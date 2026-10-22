@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
+	"github.com/theopenlane/logx"
 )
 
 // tokenQueryParam is the query parameter carrying a signed token on generated links

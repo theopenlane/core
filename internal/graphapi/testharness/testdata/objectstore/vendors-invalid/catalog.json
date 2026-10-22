@@ -1,0 +1,9 @@
+[
+  {
+    "name": "fixture-gamma-invalid",
+    "displayName": "Fixture Gamma",
+    "description": "Fixture Gamma has no systemInternalID, so the vendor mapping cannot produce an upsert key.",
+    "domains": ["fixture-gamma.example.com"],
+    "tags": ["fixture"]
+  }
+]

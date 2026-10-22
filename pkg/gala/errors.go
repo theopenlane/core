@@ -70,6 +70,8 @@ var (
 	ErrRiverClientCloseFailed = errors.New("gala: river client close failed")
 	// ErrDispatchModeInvalid is returned when an unknown gala dispatch mode is configured.
 	ErrDispatchModeInvalid = errors.New("gala: dispatch mode is invalid")
+	// ErrWaitIdleTimeout is returned when queued work does not drain within the default idle wait
+	ErrWaitIdleTimeout = errors.New("gala: work did not go idle before the default wait timeout")
 	// ErrListenerPanicked is returned when a listener panics during execution
 	ErrListenerPanicked = errors.New("gala: listener panicked")
 )

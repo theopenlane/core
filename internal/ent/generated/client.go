@@ -1635,6 +1635,54 @@ func (c *ActionPlanClient) QueryActionPlanKind(_m *ActionPlan) *CustomTypeEnumQu
 	return query
 }
 
+// QueryInternalOwnerUser queries the internal_owner_user edge of a ActionPlan.
+func (c *ActionPlanClient) QueryInternalOwnerUser(_m *ActionPlan) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.InternalOwnerUserTable, actionplan.InternalOwnerUserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup queries the internal_owner_group edge of a ActionPlan.
+func (c *ActionPlanClient) QueryInternalOwnerGroup(_m *ActionPlan) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.InternalOwnerGroupTable, actionplan.InternalOwnerGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder queries the internal_owner_identity_holder edge of a ActionPlan.
+func (c *ActionPlanClient) QueryInternalOwnerIdentityHolder(_m *ActionPlan) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.InternalOwnerIdentityHolderTable, actionplan.InternalOwnerIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryRisks queries the risks edge of a ActionPlan.
 func (c *ActionPlanClient) QueryRisks(_m *ActionPlan) *RiskQuery {
 	query := (&RiskClient{config: c.config}).Query()
@@ -8598,6 +8646,38 @@ func (c *EntityClient) QueryReviewedByIdentityHolder(_m *Entity) *IdentityHolder
 			sqlgraph.From(entity.Table, entity.FieldID, id),
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByIdentityHolderTable, entity.ReviewedByIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCatalog queries the catalog edge of a Entity.
+func (c *EntityClient) QueryCatalog(_m *Entity) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entity.CatalogTable, entity.CatalogColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAdopted queries the adopted edge of a Entity.
+func (c *EntityClient) QueryAdopted(_m *Entity) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.AdoptedTable, entity.AdoptedColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

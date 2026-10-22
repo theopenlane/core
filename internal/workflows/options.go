@@ -14,6 +14,8 @@ type Config struct {
 	CEL CELConfig `json:"cel" koanf:"cel"`
 	// Gala controls gala runtime wiring for workflow and mutation eventing.
 	Gala GalaConfig `json:"gala" koanf:"gala"`
+	// WebhookAllowPrivateAddresses permits webhook actions to target localhost and non-public addresses
+	WebhookAllowPrivateAddresses bool `json:"webhookallowprivateaddresses" koanf:"webhookallowprivateaddresses" default:"false"`
 	// RuntimeDefinitions holds in-memory workflow definitions that participate in
 	// trigger matching without DB persistence
 	RuntimeDefinitions *RuntimeDefinitionRegistry `json:"-" koanf:"-"`
@@ -82,6 +84,13 @@ type ConfigOpts func(*Config)
 func WithEnabled(enabled bool) ConfigOpts {
 	return func(c *Config) {
 		c.Enabled = enabled
+	}
+}
+
+// WithWebhookAllowPrivateAddresses sets whether webhook actions may target non-public addresses
+func WithWebhookAllowPrivateAddresses(allow bool) ConfigOpts {
+	return func(c *Config) {
+		c.WebhookAllowPrivateAddresses = allow
 	}
 }
 
@@ -189,6 +198,7 @@ func WithConfig(cfg Config) ConfigOpts {
 		c.Enabled = cfg.Enabled
 		c.CEL = cfg.CEL
 		c.Gala = cfg.Gala
+		c.WebhookAllowPrivateAddresses = cfg.WebhookAllowPrivateAddresses
 		c.RuntimeDefinitions = cfg.RuntimeDefinitions
 	}
 }

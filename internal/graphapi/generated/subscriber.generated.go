@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -109,7 +108,7 @@ func (ec *executionContext) _SubscriberDeletePayload_email(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_SubscriberDeletePayload_email(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SubscriberDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("SubscriberDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _SubscriberUpdatePayload_subscriber(ctx context.Context, field graphql.CollectedField, obj *model.SubscriberUpdatePayload) (ret graphql.Marshaler) {
@@ -162,8 +161,7 @@ func (ec *executionContext) _SubscriberBulkCreatePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, subscriberBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -182,14 +180,10 @@ func (ec *executionContext) _SubscriberBulkCreatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -200,8 +194,7 @@ func (ec *executionContext) _SubscriberCreatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, subscriberCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -220,14 +213,10 @@ func (ec *executionContext) _SubscriberCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -238,8 +227,7 @@ func (ec *executionContext) _SubscriberDeletePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, subscriberDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -258,14 +246,10 @@ func (ec *executionContext) _SubscriberDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -276,8 +260,7 @@ func (ec *executionContext) _SubscriberUpdatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, subscriberUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -296,14 +279,10 @@ func (ec *executionContext) _SubscriberUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -314,9 +293,7 @@ func (ec *executionContext) _SubscriberUpdatePayload(ctx context.Context, sel as
 
 func (ec *executionContext) marshalNSubscriberBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SubscriberBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._SubscriberBulkCreatePayload(ctx, sel, v)
@@ -324,9 +301,7 @@ func (ec *executionContext) marshalNSubscriberBulkCreatePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNSubscriberCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SubscriberCreatePayload!")
 		return graphql.Null
 	}
 	return ec._SubscriberCreatePayload(ctx, sel, v)
@@ -334,9 +309,7 @@ func (ec *executionContext) marshalNSubscriberCreatePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNSubscriberDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SubscriberDeletePayload!")
 		return graphql.Null
 	}
 	return ec._SubscriberDeletePayload(ctx, sel, v)
@@ -344,9 +317,7 @@ func (ec *executionContext) marshalNSubscriberDeletePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNSubscriberUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SubscriberUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._SubscriberUpdatePayload(ctx, sel, v)

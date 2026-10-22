@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // ProgramHistoryQuery is the builder for querying ProgramHistory entities.

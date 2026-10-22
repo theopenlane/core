@@ -419,6 +419,6 @@ func (Task) Policy() ent.Policy {
 
 func (Task) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }

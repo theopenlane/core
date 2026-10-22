@@ -18,8 +18,8 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
+	"github.com/theopenlane/logx"
 )
 
 // Invite holds the Token, InviteToken references, and the additional user input to complete acceptance of the invitation

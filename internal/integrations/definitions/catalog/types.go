@@ -3,12 +3,14 @@ package catalog
 import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
@@ -31,12 +33,18 @@ type Config struct {
 	Slack slack.Config `json:"slack" koanf:"slack"`
 	// SlackRuntime holds runtime-provisioned configuration for system Slack notifications
 	SlackRuntime slack.RuntimeSlackConfig `json:"slackruntime" koanf:"slackruntime"`
+	// ObjectStore holds operator credentials for the object storage definition's AWS source identity
+	ObjectStore objectstore.Config `json:"objectstore" koanf:"objectstore"`
+	// ObjectStoreRuntime holds runtime-provisioned configuration for the platform-owned bucket used for system record imports
+	ObjectStoreRuntime objectstore.RuntimeConfig `json:"objectstoreruntime" koanf:"objectstoreruntime"`
 	// GoogleDrive holds OAuth credentials for the Google Drive definition
 	GoogleDrive googledrive.Config `json:"googledrive" koanf:"googledrive"`
 	// GoogleWorkspace holds OAuth credentials for the Google Workspace definition
 	GoogleWorkspace googleworkspace.Config `json:"googleworkspace" koanf:"googleworkspace"`
 	// AzureEntraID holds OAuth credentials for the Azure Entra ID definition
 	AzureEntraID azureentraid.Config `json:"azureentraid" koanf:"azureentraid"`
+	// AzureSecurityCenter holds OAuth credentials for the Azure Security Center definition
+	AzureSecurityCenter azuresecuritycenter.Config `json:"azuresecuritycenter" koanf:"azuresecuritycenter"`
 	// MicrosoftTeams holds OAuth credentials for the Microsoft Teams definition
 	MicrosoftTeams microsoftteams.Config `json:"microsoftteams" koanf:"microsoftteams"`
 	// OneDrive holds OAuth credentials for the OneDrive definition

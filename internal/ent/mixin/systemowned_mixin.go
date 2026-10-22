@@ -3,16 +3,21 @@ package mixin
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"strings"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 
@@ -23,14 +28,23 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/graphapi/directives"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 )
 
 const (
 	// SystemOwnedMixinName is the name of the SystemOwnedMixin
 	SystemOwnedMixinName = "SystemOwnedMixin"
+	// catalogPointerField is the foreign key naming the catalog row an adopted row came from
+	catalogPointerField = "catalog_id"
+	// catalogKeyField holds the catalog row's lookup key on adopted rows
+	catalogKeyField = "catalog_key"
+	// catalogEdgeName is the edge from an adopted row to its catalog row
+	catalogEdgeName = "catalog"
+	// adoptedEdgeName is the edge from a catalog row to the rows adopted from it
+	adoptedEdgeName = "adopted"
 )
 
 // SystemOwnedMixin implements the revision pattern for schemas.
@@ -40,6 +54,10 @@ type SystemOwnedMixin struct {
 	// autoCreateWildcardTuples will include a hook to create wildcard tuples for system owned objects
 	// this should be skipped if there are conditionals, such as `public` field on the object (see standards as an example)
 	autoCreateWildcardTuples bool
+	// catalogSchemaType is the schema type whose system-owned rows organizations can adopt, nil disables the catalog plumbing
+	catalogSchemaType any
+	// ownerFieldName is the organization owner field the catalog index pairs with the catalog pointer
+	ownerFieldName string
 }
 
 // NewSystemOwnedMixin creates a new SystemOwnedMixin with the given options.
@@ -67,14 +85,33 @@ func SkipTupleCreation() SystemOwnedMixinOption {
 	}
 }
 
+// WithCatalog adds the catalog pointer field, edges and index so organizations can adopt this schema's system-owned rows
+func WithCatalog(schemaType any) SystemOwnedMixinOption {
+	return func(m *SystemOwnedMixin) {
+		m.catalogSchemaType = schemaType
+	}
+}
+
+// WithOwnerField sets the organization owner field name used by the catalog index
+func WithOwnerField(name string) SystemOwnedMixinOption {
+	return func(m *SystemOwnedMixin) {
+		m.ownerFieldName = name
+	}
+}
+
+// catalogName returns the snake_case name of the catalog schema type
+func (d SystemOwnedMixin) catalogName() string {
+	return strcase.SnakeCase(reflect.TypeOf(d.catalogSchemaType).In(0).Name())
+}
+
 // Name of the SystemOwnedMixin
 func (SystemOwnedMixin) Name() string {
 	return "SystemOwnedMixin"
 }
 
 // Fields of the SystemOwnedMixin.
-func (SystemOwnedMixin) Fields() []ent.Field {
-	return []ent.Field{
+func (d SystemOwnedMixin) Fields() []ent.Field {
+	fields := []ent.Field{
 		field.Bool("system_owned").
 			Optional().
 			Default(false).
@@ -99,6 +136,81 @@ func (SystemOwnedMixin) Fields() []ent.Field {
 				directives.HiddenDirectiveAnnotation,
 			).
 			Nillable(),
+	}
+
+	if d.catalogSchemaType == nil {
+		return fields
+	}
+
+	return append(fields,
+		field.String(catalogPointerField).
+			Comment("the system-owned catalog row this row was adopted from").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
+		field.Bool("externally_visible").
+			Default(false).
+			Optional().
+			Comment("whether this system-owned row is published for organizations to adopt").
+			Annotations(
+				entx.CatalogVisibilityField(),
+			),
+		field.String(catalogKeyField).
+			Optional().
+			Comment("the lookup key of the catalog row this row was adopted from").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entx.CatalogKeyField(),
+			),
+		field.JSON("raw_ingest_payload", map[string]any{}).
+			Comment("raw payload received from the integration for auditing and troubleshooting").
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().Volatile(),
+			),
+	)
+}
+
+// Edges of the SystemOwnedMixin.
+func (d SystemOwnedMixin) Edges() []ent.Edge {
+	if d.catalogSchemaType == nil {
+		return nil
+	}
+
+	return []ent.Edge{
+		edge.To(adoptedEdgeName, d.catalogSchemaType).
+			Comment("organization rows adopted from this catalog row").
+			Annotations(
+				entgql.RelayConnection(),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				accessmap.EdgeNoAuthCheck(),
+			).
+			From(catalogEdgeName).
+			Comment("the system-owned catalog row this row was adopted from").
+			Field(catalogPointerField).
+			Unique().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				accessmap.EdgeViewCheck(d.catalogName()),
+				entx.CatalogEdge(),
+			),
+	}
+}
+
+// Indexes of the SystemOwnedMixin.
+func (d SystemOwnedMixin) Indexes() []ent.Index {
+	if d.catalogSchemaType == nil {
+		return nil
+	}
+
+	if d.ownerFieldName == "" {
+		log.Fatal().Msg("SystemOwnedMixin: WithCatalog requires the owner field name from the ObjectOwnedMixin")
+	}
+
+	return []ent.Index{
+		index.Fields(catalogPointerField, d.ownerFieldName).
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
@@ -125,11 +237,18 @@ func (d SystemOwnedMixin) Policy() ent.Policy {
 	}
 }
 
-// Annotations of the SystemOwnedMixin
+// Annotations of the SystemOwnedMixin; a catalog schema also keeps its pointer and key out of the integration
+// mapping so no provider mapping can link or relink a row
 func (d SystemOwnedMixin) Annotations() []schema.Annotation {
-	return []schema.Annotation{
+	annotations := []schema.Annotation{
 		entx.SystemOwnedSchema{},
 	}
+
+	if d.catalogSchemaType == nil {
+		return annotations
+	}
+
+	return append(annotations, entx.IntegrationMappingSchema().Exclude(catalogPointerField, catalogKeyField))
 }
 
 // HookSystemOwnedCreate will automatically set the system_owned field to true if the user is a system admin
@@ -144,8 +263,16 @@ func HookSystemOwnedCreate() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			orgMut, orgOwned := m.(utils.OrgOwnedMutation)
+
+			hasOwner := false
+			if orgOwned {
+				ownerID, ok := orgMut.OwnerID()
+				hasOwner = ok && ownerID != ""
+			}
+
 			if admin {
-				mut.SetSystemOwned(true)
+				mut.SetSystemOwned(!hasOwner)
 
 				return next.Mutate(ctx, m)
 			}
@@ -154,24 +281,20 @@ func HookSystemOwnedCreate() ent.Hook {
 			mut.SetSystemOwned(false)
 
 			// ensure there is an owner id set for non system owned objects
-			orgMut, ok := m.(utils.OrgOwnedMutation)
-			if !ok && orgMut == nil {
+			if !orgOwned || hasOwner {
 				return next.Mutate(ctx, m)
 			}
 
-			ownerID, ok := orgMut.OwnerID()
-			if !ok || ownerID == "" {
-				logx.FromContext(ctx).Debug().Msg("non system admin creating object without owner ID, attempting to set")
+			logx.FromContext(ctx).Debug().Msg("non system admin creating object without owner ID, attempting to set")
 
-				orgID, err := auth.GetOrganizationIDFromContext(ctx)
-				if err != nil {
-					logx.FromContext(ctx).Error().Msg("unable to get organization ID from context for non system admin creating object")
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
+				logx.FromContext(ctx).Error().Msg("unable to get organization ID from context for non system admin creating object")
 
-					return nil, generated.ErrPermissionDenied
-				}
-
-				orgMut.SetOwnerID(orgID)
+				return nil, generated.ErrPermissionDenied
 			}
+
+			orgMut.SetOwnerID(orgID)
 
 			return next.Mutate(ctx, m)
 		})

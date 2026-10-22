@@ -15,9 +15,9 @@ import (
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/workflows"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // integrationQueuedFlag is a mutable flag set when an integration operation is successfully
@@ -298,7 +298,7 @@ func preferDefaultMessaging(inst *ent.Integration) bool {
 		DefaultMessaging bool `json:"defaultMessaging"`
 	}
 
-	if json.Unmarshal(inst.Config.ClientConfig, &cfg) != nil {
+	if json.Unmarshal(inst.UserInput.Data, &cfg) != nil {
 		return false
 	}
 
@@ -317,7 +317,7 @@ func evaluateInstallationScope(ctx context.Context, evaluator *IntegrationScopeE
 		Definition:         installationRecord.DefinitionID,
 		Operation:          operationName,
 		Config:             operationConfig,
-		InstallationConfig: jsonx.CloneRawMessage(installationRecord.Config.ClientConfig),
+		InstallationConfig: jsonx.CloneRawMessage(installationRecord.UserInput.Data),
 		OrgID:              req.OrgID,
 		InstallationID:     installationRecord.ID,
 	})

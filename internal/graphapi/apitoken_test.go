@@ -301,19 +301,14 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 
 func TestMutationDeleteAPIToken(t *testing.T) {
 	// create user to make tokens
-	user := (&th.UserBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-	user2 := (&th.UserBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	user := suite.UserBuilder(context.Background(), t)
+	user2 := suite.UserBuilder(context.Background(), t)
 
-	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
-	orgID2 := user2.Edges.Setting.Edges.DefaultOrg.ID
-
-	reqCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
+	reqCtx := user.UserCtx
 
 	token := (&th.APITokenBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 
-	reqCtx2 := auth.NewTestContextWithOrgID(user2.ID, orgID2)
-
-	token2 := (&th.APITokenBuilder{Client: suite.Client}).MustNew(reqCtx2, t)
+	token2 := (&th.APITokenBuilder{Client: suite.Client}).MustNew(user2.UserCtx, t)
 
 	testCases := []struct {
 		name     string

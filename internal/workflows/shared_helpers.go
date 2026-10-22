@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // WorkflowCreationStage identifies which step failed when building instances/object refs.

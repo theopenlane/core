@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 func init() { registerListeners(OnboardingProgramListeners) }

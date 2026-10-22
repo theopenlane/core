@@ -19,7 +19,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 func main() {
@@ -447,8 +447,8 @@ const domainScanHTTPTimeout = time.Minute
 
 // newCloudflareClient builds a Cloudflare API client from an API token and account ID, the same
 // way internal/integrations/definitions/cloudflare builds one from the operator-owned runtime config
-func newCloudflareClient(apiToken, accountID string) *cloudflare.CloudflareClient {
-	return &cloudflare.CloudflareClient{
+func newCloudflareClient(apiToken, accountID string) *cloudflare.Client {
+	return &cloudflare.Client{
 		Client: cf.NewClient(
 			option.WithAPIToken(apiToken),
 			option.WithHTTPClient(&http.Client{Timeout: domainScanHTTPTimeout}),

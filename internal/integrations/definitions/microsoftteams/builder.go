@@ -2,63 +2,47 @@ package microsoftteams
 
 import (
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // Builder returns the Microsoft Teams definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "Microsoft",
-				DisplayName: "Microsoft Teams",
-				Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
-				Category:    "collaboration",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
-				Tags:        []string{"messaging"},
-				Active:      false,
-				Visible:     true,
-			},
+			ID:          DefinitionID.ID(),
+			Family:      "Microsoft",
+			DisplayName: "Microsoft Teams",
+			Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
+			Category:    "collaboration",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
+			Tags:        []string{"messaging"},
+			Active:      true,
+			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
-			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         teamsCredential.ID(),
-					Name:        "Microsoft Teams Credential",
-					Description: "OAuth credential used to send messages to Microsoft Teams channels.",
-					Schema:      teamsCredentialSchema,
-				},
-			},
-			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  teamsCredential.ID(),
-					Name:           "Microsoft Teams OAuth",
-					Description:    "Connect your Microsoft Teams workspace using OAuth.",
-					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
-					ClientRefs:     []types.ClientID{teamsClient.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: teamsClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
-					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
-						CredentialRef: teamsCredential,
+			UserInput:    userInput.Registration(),
+			Installation: installation.Registration(),
+			Connections: []types.Connector{
+				oauthConnection.
+					Name("Microsoft Teams OAuth").
+					Description("Connect your Microsoft Teams workspace using OAuth.").
+					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						Config: auth.OAuthConfig{ //nolint:gosec
-							ClientID:     cfg.ClientID,
+							ClientID:     cfg.ApplicationID,
 							ClientSecret: cfg.ClientSecret,
-							AuthURL:      "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-							TokenURL:     "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+							AuthURL:      microsoft.AuthorizeURL(microsoft.OrganizationsTenant),
+							TokenURL:     microsoft.TokenURL(microsoft.OrganizationsTenant),
 							RedirectURL:  cfg.RedirectURL,
 							Scopes: []string{
 								"https://graph.microsoft.com/User.Read",
 								"https://graph.microsoft.com/ChannelMessage.Send",
+								"https://graph.microsoft.com/Team.ReadBasic.All",
+								"https://graph.microsoft.com/Channel.ReadBasic.All",
 								"offline_access",
 							},
 						},
@@ -70,30 +54,15 @@ func Builder(cfg Config) registry.Builder {
 							}, nil
 						},
 						EncodeCredentialError: ErrCredentialEncode,
-					}),
-					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: teamsCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
-					},
-				},
-			},
-			Clients: []types.ClientRegistration{
-				{
-					Ref:            teamsClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
-					Description:    "Microsoft Graph API client",
-					Build:          Client{}.Build,
-				},
+					})).
+					Provides(clientBuilder(cfg)).
+					Verified(verify).
+					Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.", nil),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         MessageSendOp.Name(),
-					Description:  "Send a Teams channel message via Microsoft Graph",
-					Topic:        DefinitionID.OperationTopic(MessageSendOp.Name()),
-					ClientRef:    teamsClient.ID(),
-					ConfigSchema: messageSendSchema,
-					Handle:       MessageSend{}.Handle(),
-				},
+				MessageSendOp.Permissions("ChannelMessage.Send").Description("Send a Teams channel message via Microsoft Graph").Registration(),
+				operations.NewChannelsListOperation(listTeams, ErrResultEncode).Permissions("Team.ReadBasic.All", "Channel.ReadBasic.All").Description("List the teams and channels the connected user can post to").Registration(),
+				operations.NewTestMessageOperation(sendMessage).Permissions("ChannelMessage.Send").Description("Send a test message to a Teams channel to confirm the integration works").Registration(),
 			},
 		}, nil
 	})

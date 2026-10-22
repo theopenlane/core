@@ -9,9 +9,10 @@ import (
 	slackgo "github.com/slack-go/slack"
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/v2/internal/integrations/mappingtest"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // testMappings builds the Slack definition and returns its registered mappings
@@ -25,20 +26,7 @@ func testMappings(t *testing.T) []types.MappingRegistration {
 }
 
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range testMappings(t) {
-		name := m.Schema
-		if m.Variant != "" {
-			name += "/" + m.Variant
-		}
-
-		t.Run(name+"/filter", func(t *testing.T) {
-			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
-		})
-
-		t.Run(name+"/map", func(t *testing.T) {
-			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
-		})
-	}
+	mappingtest.AssertExpressionsValid(t, testMappings(t))
 }
 
 // TestSlackMappingsUserExample tests the directory account mapping against examples/user.json

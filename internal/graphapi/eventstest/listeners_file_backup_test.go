@@ -31,7 +31,7 @@ import (
 const backupSourceProvider = storagetypes.ProviderType("mock")
 
 func TestFileBackupListener(t *testing.T) {
-	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule)
+	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	ctx := th.SetInternalContext(user.UserCtx, suite.Client.DB)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.FileBackupListeners())

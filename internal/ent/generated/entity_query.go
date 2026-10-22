@@ -43,7 +43,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // EntityQuery is the builder for querying Entity entities.
@@ -63,6 +63,8 @@ type EntityQuery struct {
 	withReviewedByUser                    *UserQuery
 	withReviewedByGroup                   *GroupQuery
 	withReviewedByIdentityHolder          *IdentityHolderQuery
+	withCatalog                           *EntityQuery
+	withAdopted                           *EntityQuery
 	withEntityRelationshipState           *CustomTypeEnumQuery
 	withEntitySecurityQuestionnaireStatus *CustomTypeEnumQuery
 	withEntitySourceType                  *CustomTypeEnumQuery
@@ -101,6 +103,7 @@ type EntityQuery struct {
 	withNamedIntegrationRuns              map[string]*IntegrationRunQuery
 	withNamedBlockedGroups                map[string]*GroupQuery
 	withNamedEditors                      map[string]*GroupQuery
+	withNamedAdopted                      map[string]*EntityQuery
 	withNamedContacts                     map[string]*ContactQuery
 	withNamedDocuments                    map[string]*DocumentDataQuery
 	withNamedNotes                        map[string]*NoteQuery
@@ -375,6 +378,50 @@ func (_q *EntityQuery) QueryReviewedByIdentityHolder() *IdentityHolderQuery {
 			sqlgraph.From(entity.Table, entity.FieldID, selector),
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByIdentityHolderTable, entity.ReviewedByIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCatalog chains the current query on the "catalog" edge.
+func (_q *EntityQuery) QueryCatalog() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, entity.CatalogTable, entity.CatalogColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAdopted chains the current query on the "adopted" edge.
+func (_q *EntityQuery) QueryAdopted() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, entity.AdoptedTable, entity.AdoptedColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -1288,6 +1335,8 @@ func (_q *EntityQuery) Clone() *EntityQuery {
 		withReviewedByUser:                    _q.withReviewedByUser.Clone(),
 		withReviewedByGroup:                   _q.withReviewedByGroup.Clone(),
 		withReviewedByIdentityHolder:          _q.withReviewedByIdentityHolder.Clone(),
+		withCatalog:                           _q.withCatalog.Clone(),
+		withAdopted:                           _q.withAdopted.Clone(),
 		withEntityRelationshipState:           _q.withEntityRelationshipState.Clone(),
 		withEntitySecurityQuestionnaireStatus: _q.withEntitySecurityQuestionnaireStatus.Clone(),
 		withEntitySourceType:                  _q.withEntitySourceType.Clone(),
@@ -1434,6 +1483,28 @@ func (_q *EntityQuery) WithReviewedByIdentityHolder(opts ...func(*IdentityHolder
 		opt(query)
 	}
 	_q.withReviewedByIdentityHolder = query
+	return _q
+}
+
+// WithCatalog tells the query-builder to eager-load the nodes that are connected to
+// the "catalog" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithCatalog(opts ...func(*EntityQuery)) *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCatalog = query
+	return _q
+}
+
+// WithAdopted tells the query-builder to eager-load the nodes that are connected to
+// the "adopted" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithAdopted(opts ...func(*EntityQuery)) *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAdopted = query
 	return _q
 }
 
@@ -1874,7 +1945,7 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [42]bool{
+		loadedTypes = [44]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
@@ -1885,6 +1956,8 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			_q.withReviewedByUser != nil,
 			_q.withReviewedByGroup != nil,
 			_q.withReviewedByIdentityHolder != nil,
+			_q.withCatalog != nil,
+			_q.withAdopted != nil,
 			_q.withEntityRelationshipState != nil,
 			_q.withEntitySecurityQuestionnaireStatus != nil,
 			_q.withEntitySourceType != nil,
@@ -2003,6 +2076,19 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 	if query := _q.withReviewedByIdentityHolder; query != nil {
 		if err := _q.loadReviewedByIdentityHolder(ctx, query, nodes, nil,
 			func(n *Entity, e *IdentityHolder) { n.Edges.ReviewedByIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCatalog; query != nil {
+		if err := _q.loadCatalog(ctx, query, nodes, nil,
+			func(n *Entity, e *Entity) { n.Edges.Catalog = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAdopted; query != nil {
+		if err := _q.loadAdopted(ctx, query, nodes,
+			func(n *Entity) { n.Edges.Adopted = []*Entity{} },
+			func(n *Entity, e *Entity) { n.Edges.Adopted = append(n.Edges.Adopted, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2245,6 +2331,13 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Entity) { n.appendNamedEditors(name) },
 			func(n *Entity, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAdopted {
+		if err := _q.loadAdopted(ctx, query, nodes,
+			func(n *Entity) { n.appendNamedAdopted(name) },
+			func(n *Entity, e *Entity) { n.appendNamedAdopted(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2814,6 +2907,66 @@ func (_q *EntityQuery) loadReviewedByIdentityHolder(ctx context.Context, query *
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadCatalog(ctx context.Context, query *EntityQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Entity)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].CatalogID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(entity.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "catalog_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadAdopted(ctx context.Context, query *EntityQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *Entity)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Entity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(entity.FieldCatalogID)
+	}
+	query.Where(predicate.Entity(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(entity.AdoptedColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.CatalogID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "catalog_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -4415,6 +4568,9 @@ func (_q *EntityQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withReviewedByIdentityHolder != nil {
 			_spec.Node.AddColumnOnce(entity.FieldReviewedByIdentityHolderID)
 		}
+		if _q.withCatalog != nil {
+			_spec.Node.AddColumnOnce(entity.FieldCatalogID)
+		}
 		if _q.withEntityRelationshipState != nil {
 			_spec.Node.AddColumnOnce(entity.FieldEntityRelationshipStateID)
 		}
@@ -4541,6 +4697,20 @@ func (_q *EntityQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) 
 		_q.withNamedEditors = make(map[string]*GroupQuery)
 	}
 	_q.withNamedEditors[name] = query
+	return _q
+}
+
+// WithNamedAdopted tells the query-builder to eager-load the nodes that are connected to the "adopted"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithNamedAdopted(name string, opts ...func(*EntityQuery)) *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAdopted == nil {
+		_q.withNamedAdopted = make(map[string]*EntityQuery)
+	}
+	_q.withNamedAdopted[name] = query
 	return _q
 }
 

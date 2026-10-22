@@ -9,8 +9,8 @@ import (
 
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // galaProvider resolves the gala instance used by River workers
@@ -47,6 +47,8 @@ type riverJobController interface {
 	JobList(context.Context, *river.JobListParams) (*river.JobListResult, error)
 	JobCancel(context.Context, int64) (*rivertype.JobRow, error)
 	JobDelete(context.Context, int64) (*rivertype.JobRow, error)
+	QueuePause(context.Context, string, *river.QueuePauseOpts) error
+	QueueResume(context.Context, string, *river.QueuePauseOpts) error
 }
 
 // dispatchResult reports whether River inserted a new row or returned the row

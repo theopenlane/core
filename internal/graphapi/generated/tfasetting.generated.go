@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _TFASettingCreatePayload_tfaSecret(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_TFASettingCreatePayload_tfaSecret(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TFASettingCreatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("TFASettingCreatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _TFASettingCreatePayload_qrCode(ctx context.Context, field graphql.CollectedField, obj *model.TFASettingCreatePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _TFASettingCreatePayload_qrCode(ctx context.Context,
 	)
 }
 func (ec *executionContext) fieldContext_TFASettingCreatePayload_qrCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TFASettingCreatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("TFASettingCreatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _TFASettingUpdatePayload_tfaSetting(ctx context.Context, field graphql.CollectedField, obj *model.TFASettingUpdatePayload) (ret graphql.Marshaler) {
@@ -155,7 +154,7 @@ func (ec *executionContext) _TFASettingUpdatePayload_tfaSecret(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_TFASettingUpdatePayload_tfaSecret(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TFASettingUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("TFASettingUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _TFASettingUpdatePayload_qrCode(ctx context.Context, field graphql.CollectedField, obj *model.TFASettingUpdatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _TFASettingUpdatePayload_qrCode(ctx context.Context,
 	)
 }
 func (ec *executionContext) fieldContext_TFASettingUpdatePayload_qrCode(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TFASettingUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("TFASettingUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _TFASettingUpdatePayload_recoveryCodes(ctx context.Context, field graphql.CollectedField, obj *model.TFASettingUpdatePayload) (ret graphql.Marshaler) {
@@ -201,7 +200,7 @@ func (ec *executionContext) _TFASettingUpdatePayload_recoveryCodes(ctx context.C
 	)
 }
 func (ec *executionContext) fieldContext_TFASettingUpdatePayload_recoveryCodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TFASettingUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("TFASettingUpdatePayload", field, false, false, "String")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -222,8 +221,7 @@ func (ec *executionContext) _TFASettingCreatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, tFASettingCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -252,14 +250,10 @@ func (ec *executionContext) _TFASettingCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -270,8 +264,7 @@ func (ec *executionContext) _TFASettingUpdatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, tFASettingUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -305,14 +298,10 @@ func (ec *executionContext) _TFASettingUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -323,9 +312,7 @@ func (ec *executionContext) _TFASettingUpdatePayload(ctx context.Context, sel as
 
 func (ec *executionContext) marshalNTFASettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTFASettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TFASettingCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TFASettingCreatePayload!")
 		return graphql.Null
 	}
 	return ec._TFASettingCreatePayload(ctx, sel, v)
@@ -333,9 +320,7 @@ func (ec *executionContext) marshalNTFASettingCreatePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNTFASettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTFASettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TFASettingUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "TFASettingUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._TFASettingUpdatePayload(ctx, sel, v)

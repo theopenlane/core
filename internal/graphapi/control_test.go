@@ -1657,6 +1657,8 @@ func TestMutationUpdateControl(t *testing.T) {
 	kind := (&th.CustomTypeEnumBuilder{Client: suite.Client, Name: "Detective", ObjectType: "control"}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 	kindCustom := (&th.CustomTypeEnumBuilder{Client: suite.Client, Name: "Custom Control Kind", ObjectType: "control"}).MustNew(th.SharedTestUser1.UserCtx, t)
 
+	systemControl := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.UpdateControlInput
@@ -1800,6 +1802,16 @@ func TestMutationUpdateControl(t *testing.T) {
 			ctx:         th.SharedTestUser2.UserCtx,
 			expectedErr: th.NotFoundErrorMsg,
 		},
+		{
+			name:      "not authorized, adding editor group permision to system owned control",
+			controlID: systemControl.ID,
+			request: testclient.UpdateControlInput{
+				AddEditorIDs: []string{groupMember.GroupID},
+			},
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -1938,6 +1950,8 @@ func TestMutationUpdateControl(t *testing.T) {
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: controlAnotherOrg.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 	(&th.Cleanup[*generated.CustomTypeEnumDeleteOne]{Client: suite.Client.DB.CustomTypeEnum, IDs: []string{kind.ID}}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 	(&th.Cleanup[*generated.CustomTypeEnumDeleteOne]{Client: suite.Client.DB.CustomTypeEnum, IDs: []string{kindCustom.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: systemControl.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateControlDescription(t *testing.T) {

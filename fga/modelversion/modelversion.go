@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	fgamodel "github.com/theopenlane/core/v2/fga/model"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // markerPrefix is the prefix shared by every version marker type, used to pick the marker out of a

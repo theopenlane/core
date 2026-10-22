@@ -135,7 +135,7 @@ func (TagDefinition) Interceptors() []ent.Interceptor {
 // Modules this schema has access to
 func (TagDefinition) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

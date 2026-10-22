@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/oci"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/okta"
@@ -35,7 +36,7 @@ func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Buil
 		authentik.Builder(),
 		awssecurityhub.Builder(cfg.AWSSecurityHub),
 		azureentraid.Builder(cfg.AzureEntraID),
-		azuresecuritycenter.Builder(),
+		azuresecuritycenter.Builder(cfg.AzureSecurityCenter),
 		cloudflare.Builder(&cfg.CloudflareRuntime),
 		email.Builder(&cfg.Email, devMode),
 		fossa.Builder(),
@@ -45,6 +46,7 @@ func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Buil
 		googleworkspace.Builder(cfg.GoogleWorkspace),
 		keycloak.Builder(),
 		microsoftteams.Builder(cfg.MicrosoftTeams),
+		objectstore.Builder(&cfg.ObjectStoreRuntime, federationIssuer, cfg.ObjectStore),
 		oci.Builder(),
 		onedrive.Builder(cfg.OneDrive),
 		oidclocal.Builder(cfg.OIDCLocal),

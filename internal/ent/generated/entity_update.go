@@ -488,6 +488,78 @@ func (_u *EntityUpdate) ClearSystemInternalID() *EntityUpdate {
 	return _u
 }
 
+// SetCatalogID sets the "catalog_id" field.
+func (_u *EntityUpdate) SetCatalogID(v string) *EntityUpdate {
+	_u.mutation.SetCatalogID(v)
+	return _u
+}
+
+// SetNillableCatalogID sets the "catalog_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableCatalogID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetCatalogID(*v)
+	}
+	return _u
+}
+
+// ClearCatalogID clears the value of the "catalog_id" field.
+func (_u *EntityUpdate) ClearCatalogID() *EntityUpdate {
+	_u.mutation.ClearCatalogID()
+	return _u
+}
+
+// SetExternallyVisible sets the "externally_visible" field.
+func (_u *EntityUpdate) SetExternallyVisible(v bool) *EntityUpdate {
+	_u.mutation.SetExternallyVisible(v)
+	return _u
+}
+
+// SetNillableExternallyVisible sets the "externally_visible" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableExternallyVisible(v *bool) *EntityUpdate {
+	if v != nil {
+		_u.SetExternallyVisible(*v)
+	}
+	return _u
+}
+
+// ClearExternallyVisible clears the value of the "externally_visible" field.
+func (_u *EntityUpdate) ClearExternallyVisible() *EntityUpdate {
+	_u.mutation.ClearExternallyVisible()
+	return _u
+}
+
+// SetCatalogKey sets the "catalog_key" field.
+func (_u *EntityUpdate) SetCatalogKey(v string) *EntityUpdate {
+	_u.mutation.SetCatalogKey(v)
+	return _u
+}
+
+// SetNillableCatalogKey sets the "catalog_key" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableCatalogKey(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetCatalogKey(*v)
+	}
+	return _u
+}
+
+// ClearCatalogKey clears the value of the "catalog_key" field.
+func (_u *EntityUpdate) ClearCatalogKey() *EntityUpdate {
+	_u.mutation.ClearCatalogKey()
+	return _u
+}
+
+// SetRawIngestPayload sets the "raw_ingest_payload" field.
+func (_u *EntityUpdate) SetRawIngestPayload(v map[string]interface{}) *EntityUpdate {
+	_u.mutation.SetRawIngestPayload(v)
+	return _u
+}
+
+// ClearRawIngestPayload clears the value of the "raw_ingest_payload" field.
+func (_u *EntityUpdate) ClearRawIngestPayload() *EntityUpdate {
+	_u.mutation.ClearRawIngestPayload()
+	return _u
+}
+
 // SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
 func (_u *EntityUpdate) SetEntityRelationshipStateName(v string) *EntityUpdate {
 	_u.mutation.SetEntityRelationshipStateName(v)
@@ -1513,6 +1585,26 @@ func (_u *EntityUpdate) SetReviewedByIdentityHolder(v *IdentityHolder) *EntityUp
 	return _u.SetReviewedByIdentityHolderID(v.ID)
 }
 
+// SetCatalog sets the "catalog" edge to the Entity entity.
+func (_u *EntityUpdate) SetCatalog(v *Entity) *EntityUpdate {
+	return _u.SetCatalogID(v.ID)
+}
+
+// AddAdoptedIDs adds the "adopted" edge to the Entity entity by IDs.
+func (_u *EntityUpdate) AddAdoptedIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddAdoptedIDs(ids...)
+	return _u
+}
+
+// AddAdopted adds the "adopted" edges to the Entity entity.
+func (_u *EntityUpdate) AddAdopted(v ...*Entity) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAdoptedIDs(ids...)
+}
+
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
 func (_u *EntityUpdate) SetEntityRelationshipState(v *CustomTypeEnum) *EntityUpdate {
 	return _u.SetEntityRelationshipStateID(v.ID)
@@ -2025,6 +2117,33 @@ func (_u *EntityUpdate) ClearReviewedByGroup() *EntityUpdate {
 func (_u *EntityUpdate) ClearReviewedByIdentityHolder() *EntityUpdate {
 	_u.mutation.ClearReviewedByIdentityHolder()
 	return _u
+}
+
+// ClearCatalog clears the "catalog" edge to the Entity entity.
+func (_u *EntityUpdate) ClearCatalog() *EntityUpdate {
+	_u.mutation.ClearCatalog()
+	return _u
+}
+
+// ClearAdopted clears all "adopted" edges to the Entity entity.
+func (_u *EntityUpdate) ClearAdopted() *EntityUpdate {
+	_u.mutation.ClearAdopted()
+	return _u
+}
+
+// RemoveAdoptedIDs removes the "adopted" edge to Entity entities by IDs.
+func (_u *EntityUpdate) RemoveAdoptedIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveAdoptedIDs(ids...)
+	return _u
+}
+
+// RemoveAdopted removes "adopted" edges to Entity entities.
+func (_u *EntityUpdate) RemoveAdopted(v ...*Entity) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAdoptedIDs(ids...)
 }
 
 // ClearEntityRelationshipState clears the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -2814,6 +2933,24 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entity.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternallyVisible(); ok {
+		_spec.SetField(entity.FieldExternallyVisible, field.TypeBool, value)
+	}
+	if _u.mutation.ExternallyVisibleCleared() {
+		_spec.ClearField(entity.FieldExternallyVisible, field.TypeBool)
+	}
+	if value, ok := _u.mutation.CatalogKey(); ok {
+		_spec.SetField(entity.FieldCatalogKey, field.TypeString, value)
+	}
+	if _u.mutation.CatalogKeyCleared() {
+		_spec.ClearField(entity.FieldCatalogKey, field.TypeString)
+	}
+	if value, ok := _u.mutation.RawIngestPayload(); ok {
+		_spec.SetField(entity.FieldRawIngestPayload, field.TypeJSON, value)
+	}
+	if _u.mutation.RawIngestPayloadCleared() {
+		_spec.ClearField(entity.FieldRawIngestPayload, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.EntityRelationshipStateName(); ok {
 		_spec.SetField(entity.FieldEntityRelationshipStateName, field.TypeString, value)
 	}
@@ -3393,6 +3530,80 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CatalogCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogTable,
+			Columns: []string{entity.CatalogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CatalogIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogTable,
+			Columns: []string{entity.CatalogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AdoptedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedTable,
+			Columns: []string{entity.AdoptedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAdoptedIDs(); len(nodes) > 0 && !_u.mutation.AdoptedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedTable,
+			Columns: []string{entity.AdoptedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AdoptedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedTable,
+			Columns: []string{entity.AdoptedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -5180,6 +5391,78 @@ func (_u *EntityUpdateOne) ClearSystemInternalID() *EntityUpdateOne {
 	return _u
 }
 
+// SetCatalogID sets the "catalog_id" field.
+func (_u *EntityUpdateOne) SetCatalogID(v string) *EntityUpdateOne {
+	_u.mutation.SetCatalogID(v)
+	return _u
+}
+
+// SetNillableCatalogID sets the "catalog_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableCatalogID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetCatalogID(*v)
+	}
+	return _u
+}
+
+// ClearCatalogID clears the value of the "catalog_id" field.
+func (_u *EntityUpdateOne) ClearCatalogID() *EntityUpdateOne {
+	_u.mutation.ClearCatalogID()
+	return _u
+}
+
+// SetExternallyVisible sets the "externally_visible" field.
+func (_u *EntityUpdateOne) SetExternallyVisible(v bool) *EntityUpdateOne {
+	_u.mutation.SetExternallyVisible(v)
+	return _u
+}
+
+// SetNillableExternallyVisible sets the "externally_visible" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableExternallyVisible(v *bool) *EntityUpdateOne {
+	if v != nil {
+		_u.SetExternallyVisible(*v)
+	}
+	return _u
+}
+
+// ClearExternallyVisible clears the value of the "externally_visible" field.
+func (_u *EntityUpdateOne) ClearExternallyVisible() *EntityUpdateOne {
+	_u.mutation.ClearExternallyVisible()
+	return _u
+}
+
+// SetCatalogKey sets the "catalog_key" field.
+func (_u *EntityUpdateOne) SetCatalogKey(v string) *EntityUpdateOne {
+	_u.mutation.SetCatalogKey(v)
+	return _u
+}
+
+// SetNillableCatalogKey sets the "catalog_key" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableCatalogKey(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetCatalogKey(*v)
+	}
+	return _u
+}
+
+// ClearCatalogKey clears the value of the "catalog_key" field.
+func (_u *EntityUpdateOne) ClearCatalogKey() *EntityUpdateOne {
+	_u.mutation.ClearCatalogKey()
+	return _u
+}
+
+// SetRawIngestPayload sets the "raw_ingest_payload" field.
+func (_u *EntityUpdateOne) SetRawIngestPayload(v map[string]interface{}) *EntityUpdateOne {
+	_u.mutation.SetRawIngestPayload(v)
+	return _u
+}
+
+// ClearRawIngestPayload clears the value of the "raw_ingest_payload" field.
+func (_u *EntityUpdateOne) ClearRawIngestPayload() *EntityUpdateOne {
+	_u.mutation.ClearRawIngestPayload()
+	return _u
+}
+
 // SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
 func (_u *EntityUpdateOne) SetEntityRelationshipStateName(v string) *EntityUpdateOne {
 	_u.mutation.SetEntityRelationshipStateName(v)
@@ -6205,6 +6488,26 @@ func (_u *EntityUpdateOne) SetReviewedByIdentityHolder(v *IdentityHolder) *Entit
 	return _u.SetReviewedByIdentityHolderID(v.ID)
 }
 
+// SetCatalog sets the "catalog" edge to the Entity entity.
+func (_u *EntityUpdateOne) SetCatalog(v *Entity) *EntityUpdateOne {
+	return _u.SetCatalogID(v.ID)
+}
+
+// AddAdoptedIDs adds the "adopted" edge to the Entity entity by IDs.
+func (_u *EntityUpdateOne) AddAdoptedIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddAdoptedIDs(ids...)
+	return _u
+}
+
+// AddAdopted adds the "adopted" edges to the Entity entity.
+func (_u *EntityUpdateOne) AddAdopted(v ...*Entity) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAdoptedIDs(ids...)
+}
+
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
 func (_u *EntityUpdateOne) SetEntityRelationshipState(v *CustomTypeEnum) *EntityUpdateOne {
 	return _u.SetEntityRelationshipStateID(v.ID)
@@ -6717,6 +7020,33 @@ func (_u *EntityUpdateOne) ClearReviewedByGroup() *EntityUpdateOne {
 func (_u *EntityUpdateOne) ClearReviewedByIdentityHolder() *EntityUpdateOne {
 	_u.mutation.ClearReviewedByIdentityHolder()
 	return _u
+}
+
+// ClearCatalog clears the "catalog" edge to the Entity entity.
+func (_u *EntityUpdateOne) ClearCatalog() *EntityUpdateOne {
+	_u.mutation.ClearCatalog()
+	return _u
+}
+
+// ClearAdopted clears all "adopted" edges to the Entity entity.
+func (_u *EntityUpdateOne) ClearAdopted() *EntityUpdateOne {
+	_u.mutation.ClearAdopted()
+	return _u
+}
+
+// RemoveAdoptedIDs removes the "adopted" edge to Entity entities by IDs.
+func (_u *EntityUpdateOne) RemoveAdoptedIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveAdoptedIDs(ids...)
+	return _u
+}
+
+// RemoveAdopted removes "adopted" edges to Entity entities.
+func (_u *EntityUpdateOne) RemoveAdopted(v ...*Entity) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAdoptedIDs(ids...)
 }
 
 // ClearEntityRelationshipState clears the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -7536,6 +7866,24 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entity.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternallyVisible(); ok {
+		_spec.SetField(entity.FieldExternallyVisible, field.TypeBool, value)
+	}
+	if _u.mutation.ExternallyVisibleCleared() {
+		_spec.ClearField(entity.FieldExternallyVisible, field.TypeBool)
+	}
+	if value, ok := _u.mutation.CatalogKey(); ok {
+		_spec.SetField(entity.FieldCatalogKey, field.TypeString, value)
+	}
+	if _u.mutation.CatalogKeyCleared() {
+		_spec.ClearField(entity.FieldCatalogKey, field.TypeString)
+	}
+	if value, ok := _u.mutation.RawIngestPayload(); ok {
+		_spec.SetField(entity.FieldRawIngestPayload, field.TypeJSON, value)
+	}
+	if _u.mutation.RawIngestPayloadCleared() {
+		_spec.ClearField(entity.FieldRawIngestPayload, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.EntityRelationshipStateName(); ok {
 		_spec.SetField(entity.FieldEntityRelationshipStateName, field.TypeString, value)
 	}
@@ -8115,6 +8463,80 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CatalogCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogTable,
+			Columns: []string{entity.CatalogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CatalogIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogTable,
+			Columns: []string{entity.CatalogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AdoptedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedTable,
+			Columns: []string{entity.AdoptedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAdoptedIDs(); len(nodes) > 0 && !_u.mutation.AdoptedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedTable,
+			Columns: []string{entity.AdoptedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AdoptedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedTable,
+			Columns: []string{entity.AdoptedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

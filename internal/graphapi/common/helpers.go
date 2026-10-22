@@ -29,9 +29,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/internal/objects/store"
 	"github.com/theopenlane/core/v2/internal/objects/upload"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // CSV and GraphQL defaults used across helper functions.

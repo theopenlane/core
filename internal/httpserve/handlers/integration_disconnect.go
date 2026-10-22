@@ -11,7 +11,7 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // DisconnectIntegration executes the definition-driven teardown flow for one installed integration

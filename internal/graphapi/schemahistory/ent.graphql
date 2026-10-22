@@ -151,6 +151,22 @@ type ActionPlanHistory implements Node {
   """
   workflowEligibleMarker: Boolean
   """
+  the internal owner for the action plan when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the action plan
+  """
+  internalOwnerUserID: String
+  """
+  the internal owner group id for the action plan
+  """
+  internalOwnerGroupID: String
+  """
+  the internal owner identity holder id for the action plan
+  """
+  internalOwnerIdentityHolderID: String
+  """
   short title describing the action plan
   """
   title: String!
@@ -290,6 +306,7 @@ enum ActionPlanHistoryOrderField {
   MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
+  internal_owner
   title
   due_date
   PRIORITY
@@ -734,6 +751,62 @@ input ActionPlanHistoryWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
+  """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: String
+  internalOwnerUserIDNEQ: String
+  internalOwnerUserIDIn: [String!]
+  internalOwnerUserIDNotIn: [String!]
+  internalOwnerUserIDContains: String
+  internalOwnerUserIDHasPrefix: String
+  internalOwnerUserIDHasSuffix: String
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: String
+  internalOwnerUserIDContainsFold: String
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: String
+  internalOwnerGroupIDNEQ: String
+  internalOwnerGroupIDIn: [String!]
+  internalOwnerGroupIDNotIn: [String!]
+  internalOwnerGroupIDContains: String
+  internalOwnerGroupIDHasPrefix: String
+  internalOwnerGroupIDHasSuffix: String
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: String
+  internalOwnerGroupIDContainsFold: String
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: String
+  internalOwnerIdentityHolderIDNEQ: String
+  internalOwnerIdentityHolderIDIn: [String!]
+  internalOwnerIdentityHolderIDNotIn: [String!]
+  internalOwnerIdentityHolderIDContains: String
+  internalOwnerIdentityHolderIDHasPrefix: String
+  internalOwnerIdentityHolderIDHasSuffix: String
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: String
+  internalOwnerIdentityHolderIDContainsFold: String
   """
   title field predicates
   """
@@ -7709,6 +7782,22 @@ type EntityHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the system-owned catalog row this row was adopted from
+  """
+  catalogID: String
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  the lookup key of the catalog row this row was adopted from
+  """
+  catalogKey: String
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawIngestPayload: Map
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -8370,6 +8459,41 @@ input EntityHistoryWhereInput {
   systemInternalIDNotNil: Boolean
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
+  """
+  catalog_id field predicates
+  """
+  catalogID: String
+  catalogIDNEQ: String
+  catalogIDIn: [String!]
+  catalogIDNotIn: [String!]
+  catalogIDContains: String
+  catalogIDHasPrefix: String
+  catalogIDHasSuffix: String
+  catalogIDIsNil: Boolean
+  catalogIDNotNil: Boolean
+  catalogIDEqualFold: String
+  catalogIDContainsFold: String
+  """
+  externally_visible field predicates
+  """
+  externallyVisible: Boolean
+  externallyVisibleNEQ: Boolean
+  externallyVisibleIsNil: Boolean
+  externallyVisibleNotNil: Boolean
+  """
+  catalog_key field predicates
+  """
+  catalogKey: String
+  catalogKeyNEQ: String
+  catalogKeyIn: [String!]
+  catalogKeyNotIn: [String!]
+  catalogKeyContains: String
+  catalogKeyHasPrefix: String
+  catalogKeyHasSuffix: String
+  catalogKeyIsNil: Boolean
+  catalogKeyNotNil: Boolean
+  catalogKeyEqualFold: String
+  catalogKeyContainsFold: String
   """
   entity_relationship_state_name field predicates
   """
@@ -29953,6 +30077,7 @@ type TrustCenterNDARequestHistory implements Node {
   ID of the user who approved the request
   """
   approvedByUserID: String
+  autoApproved: Boolean
   """
   timestamp when the NDA was signed
   """
@@ -30271,6 +30396,13 @@ input TrustCenterNDARequestHistoryWhereInput {
   approvedByUserIDEqualFold: String
   approvedByUserIDContainsFold: String
   """
+  auto_approved field predicates
+  """
+  autoApproved: Boolean
+  autoApprovedNEQ: Boolean
+  autoApprovedIsNil: Boolean
+  autoApprovedNotNil: Boolean
+  """
   signed_at field predicates
   """
   signedAt: DateTime
@@ -30438,6 +30570,14 @@ type TrustCenterSettingHistory implements Node {
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  enable auto approval rules provides configurable settings to skip manual approvals
+  """
+  enableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
 }
 """
 A connection to a list of items.
@@ -30977,6 +31117,13 @@ input TrustCenterSettingHistoryWhereInput {
   noindexDefaultDomainNEQ: Boolean
   noindexDefaultDomainIsNil: Boolean
   noindexDefaultDomainNotNil: Boolean
+  """
+  enable_auto_approval field predicates
+  """
+  enableAutoApproval: Boolean
+  enableAutoApprovalNEQ: Boolean
+  enableAutoApprovalIsNil: Boolean
+  enableAutoApprovalNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!

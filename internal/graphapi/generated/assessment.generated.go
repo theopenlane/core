@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -45,7 +44,7 @@ func (ec *executionContext) _AssessmentBulkDeletePayload_deletedIDs(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_AssessmentBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("AssessmentBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _AssessmentBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentBulkDeletePayload) (ret graphql.Marshaler) {
@@ -68,7 +67,7 @@ func (ec *executionContext) _AssessmentBulkDeletePayload_notDeletedIDs(ctx conte
 	)
 }
 func (ec *executionContext) fieldContext_AssessmentBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("AssessmentBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _AssessmentBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentBulkDeletePayload) (ret graphql.Marshaler) {
@@ -91,7 +90,7 @@ func (ec *executionContext) _AssessmentBulkDeletePayload_error(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_AssessmentBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("AssessmentBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _AssessmentCreatePayload_assessment(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentCreatePayload) (ret graphql.Marshaler) {
@@ -146,7 +145,7 @@ func (ec *executionContext) _AssessmentDeletePayload_deletedID(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_AssessmentDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("AssessmentDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _AssessmentTemplateCreatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentTemplateCreatePayload) (ret graphql.Marshaler) {
@@ -268,6 +267,18 @@ func (ec *executionContext) unmarshalInputCreateAssessmentTemplateInput(ctx cont
 	return it, nil
 }
 
+// UnmarshalCreateAssessmentTemplateInput unmarshals raw into the CreateAssessmentTemplateInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateAssessmentTemplateInput(ctx context.Context, raw any) (model.CreateAssessmentTemplateInput, error) {
+	var out model.CreateAssessmentTemplateInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateAssessmentTemplateInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -282,8 +293,7 @@ func (ec *executionContext) _AssessmentBulkDeletePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -312,14 +322,10 @@ func (ec *executionContext) _AssessmentBulkDeletePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -330,8 +336,7 @@ func (ec *executionContext) _AssessmentCreatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -350,14 +355,10 @@ func (ec *executionContext) _AssessmentCreatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -368,8 +369,7 @@ func (ec *executionContext) _AssessmentDeletePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -388,14 +388,10 @@ func (ec *executionContext) _AssessmentDeletePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -406,8 +402,7 @@ func (ec *executionContext) _AssessmentTemplateCreatePayload(ctx context.Context
 	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentTemplateCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -426,14 +421,10 @@ func (ec *executionContext) _AssessmentTemplateCreatePayload(ctx context.Context
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -444,8 +435,7 @@ func (ec *executionContext) _AssessmentUpdatePayload(ctx context.Context, sel as
 	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -464,14 +454,10 @@ func (ec *executionContext) _AssessmentUpdatePayload(ctx context.Context, sel as
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -482,9 +468,7 @@ func (ec *executionContext) _AssessmentUpdatePayload(ctx context.Context, sel as
 
 func (ec *executionContext) marshalNAssessmentBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "AssessmentBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._AssessmentBulkDeletePayload(ctx, sel, v)
@@ -492,9 +476,7 @@ func (ec *executionContext) marshalNAssessmentBulkDeletePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNAssessmentCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "AssessmentCreatePayload!")
 		return graphql.Null
 	}
 	return ec._AssessmentCreatePayload(ctx, sel, v)
@@ -502,9 +484,7 @@ func (ec *executionContext) marshalNAssessmentCreatePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNAssessmentDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "AssessmentDeletePayload!")
 		return graphql.Null
 	}
 	return ec._AssessmentDeletePayload(ctx, sel, v)
@@ -512,9 +492,7 @@ func (ec *executionContext) marshalNAssessmentDeletePayload2ᚖgithubᚗcomᚋth
 
 func (ec *executionContext) marshalNAssessmentTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentTemplateCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "AssessmentTemplateCreatePayload!")
 		return graphql.Null
 	}
 	return ec._AssessmentTemplateCreatePayload(ctx, sel, v)
@@ -522,9 +500,7 @@ func (ec *executionContext) marshalNAssessmentTemplateCreatePayload2ᚖgithubᚗ
 
 func (ec *executionContext) marshalNAssessmentUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "AssessmentUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._AssessmentUpdatePayload(ctx, sel, v)

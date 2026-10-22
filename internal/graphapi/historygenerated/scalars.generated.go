@@ -43,17 +43,13 @@ func (ec *executionContext) unmarshalNAny2interface(ctx context.Context, v any) 
 
 func (ec *executionContext) marshalNAny2interface(ctx context.Context, sel ast.SelectionSet, v any) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "Any!")
 		return graphql.Null
 	}
 	_ = sel
 	res := graphql.MarshalAny(v)
 	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullFromMarshaler(ctx, "Any!")
 	}
 	return res
 }
@@ -86,9 +82,7 @@ func (ec *executionContext) unmarshalNDateTime2ᚖgithubᚗcomᚋtheopenlaneᚋc
 
 func (ec *executionContext) marshalNDateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *models.DateTime) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "DateTime!")
 		return graphql.Null
 	}
 	return v
@@ -498,6 +492,16 @@ func (ec *executionContext) marshalOTestingProcedures2ᚕgithubᚗcomᚋtheopenl
 	}
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTrustCenterNDARequestSetting(ctx context.Context, v any) (models.TrustCenterNDARequestSetting, error) {
+	var res models.TrustCenterNDARequestSetting
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTrustCenterNDARequestSetting(ctx context.Context, sel ast.SelectionSet, v models.TrustCenterNDARequestSetting) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalOWorkflowAssignmentApproval2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowAssignmentApproval(ctx context.Context, v any) (models.WorkflowAssignmentApproval, error) {

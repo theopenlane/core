@@ -14,8 +14,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 )
 
 // LiveExternalContents is the resolver for the liveExternalContents field
@@ -68,7 +68,7 @@ func (r *internalPolicyResolver) LiveExternalContents(ctx context.Context, obj *
 		return nil, nil
 	}
 
-	result, err := r.integrationsRuntime.ExecuteOperation(ctx, found.Integration, op, nil, configBytes)
+	result, err := r.integrationsRuntime.ExecuteOperation(ctx, found.Integration, op, configBytes)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("integration_id", found.Integration.ID).Msg("export operation failed")
 		return nil, nil

@@ -1,28 +1,51 @@
 package email
 
 import (
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/resend/resend-go/v3"
+
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 var (
 	// DefinitionID is the stable identifier for the email integration definition
 	DefinitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
-	// runtimeEmailSchema is the JSON schema and typed ref for the runtime email config
-	runtimeEmailSchema, runtimeEmailRef = providerkit.RuntimeSchema[RuntimeEmailConfig]()
-	// emailCredentialSchema is the JSON schema and typed credential ref for customer-provisioned email
-	emailCredentialSchema, emailCredentialRef = providerkit.CredentialSchema[Credential]()
-	// emailClientRef is the client ref for the email client used by this definition
-	emailClientRef = types.NewClientRef[*Client]()
-	// sendEmailSchema is the operation schema for the generic send-email operation
-	sendEmailSchema, SendEmailOp = providerkit.OperationSchema[SendEmailRequest]() //nolint:revive
-	// sendBrandedCampaignSchema is the operation schema for the branded campaign dispatch operation
-	sendBrandedCampaignSchema, SendCampaignOp = providerkit.OperationSchema[SendBrandedCampaignRequest]() //nolint:revive
-	// sendQuestionnaireCampaignSchema is the operation schema for the questionnaire campaign dispatch operation
-	sendQuestionnaireCampaignSchema, SendQuestionnaireCampaignOp = providerkit.OperationSchema[SendQuestionnaireCampaignRequest]() //nolint:revive
+	// retiredConnection is the connection handle for the single-provider credential layout that stored payloads move off of
+	retiredConnection = types.ConnectionOf[Credential]()
+	// resendConnection is the typed connection handle for customer-provisioned Resend delivery
+	resendConnection = types.ConnectionOf[ResendCredential]().Replacing(retiredConnection)
+	// postmarkConnection is the typed connection handle for customer-provisioned Postmark delivery
+	postmarkConnection = types.ConnectionOf[PostmarkCredential]()
+	// installation is the typed installation metadata handle for the email definition
+	installation = types.InstallationOf[InstallationMetadata]()
+	// userInput is the installation user input layout for customer-provisioned email
+	userInput = types.UserInputRefOf[UserInput]()
 	// resendWebhookRef is the webhook ref for inbound Resend delivery events
 	resendWebhookRef = types.NewWebhookRef("resend.delivery")
+	// resendEmailSentEvent is the webhook event ref for Resend email.sent deliveries
+	resendEmailSentEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailSent)
+	// resendEmailDeliveredEvent is the webhook event ref for Resend email.delivered deliveries
+	resendEmailDeliveredEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailDelivered)
+	// resendEmailOpenedEvent is the webhook event ref for Resend email.opened deliveries
+	resendEmailOpenedEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailOpened)
+	// resendEmailClickedEvent is the webhook event ref for Resend email.clicked deliveries
+	resendEmailClickedEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailClicked)
+	// resendEmailBouncedEvent is the webhook event ref for Resend email.bounced deliveries
+	resendEmailBouncedEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailBounced)
+	// resendEmailFailedEvent is the webhook event ref for Resend email.failed deliveries
+	resendEmailFailedEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailFailed)
+	// postmarkWebhookRef is the webhook ref for inbound Postmark delivery events
+	postmarkWebhookRef = types.NewWebhookRef("postmark.delivery")
+	// postmarkDeliveryEvent is the webhook event ref for Postmark Delivery records
+	postmarkDeliveryEvent = types.NewWebhookEventRef[postmarkWebhookEvent](postmarkRecordDelivery)
+	// postmarkBounceEvent is the webhook event ref for Postmark Bounce records
+	postmarkBounceEvent = types.NewWebhookEventRef[postmarkWebhookEvent](postmarkRecordBounce)
+	// postmarkSpamComplaintEvent is the webhook event ref for Postmark SpamComplaint records
+	postmarkSpamComplaintEvent = types.NewWebhookEventRef[postmarkWebhookEvent](postmarkRecordSpamComplaint)
+	// postmarkOpenEvent is the webhook event ref for Postmark Open records
+	postmarkOpenEvent = types.NewWebhookEventRef[postmarkWebhookEvent](postmarkRecordOpen)
+	// postmarkClickEvent is the webhook event ref for Postmark Click records
+	postmarkClickEvent = types.NewWebhookEventRef[postmarkWebhookEvent](postmarkRecordClick)
 )
 
 // Tag key constants for email delivery tracking via provider webhooks
@@ -30,24 +53,23 @@ const (
 	// TagCampaignTargetID identifies the campaign target for delivery event correlation
 	TagCampaignTargetID = "campaign_target_id"
 	// TagAssessmentResponseID identifies the assessment response for delivery event correlation
-	TagAssessmentResponseID = "assessment_response_id"
+	TagAssessmentResponseID = "assessment_resp_id"
+	// tagAssessmentResponseIDPrior is the previous assessment response tag key still carried by in-flight delivery events
+	tagAssessmentResponseIDPrior = "assessment_response_id"
 	// TagIsTest marks a message as a test send to prevent cascade updates
 	TagIsTest = "is_test"
 )
 
-// RuntimeEmailConfig is the complete config for runtime-provisioned email.
-// Operational fields (API key, provider, URLs) are sourced from koanf/environment
-// at startup. Branding and presentation fields carry struct-tag defaults only and
-// are overridable per-send via UserInput or per-operation Config functions
+// RuntimeEmailConfig is the complete config for runtime-provisioned email
 type RuntimeEmailConfig struct {
 	// TestDir is the directory where dev-mode email files are written
 	TestDir string `json:"testdir,omitempty" koanf:"testdir" jsonschema:"description=Directory for dev-mode email output" default:"fixtures/email"`
-	// ResendSecret is the Resend webhook signing secret for verifying inbound delivery events
-	ResendSecret string `json:"resendsecret,omitempty" koanf:"resendsecret" jsonschema:"description=Resend webhook signing secret" sensitive:"true"`
-	// APIKey is the email provider API key
-	APIKey string `json:"apikey" koanf:"apikey" jsonschema:"required,description=Email provider API key" sensitive:"true"`
-	// Provider is the email service provider name (resend, sendgrid, postmark)
-	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,description=Email service provider" default:"resend"`
+	// Provider selects which provider block below delivers runtime email (resend, postmark)
+	Provider string `json:"provider" koanf:"provider" jsonschema:"required,enum=resend,enum=postmark,description=Email service provider" default:"resend"`
+	// Resend is the Resend sending credential and inbound webhook signing secret
+	Resend ResendConfig `json:"resend" koanf:"resend" jsonschema:"description=Resend provider configuration"`
+	// Postmark is the Postmark sending credential, delivery options, and inbound webhook password
+	Postmark PostmarkConfig `json:"postmark" koanf:"postmark" jsonschema:"description=Postmark provider configuration"`
 	// FromEmail is the default sender email address
 	FromEmail string `json:"fromemail" koanf:"fromemail" jsonschema:"required,description=Sender email address" default:"support@mail.theopenlane.io"`
 	// SupportEmail is the support contact email address
@@ -60,8 +82,7 @@ type RuntimeEmailConfig struct {
 	ProductURL string `json:"producturl" koanf:"producturl" jsonschema:"description=Product home URL" default:"https://console.theopenlane.io"`
 	// DocsURL is the documentation URL
 	DocsURL string `json:"docsurl" koanf:"docsurl" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
-	// APIURL is the public base URL of this API, used for email links that must hit the API directly
-	// (rather than the console), e.g. the subscriber verify link that confirms then redirects to the trust center
+	// APIURL is the public base URL of this API, used for email links that must hit the API directly (rather than the console), e.g. the subscriber verify link that confirms then redirects to the trust center
 	APIURL string `json:"apiurl" koanf:"apiurl" jsonschema:"description=Public base URL of the API for email links that hit the API directly" default:"https://api.theopenlane.io"`
 	// CompanyName is the display name of the sending company
 	CompanyName string `json:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
@@ -103,8 +124,7 @@ type RuntimeEmailConfig struct {
 	TextColor string `json:"textColor,omitempty" jsonschema:"description=Body paragraph text color" default:"#43454b"`
 	// FooterTextColor is the muted text color for headers, footers, and secondary content
 	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"description=Muted text color for headers footers and secondary content" default:"#5f6165"`
-	// AccentBorderColor is an optional decorative accent applied to borders only (e.g. the card top
-	// bar and callout edge); it never drives container, text, or button colors
+	// AccentBorderColor is an optional decorative accent applied to borders only (e.g. the card top bar and callout edge); it never drives container, text, or button colors
 	AccentBorderColor string `json:"accentBorderColor,omitempty" jsonschema:"description=Decorative accent color applied to borders only"`
 	// Tagline is a short descriptive footer line rendered in modern themes above the social row
 	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
@@ -112,8 +132,7 @@ type RuntimeEmailConfig struct {
 	Social []SocialLink `json:"social,omitempty" jsonschema:"-"`
 }
 
-// DefaultSocial is the default set of social footer links applied to runtime email configs
-// when no explicit social links are provided
+// DefaultSocial is the default set of social footer links applied to runtime email configs when no explicit social links are provided
 var DefaultSocial = []SocialLink{
 	{Platform: "Openlane", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/2c681874-6b4a-41de-73ea-58e550a95800/w=36", URL: "https://www.theopenlane.io"},
 	{Platform: "GitHub", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/39a11dc8-8e01-44ed-8557-0b78ae050a00/w=36", URL: "https://github.com/theopenlane"},
@@ -131,13 +150,39 @@ type SocialLink struct {
 	URL string `json:"url" koanf:"url" jsonschema:"required,description=Destination URL the icon links to"`
 }
 
-// Provisioned reports whether the runtime config has the minimum required fields
-// to build a working email client (API key, provider, and from address)
+// Provisioned reports whether the runtime config names a provider, carries that provider's sending credential, and has a from address
 func (c RuntimeEmailConfig) Provisioned() bool {
-	return c.APIKey != "" && c.Provider != "" && c.FromEmail != ""
+	if c.FromEmail == "" {
+		return false
+	}
+
+	switch c.Provider {
+	case providerResend:
+		return c.Resend.APIKey != ""
+	case providerPostmark:
+		return c.Postmark.ServerToken != ""
+	case ProviderMock:
+		return true
+	default:
+		return false
+	}
 }
 
-// Credential is the credential schema for customer-provisioned email
+// ResendConfig is the operator Resend configuration: the sending credential plus the secret that signs inbound delivery webhooks
+type ResendConfig struct {
+	ResendCredential `koanf:",squash"`
+	// WebhookSecret is the Svix signing secret Resend uses on inbound delivery webhooks
+	WebhookSecret string `json:"webhooksecret,omitempty" koanf:"webhooksecret" jsonschema:"description=Resend webhook signing secret" sensitive:"true"`
+}
+
+// PostmarkConfig is the operator Postmark configuration: the sending credential and delivery options plus the basic auth password on inbound delivery webhooks
+type PostmarkConfig struct {
+	PostmarkCredential `koanf:",squash"`
+	// WebhookSecret is the basic auth password embedded in the webhook URL registered with Postmark
+	WebhookSecret string `json:"webhooksecret,omitempty" koanf:"webhooksecret" jsonschema:"description=Postmark webhook basic auth password" sensitive:"true"`
+}
+
+// Credential is the retired single-provider credential layout whose stored payloads move onto ResendCredential
 type Credential struct {
 	// APIKey is the email provider API key
 	APIKey string `json:"apiKey" jsonschema:"required,description=Email provider API key"`
@@ -145,12 +190,33 @@ type Credential struct {
 	Provider string `json:"provider" jsonschema:"required,enum=resend,description=Email service provider"`
 }
 
-// UserInput is the installation-scoped configuration that customers provide
-// when setting up their own email integration. It carries only the sender identity
-// and the footer identity that cannot come from an email template. Email appearance
-// and content (colors, layout, logos, body) are defined by the email template
-// associated with the send, and trust center update emails additionally inherit the
-// trust center's own branding, so those values are intentionally not collected here
+// ResendCredential is the credential schema for customer-provisioned Resend delivery
+type ResendCredential struct {
+	// APIKey is the Resend API key
+	APIKey string `json:"apiKey" koanf:"apikey" jsonschema:"required,description=Resend API key" sensitive:"true"`
+}
+
+// PostmarkCredential is the credential schema for customer-provisioned Postmark delivery
+type PostmarkCredential struct {
+	// ServerToken is the Postmark server API token
+	ServerToken string `json:"serverToken" koanf:"servertoken" jsonschema:"required,description=Postmark server API token" sensitive:"true"`
+	// MessageStream is the Postmark message stream ID messages are sent through; empty uses the default transactional stream
+	MessageStream string `json:"messageStream,omitempty" koanf:"messagestream" jsonschema:"description=Postmark message stream ID (defaults to outbound)"`
+	// TrackOpens enables Postmark open tracking so open webhooks fire
+	TrackOpens bool `json:"trackOpens,omitempty" koanf:"trackopens" jsonschema:"description=Enable Postmark open tracking"`
+	// TrackLinks selects Postmark link tracking so click webhooks fire
+	TrackLinks string `json:"trackLinks,omitempty" koanf:"tracklinks" jsonschema:"enum=None,enum=HtmlAndText,enum=HtmlOnly,enum=TextOnly,description=Postmark link tracking mode"`
+}
+
+// InstallationMetadata holds the verified delivery configuration for one installation
+type InstallationMetadata struct {
+	// Provider is the email service provider name
+	Provider string `json:"provider,omitempty"`
+	// FromEmail is the address customer-initiated emails are sent from
+	FromEmail string `json:"fromEmail,omitempty"`
+}
+
+// UserInput is the installation-scoped configuration that customers provide when setting up their own email integration
 type UserInput struct {
 	// FromEmail is the address customer-initiated emails are sent from, using the configured provider key
 	FromEmail string `json:"fromEmail" jsonschema:"required,description=Email address your emails are sent from using your configured provider key"`

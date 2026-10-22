@@ -81,6 +81,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	CatalogManaged   func(ctx context.Context, obj any, next graphql.Resolver) (res any, err error)
 	ExternalReadOnly func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
 	ExternalSource   func(ctx context.Context, obj any, next graphql.Resolver, source *enums.ControlSource) (res any, err error)
 	Hidden           func(ctx context.Context, obj any, next graphql.Resolver, ifArg *bool) (res any, err error)
@@ -194,6 +195,13 @@ type ComplexityRoot struct {
 		IntegrationRuns                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes                   func(childComplexity int) int
+		InternalOwner                   func(childComplexity int) int
+		InternalOwnerGroup              func(childComplexity int) int
+		InternalOwnerGroupID            func(childComplexity int) int
+		InternalOwnerIdentityHolder     func(childComplexity int) int
+		InternalOwnerIdentityHolderID   func(childComplexity int) int
+		InternalOwnerUser               func(childComplexity int) int
+		InternalOwnerUserID             func(childComplexity int) int
 		ManagedBy                       func(childComplexity int) int
 		ManagementMode                  func(childComplexity int) int
 		Metadata                        func(childComplexity int) int
@@ -1930,6 +1938,7 @@ type ComplexityRoot struct {
 	}
 
 	Entity struct {
+		Adopted                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Aliases                               func(childComplexity int) int
 		AnnualSpend                           func(childComplexity int) int
 		ApprovedForUse                        func(childComplexity int) int
@@ -1940,6 +1949,9 @@ type ComplexityRoot struct {
 		BillingModel                          func(childComplexity int) int
 		BlockedGroups                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Campaigns                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		Catalog                               func(childComplexity int) int
+		CatalogID                             func(childComplexity int) int
+		CatalogKey                            func(childComplexity int) int
 		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
@@ -1968,6 +1980,7 @@ type ComplexityRoot struct {
 		EnvironmentID                         func(childComplexity int) int
 		EnvironmentName                       func(childComplexity int) int
 		ExternalID                            func(childComplexity int) int
+		ExternallyVisible                     func(childComplexity int) int
 		Files                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Findings                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		HasSoc2                               func(childComplexity int) int
@@ -2003,6 +2016,7 @@ type ComplexityRoot struct {
 		OwnerID                               func(childComplexity int) int
 		Platforms                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		ProvidedServices                      func(childComplexity int) int
+		RawIngestPayload                      func(childComplexity int) int
 		Remediations                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		RenewalRisk                           func(childComplexity int) int
 		ReviewFrequency                       func(childComplexity int) int
@@ -3112,6 +3126,7 @@ type ComplexityRoot struct {
 		Metadata                 func(childComplexity int) int
 		Name                     func(childComplexity int) int
 		NotificationTemplates    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NotificationTemplateOrder, where *generated.NotificationTemplateWhereInput) int
+		OperationConfig          func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		Platform                 func(childComplexity int) int
@@ -3504,6 +3519,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		AdminReassignWorkflowAssignment      func(childComplexity int, input model.ReassignWorkflowAssignmentInput) int
+		AdoptEntity                          func(childComplexity int, catalogID string, input *generated.CreateEntityInput) int
 		ApproveNDARequests                   func(childComplexity int, ids []string) int
 		ApproveWorkflowAssignment            func(childComplexity int, id string) int
 		BulkCancelWorkflowInstances          func(childComplexity int, ids []string, reason *string) int
@@ -5276,6 +5292,7 @@ type ComplexityRoot struct {
 		EmailTemplateSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		EmailTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntitiesCatalog                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Entity                          func(childComplexity int, id string) int
 		EntitySearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		EntityType                      func(childComplexity int, id string) int
@@ -6980,6 +6997,7 @@ type ComplexityRoot struct {
 		ApprovedAt            func(childComplexity int) int
 		ApprovedByUser        func(childComplexity int) int
 		ApprovedByUserID      func(childComplexity int) int
+		AutoApproved          func(childComplexity int) int
 		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CompanyName           func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -7049,6 +7067,7 @@ type ComplexityRoot struct {
 	TrustCenterSetting struct {
 		AccentColor                           func(childComplexity int) int
 		AllowSubscribers                      func(childComplexity int) int
+		AutoApprovalRules                     func(childComplexity int) int
 		BackgroundColor                       func(childComplexity int) int
 		BlockedGroups                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CompanyDescription                    func(childComplexity int) int
@@ -7057,6 +7076,7 @@ type ComplexityRoot struct {
 		CreatedAt                             func(childComplexity int) int
 		CreatedBy                             func(childComplexity int) int
 		Editors                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		EnableAutoApproval                    func(childComplexity int) int
 		Environment                           func(childComplexity int) int
 		FaviconFile                           func(childComplexity int) int
 		FaviconLocalFileID                    func(childComplexity int) int
@@ -8597,6 +8617,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlan.InternalNotes(childComplexity), true
+	case "ActionPlan.internalOwner":
+		if e.ComplexityRoot.ActionPlan.InternalOwner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwner(childComplexity), true
+	case "ActionPlan.internalOwnerGroup":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerGroup == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerGroup(childComplexity), true
+	case "ActionPlan.internalOwnerGroupID":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerGroupID(childComplexity), true
+	case "ActionPlan.internalOwnerIdentityHolder":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerIdentityHolder == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerIdentityHolder(childComplexity), true
+	case "ActionPlan.internalOwnerIdentityHolderID":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerIdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerIdentityHolderID(childComplexity), true
+	case "ActionPlan.internalOwnerUser":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerUser(childComplexity), true
+	case "ActionPlan.internalOwnerUserID":
+		if e.ComplexityRoot.ActionPlan.InternalOwnerUserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.InternalOwnerUserID(childComplexity), true
 	case "ActionPlan.managedBy":
 		if e.ComplexityRoot.ActionPlan.ManagedBy == nil {
 			break
@@ -16472,6 +16534,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateUpdatePayload.EmailTemplate(childComplexity), true
 
+	case "Entity.adopted":
+		if e.ComplexityRoot.Entity.Adopted == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_adopted_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Entity.Adopted(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Entity.aliases":
 		if e.ComplexityRoot.Entity.Aliases == nil {
 			break
@@ -16557,6 +16630,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+	case "Entity.catalog":
+		if e.ComplexityRoot.Entity.Catalog == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.Catalog(childComplexity), true
+	case "Entity.catalogID":
+		if e.ComplexityRoot.Entity.CatalogID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.CatalogID(childComplexity), true
+	case "Entity.catalogKey":
+		if e.ComplexityRoot.Entity.CatalogKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.CatalogKey(childComplexity), true
 	case "Entity.contacts":
 		if e.ComplexityRoot.Entity.Contacts == nil {
 			break
@@ -16750,6 +16841,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.ExternalID(childComplexity), true
+	case "Entity.externallyVisible":
+		if e.ComplexityRoot.Entity.ExternallyVisible == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.ExternallyVisible(childComplexity), true
 	case "Entity.files":
 		if e.ComplexityRoot.Entity.Files == nil {
 			break
@@ -17005,6 +17102,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.ProvidedServices(childComplexity), true
+	case "Entity.rawIngestPayload":
+		if e.ComplexityRoot.Entity.RawIngestPayload == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.RawIngestPayload(childComplexity), true
 	case "Entity.remediations":
 		if e.ComplexityRoot.Entity.Remediations == nil {
 			break
@@ -22489,6 +22592,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.NotificationTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NotificationTemplateOrder), args["where"].(*generated.NotificationTemplateWhereInput)), true
+	case "Integration.operationConfig":
+		if e.ComplexityRoot.Integration.OperationConfig == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.OperationConfig(childComplexity), true
 	case "Integration.owner":
 		if e.ComplexityRoot.Integration.Owner == nil {
 			break
@@ -24365,6 +24474,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.AdminReassignWorkflowAssignment(childComplexity, args["input"].(model.ReassignWorkflowAssignmentInput)), true
+	case "Mutation.adoptEntity":
+		if e.ComplexityRoot.Mutation.AdoptEntity == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_adoptEntity_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.AdoptEntity(childComplexity, args["catalogID"].(string), args["input"].(*generated.CreateEntityInput)), true
 	case "Mutation.approveNDARequests":
 		if e.ComplexityRoot.Mutation.ApproveNDARequests == nil {
 			break
@@ -37170,6 +37290,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+	case "Query.entitiesCatalog":
+		if e.ComplexityRoot.Query.EntitiesCatalog == nil {
+			break
+		}
+
+		args, err := ec.field_Query_entitiesCatalog_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.EntitiesCatalog(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Query.entity":
 		if e.ComplexityRoot.Query.Entity == nil {
 			break
@@ -46110,6 +46241,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterNDARequest.ApprovedByUserID(childComplexity), true
+	case "TrustCenterNDARequest.autoApproved":
+		if e.ComplexityRoot.TrustCenterNDARequest.AutoApproved == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequest.AutoApproved(childComplexity), true
 	case "TrustCenterNDARequest.blockedGroups":
 		if e.ComplexityRoot.TrustCenterNDARequest.BlockedGroups == nil {
 			break
@@ -46369,6 +46506,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSetting.AllowSubscribers(childComplexity), true
+	case "TrustCenterSetting.autoApprovalRules":
+		if e.ComplexityRoot.TrustCenterSetting.AutoApprovalRules == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.AutoApprovalRules(childComplexity), true
 	case "TrustCenterSetting.backgroundColor":
 		if e.ComplexityRoot.TrustCenterSetting.BackgroundColor == nil {
 			break
@@ -46427,6 +46570,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSetting.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "TrustCenterSetting.enableAutoApproval":
+		if e.ComplexityRoot.TrustCenterSetting.EnableAutoApproval == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.EnableAutoApproval(childComplexity), true
 	case "TrustCenterSetting.environment":
 		if e.ComplexityRoot.TrustCenterSetting.Environment == nil {
 			break
@@ -51087,387 +51236,389 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	opCtx := graphql.GetOperationContext(ctx)
 	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
-	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
-		ec.unmarshalInputAPITokenOrder,
-		ec.unmarshalInputAPITokenWhereInput,
-		ec.unmarshalInputActionPlanOrder,
-		ec.unmarshalInputActionPlanWhereInput,
-		ec.unmarshalInputAddProgramMembershipInput,
-		ec.unmarshalInputAssessmentOrder,
-		ec.unmarshalInputAssessmentPoliciesInput,
-		ec.unmarshalInputAssessmentPolicyOrder,
-		ec.unmarshalInputAssessmentPolicyWhereInput,
-		ec.unmarshalInputAssessmentResponseOrder,
-		ec.unmarshalInputAssessmentResponseWhereInput,
-		ec.unmarshalInputAssessmentWhereInput,
-		ec.unmarshalInputAssetOrder,
-		ec.unmarshalInputAssetWhereInput,
-		ec.unmarshalInputCampaignOrder,
-		ec.unmarshalInputCampaignTargetOrder,
-		ec.unmarshalInputCampaignTargetWhereInput,
-		ec.unmarshalInputCampaignWhereInput,
-		ec.unmarshalInputCheckResultOrder,
-		ec.unmarshalInputCheckResultWhereInput,
-		ec.unmarshalInputCloneControlInput,
-		ec.unmarshalInputCloneControlUploadInput,
-		ec.unmarshalInputContactOrder,
-		ec.unmarshalInputContactWhereInput,
-		ec.unmarshalInputControlCategoryOrder,
-		ec.unmarshalInputControlDiffInput,
-		ec.unmarshalInputControlImplementationOrder,
-		ec.unmarshalInputControlImplementationWhereInput,
-		ec.unmarshalInputControlObjectiveOrder,
-		ec.unmarshalInputControlObjectiveWhereInput,
-		ec.unmarshalInputControlOrder,
-		ec.unmarshalInputControlReportOrder,
-		ec.unmarshalInputControlWhereInput,
-		ec.unmarshalInputCreateAPITokenInput,
-		ec.unmarshalInputCreateActionPlanInput,
-		ec.unmarshalInputCreateAssessmentInput,
-		ec.unmarshalInputCreateAssessmentPolicyInput,
-		ec.unmarshalInputCreateAssessmentResponseInput,
-		ec.unmarshalInputCreateAssessmentTemplateInput,
-		ec.unmarshalInputCreateAssetInput,
-		ec.unmarshalInputCreateCampaignInput,
-		ec.unmarshalInputCreateCampaignTargetInput,
-		ec.unmarshalInputCreateCampaignWithTargetsInput,
-		ec.unmarshalInputCreateCheckResultInput,
-		ec.unmarshalInputCreateContactInput,
-		ec.unmarshalInputCreateControlImplementationInput,
-		ec.unmarshalInputCreateControlInput,
-		ec.unmarshalInputCreateControlObjectiveInput,
-		ec.unmarshalInputCreateControlWithSubcontrolsInput,
-		ec.unmarshalInputCreateCustomDomainInput,
-		ec.unmarshalInputCreateCustomTypeEnumInput,
-		ec.unmarshalInputCreateDNSVerificationInput,
-		ec.unmarshalInputCreateDirectoryAccountInput,
-		ec.unmarshalInputCreateDirectoryGroupInput,
-		ec.unmarshalInputCreateDirectoryMembershipInput,
-		ec.unmarshalInputCreateDiscussionInput,
-		ec.unmarshalInputCreateDocumentDataInput,
-		ec.unmarshalInputCreateEmailTemplateInput,
-		ec.unmarshalInputCreateEntityInput,
-		ec.unmarshalInputCreateEntityTypeInput,
-		ec.unmarshalInputCreateEventInput,
-		ec.unmarshalInputCreateEvidenceInput,
-		ec.unmarshalInputCreateExportInput,
-		ec.unmarshalInputCreateFileInput,
-		ec.unmarshalInputCreateFindingControlInput,
-		ec.unmarshalInputCreateFindingInput,
-		ec.unmarshalInputCreateFullProgramInput,
-		ec.unmarshalInputCreateGroupInput,
-		ec.unmarshalInputCreateGroupMembershipInput,
-		ec.unmarshalInputCreateGroupSettingInput,
-		ec.unmarshalInputCreateHushInput,
-		ec.unmarshalInputCreateIdentityHolderInput,
-		ec.unmarshalInputCreateInternalPolicyInput,
-		ec.unmarshalInputCreateInviteInput,
-		ec.unmarshalInputCreateMappableDomainInput,
-		ec.unmarshalInputCreateMappedControlInput,
-		ec.unmarshalInputCreateMemberWithProgramInput,
-		ec.unmarshalInputCreateNarrativeInput,
-		ec.unmarshalInputCreateNoteInput,
-		ec.unmarshalInputCreateNotificationInput,
-		ec.unmarshalInputCreateNotificationPreferenceInput,
-		ec.unmarshalInputCreateNotificationTemplateInput,
-		ec.unmarshalInputCreateOnboardingInput,
-		ec.unmarshalInputCreateOrgMembershipInput,
-		ec.unmarshalInputCreateOrganizationInput,
-		ec.unmarshalInputCreateOrganizationSettingInput,
-		ec.unmarshalInputCreatePersonalAccessTokenInput,
-		ec.unmarshalInputCreatePlatformInput,
-		ec.unmarshalInputCreateProcedureInput,
-		ec.unmarshalInputCreateProgramInput,
-		ec.unmarshalInputCreateProgramMembershipInput,
-		ec.unmarshalInputCreateProgramWithMembersInput,
-		ec.unmarshalInputCreateRemediationInput,
-		ec.unmarshalInputCreateReviewInput,
-		ec.unmarshalInputCreateRiskInput,
-		ec.unmarshalInputCreateSLADefinitionInput,
-		ec.unmarshalInputCreateScanInput,
-		ec.unmarshalInputCreateStandardInput,
-		ec.unmarshalInputCreateSubcontrolInput,
-		ec.unmarshalInputCreateSubprocessorInput,
-		ec.unmarshalInputCreateSubscriberInput,
-		ec.unmarshalInputCreateSystemDetailInput,
-		ec.unmarshalInputCreateTFASettingInput,
-		ec.unmarshalInputCreateTagDefinitionInput,
-		ec.unmarshalInputCreateTaskInput,
-		ec.unmarshalInputCreateTemplateInput,
-		ec.unmarshalInputCreateTrustCenterComplianceInput,
-		ec.unmarshalInputCreateTrustCenterDocInput,
-		ec.unmarshalInputCreateTrustCenterDomainInput,
-		ec.unmarshalInputCreateTrustCenterEntityInput,
-		ec.unmarshalInputCreateTrustCenterFAQInput,
-		ec.unmarshalInputCreateTrustCenterInput,
-		ec.unmarshalInputCreateTrustCenterNDAInput,
-		ec.unmarshalInputCreateTrustCenterNDARequestInput,
-		ec.unmarshalInputCreateTrustCenterPreviewSettingInput,
-		ec.unmarshalInputCreateTrustCenterSettingInput,
-		ec.unmarshalInputCreateTrustCenterSubprocessorInput,
-		ec.unmarshalInputCreateTrustCenterWatermarkConfigInput,
-		ec.unmarshalInputCreateUserInput,
-		ec.unmarshalInputCreateUserSettingInput,
-		ec.unmarshalInputCreateVendorRiskScoreInput,
-		ec.unmarshalInputCreateVendorScoringConfigInput,
-		ec.unmarshalInputCreateVulnerabilityInput,
-		ec.unmarshalInputCreateWorkflowDefinitionInput,
-		ec.unmarshalInputCustomDomainOrder,
-		ec.unmarshalInputCustomDomainWhereInput,
-		ec.unmarshalInputCustomTypeEnumOrder,
-		ec.unmarshalInputCustomTypeEnumWhereInput,
-		ec.unmarshalInputDNSVerificationOrder,
-		ec.unmarshalInputDNSVerificationWhereInput,
-		ec.unmarshalInputDirectoryAccountOrder,
-		ec.unmarshalInputDirectoryAccountWhereInput,
-		ec.unmarshalInputDirectoryGroupOrder,
-		ec.unmarshalInputDirectoryGroupWhereInput,
-		ec.unmarshalInputDirectoryMembershipOrder,
-		ec.unmarshalInputDirectoryMembershipWhereInput,
-		ec.unmarshalInputDiscussionOrder,
-		ec.unmarshalInputDiscussionWhereInput,
-		ec.unmarshalInputDocumentDataOrder,
-		ec.unmarshalInputDocumentDataWhereInput,
-		ec.unmarshalInputEmailTemplateOrder,
-		ec.unmarshalInputEmailTemplateWhereInput,
-		ec.unmarshalInputEntityOrder,
-		ec.unmarshalInputEntityTypeOrder,
-		ec.unmarshalInputEntityTypeWhereInput,
-		ec.unmarshalInputEntityWhereInput,
-		ec.unmarshalInputEventOrder,
-		ec.unmarshalInputEventWhereInput,
-		ec.unmarshalInputEvidenceOrder,
-		ec.unmarshalInputEvidenceWhereInput,
-		ec.unmarshalInputExportOrder,
-		ec.unmarshalInputExportWhereInput,
-		ec.unmarshalInputFileMetadataInput,
-		ec.unmarshalInputFileOrder,
-		ec.unmarshalInputFileWhereInput,
-		ec.unmarshalInputFindingControlOrder,
-		ec.unmarshalInputFindingControlWhereInput,
-		ec.unmarshalInputFindingOrder,
-		ec.unmarshalInputFindingWhereInput,
-		ec.unmarshalInputGroupMembersInput,
-		ec.unmarshalInputGroupMembershipOrder,
-		ec.unmarshalInputGroupMembershipWhereInput,
-		ec.unmarshalInputGroupOrder,
-		ec.unmarshalInputGroupPermissionOrder,
-		ec.unmarshalInputGroupPermissionWhereInput,
-		ec.unmarshalInputGroupSettingOrder,
-		ec.unmarshalInputGroupSettingWhereInput,
-		ec.unmarshalInputGroupWhereInput,
-		ec.unmarshalInputHushOrder,
-		ec.unmarshalInputHushWhereInput,
-		ec.unmarshalInputIdentityHolderOrder,
-		ec.unmarshalInputIdentityHolderWhereInput,
-		ec.unmarshalInputImportDomainScanReviewAssetInput,
-		ec.unmarshalInputImportDomainScanReviewBrandDesignInput,
-		ec.unmarshalInputImportDomainScanReviewFindingInput,
-		ec.unmarshalInputImportDomainScanReviewInput,
-		ec.unmarshalInputImportDomainScanReviewPlatformInput,
-		ec.unmarshalInputImportDomainScanReviewSystemInput,
-		ec.unmarshalInputImportDomainScanReviewVendorInput,
-		ec.unmarshalInputIntegrationOrder,
-		ec.unmarshalInputIntegrationRunOrder,
-		ec.unmarshalInputIntegrationRunWhereInput,
-		ec.unmarshalInputIntegrationWhereInput,
-		ec.unmarshalInputInternalPolicyOrder,
-		ec.unmarshalInputInternalPolicyWhereInput,
-		ec.unmarshalInputInviteOrder,
-		ec.unmarshalInputInviteWhereInput,
-		ec.unmarshalInputLaunchCampaignInput,
-		ec.unmarshalInputMappableDomainOrder,
-		ec.unmarshalInputMappableDomainWhereInput,
-		ec.unmarshalInputMappedControlOrder,
-		ec.unmarshalInputMappedControlWhereInput,
-		ec.unmarshalInputNarrativeOrder,
-		ec.unmarshalInputNarrativeWhereInput,
-		ec.unmarshalInputNoteOrder,
-		ec.unmarshalInputNoteWhereInput,
-		ec.unmarshalInputNotificationOrder,
-		ec.unmarshalInputNotificationPreferenceOrder,
-		ec.unmarshalInputNotificationPreferenceWhereInput,
-		ec.unmarshalInputNotificationTemplateOrder,
-		ec.unmarshalInputNotificationTemplateWhereInput,
-		ec.unmarshalInputOnboardingWhereInput,
-		ec.unmarshalInputOrgMembersInput,
-		ec.unmarshalInputOrgMembershipOrder,
-		ec.unmarshalInputOrgMembershipWhereInput,
-		ec.unmarshalInputOrgSubscriptionOrder,
-		ec.unmarshalInputOrgSubscriptionWhereInput,
-		ec.unmarshalInputOrganizationOrder,
-		ec.unmarshalInputOrganizationSettingOrder,
-		ec.unmarshalInputOrganizationSettingWhereInput,
-		ec.unmarshalInputOrganizationWhereInput,
-		ec.unmarshalInputPersonalAccessTokenOrder,
-		ec.unmarshalInputPersonalAccessTokenWhereInput,
-		ec.unmarshalInputPlatformOrder,
-		ec.unmarshalInputPlatformWhereInput,
-		ec.unmarshalInputProcedureOrder,
-		ec.unmarshalInputProcedureWhereInput,
-		ec.unmarshalInputProgramMembershipOrder,
-		ec.unmarshalInputProgramMembershipWhereInput,
-		ec.unmarshalInputProgramOrder,
-		ec.unmarshalInputProgramWhereInput,
-		ec.unmarshalInputReassignWorkflowAssignmentInput,
-		ec.unmarshalInputRemediationOrder,
-		ec.unmarshalInputRemediationWhereInput,
-		ec.unmarshalInputResendCampaignIncompleteInput,
-		ec.unmarshalInputResolveVulnerabilityInput,
-		ec.unmarshalInputReviewOrder,
-		ec.unmarshalInputReviewWhereInput,
-		ec.unmarshalInputRiskOrder,
-		ec.unmarshalInputRiskWhereInput,
-		ec.unmarshalInputSLADefinitionOrder,
-		ec.unmarshalInputSLADefinitionWhereInput,
-		ec.unmarshalInputScanOrder,
-		ec.unmarshalInputScanWhereInput,
-		ec.unmarshalInputSendCampaignTestEmailInput,
-		ec.unmarshalInputStandardOrder,
-		ec.unmarshalInputStandardWhereInput,
-		ec.unmarshalInputSubcontrolOrder,
-		ec.unmarshalInputSubcontrolWhereInput,
-		ec.unmarshalInputSubmitTrustCenterNDAResponseInput,
-		ec.unmarshalInputSubprocessorOrder,
-		ec.unmarshalInputSubprocessorWhereInput,
-		ec.unmarshalInputSubscriberOrder,
-		ec.unmarshalInputSubscriberWhereInput,
-		ec.unmarshalInputSystemDetailOrder,
-		ec.unmarshalInputSystemDetailWhereInput,
-		ec.unmarshalInputTFASettingOrder,
-		ec.unmarshalInputTFASettingWhereInput,
-		ec.unmarshalInputTagDefinitionOrder,
-		ec.unmarshalInputTagDefinitionWhereInput,
-		ec.unmarshalInputTaskOrder,
-		ec.unmarshalInputTaskWhereInput,
-		ec.unmarshalInputTemplateOrder,
-		ec.unmarshalInputTemplateWhereInput,
-		ec.unmarshalInputTrustCenterComplianceOrder,
-		ec.unmarshalInputTrustCenterComplianceWhereInput,
-		ec.unmarshalInputTrustCenterDocOrder,
-		ec.unmarshalInputTrustCenterDocWhereInput,
-		ec.unmarshalInputTrustCenterEntityOrder,
-		ec.unmarshalInputTrustCenterEntityWhereInput,
-		ec.unmarshalInputTrustCenterFAQOrder,
-		ec.unmarshalInputTrustCenterFAQWhereInput,
-		ec.unmarshalInputTrustCenterNDARequestOrder,
-		ec.unmarshalInputTrustCenterNDARequestWhereInput,
-		ec.unmarshalInputTrustCenterOrder,
-		ec.unmarshalInputTrustCenterSettingOrder,
-		ec.unmarshalInputTrustCenterSettingWhereInput,
-		ec.unmarshalInputTrustCenterSubprocessorOrder,
-		ec.unmarshalInputTrustCenterSubprocessorWhereInput,
-		ec.unmarshalInputTrustCenterWatermarkConfigOrder,
-		ec.unmarshalInputTrustCenterWatermarkConfigWhereInput,
-		ec.unmarshalInputTrustCenterWhereInput,
-		ec.unmarshalInputUpdateAPITokenInput,
-		ec.unmarshalInputUpdateActionPlanInput,
-		ec.unmarshalInputUpdateAssessmentInput,
-		ec.unmarshalInputUpdateAssessmentPolicyInput,
-		ec.unmarshalInputUpdateAssetInput,
-		ec.unmarshalInputUpdateCampaignInput,
-		ec.unmarshalInputUpdateCampaignTargetInput,
-		ec.unmarshalInputUpdateCheckResultInput,
-		ec.unmarshalInputUpdateContactInput,
-		ec.unmarshalInputUpdateControlImplementationInput,
-		ec.unmarshalInputUpdateControlInput,
-		ec.unmarshalInputUpdateControlObjectiveInput,
-		ec.unmarshalInputUpdateCustomDomainInput,
-		ec.unmarshalInputUpdateCustomTypeEnumInput,
-		ec.unmarshalInputUpdateDNSVerificationInput,
-		ec.unmarshalInputUpdateDirectoryAccountInput,
-		ec.unmarshalInputUpdateDirectoryGroupInput,
-		ec.unmarshalInputUpdateDirectoryMembershipInput,
-		ec.unmarshalInputUpdateDiscussionInput,
-		ec.unmarshalInputUpdateDiscussionsInput,
-		ec.unmarshalInputUpdateDocumentDataInput,
-		ec.unmarshalInputUpdateEmailTemplateInput,
-		ec.unmarshalInputUpdateEntityInput,
-		ec.unmarshalInputUpdateEntityTypeInput,
-		ec.unmarshalInputUpdateEventInput,
-		ec.unmarshalInputUpdateEvidenceInput,
-		ec.unmarshalInputUpdateExportInput,
-		ec.unmarshalInputUpdateFileInput,
-		ec.unmarshalInputUpdateFindingControlInput,
-		ec.unmarshalInputUpdateFindingInput,
-		ec.unmarshalInputUpdateGroupInput,
-		ec.unmarshalInputUpdateGroupMembershipInput,
-		ec.unmarshalInputUpdateGroupSettingInput,
-		ec.unmarshalInputUpdateHushInput,
-		ec.unmarshalInputUpdateIdentityHolderInput,
-		ec.unmarshalInputUpdateInternalPolicyInput,
-		ec.unmarshalInputUpdateInviteInput,
-		ec.unmarshalInputUpdateMappableDomainInput,
-		ec.unmarshalInputUpdateMappedControlInput,
-		ec.unmarshalInputUpdateNarrativeInput,
-		ec.unmarshalInputUpdateNoteInput,
-		ec.unmarshalInputUpdateNotificationInput,
-		ec.unmarshalInputUpdateNotificationPreferenceInput,
-		ec.unmarshalInputUpdateNotificationTemplateInput,
-		ec.unmarshalInputUpdateOrgMembershipInput,
-		ec.unmarshalInputUpdateOrganizationInput,
-		ec.unmarshalInputUpdateOrganizationSettingInput,
-		ec.unmarshalInputUpdatePersonalAccessTokenInput,
-		ec.unmarshalInputUpdatePlatformInput,
-		ec.unmarshalInputUpdateProcedureInput,
-		ec.unmarshalInputUpdateProgramInput,
-		ec.unmarshalInputUpdateProgramMembershipInput,
-		ec.unmarshalInputUpdateRemediationInput,
-		ec.unmarshalInputUpdateReviewInput,
-		ec.unmarshalInputUpdateRiskInput,
-		ec.unmarshalInputUpdateSLADefinitionInput,
-		ec.unmarshalInputUpdateScanInput,
-		ec.unmarshalInputUpdateStandardInput,
-		ec.unmarshalInputUpdateSubcontrolInput,
-		ec.unmarshalInputUpdateSubprocessorInput,
-		ec.unmarshalInputUpdateSubscriberInput,
-		ec.unmarshalInputUpdateSystemDetailInput,
-		ec.unmarshalInputUpdateTFASettingInput,
-		ec.unmarshalInputUpdateTagDefinitionInput,
-		ec.unmarshalInputUpdateTaskInput,
-		ec.unmarshalInputUpdateTemplateInput,
-		ec.unmarshalInputUpdateTrustCenterComplianceInput,
-		ec.unmarshalInputUpdateTrustCenterDocInput,
-		ec.unmarshalInputUpdateTrustCenterEntityInput,
-		ec.unmarshalInputUpdateTrustCenterFAQInput,
-		ec.unmarshalInputUpdateTrustCenterInput,
-		ec.unmarshalInputUpdateTrustCenterNDARequestInput,
-		ec.unmarshalInputUpdateTrustCenterSettingInput,
-		ec.unmarshalInputUpdateTrustCenterSubprocessorInput,
-		ec.unmarshalInputUpdateTrustCenterWatermarkConfigInput,
-		ec.unmarshalInputUpdateUserInput,
-		ec.unmarshalInputUpdateUserSettingInput,
-		ec.unmarshalInputUpdateVendorRiskScoreInput,
-		ec.unmarshalInputUpdateVendorScoringConfigInput,
-		ec.unmarshalInputUpdateVulnerabilityInput,
-		ec.unmarshalInputUpdateWorkflowDefinitionInput,
-		ec.unmarshalInputUpdateWorkflowProposalChangesInput,
-		ec.unmarshalInputUserOrder,
-		ec.unmarshalInputUserSettingOrder,
-		ec.unmarshalInputUserSettingWhereInput,
-		ec.unmarshalInputUserWhereInput,
-		ec.unmarshalInputVendorRiskScoreOrder,
-		ec.unmarshalInputVendorRiskScoreWhereInput,
-		ec.unmarshalInputVendorScoringConfigOrder,
-		ec.unmarshalInputVendorScoringConfigWhereInput,
-		ec.unmarshalInputVulnerabilityOrder,
-		ec.unmarshalInputVulnerabilityWhereInput,
-		ec.unmarshalInputWebauthnOrder,
-		ec.unmarshalInputWebauthnWhereInput,
-		ec.unmarshalInputWorkflowAssignmentOrder,
-		ec.unmarshalInputWorkflowAssignmentTargetInput,
-		ec.unmarshalInputWorkflowAssignmentTargetOrder,
-		ec.unmarshalInputWorkflowAssignmentTargetWhereInput,
-		ec.unmarshalInputWorkflowAssignmentWhereInput,
-		ec.unmarshalInputWorkflowDefinitionOrder,
-		ec.unmarshalInputWorkflowDefinitionWhereInput,
-		ec.unmarshalInputWorkflowEventOrder,
-		ec.unmarshalInputWorkflowEventWhereInput,
-		ec.unmarshalInputWorkflowInstanceOrder,
-		ec.unmarshalInputWorkflowInstanceWhereInput,
-		ec.unmarshalInputWorkflowObjectRefOrder,
-		ec.unmarshalInputWorkflowObjectRefWhereInput,
-	)
+	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
+		return graphql.NewInputUnmarshalerIndex(
+			graphql.NewInputUnmarshaler("APITokenOrder", ec.unmarshalInputAPITokenOrder),
+			graphql.NewInputUnmarshaler("APITokenWhereInput", ec.unmarshalInputAPITokenWhereInput),
+			graphql.NewInputUnmarshaler("ActionPlanOrder", ec.unmarshalInputActionPlanOrder),
+			graphql.NewInputUnmarshaler("ActionPlanWhereInput", ec.unmarshalInputActionPlanWhereInput),
+			graphql.NewInputUnmarshaler("AddProgramMembershipInput", ec.unmarshalInputAddProgramMembershipInput),
+			graphql.NewInputUnmarshaler("AssessmentOrder", ec.unmarshalInputAssessmentOrder),
+			graphql.NewInputUnmarshaler("AssessmentPoliciesInput", ec.unmarshalInputAssessmentPoliciesInput),
+			graphql.NewInputUnmarshaler("AssessmentPolicyOrder", ec.unmarshalInputAssessmentPolicyOrder),
+			graphql.NewInputUnmarshaler("AssessmentPolicyWhereInput", ec.unmarshalInputAssessmentPolicyWhereInput),
+			graphql.NewInputUnmarshaler("AssessmentResponseOrder", ec.unmarshalInputAssessmentResponseOrder),
+			graphql.NewInputUnmarshaler("AssessmentResponseWhereInput", ec.unmarshalInputAssessmentResponseWhereInput),
+			graphql.NewInputUnmarshaler("AssessmentWhereInput", ec.unmarshalInputAssessmentWhereInput),
+			graphql.NewInputUnmarshaler("AssetOrder", ec.unmarshalInputAssetOrder),
+			graphql.NewInputUnmarshaler("AssetWhereInput", ec.unmarshalInputAssetWhereInput),
+			graphql.NewInputUnmarshaler("CampaignOrder", ec.unmarshalInputCampaignOrder),
+			graphql.NewInputUnmarshaler("CampaignTargetOrder", ec.unmarshalInputCampaignTargetOrder),
+			graphql.NewInputUnmarshaler("CampaignTargetWhereInput", ec.unmarshalInputCampaignTargetWhereInput),
+			graphql.NewInputUnmarshaler("CampaignWhereInput", ec.unmarshalInputCampaignWhereInput),
+			graphql.NewInputUnmarshaler("CheckResultOrder", ec.unmarshalInputCheckResultOrder),
+			graphql.NewInputUnmarshaler("CheckResultWhereInput", ec.unmarshalInputCheckResultWhereInput),
+			graphql.NewInputUnmarshaler("CloneControlInput", ec.unmarshalInputCloneControlInput),
+			graphql.NewInputUnmarshaler("CloneControlUploadInput", ec.unmarshalInputCloneControlUploadInput),
+			graphql.NewInputUnmarshaler("ContactOrder", ec.unmarshalInputContactOrder),
+			graphql.NewInputUnmarshaler("ContactWhereInput", ec.unmarshalInputContactWhereInput),
+			graphql.NewInputUnmarshaler("ControlCategoryOrder", ec.unmarshalInputControlCategoryOrder),
+			graphql.NewInputUnmarshaler("ControlDiffInput", ec.unmarshalInputControlDiffInput),
+			graphql.NewInputUnmarshaler("ControlImplementationOrder", ec.unmarshalInputControlImplementationOrder),
+			graphql.NewInputUnmarshaler("ControlImplementationWhereInput", ec.unmarshalInputControlImplementationWhereInput),
+			graphql.NewInputUnmarshaler("ControlObjectiveOrder", ec.unmarshalInputControlObjectiveOrder),
+			graphql.NewInputUnmarshaler("ControlObjectiveWhereInput", ec.unmarshalInputControlObjectiveWhereInput),
+			graphql.NewInputUnmarshaler("ControlOrder", ec.unmarshalInputControlOrder),
+			graphql.NewInputUnmarshaler("ControlReportOrder", ec.unmarshalInputControlReportOrder),
+			graphql.NewInputUnmarshaler("ControlWhereInput", ec.unmarshalInputControlWhereInput),
+			graphql.NewInputUnmarshaler("CreateAPITokenInput", ec.unmarshalInputCreateAPITokenInput),
+			graphql.NewInputUnmarshaler("CreateActionPlanInput", ec.unmarshalInputCreateActionPlanInput),
+			graphql.NewInputUnmarshaler("CreateAssessmentInput", ec.unmarshalInputCreateAssessmentInput),
+			graphql.NewInputUnmarshaler("CreateAssessmentPolicyInput", ec.unmarshalInputCreateAssessmentPolicyInput),
+			graphql.NewInputUnmarshaler("CreateAssessmentResponseInput", ec.unmarshalInputCreateAssessmentResponseInput),
+			graphql.NewInputUnmarshaler("CreateAssessmentTemplateInput", ec.unmarshalInputCreateAssessmentTemplateInput),
+			graphql.NewInputUnmarshaler("CreateAssetInput", ec.unmarshalInputCreateAssetInput),
+			graphql.NewInputUnmarshaler("CreateCampaignInput", ec.unmarshalInputCreateCampaignInput),
+			graphql.NewInputUnmarshaler("CreateCampaignTargetInput", ec.unmarshalInputCreateCampaignTargetInput),
+			graphql.NewInputUnmarshaler("CreateCampaignWithTargetsInput", ec.unmarshalInputCreateCampaignWithTargetsInput),
+			graphql.NewInputUnmarshaler("CreateCheckResultInput", ec.unmarshalInputCreateCheckResultInput),
+			graphql.NewInputUnmarshaler("CreateContactInput", ec.unmarshalInputCreateContactInput),
+			graphql.NewInputUnmarshaler("CreateControlImplementationInput", ec.unmarshalInputCreateControlImplementationInput),
+			graphql.NewInputUnmarshaler("CreateControlInput", ec.unmarshalInputCreateControlInput),
+			graphql.NewInputUnmarshaler("CreateControlObjectiveInput", ec.unmarshalInputCreateControlObjectiveInput),
+			graphql.NewInputUnmarshaler("CreateControlWithSubcontrolsInput", ec.unmarshalInputCreateControlWithSubcontrolsInput),
+			graphql.NewInputUnmarshaler("CreateCustomDomainInput", ec.unmarshalInputCreateCustomDomainInput),
+			graphql.NewInputUnmarshaler("CreateCustomTypeEnumInput", ec.unmarshalInputCreateCustomTypeEnumInput),
+			graphql.NewInputUnmarshaler("CreateDNSVerificationInput", ec.unmarshalInputCreateDNSVerificationInput),
+			graphql.NewInputUnmarshaler("CreateDirectoryAccountInput", ec.unmarshalInputCreateDirectoryAccountInput),
+			graphql.NewInputUnmarshaler("CreateDirectoryGroupInput", ec.unmarshalInputCreateDirectoryGroupInput),
+			graphql.NewInputUnmarshaler("CreateDirectoryMembershipInput", ec.unmarshalInputCreateDirectoryMembershipInput),
+			graphql.NewInputUnmarshaler("CreateDiscussionInput", ec.unmarshalInputCreateDiscussionInput),
+			graphql.NewInputUnmarshaler("CreateDocumentDataInput", ec.unmarshalInputCreateDocumentDataInput),
+			graphql.NewInputUnmarshaler("CreateEmailTemplateInput", ec.unmarshalInputCreateEmailTemplateInput),
+			graphql.NewInputUnmarshaler("CreateEntityInput", ec.unmarshalInputCreateEntityInput),
+			graphql.NewInputUnmarshaler("CreateEntityTypeInput", ec.unmarshalInputCreateEntityTypeInput),
+			graphql.NewInputUnmarshaler("CreateEventInput", ec.unmarshalInputCreateEventInput),
+			graphql.NewInputUnmarshaler("CreateEvidenceInput", ec.unmarshalInputCreateEvidenceInput),
+			graphql.NewInputUnmarshaler("CreateExportInput", ec.unmarshalInputCreateExportInput),
+			graphql.NewInputUnmarshaler("CreateFileInput", ec.unmarshalInputCreateFileInput),
+			graphql.NewInputUnmarshaler("CreateFindingControlInput", ec.unmarshalInputCreateFindingControlInput),
+			graphql.NewInputUnmarshaler("CreateFindingInput", ec.unmarshalInputCreateFindingInput),
+			graphql.NewInputUnmarshaler("CreateFullProgramInput", ec.unmarshalInputCreateFullProgramInput),
+			graphql.NewInputUnmarshaler("CreateGroupInput", ec.unmarshalInputCreateGroupInput),
+			graphql.NewInputUnmarshaler("CreateGroupMembershipInput", ec.unmarshalInputCreateGroupMembershipInput),
+			graphql.NewInputUnmarshaler("CreateGroupSettingInput", ec.unmarshalInputCreateGroupSettingInput),
+			graphql.NewInputUnmarshaler("CreateHushInput", ec.unmarshalInputCreateHushInput),
+			graphql.NewInputUnmarshaler("CreateIdentityHolderInput", ec.unmarshalInputCreateIdentityHolderInput),
+			graphql.NewInputUnmarshaler("CreateInternalPolicyInput", ec.unmarshalInputCreateInternalPolicyInput),
+			graphql.NewInputUnmarshaler("CreateInviteInput", ec.unmarshalInputCreateInviteInput),
+			graphql.NewInputUnmarshaler("CreateMappableDomainInput", ec.unmarshalInputCreateMappableDomainInput),
+			graphql.NewInputUnmarshaler("CreateMappedControlInput", ec.unmarshalInputCreateMappedControlInput),
+			graphql.NewInputUnmarshaler("CreateMemberWithProgramInput", ec.unmarshalInputCreateMemberWithProgramInput),
+			graphql.NewInputUnmarshaler("CreateNarrativeInput", ec.unmarshalInputCreateNarrativeInput),
+			graphql.NewInputUnmarshaler("CreateNoteInput", ec.unmarshalInputCreateNoteInput),
+			graphql.NewInputUnmarshaler("CreateNotificationInput", ec.unmarshalInputCreateNotificationInput),
+			graphql.NewInputUnmarshaler("CreateNotificationPreferenceInput", ec.unmarshalInputCreateNotificationPreferenceInput),
+			graphql.NewInputUnmarshaler("CreateNotificationTemplateInput", ec.unmarshalInputCreateNotificationTemplateInput),
+			graphql.NewInputUnmarshaler("CreateOnboardingInput", ec.unmarshalInputCreateOnboardingInput),
+			graphql.NewInputUnmarshaler("CreateOrgMembershipInput", ec.unmarshalInputCreateOrgMembershipInput),
+			graphql.NewInputUnmarshaler("CreateOrganizationInput", ec.unmarshalInputCreateOrganizationInput),
+			graphql.NewInputUnmarshaler("CreateOrganizationSettingInput", ec.unmarshalInputCreateOrganizationSettingInput),
+			graphql.NewInputUnmarshaler("CreatePersonalAccessTokenInput", ec.unmarshalInputCreatePersonalAccessTokenInput),
+			graphql.NewInputUnmarshaler("CreatePlatformInput", ec.unmarshalInputCreatePlatformInput),
+			graphql.NewInputUnmarshaler("CreateProcedureInput", ec.unmarshalInputCreateProcedureInput),
+			graphql.NewInputUnmarshaler("CreateProgramInput", ec.unmarshalInputCreateProgramInput),
+			graphql.NewInputUnmarshaler("CreateProgramMembershipInput", ec.unmarshalInputCreateProgramMembershipInput),
+			graphql.NewInputUnmarshaler("CreateProgramWithMembersInput", ec.unmarshalInputCreateProgramWithMembersInput),
+			graphql.NewInputUnmarshaler("CreateRemediationInput", ec.unmarshalInputCreateRemediationInput),
+			graphql.NewInputUnmarshaler("CreateReviewInput", ec.unmarshalInputCreateReviewInput),
+			graphql.NewInputUnmarshaler("CreateRiskInput", ec.unmarshalInputCreateRiskInput),
+			graphql.NewInputUnmarshaler("CreateSLADefinitionInput", ec.unmarshalInputCreateSLADefinitionInput),
+			graphql.NewInputUnmarshaler("CreateScanInput", ec.unmarshalInputCreateScanInput),
+			graphql.NewInputUnmarshaler("CreateStandardInput", ec.unmarshalInputCreateStandardInput),
+			graphql.NewInputUnmarshaler("CreateSubcontrolInput", ec.unmarshalInputCreateSubcontrolInput),
+			graphql.NewInputUnmarshaler("CreateSubprocessorInput", ec.unmarshalInputCreateSubprocessorInput),
+			graphql.NewInputUnmarshaler("CreateSubscriberInput", ec.unmarshalInputCreateSubscriberInput),
+			graphql.NewInputUnmarshaler("CreateSystemDetailInput", ec.unmarshalInputCreateSystemDetailInput),
+			graphql.NewInputUnmarshaler("CreateTFASettingInput", ec.unmarshalInputCreateTFASettingInput),
+			graphql.NewInputUnmarshaler("CreateTagDefinitionInput", ec.unmarshalInputCreateTagDefinitionInput),
+			graphql.NewInputUnmarshaler("CreateTaskInput", ec.unmarshalInputCreateTaskInput),
+			graphql.NewInputUnmarshaler("CreateTemplateInput", ec.unmarshalInputCreateTemplateInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterComplianceInput", ec.unmarshalInputCreateTrustCenterComplianceInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterDocInput", ec.unmarshalInputCreateTrustCenterDocInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterDomainInput", ec.unmarshalInputCreateTrustCenterDomainInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterEntityInput", ec.unmarshalInputCreateTrustCenterEntityInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterFAQInput", ec.unmarshalInputCreateTrustCenterFAQInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterInput", ec.unmarshalInputCreateTrustCenterInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterNDAInput", ec.unmarshalInputCreateTrustCenterNDAInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterNDARequestInput", ec.unmarshalInputCreateTrustCenterNDARequestInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterPreviewSettingInput", ec.unmarshalInputCreateTrustCenterPreviewSettingInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterSettingInput", ec.unmarshalInputCreateTrustCenterSettingInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterSubprocessorInput", ec.unmarshalInputCreateTrustCenterSubprocessorInput),
+			graphql.NewInputUnmarshaler("CreateTrustCenterWatermarkConfigInput", ec.unmarshalInputCreateTrustCenterWatermarkConfigInput),
+			graphql.NewInputUnmarshaler("CreateUserInput", ec.unmarshalInputCreateUserInput),
+			graphql.NewInputUnmarshaler("CreateUserSettingInput", ec.unmarshalInputCreateUserSettingInput),
+			graphql.NewInputUnmarshaler("CreateVendorRiskScoreInput", ec.unmarshalInputCreateVendorRiskScoreInput),
+			graphql.NewInputUnmarshaler("CreateVendorScoringConfigInput", ec.unmarshalInputCreateVendorScoringConfigInput),
+			graphql.NewInputUnmarshaler("CreateVulnerabilityInput", ec.unmarshalInputCreateVulnerabilityInput),
+			graphql.NewInputUnmarshaler("CreateWorkflowDefinitionInput", ec.unmarshalInputCreateWorkflowDefinitionInput),
+			graphql.NewInputUnmarshaler("CustomDomainOrder", ec.unmarshalInputCustomDomainOrder),
+			graphql.NewInputUnmarshaler("CustomDomainWhereInput", ec.unmarshalInputCustomDomainWhereInput),
+			graphql.NewInputUnmarshaler("CustomTypeEnumOrder", ec.unmarshalInputCustomTypeEnumOrder),
+			graphql.NewInputUnmarshaler("CustomTypeEnumWhereInput", ec.unmarshalInputCustomTypeEnumWhereInput),
+			graphql.NewInputUnmarshaler("DNSVerificationOrder", ec.unmarshalInputDNSVerificationOrder),
+			graphql.NewInputUnmarshaler("DNSVerificationWhereInput", ec.unmarshalInputDNSVerificationWhereInput),
+			graphql.NewInputUnmarshaler("DirectoryAccountOrder", ec.unmarshalInputDirectoryAccountOrder),
+			graphql.NewInputUnmarshaler("DirectoryAccountWhereInput", ec.unmarshalInputDirectoryAccountWhereInput),
+			graphql.NewInputUnmarshaler("DirectoryGroupOrder", ec.unmarshalInputDirectoryGroupOrder),
+			graphql.NewInputUnmarshaler("DirectoryGroupWhereInput", ec.unmarshalInputDirectoryGroupWhereInput),
+			graphql.NewInputUnmarshaler("DirectoryMembershipOrder", ec.unmarshalInputDirectoryMembershipOrder),
+			graphql.NewInputUnmarshaler("DirectoryMembershipWhereInput", ec.unmarshalInputDirectoryMembershipWhereInput),
+			graphql.NewInputUnmarshaler("DiscussionOrder", ec.unmarshalInputDiscussionOrder),
+			graphql.NewInputUnmarshaler("DiscussionWhereInput", ec.unmarshalInputDiscussionWhereInput),
+			graphql.NewInputUnmarshaler("DocumentDataOrder", ec.unmarshalInputDocumentDataOrder),
+			graphql.NewInputUnmarshaler("DocumentDataWhereInput", ec.unmarshalInputDocumentDataWhereInput),
+			graphql.NewInputUnmarshaler("EmailTemplateOrder", ec.unmarshalInputEmailTemplateOrder),
+			graphql.NewInputUnmarshaler("EmailTemplateWhereInput", ec.unmarshalInputEmailTemplateWhereInput),
+			graphql.NewInputUnmarshaler("EntityOrder", ec.unmarshalInputEntityOrder),
+			graphql.NewInputUnmarshaler("EntityTypeOrder", ec.unmarshalInputEntityTypeOrder),
+			graphql.NewInputUnmarshaler("EntityTypeWhereInput", ec.unmarshalInputEntityTypeWhereInput),
+			graphql.NewInputUnmarshaler("EntityWhereInput", ec.unmarshalInputEntityWhereInput),
+			graphql.NewInputUnmarshaler("EventOrder", ec.unmarshalInputEventOrder),
+			graphql.NewInputUnmarshaler("EventWhereInput", ec.unmarshalInputEventWhereInput),
+			graphql.NewInputUnmarshaler("EvidenceOrder", ec.unmarshalInputEvidenceOrder),
+			graphql.NewInputUnmarshaler("EvidenceWhereInput", ec.unmarshalInputEvidenceWhereInput),
+			graphql.NewInputUnmarshaler("ExportOrder", ec.unmarshalInputExportOrder),
+			graphql.NewInputUnmarshaler("ExportWhereInput", ec.unmarshalInputExportWhereInput),
+			graphql.NewInputUnmarshaler("FileMetadataInput", ec.unmarshalInputFileMetadataInput),
+			graphql.NewInputUnmarshaler("FileOrder", ec.unmarshalInputFileOrder),
+			graphql.NewInputUnmarshaler("FileWhereInput", ec.unmarshalInputFileWhereInput),
+			graphql.NewInputUnmarshaler("FindingControlOrder", ec.unmarshalInputFindingControlOrder),
+			graphql.NewInputUnmarshaler("FindingControlWhereInput", ec.unmarshalInputFindingControlWhereInput),
+			graphql.NewInputUnmarshaler("FindingOrder", ec.unmarshalInputFindingOrder),
+			graphql.NewInputUnmarshaler("FindingWhereInput", ec.unmarshalInputFindingWhereInput),
+			graphql.NewInputUnmarshaler("GroupMembersInput", ec.unmarshalInputGroupMembersInput),
+			graphql.NewInputUnmarshaler("GroupMembershipOrder", ec.unmarshalInputGroupMembershipOrder),
+			graphql.NewInputUnmarshaler("GroupMembershipWhereInput", ec.unmarshalInputGroupMembershipWhereInput),
+			graphql.NewInputUnmarshaler("GroupOrder", ec.unmarshalInputGroupOrder),
+			graphql.NewInputUnmarshaler("GroupPermissionOrder", ec.unmarshalInputGroupPermissionOrder),
+			graphql.NewInputUnmarshaler("GroupPermissionWhereInput", ec.unmarshalInputGroupPermissionWhereInput),
+			graphql.NewInputUnmarshaler("GroupSettingOrder", ec.unmarshalInputGroupSettingOrder),
+			graphql.NewInputUnmarshaler("GroupSettingWhereInput", ec.unmarshalInputGroupSettingWhereInput),
+			graphql.NewInputUnmarshaler("GroupWhereInput", ec.unmarshalInputGroupWhereInput),
+			graphql.NewInputUnmarshaler("HushOrder", ec.unmarshalInputHushOrder),
+			graphql.NewInputUnmarshaler("HushWhereInput", ec.unmarshalInputHushWhereInput),
+			graphql.NewInputUnmarshaler("IdentityHolderOrder", ec.unmarshalInputIdentityHolderOrder),
+			graphql.NewInputUnmarshaler("IdentityHolderWhereInput", ec.unmarshalInputIdentityHolderWhereInput),
+			graphql.NewInputUnmarshaler("ImportDomainScanReviewAssetInput", ec.unmarshalInputImportDomainScanReviewAssetInput),
+			graphql.NewInputUnmarshaler("ImportDomainScanReviewBrandDesignInput", ec.unmarshalInputImportDomainScanReviewBrandDesignInput),
+			graphql.NewInputUnmarshaler("ImportDomainScanReviewFindingInput", ec.unmarshalInputImportDomainScanReviewFindingInput),
+			graphql.NewInputUnmarshaler("ImportDomainScanReviewInput", ec.unmarshalInputImportDomainScanReviewInput),
+			graphql.NewInputUnmarshaler("ImportDomainScanReviewPlatformInput", ec.unmarshalInputImportDomainScanReviewPlatformInput),
+			graphql.NewInputUnmarshaler("ImportDomainScanReviewSystemInput", ec.unmarshalInputImportDomainScanReviewSystemInput),
+			graphql.NewInputUnmarshaler("ImportDomainScanReviewVendorInput", ec.unmarshalInputImportDomainScanReviewVendorInput),
+			graphql.NewInputUnmarshaler("IntegrationOrder", ec.unmarshalInputIntegrationOrder),
+			graphql.NewInputUnmarshaler("IntegrationRunOrder", ec.unmarshalInputIntegrationRunOrder),
+			graphql.NewInputUnmarshaler("IntegrationRunWhereInput", ec.unmarshalInputIntegrationRunWhereInput),
+			graphql.NewInputUnmarshaler("IntegrationWhereInput", ec.unmarshalInputIntegrationWhereInput),
+			graphql.NewInputUnmarshaler("InternalPolicyOrder", ec.unmarshalInputInternalPolicyOrder),
+			graphql.NewInputUnmarshaler("InternalPolicyWhereInput", ec.unmarshalInputInternalPolicyWhereInput),
+			graphql.NewInputUnmarshaler("InviteOrder", ec.unmarshalInputInviteOrder),
+			graphql.NewInputUnmarshaler("InviteWhereInput", ec.unmarshalInputInviteWhereInput),
+			graphql.NewInputUnmarshaler("LaunchCampaignInput", ec.unmarshalInputLaunchCampaignInput),
+			graphql.NewInputUnmarshaler("MappableDomainOrder", ec.unmarshalInputMappableDomainOrder),
+			graphql.NewInputUnmarshaler("MappableDomainWhereInput", ec.unmarshalInputMappableDomainWhereInput),
+			graphql.NewInputUnmarshaler("MappedControlOrder", ec.unmarshalInputMappedControlOrder),
+			graphql.NewInputUnmarshaler("MappedControlWhereInput", ec.unmarshalInputMappedControlWhereInput),
+			graphql.NewInputUnmarshaler("NarrativeOrder", ec.unmarshalInputNarrativeOrder),
+			graphql.NewInputUnmarshaler("NarrativeWhereInput", ec.unmarshalInputNarrativeWhereInput),
+			graphql.NewInputUnmarshaler("NoteOrder", ec.unmarshalInputNoteOrder),
+			graphql.NewInputUnmarshaler("NoteWhereInput", ec.unmarshalInputNoteWhereInput),
+			graphql.NewInputUnmarshaler("NotificationOrder", ec.unmarshalInputNotificationOrder),
+			graphql.NewInputUnmarshaler("NotificationPreferenceOrder", ec.unmarshalInputNotificationPreferenceOrder),
+			graphql.NewInputUnmarshaler("NotificationPreferenceWhereInput", ec.unmarshalInputNotificationPreferenceWhereInput),
+			graphql.NewInputUnmarshaler("NotificationTemplateOrder", ec.unmarshalInputNotificationTemplateOrder),
+			graphql.NewInputUnmarshaler("NotificationTemplateWhereInput", ec.unmarshalInputNotificationTemplateWhereInput),
+			graphql.NewInputUnmarshaler("OnboardingWhereInput", ec.unmarshalInputOnboardingWhereInput),
+			graphql.NewInputUnmarshaler("OrgMembersInput", ec.unmarshalInputOrgMembersInput),
+			graphql.NewInputUnmarshaler("OrgMembershipOrder", ec.unmarshalInputOrgMembershipOrder),
+			graphql.NewInputUnmarshaler("OrgMembershipWhereInput", ec.unmarshalInputOrgMembershipWhereInput),
+			graphql.NewInputUnmarshaler("OrgSubscriptionOrder", ec.unmarshalInputOrgSubscriptionOrder),
+			graphql.NewInputUnmarshaler("OrgSubscriptionWhereInput", ec.unmarshalInputOrgSubscriptionWhereInput),
+			graphql.NewInputUnmarshaler("OrganizationOrder", ec.unmarshalInputOrganizationOrder),
+			graphql.NewInputUnmarshaler("OrganizationSettingOrder", ec.unmarshalInputOrganizationSettingOrder),
+			graphql.NewInputUnmarshaler("OrganizationSettingWhereInput", ec.unmarshalInputOrganizationSettingWhereInput),
+			graphql.NewInputUnmarshaler("OrganizationWhereInput", ec.unmarshalInputOrganizationWhereInput),
+			graphql.NewInputUnmarshaler("PersonalAccessTokenOrder", ec.unmarshalInputPersonalAccessTokenOrder),
+			graphql.NewInputUnmarshaler("PersonalAccessTokenWhereInput", ec.unmarshalInputPersonalAccessTokenWhereInput),
+			graphql.NewInputUnmarshaler("PlatformOrder", ec.unmarshalInputPlatformOrder),
+			graphql.NewInputUnmarshaler("PlatformWhereInput", ec.unmarshalInputPlatformWhereInput),
+			graphql.NewInputUnmarshaler("ProcedureOrder", ec.unmarshalInputProcedureOrder),
+			graphql.NewInputUnmarshaler("ProcedureWhereInput", ec.unmarshalInputProcedureWhereInput),
+			graphql.NewInputUnmarshaler("ProgramMembershipOrder", ec.unmarshalInputProgramMembershipOrder),
+			graphql.NewInputUnmarshaler("ProgramMembershipWhereInput", ec.unmarshalInputProgramMembershipWhereInput),
+			graphql.NewInputUnmarshaler("ProgramOrder", ec.unmarshalInputProgramOrder),
+			graphql.NewInputUnmarshaler("ProgramWhereInput", ec.unmarshalInputProgramWhereInput),
+			graphql.NewInputUnmarshaler("ReassignWorkflowAssignmentInput", ec.unmarshalInputReassignWorkflowAssignmentInput),
+			graphql.NewInputUnmarshaler("RemediationOrder", ec.unmarshalInputRemediationOrder),
+			graphql.NewInputUnmarshaler("RemediationWhereInput", ec.unmarshalInputRemediationWhereInput),
+			graphql.NewInputUnmarshaler("ResendCampaignIncompleteInput", ec.unmarshalInputResendCampaignIncompleteInput),
+			graphql.NewInputUnmarshaler("ResolveVulnerabilityInput", ec.unmarshalInputResolveVulnerabilityInput),
+			graphql.NewInputUnmarshaler("ReviewOrder", ec.unmarshalInputReviewOrder),
+			graphql.NewInputUnmarshaler("ReviewWhereInput", ec.unmarshalInputReviewWhereInput),
+			graphql.NewInputUnmarshaler("RiskOrder", ec.unmarshalInputRiskOrder),
+			graphql.NewInputUnmarshaler("RiskWhereInput", ec.unmarshalInputRiskWhereInput),
+			graphql.NewInputUnmarshaler("SLADefinitionOrder", ec.unmarshalInputSLADefinitionOrder),
+			graphql.NewInputUnmarshaler("SLADefinitionWhereInput", ec.unmarshalInputSLADefinitionWhereInput),
+			graphql.NewInputUnmarshaler("ScanOrder", ec.unmarshalInputScanOrder),
+			graphql.NewInputUnmarshaler("ScanWhereInput", ec.unmarshalInputScanWhereInput),
+			graphql.NewInputUnmarshaler("SendCampaignTestEmailInput", ec.unmarshalInputSendCampaignTestEmailInput),
+			graphql.NewInputUnmarshaler("StandardOrder", ec.unmarshalInputStandardOrder),
+			graphql.NewInputUnmarshaler("StandardWhereInput", ec.unmarshalInputStandardWhereInput),
+			graphql.NewInputUnmarshaler("SubcontrolOrder", ec.unmarshalInputSubcontrolOrder),
+			graphql.NewInputUnmarshaler("SubcontrolWhereInput", ec.unmarshalInputSubcontrolWhereInput),
+			graphql.NewInputUnmarshaler("SubmitTrustCenterNDAResponseInput", ec.unmarshalInputSubmitTrustCenterNDAResponseInput),
+			graphql.NewInputUnmarshaler("SubprocessorOrder", ec.unmarshalInputSubprocessorOrder),
+			graphql.NewInputUnmarshaler("SubprocessorWhereInput", ec.unmarshalInputSubprocessorWhereInput),
+			graphql.NewInputUnmarshaler("SubscriberOrder", ec.unmarshalInputSubscriberOrder),
+			graphql.NewInputUnmarshaler("SubscriberWhereInput", ec.unmarshalInputSubscriberWhereInput),
+			graphql.NewInputUnmarshaler("SystemDetailOrder", ec.unmarshalInputSystemDetailOrder),
+			graphql.NewInputUnmarshaler("SystemDetailWhereInput", ec.unmarshalInputSystemDetailWhereInput),
+			graphql.NewInputUnmarshaler("TFASettingOrder", ec.unmarshalInputTFASettingOrder),
+			graphql.NewInputUnmarshaler("TFASettingWhereInput", ec.unmarshalInputTFASettingWhereInput),
+			graphql.NewInputUnmarshaler("TagDefinitionOrder", ec.unmarshalInputTagDefinitionOrder),
+			graphql.NewInputUnmarshaler("TagDefinitionWhereInput", ec.unmarshalInputTagDefinitionWhereInput),
+			graphql.NewInputUnmarshaler("TaskOrder", ec.unmarshalInputTaskOrder),
+			graphql.NewInputUnmarshaler("TaskWhereInput", ec.unmarshalInputTaskWhereInput),
+			graphql.NewInputUnmarshaler("TemplateOrder", ec.unmarshalInputTemplateOrder),
+			graphql.NewInputUnmarshaler("TemplateWhereInput", ec.unmarshalInputTemplateWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterComplianceOrder", ec.unmarshalInputTrustCenterComplianceOrder),
+			graphql.NewInputUnmarshaler("TrustCenterComplianceWhereInput", ec.unmarshalInputTrustCenterComplianceWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterDocOrder", ec.unmarshalInputTrustCenterDocOrder),
+			graphql.NewInputUnmarshaler("TrustCenterDocWhereInput", ec.unmarshalInputTrustCenterDocWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterEntityOrder", ec.unmarshalInputTrustCenterEntityOrder),
+			graphql.NewInputUnmarshaler("TrustCenterEntityWhereInput", ec.unmarshalInputTrustCenterEntityWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterFAQOrder", ec.unmarshalInputTrustCenterFAQOrder),
+			graphql.NewInputUnmarshaler("TrustCenterFAQWhereInput", ec.unmarshalInputTrustCenterFAQWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterNDARequestOrder", ec.unmarshalInputTrustCenterNDARequestOrder),
+			graphql.NewInputUnmarshaler("TrustCenterNDARequestWhereInput", ec.unmarshalInputTrustCenterNDARequestWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterOrder", ec.unmarshalInputTrustCenterOrder),
+			graphql.NewInputUnmarshaler("TrustCenterSettingOrder", ec.unmarshalInputTrustCenterSettingOrder),
+			graphql.NewInputUnmarshaler("TrustCenterSettingWhereInput", ec.unmarshalInputTrustCenterSettingWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterSubprocessorOrder", ec.unmarshalInputTrustCenterSubprocessorOrder),
+			graphql.NewInputUnmarshaler("TrustCenterSubprocessorWhereInput", ec.unmarshalInputTrustCenterSubprocessorWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterWatermarkConfigOrder", ec.unmarshalInputTrustCenterWatermarkConfigOrder),
+			graphql.NewInputUnmarshaler("TrustCenterWatermarkConfigWhereInput", ec.unmarshalInputTrustCenterWatermarkConfigWhereInput),
+			graphql.NewInputUnmarshaler("TrustCenterWhereInput", ec.unmarshalInputTrustCenterWhereInput),
+			graphql.NewInputUnmarshaler("UpdateAPITokenInput", ec.unmarshalInputUpdateAPITokenInput),
+			graphql.NewInputUnmarshaler("UpdateActionPlanInput", ec.unmarshalInputUpdateActionPlanInput),
+			graphql.NewInputUnmarshaler("UpdateAssessmentInput", ec.unmarshalInputUpdateAssessmentInput),
+			graphql.NewInputUnmarshaler("UpdateAssessmentPolicyInput", ec.unmarshalInputUpdateAssessmentPolicyInput),
+			graphql.NewInputUnmarshaler("UpdateAssetInput", ec.unmarshalInputUpdateAssetInput),
+			graphql.NewInputUnmarshaler("UpdateCampaignInput", ec.unmarshalInputUpdateCampaignInput),
+			graphql.NewInputUnmarshaler("UpdateCampaignTargetInput", ec.unmarshalInputUpdateCampaignTargetInput),
+			graphql.NewInputUnmarshaler("UpdateCheckResultInput", ec.unmarshalInputUpdateCheckResultInput),
+			graphql.NewInputUnmarshaler("UpdateContactInput", ec.unmarshalInputUpdateContactInput),
+			graphql.NewInputUnmarshaler("UpdateControlImplementationInput", ec.unmarshalInputUpdateControlImplementationInput),
+			graphql.NewInputUnmarshaler("UpdateControlInput", ec.unmarshalInputUpdateControlInput),
+			graphql.NewInputUnmarshaler("UpdateControlObjectiveInput", ec.unmarshalInputUpdateControlObjectiveInput),
+			graphql.NewInputUnmarshaler("UpdateCustomDomainInput", ec.unmarshalInputUpdateCustomDomainInput),
+			graphql.NewInputUnmarshaler("UpdateCustomTypeEnumInput", ec.unmarshalInputUpdateCustomTypeEnumInput),
+			graphql.NewInputUnmarshaler("UpdateDNSVerificationInput", ec.unmarshalInputUpdateDNSVerificationInput),
+			graphql.NewInputUnmarshaler("UpdateDirectoryAccountInput", ec.unmarshalInputUpdateDirectoryAccountInput),
+			graphql.NewInputUnmarshaler("UpdateDirectoryGroupInput", ec.unmarshalInputUpdateDirectoryGroupInput),
+			graphql.NewInputUnmarshaler("UpdateDirectoryMembershipInput", ec.unmarshalInputUpdateDirectoryMembershipInput),
+			graphql.NewInputUnmarshaler("UpdateDiscussionInput", ec.unmarshalInputUpdateDiscussionInput),
+			graphql.NewInputUnmarshaler("UpdateDiscussionsInput", ec.unmarshalInputUpdateDiscussionsInput),
+			graphql.NewInputUnmarshaler("UpdateDocumentDataInput", ec.unmarshalInputUpdateDocumentDataInput),
+			graphql.NewInputUnmarshaler("UpdateEmailTemplateInput", ec.unmarshalInputUpdateEmailTemplateInput),
+			graphql.NewInputUnmarshaler("UpdateEntityInput", ec.unmarshalInputUpdateEntityInput),
+			graphql.NewInputUnmarshaler("UpdateEntityTypeInput", ec.unmarshalInputUpdateEntityTypeInput),
+			graphql.NewInputUnmarshaler("UpdateEventInput", ec.unmarshalInputUpdateEventInput),
+			graphql.NewInputUnmarshaler("UpdateEvidenceInput", ec.unmarshalInputUpdateEvidenceInput),
+			graphql.NewInputUnmarshaler("UpdateExportInput", ec.unmarshalInputUpdateExportInput),
+			graphql.NewInputUnmarshaler("UpdateFileInput", ec.unmarshalInputUpdateFileInput),
+			graphql.NewInputUnmarshaler("UpdateFindingControlInput", ec.unmarshalInputUpdateFindingControlInput),
+			graphql.NewInputUnmarshaler("UpdateFindingInput", ec.unmarshalInputUpdateFindingInput),
+			graphql.NewInputUnmarshaler("UpdateGroupInput", ec.unmarshalInputUpdateGroupInput),
+			graphql.NewInputUnmarshaler("UpdateGroupMembershipInput", ec.unmarshalInputUpdateGroupMembershipInput),
+			graphql.NewInputUnmarshaler("UpdateGroupSettingInput", ec.unmarshalInputUpdateGroupSettingInput),
+			graphql.NewInputUnmarshaler("UpdateHushInput", ec.unmarshalInputUpdateHushInput),
+			graphql.NewInputUnmarshaler("UpdateIdentityHolderInput", ec.unmarshalInputUpdateIdentityHolderInput),
+			graphql.NewInputUnmarshaler("UpdateInternalPolicyInput", ec.unmarshalInputUpdateInternalPolicyInput),
+			graphql.NewInputUnmarshaler("UpdateInviteInput", ec.unmarshalInputUpdateInviteInput),
+			graphql.NewInputUnmarshaler("UpdateMappableDomainInput", ec.unmarshalInputUpdateMappableDomainInput),
+			graphql.NewInputUnmarshaler("UpdateMappedControlInput", ec.unmarshalInputUpdateMappedControlInput),
+			graphql.NewInputUnmarshaler("UpdateNarrativeInput", ec.unmarshalInputUpdateNarrativeInput),
+			graphql.NewInputUnmarshaler("UpdateNoteInput", ec.unmarshalInputUpdateNoteInput),
+			graphql.NewInputUnmarshaler("UpdateNotificationInput", ec.unmarshalInputUpdateNotificationInput),
+			graphql.NewInputUnmarshaler("UpdateNotificationPreferenceInput", ec.unmarshalInputUpdateNotificationPreferenceInput),
+			graphql.NewInputUnmarshaler("UpdateNotificationTemplateInput", ec.unmarshalInputUpdateNotificationTemplateInput),
+			graphql.NewInputUnmarshaler("UpdateOrgMembershipInput", ec.unmarshalInputUpdateOrgMembershipInput),
+			graphql.NewInputUnmarshaler("UpdateOrganizationInput", ec.unmarshalInputUpdateOrganizationInput),
+			graphql.NewInputUnmarshaler("UpdateOrganizationSettingInput", ec.unmarshalInputUpdateOrganizationSettingInput),
+			graphql.NewInputUnmarshaler("UpdatePersonalAccessTokenInput", ec.unmarshalInputUpdatePersonalAccessTokenInput),
+			graphql.NewInputUnmarshaler("UpdatePlatformInput", ec.unmarshalInputUpdatePlatformInput),
+			graphql.NewInputUnmarshaler("UpdateProcedureInput", ec.unmarshalInputUpdateProcedureInput),
+			graphql.NewInputUnmarshaler("UpdateProgramInput", ec.unmarshalInputUpdateProgramInput),
+			graphql.NewInputUnmarshaler("UpdateProgramMembershipInput", ec.unmarshalInputUpdateProgramMembershipInput),
+			graphql.NewInputUnmarshaler("UpdateRemediationInput", ec.unmarshalInputUpdateRemediationInput),
+			graphql.NewInputUnmarshaler("UpdateReviewInput", ec.unmarshalInputUpdateReviewInput),
+			graphql.NewInputUnmarshaler("UpdateRiskInput", ec.unmarshalInputUpdateRiskInput),
+			graphql.NewInputUnmarshaler("UpdateSLADefinitionInput", ec.unmarshalInputUpdateSLADefinitionInput),
+			graphql.NewInputUnmarshaler("UpdateScanInput", ec.unmarshalInputUpdateScanInput),
+			graphql.NewInputUnmarshaler("UpdateStandardInput", ec.unmarshalInputUpdateStandardInput),
+			graphql.NewInputUnmarshaler("UpdateSubcontrolInput", ec.unmarshalInputUpdateSubcontrolInput),
+			graphql.NewInputUnmarshaler("UpdateSubprocessorInput", ec.unmarshalInputUpdateSubprocessorInput),
+			graphql.NewInputUnmarshaler("UpdateSubscriberInput", ec.unmarshalInputUpdateSubscriberInput),
+			graphql.NewInputUnmarshaler("UpdateSystemDetailInput", ec.unmarshalInputUpdateSystemDetailInput),
+			graphql.NewInputUnmarshaler("UpdateTFASettingInput", ec.unmarshalInputUpdateTFASettingInput),
+			graphql.NewInputUnmarshaler("UpdateTagDefinitionInput", ec.unmarshalInputUpdateTagDefinitionInput),
+			graphql.NewInputUnmarshaler("UpdateTaskInput", ec.unmarshalInputUpdateTaskInput),
+			graphql.NewInputUnmarshaler("UpdateTemplateInput", ec.unmarshalInputUpdateTemplateInput),
+			graphql.NewInputUnmarshaler("UpdateTrustCenterComplianceInput", ec.unmarshalInputUpdateTrustCenterComplianceInput),
+			graphql.NewInputUnmarshaler("UpdateTrustCenterDocInput", ec.unmarshalInputUpdateTrustCenterDocInput),
+			graphql.NewInputUnmarshaler("UpdateTrustCenterEntityInput", ec.unmarshalInputUpdateTrustCenterEntityInput),
+			graphql.NewInputUnmarshaler("UpdateTrustCenterFAQInput", ec.unmarshalInputUpdateTrustCenterFAQInput),
+			graphql.NewInputUnmarshaler("UpdateTrustCenterInput", ec.unmarshalInputUpdateTrustCenterInput),
+			graphql.NewInputUnmarshaler("UpdateTrustCenterNDARequestInput", ec.unmarshalInputUpdateTrustCenterNDARequestInput),
+			graphql.NewInputUnmarshaler("UpdateTrustCenterSettingInput", ec.unmarshalInputUpdateTrustCenterSettingInput),
+			graphql.NewInputUnmarshaler("UpdateTrustCenterSubprocessorInput", ec.unmarshalInputUpdateTrustCenterSubprocessorInput),
+			graphql.NewInputUnmarshaler("UpdateTrustCenterWatermarkConfigInput", ec.unmarshalInputUpdateTrustCenterWatermarkConfigInput),
+			graphql.NewInputUnmarshaler("UpdateUserInput", ec.unmarshalInputUpdateUserInput),
+			graphql.NewInputUnmarshaler("UpdateUserSettingInput", ec.unmarshalInputUpdateUserSettingInput),
+			graphql.NewInputUnmarshaler("UpdateVendorRiskScoreInput", ec.unmarshalInputUpdateVendorRiskScoreInput),
+			graphql.NewInputUnmarshaler("UpdateVendorScoringConfigInput", ec.unmarshalInputUpdateVendorScoringConfigInput),
+			graphql.NewInputUnmarshaler("UpdateVulnerabilityInput", ec.unmarshalInputUpdateVulnerabilityInput),
+			graphql.NewInputUnmarshaler("UpdateWorkflowDefinitionInput", ec.unmarshalInputUpdateWorkflowDefinitionInput),
+			graphql.NewInputUnmarshaler("UpdateWorkflowProposalChangesInput", ec.unmarshalInputUpdateWorkflowProposalChangesInput),
+			graphql.NewInputUnmarshaler("UserOrder", ec.unmarshalInputUserOrder),
+			graphql.NewInputUnmarshaler("UserSettingOrder", ec.unmarshalInputUserSettingOrder),
+			graphql.NewInputUnmarshaler("UserSettingWhereInput", ec.unmarshalInputUserSettingWhereInput),
+			graphql.NewInputUnmarshaler("UserWhereInput", ec.unmarshalInputUserWhereInput),
+			graphql.NewInputUnmarshaler("VendorRiskScoreOrder", ec.unmarshalInputVendorRiskScoreOrder),
+			graphql.NewInputUnmarshaler("VendorRiskScoreWhereInput", ec.unmarshalInputVendorRiskScoreWhereInput),
+			graphql.NewInputUnmarshaler("VendorScoringConfigOrder", ec.unmarshalInputVendorScoringConfigOrder),
+			graphql.NewInputUnmarshaler("VendorScoringConfigWhereInput", ec.unmarshalInputVendorScoringConfigWhereInput),
+			graphql.NewInputUnmarshaler("VulnerabilityOrder", ec.unmarshalInputVulnerabilityOrder),
+			graphql.NewInputUnmarshaler("VulnerabilityWhereInput", ec.unmarshalInputVulnerabilityWhereInput),
+			graphql.NewInputUnmarshaler("WebauthnOrder", ec.unmarshalInputWebauthnOrder),
+			graphql.NewInputUnmarshaler("WebauthnWhereInput", ec.unmarshalInputWebauthnWhereInput),
+			graphql.NewInputUnmarshaler("WorkflowAssignmentOrder", ec.unmarshalInputWorkflowAssignmentOrder),
+			graphql.NewInputUnmarshaler("WorkflowAssignmentTargetInput", ec.unmarshalInputWorkflowAssignmentTargetInput),
+			graphql.NewInputUnmarshaler("WorkflowAssignmentTargetOrder", ec.unmarshalInputWorkflowAssignmentTargetOrder),
+			graphql.NewInputUnmarshaler("WorkflowAssignmentTargetWhereInput", ec.unmarshalInputWorkflowAssignmentTargetWhereInput),
+			graphql.NewInputUnmarshaler("WorkflowAssignmentWhereInput", ec.unmarshalInputWorkflowAssignmentWhereInput),
+			graphql.NewInputUnmarshaler("WorkflowDefinitionOrder", ec.unmarshalInputWorkflowDefinitionOrder),
+			graphql.NewInputUnmarshaler("WorkflowDefinitionWhereInput", ec.unmarshalInputWorkflowDefinitionWhereInput),
+			graphql.NewInputUnmarshaler("WorkflowEventOrder", ec.unmarshalInputWorkflowEventOrder),
+			graphql.NewInputUnmarshaler("WorkflowEventWhereInput", ec.unmarshalInputWorkflowEventWhereInput),
+			graphql.NewInputUnmarshaler("WorkflowInstanceOrder", ec.unmarshalInputWorkflowInstanceOrder),
+			graphql.NewInputUnmarshaler("WorkflowInstanceWhereInput", ec.unmarshalInputWorkflowInstanceWhereInput),
+			graphql.NewInputUnmarshaler("WorkflowObjectRefOrder", ec.unmarshalInputWorkflowObjectRefOrder),
+			graphql.NewInputUnmarshaler("WorkflowObjectRefWhereInput", ec.unmarshalInputWorkflowObjectRefWhereInput),
+		)
+	}
 	first := true
 
 	switch opCtx.Operation.Operation {
@@ -51477,7 +51628,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			var data graphql.Marshaler
 			if first {
 				first = false
-				ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
+				ctx = graphql.WithLazyInputUnmarshalerIndex(ctx, inputUnmarshalers)
 				data = ec._Query(ctx, opCtx.Operation.SelectionSet)
 			} else {
 				if atomic.LoadInt32(&ec.PendingDeferred) > 0 {
@@ -51507,7 +51658,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 				return nil
 			}
 			first = false
-			ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
+			ctx = graphql.WithLazyInputUnmarshalerIndex(ctx, inputUnmarshalers)
 			data := ec._Mutation(ctx, opCtx.Operation.SelectionSet)
 			var buf bytes.Buffer
 			data.MarshalGQL(&buf)
@@ -51581,6 +51732,10 @@ Indicates that this field cannot be set on the input, and comes from an external
 This does not prevent the viewing of the field
 """
 directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
+"""
+Indicates the field's value is copied from the catalog row on adopt and rewritten on refresh while the row stays linked
+"""
+directive @catalogManaged on FIELD_DEFINITION
 """
 Indicates the modules an organization must have enabled to access this object,
 at least one of the listed modules is required
@@ -51731,6 +51886,8 @@ scalar RiskThresholdsConfig
 The ` + "`" + `IntegrationHealth` + "`" + ` scalar type records the runtime health state of an installed integration, including the unhealthy reason, per-operation failure reasons, and the last successful health check time
 """
 scalar IntegrationHealth
+
+scalar TrustCenterNDARequestSetting
 `, BuiltIn: false},
 	{Name: "../schema/actionplan.graphql", Input: `extend type ActionPlan {
     """
@@ -56335,7 +56492,7 @@ extend type Query {
 `, BuiltIn: false},
 	{Name: "../schema/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
-type APIToken implements Node {
+type APIToken implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -56776,6 +56933,22 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
   """
   workflowEligibleMarker: Boolean
   """
+  the internal owner for the action plan when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
+  the internal owner user id for the action plan
+  """
+  internalOwnerUserID: ID
+  """
+  the internal owner group id for the action plan
+  """
+  internalOwnerGroupID: ID
+  """
+  the internal owner identity holder id for the action plan
+  """
+  internalOwnerIdentityHolderID: ID
+  """
   short title describing the action plan
   """
   title: String!
@@ -56953,6 +57126,9 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
     where: GroupWhereInput
   ): GroupConnection!
   actionPlanKind: CustomTypeEnum
+  internalOwnerUser: User
+  internalOwnerGroup: Group
+  internalOwnerIdentityHolder: IdentityHolder
   risks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -57382,6 +57558,7 @@ enum ActionPlanOrderField {
   MANAGEMENT_MODE
   review_due
   REVIEW_FREQUENCY
+  internal_owner
   title
   due_date
   PRIORITY
@@ -57798,6 +57975,62 @@ input ActionPlanWhereInput {
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
   """
+  internal_owner field predicates
+  """
+  internalOwner: String
+  internalOwnerNEQ: String
+  internalOwnerIn: [String!]
+  internalOwnerNotIn: [String!]
+  internalOwnerContains: String
+  internalOwnerHasPrefix: String
+  internalOwnerHasSuffix: String
+  internalOwnerIsNil: Boolean
+  internalOwnerNotNil: Boolean
+  internalOwnerEqualFold: String
+  internalOwnerContainsFold: String
+  """
+  internal_owner_user_id field predicates
+  """
+  internalOwnerUserID: ID
+  internalOwnerUserIDNEQ: ID
+  internalOwnerUserIDIn: [ID!]
+  internalOwnerUserIDNotIn: [ID!]
+  internalOwnerUserIDContains: ID
+  internalOwnerUserIDHasPrefix: ID
+  internalOwnerUserIDHasSuffix: ID
+  internalOwnerUserIDIsNil: Boolean
+  internalOwnerUserIDNotNil: Boolean
+  internalOwnerUserIDEqualFold: ID
+  internalOwnerUserIDContainsFold: ID
+  """
+  internal_owner_group_id field predicates
+  """
+  internalOwnerGroupID: ID
+  internalOwnerGroupIDNEQ: ID
+  internalOwnerGroupIDIn: [ID!]
+  internalOwnerGroupIDNotIn: [ID!]
+  internalOwnerGroupIDContains: ID
+  internalOwnerGroupIDHasPrefix: ID
+  internalOwnerGroupIDHasSuffix: ID
+  internalOwnerGroupIDIsNil: Boolean
+  internalOwnerGroupIDNotNil: Boolean
+  internalOwnerGroupIDEqualFold: ID
+  internalOwnerGroupIDContainsFold: ID
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: ID
+  internalOwnerIdentityHolderIDNEQ: ID
+  internalOwnerIdentityHolderIDIn: [ID!]
+  internalOwnerIdentityHolderIDNotIn: [ID!]
+  internalOwnerIdentityHolderIDContains: ID
+  internalOwnerIdentityHolderIDHasPrefix: ID
+  internalOwnerIdentityHolderIDHasSuffix: ID
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: ID
+  internalOwnerIdentityHolderIDContainsFold: ID
+  """
   title field predicates
   """
   title: String
@@ -57930,6 +58163,21 @@ input ActionPlanWhereInput {
   """
   hasActionPlanKind: Boolean
   hasActionPlanKindWith: [CustomTypeEnumWhereInput!]
+  """
+  internal_owner_user edge predicates
+  """
+  hasInternalOwnerUser: Boolean
+  hasInternalOwnerUserWith: [UserWhereInput!]
+  """
+  internal_owner_group edge predicates
+  """
+  hasInternalOwnerGroup: Boolean
+  hasInternalOwnerGroupWith: [GroupWhereInput!]
+  """
+  internal_owner_identity_holder edge predicates
+  """
+  hasInternalOwnerIdentityHolder: Boolean
+  hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
   """
   risks edge predicates
   """
@@ -67456,6 +67704,10 @@ input CreateActionPlanInput {
   """
   workflowEligibleMarker: Boolean
   """
+  the internal owner for the action plan when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  """
   short title describing the action plan
   """
   title: String!
@@ -67507,6 +67759,9 @@ input CreateActionPlanInput {
   editorIDs: [ID!]
   viewerIDs: [ID!]
   actionPlanKindID: ID
+  internalOwnerUserID: ID
+  internalOwnerGroupID: ID
+  internalOwnerIdentityHolderID: ID
   riskIDs: [ID!]
   controlIDs: [ID!]
   programIDs: [ID!]
@@ -68920,6 +69175,14 @@ input CreateEntityInput {
   an internal identifier for the mapping, this field is only available to system admins
   """
   systemInternalID: String @readOnly
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawIngestPayload: Map
   """
   the relationship_state of the entity
   """
@@ -72642,6 +72905,14 @@ input CreateTrustCenterSettingInput {
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  enable auto approval rules provides configurable settings to skip manual approvals
+  """
+  enableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -73561,7 +73832,7 @@ input CustomDomainWhereInput {
   """
   tagsHas: String
 }
-type CustomTypeEnum implements Node {
+type CustomTypeEnum implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -76978,7 +77249,7 @@ input DirectoryMembershipWhereInput {
   observedAtLT: Time
   observedAtLTE: Time
 }
-type Discussion implements Node {
+type Discussion implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -77593,7 +77864,7 @@ input DocumentDataWhereInput {
   """
   tagsHas: String
 }
-type EmailTemplate implements Node {
+type EmailTemplate implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -78425,6 +78696,22 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   systemInternalID: String @hidden(if: true)
   """
+  the system-owned catalog row this row was adopted from
+  """
+  catalogID: ID
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  the lookup key of the catalog row this row was adopted from
+  """
+  catalogKey: String
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawIngestPayload: Map
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -78712,6 +78999,41 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   reviewedByUser: User
   reviewedByGroup: Group
   reviewedByIdentityHolder: IdentityHolder
+  """
+  the system-owned catalog row this row was adopted from
+  """
+  catalog: Entity
+  adopted(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
   entityRelationshipState: CustomTypeEnum
   entitySecurityQuestionnaireStatus: CustomTypeEnum
   entitySourceType: CustomTypeEnum
@@ -79601,7 +79923,7 @@ enum EntityOrderField {
   external_id
   observed_at
 }
-type EntityType implements Node {
+type EntityType implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -80204,6 +80526,41 @@ input EntityWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  catalog_id field predicates
+  """
+  catalogID: ID
+  catalogIDNEQ: ID
+  catalogIDIn: [ID!]
+  catalogIDNotIn: [ID!]
+  catalogIDContains: ID
+  catalogIDHasPrefix: ID
+  catalogIDHasSuffix: ID
+  catalogIDIsNil: Boolean
+  catalogIDNotNil: Boolean
+  catalogIDEqualFold: ID
+  catalogIDContainsFold: ID
+  """
+  externally_visible field predicates
+  """
+  externallyVisible: Boolean
+  externallyVisibleNEQ: Boolean
+  externallyVisibleIsNil: Boolean
+  externallyVisibleNotNil: Boolean
+  """
+  catalog_key field predicates
+  """
+  catalogKey: String
+  catalogKeyNEQ: String
+  catalogKeyIn: [String!]
+  catalogKeyNotIn: [String!]
+  catalogKeyContains: String
+  catalogKeyHasPrefix: String
+  catalogKeyHasSuffix: String
+  catalogKeyIsNil: Boolean
+  catalogKeyNotNil: Boolean
+  catalogKeyEqualFold: String
+  catalogKeyContainsFold: String
+  """
   entity_relationship_state_name field predicates
   """
   entityRelationshipStateName: String
@@ -80736,6 +81093,16 @@ input EntityWhereInput {
   """
   hasReviewedByIdentityHolder: Boolean
   hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  catalog edge predicates
+  """
+  hasCatalog: Boolean
+  hasCatalogWith: [EntityWhereInput!]
+  """
+  adopted edge predicates
+  """
+  hasAdopted: Boolean
+  hasAdoptedWith: [EntityWhereInput!]
   """
   entity_relationship_state edge predicates
   """
@@ -82498,7 +82865,7 @@ input EvidenceWhereInput {
   """
   tagsHas: String
 }
-type Export implements Node {
+type Export implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -82904,7 +83271,7 @@ input ExportWhereInput {
   """
   fieldsHas: String
 }
-type File implements Node {
+type File implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -90545,7 +90912,7 @@ input IdentityHolderWhereInput {
   """
   emailAliasesHas: String
 }
-type Integration implements Node {
+type Integration implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -91352,7 +91719,7 @@ enum IntegrationOrderField {
   status
   expires_at
 }
-type IntegrationRun implements Node {
+type IntegrationRun implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -95894,7 +96261,7 @@ interface Node @goModel(model: "github.com/theopenlane/core/v2/internal/ent/gene
   """
   id: ID!
 }
-type Note implements Node {
+type Note implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -96951,7 +97318,7 @@ input NotificationPreferenceWhereInput {
   """
   topicPatternsHas: String
 }
-type NotificationTemplate implements Node {
+type NotificationTemplate implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -102143,7 +102510,7 @@ type PageInfo {
   """
   endCursor: Cursor
 }
-type PersonalAccessToken implements Node {
+type PersonalAccessToken implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -118599,7 +118966,7 @@ input SubprocessorWhereInput {
   """
   tagsHas: String
 }
-type Subscriber implements Node {
+type Subscriber implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -119618,7 +119985,7 @@ input TFASettingWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [UserWhereInput!]
 }
-type TagDefinition implements Node {
+type TagDefinition implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -119910,7 +120277,7 @@ input TagDefinitionWhereInput {
   """
   aliasesHas: String
 }
-type Task implements Node {
+type Task implements Node @modules(names: ["any_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -123668,6 +124035,7 @@ type TrustCenterNDARequest implements Node @modules(names: ["trust_center_module
   ID of the user who approved the request
   """
   approvedByUserID: ID
+  autoApproved: Boolean
   """
   timestamp when the NDA was signed
   """
@@ -124051,6 +124419,13 @@ input TrustCenterNDARequestWhereInput {
   approvedByUserIDEqualFold: ID
   approvedByUserIDContainsFold: ID
   """
+  auto_approved field predicates
+  """
+  autoApproved: Boolean
+  autoApprovedNEQ: Boolean
+  autoApprovedIsNil: Boolean
+  autoApprovedNotNil: Boolean
+  """
   signed_at field predicates
   """
   signedAt: DateTime
@@ -124274,6 +124649,14 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  enable auto approval rules provides configurable settings to skip manual approvals
+  """
+  enableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -124841,6 +125224,13 @@ input TrustCenterSettingWhereInput {
   noindexDefaultDomainNEQ: Boolean
   noindexDefaultDomainIsNil: Boolean
   noindexDefaultDomainNotNil: Boolean
+  """
+  enable_auto_approval field predicates
+  """
+  enableAutoApproval: Boolean
+  enableAutoApprovalNEQ: Boolean
+  enableAutoApprovalIsNil: Boolean
+  enableAutoApprovalNotNil: Boolean
   """
   blocked_groups edge predicates
   """
@@ -126090,6 +126480,11 @@ input UpdateActionPlanInput {
   workflowEligibleMarker: Boolean
   clearWorkflowEligibleMarker: Boolean
   """
+  the internal owner for the action plan when no user, group, or identity holder is linked
+  """
+  internalOwner: String
+  clearInternalOwner: Boolean
+  """
   short title describing the action plan
   """
   title: String
@@ -126159,6 +126554,12 @@ input UpdateActionPlanInput {
   clearViewers: Boolean
   actionPlanKindID: ID
   clearActionPlanKind: Boolean
+  internalOwnerUserID: ID
+  clearInternalOwnerUser: Boolean
+  internalOwnerGroupID: ID
+  clearInternalOwnerGroup: Boolean
+  internalOwnerIdentityHolderID: ID
+  clearInternalOwnerIdentityHolder: Boolean
   addRiskIDs: [ID!]
   removeRiskIDs: [ID!]
   clearRisks: Boolean
@@ -128018,6 +128419,16 @@ input UpdateEntityInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  clearExternallyVisible: Boolean
+  """
+  raw payload received from the integration for auditing and troubleshooting
+  """
+  rawIngestPayload: Map
+  clearRawIngestPayload: Boolean
   """
   the relationship_state of the entity
   """
@@ -133433,6 +133844,16 @@ input UpdateTrustCenterSettingInput {
   """
   noindexDefaultDomain: Boolean
   clearNoindexDefaultDomain: Boolean
+  """
+  enable auto approval rules provides configurable settings to skip manual approvals
+  """
+  enableAutoApproval: Boolean
+  clearEnableAutoApproval: Boolean
+  """
+  rules for approving trust center NDA requests
+  """
+  autoApprovalRules: TrustCenterNDARequestSetting
+  clearAutoApprovalRules: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -138634,7 +139055,7 @@ input WebauthnWhereInput {
   """
   tagsHas: String
 }
-type WorkflowAssignment implements Node {
+type WorkflowAssignment implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -138815,7 +139236,7 @@ enum WorkflowAssignmentOrderField {
   created_at
   updated_at
 }
-type WorkflowAssignmentTarget implements Node {
+type WorkflowAssignmentTarget implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -139390,7 +139811,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
   REJECTED
   CHANGES_REQUESTED
 }
-type WorkflowDefinition implements Node {
+type WorkflowDefinition implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140026,7 +140447,7 @@ enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core
   LIFECYCLE
   NOTIFICATION
 }
-type WorkflowEvent implements Node {
+type WorkflowEvent implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -140275,7 +140696,7 @@ enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core
   EMIT_RECOVERED
   EMIT_FAILED_TERMINAL
 }
-type WorkflowInstance implements Node {
+type WorkflowInstance implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -141192,7 +141613,7 @@ enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenla
   FAILED
   PAUSED
 }
-type WorkflowObjectRef implements Node {
+type WorkflowObjectRef implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -141938,7 +142359,7 @@ input WorkflowObjectRefWhereInput {
   hasRemediation: Boolean
   hasRemediationWith: [RemediationWhereInput!]
 }
-type WorkflowProposal implements Node {
+type WorkflowProposal implements Node @modules(names: ["workflow_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -142208,6 +142629,19 @@ type EntityBulkUpdatePayload {
     Error message when the bulk update did not apply to every requested ID
     """
     error: String
+}
+`, BuiltIn: false},
+	{Name: "../schema/entitycatalog.graphql", Input: `extend type Query {
+    """
+    entitiesCatalog lists the externally visible system-owned entities available for adoption
+    """
+    entitiesCatalog(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [EntityOrder!], where: EntityWhereInput): EntityConnection!
+}
+extend type Mutation {
+    """
+    adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
+    """
+    adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
 }
 `, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
@@ -144479,6 +144913,7 @@ type IntegrationDeletePayload {
     webhookURLs: Map
     credentials: JSON
     config: JSON
+    operationConfig: JSON
 }
 `, BuiltIn: false},
 	{Name: "../schema/internalpolicy.graphql", Input: `extend type InternalPolicy {
@@ -154408,6 +154843,14 @@ func (ec *executionContext) childFields_ActionPlan(ctx context.Context, field gr
 		return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_ActionPlan_workflowEligibleMarker(ctx, field)
+	case "internalOwner":
+		return ec.fieldContext_ActionPlan_internalOwner(ctx, field)
+	case "internalOwnerUserID":
+		return ec.fieldContext_ActionPlan_internalOwnerUserID(ctx, field)
+	case "internalOwnerGroupID":
+		return ec.fieldContext_ActionPlan_internalOwnerGroupID(ctx, field)
+	case "internalOwnerIdentityHolderID":
+		return ec.fieldContext_ActionPlan_internalOwnerIdentityHolderID(ctx, field)
 	case "title":
 		return ec.fieldContext_ActionPlan_title(ctx, field)
 	case "description":
@@ -154446,6 +154889,12 @@ func (ec *executionContext) childFields_ActionPlan(ctx context.Context, field gr
 		return ec.fieldContext_ActionPlan_viewers(ctx, field)
 	case "actionPlanKind":
 		return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
+	case "internalOwnerUser":
+		return ec.fieldContext_ActionPlan_internalOwnerUser(ctx, field)
+	case "internalOwnerGroup":
+		return ec.fieldContext_ActionPlan_internalOwnerGroup(ctx, field)
+	case "internalOwnerIdentityHolder":
+		return ec.fieldContext_ActionPlan_internalOwnerIdentityHolder(ctx, field)
 	case "risks":
 		return ec.fieldContext_ActionPlan_risks(ctx, field)
 	case "controls":
@@ -157912,6 +158361,14 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_Entity_systemInternalID(ctx, field)
+	case "catalogID":
+		return ec.fieldContext_Entity_catalogID(ctx, field)
+	case "externallyVisible":
+		return ec.fieldContext_Entity_externallyVisible(ctx, field)
+	case "catalogKey":
+		return ec.fieldContext_Entity_catalogKey(ctx, field)
+	case "rawIngestPayload":
+		return ec.fieldContext_Entity_rawIngestPayload(ctx, field)
 	case "entityRelationshipStateName":
 		return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
 	case "entityRelationshipStateID":
@@ -158026,6 +158483,10 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
 	case "reviewedByIdentityHolder":
 		return ec.fieldContext_Entity_reviewedByIdentityHolder(ctx, field)
+	case "catalog":
+		return ec.fieldContext_Entity_catalog(ctx, field)
+	case "adopted":
+		return ec.fieldContext_Entity_adopted(ctx, field)
 	case "entityRelationshipState":
 		return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
 	case "entitySecurityQuestionnaireStatus":
@@ -160262,6 +160723,8 @@ func (ec *executionContext) childFields_Integration(ctx context.Context, field g
 		return ec.fieldContext_Integration_credentials(ctx, field)
 	case "config":
 		return ec.fieldContext_Integration_config(ctx, field)
+	case "operationConfig":
+		return ec.fieldContext_Integration_operationConfig(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type Integration", field.Name)
 }
@@ -166264,6 +166727,8 @@ func (ec *executionContext) childFields_TrustCenterNDARequest(ctx context.Contex
 		return ec.fieldContext_TrustCenterNDARequest_approvedAt(ctx, field)
 	case "approvedByUserID":
 		return ec.fieldContext_TrustCenterNDARequest_approvedByUserID(ctx, field)
+	case "autoApproved":
+		return ec.fieldContext_TrustCenterNDARequest_autoApproved(ctx, field)
 	case "signedAt":
 		return ec.fieldContext_TrustCenterNDARequest_signedAt(ctx, field)
 	case "documentDataID":
@@ -166442,6 +166907,10 @@ func (ec *executionContext) childFields_TrustCenterSetting(ctx context.Context, 
 		return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
 	case "noindexDefaultDomain":
 		return ec.fieldContext_TrustCenterSetting_noindexDefaultDomain(ctx, field)
+	case "enableAutoApproval":
+		return ec.fieldContext_TrustCenterSetting_enableAutoApproval(ctx, field)
+	case "autoApprovalRules":
+		return ec.fieldContext_TrustCenterSetting_autoApprovalRules(ctx, field)
 	case "blockedGroups":
 		return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 	case "editors":

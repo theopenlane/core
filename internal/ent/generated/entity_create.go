@@ -404,6 +404,54 @@ func (_c *EntityCreate) SetNillableSystemInternalID(v *string) *EntityCreate {
 	return _c
 }
 
+// SetCatalogID sets the "catalog_id" field.
+func (_c *EntityCreate) SetCatalogID(v string) *EntityCreate {
+	_c.mutation.SetCatalogID(v)
+	return _c
+}
+
+// SetNillableCatalogID sets the "catalog_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableCatalogID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetCatalogID(*v)
+	}
+	return _c
+}
+
+// SetExternallyVisible sets the "externally_visible" field.
+func (_c *EntityCreate) SetExternallyVisible(v bool) *EntityCreate {
+	_c.mutation.SetExternallyVisible(v)
+	return _c
+}
+
+// SetNillableExternallyVisible sets the "externally_visible" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableExternallyVisible(v *bool) *EntityCreate {
+	if v != nil {
+		_c.SetExternallyVisible(*v)
+	}
+	return _c
+}
+
+// SetCatalogKey sets the "catalog_key" field.
+func (_c *EntityCreate) SetCatalogKey(v string) *EntityCreate {
+	_c.mutation.SetCatalogKey(v)
+	return _c
+}
+
+// SetNillableCatalogKey sets the "catalog_key" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableCatalogKey(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetCatalogKey(*v)
+	}
+	return _c
+}
+
+// SetRawIngestPayload sets the "raw_ingest_payload" field.
+func (_c *EntityCreate) SetRawIngestPayload(v map[string]interface{}) *EntityCreate {
+	_c.mutation.SetRawIngestPayload(v)
+	return _c
+}
+
 // SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
 func (_c *EntityCreate) SetEntityRelationshipStateName(v string) *EntityCreate {
 	_c.mutation.SetEntityRelationshipStateName(v)
@@ -1108,6 +1156,26 @@ func (_c *EntityCreate) SetReviewedByIdentityHolder(v *IdentityHolder) *EntityCr
 	return _c.SetReviewedByIdentityHolderID(v.ID)
 }
 
+// SetCatalog sets the "catalog" edge to the Entity entity.
+func (_c *EntityCreate) SetCatalog(v *Entity) *EntityCreate {
+	return _c.SetCatalogID(v.ID)
+}
+
+// AddAdoptedIDs adds the "adopted" edge to the Entity entity by IDs.
+func (_c *EntityCreate) AddAdoptedIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddAdoptedIDs(ids...)
+	return _c
+}
+
+// AddAdopted adds the "adopted" edges to the Entity entity.
+func (_c *EntityCreate) AddAdopted(v ...*Entity) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAdoptedIDs(ids...)
+}
+
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
 func (_c *EntityCreate) SetEntityRelationshipState(v *CustomTypeEnum) *EntityCreate {
 	return _c.SetEntityRelationshipStateID(v.ID)
@@ -1577,6 +1645,10 @@ func (_c *EntityCreate) defaults() error {
 		v := entity.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.ExternallyVisible(); !ok {
+		v := entity.DefaultExternallyVisible
+		_c.mutation.SetExternallyVisible(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := entity.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -1801,6 +1873,18 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(entity.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.ExternallyVisible(); ok {
+		_spec.SetField(entity.FieldExternallyVisible, field.TypeBool, value)
+		_node.ExternallyVisible = value
+	}
+	if value, ok := _c.mutation.CatalogKey(); ok {
+		_spec.SetField(entity.FieldCatalogKey, field.TypeString, value)
+		_node.CatalogKey = value
+	}
+	if value, ok := _c.mutation.RawIngestPayload(); ok {
+		_spec.SetField(entity.FieldRawIngestPayload, field.TypeJSON, value)
+		_node.RawIngestPayload = value
 	}
 	if value, ok := _c.mutation.EntityRelationshipStateName(); ok {
 		_spec.SetField(entity.FieldEntityRelationshipStateName, field.TypeString, value)
@@ -2127,6 +2211,39 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ReviewedByIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CatalogIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogTable,
+			Columns: []string{entity.CatalogColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CatalogID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AdoptedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedTable,
+			Columns: []string{entity.AdoptedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EntityRelationshipStateIDs(); len(nodes) > 0 {

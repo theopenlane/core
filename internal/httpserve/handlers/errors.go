@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
+	"github.com/theopenlane/logx"
 )
 
 var (
@@ -182,6 +182,8 @@ var (
 	ErrUnableToVerifyToken = errors.New("unable to verify token, please try again")
 	// errIntegrationWebhookNotConfigured is returned when the webhook registration is missing
 	errIntegrationWebhookNotConfigured = errors.New("integration webhook not configured")
+	// errIntegrationWebhookVerificationFailed is returned to the caller when an inbound webhook cannot be authenticated; the cause stays in the server log
+	errIntegrationWebhookVerificationFailed = errors.New("integration webhook verification failed")
 	// errIntegrationWebhookSecretMissing is returned when the persisted webhook has no secret token
 	errIntegrationWebhookSecretMissing = errors.New("integration webhook secret is missing")
 	// errIntegrationWebhookSignatureMissing is returned when the signature header is absent

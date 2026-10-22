@@ -237,7 +237,7 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 // Modules of the EmailTemplate.
 func (EmailTemplate) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

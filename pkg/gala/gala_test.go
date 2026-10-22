@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 	"sync"
 	"testing"
@@ -15,8 +16,8 @@ import (
 	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/do/v2"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/contextx"
 )
 
@@ -130,6 +131,25 @@ func TestReplaceValueRestoresRuntimeDependency(t *testing.T) {
 
 	if got := do.MustInvoke[*runtimeTestFormatter](runtime.injector); got != original {
 		t.Fatal("expected original dependency to be restored")
+	}
+}
+
+func TestPauseAndResumeQueuesTargetRegisteredKindQueues(t *testing.T) {
+	runtime := newTestGala(t, nil)
+	controller := &listenerRemovalJobController{jobs: map[int64]*rivertype.JobRow{}}
+	runtime.jobController = controller
+	runtime.kindQueues = map[string]string{IntegrationReconcile.Kind(): "events_integration_reconcile"}
+
+	if err := runtime.PauseQueues(t.Context(), IntegrationReconcile, IntegrationRun); err != nil {
+		t.Fatalf("PauseQueues() error = %v", err)
+	}
+
+	if err := runtime.ResumeQueues(t.Context(), IntegrationReconcile, IntegrationRun); err != nil {
+		t.Fatalf("ResumeQueues() error = %v", err)
+	}
+
+	if !slices.Equal(controller.paused, []string{"events_integration_reconcile"}) || !slices.Equal(controller.resumed, []string{"events_integration_reconcile"}) {
+		t.Fatalf("paused %v, resumed %v, want only the registered reconcile queue", controller.paused, controller.resumed)
 	}
 }
 

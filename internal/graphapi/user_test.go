@@ -172,12 +172,11 @@ func TestMutationUpdateUser(t *testing.T) {
 	displayNameUpdate := gofakeit.LetterN(40)
 	nameUpdateLong := gofakeit.LetterN(200)
 
-	user := (&th.UserBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-
-	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
+	testUser := suite.UserBuilder(context.Background(), t)
+	user := testUser.UserInfo
 
 	// setup valid user context
-	reqCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
+	reqCtx := testUser.UserCtx
 
 	weakPassword := "notsecure"
 

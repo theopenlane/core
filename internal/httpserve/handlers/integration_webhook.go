@@ -15,9 +15,10 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 const (
@@ -64,18 +65,30 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 	// Re-set the caller now that the owning organization is known
 	webhookCtx = auth.WithOrgInternalCaller(webhookCtx, integration.OwnerID)
 
-	webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(integration.DefinitionID, persistedWebhook.Name)
-	if err != nil {
+	webhookReg, found := resolveIntegrationWebhook(h.IntegrationsRuntime.Registry(), integration.DefinitionID, persistedWebhook.Name)
+	if !found {
 		return h.BadRequest(ctx, errIntegrationWebhookNotConfigured)
 	}
 
 	if err := verifyIntegrationWebhook(webhookReg, req, payload, persistedWebhook, integration); err != nil {
 		logx.FromContext(webhookCtx).Error().Err(err).Msg("webhook signature verification failed")
 
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, errIntegrationWebhookVerificationFailed)
 	}
 
 	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, integration, webhookReg, persistedWebhook, payload)
+}
+
+// resolveIntegrationWebhook finds the webhook registration a persisted row is named after, falling back to the registration whose ref replaces that name when the row predates a rename
+func resolveIntegrationWebhook(reg *registry.Registry, definitionID, name string) (types.WebhookRegistration, bool) {
+	def, ok := reg.Definition(definitionID)
+	if !ok {
+		return types.WebhookRegistration{}, false
+	}
+
+	webhookReg, _, ok := def.ResolveWebhook(name)
+
+	return webhookReg, ok
 }
 
 // readIntegrationWebhookPayload reads the request body up to a defined maximum size and returns an error if the body is empty or exceeds the limit
@@ -220,22 +233,26 @@ func (h *Handler) IntegrationStaticWebhookHandler(definitionID, webhookName stri
 		// the owning org, if any, is not known until the integration resolves, so this is a cross-org internal context
 		webhookCtx := auth.WithInternalCrossOrgContext(req.Context())
 
-		if webhookReg.Verify != nil {
-			if err := webhookReg.Verify(types.WebhookInboundRequest{
-				Request: req,
-				Payload: payload,
-			}); err != nil {
-				logx.FromContext(webhookCtx).Error().Err(err).Msg("static webhook verification failed")
+		if webhookReg.Verify == nil {
+			logx.FromContext(webhookCtx).Error().Msg("static webhook registration missing verifier")
 
-				return h.BadRequest(ctx, err)
-			}
+			return h.BadRequest(ctx, errIntegrationWebhookVerificationFailed)
 		}
 
-		if webhookReg.ResolveIntegration != nil {
-			return h.handleStaticWebhookWithIntegration(webhookCtx, ctx, webhookName, webhookReg, req, payload)
+		if err := webhookReg.Verify(types.WebhookInboundRequest{
+			Request: req,
+			Payload: payload,
+		}); err != nil {
+			logx.FromContext(webhookCtx).Error().Err(err).Msg("static webhook verification failed")
+
+			return h.BadRequest(ctx, errIntegrationWebhookVerificationFailed)
 		}
 
-		return h.handleStaticWebhookRuntime(webhookCtx, ctx, definitionID, webhookName, webhookReg, req, payload)
+		if webhookReg.RuntimeOwned() {
+			return h.handleStaticWebhookRuntime(webhookCtx, ctx, definitionID, webhookName, webhookReg, req, payload)
+		}
+
+		return h.handleStaticWebhookWithIntegration(webhookCtx, ctx, webhookName, webhookReg, req, payload)
 	}
 }
 
@@ -286,7 +303,9 @@ func (h *Handler) handleStaticWebhookRuntime(webhookCtx context.Context, ctx ech
 		return h.BadRequest(ctx, err)
 	}
 
-	if event.Name == "" {
+	if !webhookReg.HandlesEvent(event.Name) {
+		logx.FromContext(webhookCtx).Debug().Str("event", event.Name).Msg("runtime webhook event not registered, skipped")
+		// the provider is told 200 so it does not retry an event type this webhook never handles
 		return h.Success(ctx, rout.Reply{Success: true})
 	}
 

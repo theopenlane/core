@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/logx"
 )
 
 // ControlReportsByCategory is the resolver for the controlReportsByCategory field.
@@ -62,7 +62,7 @@ func (r *queryResolver) ControlReportsByCategory(ctx context.Context, where *gen
 
 	reports := convertControlListToControlReports(controls)
 
-	if err := enrichControlReports(ctx, reports); err != nil {
+	if err := enrichControlReports(ctx, reports, where); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error enriching control reports")
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "controlreport"})
 	}
@@ -122,7 +122,7 @@ func (r *queryResolver) ControlReports(ctx context.Context, after *entgql.Cursor
 
 	nodes := lo.Map(out.Edges, func(e *model.ControlReportEdge, _ int) *model.ControlReport { return e.Node })
 
-	if err := enrichControlReports(ctx, nodes); err != nil {
+	if err := enrichControlReports(ctx, nodes, where); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error enriching control reports")
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "controlreport"})
 	}

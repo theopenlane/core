@@ -1166,14 +1166,209 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.slackruntime }}
       slackruntime:
-        {{- if .Values.openlane.coreConfiguration.integrations.slackruntime.webhookURL }}
-        webhookURL: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.webhookURL | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.slackruntime.botToken }}
-        botToken: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.botToken | quote }}
-        {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.slackruntime.defaultChannel }}
         defaultChannel: {{ .Values.openlane.coreConfiguration.integrations.slackruntime.defaultChannel | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.objectstore }}
+      objectstore:
+        {{- if .Values.openlane.coreConfiguration.integrations.objectstore.arn }}
+        arn: {{ .Values.openlane.coreConfiguration.integrations.objectstore.arn | quote }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime }}
+      objectstoreruntime:
+        {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers }}
+        providers:
+          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3 }}
+          s3:
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.ensureavailable }}
+            ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.ensureavailable }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.bucket }}
+            bucket: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.bucket | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup }}
+            backup:
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.enabled }}
+              enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.enabled }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.provider }}
+              provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.provider | quote }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.readfrombackup }}
+              readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.readfrombackup }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.region }}
+              region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.backup.region | quote }}
+              {{- end }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.proxypresignenabled }}
+            proxypresignenabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.proxypresignenabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.baseurl }}
+            baseurl: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.baseurl | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.region }}
+            region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.region | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.endpoint }}
+            endpoint: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.s3.endpoint | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2 }}
+          r2:
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.ensureavailable }}
+            ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.ensureavailable }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.bucket }}
+            bucket: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.bucket | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup }}
+            backup:
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.enabled }}
+              enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.enabled }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.provider }}
+              provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.provider | quote }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.readfrombackup }}
+              readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.readfrombackup }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.region }}
+              region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.backup.region | quote }}
+              {{- end }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.proxypresignenabled }}
+            proxypresignenabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.proxypresignenabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.baseurl }}
+            baseurl: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.baseurl | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.endpoint }}
+            endpoint: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.r2.endpoint | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs }}
+          gcs:
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.ensureavailable }}
+            ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.ensureavailable }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.bucket }}
+            bucket: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.bucket | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup }}
+            backup:
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.enabled }}
+              enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.enabled }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.provider }}
+              provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.provider | quote }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.readfrombackup }}
+              readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.readfrombackup }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.region }}
+              region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.backup.region | quote }}
+              {{- end }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.proxypresignenabled }}
+            proxypresignenabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.proxypresignenabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.baseurl }}
+            baseurl: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.baseurl | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.endpoint }}
+            endpoint: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.endpoint | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.projectid }}
+            projectid: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.gcs.projectid | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk }}
+          disk:
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.ensureavailable }}
+            ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.ensureavailable }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.bucket }}
+            bucket: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.bucket | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup }}
+            backup:
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.enabled }}
+              enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.enabled }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.provider }}
+              provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.provider | quote }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.readfrombackup }}
+              readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.readfrombackup }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.region }}
+              region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.backup.region | quote }}
+              {{- end }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.proxypresignenabled }}
+            proxypresignenabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.proxypresignenabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.baseurl }}
+            baseurl: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.baseurl | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.endpoint }}
+            endpoint: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.disk.endpoint | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database }}
+          database:
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.ensureavailable }}
+            ensureavailable: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.ensureavailable }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.bucket }}
+            bucket: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.bucket | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup }}
+            backup:
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.enabled }}
+              enabled: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.enabled }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.provider }}
+              provider: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.provider | quote }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.readfrombackup }}
+              readfrombackup: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.readfrombackup }}
+              {{- end }}
+              {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.region }}
+              region: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.backup.region | quote }}
+              {{- end }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.baseurl }}
+            baseurl: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.providers.database.baseurl | quote }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import }}
+        import:
+          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.prefix }}
+          prefix: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.prefix | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.moveprocessed }}
+          moveprocessed: {{ .Values.openlane.coreConfiguration.integrations.objectstoreruntime.import.moveprocessed }}
+          {{- end }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.googledrive }}
@@ -1196,8 +1391,8 @@ data:
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.azureentraid }}
       azureentraid:
-        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.clientid }}
-        clientid: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.clientid | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.applicationid }}
+        applicationid: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.applicationid | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.redirecturl | quote }}
@@ -1205,35 +1400,47 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant }}
         defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.defaulttenant | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.azureentraid.applicationid }}
-        applicationid: {{ .Values.openlane.coreConfiguration.integrations.azureentraid.applicationid | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter }}
+      azuresecuritycenter:
+        {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.applicationid }}
+        applicationid: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.applicationid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.redirecturl }}
+        redirecturl: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.redirecturl | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.defaulttenant }}
+        defaulttenant: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.defaulttenant | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse }}
+        lighthouse:
+          {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.managingtenantid }}
+          managingtenantid: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.managingtenantid | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.principalid }}
+          principalid: {{ .Values.openlane.coreConfiguration.integrations.azuresecuritycenter.lighthouse.principalid | quote }}
+          {{- end }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams }}
       microsoftteams:
-        {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.clientid }}
-        clientid: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.clientid | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.applicationid }}
+        applicationid: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.applicationid | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.redirecturl | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.microsoftteams.applicationid }}
-        applicationid: {{ .Values.openlane.coreConfiguration.integrations.microsoftteams.applicationid | quote }}
-        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.onedrive }}
       onedrive:
-        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.clientid }}
-        clientid: {{ .Values.openlane.coreConfiguration.integrations.onedrive.clientid | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.applicationid }}
+        applicationid: {{ .Values.openlane.coreConfiguration.integrations.onedrive.applicationid | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl }}
         redirecturl: {{ .Values.openlane.coreConfiguration.integrations.onedrive.redirecturl | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.onedrive.contentmode }}
         contentmode: {{ .Values.openlane.coreConfiguration.integrations.onedrive.contentmode | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrations.onedrive.applicationid }}
-        applicationid: {{ .Values.openlane.coreConfiguration.integrations.onedrive.applicationid | quote }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.oidclocal }}
@@ -1258,6 +1465,18 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.email.provider }}
         provider: {{ .Values.openlane.coreConfiguration.integrations.email.provider | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.postmark }}
+        postmark:
+          {{- if .Values.openlane.coreConfiguration.integrations.email.postmark.messagestream }}
+          messagestream: {{ .Values.openlane.coreConfiguration.integrations.email.postmark.messagestream | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.email.postmark.trackopens }}
+          trackopens: {{ .Values.openlane.coreConfiguration.integrations.email.postmark.trackopens }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.email.postmark.tracklinks }}
+          tracklinks: {{ .Values.openlane.coreConfiguration.integrations.email.postmark.tracklinks | quote }}
+          {{- end }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.email.fromemail }}
         fromemail: {{ .Values.openlane.coreConfiguration.integrations.email.fromemail | quote }}
@@ -1382,6 +1601,9 @@ data:
         {{- if .Values.openlane.coreConfiguration.workflows.gala.queuename }}
         queuename: {{ .Values.openlane.coreConfiguration.workflows.gala.queuename | quote }}
         {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.workflows.webhookallowprivateaddresses }}
+      webhookallowprivateaddresses: {{ .Values.openlane.coreConfiguration.workflows.webhookallowprivateaddresses }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.cloudflare }}

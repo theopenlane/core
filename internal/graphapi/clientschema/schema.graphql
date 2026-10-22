@@ -1,4 +1,8 @@
 """
+Indicates the field's value is copied from the catalog row on adopt and rewritten on refresh while the row stays linked
+"""
+directive @catalogManaged on FIELD_DEFINITION
+"""
 Indicates is the input field is read-only by non-system admin users for system-owned objects
 If an input is marked as @externalReadOnly, only system-admin users
 can set the field if the object is marked as source == ControlSourceFramework
@@ -31,7 +35,7 @@ directive @readOnly on INPUT_FIELD_DEFINITION
 AAGUID (Authenticator Attestation Global Unique Identifier) is a 128-bit identifier used in the WebAuthn and FIDO2 protocols to uniquely identify the model of an authenticator device
 """
 scalar AAGUID
-type APIToken implements Node {
+type APIToken implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -555,6 +559,22 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
 	"""
 	workflowEligibleMarker: Boolean
 	"""
+	the internal owner for the action plan when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
+	the internal owner user id for the action plan
+	"""
+	internalOwnerUserID: ID
+	"""
+	the internal owner group id for the action plan
+	"""
+	internalOwnerGroupID: ID
+	"""
+	the internal owner identity holder id for the action plan
+	"""
+	internalOwnerIdentityHolderID: ID
+	"""
 	short title describing the action plan
 	"""
 	title: String!
@@ -732,6 +752,9 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
 		where: GroupWhereInput
 	): GroupConnection!
 	actionPlanKind: CustomTypeEnum
+	internalOwnerUser: User
+	internalOwnerGroup: Group
+	internalOwnerIdentityHolder: IdentityHolder
 	risks(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -1242,6 +1265,7 @@ enum ActionPlanOrderField {
 	MANAGEMENT_MODE
 	review_due
 	REVIEW_FREQUENCY
+	internal_owner
 	title
 	due_date
 	PRIORITY
@@ -1667,6 +1691,62 @@ input ActionPlanWhereInput {
 	workflowEligibleMarkerIsNil: Boolean
 	workflowEligibleMarkerNotNil: Boolean
 	"""
+	internal_owner field predicates
+	"""
+	internalOwner: String
+	internalOwnerNEQ: String
+	internalOwnerIn: [String!]
+	internalOwnerNotIn: [String!]
+	internalOwnerContains: String
+	internalOwnerHasPrefix: String
+	internalOwnerHasSuffix: String
+	internalOwnerIsNil: Boolean
+	internalOwnerNotNil: Boolean
+	internalOwnerEqualFold: String
+	internalOwnerContainsFold: String
+	"""
+	internal_owner_user_id field predicates
+	"""
+	internalOwnerUserID: ID
+	internalOwnerUserIDNEQ: ID
+	internalOwnerUserIDIn: [ID!]
+	internalOwnerUserIDNotIn: [ID!]
+	internalOwnerUserIDContains: ID
+	internalOwnerUserIDHasPrefix: ID
+	internalOwnerUserIDHasSuffix: ID
+	internalOwnerUserIDIsNil: Boolean
+	internalOwnerUserIDNotNil: Boolean
+	internalOwnerUserIDEqualFold: ID
+	internalOwnerUserIDContainsFold: ID
+	"""
+	internal_owner_group_id field predicates
+	"""
+	internalOwnerGroupID: ID
+	internalOwnerGroupIDNEQ: ID
+	internalOwnerGroupIDIn: [ID!]
+	internalOwnerGroupIDNotIn: [ID!]
+	internalOwnerGroupIDContains: ID
+	internalOwnerGroupIDHasPrefix: ID
+	internalOwnerGroupIDHasSuffix: ID
+	internalOwnerGroupIDIsNil: Boolean
+	internalOwnerGroupIDNotNil: Boolean
+	internalOwnerGroupIDEqualFold: ID
+	internalOwnerGroupIDContainsFold: ID
+	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: ID
+	internalOwnerIdentityHolderIDNEQ: ID
+	internalOwnerIdentityHolderIDIn: [ID!]
+	internalOwnerIdentityHolderIDNotIn: [ID!]
+	internalOwnerIdentityHolderIDContains: ID
+	internalOwnerIdentityHolderIDHasPrefix: ID
+	internalOwnerIdentityHolderIDHasSuffix: ID
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: ID
+	internalOwnerIdentityHolderIDContainsFold: ID
+	"""
 	title field predicates
 	"""
 	title: String
@@ -1799,6 +1879,21 @@ input ActionPlanWhereInput {
 	"""
 	hasActionPlanKind: Boolean
 	hasActionPlanKindWith: [CustomTypeEnumWhereInput!]
+	"""
+	internal_owner_user edge predicates
+	"""
+	hasInternalOwnerUser: Boolean
+	hasInternalOwnerUserWith: [UserWhereInput!]
+	"""
+	internal_owner_group edge predicates
+	"""
+	hasInternalOwnerGroup: Boolean
+	hasInternalOwnerGroupWith: [GroupWhereInput!]
+	"""
+	internal_owner_identity_holder edge predicates
+	"""
+	hasInternalOwnerIdentityHolder: Boolean
+	hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	risks edge predicates
 	"""
@@ -12649,6 +12744,10 @@ input CreateActionPlanInput {
 	"""
 	workflowEligibleMarker: Boolean
 	"""
+	the internal owner for the action plan when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
 	short title describing the action plan
 	"""
 	title: String!
@@ -12700,6 +12799,9 @@ input CreateActionPlanInput {
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
 	actionPlanKindID: ID
+	internalOwnerUserID: ID
+	internalOwnerGroupID: ID
+	internalOwnerIdentityHolderID: ID
 	riskIDs: [ID!]
 	controlIDs: [ID!]
 	programIDs: [ID!]
@@ -14152,6 +14254,14 @@ input CreateEntityInput {
 	an internal identifier for the mapping, this field is only available to system admins
 	"""
 	systemInternalID: String @readOnly
+	"""
+	whether this system-owned row is published for organizations to adopt
+	"""
+	externallyVisible: Boolean
+	"""
+	raw payload received from the integration for auditing and troubleshooting
+	"""
+	rawIngestPayload: Map
 	"""
 	the relationship_state of the entity
 	"""
@@ -18026,6 +18136,14 @@ input CreateTrustCenterSettingInput {
 	allow trustcenter to be indexed on google
 	"""
 	noindexDefaultDomain: Boolean
+	"""
+	enable auto approval rules provides configurable settings to skip manual approvals
+	"""
+	enableAutoApproval: Boolean
+	"""
+	rules for approving trust center NDA requests
+	"""
+	autoApprovalRules: TrustCenterNDARequestSetting
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	logoFileID: ID
@@ -19032,7 +19150,7 @@ input CustomDomainWhereInput {
 	"""
 	tagsHas: String
 }
-type CustomTypeEnum implements Node {
+type CustomTypeEnum implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -22671,7 +22789,7 @@ input DirectoryMembershipWhereInput {
 	observedAtLT: Time
 	observedAtLTE: Time
 }
-type Discussion implements Node {
+type Discussion implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -23396,7 +23514,7 @@ input DocumentDataWhereInput {
 	"""
 	tagsHas: String
 }
-type EmailTemplate implements Node {
+type EmailTemplate implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -24356,6 +24474,22 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	systemInternalID: String @hidden(if: true)
 	"""
+	the system-owned catalog row this row was adopted from
+	"""
+	catalogID: ID
+	"""
+	whether this system-owned row is published for organizations to adopt
+	"""
+	externallyVisible: Boolean
+	"""
+	the lookup key of the catalog row this row was adopted from
+	"""
+	catalogKey: String
+	"""
+	raw payload received from the integration for auditing and troubleshooting
+	"""
+	rawIngestPayload: Map
+	"""
 	the relationship_state of the entity
 	"""
 	entityRelationshipStateName: String
@@ -24643,6 +24777,41 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	reviewedByUser: User
 	reviewedByGroup: Group
 	reviewedByIdentityHolder: IdentityHolder
+	"""
+	the system-owned catalog row this row was adopted from
+	"""
+	catalog: Entity
+	adopted(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
 	entityRelationshipState: CustomTypeEnum
 	entitySecurityQuestionnaireStatus: CustomTypeEnum
 	entitySourceType: CustomTypeEnum
@@ -25597,7 +25766,7 @@ enum EntityOrderField {
 	external_id
 	observed_at
 }
-type EntityType implements Node {
+type EntityType implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -26283,6 +26452,41 @@ input EntityWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	catalog_id field predicates
+	"""
+	catalogID: ID
+	catalogIDNEQ: ID
+	catalogIDIn: [ID!]
+	catalogIDNotIn: [ID!]
+	catalogIDContains: ID
+	catalogIDHasPrefix: ID
+	catalogIDHasSuffix: ID
+	catalogIDIsNil: Boolean
+	catalogIDNotNil: Boolean
+	catalogIDEqualFold: ID
+	catalogIDContainsFold: ID
+	"""
+	externally_visible field predicates
+	"""
+	externallyVisible: Boolean
+	externallyVisibleNEQ: Boolean
+	externallyVisibleIsNil: Boolean
+	externallyVisibleNotNil: Boolean
+	"""
+	catalog_key field predicates
+	"""
+	catalogKey: String
+	catalogKeyNEQ: String
+	catalogKeyIn: [String!]
+	catalogKeyNotIn: [String!]
+	catalogKeyContains: String
+	catalogKeyHasPrefix: String
+	catalogKeyHasSuffix: String
+	catalogKeyIsNil: Boolean
+	catalogKeyNotNil: Boolean
+	catalogKeyEqualFold: String
+	catalogKeyContainsFold: String
+	"""
 	entity_relationship_state_name field predicates
 	"""
 	entityRelationshipStateName: String
@@ -26815,6 +27019,16 @@ input EntityWhereInput {
 	"""
 	hasReviewedByIdentityHolder: Boolean
 	hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
+	catalog edge predicates
+	"""
+	hasCatalog: Boolean
+	hasCatalogWith: [EntityWhereInput!]
+	"""
+	adopted edge predicates
+	"""
+	hasAdopted: Boolean
+	hasAdoptedWith: [EntityWhereInput!]
 	"""
 	entity_relationship_state edge predicates
 	"""
@@ -28762,7 +28976,7 @@ input EvidenceWhereInput {
 The `ExampleEvidence` scalar type represents example evidence that can be used to satisfy the control
 """
 scalar ExampleEvidence
-type Export implements Node {
+type Export implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -29225,7 +29439,7 @@ input ExportWhereInput {
 	"""
 	fieldsHas: String
 }
-type File implements Node {
+type File implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -37776,7 +37990,7 @@ input ImportDomainScanReviewVendorInput {
 	"""
 	categories: [String!]
 }
-type Integration implements Node {
+type Integration implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -38516,6 +38730,7 @@ type Integration implements Node {
 	webhookURLs: Map
 	credentials: JSON
 	config: JSON
+	operationConfig: JSON
 }
 """
 A connection to a list of items.
@@ -38599,7 +38814,7 @@ enum IntegrationOrderField {
 	status
 	expires_at
 }
-type IntegrationRun implements Node {
+type IntegrationRun implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -44626,6 +44841,10 @@ type Mutation {
 		input: Upload!
 	): EntityBulkUpdatePayload!
 	"""
+	adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
+	"""
+	adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
+	"""
 	Create a new entityType
 	"""
 	createEntityType(
@@ -49798,7 +50017,7 @@ interface Node @goModel(model: "github.com/theopenlane/core/v2/internal/ent/gene
 	"""
 	id: ID!
 }
-type Note implements Node {
+type Note implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -50947,7 +51166,7 @@ input NotificationPreferenceWhereInput {
 	"""
 	topicPatternsHas: String
 }
-type NotificationTemplate implements Node {
+type NotificationTemplate implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -56450,7 +56669,7 @@ enum Permission @goModel(model: "github.com/theopenlane/core/common/enums.Permis
 	CREATOR
 	BLOCKED
 }
-type PersonalAccessToken implements Node {
+type PersonalAccessToken implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -65226,6 +65445,10 @@ type Query {
 		"""
 		id: ID!
 	): Entity!
+	"""
+	entitiesCatalog lists the externally visible system-owned entities available for adoption
+	"""
+	entitiesCatalog(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [EntityOrder!], where: EntityWhereInput): EntityConnection!
 	"""
 	Look up entityType by ID
 	"""
@@ -76308,7 +76531,7 @@ input SubprocessorWhereInput {
 	"""
 	tagsHas: String
 }
-type Subscriber implements Node {
+type Subscriber implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -77466,7 +77689,7 @@ input TFASettingWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [UserWhereInput!]
 }
-type TagDefinition implements Node {
+type TagDefinition implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -77794,7 +78017,7 @@ input TagDefinitionWhereInput {
 	"""
 	aliasesHas: String
 }
-type Task implements Node {
+type Task implements Node @modules(names: ["any_module"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -82065,6 +82288,7 @@ type TrustCenterNDARequest implements Node @modules(names: ["trust_center_module
 	ID of the user who approved the request
 	"""
 	approvedByUserID: ID
+	autoApproved: Boolean
 	"""
 	timestamp when the NDA was signed
 	"""
@@ -82275,6 +82499,7 @@ enum TrustCenterNDARequestOrderField {
 	created_at
 	updated_at
 }
+scalar TrustCenterNDARequestSetting
 """
 TrustCenterNDARequestTrustCenterNDARequestAccessLevel is enum for the field access_level
 """
@@ -82500,6 +82725,13 @@ input TrustCenterNDARequestWhereInput {
 	approvedByUserIDNotNil: Boolean
 	approvedByUserIDEqualFold: ID
 	approvedByUserIDContainsFold: ID
+	"""
+	auto_approved field predicates
+	"""
+	autoApproved: Boolean
+	autoApprovedNEQ: Boolean
+	autoApprovedIsNil: Boolean
+	autoApprovedNotNil: Boolean
 	"""
 	signed_at field predicates
 	"""
@@ -82736,6 +82968,14 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
 	allow trustcenter to be indexed on google
 	"""
 	noindexDefaultDomain: Boolean
+	"""
+	enable auto approval rules provides configurable settings to skip manual approvals
+	"""
+	enableAutoApproval: Boolean
+	"""
+	rules for approving trust center NDA requests
+	"""
+	autoApprovalRules: TrustCenterNDARequestSetting
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -83339,6 +83579,13 @@ input TrustCenterSettingWhereInput {
 	noindexDefaultDomainNEQ: Boolean
 	noindexDefaultDomainIsNil: Boolean
 	noindexDefaultDomainNotNil: Boolean
+	"""
+	enable_auto_approval field predicates
+	"""
+	enableAutoApproval: Boolean
+	enableAutoApprovalNEQ: Boolean
+	enableAutoApprovalIsNil: Boolean
+	enableAutoApprovalNotNil: Boolean
 	"""
 	blocked_groups edge predicates
 	"""
@@ -84707,6 +84954,11 @@ input UpdateActionPlanInput {
 	workflowEligibleMarker: Boolean
 	clearWorkflowEligibleMarker: Boolean
 	"""
+	the internal owner for the action plan when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	clearInternalOwner: Boolean
+	"""
 	short title describing the action plan
 	"""
 	title: String
@@ -84776,6 +85028,12 @@ input UpdateActionPlanInput {
 	clearViewers: Boolean
 	actionPlanKindID: ID
 	clearActionPlanKind: Boolean
+	internalOwnerUserID: ID
+	clearInternalOwnerUser: Boolean
+	internalOwnerGroupID: ID
+	clearInternalOwnerGroup: Boolean
+	internalOwnerIdentityHolderID: ID
+	clearInternalOwnerIdentityHolder: Boolean
 	addRiskIDs: [ID!]
 	removeRiskIDs: [ID!]
 	clearRisks: Boolean
@@ -86654,6 +86912,16 @@ input UpdateEntityInput {
 	"""
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
+	"""
+	whether this system-owned row is published for organizations to adopt
+	"""
+	externallyVisible: Boolean
+	clearExternallyVisible: Boolean
+	"""
+	raw payload received from the integration for auditing and troubleshooting
+	"""
+	rawIngestPayload: Map
+	clearRawIngestPayload: Boolean
 	"""
 	the relationship_state of the entity
 	"""
@@ -92127,6 +92395,16 @@ input UpdateTrustCenterSettingInput {
 	"""
 	noindexDefaultDomain: Boolean
 	clearNoindexDefaultDomain: Boolean
+	"""
+	enable auto approval rules provides configurable settings to skip manual approvals
+	"""
+	enableAutoApproval: Boolean
+	clearEnableAutoApproval: Boolean
+	"""
+	rules for approving trust center NDA requests
+	"""
+	autoApprovalRules: TrustCenterNDARequestSetting
+	clearAutoApprovalRules: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -97753,7 +98031,7 @@ input WebauthnWhereInput {
 	"""
 	tagsHas: String
 }
-type WorkflowAssignment implements Node {
+type WorkflowAssignment implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -97973,7 +98251,7 @@ type WorkflowAssignmentRejectPayload {
 WorkflowAssignmentRejection captures details when an approval is rejected or denied.
 """
 scalar WorkflowAssignmentRejection
-type WorkflowAssignmentTarget implements Node {
+type WorkflowAssignmentTarget implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -98565,7 +98843,7 @@ enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theo
 	REJECTED
 	CHANGES_REQUESTED
 }
-type WorkflowDefinition implements Node {
+type WorkflowDefinition implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -99245,7 +99523,7 @@ enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core
 	LIFECYCLE
 	NOTIFICATION
 }
-type WorkflowEvent implements Node {
+type WorkflowEvent implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -99544,7 +99822,7 @@ type WorkflowFieldMetadata {
 	"""
 	type: String!
 }
-type WorkflowInstance implements Node {
+type WorkflowInstance implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -100501,7 +100779,7 @@ type WorkflowMetadata {
 	"""
 	extensions: Map!
 }
-type WorkflowObjectRef implements Node {
+type WorkflowObjectRef implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time
@@ -101276,7 +101554,7 @@ type WorkflowObjectTypeMetadata {
 	"""
 	resolverKeys: [String!]!
 }
-type WorkflowProposal implements Node {
+type WorkflowProposal implements Node @modules(names: ["workflow_addon"]) {
 	id: ID!
 	createdAt: Time
 	updatedAt: Time

@@ -228,6 +228,22 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
+	if internalOwner, exists := m.InternalOwner(); exists {
+		create = create.SetInternalOwner(internalOwner)
+	}
+
+	if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+		create = create.SetInternalOwnerUserID(internalOwnerUserID)
+	}
+
+	if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+		create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+	}
+
+	if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+		create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+	}
+
 	if title, exists := m.Title(); exists {
 		create = create.SetTitle(title)
 	}
@@ -558,6 +574,30 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetWorkflowEligibleMarker(actionplan.WorkflowEligibleMarker)
 		}
 
+		if internalOwner, exists := m.InternalOwner(); exists {
+			create = create.SetInternalOwner(internalOwner)
+		} else {
+			create = create.SetInternalOwner(actionplan.InternalOwner)
+		}
+
+		if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+			create = create.SetInternalOwnerUserID(internalOwnerUserID)
+		} else {
+			create = create.SetInternalOwnerUserID(actionplan.InternalOwnerUserID)
+		}
+
+		if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+			create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+		} else {
+			create = create.SetInternalOwnerGroupID(actionplan.InternalOwnerGroupID)
+		}
+
+		if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+			create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+		} else {
+			create = create.SetInternalOwnerIdentityHolderID(actionplan.InternalOwnerIdentityHolderID)
+		}
+
 		if title, exists := m.Title(); exists {
 			create = create.SetTitle(title)
 		} else {
@@ -704,6 +744,10 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetActionPlanKindName(actionplan.ActionPlanKindName).
 			SetActionPlanKindID(actionplan.ActionPlanKindID).
 			SetWorkflowEligibleMarker(actionplan.WorkflowEligibleMarker).
+			SetInternalOwner(actionplan.InternalOwner).
+			SetInternalOwnerUserID(actionplan.InternalOwnerUserID).
+			SetInternalOwnerGroupID(actionplan.InternalOwnerGroupID).
+			SetInternalOwnerIdentityHolderID(actionplan.InternalOwnerIdentityHolderID).
 			SetTitle(actionplan.Title).
 			SetDescription(actionplan.Description).
 			SetDueDate(actionplan.DueDate).
@@ -6467,6 +6511,22 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
+	if catalogID, exists := m.CatalogID(); exists {
+		create = create.SetCatalogID(catalogID)
+	}
+
+	if externallyVisible, exists := m.ExternallyVisible(); exists {
+		create = create.SetExternallyVisible(externallyVisible)
+	}
+
+	if catalogKey, exists := m.CatalogKey(); exists {
+		create = create.SetCatalogKey(catalogKey)
+	}
+
+	if rawIngestPayload, exists := m.RawIngestPayload(); exists {
+		create = create.SetRawIngestPayload(rawIngestPayload)
+	}
+
 	if entityRelationshipStateName, exists := m.EntityRelationshipStateName(); exists {
 		create = create.SetEntityRelationshipStateName(entityRelationshipStateName)
 	}
@@ -6845,6 +6905,30 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableSystemInternalID(entity.SystemInternalID)
 		}
 
+		if catalogID, exists := m.CatalogID(); exists {
+			create = create.SetCatalogID(catalogID)
+		} else {
+			create = create.SetCatalogID(entity.CatalogID)
+		}
+
+		if externallyVisible, exists := m.ExternallyVisible(); exists {
+			create = create.SetExternallyVisible(externallyVisible)
+		} else {
+			create = create.SetExternallyVisible(entity.ExternallyVisible)
+		}
+
+		if catalogKey, exists := m.CatalogKey(); exists {
+			create = create.SetCatalogKey(catalogKey)
+		} else {
+			create = create.SetCatalogKey(entity.CatalogKey)
+		}
+
+		if rawIngestPayload, exists := m.RawIngestPayload(); exists {
+			create = create.SetRawIngestPayload(rawIngestPayload)
+		} else {
+			create = create.SetRawIngestPayload(entity.RawIngestPayload)
+		}
+
 		if entityRelationshipStateName, exists := m.EntityRelationshipStateName(); exists {
 			create = create.SetEntityRelationshipStateName(entityRelationshipStateName)
 		} else {
@@ -7191,6 +7275,10 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSystemOwned(entity.SystemOwned).
 			SetNillableInternalNotes(entity.InternalNotes).
 			SetNillableSystemInternalID(entity.SystemInternalID).
+			SetCatalogID(entity.CatalogID).
+			SetExternallyVisible(entity.ExternallyVisible).
+			SetCatalogKey(entity.CatalogKey).
+			SetRawIngestPayload(entity.RawIngestPayload).
 			SetEntityRelationshipStateName(entity.EntityRelationshipStateName).
 			SetEntityRelationshipStateID(entity.EntityRelationshipStateID).
 			SetEntitySecurityQuestionnaireStatusName(entity.EntitySecurityQuestionnaireStatusName).
@@ -23078,6 +23166,10 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Cont
 		create = create.SetNillableApprovedByUserID(&approvedByUserID)
 	}
 
+	if autoApproved, exists := m.AutoApproved(); exists {
+		create = create.SetAutoApproved(autoApproved)
+	}
+
 	if signedAt, exists := m.SignedAt(); exists {
 		create = create.SetNillableSignedAt(&signedAt)
 	}
@@ -23232,6 +23324,12 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetNillableApprovedByUserID(trustcenterndarequest.ApprovedByUserID)
 		}
 
+		if autoApproved, exists := m.AutoApproved(); exists {
+			create = create.SetAutoApproved(autoApproved)
+		} else {
+			create = create.SetAutoApproved(trustcenterndarequest.AutoApproved)
+		}
+
 		if signedAt, exists := m.SignedAt(); exists {
 			create = create.SetNillableSignedAt(&signedAt)
 		} else {
@@ -23306,6 +23404,7 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetStatus(trustcenterndarequest.Status).
 			SetNillableApprovedAt(trustcenterndarequest.ApprovedAt).
 			SetNillableApprovedByUserID(trustcenterndarequest.ApprovedByUserID).
+			SetAutoApproved(trustcenterndarequest.AutoApproved).
 			SetNillableSignedAt(trustcenterndarequest.SignedAt).
 			SetNillableDocumentDataID(trustcenterndarequest.DocumentDataID).
 			SetNillableFileID(trustcenterndarequest.FileID).
@@ -23489,6 +23588,14 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if noindexDefaultDomain, exists := m.NoindexDefaultDomain(); exists {
 		create = create.SetNoindexDefaultDomain(noindexDefaultDomain)
+	}
+
+	if enableAutoApproval, exists := m.EnableAutoApproval(); exists {
+		create = create.SetEnableAutoApproval(enableAutoApproval)
+	}
+
+	if autoApprovalRules, exists := m.AutoApprovalRules(); exists {
+		create = create.SetAutoApprovalRules(autoApprovalRules)
 	}
 
 	_, err := create.Save(ctx)
@@ -23741,6 +23848,18 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain)
 		}
 
+		if enableAutoApproval, exists := m.EnableAutoApproval(); exists {
+			create = create.SetEnableAutoApproval(enableAutoApproval)
+		} else {
+			create = create.SetEnableAutoApproval(trustcentersetting.EnableAutoApproval)
+		}
+
+		if autoApprovalRules, exists := m.AutoApprovalRules(); exists {
+			create = create.SetAutoApprovalRules(autoApprovalRules)
+		} else {
+			create = create.SetAutoApprovalRules(trustcentersetting.AutoApprovalRules)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -23815,6 +23934,8 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).
 			SetNillableStatusPageURL(trustcentersetting.StatusPageURL).
 			SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain).
+			SetEnableAutoApproval(trustcentersetting.EnableAutoApproval).
+			SetAutoApprovalRules(trustcentersetting.AutoApprovalRules).
 			Save(ctx)
 		if err != nil {
 			return err

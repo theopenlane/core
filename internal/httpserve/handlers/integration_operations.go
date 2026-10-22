@@ -10,13 +10,14 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // integrationOperationQueueDetails captures queue response details for integration operation requests
@@ -42,9 +43,10 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 
 	requestCtx := ctx.Request().Context()
 
-	caller, ok := auth.CallerFromContext(requestCtx)
-	if !ok {
-		return h.Unauthorized(ctx, auth.ErrNoAuthUser)
+	// the installation lookup is scoped to the caller's active organization, so a caller without one cannot run anything
+	ownerID, err := auth.GetOrganizationIDFromContext(requestCtx)
+	if err != nil {
+		return h.Unauthorized(ctx, err)
 	}
 
 	if req.IntegrationID == "" || req.Body.Operation == "" {
@@ -54,41 +56,9 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrIntegrationIDRequired)
 	}
 
-	integrationRef, err := h.IntegrationsRuntime.ResolveIntegration(requestCtx, integrationsruntime.IntegrationLookup{
-		IntegrationID: req.IntegrationID,
-		OwnerID:       caller.OrganizationID,
-	})
+	integrationRef, def, operation, err := h.resolveInvocableOperation(requestCtx, ownerID, req)
 	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("failed to resolve installation")
-
-		return h.BadRequest(ctx, ErrIntegrationNotFound)
-	}
-
-	def, ok := h.IntegrationsRuntime.Registry().Definition(integrationRef.DefinitionID)
-	if !ok {
-		logx.FromContext(requestCtx).Error().Str("definitionID", integrationRef.DefinitionID).Msg("definition not found in registry")
-
-		return h.BadRequest(ctx, ErrIntegrationNotFound)
-	}
-
-	if !def.Active {
-		logx.FromContext(requestCtx).Error().Err(ErrProviderDisabled).Str("definitionID", integrationRef.DefinitionID).Msg("integration provider is disabled, not executing operation")
-
-		return h.BadRequest(ctx, ErrProviderDisabled)
-	}
-
-	operationName := req.Body.Operation
-	operation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, operationName)
-	if err != nil {
-		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation not found")
-
-		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)
-	}
-
-	if operation.Internal {
-		logx.FromContext(requestCtx).Error().Interface("request", req).Msg("operation is internal and cannot be invoked directly")
-
-		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)
+		return h.BadRequest(ctx, err)
 	}
 
 	if operation.RequiresPaymentMethod {
@@ -97,45 +67,15 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 		}
 	}
 
-	inlineExecution := operation.Policy.Inline
-
-	queueCtx := context.WithoutCancel(requestCtx)
-	configDoc := jsonx.CloneRawMessage(req.Body.Config)
-
-	if inlineExecution {
-		if err := operations.ValidateConfig(operation.ConfigSchema, configDoc); err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Msg("invalid operation config")
-
-			return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)
-		}
+	if operation.Policy.Inline {
+		return h.runInlineOperation(ctx, req, integrationRef, def, operation)
 	}
 
-	if inlineExecution {
-		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, integrationRef, operation, nil, configDoc)
-		if err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation execution failed")
-
-			if errors.Is(err, integrationsruntime.ErrOperationRateLimited) {
-				return h.TooManyRequests(ctx, err)
-			}
-
-			return h.BadRequest(ctx, err)
-		}
-
-		return h.Success(ctx, RunIntegrationOperationResponse{
-			Reply:     rout.Reply{Success: true},
-			Provider:  def.ID,
-			Operation: operationName,
-			Status:    "ok",
-			Summary:   "Integration operation completed",
-			Details:   output,
-		})
-	}
-
-	result, err := h.IntegrationsRuntime.Dispatch(queueCtx, types.DispatchRequest{
+	result, err := h.IntegrationsRuntime.Dispatch(context.WithoutCancel(requestCtx), types.DispatchRequest{
 		IntegrationID: integrationRef.ID,
-		Operation:     operationName,
-		Config:        configDoc,
+		OwnerID:       integrationRef.OwnerID,
+		Operation:     req.Body.Operation,
+		Config:        jsonx.CloneRawMessage(req.Body.Config),
 		RunType:       enums.IntegrationRunTypeManual,
 	})
 	if err != nil {
@@ -156,9 +96,98 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 	return h.Success(ctx, RunIntegrationOperationResponse{
 		Reply:     rout.Reply{Success: true},
 		Provider:  def.ID,
-		Operation: operationName,
+		Operation: req.Body.Operation,
 		Status:    "queued",
 		Summary:   "Integration operation queued",
 		Details:   queueDetails,
+	})
+}
+
+// resolveInvocableOperation resolves the caller's installation, its active definition, and the requested operation, returning the error to answer with when the operation cannot be invoked directly
+func (h *Handler) resolveInvocableOperation(ctx context.Context, ownerID string, req *RunIntegrationOperationRequest) (*ent.Integration, types.Definition, types.OperationRegistration, error) {
+	integrationRef, err := h.IntegrationsRuntime.ResolveIntegration(ctx, integrationsruntime.IntegrationLookup{
+		IntegrationID: req.IntegrationID,
+		OwnerID:       ownerID,
+	})
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Interface("request", req).Msg("failed to resolve installation")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, ErrIntegrationNotFound
+	}
+
+	def, ok := h.IntegrationsRuntime.Registry().Definition(integrationRef.DefinitionID)
+
+	switch {
+	case integrationRef.SystemOwned:
+		logx.FromContext(ctx).Error().Interface("request", req).Msg("installation is system owned and cannot be invoked directly")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, ErrIntegrationNotFound
+	case !ok:
+		logx.FromContext(ctx).Error().Str("definitionID", integrationRef.DefinitionID).Msg("definition not found in registry")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, ErrIntegrationNotFound
+	// system and runtime definitions have no installation surface, so an installation naming one is never customer-invocable
+	case !def.Installable():
+		logx.FromContext(ctx).Error().Str("definitionID", integrationRef.DefinitionID).Msg("definition is not installable and cannot be invoked directly")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, ErrIntegrationNotFound
+	case !def.Active:
+		logx.FromContext(ctx).Error().Err(ErrProviderDisabled).Str("definitionID", integrationRef.DefinitionID).Msg("integration provider is disabled, not executing operation")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, ErrProviderDisabled
+	}
+
+	operation, err := h.IntegrationsRuntime.Registry().Operation(def.ID, req.Body.Operation)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Interface("request", req).Msg("operation not found")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, operations.ErrDispatchInputInvalid
+	}
+
+	if operation.Internal {
+		logx.FromContext(ctx).Error().Interface("request", req).Msg("operation is internal and cannot be invoked directly")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, operations.ErrDispatchInputInvalid
+	}
+
+	// the run endpoint is a customer-facing surface, so an operation hidden from customers is not invocable through it
+	if operation.CustomerSelectable != nil && !*operation.CustomerSelectable {
+		logx.FromContext(ctx).Error().Interface("request", req).Msg("operation is not customer selectable and cannot be invoked directly")
+
+		return nil, types.Definition{}, types.OperationRegistration{}, operations.ErrDispatchInputInvalid
+	}
+
+	return integrationRef, def, operation, nil
+}
+
+// runInlineOperation validates the supplied config and executes the operation synchronously, answering rate limiting with a too-many-requests response
+func (h *Handler) runInlineOperation(ctx echo.Context, req *RunIntegrationOperationRequest, integrationRef *ent.Integration, def types.Definition, operation types.OperationRegistration) error {
+	requestCtx := ctx.Request().Context()
+	configDoc := jsonx.CloneRawMessage(req.Body.Config)
+
+	if err := operations.ValidateInput(requestCtx, types.InstallationRequest{Integration: integrationRef}, operation.Input.Schema, nil, configDoc, types.ErrOperationConfigInvalid); err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Msg("invalid operation config")
+
+		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)
+	}
+
+	output, err := h.IntegrationsRuntime.ExecuteOperation(context.WithoutCancel(requestCtx), integrationRef, operation, configDoc)
+	if err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation execution failed")
+
+		if errors.Is(err, integrationsruntime.ErrOperationRateLimited) {
+			return h.TooManyRequests(ctx, err)
+		}
+
+		return h.BadRequest(ctx, err)
+	}
+
+	return h.Success(ctx, RunIntegrationOperationResponse{
+		Reply:     rout.Reply{Success: true},
+		Provider:  def.ID,
+		Operation: req.Body.Operation,
+		Status:    "ok",
+		Summary:   "Integration operation completed",
+		Details:   output,
 	})
 }

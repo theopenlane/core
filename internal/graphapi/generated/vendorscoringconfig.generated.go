@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_deletedIDs(ctx
 	)
 }
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("VendorScoringConfigBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigBulkDeletePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_notDeletedIDs(
 	)
 }
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("VendorScoringConfigBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,7 +122,7 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload_error(ctx cont
 	)
 }
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("VendorScoringConfigBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload_vendorScoringConfigs(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload_updatedIDs(ctx
 	)
 }
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("VendorScoringConfigBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -201,7 +200,7 @@ func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload_notUpdatedIDs(
 	)
 }
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("VendorScoringConfigBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -224,7 +223,7 @@ func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload_error(ctx cont
 	)
 }
 func (ec *executionContext) fieldContext_VendorScoringConfigBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("VendorScoringConfigBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("VendorScoringConfigBulkUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _VendorScoringConfigCreatePayload_vendorScoringConfig(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigCreatePayload) (ret graphql.Marshaler) {
@@ -279,7 +278,7 @@ func (ec *executionContext) _VendorScoringConfigDeletePayload_deletedID(ctx cont
 	)
 }
 func (ec *executionContext) fieldContext_VendorScoringConfigDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("VendorScoringConfigDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("VendorScoringConfigDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _VendorScoringConfigUpdatePayload_vendorScoringConfig(ctx context.Context, field graphql.CollectedField, obj *model.VendorScoringConfigUpdatePayload) (ret graphql.Marshaler) {
@@ -332,8 +331,7 @@ func (ec *executionContext) _VendorScoringConfigBulkCreatePayload(ctx context.Co
 	fields := graphql.CollectFields(ec.OperationContext, sel, vendorScoringConfigBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -352,14 +350,10 @@ func (ec *executionContext) _VendorScoringConfigBulkCreatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -370,8 +364,7 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload(ctx context.Co
 	fields := graphql.CollectFields(ec.OperationContext, sel, vendorScoringConfigBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -400,14 +393,10 @@ func (ec *executionContext) _VendorScoringConfigBulkDeletePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -418,8 +407,7 @@ func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload(ctx context.Co
 	fields := graphql.CollectFields(ec.OperationContext, sel, vendorScoringConfigBulkUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -453,14 +441,10 @@ func (ec *executionContext) _VendorScoringConfigBulkUpdatePayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -471,8 +455,7 @@ func (ec *executionContext) _VendorScoringConfigCreatePayload(ctx context.Contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, vendorScoringConfigCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -491,14 +474,10 @@ func (ec *executionContext) _VendorScoringConfigCreatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -509,8 +488,7 @@ func (ec *executionContext) _VendorScoringConfigDeletePayload(ctx context.Contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, vendorScoringConfigDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -529,14 +507,10 @@ func (ec *executionContext) _VendorScoringConfigDeletePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -547,8 +521,7 @@ func (ec *executionContext) _VendorScoringConfigUpdatePayload(ctx context.Contex
 	fields := graphql.CollectFields(ec.OperationContext, sel, vendorScoringConfigUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -567,14 +540,10 @@ func (ec *executionContext) _VendorScoringConfigUpdatePayload(ctx context.Contex
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -585,9 +554,7 @@ func (ec *executionContext) _VendorScoringConfigUpdatePayload(ctx context.Contex
 
 func (ec *executionContext) marshalNVendorScoringConfigBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "VendorScoringConfigBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._VendorScoringConfigBulkCreatePayload(ctx, sel, v)
@@ -595,9 +562,7 @@ func (ec *executionContext) marshalNVendorScoringConfigBulkCreatePayload2ᚖgith
 
 func (ec *executionContext) marshalNVendorScoringConfigBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "VendorScoringConfigBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._VendorScoringConfigBulkDeletePayload(ctx, sel, v)
@@ -605,9 +570,7 @@ func (ec *executionContext) marshalNVendorScoringConfigBulkDeletePayload2ᚖgith
 
 func (ec *executionContext) marshalNVendorScoringConfigBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "VendorScoringConfigBulkUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._VendorScoringConfigBulkUpdatePayload(ctx, sel, v)
@@ -615,9 +578,7 @@ func (ec *executionContext) marshalNVendorScoringConfigBulkUpdatePayload2ᚖgith
 
 func (ec *executionContext) marshalNVendorScoringConfigCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "VendorScoringConfigCreatePayload!")
 		return graphql.Null
 	}
 	return ec._VendorScoringConfigCreatePayload(ctx, sel, v)
@@ -625,9 +586,7 @@ func (ec *executionContext) marshalNVendorScoringConfigCreatePayload2ᚖgithub�
 
 func (ec *executionContext) marshalNVendorScoringConfigDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "VendorScoringConfigDeletePayload!")
 		return graphql.Null
 	}
 	return ec._VendorScoringConfigDeletePayload(ctx, sel, v)
@@ -635,9 +594,7 @@ func (ec *executionContext) marshalNVendorScoringConfigDeletePayload2ᚖgithub�
 
 func (ec *executionContext) marshalNVendorScoringConfigUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "VendorScoringConfigUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._VendorScoringConfigUpdatePayload(ctx, sel, v)

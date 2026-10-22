@@ -81,6 +81,14 @@ type EntityHistory struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the system-owned catalog row this row was adopted from
+	CatalogID string `json:"catalog_id,omitempty"`
+	// whether this system-owned row is published for organizations to adopt
+	ExternallyVisible bool `json:"externally_visible,omitempty"`
+	// the lookup key of the catalog row this row was adopted from
+	CatalogKey string `json:"catalog_key,omitempty"`
+	// raw payload received from the integration for auditing and troubleshooting
+	RawIngestPayload map[string]interface{} `json:"raw_ingest_payload,omitempty"`
 	// the relationship_state of the entity
 	EntityRelationshipStateName string `json:"entity_relationship_state_name,omitempty"`
 	// the relationship_state of the entity
@@ -185,17 +193,17 @@ func (*EntityHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case entityhistory.FieldLastReviewedAt, entityhistory.FieldSoc2PeriodEnd, entityhistory.FieldContractStartDate, entityhistory.FieldContractEndDate, entityhistory.FieldNextReviewAt, entityhistory.FieldContractRenewalAt, entityhistory.FieldObservedAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case entityhistory.FieldTags, entityhistory.FieldDomains, entityhistory.FieldAliases, entityhistory.FieldLinkedAssetIds, entityhistory.FieldProvidedServices, entityhistory.FieldLinks, entityhistory.FieldVendorMetadata:
+		case entityhistory.FieldTags, entityhistory.FieldRawIngestPayload, entityhistory.FieldDomains, entityhistory.FieldAliases, entityhistory.FieldLinkedAssetIds, entityhistory.FieldProvidedServices, entityhistory.FieldLinks, entityhistory.FieldVendorMetadata:
 			values[i] = new([]byte)
 		case entityhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case entityhistory.FieldSystemOwned, entityhistory.FieldApprovedForUse, entityhistory.FieldHasSoc2, entityhistory.FieldAutoRenews, entityhistory.FieldSSOEnforced, entityhistory.FieldMfaSupported, entityhistory.FieldMfaEnforced:
+		case entityhistory.FieldSystemOwned, entityhistory.FieldExternallyVisible, entityhistory.FieldApprovedForUse, entityhistory.FieldHasSoc2, entityhistory.FieldAutoRenews, entityhistory.FieldSSOEnforced, entityhistory.FieldMfaSupported, entityhistory.FieldMfaEnforced:
 			values[i] = new(sql.NullBool)
 		case entityhistory.FieldAnnualSpend:
 			values[i] = new(sql.NullFloat64)
 		case entityhistory.FieldTerminationNoticeDays, entityhistory.FieldRiskScore, entityhistory.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldUpdatedByImpersonator, entityhistory.FieldDeletedBy, entityhistory.FieldSourceDefinitionID, entityhistory.FieldSourceDefinitionVersion, entityhistory.FieldSourceInstanceID, entityhistory.FieldManagedBy, entityhistory.FieldIntegrationRunID, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldInternalOwnerIdentityHolderID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldReviewedByIdentityHolderID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency, entityhistory.FieldLogoRemoteURL, entityhistory.FieldLogoFileID, entityhistory.FieldExternalID:
+		case entityhistory.FieldID, entityhistory.FieldRef, entityhistory.FieldCreatedBy, entityhistory.FieldUpdatedBy, entityhistory.FieldUpdatedByImpersonator, entityhistory.FieldDeletedBy, entityhistory.FieldSourceDefinitionID, entityhistory.FieldSourceDefinitionVersion, entityhistory.FieldSourceInstanceID, entityhistory.FieldManagedBy, entityhistory.FieldIntegrationRunID, entityhistory.FieldOwnerID, entityhistory.FieldInternalOwner, entityhistory.FieldInternalOwnerUserID, entityhistory.FieldInternalOwnerGroupID, entityhistory.FieldInternalOwnerIdentityHolderID, entityhistory.FieldReviewedBy, entityhistory.FieldReviewedByUserID, entityhistory.FieldReviewedByGroupID, entityhistory.FieldReviewedByIdentityHolderID, entityhistory.FieldInternalNotes, entityhistory.FieldSystemInternalID, entityhistory.FieldCatalogID, entityhistory.FieldCatalogKey, entityhistory.FieldEntityRelationshipStateName, entityhistory.FieldEntityRelationshipStateID, entityhistory.FieldEntitySecurityQuestionnaireStatusName, entityhistory.FieldEntitySecurityQuestionnaireStatusID, entityhistory.FieldEntitySourceTypeName, entityhistory.FieldEntitySourceTypeID, entityhistory.FieldEnvironmentName, entityhistory.FieldEnvironmentID, entityhistory.FieldScopeName, entityhistory.FieldScopeID, entityhistory.FieldName, entityhistory.FieldDisplayName, entityhistory.FieldDescription, entityhistory.FieldEntityTypeID, entityhistory.FieldStatus, entityhistory.FieldSpendCurrency, entityhistory.FieldBillingModel, entityhistory.FieldRenewalRisk, entityhistory.FieldStatusPageURL, entityhistory.FieldRiskRating, entityhistory.FieldTier, entityhistory.FieldReviewFrequency, entityhistory.FieldLogoRemoteURL, entityhistory.FieldLogoFileID, entityhistory.FieldExternalID:
 			values[i] = new(sql.NullString)
 		case entityhistory.FieldHistoryTime, entityhistory.FieldCreatedAt, entityhistory.FieldUpdatedAt, entityhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -399,6 +407,32 @@ func (_m *EntityHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case entityhistory.FieldCatalogID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field catalog_id", values[i])
+			} else if value.Valid {
+				_m.CatalogID = value.String
+			}
+		case entityhistory.FieldExternallyVisible:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field externally_visible", values[i])
+			} else if value.Valid {
+				_m.ExternallyVisible = value.Bool
+			}
+		case entityhistory.FieldCatalogKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field catalog_key", values[i])
+			} else if value.Valid {
+				_m.CatalogKey = value.String
+			}
+		case entityhistory.FieldRawIngestPayload:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field raw_ingest_payload", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.RawIngestPayload); err != nil {
+					return fmt.Errorf("unmarshal field raw_ingest_payload: %w", err)
+				}
 			}
 		case entityhistory.FieldEntityRelationshipStateName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -832,6 +866,18 @@ func (_m *EntityHistory) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("catalog_id=")
+	builder.WriteString(_m.CatalogID)
+	builder.WriteString(", ")
+	builder.WriteString("externally_visible=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ExternallyVisible))
+	builder.WriteString(", ")
+	builder.WriteString("catalog_key=")
+	builder.WriteString(_m.CatalogKey)
+	builder.WriteString(", ")
+	builder.WriteString("raw_ingest_payload=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RawIngestPayload))
 	builder.WriteString(", ")
 	builder.WriteString("entity_relationship_state_name=")
 	builder.WriteString(_m.EntityRelationshipStateName)

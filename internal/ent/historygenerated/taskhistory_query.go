@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/taskhistory"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // TaskHistoryQuery is the builder for querying TaskHistory entities.

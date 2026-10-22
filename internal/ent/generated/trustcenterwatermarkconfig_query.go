@@ -20,7 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // TrustCenterWatermarkConfigQuery is the builder for querying TrustCenterWatermarkConfig entities.

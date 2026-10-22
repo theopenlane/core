@@ -3,10 +3,10 @@ package email
 import (
 	"context"
 	"encoding/json"
-	"strings"
 	"time"
 
 	"github.com/resend/resend-go/v3"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -15,8 +15,71 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
+
+// deliveryEventKind is the provider-neutral delivery status carried by an inbound email webhook
+type deliveryEventKind string
+
+const (
+	// deliveryEventSent means the provider accepted the message for sending
+	deliveryEventSent deliveryEventKind = "sent"
+	// deliveryEventDelivered means the recipient mail server accepted the message
+	deliveryEventDelivered deliveryEventKind = "delivered"
+	// deliveryEventOpened means the recipient opened the message
+	deliveryEventOpened deliveryEventKind = "opened"
+	// deliveryEventClicked means the recipient clicked a tracked link
+	deliveryEventClicked deliveryEventKind = "clicked"
+	// deliveryEventBounced means the message bounced
+	deliveryEventBounced deliveryEventKind = "bounced"
+	// deliveryEventComplained means the recipient marked the message as spam
+	deliveryEventComplained deliveryEventKind = "complained"
+	// deliveryEventFailed means the provider failed to send the message
+	deliveryEventFailed deliveryEventKind = "failed"
+)
+
+const (
+	// metadataEventSuffix is the metadata key suffix holding the raw provider event name
+	metadataEventSuffix = "_event"
+	// metadataEmailIDSuffix is the metadata key suffix holding the provider message id
+	metadataEmailIDSuffix = "_email_id"
+	// metadataTimestampSuffix is the metadata key suffix holding the raw provider event timestamp
+	metadataTimestampSuffix = "_timestamp"
+	// targetMetadataEmailIDKey is the per-event campaign target metadata key holding the provider message id
+	targetMetadataEmailIDKey = "email_id"
+	// targetMetadataTimestampKey is the per-event campaign target metadata key holding the raw event timestamp
+	targetMetadataTimestampKey = "timestamp"
+	// TagTrueValue is the tag value that marks a boolean tag such as TagIsTest as set
+	TagTrueValue = "true"
+)
+
+// resendEventKinds maps handled Resend event types to delivery event kinds
+var resendEventKinds = map[string]deliveryEventKind{
+	resend.EventEmailSent:      deliveryEventSent,
+	resend.EventEmailDelivered: deliveryEventDelivered,
+	resend.EventEmailOpened:    deliveryEventOpened,
+	resend.EventEmailClicked:   deliveryEventClicked,
+	resend.EventEmailBounced:   deliveryEventBounced,
+	resend.EventEmailFailed:    deliveryEventFailed,
+}
+
+// deliveryEvent is the provider-neutral form of one inbound email delivery webhook
+type deliveryEvent struct {
+	// provider is the provider name used to prefix stored metadata keys
+	provider string
+	// name is the raw provider event name, e.g. "email.bounced" or "Bounce"
+	name string
+	// kind is the provider-neutral delivery status
+	kind deliveryEventKind
+	// emailID is the provider message id
+	emailID string
+	// timestamp is the raw provider event timestamp as stored in metadata
+	timestamp string
+	// occurredAt is the parsed event timestamp, nil when absent or unparsable
+	occurredAt *time.Time
+	// tags are the correlation tags attached to the message at send time
+	tags map[string]string
+}
 
 // resendWebhookEvent represents the structure of a Resend webhook event payload
 type resendWebhookEvent struct {
@@ -36,7 +99,7 @@ type resendWebhookData struct {
 	// Resend sends this as:
 	//
 	//	"tags": {
-	//	  "assessment_response_id": "...",
+	//	  "assessment_resp_id": "...",
 	//	  "is_test": "true"
 	//	}
 	//
@@ -44,7 +107,7 @@ type resendWebhookData struct {
 	//
 	//	"tags": [
 	//	  {"name": "is_test", "value": "true"},
-	//	  {"name": "assessment_response_id", "value": "..."}
+	//	  {"name": "assessment_resp_id", "value": "..."}
 	//	]
 	Tags map[string]string `json:"tags"`
 }
@@ -109,26 +172,51 @@ func (ResendDeliveryEvent) Handle(ctx context.Context, req types.WebhookHandleRe
 		return ErrWebhookPayloadInvalid
 	}
 
-	if event.Type == "" {
+	delivery, ok := event.toDeliveryEvent()
+	if !ok {
 		return nil
 	}
 
+	return delivery.apply(ctx)
+}
+
+// toDeliveryEvent maps a Resend payload to a delivery event, reporting false for unhandled types
+func (e resendWebhookEvent) toDeliveryEvent() (deliveryEvent, bool) {
+	kind, ok := resendEventKinds[e.Type]
+	if !ok {
+		return deliveryEvent{}, false
+	}
+
+	return deliveryEvent{
+		provider:   providerResend,
+		name:       e.Type,
+		kind:       kind,
+		emailID:    e.Data.EmailID,
+		timestamp:  e.Data.CreatedAt,
+		occurredAt: parseEventTime(e.Data.CreatedAt),
+		tags:       e.Data.Tags,
+	}, true
+}
+
+// apply updates the assessment response and campaign target records correlated by the event tags
+func (e deliveryEvent) apply(ctx context.Context) error {
 	db := ent.FromContext(ctx)
 
 	flags := gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{})
 	flags.Bypass = true
 	ctx = gala.WorkflowFlagsKey.Set(ctx, flags)
 
-	isTest := event.Data.Tags[TagIsTest] == "true"
+	isTest := e.tags[TagIsTest] == TagTrueValue
 
-	if assessmentResponseID := event.Data.Tags[TagAssessmentResponseID]; assessmentResponseID != "" {
-		if err := updateAssessmentResponse(ctx, db, assessmentResponseID, event, isTest); err != nil {
+	assessmentResponseID := lo.CoalesceOrEmpty(e.tags[TagAssessmentResponseID], e.tags[tagAssessmentResponseIDPrior])
+	if assessmentResponseID != "" {
+		if err := updateAssessmentResponse(ctx, db, assessmentResponseID, e, isTest); err != nil {
 			return err
 		}
 	}
 
-	if campaignTargetID := event.Data.Tags[TagCampaignTargetID]; campaignTargetID != "" && !isTest {
-		if err := updateCampaignTarget(ctx, db, campaignTargetID, "", event); err != nil {
+	if campaignTargetID := e.tags[TagCampaignTargetID]; campaignTargetID != "" && !isTest {
+		if err := updateCampaignTarget(ctx, db, campaignTargetID, "", e); err != nil {
 			return err
 		}
 	}
@@ -137,7 +225,7 @@ func (ResendDeliveryEvent) Handle(ctx context.Context, req types.WebhookHandleRe
 }
 
 // updateAssessmentResponse applies delivery events to an assessment response record
-func updateAssessmentResponse(ctx context.Context, db *ent.Client, responseID string, event resendWebhookEvent, isTest bool) error {
+func updateAssessmentResponse(ctx context.Context, db *ent.Client, responseID string, event deliveryEvent, isTest bool) error {
 	resp, err := db.AssessmentResponse.Get(ctx, responseID)
 	if err != nil {
 		return err
@@ -146,40 +234,40 @@ func updateAssessmentResponse(ctx context.Context, db *ent.Client, responseID st
 	ctx = auth.EnsureIntegrationCaller(ctx, resp.OwnerID)
 
 	update := db.AssessmentResponse.UpdateOneID(responseID)
-	eventTime := parseResendEventTime(event.Data.CreatedAt)
+	eventTime := event.occurredAt
 
 	if eventTime != nil {
 		update.SetLastEmailEventAt(*eventTime)
 	}
 
-	switch event.Type {
-	case resend.EventEmailSent:
+	switch event.kind {
+	case deliveryEventSent:
 		update.SetStatus(enums.AssessmentResponseStatusSent)
-	case resend.EventEmailDelivered:
+	case deliveryEventDelivered:
 		if eventTime != nil {
 			update.SetEmailDeliveredAt(*eventTime)
 		}
-	case resend.EventEmailOpened:
+	case deliveryEventOpened:
 		if eventTime != nil {
 			update.SetEmailOpenedAt(*eventTime)
 		}
 
 		update.AddEmailOpenCount(1)
-	case resend.EventEmailClicked:
+	case deliveryEventClicked:
 		if eventTime != nil {
 			update.SetEmailClickedAt(*eventTime)
 		}
 
 		update.AddEmailClickCount(1)
-	case resend.EventEmailBounced, resend.EventEmailFailed:
+	case deliveryEventBounced, deliveryEventComplained, deliveryEventFailed:
 		metadata := resp.EmailMetadata
 		if metadata == nil {
 			metadata = map[string]any{}
 		}
 
-		metadata["resend_event"] = event.Type
-		metadata["resend_email_id"] = event.Data.EmailID
-		metadata["resend_timestamp"] = event.Data.CreatedAt
+		metadata[event.provider+metadataEventSuffix] = event.name
+		metadata[event.provider+metadataEmailIDSuffix] = event.emailID
+		metadata[event.provider+metadataTimestampSuffix] = event.timestamp
 		update.SetEmailMetadata(metadata)
 	}
 
@@ -195,7 +283,7 @@ func updateAssessmentResponse(ctx context.Context, db *ent.Client, responseID st
 }
 
 // updateCampaignTarget applies delivery events to a campaign target record
-func updateCampaignTarget(ctx context.Context, db *ent.Client, targetID, campaignID string, event resendWebhookEvent, email ...string) error {
+func updateCampaignTarget(ctx context.Context, db *ent.Client, targetID, campaignID string, event deliveryEvent, email ...string) error {
 	var (
 		target *ent.CampaignTarget
 		err    error
@@ -227,16 +315,14 @@ func updateCampaignTarget(ctx context.Context, db *ent.Client, targetID, campaig
 
 	update := db.CampaignTarget.UpdateOneID(target.ID)
 
-	eventTime := parseResendEventTime(event.Data.CreatedAt)
-
-	switch event.Type {
-	case resend.EventEmailSent:
+	switch event.kind {
+	case deliveryEventSent:
 		update.SetStatus(enums.AssessmentResponseStatusSent)
 
-		if eventTime != nil {
-			update.SetSentAt(models.DateTime(*eventTime))
+		if event.occurredAt != nil {
+			update.SetSentAt(models.DateTime(*event.occurredAt))
 		}
-	case resend.EventEmailDelivered, resend.EventEmailOpened, resend.EventEmailClicked:
+	case deliveryEventDelivered, deliveryEventOpened, deliveryEventClicked:
 		update.SetStatus(enums.AssessmentResponseStatusSent)
 	}
 
@@ -247,26 +333,22 @@ func updateCampaignTarget(ctx context.Context, db *ent.Client, targetID, campaig
 	return err
 }
 
-func getTargetMetadata(metadata map[string]any, event resendWebhookEvent) map[string]any {
+// getTargetMetadata records the event under its kind in the campaign target metadata
+func getTargetMetadata(metadata map[string]any, event deliveryEvent) map[string]any {
 	if metadata == nil {
 		metadata = map[string]any{}
 	}
 
-	eventName := event.Type
-	if _, after, found := strings.Cut(event.Type, "."); found {
-		eventName = after
-	}
-
-	metadata[eventName] = map[string]string{
-		"email_id":  event.Data.EmailID,
-		"timestamp": event.Data.CreatedAt,
+	metadata[string(event.kind)] = map[string]string{
+		targetMetadataEmailIDKey:   event.emailID,
+		targetMetadataTimestampKey: event.timestamp,
 	}
 
 	return metadata
 }
 
-// parseResendEventTime parses a Resend timestamp string and returns a time.Time pointer
-func parseResendEventTime(value string) *time.Time {
+// parseEventTime parses a provider timestamp string and returns a time.Time pointer
+func parseEventTime(value string) *time.Time {
 	if value == "" {
 		return nil
 	}

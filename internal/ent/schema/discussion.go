@@ -147,7 +147,7 @@ func (Discussion) Interceptors() []ent.Interceptor {
 // Modules this schema has access to
 func (Discussion) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

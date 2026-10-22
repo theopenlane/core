@@ -11,7 +11,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // maxDomainsAllowed is the max domains a single domain scan request should contain
@@ -29,21 +29,25 @@ type DomainScanSubmitResult struct {
 	Scans []url_scanner.ScanBulkNewResponse `json:"scans"`
 }
 
-// Handle adapts domain scan submission to the generic operation registration boundary
-func (s DomainScanSubmit) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(cloudflareClient, DomainScanSubmitOp, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanSubmit) (json.RawMessage, error) {
-		result, err := s.Run(ctx, client, cfg)
-		if err != nil {
-			return nil, err
-		}
+// DomainScanSubmitOp is the operation ref for submitting domains to the URL Scanner
+var DomainScanSubmitOp = types.OperationPayloadOf[DomainScanSubmit]().
+	Handles(runDomainScanSubmit).
+	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
+	CustomerSelectable(false).
+	Internal()
 
-		return providerkit.EncodeResult(result, ErrResultEncode)
-	})
+// runDomainScanSubmit submits the configured domains to the URL Scanner and encodes the result
+func runDomainScanSubmit(ctx context.Context, _ types.OperationRequest, client *Client, cfg DomainScanSubmit) (json.RawMessage, error) {
+	result, err := DomainScanSubmit{}.Run(ctx, client, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
 // Run submits the domains to Cloudflare's URL Scanner, with a max of 10 domains in any scan request
-// Cloudflare bulk scan allows up to 100 in a single request, so we do not need to batch these request
-func (DomainScanSubmit) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanSubmit) (DomainScanSubmitResult, error) {
+func (DomainScanSubmit) Run(ctx context.Context, client *Client, cfg DomainScanSubmit) (DomainScanSubmitResult, error) {
 	if len(cfg.Domains) > maxDomainsAllowed {
 		logx.FromContext(ctx).Warn().Strs("domains", cfg.Domains).Msg("cloudflare: max domains surpassed, only running on first 10")
 
@@ -57,7 +61,7 @@ func (DomainScanSubmit) Run(ctx context.Context, client *CloudflareClient, cfg D
 	return runScansSequentially(ctx, client, cfg.Domains)
 }
 
-func runBulkScan(ctx context.Context, client *CloudflareClient, domains []string) (DomainScanSubmitResult, error) {
+func runBulkScan(ctx context.Context, client *Client, domains []string) (DomainScanSubmitResult, error) {
 	scans := make([]url_scanner.ScanBulkNewResponse, 0, len(domains))
 
 	body := make([]url_scanner.ScanBulkNewParamsBody, len(domains))
@@ -89,7 +93,7 @@ func runBulkScan(ctx context.Context, client *CloudflareClient, domains []string
 }
 
 // runScansSequentially submits domains sequentially through the single URL Scanner endpoint
-func runScansSequentially(ctx context.Context, client *CloudflareClient, domains []string) (DomainScanSubmitResult, error) {
+func runScansSequentially(ctx context.Context, client *Client, domains []string) (DomainScanSubmitResult, error) {
 	scans := make([]url_scanner.ScanBulkNewResponse, 0, len(domains))
 
 	var errs error

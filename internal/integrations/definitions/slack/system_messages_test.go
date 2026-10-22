@@ -12,6 +12,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/samber/lo"
 	slackgo "github.com/slack-go/slack"
 	"github.com/stretchr/testify/require"
 )
@@ -112,7 +113,7 @@ func TestOrganizationsPendingDeletionTemplateRender(t *testing.T) {
 func TestSlackClientSendTextEmpty(t *testing.T) {
 	t.Parallel()
 
-	client := &SlackClient{WebhookURL: "https://hooks.slack.com/services/T/B/X"}
+	client := &Client{WebhookURL: "https://hooks.slack.com/services/T/B/X"}
 	err := client.sendText(context.Background(), "", "")
 	require.ErrorIs(t, err, ErrMessageEmpty)
 }
@@ -140,7 +141,7 @@ func TestSlackClientSendTextWebhook(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client := &SlackClient{WebhookURL: server.URL}
+	client := &Client{WebhookURL: server.URL}
 	err := client.sendText(context.Background(), "hello webhook", "")
 	require.NoError(t, err)
 
@@ -156,7 +157,7 @@ func TestSlackClientSendTextUsesDefaultChannel(t *testing.T) {
 	server := httptest.NewServer(recorder.handler())
 	defer server.Close()
 
-	client := &SlackClient{
+	client := &Client{
 		API:            slackgo.New("xoxb-test", slackgo.OptionAPIURL(server.URL+"/")),
 		DefaultChannel: "C123",
 	}
@@ -174,7 +175,7 @@ func TestSlackClientSendTextChannelOverridesDefault(t *testing.T) {
 	server := httptest.NewServer(recorder.handler())
 	defer server.Close()
 
-	client := &SlackClient{
+	client := &Client{
 		API:            slackgo.New("xoxb-test", slackgo.OptionAPIURL(server.URL+"/")),
 		DefaultChannel: "C123",
 	}
@@ -187,7 +188,7 @@ func TestSlackClientSendTextChannelOverridesDefault(t *testing.T) {
 func TestSlackClientSendTextNoChannelConfigured(t *testing.T) {
 	t.Parallel()
 
-	client := &SlackClient{API: slackgo.New("xoxb-test")}
+	client := &Client{API: slackgo.New("xoxb-test")}
 
 	err := client.sendText(context.Background(), "hello", "")
 	require.ErrorIs(t, err, ErrDefaultChannelMissing)
@@ -196,12 +197,18 @@ func TestSlackClientSendTextNoChannelConfigured(t *testing.T) {
 func TestAllSlackSystemMessagesWiredToMessageClient(t *testing.T) {
 	t.Parallel()
 
+	def, err := Builder(Config{}, nil, false)()
+	require.NoError(t, err)
+
+	clientNames := lo.Keys(def.ConnectionList()[0].Clients)
+	require.Len(t, clientNames, 1)
+
 	regs := AllSlackSystemMessages()
 	require.NotEmpty(t, regs)
 
 	for _, reg := range regs {
-		if reg.ClientRef != slackClient.ID() {
-			t.Fatalf("op %s has ClientRef %v, want %v", reg.Name, reg.ClientRef, slackClient.ID())
+		if reg.ClientRef != clientNames[0] {
+			t.Fatalf("op %s has ClientRef %v, want %v", reg.Name, reg.ClientRef, clientNames[0])
 		}
 
 		require.True(t, reg.Policy.SkipRunRecord, "op %s must be SkipRunRecord", reg.Name)
@@ -218,7 +225,7 @@ func TestBuildRuntimeMessageClientWebhookOnly(t *testing.T) {
 	built, err := runtimeSlackClientBuilder(false)(context.Background(), raw)
 	require.NoError(t, err)
 
-	client, ok := built.(*SlackClient)
+	client, ok := built.(*Client)
 	require.True(t, ok)
 	require.Equal(t, cfg.WebhookURL, client.WebhookURL)
 	require.Nil(t, client.API)
@@ -237,7 +244,7 @@ func TestBuildRuntimeMessageClientBotToken(t *testing.T) {
 	built, err := runtimeSlackClientBuilder(false)(context.Background(), raw)
 	require.NoError(t, err)
 
-	client, ok := built.(*SlackClient)
+	client, ok := built.(*Client)
 	require.True(t, ok)
 	require.NotNil(t, client.API)
 	require.Equal(t, "C_PLATFORM", client.DefaultChannel)
@@ -258,7 +265,7 @@ func TestBuildRuntimeMessageClientBotTokenWithWebhookFallback(t *testing.T) {
 	built, err := runtimeSlackClientBuilder(false)(context.Background(), raw)
 	require.NoError(t, err)
 
-	client, ok := built.(*SlackClient)
+	client, ok := built.(*Client)
 	require.True(t, ok)
 	require.NotNil(t, client.API)
 	require.Equal(t, cfg.WebhookURL, client.WebhookURL)
@@ -284,7 +291,7 @@ func TestDevModeNoCredentials_SystemMessageNoOps(t *testing.T) {
 	built, err := runtimeSlackClientBuilder(true)(context.Background(), raw)
 	require.NoError(t, err)
 
-	client := built.(*SlackClient)
+	client := built.(*Client)
 	require.NoError(t, client.sendText(context.Background(), "this message should be silently dropped", ""))
 }
 
@@ -305,7 +312,7 @@ func TestDevModeWithCredentials_SystemMessageDelivers(t *testing.T) {
 	built, err := runtimeSlackClientBuilder(true)(context.Background(), raw)
 	require.NoError(t, err)
 
-	client := built.(*SlackClient)
+	client := built.(*Client)
 	client.API = slackgo.New("xoxb-real-token", slackgo.OptionAPIURL(server.URL+"/"))
 
 	require.NoError(t, client.sendText(context.Background(), "should deliver normally", ""))
@@ -320,7 +327,7 @@ func TestSlackClientSendTextAPIPreferredOverWebhook(t *testing.T) {
 	server := httptest.NewServer(recorder.handler())
 	defer server.Close()
 
-	client := &SlackClient{
+	client := &Client{
 		API:            slackgo.New("xoxb-test", slackgo.OptionAPIURL(server.URL+"/")),
 		WebhookURL:     "https://hooks.slack.com/should-not-be-called",
 		DefaultChannel: "C_RUNTIME",

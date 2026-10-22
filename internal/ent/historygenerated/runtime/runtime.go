@@ -160,11 +160,11 @@ func init() {
 	// actionplanhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	actionplanhistory.DefaultWorkflowEligibleMarker = actionplanhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// actionplanhistoryDescRequiresApproval is the schema descriptor for requires_approval field.
-	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[51].Descriptor()
+	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[55].Descriptor()
 	// actionplanhistory.DefaultRequiresApproval holds the default value on creation for the requires_approval field.
 	actionplanhistory.DefaultRequiresApproval = actionplanhistoryDescRequiresApproval.Default.(bool)
 	// actionplanhistoryDescBlocked is the schema descriptor for blocked field.
-	actionplanhistoryDescBlocked := actionplanhistoryFields[52].Descriptor()
+	actionplanhistoryDescBlocked := actionplanhistoryFields[56].Descriptor()
 	// actionplanhistory.DefaultBlocked holds the default value on creation for the blocked field.
 	actionplanhistory.DefaultBlocked = actionplanhistoryDescBlocked.Default.(bool)
 	// actionplanhistoryDescID is the schema descriptor for id field.
@@ -774,44 +774,48 @@ func init() {
 	entityhistoryDescSystemOwned := entityhistoryFields[27].Descriptor()
 	// entityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	entityhistory.DefaultSystemOwned = entityhistoryDescSystemOwned.Default.(bool)
+	// entityhistoryDescExternallyVisible is the schema descriptor for externally_visible field.
+	entityhistoryDescExternallyVisible := entityhistoryFields[31].Descriptor()
+	// entityhistory.DefaultExternallyVisible holds the default value on creation for the externally_visible field.
+	entityhistory.DefaultExternallyVisible = entityhistoryDescExternallyVisible.Default.(bool)
 	// entityhistoryDescApprovedForUse is the schema descriptor for approved_for_use field.
-	entityhistoryDescApprovedForUse := entityhistoryFields[47].Descriptor()
+	entityhistoryDescApprovedForUse := entityhistoryFields[51].Descriptor()
 	// entityhistory.DefaultApprovedForUse holds the default value on creation for the approved_for_use field.
 	entityhistory.DefaultApprovedForUse = entityhistoryDescApprovedForUse.Default.(bool)
 	// entityhistoryDescLinkedAssetIds is the schema descriptor for linked_asset_ids field.
-	entityhistoryDescLinkedAssetIds := entityhistoryFields[48].Descriptor()
+	entityhistoryDescLinkedAssetIds := entityhistoryFields[52].Descriptor()
 	// entityhistory.DefaultLinkedAssetIds holds the default value on creation for the linked_asset_ids field.
 	entityhistory.DefaultLinkedAssetIds = entityhistoryDescLinkedAssetIds.Default.([]string)
 	// entityhistoryDescHasSoc2 is the schema descriptor for has_soc2 field.
-	entityhistoryDescHasSoc2 := entityhistoryFields[49].Descriptor()
+	entityhistoryDescHasSoc2 := entityhistoryFields[53].Descriptor()
 	// entityhistory.DefaultHasSoc2 holds the default value on creation for the has_soc2 field.
 	entityhistory.DefaultHasSoc2 = entityhistoryDescHasSoc2.Default.(bool)
 	// entityhistoryDescAutoRenews is the schema descriptor for auto_renews field.
-	entityhistoryDescAutoRenews := entityhistoryFields[53].Descriptor()
+	entityhistoryDescAutoRenews := entityhistoryFields[57].Descriptor()
 	// entityhistory.DefaultAutoRenews holds the default value on creation for the auto_renews field.
 	entityhistory.DefaultAutoRenews = entityhistoryDescAutoRenews.Default.(bool)
 	// entityhistoryDescSpendCurrency is the schema descriptor for spend_currency field.
-	entityhistoryDescSpendCurrency := entityhistoryFields[56].Descriptor()
+	entityhistoryDescSpendCurrency := entityhistoryFields[60].Descriptor()
 	// entityhistory.DefaultSpendCurrency holds the default value on creation for the spend_currency field.
 	entityhistory.DefaultSpendCurrency = entityhistoryDescSpendCurrency.Default.(string)
 	// entityhistoryDescSSOEnforced is the schema descriptor for sso_enforced field.
-	entityhistoryDescSSOEnforced := entityhistoryFields[59].Descriptor()
+	entityhistoryDescSSOEnforced := entityhistoryFields[63].Descriptor()
 	// entityhistory.DefaultSSOEnforced holds the default value on creation for the sso_enforced field.
 	entityhistory.DefaultSSOEnforced = entityhistoryDescSSOEnforced.Default.(bool)
 	// entityhistoryDescMfaSupported is the schema descriptor for mfa_supported field.
-	entityhistoryDescMfaSupported := entityhistoryFields[60].Descriptor()
+	entityhistoryDescMfaSupported := entityhistoryFields[64].Descriptor()
 	// entityhistory.DefaultMfaSupported holds the default value on creation for the mfa_supported field.
 	entityhistory.DefaultMfaSupported = entityhistoryDescMfaSupported.Default.(bool)
 	// entityhistoryDescMfaEnforced is the schema descriptor for mfa_enforced field.
-	entityhistoryDescMfaEnforced := entityhistoryFields[61].Descriptor()
+	entityhistoryDescMfaEnforced := entityhistoryFields[65].Descriptor()
 	// entityhistory.DefaultMfaEnforced holds the default value on creation for the mfa_enforced field.
 	entityhistory.DefaultMfaEnforced = entityhistoryDescMfaEnforced.Default.(bool)
 	// entityhistoryDescProvidedServices is the schema descriptor for provided_services field.
-	entityhistoryDescProvidedServices := entityhistoryFields[63].Descriptor()
+	entityhistoryDescProvidedServices := entityhistoryFields[67].Descriptor()
 	// entityhistory.DefaultProvidedServices holds the default value on creation for the provided_services field.
 	entityhistory.DefaultProvidedServices = entityhistoryDescProvidedServices.Default.([]string)
 	// entityhistoryDescLinks is the schema descriptor for links field.
-	entityhistoryDescLinks := entityhistoryFields[64].Descriptor()
+	entityhistoryDescLinks := entityhistoryFields[68].Descriptor()
 	// entityhistory.DefaultLinks holds the default value on creation for the links field.
 	entityhistory.DefaultLinks = entityhistoryDescLinks.Default.([]string)
 	// entityhistoryDescID is the schema descriptor for id field.
@@ -2470,6 +2474,10 @@ func init() {
 	trustcenterndarequesthistoryDescTags := trustcenterndarequesthistoryFields[11].Descriptor()
 	// trustcenterndarequesthistory.DefaultTags holds the default value on creation for the tags field.
 	trustcenterndarequesthistory.DefaultTags = trustcenterndarequesthistoryDescTags.Default.([]string)
+	// trustcenterndarequesthistoryDescAutoApproved is the schema descriptor for auto_approved field.
+	trustcenterndarequesthistoryDescAutoApproved := trustcenterndarequesthistoryFields[22].Descriptor()
+	// trustcenterndarequesthistory.DefaultAutoApproved holds the default value on creation for the auto_approved field.
+	trustcenterndarequesthistory.DefaultAutoApproved = trustcenterndarequesthistoryDescAutoApproved.Default.(bool)
 	// trustcenterndarequesthistoryDescID is the schema descriptor for id field.
 	trustcenterndarequesthistoryDescID := trustcenterndarequesthistoryFields[10].Descriptor()
 	// trustcenterndarequesthistory.DefaultID holds the default value on creation for the id field.
@@ -2519,6 +2527,10 @@ func init() {
 	trustcentersettinghistoryDescNoindexDefaultDomain := trustcentersettinghistoryFields[39].Descriptor()
 	// trustcentersettinghistory.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
 	trustcentersettinghistory.DefaultNoindexDefaultDomain = trustcentersettinghistoryDescNoindexDefaultDomain.Default.(bool)
+	// trustcentersettinghistoryDescAutoApprovalRules is the schema descriptor for auto_approval_rules field.
+	trustcentersettinghistoryDescAutoApprovalRules := trustcentersettinghistoryFields[41].Descriptor()
+	// trustcentersettinghistory.DefaultAutoApprovalRules holds the default value on creation for the auto_approval_rules field.
+	trustcentersettinghistory.DefaultAutoApprovalRules = trustcentersettinghistoryDescAutoApprovalRules.Default.(models.TrustCenterNDARequestSetting)
 	// trustcentersettinghistoryDescID is the schema descriptor for id field.
 	trustcentersettinghistoryDescID := trustcentersettinghistoryFields[10].Descriptor()
 	// trustcentersettinghistory.DefaultID holds the default value on creation for the id field.

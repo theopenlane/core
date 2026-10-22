@@ -14,8 +14,8 @@ import (
 	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/do/v2"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 )
 
@@ -28,6 +28,12 @@ const (
 	// DispatchModeInMemory dispatches envelopes immediately in-process.
 	DispatchModeInMemory DispatchMode = "in_memory"
 )
+
+// defaultWaitIdleTimeout bounds WaitIdle when the caller's context has no deadline, so a stuck job fails fast
+const defaultWaitIdleTimeout = 2 * time.Minute
+
+// defaultStopWorkersTimeout bounds StopWorkers when the caller's context has no deadline, so a job ignoring cancellation cannot block shutdown
+const defaultStopWorkersTimeout = 2 * DefaultSoftStopTimeout
 
 // Config configures cohesive Gala startup
 type Config struct {
@@ -532,6 +538,13 @@ func (g *Gala) StopWorkers(ctx context.Context) error {
 		return nil
 	}
 
+	if _, hasDeadline := ctx.Deadline(); !hasDeadline {
+		var cancel context.CancelFunc
+
+		ctx, cancel = context.WithTimeout(ctx, defaultStopWorkersTimeout)
+		defer cancel()
+	}
+
 	if err := g.jobClient.GetRiverClient().Stop(ctx); err != nil &&
 		!errors.Is(err, context.Canceled) &&
 		!errors.Is(err, context.DeadlineExceeded) {
@@ -544,6 +557,25 @@ func (g *Gala) StopWorkers(ctx context.Context) error {
 // WaitIdle blocks until runnable work drains or the context ends
 // Future scheduled and retry work does not count as busy in durable mode
 func (g *Gala) WaitIdle(ctx context.Context) error {
+	if _, hasDeadline := ctx.Deadline(); hasDeadline {
+		return g.waitIdle(ctx)
+	}
+
+	boundedCtx, cancel := context.WithTimeout(ctx, defaultWaitIdleTimeout)
+	defer cancel()
+
+	if err := g.waitIdle(boundedCtx); err != nil {
+		if errors.Is(err, context.DeadlineExceeded) && ctx.Err() == nil {
+			return fmt.Errorf("%w: %w", ErrWaitIdleTimeout, err)
+		}
+
+		return err
+	}
+
+	return nil
+}
+
+func (g *Gala) waitIdle(ctx context.Context) error {
 	switch g.dispatchMode {
 	case DispatchModeInMemory:
 		if g.inMemoryPool != nil {
@@ -679,6 +711,32 @@ func (g *Gala) CountActiveJobsWithMetadata(ctx context.Context, metadataFragment
 	}
 
 	return len(jobs), nil
+}
+
+// PauseQueues pauses the queues of the namespaces' job kinds on every pod
+func (g *Gala) PauseQueues(ctx context.Context, namespaces ...Namespace) error {
+	return g.eachQueue(namespaces, func(queue string) error { return g.jobController.QueuePause(ctx, queue, nil) })
+}
+
+// ResumeQueues resumes the queues of the namespaces' job kinds
+func (g *Gala) ResumeQueues(ctx context.Context, namespaces ...Namespace) error {
+	return g.eachQueue(namespaces, func(queue string) error { return g.jobController.QueueResume(ctx, queue, nil) })
+}
+
+// eachQueue applies fn to each namespace's registered queue
+func (g *Gala) eachQueue(namespaces []Namespace, fn func(queue string) error) error {
+	if g.jobController == nil {
+		return nil
+	}
+
+	return errors.Join(lo.FilterMap(namespaces, func(namespace Namespace, _ int) (error, bool) {
+		queue, registered := g.kindQueues[namespace.Kind()]
+		if !registered {
+			return nil, false
+		}
+
+		return fn(queue), true
+	})...)
 }
 
 // PurgeActiveJobsWithMetadata deletes live River jobs matching a JSONB metadata fragment

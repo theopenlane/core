@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // rateLimitKeyPrefix namespaces per-operation cooldown keys in redis
@@ -70,7 +70,7 @@ return 1
 // and always expire after window, so no separate cleanup is required. A server with no redis client
 // configured is never limited
 func (r *Runtime) AllowN(ctx context.Context, key string, n int, limit int, window time.Duration) (bool, error) {
-	redisClient := r.Redis()
+	redisClient := r.redisClient()
 	if redisClient == nil {
 		return true, nil
 	}

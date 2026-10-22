@@ -8,9 +8,9 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
-        exclude: jsonschema/api-docs.md|jsonschema/workflow-docs.md|internal/graphapi/generated/.+\.go|internal/graphapi/clientschema/.+\.graphql
+        exclude: jsonschema/api-docs.md|jsonschema/workflow-docs.md|internal/graphapi/generated/.+\.go|internal/graphapi/clientschema/.+\.graphql|internal/graphapi/testharness/testdata/.+
       - id: detect-private-key
-        exclude: internal/httpserve/serveropts/options_test.go
+        exclude: internal/httpserve/serveropts/options_test.go|internal/graphapi/testharness/testdata/.+
   - repo: https://github.com/google/yamlfmt
     rev: v0.21.0
     hooks:

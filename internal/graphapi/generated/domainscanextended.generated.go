@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -44,7 +43,7 @@ func (ec *executionContext) _ImportDomainScanReviewPayload_accepted(ctx context.
 	)
 }
 func (ec *executionContext) fieldContext_ImportDomainScanReviewPayload_accepted(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("ImportDomainScanReviewPayload", field, false, false, errors.New("field of type Boolean does not have child fields"))
+	return graphql.NewScalarFieldContext("ImportDomainScanReviewPayload", field, false, false, "Boolean")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -107,6 +106,18 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewAssetInput(ctx c
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalImportDomainScanReviewAssetInput unmarshals raw into the ImportDomainScanReviewAssetInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalImportDomainScanReviewAssetInput(ctx context.Context, raw any) (model.ImportDomainScanReviewAssetInput, error) {
+	var out model.ImportDomainScanReviewAssetInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ImportDomainScanReviewAssetInput", raw, &out)
+	return out, err
 }
 
 func (ec *executionContext) unmarshalInputImportDomainScanReviewBrandDesignInput(ctx context.Context, obj any) (model.ImportDomainScanReviewBrandDesignInput, error) {
@@ -195,6 +206,18 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewBrandDesignInput
 	return it, nil
 }
 
+// UnmarshalImportDomainScanReviewBrandDesignInput unmarshals raw into the ImportDomainScanReviewBrandDesignInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalImportDomainScanReviewBrandDesignInput(ctx context.Context, raw any) (model.ImportDomainScanReviewBrandDesignInput, error) {
+	var out model.ImportDomainScanReviewBrandDesignInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ImportDomainScanReviewBrandDesignInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputImportDomainScanReviewFindingInput(ctx context.Context, obj any) (model.ImportDomainScanReviewFindingInput, error) {
 	var it model.ImportDomainScanReviewFindingInput
 	if obj == nil {
@@ -237,6 +260,18 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewFindingInput(ctx
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalImportDomainScanReviewFindingInput unmarshals raw into the ImportDomainScanReviewFindingInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalImportDomainScanReviewFindingInput(ctx context.Context, raw any) (model.ImportDomainScanReviewFindingInput, error) {
+	var out model.ImportDomainScanReviewFindingInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ImportDomainScanReviewFindingInput", raw, &out)
+	return out, err
 }
 
 func (ec *executionContext) unmarshalInputImportDomainScanReviewInput(ctx context.Context, obj any) (model.ImportDomainScanReviewInput, error) {
@@ -311,6 +346,18 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewInput(ctx contex
 	return it, nil
 }
 
+// UnmarshalImportDomainScanReviewInput unmarshals raw into the ImportDomainScanReviewInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalImportDomainScanReviewInput(ctx context.Context, raw any) (model.ImportDomainScanReviewInput, error) {
+	var out model.ImportDomainScanReviewInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ImportDomainScanReviewInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputImportDomainScanReviewPlatformInput(ctx context.Context, obj any) (model.ImportDomainScanReviewPlatformInput, error) {
 	var it model.ImportDomainScanReviewPlatformInput
 	if obj == nil {
@@ -367,6 +414,18 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewPlatformInput(ct
 		}
 	}
 	return it, nil
+}
+
+// UnmarshalImportDomainScanReviewPlatformInput unmarshals raw into the ImportDomainScanReviewPlatformInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalImportDomainScanReviewPlatformInput(ctx context.Context, raw any) (model.ImportDomainScanReviewPlatformInput, error) {
+	var out model.ImportDomainScanReviewPlatformInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ImportDomainScanReviewPlatformInput", raw, &out)
+	return out, err
 }
 
 func (ec *executionContext) unmarshalInputImportDomainScanReviewSystemInput(ctx context.Context, obj any) (model.ImportDomainScanReviewSystemInput, error) {
@@ -427,6 +486,18 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewSystemInput(ctx 
 	return it, nil
 }
 
+// UnmarshalImportDomainScanReviewSystemInput unmarshals raw into the ImportDomainScanReviewSystemInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalImportDomainScanReviewSystemInput(ctx context.Context, raw any) (model.ImportDomainScanReviewSystemInput, error) {
+	var out model.ImportDomainScanReviewSystemInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ImportDomainScanReviewSystemInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputImportDomainScanReviewVendorInput(ctx context.Context, obj any) (model.ImportDomainScanReviewVendorInput, error) {
 	var it model.ImportDomainScanReviewVendorInput
 	if obj == nil {
@@ -485,6 +556,18 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewVendorInput(ctx 
 	return it, nil
 }
 
+// UnmarshalImportDomainScanReviewVendorInput unmarshals raw into the ImportDomainScanReviewVendorInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalImportDomainScanReviewVendorInput(ctx context.Context, raw any) (model.ImportDomainScanReviewVendorInput, error) {
+	var out model.ImportDomainScanReviewVendorInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ImportDomainScanReviewVendorInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -499,8 +582,7 @@ func (ec *executionContext) _ImportDomainScanReviewPayload(ctx context.Context, 
 	fields := graphql.CollectFields(ec.OperationContext, sel, importDomainScanReviewPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -519,14 +601,10 @@ func (ec *executionContext) _ImportDomainScanReviewPayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -566,9 +644,7 @@ func (ec *executionContext) unmarshalNImportDomainScanReviewInput2githubᚗcom�
 
 func (ec *executionContext) marshalNImportDomainScanReviewPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPayload(ctx context.Context, sel ast.SelectionSet, v *model.ImportDomainScanReviewPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "ImportDomainScanReviewPayload!")
 		return graphql.Null
 	}
 	return ec._ImportDomainScanReviewPayload(ctx, sel, v)

@@ -58,6 +58,21 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "internal_owner_user": {
+	ObjectType:          "user",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "internal_owner_group": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "internal_owner_identity_holder": {
+	ObjectType:          "identity_holder",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "risks": {
 	ObjectType:          "risk",
 	SkipEditCheck:       false,
@@ -1330,6 +1345,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "catalog": {
+	ObjectType:          "entity",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "adopted": {
+	ObjectType:          "entity",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 }, "entity_relationship_state": {
 	ObjectType:          "custom_type_enum",
 	SkipEditCheck:       true,

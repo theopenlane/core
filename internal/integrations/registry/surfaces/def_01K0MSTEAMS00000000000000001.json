@@ -1,0 +1,87 @@
+{
+  "hash": "63c4ff5fec4040db3821728ad8910f8013e782cd3bb05490204c818b79ff3425",
+  "version": "01M52Y3C265Y1EAZ3P5YMBPJT1",
+  "surface": {
+    "id": "def_01K0MSTEAMS00000000000000001",
+    "credentials": [
+      {
+        "ref": "teamsCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/teams-cred",
+          "$ref": "#/$defs/teamsCred",
+          "$defs": {
+            "teamsCred": {
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "defaultMessaging": {
+                "type": "boolean",
+                "title": "Default Messaging"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "tenantId": {
+                "type": "string",
+                "title": "Tenant ID"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "teamsCred"
+    ],
+    "operations": [
+      {
+        "name": "ChannelsListOperation"
+      },
+      {
+        "name": "MessageSendOperation"
+      },
+      {
+        "name": "TestMessageSendOperation"
+      }
+    ]
+  }
+}

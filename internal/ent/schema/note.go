@@ -209,7 +209,7 @@ func (n Note) Edges() []ent.Edge {
 
 func (Note) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

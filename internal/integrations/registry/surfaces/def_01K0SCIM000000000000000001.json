@@ -1,0 +1,64 @@
+{
+  "hash": "ec60ce450ab99d83ff217737b383a883462867b465f157a7b7a0970db1dc21dd",
+  "version": "01M4V1VGWRTYQE62W97YTVA8WM",
+  "surface": {
+    "id": "def_01K0SCIM000000000000000001",
+    "credentials": [],
+    "userInput": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/scim/user-input",
+        "$ref": "#/$defs/UserInput",
+        "$defs": {
+          "UserInput": {
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Directory Name",
+                "description": "Human-readable label for this SCIM directory."
+              },
+              "primaryDirectory": {
+                "type": "boolean",
+                "title": "Primary Directory"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name"
+            ]
+          }
+        }
+      }
+    },
+    "connections": [],
+    "operations": [
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/scim/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

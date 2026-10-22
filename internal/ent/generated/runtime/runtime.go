@@ -2438,6 +2438,10 @@ func init() {
 	entityDescSystemOwned := entityMixinFields11[0].Descriptor()
 	// entity.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	entity.DefaultSystemOwned = entityDescSystemOwned.Default.(bool)
+	// entityDescExternallyVisible is the schema descriptor for externally_visible field.
+	entityDescExternallyVisible := entityMixinFields11[4].Descriptor()
+	// entity.DefaultExternallyVisible holds the default value on creation for the externally_visible field.
+	entity.DefaultExternallyVisible = entityDescExternallyVisible.Default.(bool)
 	// entityDescName is the schema descriptor for name field.
 	entityDescName := entityFields[0].Descriptor()
 	// entity.NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -3697,11 +3701,11 @@ func init() {
 	// integration.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	integration.PlatformIDValidator = integrationDescPlatformID.Validators[0].(func(string) error)
 	// integrationDescPrimaryDirectory is the schema descriptor for primary_directory field.
-	integrationDescPrimaryDirectory := integrationFields[18].Descriptor()
+	integrationDescPrimaryDirectory := integrationFields[20].Descriptor()
 	// integration.DefaultPrimaryDirectory holds the default value on creation for the primary_directory field.
 	integration.DefaultPrimaryDirectory = integrationDescPrimaryDirectory.Default.(bool)
 	// integrationDescCampaignEmail is the schema descriptor for campaign_email field.
-	integrationDescCampaignEmail := integrationFields[19].Descriptor()
+	integrationDescCampaignEmail := integrationFields[21].Descriptor()
 	// integration.DefaultCampaignEmail holds the default value on creation for the campaign_email field.
 	integration.DefaultCampaignEmail = integrationDescCampaignEmail.Default.(bool)
 	// integrationDescID is the schema descriptor for id field.
@@ -7837,6 +7841,10 @@ func init() {
 			return nil
 		}
 	}()
+	// trustcenterndarequestDescAutoApproved is the schema descriptor for auto_approved field.
+	trustcenterndarequestDescAutoApproved := trustcenterndarequestFields[10].Descriptor()
+	// trustcenterndarequest.DefaultAutoApproved holds the default value on creation for the auto_approved field.
+	trustcenterndarequest.DefaultAutoApproved = trustcenterndarequestDescAutoApproved.Default.(bool)
 	// trustcenterndarequestDescID is the schema descriptor for id field.
 	trustcenterndarequestDescID := trustcenterndarequestMixinFields4[0].Descriptor()
 	// trustcenterndarequest.DefaultID holds the default value on creation for the id field.
@@ -8031,6 +8039,10 @@ func init() {
 	trustcentersettingDescNoindexDefaultDomain := trustcentersettingFields[28].Descriptor()
 	// trustcentersetting.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
 	trustcentersetting.DefaultNoindexDefaultDomain = trustcentersettingDescNoindexDefaultDomain.Default.(bool)
+	// trustcentersettingDescAutoApprovalRules is the schema descriptor for auto_approval_rules field.
+	trustcentersettingDescAutoApprovalRules := trustcentersettingFields[30].Descriptor()
+	// trustcentersetting.DefaultAutoApprovalRules holds the default value on creation for the auto_approval_rules field.
+	trustcentersetting.DefaultAutoApprovalRules = trustcentersettingDescAutoApprovalRules.Default.(models.TrustCenterNDARequestSetting)
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields4[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.
@@ -9077,6 +9089,10 @@ func init() {
 	workflowdefinitionDescApprovalEdges := workflowdefinitionFields[13].Descriptor()
 	// workflowdefinition.DefaultApprovalEdges holds the default value on creation for the approval_edges field.
 	workflowdefinition.DefaultApprovalEdges = workflowdefinitionDescApprovalEdges.Default.([]string)
+	// workflowdefinitionDescDefinitionJSON is the schema descriptor for definition_json field.
+	workflowdefinitionDescDefinitionJSON := workflowdefinitionFields[15].Descriptor()
+	// workflowdefinition.DefinitionJSONValidator is a validator for the "definition_json" field. It is called by the builders before save.
+	workflowdefinition.DefinitionJSONValidator = workflowdefinitionDescDefinitionJSON.Validators[0].(func(models.WorkflowDefinitionDocument) error)
 	// workflowdefinitionDescID is the schema descriptor for id field.
 	workflowdefinitionDescID := workflowdefinitionMixinFields4[0].Descriptor()
 	// workflowdefinition.DefaultID holds the default value on creation for the id field.

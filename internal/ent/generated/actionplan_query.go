@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -29,57 +30,61 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // ActionPlanQuery is the builder for querying ActionPlan entities.
 type ActionPlanQuery struct {
 	config
-	ctx                         *QueryContext
-	order                       []actionplan.OrderOption
-	inters                      []Interceptor
-	predicates                  []predicate.ActionPlan
-	withIntegrationRuns         *IntegrationRunQuery
-	withApprover                *GroupQuery
-	withDelegate                *GroupQuery
-	withOwner                   *OrganizationQuery
-	withBlockedGroups           *GroupQuery
-	withEditors                 *GroupQuery
-	withViewers                 *GroupQuery
-	withActionPlanKind          *CustomTypeEnumQuery
-	withRisks                   *RiskQuery
-	withControls                *ControlQuery
-	withPrograms                *ProgramQuery
-	withFindings                *FindingQuery
-	withVulnerabilities         *VulnerabilityQuery
-	withScans                   *ScanQuery
-	withReviews                 *ReviewQuery
-	withRemediations            *RemediationQuery
-	withTasks                   *TaskQuery
-	withIntegrations            *IntegrationQuery
-	withFile                    *FileQuery
-	withWorkflowObjectRefs      *WorkflowObjectRefQuery
-	withFKs                     bool
-	loadTotal                   []func(context.Context, []*ActionPlan) error
-	modifiers                   []func(*sql.Selector)
-	withNamedIntegrationRuns    map[string]*IntegrationRunQuery
-	withNamedBlockedGroups      map[string]*GroupQuery
-	withNamedEditors            map[string]*GroupQuery
-	withNamedViewers            map[string]*GroupQuery
-	withNamedRisks              map[string]*RiskQuery
-	withNamedControls           map[string]*ControlQuery
-	withNamedPrograms           map[string]*ProgramQuery
-	withNamedFindings           map[string]*FindingQuery
-	withNamedVulnerabilities    map[string]*VulnerabilityQuery
-	withNamedScans              map[string]*ScanQuery
-	withNamedReviews            map[string]*ReviewQuery
-	withNamedRemediations       map[string]*RemediationQuery
-	withNamedTasks              map[string]*TaskQuery
-	withNamedIntegrations       map[string]*IntegrationQuery
-	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
+	ctx                             *QueryContext
+	order                           []actionplan.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.ActionPlan
+	withIntegrationRuns             *IntegrationRunQuery
+	withApprover                    *GroupQuery
+	withDelegate                    *GroupQuery
+	withOwner                       *OrganizationQuery
+	withBlockedGroups               *GroupQuery
+	withEditors                     *GroupQuery
+	withViewers                     *GroupQuery
+	withActionPlanKind              *CustomTypeEnumQuery
+	withInternalOwnerUser           *UserQuery
+	withInternalOwnerGroup          *GroupQuery
+	withInternalOwnerIdentityHolder *IdentityHolderQuery
+	withRisks                       *RiskQuery
+	withControls                    *ControlQuery
+	withPrograms                    *ProgramQuery
+	withFindings                    *FindingQuery
+	withVulnerabilities             *VulnerabilityQuery
+	withScans                       *ScanQuery
+	withReviews                     *ReviewQuery
+	withRemediations                *RemediationQuery
+	withTasks                       *TaskQuery
+	withIntegrations                *IntegrationQuery
+	withFile                        *FileQuery
+	withWorkflowObjectRefs          *WorkflowObjectRefQuery
+	withFKs                         bool
+	loadTotal                       []func(context.Context, []*ActionPlan) error
+	modifiers                       []func(*sql.Selector)
+	withNamedIntegrationRuns        map[string]*IntegrationRunQuery
+	withNamedBlockedGroups          map[string]*GroupQuery
+	withNamedEditors                map[string]*GroupQuery
+	withNamedViewers                map[string]*GroupQuery
+	withNamedRisks                  map[string]*RiskQuery
+	withNamedControls               map[string]*ControlQuery
+	withNamedPrograms               map[string]*ProgramQuery
+	withNamedFindings               map[string]*FindingQuery
+	withNamedVulnerabilities        map[string]*VulnerabilityQuery
+	withNamedScans                  map[string]*ScanQuery
+	withNamedReviews                map[string]*ReviewQuery
+	withNamedRemediations           map[string]*RemediationQuery
+	withNamedTasks                  map[string]*TaskQuery
+	withNamedIntegrations           map[string]*IntegrationQuery
+	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -285,6 +290,72 @@ func (_q *ActionPlanQuery) QueryActionPlanKind() *CustomTypeEnumQuery {
 			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.ActionPlanKindTable, actionplan.ActionPlanKindColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerUser chains the current query on the "internal_owner_user" edge.
+func (_q *ActionPlanQuery) QueryInternalOwnerUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.InternalOwnerUserTable, actionplan.InternalOwnerUserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup chains the current query on the "internal_owner_group" edge.
+func (_q *ActionPlanQuery) QueryInternalOwnerGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.InternalOwnerGroupTable, actionplan.InternalOwnerGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder chains the current query on the "internal_owner_identity_holder" edge.
+func (_q *ActionPlanQuery) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.InternalOwnerIdentityHolderTable, actionplan.InternalOwnerIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -743,31 +814,34 @@ func (_q *ActionPlanQuery) Clone() *ActionPlanQuery {
 		return nil
 	}
 	return &ActionPlanQuery{
-		config:                 _q.config,
-		ctx:                    _q.ctx.Clone(),
-		order:                  append([]actionplan.OrderOption{}, _q.order...),
-		inters:                 append([]Interceptor{}, _q.inters...),
-		predicates:             append([]predicate.ActionPlan{}, _q.predicates...),
-		withIntegrationRuns:    _q.withIntegrationRuns.Clone(),
-		withApprover:           _q.withApprover.Clone(),
-		withDelegate:           _q.withDelegate.Clone(),
-		withOwner:              _q.withOwner.Clone(),
-		withBlockedGroups:      _q.withBlockedGroups.Clone(),
-		withEditors:            _q.withEditors.Clone(),
-		withViewers:            _q.withViewers.Clone(),
-		withActionPlanKind:     _q.withActionPlanKind.Clone(),
-		withRisks:              _q.withRisks.Clone(),
-		withControls:           _q.withControls.Clone(),
-		withPrograms:           _q.withPrograms.Clone(),
-		withFindings:           _q.withFindings.Clone(),
-		withVulnerabilities:    _q.withVulnerabilities.Clone(),
-		withScans:              _q.withScans.Clone(),
-		withReviews:            _q.withReviews.Clone(),
-		withRemediations:       _q.withRemediations.Clone(),
-		withTasks:              _q.withTasks.Clone(),
-		withIntegrations:       _q.withIntegrations.Clone(),
-		withFile:               _q.withFile.Clone(),
-		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
+		config:                          _q.config,
+		ctx:                             _q.ctx.Clone(),
+		order:                           append([]actionplan.OrderOption{}, _q.order...),
+		inters:                          append([]Interceptor{}, _q.inters...),
+		predicates:                      append([]predicate.ActionPlan{}, _q.predicates...),
+		withIntegrationRuns:             _q.withIntegrationRuns.Clone(),
+		withApprover:                    _q.withApprover.Clone(),
+		withDelegate:                    _q.withDelegate.Clone(),
+		withOwner:                       _q.withOwner.Clone(),
+		withBlockedGroups:               _q.withBlockedGroups.Clone(),
+		withEditors:                     _q.withEditors.Clone(),
+		withViewers:                     _q.withViewers.Clone(),
+		withActionPlanKind:              _q.withActionPlanKind.Clone(),
+		withInternalOwnerUser:           _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:          _q.withInternalOwnerGroup.Clone(),
+		withInternalOwnerIdentityHolder: _q.withInternalOwnerIdentityHolder.Clone(),
+		withRisks:                       _q.withRisks.Clone(),
+		withControls:                    _q.withControls.Clone(),
+		withPrograms:                    _q.withPrograms.Clone(),
+		withFindings:                    _q.withFindings.Clone(),
+		withVulnerabilities:             _q.withVulnerabilities.Clone(),
+		withScans:                       _q.withScans.Clone(),
+		withReviews:                     _q.withReviews.Clone(),
+		withRemediations:                _q.withRemediations.Clone(),
+		withTasks:                       _q.withTasks.Clone(),
+		withIntegrations:                _q.withIntegrations.Clone(),
+		withFile:                        _q.withFile.Clone(),
+		withWorkflowObjectRefs:          _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -860,6 +934,39 @@ func (_q *ActionPlanQuery) WithActionPlanKind(opts ...func(*CustomTypeEnumQuery)
 		opt(query)
 	}
 	_q.withActionPlanKind = query
+	return _q
+}
+
+// WithInternalOwnerUser tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithInternalOwnerUser(opts ...func(*UserQuery)) *ActionPlanQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerUser = query
+	return _q
+}
+
+// WithInternalOwnerGroup tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery)) *ActionPlanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerGroup = query
+	return _q
+}
+
+// WithInternalOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithInternalOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *ActionPlanQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerIdentityHolder = query
 	return _q
 }
 
@@ -1080,7 +1187,7 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		nodes       = []*ActionPlan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [23]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withApprover != nil,
 			_q.withDelegate != nil,
@@ -1089,6 +1196,9 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withActionPlanKind != nil,
+			_q.withInternalOwnerUser != nil,
+			_q.withInternalOwnerGroup != nil,
+			_q.withInternalOwnerIdentityHolder != nil,
 			_q.withRisks != nil,
 			_q.withControls != nil,
 			_q.withPrograms != nil,
@@ -1176,6 +1286,24 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 	if query := _q.withActionPlanKind; query != nil {
 		if err := _q.loadActionPlanKind(ctx, query, nodes, nil,
 			func(n *ActionPlan, e *CustomTypeEnum) { n.Edges.ActionPlanKind = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerUser; query != nil {
+		if err := _q.loadInternalOwnerUser(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *User) { n.Edges.InternalOwnerUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerGroup; query != nil {
+		if err := _q.loadInternalOwnerGroup(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *Group) { n.Edges.InternalOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerIdentityHolder; query != nil {
+		if err := _q.loadInternalOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *ActionPlan, e *IdentityHolder) { n.Edges.InternalOwnerIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1730,6 +1858,93 @@ func (_q *ActionPlanQuery) loadActionPlanKind(ctx context.Context, query *Custom
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "action_plan_kind_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadInternalOwnerUser(ctx context.Context, query *UserQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadInternalOwnerGroup(ctx context.Context, query *GroupQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadInternalOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*ActionPlan)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_identity_holder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2450,6 +2665,15 @@ func (_q *ActionPlanQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withActionPlanKind != nil {
 			_spec.Node.AddColumnOnce(actionplan.FieldActionPlanKindID)
+		}
+		if _q.withInternalOwnerUser != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldInternalOwnerUserID)
+		}
+		if _q.withInternalOwnerGroup != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldInternalOwnerGroupID)
+		}
+		if _q.withInternalOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(actionplan.FieldInternalOwnerIdentityHolderID)
 		}
 		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(actionplan.FieldFileID)

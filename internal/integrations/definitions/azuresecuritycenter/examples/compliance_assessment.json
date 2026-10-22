@@ -1,0 +1,28 @@
+{
+  "id": "/subscriptions/359fcb95-1c6d-453b-9140-5a8254ec83fd/providers/Microsoft.Security/regulatoryComplianceStandards/Azure-SOC-2023/regulatoryComplianceControls/CC7.4/regulatoryComplianceAssessments/77758c9d-8a56-5f54-6ff7-69a762ca6004",
+  "name": "77758c9d-8a56-5f54-6ff7-69a762ca6004",
+  "properties": {
+    "description": "Microsoft Defender for Resource Manager should be enabled",
+    "assessmentType": "Azure",
+    "assessmentDetailsLink": "https://management.azure.com/subscriptions/359fcb95-1c6d-453b-9140-5a8254ec83fd/providers/Microsoft.Security/assessments/77758c9d-8a56-5f54-6ff7-69a762ca6004",
+    "state": "Failed",
+    "passedResources": 0,
+    "failedResources": 1,
+    "skippedResources": 0,
+    "unsupportedResources": 0
+  },
+  "metadata": {
+    "displayName": "Microsoft Defender for Resource Manager should be enabled",
+    "severity": "High",
+    "assessmentType": "BuiltIn",
+    "description": "Microsoft Defender for Resource Manager automatically monitors the resource management operations in your organization.",
+    "remediationDescription": "Enable Microsoft Defender for Resource Manager in the Defender plans of the subscription's environment settings."
+  },
+  "resources": [
+    "/subscriptions/359fcb95-1c6d-453b-9140-5a8254ec83fd"
+  ],
+  "owners": [
+    "secops@example.com"
+  ],
+  "sourceUpdatedAt": "2026-10-16T19:23:35.8120901Z"
+}

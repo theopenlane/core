@@ -9,12 +9,6 @@ var (
 	ErrDispatchInputInvalid = errors.New("integrations/operations: dispatch input invalid")
 	// ErrInstallationIDRequired indicates the installation identifier is missing
 	ErrInstallationIDRequired = errors.New("integrations/operations: installation id required")
-	// ErrIntegrationIDRequired indicates resolution requires an explicit integration ID
-	ErrIntegrationIDRequired = errors.New("integrations/operations: integration id required")
-	// ErrInstallationDefinitionMismatch indicates the resolved installation does not match the requested definition
-	ErrInstallationDefinitionMismatch = errors.New("integrations/operations: installation definition mismatch")
-	// ErrOperationConfigInvalid indicates queued operation config failed caller-input validation
-	ErrOperationConfigInvalid = errors.New("integrations/operations: operation config invalid")
 	// ErrRunIDRequired indicates the run identifier is missing
 	ErrRunIDRequired = errors.New("integrations/operations: run id required")
 	// ErrIngestDefinitionNotFound indicates the operation definition could not be resolved for ingest
@@ -39,6 +33,8 @@ var (
 	ErrIngestUpsertConflict = errors.New("integrations/operations: ingest upsert conflict")
 	// ErrIngestUnsupportedSchema indicates the runtime does not yet support the requested generated ingest schema
 	ErrIngestUnsupportedSchema = errors.New("integrations/operations: ingest schema unsupported")
+	// ErrIngestSchemaNotSystemOwned indicates the schema carries no system_owned marker, so runtime ingest cannot persist it without an owner
+	ErrIngestSchemaNotSystemOwned = errors.New("integrations/operations: ingest schema cannot be system owned")
 	// ErrIngestPersistFailed indicates the mapped record could not be persisted
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
 	// ErrIngestRecordExcluded indicates the record was skipped because an earlier run recorded it as failing
@@ -58,4 +54,6 @@ var (
 	ErrResultEncode = errors.New("integrations/operations: result encode failed")
 	// ErrLinkFailed indicates a link operation failed
 	ErrLinkFailed = errors.New("integrations/operations: link operation failed")
+	// ErrVendorEntityTypeMissing indicates the organization has no vendor entity type
+	ErrVendorEntityTypeMissing = errors.New("integrations/operations: vendor entity type missing")
 )

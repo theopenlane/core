@@ -101,12 +101,14 @@ query GetTrustCenterSettingByID ($trustCenterSettingId: ID!) {
 	trustCenterSetting(id: $trustCenterSettingId) {
 		accentColor
 		allowSubscribers
+		autoApprovalRules
 		backgroundColor
 		companyDescription
 		companyDomain
 		companyName
 		createdAt
 		createdBy
+		enableAutoApproval
 		environment
 		faviconLocalFileID
 		faviconRemoteURL

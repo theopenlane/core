@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/logx"
 )
 
 // HookGroup runs on group mutations to set default values that are not provided

@@ -11,7 +11,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // CSV reference sentinel errors for field access.

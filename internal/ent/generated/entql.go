@@ -200,6 +200,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldActionPlanKindName:              {Type: field.TypeString, Column: actionplan.FieldActionPlanKindName},
 			actionplan.FieldActionPlanKindID:                {Type: field.TypeString, Column: actionplan.FieldActionPlanKindID},
 			actionplan.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: actionplan.FieldWorkflowEligibleMarker},
+			actionplan.FieldInternalOwner:                   {Type: field.TypeString, Column: actionplan.FieldInternalOwner},
+			actionplan.FieldInternalOwnerUserID:             {Type: field.TypeString, Column: actionplan.FieldInternalOwnerUserID},
+			actionplan.FieldInternalOwnerGroupID:            {Type: field.TypeString, Column: actionplan.FieldInternalOwnerGroupID},
+			actionplan.FieldInternalOwnerIdentityHolderID:   {Type: field.TypeString, Column: actionplan.FieldInternalOwnerIdentityHolderID},
 			actionplan.FieldTitle:                           {Type: field.TypeString, Column: actionplan.FieldTitle},
 			actionplan.FieldDescription:                     {Type: field.TypeString, Column: actionplan.FieldDescription},
 			actionplan.FieldDueDate:                         {Type: field.TypeTime, Column: actionplan.FieldDueDate},
@@ -1068,6 +1072,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entity.FieldSystemOwned:                           {Type: field.TypeBool, Column: entity.FieldSystemOwned},
 			entity.FieldInternalNotes:                         {Type: field.TypeString, Column: entity.FieldInternalNotes},
 			entity.FieldSystemInternalID:                      {Type: field.TypeString, Column: entity.FieldSystemInternalID},
+			entity.FieldCatalogID:                             {Type: field.TypeString, Column: entity.FieldCatalogID},
+			entity.FieldExternallyVisible:                     {Type: field.TypeBool, Column: entity.FieldExternallyVisible},
+			entity.FieldCatalogKey:                            {Type: field.TypeString, Column: entity.FieldCatalogKey},
+			entity.FieldRawIngestPayload:                      {Type: field.TypeJSON, Column: entity.FieldRawIngestPayload},
 			entity.FieldEntityRelationshipStateName:           {Type: field.TypeString, Column: entity.FieldEntityRelationshipStateName},
 			entity.FieldEntityRelationshipStateID:             {Type: field.TypeString, Column: entity.FieldEntityRelationshipStateID},
 			entity.FieldEntitySecurityQuestionnaireStatusName: {Type: field.TypeString, Column: entity.FieldEntitySecurityQuestionnaireStatusName},
@@ -1660,6 +1668,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldConfig:                   {Type: field.TypeJSON, Column: integration.FieldConfig},
 			integration.FieldInstallationMetadata:     {Type: field.TypeJSON, Column: integration.FieldInstallationMetadata},
 			integration.FieldProviderState:            {Type: field.TypeJSON, Column: integration.FieldProviderState},
+			integration.FieldUserInput:                {Type: field.TypeJSON, Column: integration.FieldUserInput},
+			integration.FieldOperationConfig:          {Type: field.TypeJSON, Column: integration.FieldOperationConfig},
 			integration.FieldMetadata:                 {Type: field.TypeJSON, Column: integration.FieldMetadata},
 			integration.FieldHealth:                   {Type: field.TypeJSON, Column: integration.FieldHealth},
 			integration.FieldDefinitionID:             {Type: field.TypeString, Column: integration.FieldDefinitionID},
@@ -3313,6 +3323,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequest.FieldStatus:                {Type: field.TypeEnum, Column: trustcenterndarequest.FieldStatus},
 			trustcenterndarequest.FieldApprovedAt:            {Type: field.TypeTime, Column: trustcenterndarequest.FieldApprovedAt},
 			trustcenterndarequest.FieldApprovedByUserID:      {Type: field.TypeString, Column: trustcenterndarequest.FieldApprovedByUserID},
+			trustcenterndarequest.FieldAutoApproved:          {Type: field.TypeBool, Column: trustcenterndarequest.FieldAutoApproved},
 			trustcenterndarequest.FieldSignedAt:              {Type: field.TypeTime, Column: trustcenterndarequest.FieldSignedAt},
 			trustcenterndarequest.FieldDocumentDataID:        {Type: field.TypeString, Column: trustcenterndarequest.FieldDocumentDataID},
 			trustcenterndarequest.FieldFileID:                {Type: field.TypeString, Column: trustcenterndarequest.FieldFileID},
@@ -3365,6 +3376,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersetting.FieldNdaApproverGroupID},
 			trustcentersetting.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersetting.FieldStatusPageURL},
 			trustcentersetting.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersetting.FieldNoindexDefaultDomain},
+			trustcentersetting.FieldEnableAutoApproval:                    {Type: field.TypeBool, Column: trustcentersetting.FieldEnableAutoApproval},
+			trustcentersetting.FieldAutoApprovalRules:                     {Type: field.TypeJSON, Column: trustcentersetting.FieldAutoApprovalRules},
 		},
 	}
 	graph.Nodes[85] = &sqlgraph.Node{
@@ -4037,6 +4050,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ActionPlan",
 		"CustomTypeEnum",
+	)
+	graph.MustAddE(
+		"internal_owner_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerUserTable,
+			Columns: []string{actionplan.InternalOwnerUserColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"User",
+	)
+	graph.MustAddE(
+		"internal_owner_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerGroupTable,
+			Columns: []string{actionplan.InternalOwnerGroupColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"Group",
+	)
+	graph.MustAddE(
+		"internal_owner_identity_holder",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   actionplan.InternalOwnerIdentityHolderTable,
+			Columns: []string{actionplan.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"IdentityHolder",
 	)
 	graph.MustAddE(
 		"risks",
@@ -7037,6 +7086,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Entity",
 		"IdentityHolder",
+	)
+	graph.MustAddE(
+		"catalog",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogTable,
+			Columns: []string{entity.CatalogColumn},
+			Bidi:    false,
+		},
+		"Entity",
+		"Entity",
+	)
+	graph.MustAddE(
+		"adopted",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedTable,
+			Columns: []string{entity.AdoptedColumn},
+			Bidi:    false,
+		},
+		"Entity",
+		"Entity",
 	)
 	graph.MustAddE(
 		"entity_relationship_state",
@@ -19595,6 +19668,26 @@ func (f *ActionPlanFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
 	f.Where(p.Field(actionplan.FieldWorkflowEligibleMarker))
 }
 
+// WhereInternalOwner applies the entql string predicate on the internal_owner field.
+func (f *ActionPlanFilter) WhereInternalOwner(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldInternalOwner))
+}
+
+// WhereInternalOwnerUserID applies the entql string predicate on the internal_owner_user_id field.
+func (f *ActionPlanFilter) WhereInternalOwnerUserID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldInternalOwnerUserID))
+}
+
+// WhereInternalOwnerGroupID applies the entql string predicate on the internal_owner_group_id field.
+func (f *ActionPlanFilter) WhereInternalOwnerGroupID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldInternalOwnerGroupID))
+}
+
+// WhereInternalOwnerIdentityHolderID applies the entql string predicate on the internal_owner_identity_holder_id field.
+func (f *ActionPlanFilter) WhereInternalOwnerIdentityHolderID(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldInternalOwnerIdentityHolderID))
+}
+
 // WhereTitle applies the entql string predicate on the title field.
 func (f *ActionPlanFilter) WhereTitle(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldTitle))
@@ -19756,6 +19849,48 @@ func (f *ActionPlanFilter) WhereHasActionPlanKind() {
 // WhereHasActionPlanKindWith applies a predicate to check if query has an edge action_plan_kind with a given conditions (other predicates).
 func (f *ActionPlanFilter) WhereHasActionPlanKindWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("action_plan_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerUser applies a predicate to check if query has an edge internal_owner_user.
+func (f *ActionPlanFilter) WhereHasInternalOwnerUser() {
+	f.Where(entql.HasEdge("internal_owner_user"))
+}
+
+// WhereHasInternalOwnerUserWith applies a predicate to check if query has an edge internal_owner_user with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasInternalOwnerUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("internal_owner_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerGroup applies a predicate to check if query has an edge internal_owner_group.
+func (f *ActionPlanFilter) WhereHasInternalOwnerGroup() {
+	f.Where(entql.HasEdge("internal_owner_group"))
+}
+
+// WhereHasInternalOwnerGroupWith applies a predicate to check if query has an edge internal_owner_group with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasInternalOwnerGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("internal_owner_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasInternalOwnerIdentityHolder applies a predicate to check if query has an edge internal_owner_identity_holder.
+func (f *ActionPlanFilter) WhereHasInternalOwnerIdentityHolder() {
+	f.Where(entql.HasEdge("internal_owner_identity_holder"))
+}
+
+// WhereHasInternalOwnerIdentityHolderWith applies a predicate to check if query has an edge internal_owner_identity_holder with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasInternalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) {
+	f.Where(entql.HasEdgeWith("internal_owner_identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -26857,6 +26992,26 @@ func (f *EntityFilter) WhereSystemInternalID(p entql.StringP) {
 	f.Where(p.Field(entity.FieldSystemInternalID))
 }
 
+// WhereCatalogID applies the entql string predicate on the catalog_id field.
+func (f *EntityFilter) WhereCatalogID(p entql.StringP) {
+	f.Where(p.Field(entity.FieldCatalogID))
+}
+
+// WhereExternallyVisible applies the entql bool predicate on the externally_visible field.
+func (f *EntityFilter) WhereExternallyVisible(p entql.BoolP) {
+	f.Where(p.Field(entity.FieldExternallyVisible))
+}
+
+// WhereCatalogKey applies the entql string predicate on the catalog_key field.
+func (f *EntityFilter) WhereCatalogKey(p entql.StringP) {
+	f.Where(p.Field(entity.FieldCatalogKey))
+}
+
+// WhereRawIngestPayload applies the entql json.RawMessage predicate on the raw_ingest_payload field.
+func (f *EntityFilter) WhereRawIngestPayload(p entql.BytesP) {
+	f.Where(p.Field(entity.FieldRawIngestPayload))
+}
+
 // WhereEntityRelationshipStateName applies the entql string predicate on the entity_relationship_state_name field.
 func (f *EntityFilter) WhereEntityRelationshipStateName(p entql.StringP) {
 	f.Where(p.Field(entity.FieldEntityRelationshipStateName))
@@ -27226,6 +27381,34 @@ func (f *EntityFilter) WhereHasReviewedByIdentityHolder() {
 // WhereHasReviewedByIdentityHolderWith applies a predicate to check if query has an edge reviewed_by_identity_holder with a given conditions (other predicates).
 func (f *EntityFilter) WhereHasReviewedByIdentityHolderWith(preds ...predicate.IdentityHolder) {
 	f.Where(entql.HasEdgeWith("reviewed_by_identity_holder", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasCatalog applies a predicate to check if query has an edge catalog.
+func (f *EntityFilter) WhereHasCatalog() {
+	f.Where(entql.HasEdge("catalog"))
+}
+
+// WhereHasCatalogWith applies a predicate to check if query has an edge catalog with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasCatalogWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("catalog", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAdopted applies a predicate to check if query has an edge adopted.
+func (f *EntityFilter) WhereHasAdopted() {
+	f.Where(entql.HasEdge("adopted"))
+}
+
+// WhereHasAdoptedWith applies a predicate to check if query has an edge adopted with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasAdoptedWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("adopted", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -32660,6 +32843,16 @@ func (f *IntegrationFilter) WhereInstallationMetadata(p entql.BytesP) {
 // WhereProviderState applies the entql json.RawMessage predicate on the provider_state field.
 func (f *IntegrationFilter) WhereProviderState(p entql.BytesP) {
 	f.Where(p.Field(integration.FieldProviderState))
+}
+
+// WhereUserInput applies the entql json.RawMessage predicate on the user_input field.
+func (f *IntegrationFilter) WhereUserInput(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldUserInput))
+}
+
+// WhereOperationConfig applies the entql json.RawMessage predicate on the operation_config field.
+func (f *IntegrationFilter) WhereOperationConfig(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldOperationConfig))
 }
 
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
@@ -48594,6 +48787,11 @@ func (f *TrustCenterNDARequestFilter) WhereApprovedByUserID(p entql.StringP) {
 	f.Where(p.Field(trustcenterndarequest.FieldApprovedByUserID))
 }
 
+// WhereAutoApproved applies the entql bool predicate on the auto_approved field.
+func (f *TrustCenterNDARequestFilter) WhereAutoApproved(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequest.FieldAutoApproved))
+}
+
 // WhereSignedAt applies the entql time.Time predicate on the signed_at field.
 func (f *TrustCenterNDARequestFilter) WhereSignedAt(p entql.TimeP) {
 	f.Where(p.Field(trustcenterndarequest.FieldSignedAt))
@@ -48925,6 +49123,16 @@ func (f *TrustCenterSettingFilter) WhereStatusPageURL(p entql.StringP) {
 // WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
 func (f *TrustCenterSettingFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
 	f.Where(p.Field(trustcentersetting.FieldNoindexDefaultDomain))
+}
+
+// WhereEnableAutoApproval applies the entql bool predicate on the enable_auto_approval field.
+func (f *TrustCenterSettingFilter) WhereEnableAutoApproval(p entql.BoolP) {
+	f.Where(p.Field(trustcentersetting.FieldEnableAutoApproval))
+}
+
+// WhereAutoApprovalRules applies the entql json.RawMessage predicate on the auto_approval_rules field.
+func (f *TrustCenterSettingFilter) WhereAutoApprovalRules(p entql.BytesP) {
+	f.Where(p.Field(trustcentersetting.FieldAutoApprovalRules))
 }
 
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.

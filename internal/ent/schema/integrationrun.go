@@ -175,7 +175,7 @@ func (r IntegrationRun) Mixin() []ent.Mixin {
 // Modules of the IntegrationRun.
 func (IntegrationRun) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

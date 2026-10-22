@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // HookOnboarding runs on onboarding mutations to create the organization and settings

@@ -21,8 +21,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // domainScanImportVendorEntityType is the entityTypeName to use when creating the entities from
@@ -190,7 +190,6 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 }
 
 func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, brandDesign domainscan.BrandDesignProfile) (bool, error) {
-
 	envs := []enums.TrustCenterEnvironment{}
 
 	if brandDesign.ApplyToPreviewTrustcenter {

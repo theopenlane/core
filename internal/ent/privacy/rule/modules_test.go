@@ -35,6 +35,19 @@ func createExportMutation(t *testing.T) ent.Mutation {
 	).Export.Create().Mutation()
 }
 
+func createEventMutation(t *testing.T) ent.Mutation {
+	t.Helper()
+	return generated.NewClient(
+		generated.EntConfig(
+			&entconfig.Config{
+				Modules: entconfig.Modules{
+					Enabled: true,
+				},
+			},
+		),
+	).Event.Create().Mutation()
+}
+
 func createControlMutation(t *testing.T) ent.Mutation {
 	t.Helper()
 	return generated.NewClient(
@@ -146,17 +159,17 @@ func TestDenyIfMissingAllModulesBase(t *testing.T) {
 		expectedError    string
 	}{
 		{
-			title: "Export features present should skip",
+			title: "Event features present should skip",
 			createMutationFn: func() ent.Mutation {
-				return createExportMutation(t)
+				return createEventMutation(t)
 			},
 			modules:    []models.OrgModule{models.CatalogBaseModule},
 			shouldSkip: true,
 		},
 		{
-			title: "Export features only requires base, should allow",
+			title: "Event features only requires base, should allow",
 			createMutationFn: func() ent.Mutation {
-				return createExportMutation(t)
+				return createEventMutation(t)
 			},
 			modules:    []models.OrgModule{models.CatalogComplianceModule},
 			shouldSkip: true,
@@ -309,7 +322,7 @@ func TestModulesEnabledBase(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.title, func(t *testing.T) {
 			ctx := setupContext(t, tt.modules)
-			mutation := createExportMutation(t)
+			mutation := createEventMutation(t)
 
 			rule := rule.DenyIfMissingAllModules()
 			err := rule.EvalMutation(ctx, mutation)
@@ -373,6 +386,104 @@ func TestModulesEnabled(t *testing.T) {
 				assert.Contains(t, err.Error(), tt.expectedErr)
 				assert.NotContains(t, err.Error(), "skip rule")
 			}
+		})
+	}
+}
+
+func TestAnyModuleFeature(t *testing.T) {
+	tests := []struct {
+		title    string
+		modules  []models.OrgModule
+		expected bool
+	}{
+		{
+			title:    "no modules",
+			modules:  []models.OrgModule{},
+			expected: false,
+		},
+		{
+			title:    "base module only",
+			modules:  []models.OrgModule{models.CatalogBaseModule},
+			expected: false,
+		},
+		{
+			title:    "base and compliance",
+			modules:  []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule},
+			expected: true,
+		},
+		{
+			title:    "addon only",
+			modules:  []models.OrgModule{models.CatalogDomainScanningAddon},
+			expected: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.title, func(t *testing.T) {
+			ctx := setupContext(t, tt.modules)
+
+			ok, err := rule.HasFeature(ctx, models.CatalogAnyModule.String())
+			require.NoError(t, err)
+			assert.Equal(t, tt.expected, ok)
+
+			ok, _, err = rule.HasAnyFeature(ctx, models.CatalogAnyModule)
+			require.NoError(t, err)
+			assert.Equal(t, tt.expected, ok)
+
+			ok, missing, err := rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogAnyModule)
+			require.NoError(t, err)
+			assert.Equal(t, tt.expected, ok)
+
+			if !tt.expected {
+				require.NotNil(t, missing)
+				assert.Equal(t, models.CatalogAnyModule, *missing)
+			}
+		})
+	}
+}
+
+func TestDenyIfMissingAllModulesAnyModule(t *testing.T) {
+	tests := []struct {
+		title       string
+		modules     []models.OrgModule
+		shouldAllow bool
+	}{
+		{
+			title:       "no modules should deny",
+			modules:     []models.OrgModule{},
+			shouldAllow: false,
+		},
+		{
+			title:       "base module only should deny",
+			modules:     []models.OrgModule{models.CatalogBaseModule},
+			shouldAllow: false,
+		},
+		{
+			title:       "compliance module should allow",
+			modules:     []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule},
+			shouldAllow: true,
+		},
+		{
+			title:       "trust center module should allow",
+			modules:     []models.OrgModule{models.CatalogTrustCenterModule},
+			shouldAllow: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.title, func(t *testing.T) {
+			ctx := setupContext(t, tt.modules)
+
+			err := rule.DenyIfMissingAllModules().EvalMutation(ctx, createExportMutation(t))
+			require.Error(t, err)
+
+			if tt.shouldAllow {
+				assert.Contains(t, err.Error(), "skip rule")
+				return
+			}
+
+			assert.Contains(t, err.Error(), "features are not enabled")
+			assert.NotContains(t, err.Error(), "skip rule")
 		})
 	}
 }

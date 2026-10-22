@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 )
 
 const (
@@ -253,6 +254,8 @@ var (
 	DefaultApprovalFields []string
 	// DefaultApprovalEdges holds the default value on creation for the "approval_edges" field.
 	DefaultApprovalEdges []string
+	// DefinitionJSONValidator is a validator for the "definition_json" field. It is called by the builders before save.
+	DefinitionJSONValidator func(models.WorkflowDefinitionDocument) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

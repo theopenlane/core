@@ -40,6 +40,10 @@ type ActionPlanProjection struct {
 	ImprovementSuggestions          []string                     `json:"improvement_suggestions,omitempty"`
 	IntegrationRunID                string                       `json:"integration_run_id,omitempty"`
 	InternalNotes                   string                       `json:"internal_notes,omitempty"`
+	InternalOwner                   string                       `json:"internal_owner,omitempty"`
+	InternalOwnerGroupID            string                       `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID   string                       `json:"internal_owner_identity_holder_id,omitempty"`
+	InternalOwnerUserID             string                       `json:"internal_owner_user_id,omitempty"`
 	ManagedBy                       string                       `json:"managed_by,omitempty"`
 	ManagementMode                  enums.DocumentManagementMode `json:"management_mode,omitempty"`
 	Metadata                        map[string]interface{}       `json:"metadata,omitempty"`
@@ -675,6 +679,8 @@ type EntityProjection struct {
 	ApprovedForUse                        bool                   `json:"approved_for_use,omitempty"`
 	AutoRenews                            bool                   `json:"auto_renews,omitempty"`
 	BillingModel                          string                 `json:"billing_model,omitempty"`
+	CatalogID                             string                 `json:"catalog_id,omitempty"`
+	CatalogKey                            string                 `json:"catalog_key,omitempty"`
 	ContractEndDate                       models.DateTime        `json:"contract_end_date,omitempty"`
 	ContractRenewalAt                     models.DateTime        `json:"contract_renewal_at,omitempty"`
 	ContractStartDate                     models.DateTime        `json:"contract_start_date,omitempty"`
@@ -693,6 +699,7 @@ type EntityProjection struct {
 	EnvironmentID                         string                 `json:"environment_id,omitempty"`
 	EnvironmentName                       string                 `json:"environment_name,omitempty"`
 	ExternalID                            string                 `json:"external_id,omitempty"`
+	ExternallyVisible                     bool                   `json:"externally_visible,omitempty"`
 	HasSoc2                               bool                   `json:"has_soc2,omitempty"`
 	IntegrationRunID                      string                 `json:"integration_run_id,omitempty"`
 	InternalNotes                         string                 `json:"internal_notes,omitempty"`
@@ -713,6 +720,7 @@ type EntityProjection struct {
 	ObservedAt                            models.DateTime        `json:"observed_at,omitempty"`
 	OwnerID                               string                 `json:"owner_id,omitempty"`
 	ProvidedServices                      []string               `json:"provided_services,omitempty"`
+	RawIngestPayload                      map[string]interface{} `json:"raw_ingest_payload,omitempty"`
 	RenewalRisk                           string                 `json:"renewal_risk,omitempty"`
 	ReviewFrequency                       enums.Frequency        `json:"review_frequency,omitempty"`
 	ReviewedBy                            string                 `json:"reviewed_by,omitempty"`

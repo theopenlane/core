@@ -44,9 +44,7 @@ func (ec *executionContext) unmarshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 
 func (ec *executionContext) marshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAAGUID(ctx context.Context, sel ast.SelectionSet, v *models.AAGUID) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "AAGUID!")
 		return graphql.Null
 	}
 	return v
@@ -59,17 +57,13 @@ func (ec *executionContext) unmarshalNAny2interface(ctx context.Context, v any) 
 
 func (ec *executionContext) marshalNAny2interface(ctx context.Context, sel ast.SelectionSet, v any) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "Any!")
 		return graphql.Null
 	}
 	_ = sel
 	res := graphql.MarshalAny(v)
 	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullFromMarshaler(ctx, "Any!")
 	}
 	return res
 }
@@ -103,9 +97,7 @@ func (ec *executionContext) marshalNChannel2string(ctx context.Context, sel ast.
 	_ = sel
 	res := graphql.MarshalString(v)
 	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullFromMarshaler(ctx, "Channel!")
 	}
 	return res
 }
@@ -118,9 +110,7 @@ func (ec *executionContext) unmarshalNDateTime2ᚖgithubᚗcomᚋtheopenlaneᚋc
 
 func (ec *executionContext) marshalNDateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *models.DateTime) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "DateTime!")
 		return graphql.Null
 	}
 	return v
@@ -195,9 +185,7 @@ func (ec *executionContext) marshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋg
 	_ = sel
 	res := graphql.MarshalUpload(v)
 	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullFromMarshaler(ctx, "Upload!")
 	}
 	return res
 }
@@ -209,17 +197,13 @@ func (ec *executionContext) unmarshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlge
 
 func (ec *executionContext) marshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx context.Context, sel ast.SelectionSet, v *graphql.Upload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "Upload!")
 		return graphql.Null
 	}
 	_ = sel
 	res := graphql.MarshalUpload(*v)
 	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullFromMarshaler(ctx, "Upload!")
 	}
 	return res
 }
@@ -737,6 +721,32 @@ func (ec *executionContext) marshalOTestingProcedures2ᚕgithubᚗcomᚋtheopenl
 	}
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTrustCenterNDARequestSetting(ctx context.Context, v any) (models.TrustCenterNDARequestSetting, error) {
+	var res models.TrustCenterNDARequestSetting
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTrustCenterNDARequestSetting(ctx context.Context, sel ast.SelectionSet, v models.TrustCenterNDARequestSetting) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTrustCenterNDARequestSetting(ctx context.Context, v any) (*models.TrustCenterNDARequestSetting, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.TrustCenterNDARequestSetting)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐTrustCenterNDARequestSetting(ctx context.Context, sel ast.SelectionSet, v *models.TrustCenterNDARequestSetting) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx context.Context, v any) ([]*graphql.Upload, error) {

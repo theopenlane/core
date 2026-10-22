@@ -9,8 +9,8 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
+	"github.com/theopenlane/logx"
 )
 
 // EmailTestSendRequest is the request body for the test email send endpoint
@@ -95,7 +95,7 @@ func (h *Handler) EmailTestSendHandler(ctx echo.Context) error {
 		}
 	}
 
-	testTag := newman.Tag{Name: email.TagIsTest, Value: "true"}
+	testTag := newman.Tag{Name: email.TagIsTest, Value: email.TagTrueValue}
 	results := make([]EmailTestSendResult, 0, len(ops))
 
 	for _, op := range ops {

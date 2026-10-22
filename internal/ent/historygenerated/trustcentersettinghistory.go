@@ -5,6 +5,7 @@
 package historygenerated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -12,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -99,7 +101,11 @@ type TrustCenterSettingHistory struct {
 	StatusPageURL *string `json:"status_page_url,omitempty"`
 	// allow trustcenter to be indexed on google
 	NoindexDefaultDomain bool `json:"noindex_default_domain,omitempty"`
-	selectValues         sql.SelectValues
+	// enable auto approval rules provides configurable settings to skip manual approvals
+	EnableAutoApproval bool `json:"enable_auto_approval,omitempty"`
+	// rules for approving trust center NDA requests
+	AutoApprovalRules models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`
+	selectValues      sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -107,9 +113,11 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case trustcentersettinghistory.FieldAutoApprovalRules:
+			values[i] = new([]byte)
 		case trustcentersettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired, trustcentersettinghistory.FieldAllowSubscribers, trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, trustcentersettinghistory.FieldNoindexDefaultDomain:
+		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired, trustcentersettinghistory.FieldAllowSubscribers, trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, trustcentersettinghistory.FieldNoindexDefaultDomain, trustcentersettinghistory.FieldEnableAutoApproval:
 			values[i] = new(sql.NullBool)
 		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldUpdatedByImpersonator, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldHeroImageLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact, trustcentersettinghistory.FieldNdaApproverGroupID, trustcentersettinghistory.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
@@ -381,6 +389,20 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				_m.NoindexDefaultDomain = value.Bool
 			}
+		case trustcentersettinghistory.FieldEnableAutoApproval:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field enable_auto_approval", values[i])
+			} else if value.Valid {
+				_m.EnableAutoApproval = value.Bool
+			}
+		case trustcentersettinghistory.FieldAutoApprovalRules:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field auto_approval_rules", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.AutoApprovalRules); err != nil {
+					return fmt.Errorf("unmarshal field auto_approval_rules: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -555,6 +577,12 @@ func (_m *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("noindex_default_domain=")
 	builder.WriteString(fmt.Sprintf("%v", _m.NoindexDefaultDomain))
+	builder.WriteString(", ")
+	builder.WriteString("enable_auto_approval=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EnableAutoApproval))
+	builder.WriteString(", ")
+	builder.WriteString("auto_approval_rules=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AutoApprovalRules))
 	builder.WriteByte(')')
 	return builder.String()
 }

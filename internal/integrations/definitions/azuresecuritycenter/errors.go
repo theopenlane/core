@@ -5,24 +5,30 @@ import "errors"
 var (
 	// ErrTenantIDMissing indicates the Azure tenant ID is missing
 	ErrTenantIDMissing = errors.New("azuresecuritycenter: tenant ID required")
-	// ErrClientIDMissing indicates the Azure client ID is missing
-	ErrClientIDMissing = errors.New("azuresecuritycenter: client ID required")
-	// ErrClientSecretMissing indicates the Azure client secret is missing
-	ErrClientSecretMissing = errors.New("azuresecuritycenter: client secret required")
-	// ErrSubscriptionIDMissing indicates the Azure subscription ID is missing
-	ErrSubscriptionIDMissing = errors.New("azuresecuritycenter: subscription ID required")
-	// ErrCredentialInvalid indicates credential metadata could not be decoded
-	ErrCredentialInvalid = errors.New("azuresecuritycenter: credential invalid")
+	// ErrNoSubscriptions indicates no subscriptions are accessible, usually because no RBAC role was assigned to the app
+	ErrNoSubscriptions = errors.New("azuresecuritycenter: no accessible subscriptions; assign the Security Reader role to the Openlane app on at least one subscription")
+	// ErrNoTenantSubscriptionsDelegated indicates no subscription in the tenant is visible through any Lighthouse delegation to the managing tenant
+	ErrNoTenantSubscriptionsDelegated = errors.New("azuresecuritycenter: no subscriptions in this tenant are delegated to Openlane yet; check the tenant ID, or wait up to 15 minutes after deploying the Lighthouse template")
+	// ErrNoDelegatedSubscriptions indicates subscriptions are delegated but none carry the installation's connection code
+	ErrNoDelegatedSubscriptions = errors.New("azuresecuritycenter: no subscriptions delegated with this connection code; the offer name in the Service providers page must end with the connection code saved in Openlane")
+	// ErrDelegationLookupFailed indicates the Lighthouse delegations of a subscription could not be read
+	ErrDelegationLookupFailed = errors.New("azuresecuritycenter: lighthouse delegation lookup failed")
+	// ErrLighthouseNotConfigured indicates the operator has not configured the Lighthouse managing tenant
+	ErrLighthouseNotConfigured = errors.New("azuresecuritycenter: lighthouse managing tenant not configured")
+	// ErrDisconnectDetailsEncode indicates the disconnect result details could not be serialized
+	ErrDisconnectDetailsEncode = errors.New("azuresecuritycenter: disconnect details encode failed")
+	// ErrConnectionCodeMissing indicates the Lighthouse connection code is missing
+	ErrConnectionCodeMissing = errors.New("azuresecuritycenter: connection code required")
+	// ErrSubscriptionNotAccessible indicates a requested subscription is not owned by the connected tenant or not accessible to the app
+	ErrSubscriptionNotAccessible = errors.New("azuresecuritycenter: requested subscription is not accessible in the connected tenant")
 	// ErrCredentialBuildFailed indicates the Azure credential could not be constructed
 	ErrCredentialBuildFailed = errors.New("azuresecuritycenter: credential build failed")
-	// ErrAssessmentsClientBuildFailed indicates an armsecurity assessments client could not be constructed
-	ErrAssessmentsClientBuildFailed = errors.New("azuresecuritycenter: assessments client build failed")
-	// ErrAssessmentFetchFailed indicates the assessments list request failed
+	// ErrAssessmentFetchFailed indicates the assessments query failed
 	ErrAssessmentFetchFailed = errors.New("azuresecuritycenter: assessment fetch failed")
-	// ErrSubAssessmentFetchFailed indicates the sub-assessments list request failed
-	ErrSubAssessmentFetchFailed = errors.New("azuresecuritycenter: sub-assessment fetch failed")
+	// ErrResourceGraphQueryFailed indicates a Resource Graph query failed
+	ErrResourceGraphQueryFailed = errors.New("azuresecuritycenter: resource graph query failed")
+	// ErrAssessmentDecode indicates an assessment row could not be decoded
+	ErrAssessmentDecode = errors.New("azuresecuritycenter: assessment decode failed")
 	// ErrIngestPayloadEncode indicates an ingest envelope payload could not be serialized
 	ErrIngestPayloadEncode = errors.New("azuresecuritycenter: ingest payload encode failed")
-	// ErrResultEncode indicates an operation result could not be serialized
-	ErrResultEncode = errors.New("azuresecuritycenter: result encode failed")
 )

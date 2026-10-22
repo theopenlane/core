@@ -108,7 +108,7 @@ func (e Export) Mixin() []ent.Mixin {
 
 func (Export) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

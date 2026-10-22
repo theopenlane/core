@@ -224,6 +224,6 @@ func (Subscriber) Policy() ent.Policy {
 
 func (Subscriber) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }

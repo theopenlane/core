@@ -61,9 +61,9 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "azureentraid.Config": {
+    "azuresecuritycenter.Config": {
       "properties": {
-        "clientid": {
+        "applicationid": {
           "type": "string"
         },
         "clientsecret": {
@@ -75,8 +75,8 @@
         "defaulttenant": {
           "type": "string"
         },
-        "applicationid": {
-          "type": "string"
+        "lighthouse": {
+          "$ref": "#/$defs/microsoft.LighthouseConfig"
         }
       },
       "additionalProperties": false,
@@ -165,6 +165,12 @@
         "slackruntime": {
           "$ref": "#/$defs/slack.RuntimeSlackConfig"
         },
+        "objectstore": {
+          "$ref": "#/$defs/objectstore.Config"
+        },
+        "objectstoreruntime": {
+          "$ref": "#/$defs/objectstore.RuntimeConfig"
+        },
         "googledrive": {
           "$ref": "#/$defs/googledrive.Config"
         },
@@ -172,7 +178,10 @@
           "$ref": "#/$defs/googleworkspace.Config"
         },
         "azureentraid": {
-          "$ref": "#/$defs/azureentraid.Config"
+          "$ref": "#/$defs/microsoft.AppConfig"
+        },
+        "azuresecuritycenter": {
+          "$ref": "#/$defs/azuresecuritycenter.Config"
         },
         "microsoftteams": {
           "$ref": "#/$defs/microsoftteams.Config"
@@ -493,26 +502,79 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "email.PostmarkConfig": {
+      "properties": {
+        "servertoken": {
+          "type": "string",
+          "description": "Postmark server API token"
+        },
+        "messagestream": {
+          "type": "string",
+          "description": "Postmark message stream ID (defaults to outbound)"
+        },
+        "trackopens": {
+          "type": "boolean",
+          "description": "Enable Postmark open tracking"
+        },
+        "tracklinks": {
+          "type": "string",
+          "enum": [
+            "None",
+            "HtmlAndText",
+            "HtmlOnly",
+            "TextOnly"
+          ],
+          "description": "Postmark link tracking mode"
+        },
+        "webhooksecret": {
+          "type": "string",
+          "description": "Postmark webhook basic auth password"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "servertoken"
+      ]
+    },
+    "email.ResendConfig": {
+      "properties": {
+        "apikey": {
+          "type": "string",
+          "description": "Resend API key"
+        },
+        "webhooksecret": {
+          "type": "string",
+          "description": "Resend webhook signing secret"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "apikey"
+      ]
+    },
     "email.RuntimeEmailConfig": {
       "properties": {
         "testdir": {
           "type": "string",
           "description": "Directory for dev-mode email output"
         },
-        "resendsecret": {
-          "type": "string",
-          "description": "Resend webhook signing secret"
-        },
-        "apikey": {
-          "type": "string",
-          "description": "Email provider API key"
-        },
         "provider": {
           "type": "string",
           "enum": [
-            "resend"
+            "resend",
+            "postmark"
           ],
           "description": "Email service provider"
+        },
+        "resend": {
+          "$ref": "#/$defs/email.ResendConfig",
+          "description": "Resend provider configuration"
+        },
+        "postmark": {
+          "$ref": "#/$defs/email.PostmarkConfig",
+          "description": "Postmark provider configuration"
         },
         "fromemail": {
           "type": "string",
@@ -638,7 +700,6 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "apikey",
         "provider",
         "fromemail"
       ]
@@ -1173,9 +1234,9 @@
       },
       "type": "object"
     },
-    "microsoftteams.Config": {
+    "microsoft.AppConfig": {
       "properties": {
-        "clientid": {
+        "applicationid": {
           "type": "string"
         },
         "clientsecret": {
@@ -1184,7 +1245,34 @@
         "redirecturl": {
           "type": "string"
         },
+        "defaulttenant": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "microsoft.LighthouseConfig": {
+      "properties": {
+        "managingtenantid": {
+          "type": "string"
+        },
+        "principalid": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "microsoftteams.Config": {
+      "properties": {
         "applicationid": {
+          "type": "string"
+        },
+        "clientsecret": {
+          "type": "string"
+        },
+        "redirecturl": {
           "type": "string"
         }
       },
@@ -1210,6 +1298,54 @@
       "type": "object",
       "description": "Config defines the config for Mime middleware"
     },
+    "objectstore.Config": {
+      "properties": {
+        "accesskeyid": {
+          "type": "string"
+        },
+        "secretaccesskey": {
+          "type": "string"
+        },
+        "arn": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "objectstore.ImportSpec": {
+      "properties": {
+        "prefix": {
+          "type": "string",
+          "title": "Prefix",
+          "description": "Object key prefix (directory) whose JSON files hold arrays of records"
+        },
+        "moveprocessed": {
+          "type": "boolean",
+          "title": "Move Processed",
+          "description": "Move each object into the processed directory under the prefix once its records import without failure"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "prefix"
+      ]
+    },
+    "objectstore.RuntimeConfig": {
+      "properties": {
+        "providers": {
+          "$ref": "#/$defs/storage.Providers",
+          "description": "Storage providers"
+        },
+        "import": {
+          "$ref": "#/$defs/objectstore.ImportSpec",
+          "description": "Bucket prefix and record kind the runtime import reads when the operation config leaves them empty"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "oidclocal.Config": {
       "properties": {
         "enabled": {
@@ -1233,7 +1369,7 @@
     },
     "onedrive.Config": {
       "properties": {
-        "clientid": {
+        "applicationid": {
           "type": "string"
         },
         "clientsecret": {
@@ -1243,9 +1379,6 @@
           "type": "string"
         },
         "contentmode": {
-          "type": "string"
-        },
-        "applicationid": {
           "type": "string"
         }
       },
@@ -2375,6 +2508,9 @@
         },
         "gala": {
           "$ref": "#/$defs/workflows.GalaConfig"
+        },
+        "webhookallowprivateaddresses": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false,

@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
 	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // DirectoryGroupHandler implements scim.ResourceHandler writing to DirectoryGroup instead of Group.

@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload_deletedIDs(ctx conte
 	)
 }
 func (ec *executionContext) fieldContext_SLADefinitionBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SLADefinitionBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("SLADefinitionBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _SLADefinitionBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionBulkDeletePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload_notDeletedIDs(ctx co
 	)
 }
 func (ec *executionContext) fieldContext_SLADefinitionBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SLADefinitionBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("SLADefinitionBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _SLADefinitionBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,7 +122,7 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload_error(ctx context.Co
 	)
 }
 func (ec *executionContext) fieldContext_SLADefinitionBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SLADefinitionBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("SLADefinitionBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _SLADefinitionBulkUpdatePayload_slaDefinitions(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _SLADefinitionBulkUpdatePayload_updatedIDs(ctx conte
 	)
 }
 func (ec *executionContext) fieldContext_SLADefinitionBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SLADefinitionBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("SLADefinitionBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _SLADefinitionBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -201,7 +200,7 @@ func (ec *executionContext) _SLADefinitionBulkUpdatePayload_notUpdatedIDs(ctx co
 	)
 }
 func (ec *executionContext) fieldContext_SLADefinitionBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SLADefinitionBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("SLADefinitionBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _SLADefinitionBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -224,7 +223,7 @@ func (ec *executionContext) _SLADefinitionBulkUpdatePayload_error(ctx context.Co
 	)
 }
 func (ec *executionContext) fieldContext_SLADefinitionBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SLADefinitionBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("SLADefinitionBulkUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _SLADefinitionCreatePayload_slaDefinition(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionCreatePayload) (ret graphql.Marshaler) {
@@ -279,7 +278,7 @@ func (ec *executionContext) _SLADefinitionDeletePayload_deletedID(ctx context.Co
 	)
 }
 func (ec *executionContext) fieldContext_SLADefinitionDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("SLADefinitionDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("SLADefinitionDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _SLADefinitionUpdatePayload_slaDefinition(ctx context.Context, field graphql.CollectedField, obj *model.SLADefinitionUpdatePayload) (ret graphql.Marshaler) {
@@ -332,8 +331,7 @@ func (ec *executionContext) _SLADefinitionBulkCreatePayload(ctx context.Context,
 	fields := graphql.CollectFields(ec.OperationContext, sel, sLADefinitionBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -352,14 +350,10 @@ func (ec *executionContext) _SLADefinitionBulkCreatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -370,8 +364,7 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload(ctx context.Context,
 	fields := graphql.CollectFields(ec.OperationContext, sel, sLADefinitionBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -400,14 +393,10 @@ func (ec *executionContext) _SLADefinitionBulkDeletePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -418,8 +407,7 @@ func (ec *executionContext) _SLADefinitionBulkUpdatePayload(ctx context.Context,
 	fields := graphql.CollectFields(ec.OperationContext, sel, sLADefinitionBulkUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -453,14 +441,10 @@ func (ec *executionContext) _SLADefinitionBulkUpdatePayload(ctx context.Context,
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -471,8 +455,7 @@ func (ec *executionContext) _SLADefinitionCreatePayload(ctx context.Context, sel
 	fields := graphql.CollectFields(ec.OperationContext, sel, sLADefinitionCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -491,14 +474,10 @@ func (ec *executionContext) _SLADefinitionCreatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -509,8 +488,7 @@ func (ec *executionContext) _SLADefinitionDeletePayload(ctx context.Context, sel
 	fields := graphql.CollectFields(ec.OperationContext, sel, sLADefinitionDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -529,14 +507,10 @@ func (ec *executionContext) _SLADefinitionDeletePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -547,8 +521,7 @@ func (ec *executionContext) _SLADefinitionUpdatePayload(ctx context.Context, sel
 	fields := graphql.CollectFields(ec.OperationContext, sel, sLADefinitionUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -567,14 +540,10 @@ func (ec *executionContext) _SLADefinitionUpdatePayload(ctx context.Context, sel
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -585,9 +554,7 @@ func (ec *executionContext) _SLADefinitionUpdatePayload(ctx context.Context, sel
 
 func (ec *executionContext) marshalNSLADefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SLADefinitionBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._SLADefinitionBulkCreatePayload(ctx, sel, v)
@@ -595,9 +562,7 @@ func (ec *executionContext) marshalNSLADefinitionBulkCreatePayload2ᚖgithubᚗc
 
 func (ec *executionContext) marshalNSLADefinitionBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SLADefinitionBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._SLADefinitionBulkDeletePayload(ctx, sel, v)
@@ -605,9 +570,7 @@ func (ec *executionContext) marshalNSLADefinitionBulkDeletePayload2ᚖgithubᚗc
 
 func (ec *executionContext) marshalNSLADefinitionBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SLADefinitionBulkUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._SLADefinitionBulkUpdatePayload(ctx, sel, v)
@@ -615,9 +578,7 @@ func (ec *executionContext) marshalNSLADefinitionBulkUpdatePayload2ᚖgithubᚗc
 
 func (ec *executionContext) marshalNSLADefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SLADefinitionCreatePayload!")
 		return graphql.Null
 	}
 	return ec._SLADefinitionCreatePayload(ctx, sel, v)
@@ -625,9 +586,7 @@ func (ec *executionContext) marshalNSLADefinitionCreatePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNSLADefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SLADefinitionDeletePayload!")
 		return graphql.Null
 	}
 	return ec._SLADefinitionDeletePayload(ctx, sel, v)
@@ -635,9 +594,7 @@ func (ec *executionContext) marshalNSLADefinitionDeletePayload2ᚖgithubᚗcom�
 
 func (ec *executionContext) marshalNSLADefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "SLADefinitionUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._SLADefinitionUpdatePayload(ctx, sel, v)

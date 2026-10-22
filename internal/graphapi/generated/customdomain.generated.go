@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _CustomDomainBulkDeletePayload_deletedIDs(ctx contex
 	)
 }
 func (ec *executionContext) fieldContext_CustomDomainBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CustomDomainBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("CustomDomainBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _CustomDomainBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.CustomDomainBulkDeletePayload) (ret graphql.Marshaler) {
@@ -100,7 +99,7 @@ func (ec *executionContext) _CustomDomainBulkDeletePayload_notDeletedIDs(ctx con
 	)
 }
 func (ec *executionContext) fieldContext_CustomDomainBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CustomDomainBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("CustomDomainBulkDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _CustomDomainBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.CustomDomainBulkDeletePayload) (ret graphql.Marshaler) {
@@ -123,7 +122,7 @@ func (ec *executionContext) _CustomDomainBulkDeletePayload_error(ctx context.Con
 	)
 }
 func (ec *executionContext) fieldContext_CustomDomainBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CustomDomainBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("CustomDomainBulkDeletePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _CustomDomainBulkUpdatePayload_customDomains(ctx context.Context, field graphql.CollectedField, obj *model.CustomDomainBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -178,7 +177,7 @@ func (ec *executionContext) _CustomDomainBulkUpdatePayload_updatedIDs(ctx contex
 	)
 }
 func (ec *executionContext) fieldContext_CustomDomainBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CustomDomainBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("CustomDomainBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _CustomDomainBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.CustomDomainBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -201,7 +200,7 @@ func (ec *executionContext) _CustomDomainBulkUpdatePayload_notUpdatedIDs(ctx con
 	)
 }
 func (ec *executionContext) fieldContext_CustomDomainBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CustomDomainBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("CustomDomainBulkUpdatePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _CustomDomainBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.CustomDomainBulkUpdatePayload) (ret graphql.Marshaler) {
@@ -224,7 +223,7 @@ func (ec *executionContext) _CustomDomainBulkUpdatePayload_error(ctx context.Con
 	)
 }
 func (ec *executionContext) fieldContext_CustomDomainBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CustomDomainBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("CustomDomainBulkUpdatePayload", field, false, false, "String")
 }
 
 func (ec *executionContext) _CustomDomainCreatePayload_customDomain(ctx context.Context, field graphql.CollectedField, obj *model.CustomDomainCreatePayload) (ret graphql.Marshaler) {
@@ -279,7 +278,7 @@ func (ec *executionContext) _CustomDomainDeletePayload_deletedID(ctx context.Con
 	)
 }
 func (ec *executionContext) fieldContext_CustomDomainDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CustomDomainDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("CustomDomainDeletePayload", field, false, false, "ID")
 }
 
 func (ec *executionContext) _CustomDomainUpdatePayload_customDomain(ctx context.Context, field graphql.CollectedField, obj *model.CustomDomainUpdatePayload) (ret graphql.Marshaler) {
@@ -364,8 +363,7 @@ func (ec *executionContext) _CustomDomainBulkCreatePayload(ctx context.Context, 
 	fields := graphql.CollectFields(ec.OperationContext, sel, customDomainBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -384,14 +382,10 @@ func (ec *executionContext) _CustomDomainBulkCreatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -402,8 +396,7 @@ func (ec *executionContext) _CustomDomainBulkDeletePayload(ctx context.Context, 
 	fields := graphql.CollectFields(ec.OperationContext, sel, customDomainBulkDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -432,14 +425,10 @@ func (ec *executionContext) _CustomDomainBulkDeletePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -450,8 +439,7 @@ func (ec *executionContext) _CustomDomainBulkUpdatePayload(ctx context.Context, 
 	fields := graphql.CollectFields(ec.OperationContext, sel, customDomainBulkUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -485,14 +473,10 @@ func (ec *executionContext) _CustomDomainBulkUpdatePayload(ctx context.Context, 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -503,8 +487,7 @@ func (ec *executionContext) _CustomDomainCreatePayload(ctx context.Context, sel 
 	fields := graphql.CollectFields(ec.OperationContext, sel, customDomainCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -523,14 +506,10 @@ func (ec *executionContext) _CustomDomainCreatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -541,8 +520,7 @@ func (ec *executionContext) _CustomDomainDeletePayload(ctx context.Context, sel 
 	fields := graphql.CollectFields(ec.OperationContext, sel, customDomainDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -561,14 +539,10 @@ func (ec *executionContext) _CustomDomainDeletePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -579,8 +553,7 @@ func (ec *executionContext) _CustomDomainUpdatePayload(ctx context.Context, sel 
 	fields := graphql.CollectFields(ec.OperationContext, sel, customDomainUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -599,14 +572,10 @@ func (ec *executionContext) _CustomDomainUpdatePayload(ctx context.Context, sel 
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -617,8 +586,7 @@ func (ec *executionContext) _CustomDomainValidatePayload(ctx context.Context, se
 	fields := graphql.CollectFields(ec.OperationContext, sel, customDomainValidatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -637,14 +605,10 @@ func (ec *executionContext) _CustomDomainValidatePayload(ctx context.Context, se
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -655,9 +619,7 @@ func (ec *executionContext) _CustomDomainValidatePayload(ctx context.Context, se
 
 func (ec *executionContext) marshalNCustomDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CustomDomainBulkCreatePayload!")
 		return graphql.Null
 	}
 	return ec._CustomDomainBulkCreatePayload(ctx, sel, v)
@@ -665,9 +627,7 @@ func (ec *executionContext) marshalNCustomDomainBulkCreatePayload2ᚖgithubᚗco
 
 func (ec *executionContext) marshalNCustomDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CustomDomainBulkDeletePayload!")
 		return graphql.Null
 	}
 	return ec._CustomDomainBulkDeletePayload(ctx, sel, v)
@@ -675,9 +635,7 @@ func (ec *executionContext) marshalNCustomDomainBulkDeletePayload2ᚖgithubᚗco
 
 func (ec *executionContext) marshalNCustomDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CustomDomainBulkUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._CustomDomainBulkUpdatePayload(ctx, sel, v)
@@ -685,9 +643,7 @@ func (ec *executionContext) marshalNCustomDomainBulkUpdatePayload2ᚖgithubᚗco
 
 func (ec *executionContext) marshalNCustomDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainCreatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CustomDomainCreatePayload!")
 		return graphql.Null
 	}
 	return ec._CustomDomainCreatePayload(ctx, sel, v)
@@ -695,9 +651,7 @@ func (ec *executionContext) marshalNCustomDomainCreatePayload2ᚖgithubᚗcomᚋ
 
 func (ec *executionContext) marshalNCustomDomainDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainDeletePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CustomDomainDeletePayload!")
 		return graphql.Null
 	}
 	return ec._CustomDomainDeletePayload(ctx, sel, v)
@@ -705,9 +659,7 @@ func (ec *executionContext) marshalNCustomDomainDeletePayload2ᚖgithubᚗcomᚋ
 
 func (ec *executionContext) marshalNCustomDomainUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainUpdatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CustomDomainUpdatePayload!")
 		return graphql.Null
 	}
 	return ec._CustomDomainUpdatePayload(ctx, sel, v)
@@ -715,9 +667,7 @@ func (ec *executionContext) marshalNCustomDomainUpdatePayload2ᚖgithubᚗcomᚋ
 
 func (ec *executionContext) marshalNCustomDomainValidatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainValidatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainValidatePayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "CustomDomainValidatePayload!")
 		return graphql.Null
 	}
 	return ec._CustomDomainValidatePayload(ctx, sel, v)

@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // CampaignDispatchResult is the structured result returned by campaign operations
@@ -33,7 +33,6 @@ type CampaignDispatchResult struct {
 // loadEmailTemplate resolves an active email template by ID for the given owner, eager-loading
 // the Files edge so static attachments can be included in the dispatched message
 func loadEmailTemplate(ctx context.Context, client *generated.Client, ownerID string, emailTemplateID string) (*generated.EmailTemplate, error) {
-
 	record, err := client.EmailTemplate.Query().
 		Where(
 			emailtemplate.IDEQ(emailTemplateID),

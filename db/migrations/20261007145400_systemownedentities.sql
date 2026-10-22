@@ -1,0 +1,4 @@
+-- Modify "entities" table
+ALTER TABLE "entities" ADD COLUMN "externally_visible" boolean NULL DEFAULT false, ADD COLUMN "catalog_entity_key" character varying NULL, ADD COLUMN "catalog_entity_id" character varying NULL, ADD CONSTRAINT "entities_entities_adopted_entities" FOREIGN KEY ("catalog_entity_id") REFERENCES "entities" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+-- Create index "entity_catalog_entity_id_owner_id" to table: "entities"
+CREATE UNIQUE INDEX "entity_catalog_entity_id_owner_id" ON "entities" ("catalog_entity_id", "owner_id") WHERE (deleted_at IS NULL);

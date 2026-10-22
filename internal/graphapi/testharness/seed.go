@@ -73,6 +73,8 @@ type TestUserDetails struct {
 	GroupID string
 	// UserCtx is the context of the user that should be used for the test requests
 	UserCtx context.Context
+	// PersonalOrgCtx is the context of the user as owner of their personal organization
+	PersonalOrgCtx context.Context
 }
 
 // UserBuilder creates a new test user and returns the details
@@ -99,11 +101,18 @@ func (suite *GraphTestSuite) UserBuilder(ctx context.Context, t *testing.T, feat
 	// setup user context with the org; users who create an org are owners
 	testUser.UserCtx = SetUserContext(auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID, auth.WithOrganizationRole(auth.OwnerRole)), suite.Client.DB)
 
+	// users own their personal org
+	testUser.PersonalOrgCtx = SetUserContext(auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID, auth.WithOrganizationRole(auth.OwnerRole)), suite.Client.DB)
+
 	// create a group under the organization
 	testGroup := (&GroupBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
 	testUser.GroupID = testGroup.ID
 
 	return testUser
+}
+
+func (suite *GraphTestSuite) WorkflowUserBuilder(ctx context.Context, t *testing.T) TestUserDetails {
+	return suite.UserBuilder(ctx, t, models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogWorkflowAddon)
 }
 
 var seedOnce sync.Once

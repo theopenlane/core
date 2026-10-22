@@ -840,6 +840,11 @@ func (_u *WorkflowDefinitionUpdate) check() error {
 			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.approval_submission_mode": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.DefinitionJSON(); ok {
+		if err := workflowdefinition.DefinitionJSONValidator(v); err != nil {
+			return &ValidationError{Name: "definition_json", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.definition_json": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -2228,6 +2233,11 @@ func (_u *WorkflowDefinitionUpdateOne) check() error {
 	if v, ok := _u.mutation.ApprovalSubmissionMode(); ok {
 		if err := workflowdefinition.ApprovalSubmissionModeValidator(v); err != nil {
 			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.approval_submission_mode": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.DefinitionJSON(); ok {
+		if err := workflowdefinition.DefinitionJSONValidator(v); err != nil {
+			return &ValidationError{Name: "definition_json", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.definition_json": %w`, err)}
 		}
 	}
 	return nil

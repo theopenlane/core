@@ -9,7 +9,7 @@ import (
 
 	"github.com/riverqueue/river"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 const (
@@ -76,6 +76,10 @@ func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
 			if override := spec.Override(payload); override != nil {
 				effectiveSchedule = *override
 			}
+		}
+
+		if _, snoozed := errors.AsType[*river.JobSnoozeError](execErr); snoozed {
+			return execErr
 		}
 
 		if execErr != nil {

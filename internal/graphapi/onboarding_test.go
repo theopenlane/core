@@ -3,6 +3,7 @@ package graphapi_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/samber/lo"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -10,6 +11,7 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+	"gotest.tools/v3/poll"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -160,13 +162,16 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			assert.Check(t, is.Equal(4, slaCount))
 
 			orgID := *resp.CreateOnboarding.Onboarding.OrganizationID
+			internalCtx := th.SetInternalContext(tc.ctx, suite.Client.DB)
 
-			assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
+			if tc.expectedPrograms > 0 {
+				poll.WaitOn(t, onboardingProgramsCreated(internalCtx, orgID, tc.expectedPrograms), poll.WithTimeout(30*time.Second))
+			}
 
 			programs, err := suite.Client.DB.Program.Query().
 				Where(program.OwnerID(orgID)).
 				WithControls().
-				All(th.SetInternalContext(tc.ctx, suite.Client.DB))
+				All(internalCtx)
 			assert.NilError(t, err)
 			assert.Assert(t, is.Len(programs, tc.expectedPrograms))
 
@@ -177,5 +182,20 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			// th.Cleanup onboarding data
 			(&th.Cleanup[*generated.OnboardingDeleteOne]{Client: suite.Client.DB.Onboarding, IDs: []string{resp.CreateOnboarding.Onboarding.ID}}).MustDelete(tc.ctx, t)
 		})
+	}
+}
+
+func onboardingProgramsCreated(ctx context.Context, orgID string, want int) poll.Check {
+	return func(_ poll.LogT) poll.Result {
+		count, err := suite.Client.DB.Program.Query().Where(program.OwnerID(orgID)).Count(ctx)
+		if err != nil {
+			return poll.Error(err)
+		}
+
+		if count < want {
+			return poll.Continue("found %d of %d programs", count, want)
+		}
+
+		return poll.Success()
 	}
 }

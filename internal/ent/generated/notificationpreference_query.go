@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // NotificationPreferenceQuery is the builder for querying NotificationPreference entities.

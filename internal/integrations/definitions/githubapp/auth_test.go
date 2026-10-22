@@ -16,8 +16,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // testPrivateKey generates a PEM-encoded RSA private key for testing
@@ -93,41 +93,6 @@ func TestFlowCompleteDecodesCallbackAndProducesCredential(t *testing.T) {
 	require.Equal(t, int64(99), cred.InstallationID)
 	require.Equal(t, "ghs_test123", cred.AccessToken)
 	require.NotNil(t, cred.Expiry)
-}
-
-// TestFlowCompleteSetsInstallationInput verifies Complete populates InstallationInput with metadata
-func TestFlowCompleteSetsInstallationInput(t *testing.T) {
-	t.Parallel()
-
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-		_, _ = w.Write([]byte(`{"token":"ghs_abc","expires_at":"2099-01-01T00:00:00Z"}`))
-	}))
-	defer server.Close()
-
-	pk := testPrivateKey(t)
-
-	cfg := Config{
-		AppID:      "42",
-		PrivateKey: pk,
-		AppSlug:    "test-app",
-		APIURL:     server.URL,
-	}
-
-	stateJSON, err := jsonx.ToRawMessage(statePayload{Token: "tok"})
-	require.NoError(t, err)
-
-	result, err := completeAppInstall(context.Background(), cfg, stateJSON, types.AuthCallbackInput{
-		Query: []types.AuthCallbackValue{
-			{Name: "installation_id", Values: []string{"77"}},
-		},
-	})
-	require.NoError(t, err)
-	require.NotEmpty(t, result.InstallationInput)
-
-	var meta InstallationMetadata
-	require.NoError(t, json.Unmarshal(result.InstallationInput, &meta))
-	require.Equal(t, "77", meta.InstallationID)
 }
 
 // TestFlowCompleteMissingInstallationID verifies Complete fails when installation_id is zero

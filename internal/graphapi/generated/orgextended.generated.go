@@ -4,7 +4,6 @@ package gqlgenerated
 
 import (
 	"context"
-	"errors"
 	"math"
 	"strconv"
 	"sync/atomic"
@@ -77,7 +76,7 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload_invitationSent
 	)
 }
 func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_invitationSent(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationTransferOwnershipPayload", field, false, false, errors.New("field of type Boolean does not have child fields"))
+	return graphql.NewScalarFieldContext("OrganizationTransferOwnershipPayload", field, false, false, "Boolean")
 }
 
 // endregion **************************** field.gotpl *****************************
@@ -121,6 +120,18 @@ func (ec *executionContext) unmarshalInputOrgMembersInput(ctx context.Context, o
 	return it, nil
 }
 
+// UnmarshalOrgMembersInput unmarshals raw into the OrgMembersInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalOrgMembersInput(ctx context.Context, raw any) (model.OrgMembersInput, error) {
+	var out model.OrgMembersInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "OrgMembersInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -135,8 +146,7 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload(ctx context.Co
 	fields := graphql.CollectFields(ec.OperationContext, sel, organizationTransferOwnershipPayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
-	deferredFieldSet := graphql.NewFieldSet(nil)
-	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	deferred := graphql.NewDeferredGroup(ctx)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
@@ -160,14 +170,10 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload(ctx context.Co
 		return graphql.Null
 	}
 
-	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
-
-	ec.ProcessDeferredGroup(graphql.DeferredGroup{
-		Defers:   deferLabelToView,
-		Path:     graphql.GetPath(ctx),
-		FieldSet: deferredFieldSet,
-		Context:  ctx,
-	})
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
 
 	return out
 }
@@ -183,9 +189,7 @@ func (ec *executionContext) unmarshalNOrgMembersInput2ᚖgithubᚗcomᚋtheopenl
 
 func (ec *executionContext) marshalNOrganizationTransferOwnershipPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationTransferOwnershipPayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationTransferOwnershipPayload) graphql.Marshaler {
 	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
+		graphql.AddInvalidNullError(ctx, "OrganizationTransferOwnershipPayload!")
 		return graphql.Null
 	}
 	return ec._OrganizationTransferOwnershipPayload(ctx, sel, v)

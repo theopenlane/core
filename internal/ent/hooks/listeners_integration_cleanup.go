@@ -6,7 +6,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // init registers the integration cleanup listeners so gala setup picks them up automatically

@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // HookNotificationTemplateSanitize sanitizes template content fields on create and update
@@ -22,15 +22,15 @@ func HookNotificationTemplateSanitize() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.NotificationTemplateFunc(func(ctx context.Context, m *generated.NotificationTemplateMutation) (generated.Value, error) {
 			if v, exists := m.TitleTemplate(); exists {
-				m.SetTitleTemplate(emaildef.EmailScrubber().Scrub(v))
+				m.SetTitleTemplate(emaildef.Scrubber().Scrub(v))
 			}
 
 			if v, exists := m.SubjectTemplate(); exists {
-				m.SetSubjectTemplate(emaildef.EmailScrubber().Scrub(v))
+				m.SetSubjectTemplate(emaildef.Scrubber().Scrub(v))
 			}
 
 			if v, exists := m.BodyTemplate(); exists {
-				m.SetBodyTemplate(emaildef.EmailScrubber().Scrub(v))
+				m.SetBodyTemplate(emaildef.Scrubber().Scrub(v))
 			}
 
 			return next.Mutate(ctx, m)

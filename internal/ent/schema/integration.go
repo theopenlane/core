@@ -105,6 +105,20 @@ func (Integration) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipType),
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+		field.JSON("user_input", openapi.IntegrationUserInput{}).
+			Comment("installation-scoped user input stored under the layout name it was collected with").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+				entgql.Skip(entgql.SkipWhereInput),
+			),
+		field.JSON("operation_config", openapi.IntegrationOperationConfig{}).
+			Comment("installation-scoped operation input keyed by operation name").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipType),
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the integration").
 			Optional().
@@ -251,7 +265,7 @@ func (i Integration) Policy() ent.Policy {
 
 func (Integration) Modules() []models.OrgModule {
 	return []models.OrgModule{
-		models.CatalogBaseModule,
+		models.CatalogAnyModule,
 	}
 }
 

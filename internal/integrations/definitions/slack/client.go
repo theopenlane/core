@@ -7,41 +7,43 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
-// Client builds Slack clients for one customer installation
-type Client struct{}
+// oauthClient builds the SlackClient from the stored OAuth credential
+func oauthClient(_ context.Context, req types.ConnectionRequest[slackCred]) (*Client, error) {
+	if req.Credential.AccessToken == "" {
+		return nil, ErrOAuthTokenMissing
+	}
 
-// Build constructs the unified SlackClient for one customer installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	token, err := resolveAccessToken(req.Credentials)
-	if err != nil {
+	return newSlackClient(req.Credential.AccessToken, req.Integration)
+}
+
+// botTokenClient builds the SlackClient from the stored bot token credential
+func botTokenClient(_ context.Context, req types.ConnectionRequest[slackBotTokenCred]) (*Client, error) {
+	if req.Credential.BotToken == "" {
+		return nil, ErrBotTokenMissing
+	}
+
+	return newSlackClient(req.Credential.BotToken, req.Integration)
+}
+
+// newSlackClient constructs the unified SlackClient for one customer installation
+func newSlackClient(token string, integration *generated.Integration) (*Client, error) {
+	var metadata InstallationMetadata
+	if err := jsonx.UnmarshalIfPresent(integration.InstallationMetadata.Attributes, &metadata); err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 	}
 
-	var metadata InstallationMetadata
-	if req.Integration != nil && len(req.Integration.Metadata) > 0 {
-		raw, err := jsonx.ToRawMessage(req.Integration.Metadata)
-		if err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
-		}
-
-		if err := jsonx.UnmarshalIfPresent(raw, &metadata); err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
-		}
-	}
-
-	return &SlackClient{
+	return &Client{
 		API:            slackgo.New(token),
 		DefaultChannel: metadata.DefaultChannel,
 	}, nil
 }
 
-// runtimeSlackClientBuilder returns a build function that constructs a SlackClient
-// for the runtime (system) path. When devMode is true and credentials are absent
-// a no-op client is returned so dispatches succeed silently
+// runtimeSlackClientBuilder builds a SlackClient for the runtime system path
 func runtimeSlackClientBuilder(devMode bool) func(context.Context, json.RawMessage) (any, error) {
 	return func(_ context.Context, config json.RawMessage) (any, error) {
 		var cfg RuntimeSlackConfig
@@ -51,13 +53,13 @@ func runtimeSlackClientBuilder(devMode bool) func(context.Context, json.RawMessa
 
 		if !cfg.Provisioned() {
 			if devMode {
-				return &SlackClient{devMode: true}, nil
+				return &Client{devMode: true}, nil
 			}
 
 			return nil, ErrRuntimeConfigInvalid
 		}
 
-		client := &SlackClient{
+		client := &Client{
 			WebhookURL:     cfg.WebhookURL,
 			DefaultChannel: cfg.DefaultChannel,
 		}
@@ -70,11 +72,8 @@ func runtimeSlackClientBuilder(devMode bool) func(context.Context, json.RawMessa
 	}
 }
 
-// sendText delivers a plain-text system message through the client's active transport.
-// When an API client is available it posts via chat.postMessage (supports channel targeting
-// and richer formatting); otherwise it falls back to the incoming webhook. In dev mode
-// with no transport configured the call is a silent no-op
-func (c *SlackClient) sendText(ctx context.Context, text, channel string) error {
+// sendText delivers a plain-text system message through the active transport
+func (c *Client) sendText(ctx context.Context, text, channel string) error {
 	if text == "" {
 		return ErrMessageEmpty
 	}
@@ -108,29 +107,4 @@ func (c *SlackClient) sendText(ctx context.Context, text, channel string) error 
 	}
 
 	return ErrDefaultChannelMissing
-}
-
-// resolveAccessToken returns a usable Slack API token from whichever credential slot is bound
-func resolveAccessToken(bindings types.CredentialBindings) (string, error) {
-	if oauthCred, ok, err := slackCredential.Resolve(bindings); err != nil {
-		return "", ErrCredentialDecode
-	} else if ok {
-		if oauthCred.AccessToken == "" {
-			return "", ErrOAuthTokenMissing
-		}
-
-		return oauthCred.AccessToken, nil
-	}
-
-	if botCred, ok, err := slackBotTokenCredential.Resolve(bindings); err != nil {
-		return "", ErrCredentialDecode
-	} else if ok {
-		if botCred.BotToken == "" {
-			return "", ErrBotTokenMissing
-		}
-
-		return botCred.BotToken, nil
-	}
-
-	return "", ErrNoCredentialResolved
 }

@@ -30,10 +30,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/v2/internal/ssoenforcement"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/permissioncache"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
+	"github.com/theopenlane/logx"
 )
 
 // These are stored here, instead of iam because they are specific

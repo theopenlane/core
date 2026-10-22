@@ -675,6 +675,11 @@ func (_c *WorkflowDefinitionCreate) check() error {
 			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.approval_submission_mode": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.DefinitionJSON(); ok {
+		if err := workflowdefinition.DefinitionJSONValidator(v); err != nil {
+			return &ValidationError{Name: "definition_json", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.definition_json": %w`, err)}
+		}
+	}
 	return nil
 }
 

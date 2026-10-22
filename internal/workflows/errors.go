@@ -41,4 +41,6 @@ var (
 	ErrRuntimeDefinitionKeyRequired = errors.New("runtime definition key is required")
 	// ErrRuntimeDefinitionDuplicateKey is returned when a runtime definition key is already registered
 	ErrRuntimeDefinitionDuplicateKey = errors.New("runtime definition key already registered")
+	// ErrWebhookParamsInvalid is returned when webhook action params cannot be decoded
+	ErrWebhookParamsInvalid = errors.New("invalid webhook action params")
 )

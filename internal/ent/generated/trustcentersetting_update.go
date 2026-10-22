@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -684,6 +685,46 @@ func (_u *TrustCenterSettingUpdate) ClearNoindexDefaultDomain() *TrustCenterSett
 	return _u
 }
 
+// SetEnableAutoApproval sets the "enable_auto_approval" field.
+func (_u *TrustCenterSettingUpdate) SetEnableAutoApproval(v bool) *TrustCenterSettingUpdate {
+	_u.mutation.SetEnableAutoApproval(v)
+	return _u
+}
+
+// SetNillableEnableAutoApproval sets the "enable_auto_approval" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableEnableAutoApproval(v *bool) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetEnableAutoApproval(*v)
+	}
+	return _u
+}
+
+// ClearEnableAutoApproval clears the value of the "enable_auto_approval" field.
+func (_u *TrustCenterSettingUpdate) ClearEnableAutoApproval() *TrustCenterSettingUpdate {
+	_u.mutation.ClearEnableAutoApproval()
+	return _u
+}
+
+// SetAutoApprovalRules sets the "auto_approval_rules" field.
+func (_u *TrustCenterSettingUpdate) SetAutoApprovalRules(v models.TrustCenterNDARequestSetting) *TrustCenterSettingUpdate {
+	_u.mutation.SetAutoApprovalRules(v)
+	return _u
+}
+
+// SetNillableAutoApprovalRules sets the "auto_approval_rules" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableAutoApprovalRules(v *models.TrustCenterNDARequestSetting) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetAutoApprovalRules(*v)
+	}
+	return _u
+}
+
+// ClearAutoApprovalRules clears the value of the "auto_approval_rules" field.
+func (_u *TrustCenterSettingUpdate) ClearAutoApprovalRules() *TrustCenterSettingUpdate {
+	_u.mutation.ClearAutoApprovalRules()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterSettingUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1174,6 +1215,18 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.NoindexDefaultDomainCleared() {
 		_spec.ClearField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool)
+	}
+	if value, ok := _u.mutation.EnableAutoApproval(); ok {
+		_spec.SetField(trustcentersetting.FieldEnableAutoApproval, field.TypeBool, value)
+	}
+	if _u.mutation.EnableAutoApprovalCleared() {
+		_spec.ClearField(trustcentersetting.FieldEnableAutoApproval, field.TypeBool)
+	}
+	if value, ok := _u.mutation.AutoApprovalRules(); ok {
+		_spec.SetField(trustcentersetting.FieldAutoApprovalRules, field.TypeJSON, value)
+	}
+	if _u.mutation.AutoApprovalRulesCleared() {
+		_spec.ClearField(trustcentersetting.FieldAutoApprovalRules, field.TypeJSON)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2055,6 +2108,46 @@ func (_u *TrustCenterSettingUpdateOne) ClearNoindexDefaultDomain() *TrustCenterS
 	return _u
 }
 
+// SetEnableAutoApproval sets the "enable_auto_approval" field.
+func (_u *TrustCenterSettingUpdateOne) SetEnableAutoApproval(v bool) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetEnableAutoApproval(v)
+	return _u
+}
+
+// SetNillableEnableAutoApproval sets the "enable_auto_approval" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableEnableAutoApproval(v *bool) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetEnableAutoApproval(*v)
+	}
+	return _u
+}
+
+// ClearEnableAutoApproval clears the value of the "enable_auto_approval" field.
+func (_u *TrustCenterSettingUpdateOne) ClearEnableAutoApproval() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearEnableAutoApproval()
+	return _u
+}
+
+// SetAutoApprovalRules sets the "auto_approval_rules" field.
+func (_u *TrustCenterSettingUpdateOne) SetAutoApprovalRules(v models.TrustCenterNDARequestSetting) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetAutoApprovalRules(v)
+	return _u
+}
+
+// SetNillableAutoApprovalRules sets the "auto_approval_rules" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableAutoApprovalRules(v *models.TrustCenterNDARequestSetting) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetAutoApprovalRules(*v)
+	}
+	return _u
+}
+
+// ClearAutoApprovalRules clears the value of the "auto_approval_rules" field.
+func (_u *TrustCenterSettingUpdateOne) ClearAutoApprovalRules() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearAutoApprovalRules()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterSettingUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -2575,6 +2668,18 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.NoindexDefaultDomainCleared() {
 		_spec.ClearField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool)
+	}
+	if value, ok := _u.mutation.EnableAutoApproval(); ok {
+		_spec.SetField(trustcentersetting.FieldEnableAutoApproval, field.TypeBool, value)
+	}
+	if _u.mutation.EnableAutoApprovalCleared() {
+		_spec.ClearField(trustcentersetting.FieldEnableAutoApproval, field.TypeBool)
+	}
+	if value, ok := _u.mutation.AutoApprovalRules(); ok {
+		_spec.SetField(trustcentersetting.FieldAutoApprovalRules, field.TypeJSON, value)
+	}
+	if _u.mutation.AutoApprovalRulesCleared() {
+		_spec.ClearField(trustcentersetting.FieldAutoApprovalRules, field.TypeJSON)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

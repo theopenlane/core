@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // WorkflowAssignmentTargetQuery is the builder for querying WorkflowAssignmentTarget entities.

@@ -228,14 +228,13 @@ func TestMutationCreateEntity(t *testing.T) {
 			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
-			name: "name already exists, different casing",
+			name: "name already exists, different casing is allowed",
 			request: testclient.CreateEntityInput{
 				Name: lo.ToPtr("Blue spruce"),
 				Tier: defaultTier,
 			},
-			client:      suite.Client.API,
-			ctx:         th.SharedTestUser1.UserCtx,
-			expectedErr: "entity already exists",
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "invalid domain(s)",

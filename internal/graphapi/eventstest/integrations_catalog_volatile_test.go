@@ -22,7 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 // TestFindingRawPayloadOnlyReingestNoop verifies a Volatile-only raw_payload difference never writes on its own but rides along on a material change

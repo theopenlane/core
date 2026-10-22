@@ -3,80 +3,50 @@ package azureentraid
 import (
 	"context"
 
-	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	kiotaauth "github.com/microsoft/kiota-authentication-azure-go"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
-// graphScope is the default scope used for Microsoft Graph client credentials requests
-const graphScope = "https://graph.microsoft.com/.default"
-
-// CredentialClient builds the Azure token credential for one installation
-type CredentialClient struct {
-	// cfg is the operator-level Azure Entra ID configuration
-	cfg Config
+// tokenCredentialClient builds the Azure client credentials token credential for one installation
+func tokenCredentialClient(cfg Config) func(context.Context, types.ConnectionRequest[entraIDCred]) (azcore.TokenCredential, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[entraIDCred]) (azcore.TokenCredential, error) {
+		return tenantCredential(ctx, cfg, req.Credential)
+	}
 }
 
-// Build constructs the Azure client credentials token credential for one installation
-func (c CredentialClient) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
-	meta, err := credentialFromRequest(req)
-	if err != nil {
-		return nil, err
-	}
+// graphClient builds the Microsoft Graph service client for one installation
+func graphClient(cfg Config) func(context.Context, types.ConnectionRequest[entraIDCred]) (*msgraphsdk.GraphServiceClient, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[entraIDCred]) (*msgraphsdk.GraphServiceClient, error) {
+		cred, err := tenantCredential(ctx, cfg, req.Credential)
+		if err != nil {
+			return nil, err
+		}
 
-	cred, err := azidentity.NewClientSecretCredential(meta.TenantID, c.cfg.ClientID, c.cfg.ClientSecret, nil)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("tenant_id", meta.TenantID).Msg("failed to create client secret credential")
-		return nil, ErrTokenAcquireFailed
-	}
+		client, err := cfg.NewGraphClient(cred)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("azureentraid: failed to get graph client")
+			return nil, ErrTokenAcquireFailed
+		}
 
-	return cred, nil
+		return client, nil
+	}
 }
 
-// GraphClient builds the Microsoft Graph service client for one installation
-type GraphClient struct {
-	// cfg is the operator-level Azure Entra ID configuration
-	cfg Config
-}
-
-// Build constructs the Microsoft Graph service client for one installation
-func (c GraphClient) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
-	meta, err := credentialFromRequest(req)
-	if err != nil {
-		return nil, err
-	}
-
-	cred, err := azidentity.NewClientSecretCredential(meta.TenantID, c.cfg.ClientID, c.cfg.ClientSecret, nil)
-	if err != nil {
-		return nil, ErrTokenAcquireFailed
-	}
-
-	authProvider, err := kiotaauth.NewAzureIdentityAuthenticationProviderWithScopes(cred, []string{graphScope})
-	if err != nil {
-		return nil, ErrTokenAcquireFailed
-	}
-
-	adapter, err := msgraphsdk.NewGraphRequestAdapter(authProvider)
-	if err != nil {
-		return nil, ErrTokenAcquireFailed
-	}
-
-	return msgraphsdk.NewGraphServiceClient(adapter), nil
-}
-
-// credentialFromRequest decodes and validates the installation credential data
-func credentialFromRequest(req types.ClientBuildRequest) (entraIDCred, error) {
-	cred, _, err := entraTenantCredential.Resolve(req.Credentials)
-	if err != nil {
-		return entraIDCred{}, ErrCredentialDecode
-	}
-
+// tenantCredential builds the client credentials token credential for the installation's consented tenant
+func tenantCredential(ctx context.Context, cfg Config, cred entraIDCred) (azcore.TokenCredential, error) {
 	if cred.TenantID == "" {
-		return entraIDCred{}, ErrCredentialMetadataRequired
+		return nil, ErrCredentialMetadataRequired
 	}
 
-	return cred, nil
+	tokenCred, err := microsoft.NewTokenCredential(cfg, cred.TenantID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("tenant_id", cred.TenantID).Msg("azureentraid: failed to create client secret credential")
+		return nil, ErrTokenAcquireFailed
+	}
+
+	return tokenCred, nil
 }

@@ -11,7 +11,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // lookupByID queries a single entity by ID, mapping ent not-found to a SCIM resource-not-found error

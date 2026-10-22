@@ -44,9 +44,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/config"
 	cloudflaredef "github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	systemdef "github.com/theopenlane/core/v2/internal/integrations/definitions/system"
-	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/internal/objects"
@@ -56,11 +56,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
 	mock_shared "github.com/theopenlane/core/v2/pkg/objects/mocks"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
+	"github.com/theopenlane/logx"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
@@ -95,6 +95,7 @@ type GraphTestSuite struct {
 	WorkflowEngine     *engine.WorkflowEngine
 	SlackMock          *slackdef.MockSlackRuntime
 	CloudflareMock     *cloudflaredef.MockCloudflareRuntime
+	ObjectStoreRuntime objectstore.RuntimeConfig
 }
 
 // Client contains all the clients the test need to interact with
@@ -123,6 +124,9 @@ func repoRoot() string {
 
 // fgaModuleFile is the fga model the test containers are seeded with
 var fgaModuleFile = filepath.Join(repoRoot(), "fga", "model", "fga.mod")
+
+// objectStoreFixtureDir is the committed record bucket the objectstore runtime reads in tests
+var objectStoreFixtureDir = filepath.Join(repoRoot(), "internal", "graphapi", "testharness", "testdata", "objectstore")
 
 // Suite is the shared harness instance used by each graphapi test suite
 var Suite = &GraphTestSuite{}
@@ -328,19 +332,28 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	suite.SlackMock = slackdef.NewMockSlackRuntime()
 	suite.CloudflareMock = cloudflaredef.NewMockCloudflareRuntime()
 
+	suite.ObjectStoreRuntime = objectstore.RuntimeConfig{
+		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: objectStoreFixtureDir}}},
+		Import:    objectstore.ImportSpec{Prefix: "vendors/"},
+	}
+
+	reg, err := testint.VersionedRegistry(
+		emaildef.Builder(emaildef.MockRuntimeConfig(), false),
+		suite.SlackMock.Builder(),
+		suite.CloudflareMock.Builder(),
+		systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
+		objectstore.Builder(&suite.ObjectStoreRuntime, "", objectstore.Config{}),
+		testint.Builder(),
+		testint.MockHTTPBuilder(),
+	)
+	RequireNoError(t, err)
+
 	rt, err := intruntime.New(intruntime.Config{
 		DB:          c.DB,
 		Gala:        galaInstance,
 		Keystore:    credStore,
 		RedisClient: coreutils.NewRedisClient(),
-		DefinitionBuilders: []registry.Builder{
-			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
-			suite.SlackMock.Builder(),
-			suite.CloudflareMock.Builder(),
-			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
-			testint.Builder(),
-			testint.MockHTTPBuilder(),
-		},
+		Registry:    reg,
 	})
 	RequireNoError(t, err)
 
