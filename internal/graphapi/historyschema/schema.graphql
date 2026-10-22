@@ -6423,7 +6423,7 @@ type CustomDomainHistory implements Node {
 	"""
 	what this domain is used for
 	"""
-	purpose: CustomDomainHistoryDomainPurpose!
+	purpose: CustomDomainHistoryDomainPurpose
 }
 """
 A connection to a list of items.
@@ -6723,6 +6723,8 @@ input CustomDomainHistoryWhereInput {
 	purposeNEQ: CustomDomainHistoryDomainPurpose
 	purposeIn: [CustomDomainHistoryDomainPurpose!]
 	purposeNotIn: [CustomDomainHistoryDomainPurpose!]
+	purposeIsNil: Boolean
+	purposeNotNil: Boolean
 }
 """
 DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z )

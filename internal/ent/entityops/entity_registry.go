@@ -6282,7 +6282,7 @@ func init() {
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "mappable_domain_id", Label: "MappableDomainID", Type: "string", MatchKey: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "purpose", Label: "Purpose", Type: "enums.DomainPurpose"},
+		{Name: "purpose", Label: "Purpose", Type: "enums.DomainPurpose", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},

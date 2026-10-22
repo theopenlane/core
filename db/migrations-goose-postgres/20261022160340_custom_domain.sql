@@ -1,6 +1,6 @@
 -- +goose Up
 -- modify "custom_domains" table
-ALTER TABLE "custom_domains" ADD COLUMN "purpose" character varying NOT NULL DEFAULT 'TRUSTCENTER';
+ALTER TABLE "custom_domains" ADD COLUMN "purpose" character varying NULL DEFAULT 'TRUSTCENTER';
 -- create index "customdomain_purpose_domain_type_owner_id" to table: "custom_domains"
 CREATE UNIQUE INDEX "customdomain_purpose_domain_type_owner_id" ON "custom_domains" ("purpose", "domain_type", "owner_id") WHERE (deleted_at IS NULL);
 -- drop index "entity_external_id_owner_id" from table: "entities"
