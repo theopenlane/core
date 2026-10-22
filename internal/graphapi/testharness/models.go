@@ -1751,6 +1751,7 @@ type CustomDomainBuilder struct {
 	CnameRecord      string
 	MappableDomainID string
 	Purpose          enums.DomainPurpose
+	DomainType       enums.CustomDomainType
 }
 
 // DNSVerificationBuilder is used to create DNS verifications
@@ -1778,6 +1779,10 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Cu
 		c.Purpose = enums.DomainPurposeTrustcenter
 	}
 
+	if c.DomainType == "" {
+		c.DomainType = enums.CustomDomainTypeExternal
+	}
+
 	if c.CnameRecord == "" {
 		c.CnameRecord = gofakeit.DomainName()
 	}
@@ -1791,6 +1796,7 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Cu
 		SetCnameRecord(c.CnameRecord).
 		SetMappableDomainID(c.MappableDomainID).
 		SetPurpose(c.Purpose).
+		SetDomainType(c.DomainType).
 		Save(ctx)
 	RequireNoError(t, err)
 

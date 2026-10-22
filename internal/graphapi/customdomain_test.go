@@ -84,7 +84,7 @@ func TestQueryCustomDomains(t *testing.T) {
 	mappableDomain2 := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	customDomain1 := (&th.CustomDomainBuilder{Client: suite.Client, MappableDomainID: mappableDomain2.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
-	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client, MappableDomainID: mappableDomain.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client, MappableDomainID: mappableDomain.ID, Purpose: enums.DomainPurposeAssessment}).MustNew(th.SharedTestUser1.UserCtx, t)
 	customDomain3 := (&th.CustomDomainBuilder{Client: suite.Client, MappableDomainID: mappableDomain.ID}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	nonExistentDomain := "nonexistent.example.com"
@@ -258,8 +258,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 
 func TestMutationDeleteCustomDomain(t *testing.T) {
 	customDomain := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-	customDomain3 := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client, DomainType: enums.CustomDomainTypePreview}).MustNew(th.SharedTestUser1.UserCtx, t)
+	customDomain3 := (&th.CustomDomainBuilder{Client: suite.Client, Purpose: enums.DomainPurposeAssessment}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	anotherUser := suite.UserBuilder(context.Background(), t)
 	custDomainForTrustCenter := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(anotherUser.UserCtx, t)
@@ -585,6 +585,7 @@ func TestGetAllCustomDomains(t *testing.T) {
 	customDomain2 := (&th.CustomDomainBuilder{
 		Client:           suite.Client,
 		MappableDomainID: mappableDomain.ID,
+		Purpose:          enums.DomainPurposeAssessment,
 	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	customDomain3 := (&th.CustomDomainBuilder{
