@@ -60,6 +60,8 @@ const (
 	FieldTrustCenterID = "trust_center_id"
 	// FieldDomainType holds the string denoting the domain_type field in the database.
 	FieldDomainType = "domain_type"
+	// FieldPurpose holds the string denoting the purpose field in the database.
+	FieldPurpose = "purpose"
 	// Table holds the table name of the customdomainhistory in the database.
 	Table = "custom_domain_history"
 )
@@ -87,6 +89,7 @@ var Columns = []string{
 	FieldDNSVerificationID,
 	FieldTrustCenterID,
 	FieldDomainType,
+	FieldPurpose,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -141,6 +144,18 @@ func DomainTypeValidator(dt enums.CustomDomainType) error {
 		return nil
 	default:
 		return fmt.Errorf("customdomainhistory: invalid enum value for domain_type field: %q", dt)
+	}
+}
+
+const DefaultPurpose enums.DomainPurpose = "TRUSTCENTER"
+
+// PurposeValidator is a validator for the "purpose" field enum values. It is called by the builders before save.
+func PurposeValidator(pu enums.DomainPurpose) error {
+	switch pu.String() {
+	case "TRUSTCENTER", "ASSESSMENT":
+		return nil
+	default:
+		return fmt.Errorf("customdomainhistory: invalid enum value for purpose field: %q", pu)
 	}
 }
 
@@ -247,6 +262,11 @@ func ByDomainType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDomainType, opts...).ToFunc()
 }
 
+// ByPurpose orders the results by the purpose field.
+func ByPurpose(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPurpose, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -259,4 +279,11 @@ var (
 	_ graphql.Marshaler = (*enums.CustomDomainType)(nil)
 	// enums.CustomDomainType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.CustomDomainType)(nil)
+)
+
+var (
+	// enums.DomainPurpose must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.DomainPurpose)(nil)
+	// enums.DomainPurpose must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.DomainPurpose)(nil)
 )

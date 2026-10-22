@@ -1,0 +1,22 @@
+extend type Mutation{
+    """
+    Create a new assessmentDomain
+    """
+    createAssessmentDomain(
+        """
+        values of the assessmentDomain
+        """
+        input: CreateAssessmentDomainInput!
+    ): AssessmentDomainCreatePayload!
+}
+
+"""
+Return response for createAssessmentDomain mutation
+"""
+type AssessmentDomainCreatePayload {
+    customDomain: CustomDomain!
+}
+
+input CreateAssessmentDomainInput {
+    cnameRecord: String!
+}

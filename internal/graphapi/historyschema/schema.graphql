@@ -6420,6 +6420,10 @@ type CustomDomainHistory implements Node {
 	the type of this custom domain
 	"""
 	domainType: CustomDomainHistoryCustomDomainType!
+	"""
+	what this domain is used for
+	"""
+	purpose: CustomDomainHistoryDomainPurpose
 }
 """
 A connection to a list of items.
@@ -6445,6 +6449,13 @@ enum CustomDomainHistoryCustomDomainType @goModel(model: "github.com/theopenlane
 	PREVIEW
 	EXTERNAL
 	UNKNOWN
+}
+"""
+CustomDomainHistoryDomainPurpose is enum for the field purpose
+"""
+enum CustomDomainHistoryDomainPurpose @goModel(model: "github.com/theopenlane/core/common/enums.DomainPurpose") {
+	TRUSTCENTER
+	ASSESSMENT
 }
 """
 An edge in a connection.
@@ -6705,6 +6716,15 @@ input CustomDomainHistoryWhereInput {
 	domainTypeNEQ: CustomDomainHistoryCustomDomainType
 	domainTypeIn: [CustomDomainHistoryCustomDomainType!]
 	domainTypeNotIn: [CustomDomainHistoryCustomDomainType!]
+	"""
+	purpose field predicates
+	"""
+	purpose: CustomDomainHistoryDomainPurpose
+	purposeNEQ: CustomDomainHistoryDomainPurpose
+	purposeIn: [CustomDomainHistoryDomainPurpose!]
+	purposeNotIn: [CustomDomainHistoryDomainPurpose!]
+	purposeIsNil: Boolean
+	purposeNotNil: Boolean
 }
 """
 DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z )

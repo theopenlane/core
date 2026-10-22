@@ -45538,6 +45538,7 @@ type CustomDomainMutation struct {
 	cname_record            *string
 	trust_center_id         *string
 	domain_type             *enums.CustomDomainType
+	purpose                 *enums.DomainPurpose
 	clearedFields           map[string]struct{}
 	owner                   *string
 	clearedowner            bool
@@ -46464,6 +46465,55 @@ func (m *CustomDomainMutation) ResetDomainType() {
 	m.domain_type = nil
 }
 
+// SetPurpose sets the "purpose" field.
+func (m *CustomDomainMutation) SetPurpose(ep enums.DomainPurpose) {
+	m.purpose = &ep
+}
+
+// Purpose returns the value of the "purpose" field in the mutation.
+func (m *CustomDomainMutation) Purpose() (r enums.DomainPurpose, exists bool) {
+	v := m.purpose
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPurpose returns the old "purpose" field's value of the CustomDomain entity.
+// If the CustomDomain object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CustomDomainMutation) OldPurpose(ctx context.Context) (v enums.DomainPurpose, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPurpose is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPurpose requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPurpose: %w", err)
+	}
+	return oldValue.Purpose, nil
+}
+
+// ClearPurpose clears the value of the "purpose" field.
+func (m *CustomDomainMutation) ClearPurpose() {
+	m.purpose = nil
+	m.clearedFields[customdomain.FieldPurpose] = struct{}{}
+}
+
+// PurposeCleared returns if the "purpose" field was cleared in this mutation.
+func (m *CustomDomainMutation) PurposeCleared() bool {
+	_, ok := m.clearedFields[customdomain.FieldPurpose]
+	return ok
+}
+
+// ResetPurpose resets all changes to the "purpose" field.
+func (m *CustomDomainMutation) ResetPurpose() {
+	m.purpose = nil
+	delete(m.clearedFields, customdomain.FieldPurpose)
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *CustomDomainMutation) ClearOwner() {
 	m.clearedowner = true
@@ -46579,7 +46629,7 @@ func (m *CustomDomainMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CustomDomainMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.created_at != nil {
 		fields = append(fields, customdomain.FieldCreatedAt)
 	}
@@ -46631,6 +46681,9 @@ func (m *CustomDomainMutation) Fields() []string {
 	if m.domain_type != nil {
 		fields = append(fields, customdomain.FieldDomainType)
 	}
+	if m.purpose != nil {
+		fields = append(fields, customdomain.FieldPurpose)
+	}
 	return fields
 }
 
@@ -46673,6 +46726,8 @@ func (m *CustomDomainMutation) Field(name string) (ent.Value, bool) {
 		return m.TrustCenterID()
 	case customdomain.FieldDomainType:
 		return m.DomainType()
+	case customdomain.FieldPurpose:
+		return m.Purpose()
 	}
 	return nil, false
 }
@@ -46716,6 +46771,8 @@ func (m *CustomDomainMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldTrustCenterID(ctx)
 	case customdomain.FieldDomainType:
 		return m.OldDomainType(ctx)
+	case customdomain.FieldPurpose:
+		return m.OldPurpose(ctx)
 	}
 	return nil, fmt.Errorf("unknown CustomDomain field %s", name)
 }
@@ -46844,6 +46901,13 @@ func (m *CustomDomainMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDomainType(v)
 		return nil
+	case customdomain.FieldPurpose:
+		v, ok := value.(enums.DomainPurpose)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPurpose(v)
+		return nil
 	}
 	return fmt.Errorf("unknown CustomDomain field %s", name)
 }
@@ -46916,6 +46980,9 @@ func (m *CustomDomainMutation) ClearedFields() []string {
 	if m.FieldCleared(customdomain.FieldTrustCenterID) {
 		fields = append(fields, customdomain.FieldTrustCenterID)
 	}
+	if m.FieldCleared(customdomain.FieldPurpose) {
+		fields = append(fields, customdomain.FieldPurpose)
+	}
 	return fields
 }
 
@@ -46971,6 +47038,9 @@ func (m *CustomDomainMutation) ClearField(name string) error {
 		return nil
 	case customdomain.FieldTrustCenterID:
 		m.ClearTrustCenterID()
+		return nil
+	case customdomain.FieldPurpose:
+		m.ClearPurpose()
 		return nil
 	}
 	return fmt.Errorf("unknown CustomDomain nullable field %s", name)
@@ -47030,6 +47100,9 @@ func (m *CustomDomainMutation) ResetField(name string) error {
 		return nil
 	case customdomain.FieldDomainType:
 		m.ResetDomainType()
+		return nil
+	case customdomain.FieldPurpose:
+		m.ResetPurpose()
 		return nil
 	}
 	return fmt.Errorf("unknown CustomDomain field %s", name)

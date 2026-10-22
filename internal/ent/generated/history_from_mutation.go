@@ -5221,6 +5221,10 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetDomainType(domainType)
 	}
 
+	if purpose, exists := m.Purpose(); exists {
+		create = create.SetPurpose(purpose)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -5357,6 +5361,12 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetDomainType(customdomain.DomainType)
 		}
 
+		if purpose, exists := m.Purpose(); exists {
+			create = create.SetPurpose(purpose)
+		} else {
+			create = create.SetPurpose(customdomain.Purpose)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5412,6 +5422,7 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDNSVerificationID(customdomain.DNSVerificationID).
 			SetTrustCenterID(customdomain.TrustCenterID).
 			SetDomainType(customdomain.DomainType).
+			SetPurpose(customdomain.Purpose).
 			Save(ctx)
 		if err != nil {
 			return err

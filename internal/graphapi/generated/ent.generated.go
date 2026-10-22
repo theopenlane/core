@@ -69256,6 +69256,29 @@ func (ec *executionContext) fieldContext_CustomDomain_domainType(_ context.Conte
 	return graphql.NewScalarFieldContext("CustomDomain", field, false, false, "CustomDomainCustomDomainType")
 }
 
+func (ec *executionContext) _CustomDomain_purpose(ctx context.Context, field graphql.CollectedField, obj *generated.CustomDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CustomDomain_purpose(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Purpose, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.DomainPurpose) graphql.Marshaler {
+			return ec.marshalNCustomDomainDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CustomDomain_purpose(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CustomDomain", field, false, false, "CustomDomainDomainPurpose")
+}
+
 func (ec *executionContext) _CustomDomain_owner(ctx context.Context, field graphql.CollectedField, obj *generated.CustomDomain) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -204835,7 +204858,7 @@ func (ec *executionContext) unmarshalInputCreateCustomDomainInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalNotes", "systemInternalID", "cnameRecord", "trustCenterID", "domainType", "ownerID", "mappableDomainID", "dnsVerificationID"}
+	fieldsInOrder := [...]string{"tags", "internalNotes", "systemInternalID", "cnameRecord", "trustCenterID", "domainType", "purpose", "ownerID", "mappableDomainID", "dnsVerificationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -204918,6 +204941,13 @@ func (ec *executionContext) unmarshalInputCreateCustomDomainInput(ctx context.Co
 				return it, err
 			}
 			it.DomainType = data
+		case "purpose":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purpose"))
+			data, err := ec.unmarshalOCustomDomainDomainPurpose2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Purpose = data
 		case "ownerID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -220891,7 +220921,7 @@ func (ec *executionContext) unmarshalInputCustomDomainWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "cnameRecord", "cnameRecordNEQ", "cnameRecordIn", "cnameRecordNotIn", "cnameRecordContains", "cnameRecordHasPrefix", "cnameRecordHasSuffix", "cnameRecordEqualFold", "cnameRecordContainsFold", "mappableDomainID", "mappableDomainIDNEQ", "mappableDomainIDIn", "mappableDomainIDNotIn", "mappableDomainIDContains", "mappableDomainIDHasPrefix", "mappableDomainIDHasSuffix", "mappableDomainIDEqualFold", "mappableDomainIDContainsFold", "dnsVerificationID", "dnsVerificationIDNEQ", "dnsVerificationIDIn", "dnsVerificationIDNotIn", "dnsVerificationIDContains", "dnsVerificationIDHasPrefix", "dnsVerificationIDHasSuffix", "dnsVerificationIDIsNil", "dnsVerificationIDNotNil", "dnsVerificationIDEqualFold", "dnsVerificationIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "domainType", "domainTypeNEQ", "domainTypeIn", "domainTypeNotIn", "hasOwner", "hasOwnerWith", "hasMappableDomain", "hasMappableDomainWith", "hasDNSVerification", "hasDNSVerificationWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "cnameRecord", "cnameRecordNEQ", "cnameRecordIn", "cnameRecordNotIn", "cnameRecordContains", "cnameRecordHasPrefix", "cnameRecordHasSuffix", "cnameRecordEqualFold", "cnameRecordContainsFold", "mappableDomainID", "mappableDomainIDNEQ", "mappableDomainIDIn", "mappableDomainIDNotIn", "mappableDomainIDContains", "mappableDomainIDHasPrefix", "mappableDomainIDHasSuffix", "mappableDomainIDEqualFold", "mappableDomainIDContainsFold", "dnsVerificationID", "dnsVerificationIDNEQ", "dnsVerificationIDIn", "dnsVerificationIDNotIn", "dnsVerificationIDContains", "dnsVerificationIDHasPrefix", "dnsVerificationIDHasSuffix", "dnsVerificationIDIsNil", "dnsVerificationIDNotNil", "dnsVerificationIDEqualFold", "dnsVerificationIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "domainType", "domainTypeNEQ", "domainTypeIn", "domainTypeNotIn", "purpose", "purposeNEQ", "purposeIn", "purposeNotIn", "hasOwner", "hasOwnerWith", "hasMappableDomain", "hasMappableDomainWith", "hasDNSVerification", "hasDNSVerificationWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -221857,6 +221887,34 @@ func (ec *executionContext) unmarshalInputCustomDomainWhereInput(ctx context.Con
 				return it, err
 			}
 			it.DomainTypeNotIn = data
+		case "purpose":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purpose"))
+			data, err := ec.unmarshalOCustomDomainDomainPurpose2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Purpose = data
+		case "purposeNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purposeNEQ"))
+			data, err := ec.unmarshalOCustomDomainDomainPurpose2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PurposeNEQ = data
+		case "purposeIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purposeIn"))
+			data, err := ec.unmarshalOCustomDomainDomainPurpose2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurposeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PurposeIn = data
+		case "purposeNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("purposeNotIn"))
+			data, err := ec.unmarshalOCustomDomainDomainPurpose2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurposeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PurposeNotIn = data
 		case "hasOwner":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasOwner"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -393563,6 +393621,11 @@ func (ec *executionContext) _CustomDomain(ctx context.Context, sel ast.Selection
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "purpose":
+			out.Values[i] = ec._CustomDomain_purpose(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "owner":
 			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
 				true, false,
@@ -420780,6 +420843,16 @@ func (ec *executionContext) marshalNCustomDomainCustomDomainType2githubᚗcomᚋ
 	return v
 }
 
+func (ec *executionContext) unmarshalNCustomDomainDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, v any) (enums.DomainPurpose, error) {
+	var res enums.DomainPurpose
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNCustomDomainDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, sel ast.SelectionSet, v enums.DomainPurpose) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNCustomDomainOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainOrder(ctx context.Context, v any) (*generated.CustomDomainOrder, error) {
 	res, err := ec.unmarshalInputCustomDomainOrder(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -428959,6 +429032,58 @@ func (ec *executionContext) unmarshalOCustomDomainCustomDomainType2ᚖgithubᚗc
 }
 
 func (ec *executionContext) marshalOCustomDomainCustomDomainType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCustomDomainType(ctx context.Context, sel ast.SelectionSet, v *enums.CustomDomainType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOCustomDomainDomainPurpose2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurposeᚄ(ctx context.Context, v any) ([]enums.DomainPurpose, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]enums.DomainPurpose, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCustomDomainDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOCustomDomainDomainPurpose2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurposeᚄ(ctx context.Context, sel ast.SelectionSet, v []enums.DomainPurpose) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNCustomDomainDomainPurpose2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOCustomDomainDomainPurpose2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, v any) (*enums.DomainPurpose, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(enums.DomainPurpose)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOCustomDomainDomainPurpose2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐDomainPurpose(ctx context.Context, sel ast.SelectionSet, v *enums.DomainPurpose) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

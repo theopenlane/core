@@ -12,6 +12,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -83,7 +84,7 @@ func TestQueryCustomDomains(t *testing.T) {
 	mappableDomain2 := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	customDomain1 := (&th.CustomDomainBuilder{Client: suite.Client, MappableDomainID: mappableDomain2.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
-	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client, MappableDomainID: mappableDomain.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client, MappableDomainID: mappableDomain.ID, Purpose: enums.DomainPurposeAssessment}).MustNew(th.SharedTestUser1.UserCtx, t)
 	customDomain3 := (&th.CustomDomainBuilder{Client: suite.Client, MappableDomainID: mappableDomain.ID}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	nonExistentDomain := "nonexistent.example.com"
@@ -173,6 +174,7 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				DomainType:       &enums.CustomDomainTypeExternal,
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedTestUser1.UserCtx,
@@ -183,6 +185,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				Purpose:          &enums.DomainPurposeTrustcenter,
+				DomainType:       &enums.CustomDomainTypeExternal,
 			},
 			client: suite.Client.API,
 			ctx:    th.SharedAdminUser.UserCtx,
@@ -193,6 +197,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				Purpose:          &enums.DomainPurposeTrustcenter,
+				DomainType:       &enums.CustomDomainTypeExternal,
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedViewOnlyUser.UserCtx,
@@ -204,6 +210,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 				CnameRecord:      "!invalid-domain",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				Purpose:          &enums.DomainPurposeTrustcenter,
+				DomainType:       &enums.CustomDomainTypeExternal,
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -214,6 +222,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 			request: testclient.CreateCustomDomainInput{
 				CnameRecord: "test2.example.com",
 				OwnerID:     lo.ToPtr(th.SharedTestUser1.OrganizationID),
+				Purpose:     &enums.DomainPurposeTrustcenter,
+				DomainType:  &enums.CustomDomainTypeExternal,
 			},
 			client:      suite.Client.API,
 			ctx:         th.SharedTestUser1.UserCtx,
@@ -247,8 +257,8 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 
 func TestMutationDeleteCustomDomain(t *testing.T) {
 	customDomain := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-	customDomain3 := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client, DomainType: enums.CustomDomainTypePreview}).MustNew(th.SharedTestUser1.UserCtx, t)
+	customDomain3 := (&th.CustomDomainBuilder{Client: suite.Client, Purpose: enums.DomainPurposeAssessment}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	anotherUser := suite.UserBuilder(context.Background(), t)
 	custDomainForTrustCenter := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(anotherUser.UserCtx, t)
@@ -425,16 +435,22 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 					CnameRecord:      "bulk1.example.com",
 					MappableDomainID: mappableDomain.ID,
 					OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+					Purpose:          lo.ToPtr(enums.DomainPurposeTrustcenter),
+					DomainType:       lo.ToPtr(enums.CustomDomainTypeExternal),
 				},
 				{
 					CnameRecord:      "bulk2.example.com",
 					MappableDomainID: mappableDomain.ID,
 					OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+					Purpose:          lo.ToPtr(enums.DomainPurposeTrustcenter),
+					DomainType:       lo.ToPtr(enums.CustomDomainTypePreview),
 				},
 				{
 					CnameRecord:      "bulk3.example.com",
 					MappableDomainID: mappableDomain.ID,
 					OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+					Purpose:          lo.ToPtr(enums.DomainPurposeAssessment),
+					DomainType:       lo.ToPtr(enums.CustomDomainTypeExternal),
 				},
 			},
 			client:      suite.Client.API,
@@ -448,6 +464,8 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 					CnameRecord:      "singlebulk.example.com",
 					MappableDomainID: mappableDomain.ID,
 					OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+					Purpose:          lo.ToPtr(enums.DomainPurposeTrustcenter),
+					DomainType:       lo.ToPtr(enums.CustomDomainTypeExternal),
 				},
 			},
 			client:      suite.Client.API,
@@ -461,6 +479,8 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 					CnameRecord:      "adminbulk.example.com",
 					MappableDomainID: mappableDomain.ID,
 					OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+					Purpose:          lo.ToPtr(enums.DomainPurposeTrustcenter),
+					DomainType:       lo.ToPtr(enums.CustomDomainTypeExternal),
 				},
 			},
 			client:      suite.Client.API,
@@ -474,11 +494,15 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 					CnameRecord:      "valid.example.com",
 					MappableDomainID: mappableDomain.ID,
 					OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+					Purpose:          lo.ToPtr(enums.DomainPurposeTrustcenter),
+					DomainType:       lo.ToPtr(enums.CustomDomainTypeExternal),
 				},
 				{
 					CnameRecord:      "!invalid-domain",
 					MappableDomainID: mappableDomain.ID,
 					OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+					Purpose:          lo.ToPtr(enums.DomainPurposeTrustcenter),
+					DomainType:       lo.ToPtr(enums.CustomDomainTypePreview),
 				},
 			},
 			client:      suite.Client.API,
@@ -492,6 +516,8 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 					CnameRecord:      "unauthorized.example.com",
 					MappableDomainID: mappableDomain.ID,
 					OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
+					Purpose:          lo.ToPtr(enums.DomainPurposeTrustcenter),
+					DomainType:       lo.ToPtr(enums.CustomDomainTypeExternal),
 				},
 			},
 			client:      suite.Client.API,
@@ -558,6 +584,7 @@ func TestGetAllCustomDomains(t *testing.T) {
 	customDomain2 := (&th.CustomDomainBuilder{
 		Client:           suite.Client,
 		MappableDomainID: mappableDomain.ID,
+		Purpose:          enums.DomainPurposeAssessment,
 	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	customDomain3 := (&th.CustomDomainBuilder{

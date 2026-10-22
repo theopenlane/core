@@ -14974,6 +14974,11 @@ func (_q *CustomDomainQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, customdomain.FieldDomainType)
 				fieldSeen[customdomain.FieldDomainType] = struct{}{}
 			}
+		case "purpose":
+			if _, ok := fieldSeen[customdomain.FieldPurpose]; !ok {
+				selectedFields = append(selectedFields, customdomain.FieldPurpose)
+				fieldSeen[customdomain.FieldPurpose] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

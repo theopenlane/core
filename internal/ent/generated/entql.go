@@ -704,6 +704,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomain.FieldDNSVerificationID:     {Type: field.TypeString, Column: customdomain.FieldDNSVerificationID},
 			customdomain.FieldTrustCenterID:         {Type: field.TypeString, Column: customdomain.FieldTrustCenterID},
 			customdomain.FieldDomainType:            {Type: field.TypeEnum, Column: customdomain.FieldDomainType},
+			customdomain.FieldPurpose:               {Type: field.TypeEnum, Column: customdomain.FieldPurpose},
 		},
 	}
 	graph.Nodes[14] = &sqlgraph.Node{
@@ -24392,6 +24393,11 @@ func (f *CustomDomainFilter) WhereTrustCenterID(p entql.StringP) {
 // WhereDomainType applies the entql string predicate on the domain_type field.
 func (f *CustomDomainFilter) WhereDomainType(p entql.StringP) {
 	f.Where(p.Field(customdomain.FieldDomainType))
+}
+
+// WherePurpose applies the entql string predicate on the purpose field.
+func (f *CustomDomainFilter) WherePurpose(p entql.StringP) {
+	f.Where(p.Field(customdomain.FieldPurpose))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

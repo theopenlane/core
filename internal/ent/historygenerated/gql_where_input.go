@@ -14041,6 +14041,14 @@ type CustomDomainHistoryWhereInput struct {
 	DomainTypeIn    []enums.CustomDomainType `json:"domainTypeIn,omitempty"`
 	DomainTypeNotIn []enums.CustomDomainType `json:"domainTypeNotIn,omitempty"`
 
+	// "purpose" field predicates.
+	Purpose       *enums.DomainPurpose  `json:"purpose,omitempty"`
+	PurposeNEQ    *enums.DomainPurpose  `json:"purposeNEQ,omitempty"`
+	PurposeIn     []enums.DomainPurpose `json:"purposeIn,omitempty"`
+	PurposeNotIn  []enums.DomainPurpose `json:"purposeNotIn,omitempty"`
+	PurposeIsNil  bool                  `json:"purposeIsNil,omitempty"`
+	PurposeNotNil bool                  `json:"purposeNotNil,omitempty"`
+
 	// "tags" JSON-string-array predicates.
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -14577,6 +14585,24 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	}
 	if len(i.DomainTypeNotIn) > 0 {
 		predicates = append(predicates, customdomainhistory.DomainTypeNotIn(i.DomainTypeNotIn...))
+	}
+	if i.Purpose != nil {
+		predicates = append(predicates, customdomainhistory.PurposeEQ(*i.Purpose))
+	}
+	if i.PurposeNEQ != nil {
+		predicates = append(predicates, customdomainhistory.PurposeNEQ(*i.PurposeNEQ))
+	}
+	if len(i.PurposeIn) > 0 {
+		predicates = append(predicates, customdomainhistory.PurposeIn(i.PurposeIn...))
+	}
+	if len(i.PurposeNotIn) > 0 {
+		predicates = append(predicates, customdomainhistory.PurposeNotIn(i.PurposeNotIn...))
+	}
+	if i.PurposeIsNil {
+		predicates = append(predicates, customdomainhistory.PurposeIsNil())
+	}
+	if i.PurposeNotNil {
+		predicates = append(predicates, customdomainhistory.PurposeNotNil())
 	}
 
 	if i.TagsHas != nil {

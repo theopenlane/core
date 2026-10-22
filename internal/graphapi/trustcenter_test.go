@@ -1375,7 +1375,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 	trustCenterWithDomain := tcOrgWithDomain.TrustCenter
 
 	// Create two custom domains
-	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(tcOrgWithDomain.Owner.UserCtx, t)
+	customDomain2 := (&th.CustomDomainBuilder{Client: suite.Client, DomainType: enums.CustomDomainTypePreview}).MustNew(tcOrgWithDomain.Owner.UserCtx, t)
 
 	// Manually set pirsch_domain_id to simulate what would happen after the CreatePirschDomain job completes
 	ctx := th.SetInternalContext(tcOrgWithDomain.Owner.UserCtx, suite.Client.DB)

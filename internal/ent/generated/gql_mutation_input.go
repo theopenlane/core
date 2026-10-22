@@ -5149,6 +5149,7 @@ type CreateCustomDomainInput struct {
 	CnameRecord       string                  `json:"cname_record,omitempty"`
 	TrustCenterID     *string                 `json:"trust_center_id,omitempty"`
 	DomainType        *enums.CustomDomainType `json:"domain_type,omitempty"`
+	Purpose           *enums.DomainPurpose    `json:"purpose,omitempty"`
 	OwnerID           *string                 `json:"owner_id,omitempty"`
 	MappableDomainID  string                  `json:"mappable_domain_id,omitempty"`
 	DNSVerificationID *string                 `json:"dns_verification_id,omitempty"`
@@ -5171,6 +5172,9 @@ func (i *CreateCustomDomainInput) Mutate(m *CustomDomainMutation) {
 	}
 	if v := i.DomainType; v != nil {
 		m.SetDomainType(*v)
+	}
+	if v := i.Purpose; v != nil {
+		m.SetPurpose(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)

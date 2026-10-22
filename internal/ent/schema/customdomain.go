@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
@@ -81,6 +82,12 @@ func (CustomDomain) Fields() []ent.Field {
 			Default(enums.CustomDomainTypeUnknown.String()).
 			Comment("the type of this custom domain").
 			GoType(enums.CustomDomainType("")),
+		field.Enum("purpose").
+			Immutable().
+			Optional().
+			Comment("what this domain is used for").
+			Default(enums.DomainPurposeTrustcenter.String()).
+			GoType(enums.DomainPurpose("")),
 	}
 }
 
@@ -124,7 +131,12 @@ func (e CustomDomain) Edges() []ent.Edge {
 func (CustomDomain) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("cname_record").
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+
+		index.Fields("purpose", "domain_type", ownerFieldName).
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
@@ -151,5 +163,6 @@ func (CustomDomain) Hooks() []ent.Hook {
 func (CustomDomain) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,
+		models.CatalogAssessmentCustomDomainAddon,
 	}
 }
