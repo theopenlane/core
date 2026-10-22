@@ -1384,7 +1384,7 @@ var (
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "domain_type", Type: field.TypeEnum, Enums: []string{"PREVIEW", "EXTERNAL", "UNKNOWN"}, Default: "UNKNOWN"},
-		{Name: "purpose", Type: field.TypeEnum, Nullable: true, Enums: []string{"TRUSTCENTER", "ASSESSMENT"}},
+		{Name: "purpose", Type: field.TypeEnum, Nullable: true, Enums: []string{"TRUSTCENTER", "ASSESSMENT"}, Default: "TRUSTCENTER"},
 		{Name: "mappable_domain_id", Type: field.TypeString},
 		{Name: "dns_verification_id", Type: field.TypeString, Nullable: true},
 		{Name: "dns_verification_custom_domains", Type: field.TypeString, Nullable: true},
@@ -1448,6 +1448,14 @@ var (
 				Name:    "customdomain_cname_record",
 				Unique:  true,
 				Columns: []*schema.Column{CustomDomainsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "customdomain_purpose_domain_type_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{CustomDomainsColumns[15], CustomDomainsColumns[14], CustomDomainsColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

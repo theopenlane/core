@@ -86,6 +86,7 @@ func (CustomDomain) Fields() []ent.Field {
 			Immutable().
 			Comment("what this domain is used for").
 			Optional().
+			Default(enums.DomainPurposeTrustcenter.String()).
 			GoType(enums.DomainPurpose("")),
 	}
 }
@@ -130,7 +131,12 @@ func (e CustomDomain) Edges() []ent.Edge {
 func (CustomDomain) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("cname_record").
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+
+		index.Fields("purpose", "domain_type", ownerFieldName).
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

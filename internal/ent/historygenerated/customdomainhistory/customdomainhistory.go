@@ -147,6 +147,8 @@ func DomainTypeValidator(dt enums.CustomDomainType) error {
 	}
 }
 
+const DefaultPurpose enums.DomainPurpose = "TRUSTCENTER"
+
 // PurposeValidator is a validator for the "purpose" field enum values. It is called by the builders before save.
 func PurposeValidator(pu enums.DomainPurpose) error {
 	switch pu.String() {

@@ -344,6 +344,10 @@ func (_c *CustomDomainCreate) defaults() error {
 		v := customdomain.DefaultDomainType
 		_c.mutation.SetDomainType(v)
 	}
+	if _, ok := _c.mutation.Purpose(); !ok {
+		v := customdomain.DefaultPurpose
+		_c.mutation.SetPurpose(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if customdomain.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.DefaultID (forgotten import generated/runtime?)")

@@ -370,6 +370,10 @@ func (_c *CustomDomainHistoryCreate) defaults() error {
 		v := customdomainhistory.DefaultDomainType
 		_c.mutation.SetDomainType(v)
 	}
+	if _, ok := _c.mutation.Purpose(); !ok {
+		v := customdomainhistory.DefaultPurpose
+		_c.mutation.SetPurpose(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if customdomainhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized customdomainhistory.DefaultID (forgotten import historygenerated/runtime?)")

@@ -69,7 +69,7 @@ func TestMutationCreateAssessmentDomain(t *testing.T) {
 		_, err = suite.Client.API.CreateAssessmentDomain(newOrg.Owner.UserCtx, testclient.CreateAssessmentDomainInput{
 			CnameRecord: gofakeit.DomainName(),
 		})
-		assert.ErrorContains(t, err, "domain already exists for this organization")
+		assert.ErrorContains(t, err, "customdomain already exists")
 
 		th.CleanupOrganizationDataWithContext(newOrg.Owner.UserCtx, t)
 	})
