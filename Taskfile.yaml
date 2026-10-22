@@ -444,13 +444,20 @@ tasks:
       - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-events.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/eventstest" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-events.out -tags test
 
   go:testsum:ci:handlers:
-    desc: runs tests only graph tests using gotestsum for CI
+    desc: runs only handlers tests using gotestsum for CI, sharded by BUILDKITE_PARALLEL_JOB / BUILDKITE_PARALLEL_JOB_COUNT
     silent: true
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:handlers']
     cmds:
-      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-handlers.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-handlers.out -tags test
+      - |
+        SHARD="${BUILDKITE_PARALLEL_JOB:-0}"
+        SHARDS="${BUILDKITE_PARALLEL_JOB_COUNT:-1}"
+        FILES=$(ls internal/httpserve/handlers/*_test.go | grep -v '/_')
+        TESTS=$(echo "$FILES" | xargs grep -hoE '^func Test[A-Za-z0-9_]+\(t \*testing\.T\)' | sed -E 's/^func (Test[^(]+).*/\1/' | grep -vx TestHandlerTestSuite | sort | awk -v n="$SHARDS" -v i="$SHARD" 'NR % n == i' | paste -sd'|' -)
+        SUITE_TESTS=$(echo "$FILES" | xargs grep -hoE '^func \(suite \*HandlerTestSuite\) Test[A-Za-z0-9_]+' | sed -E 's/^.* (Test.*)$/\1/' | sort | awk -v n="$SHARDS" -v i="$SHARD" 'NR % n == i' | paste -sd'|' -)
+        echo "handlers shard $SHARD of $SHARDS: $(echo "$TESTS" | tr '|' '\n' | grep -c .) tests, $(echo "$SUITE_TESTS" | tr '|' '\n' | grep -c .) suite tests"
+        go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile "junit-handlers-${SHARD}.xml" --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -run "^(${TESTS}|TestHandlerTestSuite)$" -testify.m "^(${SUITE_TESTS})$" -p 20 -timeout 20m -coverprofile="coverage-handlers-${SHARD}.out" -tags test
 
   go:testsum:ci:no-api:
     desc: runs tests using gotestsum for CI
