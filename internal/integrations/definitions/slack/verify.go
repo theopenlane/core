@@ -5,7 +5,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/utils/jsonx"
 )
 
 // incomingWebhookKey is the token response field Slack fills with the channel chosen during app install
@@ -39,8 +38,8 @@ func defaultChannel[T any](req types.ConnectionRequest[T]) (string, error) {
 		return cred.DefaultChannel, nil
 	}
 
-	var input UserInput
-	if err := jsonx.UnmarshalIfPresent(req.Integration.UserInput.Data, &input); err != nil {
+	input, err := userInput.Decode(req.Integration)
+	if err != nil {
 		return "", ErrUserInputDecode
 	}
 

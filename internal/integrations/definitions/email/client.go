@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/newman/providers/postmark"
 	"github.com/theopenlane/newman/providers/resend"
 	"github.com/theopenlane/newman/scrubber"
-	"github.com/theopenlane/utils/jsonx"
 )
 
 // Client wraps a newman.EmailSender with the RuntimeEmailConfig needed for template rendering and branding
@@ -50,16 +49,17 @@ func customerClientBuilder[T any](newSender func(T) (newman.EmailSender, error))
 			return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 		}
 
-		var userInput UserInput
+		var input UserInput
 		if req.Integration != nil {
-			if err := jsonx.UnmarshalIfPresent(req.Integration.UserInput.Data, &userInput); err != nil {
+			input, err = userInput.Decode(req.Integration)
+			if err != nil {
 				return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 			}
 		}
 
 		return &Client{
 			Sender: sender,
-			Config: userInput.ToRuntimeConfig(),
+			Config: input.ToRuntimeConfig(),
 		}, nil
 	}
 }

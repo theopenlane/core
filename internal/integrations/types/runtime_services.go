@@ -30,4 +30,6 @@ type RuntimeServices interface {
 	ReapExpiredInstallation(ctx context.Context, integrationID string) (bool, error)
 	// ResolveOwnerIntegration returns the operational installation id for the definition and owner
 	ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*generated.Integration) bool) (string, error)
+	// TriggerReconcile moves an installation operation's queued reconcile loop up to run now, reporting whether a queued loop was found
+	TriggerReconcile(ctx context.Context, integrationID, operationName string) (bool, error)
 }

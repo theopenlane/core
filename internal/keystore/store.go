@@ -174,11 +174,16 @@ func (s *Store) ReplaceCredentials(ctx context.Context, installation *ent.Integr
 		return slot, !keep
 	})
 
-	if len(removed) > 0 {
+	return s.DeleteCredentialSlots(ctx, installation, removed...)
+}
+
+// DeleteCredentialSlots deletes the installation's credentials stored under the given secret names and drops its cached clients
+func (s *Store) DeleteCredentialSlots(ctx context.Context, installation *ent.Integration, names ...string) error {
+	if len(names) > 0 {
 		if _, err := s.client(ctx).Hush.Delete().
 			Where(
 				enthush.HasIntegrationsWith(entintegration.IDEQ(installation.ID)),
-				enthush.SecretNameIn(removed...),
+				enthush.SecretNameIn(names...),
 			).
 			Exec(ctx); err != nil {
 			return err

@@ -11,8 +11,10 @@ import (
 
 	"github.com/samber/lo"
 
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/utils/jsonx"
+	"github.com/theopenlane/utils/mapx"
 )
 
 // =========
@@ -126,6 +128,20 @@ func (r ConnectionRef[T]) Description(description string) ConnectionRef[T] {
 // Recommended marks the connection as the recommended method
 func (r ConnectionRef[T]) Recommended() ConnectionRef[T] {
 	r.connection.Recommended = true
+
+	return r
+}
+
+// Revision names the connection after its credential type with a V<n> suffix, so one credential type can back a connection per app registration while the unrevised connection keeps the original name
+func (r ConnectionRef[T]) Revision(n int) ConnectionRef[T] {
+	r.connection.Credential.Name = fmt.Sprintf("%sV%d", reflectedInput[T]("").Name, n)
+
+	return r
+}
+
+// Retired marks the connection as one existing installations still use but that can no longer be connected
+func (r ConnectionRef[T]) Retired() ConnectionRef[T] {
+	r.connection.Retired = true
 
 	return r
 }
@@ -313,6 +329,32 @@ func (r UserInputRef[T]) Validated(fn func(context.Context, InstallationRequest,
 	r.input.Validate = validated(fn)
 
 	return r
+}
+
+// Decode returns the installation's stored user input as T, the zero value when none is stored
+func (r UserInputRef[T]) Decode(integration *generated.Integration) (T, error) {
+	var input T
+	err := jsonx.UnmarshalIfPresent(integration.UserInput.Data, &input)
+
+	return input, err
+}
+
+// Save replaces the installation's stored user input with input under this layout's name
+func (r UserInputRef[T]) Save(ctx context.Context, db *generated.Client, integration *generated.Integration, input T) error {
+	data, err := jsonx.ToRawMessage(input)
+	if err != nil {
+		return err
+	}
+
+	next := IntegrationUserInput{Layout: r.input.Name, Data: data}
+
+	if err := db.Integration.UpdateOneID(integration.ID).SetUserInput(next).Exec(ctx); err != nil {
+		return err
+	}
+
+	integration.UserInput = next
+
+	return nil
 }
 
 // Registration returns the layout name, reflected schema, declared upgrade, and validation as an input registration
@@ -701,6 +743,37 @@ func (r InstallationRef[M]) Validated(fn func(context.Context, InstallationReque
 	r.input.Validate = validated(fn)
 
 	return r
+}
+
+// Decode returns the installation's stored metadata attributes as M, the zero value when none is stored
+func (r InstallationRef[M]) Decode(integration *generated.Integration) (M, error) {
+	var metadata M
+	err := jsonx.UnmarshalIfPresent(integration.InstallationMetadata.Attributes, &metadata)
+
+	return metadata, err
+}
+
+// Save replaces the installation's stored metadata attributes with metadata under this layout's name, keeping the stored display identity and mirroring its public fields into the metadata map
+func (r InstallationRef[M]) Save(ctx context.Context, db *generated.Client, integration *generated.Integration, metadata M) error {
+	data, err := jsonx.ToRawMessage(metadata)
+	if err != nil {
+		return err
+	}
+
+	next := IntegrationInstallationMetadata{Layout: r.input.Name, Attributes: data, Display: integration.InstallationMetadata.Display}
+
+	mirrored := integration.Metadata
+	if public, ok := any(metadata).(InstallationPublic); ok {
+		mirrored = mapx.DeepMergeMapAny(integration.Metadata, public.PublicMetadata())
+	}
+
+	if err := db.Integration.UpdateOneID(integration.ID).SetInstallationMetadata(next).SetMetadata(mirrored).Exec(ctx); err != nil {
+		return err
+	}
+
+	integration.InstallationMetadata, integration.Metadata = next, mirrored
+
+	return nil
 }
 
 // Registration returns the layout and its identity derivation as an installation registration

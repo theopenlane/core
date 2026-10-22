@@ -1,15 +1,23 @@
 package azureentraid
 
 import (
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoft"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+)
+
+const (
+	// connectionRevision is the revision used for the connection
+	connectionRevision = 2
 )
 
 var (
 	// definitionID is the stable identifier for the Azure Entra ID integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
-	// adminConsent is the connection handle for the consented tenant credential
-	adminConsent = types.ConnectionOf[entraIDCred]()
+	// adminConsent is the connection handle for the consented tenant credential under the current app registration
+	adminConsent = types.ConnectionOf[entraIDCred]().Revision(connectionRevision)
+	// legacyAdminConsent is the retired connection for tenants consented to the app registration used before the tenant move
+	legacyAdminConsent = types.ConnectionOf[entraIDCred]()
 	// installation is the typed installation metadata handle for the Azure Entra ID definition
 	installation = types.InstallationOf[InstallationMetadata]()
 	// userInput is the installation user input layout
@@ -36,8 +44,8 @@ type entraIDCred struct {
 }
 
 // newEntraIDCred builds the Entra ID credential for a consented tenant
-func newEntraIDCred(tenantID string) entraIDCred {
-	return entraIDCred{TenantID: tenantID}
+func newEntraIDCred(consent microsoft.AdminConsent) entraIDCred {
+	return entraIDCred{TenantID: consent.TenantID}
 }
 
 // VerifiedDomain holds one verified domain entry for an Azure Entra ID tenant

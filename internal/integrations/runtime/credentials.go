@@ -120,12 +120,18 @@ func (r *Runtime) ReconcileCredential(ctx context.Context, installation *ent.Int
 		return ErrConnectionNotFound
 	}
 
+	if connection.Retired {
+		return ErrConnectionRetired
+	}
+
 	persisted, found, err := r.resolveConnectionFromState(def, installation)
 	if err != nil {
 		return err
 	}
 
-	if found && persisted.Credential.Name != connection.Credential.Name {
+	// an installation on a retired connection moves onto the connection it is reconnected with, and no other switch is allowed
+	switching := found && persisted.Credential.Name != connection.Credential.Name
+	if switching && !persisted.Retired {
 		return ErrConnectionMismatch
 	}
 
@@ -161,6 +167,12 @@ func (r *Runtime) ReconcileCredential(ctx context.Context, installation *ent.Int
 
 	if err := r.persistConnectionState(ctx, installation, def, connection.Credential.Name); err != nil {
 		return err
+	}
+
+	if switching {
+		if err := r.keystore().DeleteCredentialSlots(ctx, installation, persisted.Credential.Name); err != nil {
+			return err
+		}
 	}
 
 	if err := r.saveInstallationMetadata(ctx, installation, def, connection, metadata); err != nil {
@@ -224,6 +236,14 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 	}
 
 	metadata.Display.CredentialRef = connection.Credential.Name
+
+	// keep stored attributes the health check does not resolve, such as ones written by operations
+	attributes, _, err := jsonx.DeepMerge(installation.InstallationMetadata.Attributes, metadata.Attributes)
+	if err != nil {
+		return err
+	}
+
+	metadata.Attributes = attributes
 
 	displayMeta, _ := jsonx.ToMap(metadata.Display)
 	merged := mapx.DeepMergeMapAny(installation.Metadata, mapx.PruneMapZeroAny(displayMeta))

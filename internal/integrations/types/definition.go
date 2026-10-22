@@ -176,6 +176,16 @@ type DefinitionProviderState struct {
 	CredentialRef string `json:"credentialRef"`
 }
 
+// SelectedResource is one provider resource a user selected for an installation
+type SelectedResource struct {
+	// ID is the provider identifier of the resource
+	ID string `json:"id" jsonschema:"required,title=ID"`
+	// Name is the resource's display name at the time it was selected
+	Name string `json:"name,omitempty" jsonschema:"title=Name"`
+	// ParentID is the provider identifier of the resource's container or parent folder
+	ParentID string `json:"parentId,omitempty" jsonschema:"title=Parent ID"`
+}
+
 // ProviderState returns the persisted provider state for this definition
 func (d Definition) ProviderState(state IntegrationProviderState) (DefinitionProviderState, error) {
 	var out DefinitionProviderState

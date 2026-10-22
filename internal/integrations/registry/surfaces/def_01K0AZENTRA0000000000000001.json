@@ -1,11 +1,34 @@
 {
-  "hash": "bd63c9b1289f6167c9e331e95fc942e517781b1509b4e26d8bcdf20ec314d3e5",
-  "version": "01M49CHH2NPBMN1CMF8MGZAXAZ",
+  "hash": "ff73754b1f2eec4d924c1ecc9731c002f0c36a4e8a5e01e4144d70c00c39f24c",
+  "version": "01M5DPJKBD1EJXZ29VQDARR8CY",
   "surface": {
     "id": "def_01K0AZENTRA0000000000000001",
     "credentials": [
       {
         "ref": "entraIDCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/entra-id-cred",
+          "$ref": "#/$defs/entraIDCred",
+          "$defs": {
+            "entraIDCred": {
+              "properties": {
+                "tenantId": {
+                  "type": "string",
+                  "title": "Tenant ID"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "tenantId"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ref": "entraIDCredV2",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/entra-id-cred",
@@ -90,7 +113,8 @@
       }
     },
     "connections": [
-      "entraIDCred"
+      "entraIDCred",
+      "entraIDCredV2"
     ],
     "operations": [
       {

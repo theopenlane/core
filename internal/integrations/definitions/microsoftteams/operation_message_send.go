@@ -31,6 +31,16 @@ func sendMessage(ctx context.Context, req types.OperationRequest, c *msgraphsdk.
 		return nil, err
 	}
 
+	if cfg.TeamID == "" && cfg.Channel == "" {
+		input, err := installationUserInput(req.Integration)
+		if err != nil {
+			return nil, err
+		}
+
+		cfg.TeamID = input.DefaultTeamID
+		cfg.Channel = input.DefaultChannel
+	}
+
 	if cfg.TeamID == "" || cfg.Channel == "" {
 		return nil, ErrChannelMissing
 	}

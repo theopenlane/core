@@ -49,6 +49,10 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType)
 	}
 
+	if connection.Retired {
+		return h.BadRequest(ctx, integrationsruntime.ErrConnectionRetired)
+	}
+
 	if connection.Auth == nil || connection.Auth.Start == nil {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType)
 	}

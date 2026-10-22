@@ -28,14 +28,14 @@ func Builder(cfg Config) registry.Builder {
 			UserInput:    userInput.Registration(),
 			Installation: installation.Registration(),
 			Connections: []types.Connector{
-				adminConsent.
+				consentConnection(adminConsent.
 					Name("Azure Entra ID Admin Consent").
 					Description("Connect your Azure Entra ID tenant using admin consent.").
-					Authenticates(microsoft.AdminConsentFlow(cfg, newEntraIDCred)).
-					Provides(tokenCredentialClient(cfg)).
-					Provides(graphClient(cfg)).
-					Verified(verify).
-					Disconnects("Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.", nil),
+					Recommended(), cfg.AppConfig),
+				consentConnection(legacyAdminConsent.
+					Name("Azure Entra ID Admin Consent (Legacy)").
+					Description("Tenants consented before the Openlane app registration moved to Partner Organization, reconnect to move to the current connection.").
+					Retired(), cfg.Legacy),
 			},
 			Operations: []types.OperationRegistration{
 				types.OperationRefOf[DirectorySync]().
@@ -52,4 +52,14 @@ func Builder(cfg Config) registry.Builder {
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil
 	})
+}
+
+// consentConnection completes an admin consent connection that authenticates and builds clients under app
+func consentConnection(ref types.ConnectionRef[entraIDCred], app microsoft.AppConfig) types.ConnectionRef[entraIDCred] {
+	return ref.
+		Authenticates(microsoft.AdminConsentFlow(app, newEntraIDCred)).
+		Provides(tokenCredentialClient(app)).
+		Provides(graphClient(app)).
+		Verified(verify).
+		Disconnects("Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.", nil)
 }

@@ -31,6 +31,10 @@ type teamsCred struct {
 type UserInput struct {
 	// DefaultMessaging marks this installation as the preferred tenant for messaging
 	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
+	// DefaultTeamID is the Teams team id messages post to when no team and channel are given
+	DefaultTeamID string `json:"defaultTeamId,omitempty" jsonschema:"title=Default Team ID,description=Teams team id messages post to when no team and channel are given"`
+	// DefaultChannel is the Teams channel id messages post to when no team and channel are given
+	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel,description=Teams channel id messages post to when no team and channel are given"`
 }
 
 // InstallationMetadata holds the stable Microsoft tenant identity for one Teams installation

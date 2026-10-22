@@ -83,6 +83,22 @@ func (r *Runtime) purgeReconcileLoop(ctx context.Context, integrationID, operati
 	return r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
 }
 
+// TriggerReconcile moves an installation operation's queued reconcile loop up to run now, reporting whether a queued loop was found
+func (r *Runtime) TriggerReconcile(ctx context.Context, integrationID, operationName string) (bool, error) {
+	fragment, err := reconcileLoopFragment(integrationID, operationName)
+	if err != nil {
+		return false, err
+	}
+
+	triggered, err := r.Gala().TriggerActiveJobsWithMetadata(ctx, fragment)
+
+	if triggered > 1 {
+		logx.FromContext(ctx).Warn().Str("integration_id", integrationID).Str("operation", operationName).Int("triggered_jobs", triggered).Msg("more than one reconcile loop was triggered")
+	}
+
+	return triggered > 0, err
+}
+
 // markReconcileExhausted marks the installation unhealthy when its loop exhausts its error budget
 func (r *Runtime) markReconcileExhausted(ctx context.Context, e operations.ReconcileEnvelope, cause error) {
 	src := types.IntegrationSourceFrom(e.OperationContext)

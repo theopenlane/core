@@ -713,6 +713,36 @@ func (g *Gala) CountActiveJobsWithMetadata(ctx context.Context, metadataFragment
 	return len(jobs), nil
 }
 
+// TriggerActiveJobsWithMetadata makes every queued River job matching a JSONB metadata fragment available to run now
+// Running jobs are left untouched
+// Returns how many jobs were moved up and zero without error when Gala is not in durable mode
+func (g *Gala) TriggerActiveJobsWithMetadata(ctx context.Context, metadataFragment string) (int, error) {
+	if g.jobController == nil {
+		return 0, nil
+	}
+
+	jobs, err := g.activeJobsWithMetadata(ctx, metadataFragment)
+	if err != nil {
+		return 0, err
+	}
+
+	triggered := 0
+
+	for _, job := range jobs {
+		if job.State == rivertype.JobStateRunning {
+			continue
+		}
+
+		if _, err := g.jobController.JobRetry(ctx, job.ID); err != nil {
+			return triggered, err
+		}
+
+		triggered++
+	}
+
+	return triggered, nil
+}
+
 // PauseQueues pauses the queues of the namespaces' job kinds on every pod
 func (g *Gala) PauseQueues(ctx context.Context, namespaces ...Namespace) error {
 	return g.eachQueue(namespaces, func(queue string) error { return g.jobController.QueuePause(ctx, queue, nil) })

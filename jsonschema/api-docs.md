@@ -169,14 +169,20 @@ Config contains the configuration for the core server
             },
             "import": {}
         },
-        "googledrive": {},
+        "googledrive": {
+            "legacy": {}
+        },
         "googleworkspace": {},
-        "azureentraid": {},
+        "azureentraid": {
+            "legacy": {}
+        },
         "azuresecuritycenter": {
             "lighthouse": {}
         },
         "microsoftteams": {},
-        "onedrive": {},
+        "onedrive": {
+            "legacy": {}
+        },
         "oidclocal": {},
         "email": {
             "resend": {},
@@ -1863,7 +1869,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**objectstoreruntime**](#defsobjectstoreruntimeconfig)|`object`|||
 |[**googledrive**](#defsgoogledriveconfig)|`object`|||
 |[**googleworkspace**](#defsgoogleworkspaceconfig)|`object`|||
-|[**azureentraid**](#defsmicrosoftappconfig)|`object`|||
+|[**azureentraid**](#defsazureentraidconfig)|`object`|||
 |[**azuresecuritycenter**](#defsazuresecuritycenterconfig)|`object`|||
 |[**microsoftteams**](#defsmicrosoftteamsconfig)|`object`|||
 |[**onedrive**](#defsonedriveconfig)|`object`|||
@@ -1908,14 +1914,20 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
         },
         "import": {}
     },
-    "googledrive": {},
+    "googledrive": {
+        "legacy": {}
+    },
     "googleworkspace": {},
-    "azureentraid": {},
+    "azureentraid": {
+        "legacy": {}
+    },
     "azuresecuritycenter": {
         "lighthouse": {}
     },
     "microsoftteams": {},
-    "onedrive": {},
+    "onedrive": {
+        "legacy": {}
+    },
     "oidclocal": {},
     "email": {
         "resend": {},
@@ -2421,6 +2433,29 @@ supplies the region, endpoint, and credentials
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**pickerapikey**|`string`|||
+|[**legacy**](#defsgoogledriveappconfig)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "legacy": {}
+}
+```
+
+   
+<a name="defsgoogledriveappconfig"></a>
+#### $defs/googledrive\.AppConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2437,8 +2472,31 @@ supplies the region, endpoint, and credentials
 
 **Additional Properties:** not allowed   
    
+<a name="defsazureentraidconfig"></a>
+### $defs/azureentraid\.Config: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**applicationid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
+|[**legacy**](#defsmicrosoftappconfig)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "legacy": {}
+}
+```
+
+   
 <a name="defsmicrosoftappconfig"></a>
-### $defs/microsoft\.AppConfig: object
+#### $defs/microsoft\.AppConfig: object
 
 **Properties**
 
@@ -2496,6 +2554,7 @@ supplies the region, endpoint, and credentials
 |**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2509,7 +2568,31 @@ supplies the region, endpoint, and credentials
 |**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
 |**contentmode**|`string`|||
+|[**legacy**](#defsmicrosoftappconfig)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "legacy": {}
+}
+```
+
+   
+<a name="defsmicrosoftappconfig"></a>
+#### $defs/microsoft\.AppConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**applicationid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
 
 **Additional Properties:** not allowed   
    

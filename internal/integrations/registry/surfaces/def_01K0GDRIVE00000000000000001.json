@@ -1,11 +1,37 @@
 {
-  "hash": "e187d182fc70b41fbd5981c0adfa964e3a6dba8c19fb3e95fa5f450ab52db2ce",
-  "version": "01M49CHH2NPBMN1CMF8T09VJ94",
+  "hash": "023c70e12973fa3e3de4de9c074d8d699d7aa91a04edaccb4aa54e50ad42d4b2",
+  "version": "01M5G49E56STDPVRA0M6WQQJGF",
   "surface": {
     "id": "def_01K0GDRIVE00000000000000001",
     "credentials": [
       {
         "ref": "googleDriveCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive/google-drive-cred",
+          "$ref": "#/$defs/googleDriveCred",
+          "$defs": {
+            "googleDriveCred": {
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "ref": "googleDriveCredV2",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive/google-drive-cred",
@@ -65,16 +91,45 @@
               "domain": {
                 "type": "string",
                 "title": "Domain"
+              },
+              "selectedDocuments": {
+                "items": {
+                  "$ref": "#/$defs/SelectedResource"
+                },
+                "type": "array",
+                "title": "Selected Documents"
               }
             },
             "additionalProperties": false,
             "type": "object"
+          },
+          "SelectedResource": {
+            "properties": {
+              "id": {
+                "type": "string",
+                "title": "ID"
+              },
+              "name": {
+                "type": "string",
+                "title": "Name"
+              },
+              "parentId": {
+                "type": "string",
+                "title": "Parent ID"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "id"
+            ]
           }
         }
       }
     },
     "connections": [
-      "googleDriveCred"
+      "googleDriveCred",
+      "googleDriveCredV2"
     ],
     "operations": [
       {
@@ -106,13 +161,16 @@
                 }
               },
               "additionalProperties": false,
-              "type": "object",
-              "required": [
-                "folderId"
-              ]
+              "type": "object"
             }
           }
         }
+      },
+      {
+        "name": "PickerSession"
+      },
+      {
+        "name": "ResourceSelection"
       }
     ]
   }
