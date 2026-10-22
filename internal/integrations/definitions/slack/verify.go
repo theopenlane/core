@@ -32,22 +32,18 @@ func verify[T any](ctx context.Context, req types.ConnectionRequest[T], c *Clien
 	return InstallationMetadata{TeamID: resp.TeamID, TeamName: resp.Team, DefaultChannel: channel}, nil
 }
 
-// defaultChannel prefers the channel the user chose as user input over the one chosen during app install
+// defaultChannel prefers the channel chosen during app install over the one supplied as user input
 func defaultChannel[T any](req types.ConnectionRequest[T]) (string, error) {
+	if cred, ok := any(req.Credential).(slackCred); ok && cred.DefaultChannel != "" {
+		return cred.DefaultChannel, nil
+	}
+
 	input, err := userInput.Decode(req.Integration)
 	if err != nil {
 		return "", ErrUserInputDecode
 	}
 
-	if input.DefaultChannel != "" {
-		return input.DefaultChannel, nil
-	}
-
-	if cred, ok := any(req.Credential).(slackCred); ok {
-		return cred.DefaultChannel, nil
-	}
-
-	return "", nil
+	return input.DefaultChannel, nil
 }
 
 // installChannel returns the channel id Slack reports on the token response when the installer picked one
