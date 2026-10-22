@@ -1,22 +1,29 @@
 env:
   APP_NAME: ${BUILDKITE_PIPELINE_SLUG}
   IMAGE_REPO: ghcr.io/theopenlane/${APP_NAME}
-  GCR_REPO: us-west1-docker.pkg.dev/neural-vista-433523-c1/openlane/openlane
   IMAGE_TAG: ${BUILDKITE_BUILD_NUMBER}-${BUILDKITE_COMMIT:0:8}
   SONAR_HOST: https://sonarcloud.io
-  LARGE_RUNNER_QUEUE: self-hosted-garage-vms
-  SMALL_RUNNER_QUEUE: self-hosted-garage-vms
-  RUNNER_LARGE: "large"
-  RUNNER_SMALL: "small"
+
+  # graphql settings
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_HISTORY_SCHEMA_LOCATION: "internal/graphapi/historyschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-0dedz@current"
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
+
+  # build settings
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
+
+  # helm settings
   HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
+
+  # runner vars
+  LARGE_RUNNER_QUEUE: self-hosted-garage-vms
+  SMALL_RUNNER_QUEUE: self-hosted-garage-vms
+  RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
+  RUNNER_WORKLOAD_STANDARD: "standard"
 
 secrets:
   - GITHUB_TOKEN
@@ -38,7 +45,7 @@ steps:
         key: "generate"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         if_changed:
           - go.{mod,sum}
@@ -60,6 +67,9 @@ steps:
                 - "GOTOOLCHAIN=auto"
       - label: ":yaml: generate config"
         key: "generate_config"
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         if_changed:
           - go.{mod,sum}
@@ -81,6 +91,9 @@ steps:
                 - "GOTOOLCHAIN=auto"
       - label: ":construction: create draft config PR"
         key: "draft_pr_automation"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "generate_config"
         if: build.pull_request.id != null
         if_changed:
@@ -104,6 +117,9 @@ steps:
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":link: link PRs"
         key: "link_pr_automation"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "draft_pr_automation"
         if: build.pull_request.id != null
         if_changed:
@@ -128,6 +144,9 @@ steps:
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":helm: update helm chart"
         key: "helm_automation"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "generate_config"
         if: build.branch == "main"
         plugins:
@@ -152,6 +171,9 @@ steps:
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":arrows_counterclockwise: close draft config PRs"
         key: "post_merge_automation"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "helm_automation"
         if: build.branch == "main"
         plugins:
@@ -175,6 +197,9 @@ steps:
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":broom: cleanup draft PRs"
         key: "cleanup_draft_prs"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "post_merge_automation"
         if: build.branch == "main"
         plugins:
@@ -195,7 +220,7 @@ steps:
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         plugins:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -223,7 +248,7 @@ steps:
           - go.{mod,sum}
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_graphapi"
@@ -248,7 +273,7 @@ steps:
           - go.{mod,sum}
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_handlers"
@@ -277,7 +302,7 @@ steps:
             - internal/httpserve/handlers/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_non_api"
@@ -300,7 +325,7 @@ steps:
       - label: ":golang: go test - graphapi only %n/%t"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         key: "go_test_graph"
         parallelism: 4
         cancel_on_build_failing: true
@@ -335,7 +360,7 @@ steps:
       - label: ":golang: go test - events only"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         key: "go_test_events"
         cancel_on_build_failing: true
         if_changed: # only run when event driven code changes
@@ -379,11 +404,12 @@ steps:
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
                 - "CGO_ENABLED=0"
         artifact_paths: ["coverage-events.out", "junit-events.xml"]
-      - label: ":golang: go test - handlers only"
+      - label: ":golang: go test - handlers only %n/%t"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         key: "go_test_handlers"
+        parallelism: 2
         cancel_on_build_failing: true
         if_changed:
           include:
@@ -392,11 +418,7 @@ steps:
           exclude: # do not run tests if only cli files changed
             - cli/**
         env:
-          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
-        matrix:
-          setup:
-            version:
-              - 18-alpine
+          TEST_DB_URL: "docker://postgres:18-alpine"
         plugins:
           - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -414,7 +436,9 @@ steps:
                 - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
                 - "CGO_ENABLED=0"
-        artifact_paths: ["coverage-handlers.out", "junit-handlers.xml"]
+                - "BUILDKITE_PARALLEL_JOB"
+                - "BUILDKITE_PARALLEL_JOB_COUNT"
+        artifact_paths: ["coverage-handlers-*.out", "junit-handlers-*.xml"]
       - label: ":golang: go test - all except api"
         if_changed:
           include:
@@ -424,7 +448,7 @@ steps:
             - cli/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         key: "go_test_no_api"
         cancel_on_build_failing: true
         env:
@@ -456,7 +480,7 @@ steps:
           - "fga/**"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          size: $RUNNER_SMALL
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         key: "fga_test"
         plugins:
           - sparse-checkout#v1.10.0:
@@ -471,6 +495,9 @@ steps:
     steps:
       - label: ":buildkite: upload test analytics report"
         key: "test-analytics"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
         if_changed:
@@ -484,6 +511,8 @@ steps:
           #!/bin/bash
           graph_junits=()
           for f in junit-graph-*.xml; do graph_junits+=(-F "data=@$$f"); done
+          handlers_junits=()
+          for f in junit-handlers-*.xml; do handlers_junits+=(-F "data=@$$f"); done
           curl \
             -X POST \
             --fail-with-body \
@@ -491,7 +520,7 @@ steps:
             -F "data=@junit-no-api.xml" \
             "$${graph_junits[@]}" \
             -F "data=@junit-events.xml" \
-            -F "data=@junit-handlers.xml" \
+            "$${handlers_junits[@]}" \
             -F "format=junit" \
             -F "run_env[CI]=buildkite" \
             -F "run_env[key]=$BUILDKITE_BUILD_ID" \
@@ -510,14 +539,14 @@ steps:
               download: "junit-no-api.xml"
               step: "go_test_no_api"
           - artifacts#v1.11.0:
-              download: "junit-handlers.xml"
+              download: "junit-handlers-*.xml"
               step: "go_test_handlers"
       - label: ":github: upload PR reports"
         key: "scan-upload-pr"
         cancel_on_build_failing: true
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          size: $RUNNER_SMALL
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         if_changed:
           include:
             - "**.go"
@@ -528,7 +557,7 @@ steps:
         depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers", "go_test_events"]
         plugins:
           - artifacts#v1.11.0:
-              download: "coverage-handlers.out"
+              download: "coverage-handlers-*.out"
               step: "go_test_handlers"
           - artifacts#v1.11.0:
               download: "coverage-no-api.out"
@@ -537,7 +566,7 @@ steps:
               download: "coverage-graph-*.out"
               step: "go_test_graph"
           - artifacts#v1.11.0:
-              download: "junit-handlers.xml"
+              download: "junit-handlers-*.xml"
               step: "go_test_handlers"
           - artifacts#v1.11.0:
               download: "junit-no-api.xml"
@@ -569,7 +598,7 @@ steps:
         key: "scan-upload"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          size: $RUNNER_SMALL
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         if_changed:
           include:
             - "**.go"
@@ -586,10 +615,10 @@ steps:
               download: "coverage-graph-*.out"
               step: "go_test_graph"
           - artifacts#v1.11.0:
-              download: "coverage-handlers.out"
+              download: "coverage-handlers-*.out"
               step: "go_test_handlers"
           - artifacts#v1.11.0:
-              download: "junit-handlers.xml"
+              download: "junit-handlers-*.xml"
               step: "go_test_handlers"
           - artifacts#v1.11.0:
               download: "junit-no-api.xml"
@@ -633,7 +662,7 @@ steps:
             - cli/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         plugins:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -650,7 +679,7 @@ steps:
         key: "gobuild-cli"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         if_changed:
@@ -678,7 +707,7 @@ steps:
         artifact_paths: "bin/${APP_NAME}"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         plugins:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -696,7 +725,7 @@ steps:
         key: "gobuild-cli-release"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         plugins:
@@ -720,7 +749,7 @@ steps:
         if: build.branch !~ /^renovate\//
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          size: $RUNNER_SMALL
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         if_changed:
           - db/**
           - internal/ent/schema/**
@@ -741,7 +770,7 @@ steps:
         if_changed: "**.graphql"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          size: $RUNNER_SMALL
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         skip: "false"
         soft_fail:
           - exit_status: 1
@@ -793,7 +822,7 @@ steps:
         key: "docker-pr-build"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          size: $RUNNER_LARGE
+          workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         if_changed:
@@ -834,6 +863,9 @@ steps:
                 - NAME=${APP_NAME}
       - label: ":docker: docker build and publish"
         key: "docker-build-and-tag"
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         commands: |
@@ -867,7 +899,7 @@ steps:
         key: "apollo-publish-schema"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          size: $RUNNER_SMALL
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         skip: false
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         cancel_on_build_failing: true
@@ -890,7 +922,7 @@ steps:
         command: "rover graph publish --schema $$GRAPHQL_HISTORY_SCHEMA_LOCATION $$GRAPHQL_HISTORY_SCHEMA_NAME"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          size: $RUNNER_SMALL
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         plugins:
           - sparse-checkout#v1.10.0:
               paths:
@@ -909,7 +941,7 @@ steps:
         key: "atlas_migrate"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          size: $RUNNER_SMALL
+          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         plugins:
           - sparse-checkout#v1.10.0:
               paths:
