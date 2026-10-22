@@ -1333,16 +1333,6 @@ func PurposeNotIn(vs ...enums.DomainPurpose) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.FieldNotIn(FieldPurpose, v...))
 }
 
-// PurposeIsNil applies the IsNil predicate on the "purpose" field.
-func PurposeIsNil() predicate.CustomDomainHistory {
-	return predicate.CustomDomainHistory(sql.FieldIsNull(FieldPurpose))
-}
-
-// PurposeNotNil applies the NotNil predicate on the "purpose" field.
-func PurposeNotNil() predicate.CustomDomainHistory {
-	return predicate.CustomDomainHistory(sql.FieldNotNull(FieldPurpose))
-}
-
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.CustomDomainHistory) predicate.CustomDomainHistory {
 	return predicate.CustomDomainHistory(sql.AndPredicates(predicates...))

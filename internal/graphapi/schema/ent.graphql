@@ -17077,7 +17077,7 @@ type CustomDomain implements Node @modules(names: ["trust_center_module","assess
   """
   what this domain is used for
   """
-  purpose: CustomDomainDomainPurpose
+  purpose: CustomDomainDomainPurpose!
   owner: Organization
   mappableDomain: MappableDomain!
   dnsVerification: DNSVerification
@@ -17342,8 +17342,6 @@ input CustomDomainWhereInput {
   purposeNEQ: CustomDomainDomainPurpose
   purposeIn: [CustomDomainDomainPurpose!]
   purposeNotIn: [CustomDomainDomainPurpose!]
-  purposeIsNil: Boolean
-  purposeNotNil: Boolean
   """
   owner edge predicates
   """

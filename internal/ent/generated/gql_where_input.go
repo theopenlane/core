@@ -18618,12 +18618,10 @@ type CustomDomainWhereInput struct {
 	DomainTypeNotIn []enums.CustomDomainType `json:"domainTypeNotIn,omitempty"`
 
 	// "purpose" field predicates.
-	Purpose       *enums.DomainPurpose  `json:"purpose,omitempty"`
-	PurposeNEQ    *enums.DomainPurpose  `json:"purposeNEQ,omitempty"`
-	PurposeIn     []enums.DomainPurpose `json:"purposeIn,omitempty"`
-	PurposeNotIn  []enums.DomainPurpose `json:"purposeNotIn,omitempty"`
-	PurposeIsNil  bool                  `json:"purposeIsNil,omitempty"`
-	PurposeNotNil bool                  `json:"purposeNotNil,omitempty"`
+	Purpose      *enums.DomainPurpose  `json:"purpose,omitempty"`
+	PurposeNEQ   *enums.DomainPurpose  `json:"purposeNEQ,omitempty"`
+	PurposeIn    []enums.DomainPurpose `json:"purposeIn,omitempty"`
+	PurposeNotIn []enums.DomainPurpose `json:"purposeNotIn,omitempty"`
 
 	// "tags" JSON-string-array predicates.
 	TagsHas *string `json:"tagsHas,omitempty"`
@@ -19125,12 +19123,6 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 	}
 	if len(i.PurposeNotIn) > 0 {
 		predicates = append(predicates, customdomain.PurposeNotIn(i.PurposeNotIn...))
-	}
-	if i.PurposeIsNil {
-		predicates = append(predicates, customdomain.PurposeIsNil())
-	}
-	if i.PurposeNotNil {
-		predicates = append(predicates, customdomain.PurposeNotNil())
 	}
 
 	if i.TagsHas != nil {

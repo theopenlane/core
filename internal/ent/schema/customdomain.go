@@ -85,7 +85,6 @@ func (CustomDomain) Fields() []ent.Field {
 		field.Enum("purpose").
 			Immutable().
 			Comment("what this domain is used for").
-			Optional().
 			Default(enums.DomainPurposeTrustcenter.String()).
 			GoType(enums.DomainPurpose("")),
 	}

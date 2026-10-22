@@ -1384,7 +1384,7 @@ var (
 		{Name: "cname_record", Type: field.TypeString, Size: 255},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "domain_type", Type: field.TypeEnum, Enums: []string{"PREVIEW", "EXTERNAL", "UNKNOWN"}, Default: "UNKNOWN"},
-		{Name: "purpose", Type: field.TypeEnum, Nullable: true, Enums: []string{"TRUSTCENTER", "ASSESSMENT"}, Default: "TRUSTCENTER"},
+		{Name: "purpose", Type: field.TypeEnum, Enums: []string{"TRUSTCENTER", "ASSESSMENT"}, Default: "TRUSTCENTER"},
 		{Name: "mappable_domain_id", Type: field.TypeString},
 		{Name: "dns_verification_id", Type: field.TypeString, Nullable: true},
 		{Name: "dns_verification_custom_domains", Type: field.TypeString, Nullable: true},

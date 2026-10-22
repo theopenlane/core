@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"entgo.io/ent"
@@ -29,15 +28,6 @@ func HookCreateCustomDomain() ent.Hook {
 				domainType, ok := m.DomainType()
 				if !ok || domainType == enums.CustomDomainTypeUnknown {
 					m.SetDomainType(enums.CustomDomainTypeExternal)
-				}
-
-				purpose, ok := m.Purpose()
-				if !ok {
-					return nil, errors.New("domain purpose must be provided") //nolint:err113
-				}
-
-				if purpose == enums.DomainPurposeInvalid {
-					return nil, errors.New("unsupported domain purpose") //nolint:err113
 				}
 
 				v, err := next.Mutate(ctx, m)

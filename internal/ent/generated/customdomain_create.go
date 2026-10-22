@@ -384,6 +384,9 @@ func (_c *CustomDomainCreate) check() error {
 			return &ValidationError{Name: "domain_type", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.domain_type": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Purpose(); !ok {
+		return &ValidationError{Name: "purpose", err: errors.New(`generated: missing required field "CustomDomain.purpose"`)}
+	}
 	if v, ok := _c.mutation.Purpose(); ok {
 		if err := customdomain.PurposeValidator(v); err != nil {
 			return &ValidationError{Name: "purpose", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.purpose": %w`, err)}

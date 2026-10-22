@@ -24731,7 +24731,7 @@ type CustomDomainHistory implements Node {
   """
   what this domain is used for
   """
-  purpose: CustomDomainHistoryDomainPurpose
+  purpose: CustomDomainHistoryDomainPurpose!
 }
 """
 A connection to a list of items.
@@ -25031,8 +25031,6 @@ input CustomDomainHistoryWhereInput {
   purposeNEQ: CustomDomainHistoryDomainPurpose
   purposeIn: [CustomDomainHistoryDomainPurpose!]
   purposeNotIn: [CustomDomainHistoryDomainPurpose!]
-  purposeIsNil: Boolean
-  purposeNotNil: Boolean
 }
 type DiscussionHistory implements Node {
   id: ID!

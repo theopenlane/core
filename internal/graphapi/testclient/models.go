@@ -10020,10 +10020,10 @@ type CustomDomain struct {
 	// the type of this custom domain
 	DomainType enums.CustomDomainType `json:"domainType"`
 	// what this domain is used for
-	Purpose         *enums.DomainPurpose `json:"purpose,omitempty"`
-	Owner           *Organization        `json:"owner,omitempty"`
-	MappableDomain  *MappableDomain      `json:"mappableDomain"`
-	DNSVerification *DNSVerification     `json:"dnsVerification,omitempty"`
+	Purpose         enums.DomainPurpose `json:"purpose"`
+	Owner           *Organization       `json:"owner,omitempty"`
+	MappableDomain  *MappableDomain     `json:"mappableDomain"`
+	DNSVerification *DNSVerification    `json:"dnsVerification,omitempty"`
 }
 
 func (CustomDomain) IsNode() {}
@@ -10262,12 +10262,10 @@ type CustomDomainWhereInput struct {
 	DomainTypeIn    []enums.CustomDomainType `json:"domainTypeIn,omitempty"`
 	DomainTypeNotIn []enums.CustomDomainType `json:"domainTypeNotIn,omitempty"`
 	// purpose field predicates
-	Purpose       *enums.DomainPurpose  `json:"purpose,omitempty"`
-	PurposeNeq    *enums.DomainPurpose  `json:"purposeNEQ,omitempty"`
-	PurposeIn     []enums.DomainPurpose `json:"purposeIn,omitempty"`
-	PurposeNotIn  []enums.DomainPurpose `json:"purposeNotIn,omitempty"`
-	PurposeIsNil  *bool                 `json:"purposeIsNil,omitempty"`
-	PurposeNotNil *bool                 `json:"purposeNotNil,omitempty"`
+	Purpose      *enums.DomainPurpose  `json:"purpose,omitempty"`
+	PurposeNeq   *enums.DomainPurpose  `json:"purposeNEQ,omitempty"`
+	PurposeIn    []enums.DomainPurpose `json:"purposeIn,omitempty"`
+	PurposeNotIn []enums.DomainPurpose `json:"purposeNotIn,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`

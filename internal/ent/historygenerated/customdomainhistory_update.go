@@ -115,9 +115,6 @@ func (_u *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldTrustCenterID, field.TypeString)
 	}
-	if _u.mutation.PurposeCleared() {
-		_spec.ClearField(customdomainhistory.FieldPurpose, field.TypeEnum)
-	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{customdomainhistory.Label}
@@ -253,9 +250,6 @@ func (_u *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Cus
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldTrustCenterID, field.TypeString)
-	}
-	if _u.mutation.PurposeCleared() {
-		_spec.ClearField(customdomainhistory.FieldPurpose, field.TypeEnum)
 	}
 	_node = &CustomDomainHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -174,7 +174,6 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
 				OwnerID:          lo.ToPtr(th.SharedTestUser1.OrganizationID),
-				Purpose:          &enums.DomainPurposeTrustcenter,
 				DomainType:       &enums.CustomDomainTypeExternal,
 			},
 			client: suite.Client.API,

@@ -411,6 +411,9 @@ func (_c *CustomDomainHistoryCreate) check() error {
 			return &ValidationError{Name: "domain_type", err: fmt.Errorf(`historygenerated: validator failed for field "CustomDomainHistory.domain_type": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Purpose(); !ok {
+		return &ValidationError{Name: "purpose", err: errors.New(`historygenerated: missing required field "CustomDomainHistory.purpose"`)}
+	}
 	if v, ok := _c.mutation.Purpose(); ok {
 		if err := customdomainhistory.PurposeValidator(v); err != nil {
 			return &ValidationError{Name: "purpose", err: fmt.Errorf(`historygenerated: validator failed for field "CustomDomainHistory.purpose": %w`, err)}

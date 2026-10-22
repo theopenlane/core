@@ -405,9 +405,6 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomain.FieldTrustCenterID, field.TypeString)
 	}
-	if _u.mutation.PurposeCleared() {
-		_spec.ClearField(customdomain.FieldPurpose, field.TypeEnum)
-	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -890,9 +887,6 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomain.FieldTrustCenterID, field.TypeString)
-	}
-	if _u.mutation.PurposeCleared() {
-		_spec.ClearField(customdomain.FieldPurpose, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
