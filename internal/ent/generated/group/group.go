@@ -71,6 +71,12 @@ const (
 	EdgeProgramBlockedGroups = "program_blocked_groups"
 	// EdgeProgramViewers holds the string denoting the program_viewers edge name in mutations.
 	EdgeProgramViewers = "program_viewers"
+	// EdgeReportEditors holds the string denoting the report_editors edge name in mutations.
+	EdgeReportEditors = "report_editors"
+	// EdgeReportBlockedGroups holds the string denoting the report_blocked_groups edge name in mutations.
+	EdgeReportBlockedGroups = "report_blocked_groups"
+	// EdgeReportViewers holds the string denoting the report_viewers edge name in mutations.
+	EdgeReportViewers = "report_viewers"
 	// EdgeRiskEditors holds the string denoting the risk_editors edge name in mutations.
 	EdgeRiskEditors = "risk_editors"
 	// EdgeRiskBlockedGroups holds the string denoting the risk_blocked_groups edge name in mutations.
@@ -195,6 +201,21 @@ const (
 	// ProgramViewersInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramViewersInverseTable = "programs"
+	// ReportEditorsTable is the table that holds the report_editors relation/edge. The primary key declared below.
+	ReportEditorsTable = "report_editors"
+	// ReportEditorsInverseTable is the table name for the Report entity.
+	// It exists in this package in order to avoid circular dependency with the "report" package.
+	ReportEditorsInverseTable = "reports"
+	// ReportBlockedGroupsTable is the table that holds the report_blocked_groups relation/edge. The primary key declared below.
+	ReportBlockedGroupsTable = "report_blocked_groups"
+	// ReportBlockedGroupsInverseTable is the table name for the Report entity.
+	// It exists in this package in order to avoid circular dependency with the "report" package.
+	ReportBlockedGroupsInverseTable = "reports"
+	// ReportViewersTable is the table that holds the report_viewers relation/edge. The primary key declared below.
+	ReportViewersTable = "report_viewers"
+	// ReportViewersInverseTable is the table name for the Report entity.
+	// It exists in this package in order to avoid circular dependency with the "report" package.
+	ReportViewersInverseTable = "reports"
 	// RiskEditorsTable is the table that holds the risk_editors relation/edge. The primary key declared below.
 	RiskEditorsTable = "risk_editors"
 	// RiskEditorsInverseTable is the table name for the Risk entity.
@@ -547,6 +568,8 @@ var ForeignKeys = []string{
 	"organization_program_creators",
 	"organization_program_membership_creators",
 	"organization_remediation_creators",
+	"organization_report_creators",
+	"organization_report_membership_creators",
 	"organization_review_creators",
 	"organization_risk_creators",
 	"organization_scan_creators",
@@ -618,6 +641,15 @@ var (
 	// ProgramViewersPrimaryKey and ProgramViewersColumn2 are the table columns denoting the
 	// primary key for the program_viewers relation (M2M).
 	ProgramViewersPrimaryKey = []string{"program_id", "group_id"}
+	// ReportEditorsPrimaryKey and ReportEditorsColumn2 are the table columns denoting the
+	// primary key for the report_editors relation (M2M).
+	ReportEditorsPrimaryKey = []string{"report_id", "group_id"}
+	// ReportBlockedGroupsPrimaryKey and ReportBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the report_blocked_groups relation (M2M).
+	ReportBlockedGroupsPrimaryKey = []string{"report_id", "group_id"}
+	// ReportViewersPrimaryKey and ReportViewersColumn2 are the table columns denoting the
+	// primary key for the report_viewers relation (M2M).
+	ReportViewersPrimaryKey = []string{"report_id", "group_id"}
 	// RiskEditorsPrimaryKey and RiskEditorsColumn2 are the table columns denoting the
 	// primary key for the risk_editors relation (M2M).
 	RiskEditorsPrimaryKey = []string{"risk_id", "group_id"}
@@ -776,7 +808,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [11]ent.Hook
+	Hooks        [12]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -973,6 +1005,48 @@ func ByProgramViewersCount(opts ...sql.OrderTermOption) OrderOption {
 func ByProgramViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProgramViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReportEditorsCount orders the results by report_editors count.
+func ByReportEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportEditorsStep(), opts...)
+	}
+}
+
+// ByReportEditors orders the results by report_editors terms.
+func ByReportEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReportBlockedGroupsCount orders the results by report_blocked_groups count.
+func ByReportBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByReportBlockedGroups orders the results by report_blocked_groups terms.
+func ByReportBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReportViewersCount orders the results by report_viewers count.
+func ByReportViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportViewersStep(), opts...)
+	}
+}
+
+// ByReportViewers orders the results by report_viewers terms.
+func ByReportViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1687,6 +1761,27 @@ func newProgramViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ProgramViewersTable, ProgramViewersPrimaryKey...),
+	)
+}
+func newReportEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReportEditorsTable, ReportEditorsPrimaryKey...),
+	)
+}
+func newReportBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReportBlockedGroupsTable, ReportBlockedGroupsPrimaryKey...),
+	)
+}
+func newReportViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReportViewersTable, ReportViewersPrimaryKey...),
 	)
 }
 func newRiskEditorsStep() *sqlgraph.Step {

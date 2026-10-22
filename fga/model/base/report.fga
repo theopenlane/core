@@ -1,0 +1,18 @@
+module base
+
+type report
+  relations
+    define can_view: (viewer but not blocked)
+    define can_edit: (editor but not blocked) or can_delete
+    define can_delete: owner or parent_admin
+    define can_share: can_edit
+
+    define owner: [user]
+    define member: [user]
+    define editor: [user, service, group#member] or owner or parent_admin
+    define viewer: [user, service, group#member] or member or editor or organization_viewer
+    define blocked: [user, service, group#member]
+    define organization_viewer: [organization#member]
+    define parent_admin: full_access from parent_context
+    define audit_log_viewer: can_view
+    define parent_context: [organization]

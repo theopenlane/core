@@ -77,6 +77,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -237,6 +239,8 @@ func checkColumn(t, c string) error {
 			program.Table:                    program.ValidColumn,
 			programmembership.Table:          programmembership.ValidColumn,
 			remediation.Table:                remediation.ValidColumn,
+			report.Table:                     report.ValidColumn,
+			reportmembership.Table:           reportmembership.ValidColumn,
 			review.Table:                     review.ValidColumn,
 			risk.Table:                       risk.ValidColumn,
 			sladefinition.Table:              sladefinition.ValidColumn,

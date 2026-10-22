@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -57,6 +58,9 @@ type GroupQuery struct {
 	withProgramEditors                          *ProgramQuery
 	withProgramBlockedGroups                    *ProgramQuery
 	withProgramViewers                          *ProgramQuery
+	withReportEditors                           *ReportQuery
+	withReportBlockedGroups                     *ReportQuery
+	withReportViewers                           *ReportQuery
 	withRiskEditors                             *RiskQuery
 	withRiskBlockedGroups                       *RiskQuery
 	withRiskViewers                             *RiskQuery
@@ -113,6 +117,9 @@ type GroupQuery struct {
 	withNamedProgramEditors                     map[string]*ProgramQuery
 	withNamedProgramBlockedGroups               map[string]*ProgramQuery
 	withNamedProgramViewers                     map[string]*ProgramQuery
+	withNamedReportEditors                      map[string]*ReportQuery
+	withNamedReportBlockedGroups                map[string]*ReportQuery
+	withNamedReportViewers                      map[string]*ReportQuery
 	withNamedRiskEditors                        map[string]*RiskQuery
 	withNamedRiskBlockedGroups                  map[string]*RiskQuery
 	withNamedRiskViewers                        map[string]*RiskQuery
@@ -278,6 +285,72 @@ func (_q *GroupQuery) QueryProgramViewers() *ProgramQuery {
 			sqlgraph.From(group.Table, group.FieldID, selector),
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ProgramViewersTable, group.ProgramViewersPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReportEditors chains the current query on the "report_editors" edge.
+func (_q *GroupQuery) QueryReportEditors() *ReportQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ReportEditorsTable, group.ReportEditorsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReportBlockedGroups chains the current query on the "report_blocked_groups" edge.
+func (_q *GroupQuery) QueryReportBlockedGroups() *ReportQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ReportBlockedGroupsTable, group.ReportBlockedGroupsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReportViewers chains the current query on the "report_viewers" edge.
+func (_q *GroupQuery) QueryReportViewers() *ReportQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.ReportViewersTable, group.ReportViewersPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -1581,6 +1654,9 @@ func (_q *GroupQuery) Clone() *GroupQuery {
 		withProgramEditors:                     _q.withProgramEditors.Clone(),
 		withProgramBlockedGroups:               _q.withProgramBlockedGroups.Clone(),
 		withProgramViewers:                     _q.withProgramViewers.Clone(),
+		withReportEditors:                      _q.withReportEditors.Clone(),
+		withReportBlockedGroups:                _q.withReportBlockedGroups.Clone(),
+		withReportViewers:                      _q.withReportViewers.Clone(),
 		withRiskEditors:                        _q.withRiskEditors.Clone(),
 		withRiskBlockedGroups:                  _q.withRiskBlockedGroups.Clone(),
 		withRiskViewers:                        _q.withRiskViewers.Clone(),
@@ -1679,6 +1755,39 @@ func (_q *GroupQuery) WithProgramViewers(opts ...func(*ProgramQuery)) *GroupQuer
 		opt(query)
 	}
 	_q.withProgramViewers = query
+	return _q
+}
+
+// WithReportEditors tells the query-builder to eager-load the nodes that are connected to
+// the "report_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithReportEditors(opts ...func(*ReportQuery)) *GroupQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReportEditors = query
+	return _q
+}
+
+// WithReportBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "report_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithReportBlockedGroups(opts ...func(*ReportQuery)) *GroupQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReportBlockedGroups = query
+	return _q
+}
+
+// WithReportViewers tells the query-builder to eager-load the nodes that are connected to
+// the "report_viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithReportViewers(opts ...func(*ReportQuery)) *GroupQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReportViewers = query
 	return _q
 }
 
@@ -2317,11 +2426,14 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		nodes       = []*Group{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [54]bool{
+		loadedTypes = [57]bool{
 			_q.withOwner != nil,
 			_q.withProgramEditors != nil,
 			_q.withProgramBlockedGroups != nil,
 			_q.withProgramViewers != nil,
+			_q.withReportEditors != nil,
+			_q.withReportBlockedGroups != nil,
+			_q.withReportViewers != nil,
 			_q.withRiskEditors != nil,
 			_q.withRiskBlockedGroups != nil,
 			_q.withRiskViewers != nil,
@@ -2422,6 +2534,27 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := _q.loadProgramViewers(ctx, query, nodes,
 			func(n *Group) { n.Edges.ProgramViewers = []*Program{} },
 			func(n *Group, e *Program) { n.Edges.ProgramViewers = append(n.Edges.ProgramViewers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReportEditors; query != nil {
+		if err := _q.loadReportEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.ReportEditors = []*Report{} },
+			func(n *Group, e *Report) { n.Edges.ReportEditors = append(n.Edges.ReportEditors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReportBlockedGroups; query != nil {
+		if err := _q.loadReportBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.ReportBlockedGroups = []*Report{} },
+			func(n *Group, e *Report) { n.Edges.ReportBlockedGroups = append(n.Edges.ReportBlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReportViewers; query != nil {
+		if err := _q.loadReportViewers(ctx, query, nodes,
+			func(n *Group) { n.Edges.ReportViewers = []*Report{} },
+			func(n *Group, e *Report) { n.Edges.ReportViewers = append(n.Edges.ReportViewers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2819,6 +2952,27 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := _q.loadProgramViewers(ctx, query, nodes,
 			func(n *Group) { n.appendNamedProgramViewers(name) },
 			func(n *Group, e *Program) { n.appendNamedProgramViewers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReportEditors {
+		if err := _q.loadReportEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedReportEditors(name) },
+			func(n *Group, e *Report) { n.appendNamedReportEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReportBlockedGroups {
+		if err := _q.loadReportBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedReportBlockedGroups(name) },
+			func(n *Group, e *Report) { n.appendNamedReportBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReportViewers {
+		if err := _q.loadReportViewers(ctx, query, nodes,
+			func(n *Group) { n.appendNamedReportViewers(name) },
+			func(n *Group, e *Report) { n.appendNamedReportViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3371,6 +3525,189 @@ func (_q *GroupQuery) loadProgramViewers(ctx context.Context, query *ProgramQuer
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "program_viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadReportEditors(ctx context.Context, query *ReportQuery, nodes []*Group, init func(*Group), assign func(*Group, *Report)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.ReportEditorsTable)
+		s.Join(joinT).On(s.C(report.FieldID), joinT.C(group.ReportEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ReportEditorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.ReportEditorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Report](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "report_editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadReportBlockedGroups(ctx context.Context, query *ReportQuery, nodes []*Group, init func(*Group), assign func(*Group, *Report)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.ReportBlockedGroupsTable)
+		s.Join(joinT).On(s.C(report.FieldID), joinT.C(group.ReportBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ReportBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.ReportBlockedGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Report](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "report_blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadReportViewers(ctx context.Context, query *ReportQuery, nodes []*Group, init func(*Group), assign func(*Group, *Report)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.ReportViewersTable)
+		s.Join(joinT).On(s.C(report.FieldID), joinT.C(group.ReportViewersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.ReportViewersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.ReportViewersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Report](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "report_viewers" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -6414,6 +6751,48 @@ func (_q *GroupQuery) WithNamedProgramViewers(name string, opts ...func(*Program
 		_q.withNamedProgramViewers = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedProgramViewers[name] = query
+	return _q
+}
+
+// WithNamedReportEditors tells the query-builder to eager-load the nodes that are connected to the "report_editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedReportEditors(name string, opts ...func(*ReportQuery)) *GroupQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReportEditors == nil {
+		_q.withNamedReportEditors = make(map[string]*ReportQuery)
+	}
+	_q.withNamedReportEditors[name] = query
+	return _q
+}
+
+// WithNamedReportBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "report_blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedReportBlockedGroups(name string, opts ...func(*ReportQuery)) *GroupQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReportBlockedGroups == nil {
+		_q.withNamedReportBlockedGroups = make(map[string]*ReportQuery)
+	}
+	_q.withNamedReportBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedReportViewers tells the query-builder to eager-load the nodes that are connected to the "report_viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedReportViewers(name string, opts ...func(*ReportQuery)) *GroupQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReportViewers == nil {
+		_q.withNamedReportViewers = make(map[string]*ReportQuery)
+	}
+	_q.withNamedReportViewers[name] = query
 	return _q
 }
 

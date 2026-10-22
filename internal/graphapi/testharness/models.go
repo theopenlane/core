@@ -239,6 +239,16 @@ type ProgramMemberBuilder struct {
 	Role      string
 }
 
+type ReportBuilder struct {
+	Client *Client
+
+	Name          string
+	Query         string
+	Variables     map[string]any
+	Visibility    enums.ReportVisibility
+	ReportOwnerID string
+}
+
 type ProcedureBuilder struct {
 	Client *Client
 
@@ -1236,6 +1246,47 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 	RequireNoError(t, err)
 
 	return programMember
+}
+
+func (r *ReportBuilder) MustNew(ctx context.Context, t *testing.T) *testclient.CreateReport_CreateReport_Report {
+	t.Helper()
+
+	if r.Name == "" {
+		r.Name = gofakeit.AppName()
+	}
+
+	if r.Query == "" {
+		r.Query = `query ReportTasks {
+  tasks(first: 10) {
+    edges {
+      node {
+        id
+        title
+        status
+      }
+    }
+  }
+}`
+	}
+
+	input := testclient.CreateReportInput{
+		Name:      r.Name,
+		Query:     r.Query,
+		Variables: r.Variables,
+	}
+
+	if r.Visibility != "" {
+		input.Visibility = lo.ToPtr(r.Visibility)
+	}
+
+	if r.ReportOwnerID != "" {
+		input.ReportOwnerID = &r.ReportOwnerID
+	}
+
+	resp, err := r.Client.API.CreateReport(ctx, input)
+	RequireNoError(t, err)
+
+	return &resp.CreateReport.Report
 }
 
 // MustNew procedure builder is used to create, without authz checks, procedures in the database

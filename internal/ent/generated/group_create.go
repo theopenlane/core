@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -413,6 +414,51 @@ func (_c *GroupCreate) AddProgramViewers(v ...*Program) *GroupCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddProgramViewerIDs(ids...)
+}
+
+// AddReportEditorIDs adds the "report_editors" edge to the Report entity by IDs.
+func (_c *GroupCreate) AddReportEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddReportEditorIDs(ids...)
+	return _c
+}
+
+// AddReportEditors adds the "report_editors" edges to the Report entity.
+func (_c *GroupCreate) AddReportEditors(v ...*Report) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReportEditorIDs(ids...)
+}
+
+// AddReportBlockedGroupIDs adds the "report_blocked_groups" edge to the Report entity by IDs.
+func (_c *GroupCreate) AddReportBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddReportBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddReportBlockedGroups adds the "report_blocked_groups" edges to the Report entity.
+func (_c *GroupCreate) AddReportBlockedGroups(v ...*Report) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReportBlockedGroupIDs(ids...)
+}
+
+// AddReportViewerIDs adds the "report_viewers" edge to the Report entity by IDs.
+func (_c *GroupCreate) AddReportViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddReportViewerIDs(ids...)
+	return _c
+}
+
+// AddReportViewers adds the "report_viewers" edges to the Report entity.
+func (_c *GroupCreate) AddReportViewers(v ...*Report) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReportViewerIDs(ids...)
 }
 
 // AddRiskEditorIDs adds the "risk_editors" edge to the Risk entity by IDs.
@@ -1472,6 +1518,54 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReportEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportEditorsTable,
+			Columns: group.ReportEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReportBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportBlockedGroupsTable,
+			Columns: group.ReportBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReportViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportViewersTable,
+			Columns: group.ReportViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

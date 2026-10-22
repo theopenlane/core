@@ -1,0 +1,156 @@
+extend type Query {
+    """
+    Look up reportMembership by ID
+    """
+     reportMembership(
+        """
+        ID of the reportMembership
+        """
+        id: ID!
+    ):  ReportMembership!
+}
+
+extend type Mutation{
+    """
+    Create a new reportMembership
+    """
+    createReportMembership(
+        """
+        values of the reportMembership
+        """
+        input: CreateReportMembershipInput!
+    ): ReportMembershipCreatePayload!
+    """
+    Create multiple new reportMemberships
+    """
+    createBulkReportMembership(
+        """
+        values of the reportMembership
+        """
+        input: [CreateReportMembershipInput!]
+    ): ReportMembershipBulkCreatePayload!
+    """
+    Update multiple existing reportMemberships
+    """
+    updateBulkReportMembership(
+        """
+        IDs of the reportMemberships to update
+        """
+        ids: [ID!]!
+        """
+        values to update the reportMemberships with
+        """
+        input: UpdateReportMembershipInput!
+    ): ReportMembershipBulkUpdatePayload!
+    """
+    Update an existing reportMembership
+    """
+    updateReportMembership(
+        """
+        ID of the reportMembership
+        """
+        id: ID!
+        """
+        New values for the reportMembership
+        """
+        input: UpdateReportMembershipInput!
+    ): ReportMembershipUpdatePayload!
+    """
+    Delete an existing reportMembership
+    """
+    deleteReportMembership(
+        """
+        ID of the reportMembership
+        """
+        id: ID!
+    ): ReportMembershipDeletePayload!
+    """
+    Delete multiple reportMemberships
+    """
+    deleteBulkReportMembership(
+        """
+        IDs of the reportMemberships to delete
+        """
+        ids: [ID!]!
+    ): ReportMembershipBulkDeletePayload!
+}
+
+"""
+Return response for createReportMembership mutation
+"""
+type ReportMembershipCreatePayload {
+    """
+    Created reportMembership
+    """
+    reportMembership: ReportMembership!
+}
+
+"""
+Return response for updateReportMembership mutation
+"""
+type ReportMembershipUpdatePayload {
+    """
+    Updated reportMembership
+    """
+    reportMembership: ReportMembership!
+}
+
+"""
+Return response for deleteReportMembership mutation
+"""
+type ReportMembershipDeletePayload {
+    """
+    Deleted reportMembership ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkReportMembership mutation
+"""
+type ReportMembershipBulkCreatePayload {
+    """
+    Created reportMemberships
+    """
+    reportMemberships: [ReportMembership!]
+}
+
+"""
+Return response for updateBulkReportMembership mutation
+"""
+type ReportMembershipBulkUpdatePayload {
+    """
+    Updated reportMemberships
+    """
+    reportMemberships: [ReportMembership!]
+    """
+    IDs of the updated reportMemberships
+    """
+    updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
+}
+
+"""
+Return response for deleteBulkReportMembership mutation
+"""
+type ReportMembershipBulkDeletePayload {
+    """
+    Deleted reportMembership IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of reportMemberships that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}
