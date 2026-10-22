@@ -12,6 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox/middleware/echocontext"
 
+	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/iam/auth"
 )
@@ -35,6 +36,8 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 
 	customDomain, err := suite.db.CustomDomain.Create().
 		SetCnameRecord("trust.meow.org").
+		SetPurpose(enums.DomainPurposeTrustcenter).
+		SetDomainType(enums.CustomDomainTypeExternal).
 		SetMappableDomainID(mappableDomain.ID).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(testUser1.UserCtx)
@@ -42,6 +45,8 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 
 	previewDomain, err := suite.db.CustomDomain.Create().
 		SetCnameRecord("preview.meow.org").
+		SetPurpose(enums.DomainPurposeTrustcenter).
+		SetDomainType(enums.CustomDomainTypePreview).
 		SetMappableDomainID(mappableDomain.ID).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(testUser1.UserCtx)
