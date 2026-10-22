@@ -1,6 +1,6 @@
 {
-  "hash": "e63076851caf63e9f87b0b8fb7af66a74300e3915a5fd62fee9ea4fbfe9a14f1",
-  "version": "01M5D958QRHMN98E6K3J788ZNX",
+  "hash": "a92e289e860647d9729bf3167c35037f2418bf7ed11dde958d594df105840072",
+  "version": "01M5J5PXC1ESH76HFVGSXK612G",
   "surface": {
     "id": "def_01K0SLACK000000000000000001",
     "credentials": [
@@ -157,9 +157,6 @@
       },
       {
         "name": "OrganizationsPendingDeletionMessage"
-      },
-      {
-        "name": "ResourceSelection"
       },
       {
         "name": "TestMessageSendOperation"
