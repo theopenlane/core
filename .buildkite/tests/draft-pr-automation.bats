@@ -36,6 +36,7 @@ SCRIPT
     cat > "$TEST_TEMP_DIR/stubs.sh" <<STUB
 temp_workspace="$TEST_TEMP_DIR/workspace"
 install_dependencies() { :; }
+setup_git_auth() { :; }
 create_temp_workspace() { mkdir -p "\$temp_workspace"; echo "\$temp_workspace"; }
 log_execution_context() { :; }
 pr_has_config_changes() { if [ "\${PR_HAS_CHANGES:-0}" -eq 0 ]; then return 0; else return 1; fi }

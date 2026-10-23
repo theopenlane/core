@@ -20,7 +20,7 @@ env:
   APOLLO_CONFIG_HOME: $HOME
 
   # helm settings
-  HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
+  HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
   # runner vars
@@ -32,7 +32,6 @@ env:
 secrets:
   - GITHUB_TOKEN
   - SLACK_WEBHOOK_URL
-  - GITHUB_SSH_PRIVATE_KEY
   - ANALYTICS_KEY
   - SONAR_TOKEN
   - ATLAS_CLOUD_TOKEN
@@ -117,7 +116,6 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -148,7 +146,6 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":helm: update helm chart"
@@ -174,7 +171,6 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -201,7 +197,6 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -222,7 +217,6 @@ steps:
               propagate-uid-gid: true
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
       - label: ":rocket: update image tag for release"
         key: "image_tag_automation"
@@ -245,7 +239,6 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"

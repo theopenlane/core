@@ -7,11 +7,13 @@ source "${SCRIPT_DIR}/lib/common.sh"
 source "${SCRIPT_DIR}/lib/templates.sh"
 
 YQ_VERSION=${YQ_VERSION:-4.45.4}
-repo="${HELM_CHART_REPO}"
+helm_repo="${HELM_CHART_REPO}"
+repo="$(normalize_github_repo "$helm_repo")"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
 # Install dependencies using shared library function
 install_dependencies
+setup_git_auth
 
 echo "=== Image Tag Automation ==="
 echo "Repository: $repo"
@@ -32,7 +34,7 @@ work=$(create_temp_workspace)
 
 # Clone the target repository
 echo "Cloning repository..."
-if ! git clone "$repo" "$work"; then
+if ! git clone "$helm_repo" "$work"; then
   echo "❌ Failed to clone $repo" >&2
   exit 1
 fi
