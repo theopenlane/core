@@ -23,6 +23,7 @@ draft_pr_metadata_file="${BUILDKITE_BUILD_CHECKOUT_PATH}/.draft_pr_metadata"
 
 # Install dependencies
 install_dependencies
+setup_git_auth
 
 # Create workspace
 work=$(create_temp_workspace)

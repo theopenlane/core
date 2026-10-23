@@ -12,6 +12,7 @@ chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
 # Install dependencies using shared library function
 install_dependencies
+setup_git_auth
 
 echo "=== Image Tag Automation ==="
 echo "Repository: $repo"
