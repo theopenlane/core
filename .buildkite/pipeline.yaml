@@ -11,9 +11,13 @@ env:
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
 
   # build settings
-  GOCACHE: $HOME/.cache/go-build
-  GOMODCACHE: $HOME/.cache/go/pkg/mod
-  GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
+  BK_HOME: /var/lib/buildkite-agent
+  GOCACHE: $BK_HOME/.cache/go-build
+  GOMODCACHE: $BK_HOME/.cache/go/pkg/mod
+  GOLANGCI_LINT_CACHE: $BK_HOME/.cache/golangci-lint
+  HOME: /tmp
+  GIT_CONFIG_GLOBAL: $HOME/.gitconfig
+  APOLLO_CONFIG_HOME: $HOME
 
   # helm settings
   HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
@@ -58,6 +62,7 @@ steps:
               always_pull: true
               command: ["task", "generate:checksums"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -82,6 +87,7 @@ steps:
               always_pull: true
               command: ["task", "config:ci"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -105,6 +111,7 @@ steps:
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -115,6 +122,7 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+                - GIT_CONFIG_GLOBAL=/tmp/.gitconfig
       - label: ":link: link PRs"
         key: "link_pr_automation"
         agents:
@@ -134,6 +142,7 @@ steps:
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/link-pr-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -159,6 +168,7 @@ steps:
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/helm-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -185,6 +195,7 @@ steps:
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -208,6 +219,7 @@ steps:
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               environment:
                 - "GITHUB_TOKEN"
                 - "GITHUB_SSH_PRIVATE_KEY"
@@ -227,6 +239,7 @@ steps:
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -258,6 +271,7 @@ steps:
               command: ["task", "go:lint:ci:graphapi"]
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -283,6 +297,7 @@ steps:
               command: ["task", "go:lint:ci:handlers"]
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -312,6 +327,7 @@ steps:
               command: ["task", "go:lint:ci:no-api"]
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -343,6 +359,7 @@ steps:
               always_pull: true
               command: ["task", "go:testsum:ci:graph"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -392,6 +409,7 @@ steps:
               always_pull: true
               command: ["task", "go:testsum:ci:events"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -425,6 +443,7 @@ steps:
               always_pull: true
               command: ["task", "go:testsum:ci:handlers"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -463,6 +482,7 @@ steps:
               always_pull: true
               command: ["task", "go:testsum:ci:no-graph"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -489,6 +509,7 @@ steps:
           - docker#v5.14.0:
               image: openfga/cli:v0.5.1
               propagate-environment: true
+              propagate-uid-gid: true
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
   - group: ":closed_lock_with_key: Security Checks"
     key: "security"
@@ -586,6 +607,7 @@ steps:
           - docker#v5.14.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -637,6 +659,7 @@ steps:
           - docker#v5.14.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -668,6 +691,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -692,6 +716,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -713,6 +738,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -733,6 +759,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -811,6 +838,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               environment:
                 - "APOLLO_KEY"
                 - "BUILDKITE_AGENT_ACCESS_TOKEN"
@@ -912,6 +940,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               environment:
                 - "APOLLO_KEY"
       - label: ":graphql: publish history graphql schema"
@@ -934,6 +963,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               environment:
                 - "APOLLO_KEY"
       - label: ":rocket: atlas push"
