@@ -82,12 +82,19 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 
 	check := func(kind string, fs FeatureSet) error {
 		for name, f := range fs {
-			prod, err := sc.GetProduct(ctx, f.ProductID)
-			if err != nil {
-				if !notFound(err) {
+			var prod *stripe.Product
+
+			// an empty product ID would request the list endpoint and log a 404, so go straight to the name lookup
+			if f.ProductID != "" {
+				var err error
+
+				prod, err = sc.GetProduct(ctx, f.ProductID)
+				if err != nil && !notFound(err) {
 					return err
 				}
+			}
 
+			if prod == nil {
 				products, lerr := sc.ListProducts(ctx)
 				if lerr != nil {
 					return lerr
@@ -99,7 +106,7 @@ func (c *Catalog) LookupKeyConflicts(ctx context.Context, sc lookupClient, opts 
 						break
 					}
 				}
-			} else if prod != nil {
+			} else {
 				conflicts = append(conflicts, LookupKeyConflict{Feature: fmt.Sprintf("%s:%s", kind, name), Resource: "product", LookupKey: name, ID: prod.ID})
 
 				if cfg.failFast {
