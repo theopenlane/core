@@ -109,7 +109,7 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["bash", ".buildkite/helm-automation.sh"]
+              command: ["bash", ".buildkite/draft-pr-automation.sh"]
               propagate-environment: true
               propagate-uid-gid: true
               volumes:
@@ -193,7 +193,7 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["bash", ".buildkite/post-merge-pr-automation"]
+              command: ["bash", ".buildkite/post-merge-pr-automation.sh"]
               propagate-environment: true
               propagate-uid-gid: true
               volumes:
