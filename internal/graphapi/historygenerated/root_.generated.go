@@ -579,6 +579,7 @@ type ComplexityRoot struct {
 		MappableDomainID      func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
+		Purpose               func(childComplexity int) int
 		Ref                   func(childComplexity int) int
 		SystemInternalID      func(childComplexity int) int
 		SystemOwned           func(childComplexity int) int
@@ -5749,6 +5750,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CustomDomainHistory.OwnerID(childComplexity), true
+	case "CustomDomainHistory.purpose":
+		if e.ComplexityRoot.CustomDomainHistory.Purpose == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomDomainHistory.Purpose(childComplexity), true
 	case "CustomDomainHistory.ref":
 		if e.ComplexityRoot.CustomDomainHistory.Ref == nil {
 			break
@@ -24721,6 +24728,10 @@ type CustomDomainHistory implements Node {
   the type of this custom domain
   """
   domainType: CustomDomainHistoryCustomDomainType!
+  """
+  what this domain is used for
+  """
+  purpose: CustomDomainHistoryDomainPurpose
 }
 """
 A connection to a list of items.
@@ -24746,6 +24757,13 @@ enum CustomDomainHistoryCustomDomainType @goModel(model: "github.com/theopenlane
   PREVIEW
   EXTERNAL
   UNKNOWN
+}
+"""
+CustomDomainHistoryDomainPurpose is enum for the field purpose
+"""
+enum CustomDomainHistoryDomainPurpose @goModel(model: "github.com/theopenlane/core/common/enums.DomainPurpose") {
+  TRUSTCENTER
+  ASSESSMENT
 }
 """
 An edge in a connection.
@@ -25006,6 +25024,15 @@ input CustomDomainHistoryWhereInput {
   domainTypeNEQ: CustomDomainHistoryCustomDomainType
   domainTypeIn: [CustomDomainHistoryCustomDomainType!]
   domainTypeNotIn: [CustomDomainHistoryCustomDomainType!]
+  """
+  purpose field predicates
+  """
+  purpose: CustomDomainHistoryDomainPurpose
+  purposeNEQ: CustomDomainHistoryDomainPurpose
+  purposeIn: [CustomDomainHistoryDomainPurpose!]
+  purposeNotIn: [CustomDomainHistoryDomainPurpose!]
+  purposeIsNil: Boolean
+  purposeNotNil: Boolean
 }
 type DiscussionHistory implements Node {
   id: ID!
@@ -55178,6 +55205,8 @@ func (ec *executionContext) childFields_CustomDomainHistory(ctx context.Context,
 		return ec.fieldContext_CustomDomainHistory_trustCenterID(ctx, field)
 	case "domainType":
 		return ec.fieldContext_CustomDomainHistory_domainType(ctx, field)
+	case "purpose":
+		return ec.fieldContext_CustomDomainHistory_purpose(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type CustomDomainHistory", field.Name)
 }

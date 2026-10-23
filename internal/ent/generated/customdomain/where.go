@@ -1156,6 +1156,46 @@ func DomainTypeNotIn(vs ...enums.CustomDomainType) predicate.CustomDomain {
 	return predicate.CustomDomain(sql.FieldNotIn(FieldDomainType, v...))
 }
 
+// PurposeEQ applies the EQ predicate on the "purpose" field.
+func PurposeEQ(v enums.DomainPurpose) predicate.CustomDomain {
+	vc := v
+	return predicate.CustomDomain(sql.FieldEQ(FieldPurpose, vc))
+}
+
+// PurposeNEQ applies the NEQ predicate on the "purpose" field.
+func PurposeNEQ(v enums.DomainPurpose) predicate.CustomDomain {
+	vc := v
+	return predicate.CustomDomain(sql.FieldNEQ(FieldPurpose, vc))
+}
+
+// PurposeIn applies the In predicate on the "purpose" field.
+func PurposeIn(vs ...enums.DomainPurpose) predicate.CustomDomain {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.CustomDomain(sql.FieldIn(FieldPurpose, v...))
+}
+
+// PurposeNotIn applies the NotIn predicate on the "purpose" field.
+func PurposeNotIn(vs ...enums.DomainPurpose) predicate.CustomDomain {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.CustomDomain(sql.FieldNotIn(FieldPurpose, v...))
+}
+
+// PurposeIsNil applies the IsNil predicate on the "purpose" field.
+func PurposeIsNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldIsNull(FieldPurpose))
+}
+
+// PurposeNotNil applies the NotNil predicate on the "purpose" field.
+func PurposeNotNil() predicate.CustomDomain {
+	return predicate.CustomDomain(sql.FieldNotNull(FieldPurpose))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.CustomDomain {
 	return predicate.CustomDomain(func(s *sql.Selector) {

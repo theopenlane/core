@@ -29,8 +29,8 @@ input CreateTrustCenterDomainInput {
 	the type of the custom domain
 	"""
 	domainType: CustomDomainCustomDomainType
-    """
-    trust center ID
-    """
-    trustCenterID: ID!
+        """
+        trust center ID
+        """
+        trustCenterID: ID!
 }

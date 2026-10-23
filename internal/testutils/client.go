@@ -38,6 +38,7 @@ import (
 var (
 	MaxResultLimit           = 10
 	TrustCenterCnameTarget   = "cname.test.net"
+	AssessmentCnameTarget    = "assessment-cname.test.net"
 	TrustCenterDefaultDomain = "trust.test.net"
 )
 
@@ -176,6 +177,7 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 	r := graphapi.NewResolver(c, u).
 		WithMaxResultLimit(MaxResultLimit).
 		WithTrustCenterCnameTarget(TrustCenterCnameTarget).
+		WithAssessmentCnameTarget(AssessmentCnameTarget).
 		WithTrustCenterDefaultDomain(TrustCenterDefaultDomain).
 		WithSubscriptions(true, nil).
 		WithIntegrationsRuntime(runtime.Default())

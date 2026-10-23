@@ -10,13 +10,20 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
+const (
+	// oauthRevision is the revision used for the latest oauth connection
+	oauthRevision = 2
+)
+
 var (
 	// definitionID is the stable identifier for the OneDrive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0ONEDRIVE00000000000001")
 	// installation is the installation metadata layout
 	installation = types.InstallationOf[InstallationMetadata]()
-	// oauthConnection is the OneDrive OAuth connection
-	oauthConnection = types.ConnectionOf[oneDriveCred]()
+	// oauthConnection is the OneDrive OAuth connection under the current app registration
+	oauthConnection = types.ConnectionOf[oneDriveCred]().Revision(oauthRevision)
+	// legacyOauthConnection is the retired connection for installations authorized against the app registration used before the tenant move
+	legacyOauthConnection = types.ConnectionOf[oneDriveCred]()
 	// userInput is the installation user input layout
 	userInput = types.UserInputRefOf[UserInput]()
 )

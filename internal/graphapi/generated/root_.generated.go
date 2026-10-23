@@ -340,6 +340,10 @@ type ComplexityRoot struct {
 		DeletedID func(childComplexity int) int
 	}
 
+	AssessmentDomainCreatePayload struct {
+		CustomDomain func(childComplexity int) int
+	}
+
 	AssessmentEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
@@ -1330,6 +1334,7 @@ type ComplexityRoot struct {
 		MappableDomainID      func(childComplexity int) int
 		Owner                 func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
+		Purpose               func(childComplexity int) int
 		SystemInternalID      func(childComplexity int) int
 		SystemOwned           func(childComplexity int) int
 		Tags                  func(childComplexity int) int
@@ -3529,6 +3534,7 @@ type ComplexityRoot struct {
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
 		CreateAssessment                     func(childComplexity int, input generated.CreateAssessmentInput) int
+		CreateAssessmentDomain               func(childComplexity int, input model.CreateAssessmentDomainInput) int
 		CreateAssessmentPolicy               func(childComplexity int, input generated.CreateAssessmentPolicyInput) int
 		CreateAssessmentResponse             func(childComplexity int, input generated.CreateAssessmentResponseInput) int
 		CreateAssessmentTemplate             func(childComplexity int, input model.CreateAssessmentTemplateInput) int
@@ -9360,6 +9366,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.AssessmentDeletePayload.DeletedID(childComplexity), true
 
+	case "AssessmentDomainCreatePayload.customDomain":
+		if e.ComplexityRoot.AssessmentDomainCreatePayload.CustomDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentDomainCreatePayload.CustomDomain(childComplexity), true
+
 	case "AssessmentEdge.cursor":
 		if e.ComplexityRoot.AssessmentEdge.Cursor == nil {
 			break
@@ -13984,6 +13997,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CustomDomain.OwnerID(childComplexity), true
+	case "CustomDomain.purpose":
+		if e.ComplexityRoot.CustomDomain.Purpose == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomDomain.Purpose(childComplexity), true
 	case "CustomDomain.systemInternalID":
 		if e.ComplexityRoot.CustomDomain.SystemInternalID == nil {
 			break
@@ -24584,6 +24603,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateAssessment(childComplexity, args["input"].(generated.CreateAssessmentInput)), true
+	case "Mutation.createAssessmentDomain":
+		if e.ComplexityRoot.Mutation.CreateAssessmentDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAssessmentDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateAssessmentDomain(childComplexity, args["input"].(model.CreateAssessmentDomainInput)), true
 	case "Mutation.createAssessmentPolicy":
 		if e.ComplexityRoot.Mutation.CreateAssessmentPolicy == nil {
 			break
@@ -51273,6 +51303,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("ControlWhereInput", ec.unmarshalInputControlWhereInput),
 			graphql.NewInputUnmarshaler("CreateAPITokenInput", ec.unmarshalInputCreateAPITokenInput),
 			graphql.NewInputUnmarshaler("CreateActionPlanInput", ec.unmarshalInputCreateActionPlanInput),
+			graphql.NewInputUnmarshaler("CreateAssessmentDomainInput", ec.unmarshalInputCreateAssessmentDomainInput),
 			graphql.NewInputUnmarshaler("CreateAssessmentInput", ec.unmarshalInputCreateAssessmentInput),
 			graphql.NewInputUnmarshaler("CreateAssessmentPolicyInput", ec.unmarshalInputCreateAssessmentPolicyInput),
 			graphql.NewInputUnmarshaler("CreateAssessmentResponseInput", ec.unmarshalInputCreateAssessmentResponseInput),
@@ -52436,6 +52467,29 @@ type AssessmentBulkDeletePayload {
     Error message when the bulk delete did not apply to every requested ID
     """
     error: String
+}
+`, BuiltIn: false},
+	{Name: "../schema/assessmentdomain.graphql", Input: `extend type Mutation{
+    """
+    Create a new assessmentDomain
+    """
+    createAssessmentDomain(
+        """
+        values of the assessmentDomain
+        """
+        input: CreateAssessmentDomainInput!
+    ): AssessmentDomainCreatePayload!
+}
+
+"""
+Return response for createAssessmentDomain mutation
+"""
+type AssessmentDomainCreatePayload {
+    customDomain: CustomDomain!
+}
+
+input CreateAssessmentDomainInput {
+    cnameRecord: String!
 }
 `, BuiltIn: false},
 	{Name: "../schema/assessmentextended.graphql", Input: `extend type Assessment {
@@ -68647,6 +68701,10 @@ input CreateCustomDomainInput {
   the type of this custom domain
   """
   domainType: CustomDomainCustomDomainType
+  """
+  what this domain is used for
+  """
+  purpose: CustomDomainDomainPurpose
   ownerID: ID
   mappableDomainID: ID!
   dnsVerificationID: ID
@@ -73517,7 +73575,7 @@ Define a Relay Cursor type:
 https://relay.dev/graphql/connections.htm#sec-Cursor
 """
 scalar Cursor
-type CustomDomain implements Node @modules(names: ["trust_center_module"]) {
+type CustomDomain implements Node @modules(names: ["trust_center_module","assessment_custom_domain_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -73567,6 +73625,10 @@ type CustomDomain implements Node @modules(names: ["trust_center_module"]) {
   the type of this custom domain
   """
   domainType: CustomDomainCustomDomainType!
+  """
+  what this domain is used for
+  """
+  purpose: CustomDomainDomainPurpose!
   owner: Organization
   mappableDomain: MappableDomain!
   dnsVerification: DNSVerification
@@ -73595,6 +73657,13 @@ enum CustomDomainCustomDomainType @goModel(model: "github.com/theopenlane/core/c
   PREVIEW
   EXTERNAL
   UNKNOWN
+}
+"""
+CustomDomainDomainPurpose is enum for the field purpose
+"""
+enum CustomDomainDomainPurpose @goModel(model: "github.com/theopenlane/core/common/enums.DomainPurpose") {
+  TRUSTCENTER
+  ASSESSMENT
 }
 """
 An edge in a connection.
@@ -73817,6 +73886,13 @@ input CustomDomainWhereInput {
   domainTypeNEQ: CustomDomainCustomDomainType
   domainTypeIn: [CustomDomainCustomDomainType!]
   domainTypeNotIn: [CustomDomainCustomDomainType!]
+  """
+  purpose field predicates
+  """
+  purpose: CustomDomainDomainPurpose
+  purposeNEQ: CustomDomainDomainPurpose
+  purposeIn: [CustomDomainDomainPurpose!]
+  purposeNotIn: [CustomDomainDomainPurpose!]
   """
   owner edge predicates
   """
@@ -74514,7 +74590,7 @@ input CustomTypeEnumWhereInput {
   hasPlatforms: Boolean
   hasPlatformsWith: [PlatformWhereInput!]
 }
-type DNSVerification implements Node @modules(names: ["trust_center_module"]) {
+type DNSVerification implements Node @modules(names: ["trust_center_module","assessment_custom_domain_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -151963,10 +152039,10 @@ input CreateTrustCenterDomainInput {
 	the type of the custom domain
 	"""
 	domainType: CustomDomainCustomDomainType
-    """
-    trust center ID
-    """
-    trustCenterID: ID!
+        """
+        trust center ID
+        """
+        trustCenterID: ID!
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcenterentity.graphql", Input: `extend type Query {
@@ -155132,6 +155208,14 @@ func (ec *executionContext) childFields_AssessmentDeletePayload(ctx context.Cont
 	return nil, fmt.Errorf("no field named %q was found under type AssessmentDeletePayload", field.Name)
 }
 
+func (ec *executionContext) childFields_AssessmentDomainCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "customDomain":
+		return ec.fieldContext_AssessmentDomainCreatePayload_customDomain(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentDomainCreatePayload", field.Name)
+}
+
 func (ec *executionContext) childFields_AssessmentEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "node":
@@ -157108,6 +157192,8 @@ func (ec *executionContext) childFields_CustomDomain(ctx context.Context, field 
 		return ec.fieldContext_CustomDomain_trustCenterID(ctx, field)
 	case "domainType":
 		return ec.fieldContext_CustomDomain_domainType(ctx, field)
+	case "purpose":
+		return ec.fieldContext_CustomDomain_purpose(ctx, field)
 	case "owner":
 		return ec.fieldContext_CustomDomain_owner(ctx, field)
 	case "mappableDomain":

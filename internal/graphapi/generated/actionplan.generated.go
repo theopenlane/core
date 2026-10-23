@@ -39,6 +39,7 @@ type MutationResolver interface {
 	UpdateAssessment(ctx context.Context, id string, input generated.UpdateAssessmentInput) (*model.AssessmentUpdatePayload, error)
 	DeleteAssessment(ctx context.Context, id string) (*model.AssessmentDeletePayload, error)
 	DeleteBulkAssessment(ctx context.Context, ids []string) (*model.AssessmentBulkDeletePayload, error)
+	CreateAssessmentDomain(ctx context.Context, input model.CreateAssessmentDomainInput) (*model.AssessmentDomainCreatePayload, error)
 	CreateAssessmentWithPolicies(ctx context.Context, assessmentInput generated.CreateAssessmentInput, policies []*model.AssessmentPoliciesInput) (*model.AssessmentCreatePayload, error)
 	CreateAssessmentPolicy(ctx context.Context, input generated.CreateAssessmentPolicyInput) (*model.AssessmentPolicyCreatePayload, error)
 	CreateBulkAssessmentPolicy(ctx context.Context, input []*generated.CreateAssessmentPolicyInput) (*model.AssessmentPolicyBulkCreatePayload, error)
@@ -779,6 +780,20 @@ func (ec *executionContext) field_Mutation_createActionPlan_args(ctx context.Con
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (generated.CreateActionPlanInput, error) {
 			return ec.unmarshalNCreateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_createAssessmentDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (model.CreateAssessmentDomainInput, error) {
+			return ec.unmarshalNCreateAssessmentDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCreateAssessmentDomainInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -12454,6 +12469,50 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkAssessment(ctx conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteBulkAssessment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createAssessmentDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_createAssessmentDomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().CreateAssessmentDomain(ctx, fc.Args["input"].(model.CreateAssessmentDomainInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *model.AssessmentDomainCreatePayload) graphql.Marshaler {
+			return ec.marshalNAssessmentDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentDomainCreatePayload(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_createAssessmentDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AssessmentDomainCreatePayload(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createAssessmentDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -37925,6 +37984,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteBulkAssessment":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteBulkAssessment(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createAssessmentDomain":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createAssessmentDomain(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

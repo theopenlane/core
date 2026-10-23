@@ -1,6 +1,6 @@
 {
-  "hash": "4cc1f932bdd920e483d08ce0436c0b31f958b49522511cce0d78b132d7b0bc16",
-  "version": "01M55EXDENYFQSSPB3VB0T8V6B",
+  "hash": "a92e289e860647d9729bf3167c35037f2418bf7ed11dde958d594df105840072",
+  "version": "01M5J5PXC1ESH76HFVGSXK612G",
   "surface": {
     "id": "def_01K0SLACK000000000000000001",
     "credentials": [
@@ -73,7 +73,7 @@
               "defaultChannel": {
                 "type": "string",
                 "title": "Default Channel",
-                "description": "Slack channel id used as the default delivery target for system notifications"
+                "description": "Slack channel id messages post to when no channel is given"
               }
             },
             "additionalProperties": false,

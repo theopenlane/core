@@ -1,6 +1,6 @@
 {
-  "hash": "63c4ff5fec4040db3821728ad8910f8013e782cd3bb05490204c818b79ff3425",
-  "version": "01M52Y3C265Y1EAZ3P5YMBPJT1",
+  "hash": "6dde8ceb24f7ac7cc0c0b5260b94cf94eace3d15d20a21e7bbb8259e8f2be7c4",
+  "version": "01M5D958QRHMN98E6K3ED8ZHE0",
   "surface": {
     "id": "def_01K0MSTEAMS00000000000000001",
     "credentials": [
@@ -42,6 +42,16 @@
               "defaultMessaging": {
                 "type": "boolean",
                 "title": "Default Messaging"
+              },
+              "defaultTeamId": {
+                "type": "string",
+                "title": "Default Team ID",
+                "description": "Teams team id messages post to when no team and channel are given"
+              },
+              "defaultChannel": {
+                "type": "string",
+                "title": "Default Channel",
+                "description": "Teams channel id messages post to when no team and channel are given"
               }
             },
             "additionalProperties": false,
@@ -78,6 +88,9 @@
       },
       {
         "name": "MessageSendOperation"
+      },
+      {
+        "name": "ResourceSelection"
       },
       {
         "name": "TestMessageSendOperation"

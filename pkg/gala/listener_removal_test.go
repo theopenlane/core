@@ -41,6 +41,10 @@ func (c *listenerRemovalJobController) QueueResume(_ context.Context, name strin
 	return nil
 }
 
+func (c *listenerRemovalJobController) JobRetry(_ context.Context, id int64) (*rivertype.JobRow, error) {
+	return c.jobs[id], nil
+}
+
 func (c *listenerRemovalJobController) JobList(context.Context, *river.JobListParams) (*river.JobListResult, error) {
 	if c.listErr != nil {
 		err := c.listErr

@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/logx"
 )
 
-// clientBuilder returns the OneDrive Graph client builder bound to the operator config
-func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[oneDriveCred]) (*DriveClient, error) {
+// clientBuilder returns the OneDrive Graph client builder refreshing tokens against app, bound to the operator config
+func clientBuilder(cfg Config, app microsoft.AppConfig) func(context.Context, types.ConnectionRequest[oneDriveCred]) (*DriveClient, error) {
 	return func(ctx context.Context, req types.ConnectionRequest[oneDriveCred]) (*DriveClient, error) {
 		cred := req.Credential
 
@@ -18,9 +18,7 @@ func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[one
 			return nil, ErrOAuthTokenMissing
 		}
 
-		appCfg := microsoft.AppConfig{ApplicationID: cfg.ApplicationID, ClientSecret: cfg.ClientSecret}
-
-		graph, ts, err := appCfg.NewDelegatedGraphClient(ctx, microsoft.CommonTenant, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
+		graph, ts, err := app.NewDelegatedGraphClient(ctx, microsoft.CommonTenant, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error building onedrive client")
 			return nil, ErrClientBuildFailed

@@ -29,34 +29,14 @@ func Builder(cfg Config) registry.Builder {
 			UserInput:    userInput.Registration(),
 			Installation: installation.Registration(),
 			Connections: []types.Connector{
-				oauthConnection.
+				oneDriveConnection(oauthConnection.
 					Name("OneDrive OAuth").
 					Description("Connect your Microsoft account using OAuth to access OneDrive documents.").
-					Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[oneDriveCred]{
-						Config: auth.OAuthConfig{ //nolint:gosec
-							ClientID:     cfg.ApplicationID,
-							ClientSecret: cfg.ClientSecret,
-							AuthURL:      microsoft.AuthorizeURL(microsoft.CommonTenant),
-							TokenURL:     microsoft.TokenURL(microsoft.CommonTenant),
-							RedirectURL:  cfg.RedirectURL,
-							Scopes: []string{
-								"https://graph.microsoft.com/Files.Read",
-								"https://graph.microsoft.com/User.Read",
-								"offline_access",
-							},
-						},
-						Material: func(material auth.OAuthMaterial) (oneDriveCred, error) {
-							return oneDriveCred{
-								AccessToken:  material.AccessToken,
-								RefreshToken: material.RefreshToken,
-								Expiry:       material.Expiry,
-							}, nil
-						},
-						EncodeCredentialError: ErrCredentialEncode,
-					})).
-					Provides(clientBuilder(cfg)).
-					Verified(verify).
-					Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Microsoft account under Account settings > Privacy.", nil),
+					Recommended(), cfg, cfg.AppConfig),
+				oneDriveConnection(legacyOauthConnection.
+					Name("OneDrive OAuth (Legacy)").
+					Description("Installations authorized before the Openlane app registration moved to Partner Organization, reconnect to move to the current connection.").
+					Retired(), cfg, cfg.Legacy),
 			},
 			Operations: []types.OperationRegistration{
 				documentExportOperation.Description("Download a OneDrive file and return its content").Registration(),
@@ -79,4 +59,37 @@ func Builder(cfg Config) registry.Builder {
 			},
 		}, nil
 	})
+}
+
+// oneDriveConnection completes a OneDrive OAuth connection that authenticates and refreshes against app
+func oneDriveConnection(ref types.ConnectionRef[oneDriveCred], cfg Config, app microsoft.AppConfig) types.ConnectionRef[oneDriveCred] {
+	return ref.
+		Authenticates(auth.OAuthRegistration(auth.OAuthRegistrationOptions[oneDriveCred]{
+			Config: auth.OAuthConfig{ //nolint:gosec
+				ClientID:     app.ApplicationID,
+				ClientSecret: app.ClientSecret,
+				AuthURL:      microsoft.AuthorizeURL(microsoft.CommonTenant),
+				TokenURL:     microsoft.TokenURL(microsoft.CommonTenant),
+				RedirectURL:  app.RedirectURL,
+				Scopes: []string{
+					"https://graph.microsoft.com/Files.Read",
+					"https://graph.microsoft.com/User.Read",
+					"offline_access",
+				},
+			},
+			Material:              newOneDriveCred,
+			EncodeCredentialError: ErrCredentialEncode,
+		})).
+		Provides(clientBuilder(cfg, app)).
+		Verified(verify).
+		Disconnects("Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Microsoft account under Account settings > Privacy.", nil)
+}
+
+// newOneDriveCred maps completed OAuth material to the OneDrive credential
+func newOneDriveCred(material auth.OAuthMaterial) (oneDriveCred, error) {
+	return oneDriveCred{
+		AccessToken:  material.AccessToken,
+		RefreshToken: material.RefreshToken,
+		Expiry:       material.Expiry,
+	}, nil
 }

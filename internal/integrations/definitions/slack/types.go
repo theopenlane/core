@@ -70,8 +70,8 @@ type slackBotTokenCred struct {
 type UserInput struct {
 	// DefaultMessaging marks this installation as the preferred workspace for messaging
 	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
-	// DefaultChannel is the Slack channel id used as the default delivery target for system messages when app install did not choose one
-	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel,description=Slack channel id used as the default delivery target for system notifications"`
+	// DefaultChannel is the Slack channel id messages post to when none is given, taking precedence over the channel chosen during app install
+	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel,description=Slack channel id messages post to when no channel is given"`
 }
 
 // DirectorySync is the Slack directory account sync operation configuration

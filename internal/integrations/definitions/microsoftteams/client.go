@@ -20,7 +20,7 @@ func clientBuilder(cfg Config) func(context.Context, types.ConnectionRequest[tea
 			return nil, ErrOAuthTokenMissing
 		}
 
-		appCfg := microsoft.AppConfig{ApplicationID: cfg.ApplicationID, ClientSecret: cfg.ClientSecret}
+		appCfg := cfg.AppConfig
 
 		graph, _, err := appCfg.NewDelegatedGraphClient(ctx, microsoft.OrganizationsTenant, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 		if err != nil {

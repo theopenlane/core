@@ -9,6 +9,10 @@ var (
 	ErrDispatchInputInvalid = errors.New("integrations/operations: dispatch input invalid")
 	// ErrInstallationIDRequired indicates the installation identifier is missing
 	ErrInstallationIDRequired = errors.New("integrations/operations: installation id required")
+	// ErrSelectionPersistFailed indicates a picker selection could not be stored on the installation
+	ErrSelectionPersistFailed = errors.New("integrations/operations: selection persist failed")
+	// ErrSelectionLimitExceeded indicates more resources were selected than the operation accepts
+	ErrSelectionLimitExceeded = errors.New("integrations/operations: too many resources selected")
 	// ErrRunIDRequired indicates the run identifier is missing
 	ErrRunIDRequired = errors.New("integrations/operations: run id required")
 	// ErrIngestDefinitionNotFound indicates the operation definition could not be resolved for ingest

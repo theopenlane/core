@@ -169,14 +169,20 @@ Config contains the configuration for the core server
             },
             "import": {}
         },
-        "googledrive": {},
+        "googledrive": {
+            "legacy": {}
+        },
         "googleworkspace": {},
-        "azureentraid": {},
+        "azureentraid": {
+            "legacy": {}
+        },
         "azuresecuritycenter": {
             "lighthouse": {}
         },
         "microsoftteams": {},
-        "onedrive": {},
+        "onedrive": {
+            "legacy": {}
+        },
         "oidclocal": {},
         "email": {
             "resend": {},
@@ -240,6 +246,7 @@ Server settings for the echo server
 |**secretmanager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |**defaulttrustcenterdomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
 |**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
+|**assessmentcnametarget**|`string`|AssessmentCnameTarget is the cname target for the assessment domains.<br/>Used for mapping vanity domains for questionnaires<br/>|no|
 |**trustcenterpreviewzoneid**|`string`|TrustCenterPreviewZoneID is the cloudflare zone id that holds trust center preview domain records<br/>|no|
 |**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
 
@@ -1862,7 +1869,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**objectstoreruntime**](#defsobjectstoreruntimeconfig)|`object`|||
 |[**googledrive**](#defsgoogledriveconfig)|`object`|||
 |[**googleworkspace**](#defsgoogleworkspaceconfig)|`object`|||
-|[**azureentraid**](#defsmicrosoftappconfig)|`object`|||
+|[**azureentraid**](#defsazureentraidconfig)|`object`|||
 |[**azuresecuritycenter**](#defsazuresecuritycenterconfig)|`object`|||
 |[**microsoftteams**](#defsmicrosoftteamsconfig)|`object`|||
 |[**onedrive**](#defsonedriveconfig)|`object`|||
@@ -1907,14 +1914,20 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
         },
         "import": {}
     },
-    "googledrive": {},
+    "googledrive": {
+        "legacy": {}
+    },
     "googleworkspace": {},
-    "azureentraid": {},
+    "azureentraid": {
+        "legacy": {}
+    },
     "azuresecuritycenter": {
         "lighthouse": {}
     },
     "microsoftteams": {},
-    "onedrive": {},
+    "onedrive": {
+        "legacy": {}
+    },
     "oidclocal": {},
     "email": {
         "resend": {},
@@ -2420,6 +2433,29 @@ supplies the region, endpoint, and credentials
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**pickerapikey**|`string`|||
+|[**legacy**](#defsgoogledriveappconfig)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "legacy": {}
+}
+```
+
+   
+<a name="defsgoogledriveappconfig"></a>
+#### $defs/googledrive\.AppConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**clientid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2436,8 +2472,31 @@ supplies the region, endpoint, and credentials
 
 **Additional Properties:** not allowed   
    
+<a name="defsazureentraidconfig"></a>
+### $defs/azureentraid\.Config: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**applicationid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
+|[**legacy**](#defsmicrosoftappconfig)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "legacy": {}
+}
+```
+
+   
 <a name="defsmicrosoftappconfig"></a>
-### $defs/microsoft\.AppConfig: object
+#### $defs/microsoft\.AppConfig: object
 
 **Properties**
 
@@ -2495,6 +2554,7 @@ supplies the region, endpoint, and credentials
 |**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
 
 **Additional Properties:** not allowed   
    
@@ -2508,7 +2568,31 @@ supplies the region, endpoint, and credentials
 |**applicationid**|`string`|||
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
 |**contentmode**|`string`|||
+|[**legacy**](#defsmicrosoftappconfig)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "legacy": {}
+}
+```
+
+   
+<a name="defsmicrosoftappconfig"></a>
+#### $defs/microsoft\.AppConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**applicationid**|`string`|||
+|**clientsecret**|`string`|||
+|**redirecturl**|`string`|||
+|**defaulttenant**|`string`|||
 
 **Additional Properties:** not allowed   
    

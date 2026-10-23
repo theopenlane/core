@@ -137,7 +137,7 @@ addons:
         nickname: price_workflow_annually
         lookup_key: price_workflow_annually
     audience: private
-    include_with_trial: true
+    include_with_trial: false
   domain_scanning_addon:
     display_name: Domain and Vulnerability Scanning
     lookup_key: domain_scanning_addon

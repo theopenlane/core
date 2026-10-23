@@ -39,6 +39,7 @@ func projectIntegrationProvider(def types.Definition) IntegrationProvider {
 				Description: c.Description,
 				Schema:      c.Form,
 				Recommended: c.Recommended,
+				Retired:     c.Retired,
 			}
 		}),
 		Connections: lo.Map(connections, func(c types.Connection, _ int) IntegrationProviderConnection {
@@ -50,6 +51,7 @@ func projectIntegrationProvider(def types.Definition) IntegrationProvider {
 				CredentialRefs: []string{c.Credential.Name},
 				Auth:           lo.Ternary(c.Auth != nil, &IntegrationProviderAuth{}, nil),
 				Disconnect:     c.Disconnect,
+				Retired:        c.Retired,
 			}
 		}),
 		Operations: lo.Filter(def.Operations, func(op types.OperationRegistration, _ int) bool {

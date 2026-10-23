@@ -17,6 +17,8 @@ type Connection struct {
 	Description string
 	// Recommended indicates the connection that is recommended when there are multiple options
 	Recommended bool
+	// Retired marks a connection existing installations still resolve but that can no longer be connected, so installations move off it by connecting another connection
+	Retired bool
 	// Meta is additional data the user might need to set up the connection
 	Meta map[string]MetaInfo
 	// Credential is the stored credential layout; Credential.Name is the persisted slot and connection name

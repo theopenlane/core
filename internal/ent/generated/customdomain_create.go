@@ -238,6 +238,20 @@ func (_c *CustomDomainCreate) SetNillableDomainType(v *enums.CustomDomainType) *
 	return _c
 }
 
+// SetPurpose sets the "purpose" field.
+func (_c *CustomDomainCreate) SetPurpose(v enums.DomainPurpose) *CustomDomainCreate {
+	_c.mutation.SetPurpose(v)
+	return _c
+}
+
+// SetNillablePurpose sets the "purpose" field if the given value is not nil.
+func (_c *CustomDomainCreate) SetNillablePurpose(v *enums.DomainPurpose) *CustomDomainCreate {
+	if v != nil {
+		_c.SetPurpose(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CustomDomainCreate) SetID(v string) *CustomDomainCreate {
 	_c.mutation.SetID(v)
@@ -330,6 +344,10 @@ func (_c *CustomDomainCreate) defaults() error {
 		v := customdomain.DefaultDomainType
 		_c.mutation.SetDomainType(v)
 	}
+	if _, ok := _c.mutation.Purpose(); !ok {
+		v := customdomain.DefaultPurpose
+		_c.mutation.SetPurpose(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if customdomain.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized customdomain.DefaultID (forgotten import generated/runtime?)")
@@ -364,6 +382,11 @@ func (_c *CustomDomainCreate) check() error {
 	if v, ok := _c.mutation.DomainType(); ok {
 		if err := customdomain.DomainTypeValidator(v); err != nil {
 			return &ValidationError{Name: "domain_type", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.domain_type": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Purpose(); ok {
+		if err := customdomain.PurposeValidator(v); err != nil {
+			return &ValidationError{Name: "purpose", err: fmt.Errorf(`generated: validator failed for field "CustomDomain.purpose": %w`, err)}
 		}
 	}
 	if len(_c.mutation.MappableDomainIDs()) == 0 {
@@ -459,6 +482,10 @@ func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.DomainType(); ok {
 		_spec.SetField(customdomain.FieldDomainType, field.TypeEnum, value)
 		_node.DomainType = value
+	}
+	if value, ok := _c.mutation.Purpose(); ok {
+		_spec.SetField(customdomain.FieldPurpose, field.TypeEnum, value)
+		_node.Purpose = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

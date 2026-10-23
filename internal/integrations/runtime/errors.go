@@ -23,6 +23,8 @@ var (
 	ErrCredentialInvalid = errors.New("integrations/runtime: credential invalid")
 	// ErrConnectionMismatch indicates the credential belongs to a different connection than the installation's
 	ErrConnectionMismatch = errors.New("integrations/runtime: credential belongs to a different connection than the installation's")
+	// ErrConnectionRetired indicates a credential was submitted for a connection that can no longer be connected
+	ErrConnectionRetired = errors.New("integrations/runtime: connection is retired, connect with a current connection instead")
 	// ErrInstallationMetadataInvalid indicates the installation metadata document failed schema validation
 	ErrInstallationMetadataInvalid = errors.New("integrations/runtime: installation metadata invalid")
 	// ErrRuntimeClientNotFound indicates no pre-built runtime client exists for the definition

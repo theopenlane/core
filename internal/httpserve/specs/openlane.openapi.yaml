@@ -570,6 +570,8 @@ components:
                                             type: object
                                         name:
                                             type: string
+                                        retired:
+                                            type: boolean
                                     type: object
                                 type: array
                             credentialRegistrations:
@@ -584,6 +586,8 @@ components:
                                             type: boolean
                                         ref:
                                             type: string
+                                        retired:
+                                            type: boolean
                                         schema: {}
                                     type: object
                                 type: array

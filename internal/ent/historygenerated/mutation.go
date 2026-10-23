@@ -31229,6 +31229,7 @@ type CustomDomainHistoryMutation struct {
 	dns_verification_id     *string
 	trust_center_id         *string
 	domain_type             *enums.CustomDomainType
+	purpose                 *enums.DomainPurpose
 	clearedFields           map[string]struct{}
 	done                    bool
 	oldValue                func(context.Context) (*CustomDomainHistory, error)
@@ -32270,6 +32271,55 @@ func (m *CustomDomainHistoryMutation) ResetDomainType() {
 	m.domain_type = nil
 }
 
+// SetPurpose sets the "purpose" field.
+func (m *CustomDomainHistoryMutation) SetPurpose(ep enums.DomainPurpose) {
+	m.purpose = &ep
+}
+
+// Purpose returns the value of the "purpose" field in the mutation.
+func (m *CustomDomainHistoryMutation) Purpose() (r enums.DomainPurpose, exists bool) {
+	v := m.purpose
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPurpose returns the old "purpose" field's value of the CustomDomainHistory entity.
+// If the CustomDomainHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CustomDomainHistoryMutation) OldPurpose(ctx context.Context) (v enums.DomainPurpose, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPurpose is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPurpose requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPurpose: %w", err)
+	}
+	return oldValue.Purpose, nil
+}
+
+// ClearPurpose clears the value of the "purpose" field.
+func (m *CustomDomainHistoryMutation) ClearPurpose() {
+	m.purpose = nil
+	m.clearedFields[customdomainhistory.FieldPurpose] = struct{}{}
+}
+
+// PurposeCleared returns if the "purpose" field was cleared in this mutation.
+func (m *CustomDomainHistoryMutation) PurposeCleared() bool {
+	_, ok := m.clearedFields[customdomainhistory.FieldPurpose]
+	return ok
+}
+
+// ResetPurpose resets all changes to the "purpose" field.
+func (m *CustomDomainHistoryMutation) ResetPurpose() {
+	m.purpose = nil
+	delete(m.clearedFields, customdomainhistory.FieldPurpose)
+}
+
 // Where appends a list predicates to the CustomDomainHistoryMutation builder.
 func (m *CustomDomainHistoryMutation) Where(ps ...predicate.CustomDomainHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -32304,7 +32354,7 @@ func (m *CustomDomainHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CustomDomainHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 21)
 	if m.history_time != nil {
 		fields = append(fields, customdomainhistory.FieldHistoryTime)
 	}
@@ -32365,6 +32415,9 @@ func (m *CustomDomainHistoryMutation) Fields() []string {
 	if m.domain_type != nil {
 		fields = append(fields, customdomainhistory.FieldDomainType)
 	}
+	if m.purpose != nil {
+		fields = append(fields, customdomainhistory.FieldPurpose)
+	}
 	return fields
 }
 
@@ -32413,6 +32466,8 @@ func (m *CustomDomainHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.TrustCenterID()
 	case customdomainhistory.FieldDomainType:
 		return m.DomainType()
+	case customdomainhistory.FieldPurpose:
+		return m.Purpose()
 	}
 	return nil, false
 }
@@ -32462,6 +32517,8 @@ func (m *CustomDomainHistoryMutation) OldField(ctx context.Context, name string)
 		return m.OldTrustCenterID(ctx)
 	case customdomainhistory.FieldDomainType:
 		return m.OldDomainType(ctx)
+	case customdomainhistory.FieldPurpose:
+		return m.OldPurpose(ctx)
 	}
 	return nil, fmt.Errorf("unknown CustomDomainHistory field %s", name)
 }
@@ -32611,6 +32668,13 @@ func (m *CustomDomainHistoryMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetDomainType(v)
 		return nil
+	case customdomainhistory.FieldPurpose:
+		v, ok := value.(enums.DomainPurpose)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPurpose(v)
+		return nil
 	}
 	return fmt.Errorf("unknown CustomDomainHistory field %s", name)
 }
@@ -32686,6 +32750,9 @@ func (m *CustomDomainHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(customdomainhistory.FieldTrustCenterID) {
 		fields = append(fields, customdomainhistory.FieldTrustCenterID)
 	}
+	if m.FieldCleared(customdomainhistory.FieldPurpose) {
+		fields = append(fields, customdomainhistory.FieldPurpose)
+	}
 	return fields
 }
 
@@ -32744,6 +32811,9 @@ func (m *CustomDomainHistoryMutation) ClearField(name string) error {
 		return nil
 	case customdomainhistory.FieldTrustCenterID:
 		m.ClearTrustCenterID()
+		return nil
+	case customdomainhistory.FieldPurpose:
+		m.ClearPurpose()
 		return nil
 	}
 	return fmt.Errorf("unknown CustomDomainHistory nullable field %s", name)
@@ -32812,6 +32882,9 @@ func (m *CustomDomainHistoryMutation) ResetField(name string) error {
 		return nil
 	case customdomainhistory.FieldDomainType:
 		m.ResetDomainType()
+		return nil
+	case customdomainhistory.FieldPurpose:
+		m.ResetPurpose()
 		return nil
 	}
 	return fmt.Errorf("unknown CustomDomainHistory field %s", name)

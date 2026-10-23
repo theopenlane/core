@@ -73,6 +73,8 @@ type IntegrationProviderCredential struct {
 	Schema json.RawMessage `json:"schema,omitempty"`
 	// Recommended marks the recommended connection
 	Recommended bool `json:"recommended,omitempty"`
+	// Retired marks a connection existing installations still use but that cannot be newly connected
+	Retired bool `json:"retired,omitempty"`
 }
 
 // IntegrationProviderConnection is one connection as the console reads it
@@ -91,6 +93,8 @@ type IntegrationProviderConnection struct {
 	Auth *IntegrationProviderAuth `json:"auth,omitempty"`
 	// Disconnect describes how the connection tears down an installation
 	Disconnect *types.DisconnectRegistration `json:"disconnect,omitempty"`
+	// Retired marks a connection existing installations still use but that cannot be newly connected
+	Retired bool `json:"retired,omitempty"`
 }
 
 // IntegrationProviderAuth marks a connection whose credential an auth flow obtains

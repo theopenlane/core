@@ -122,6 +122,9 @@ coreConfiguration:
     # -- TrustCenterCnameTarget is the cname target for the trust center
     # Used for mapping the vanity domains to the trust centers
     trustcentercnametarget: "cname.openlane-dns.com"  # @schema type:string; default:cname.openlane-dns.com
+    # -- AssessmentCnameTarget is the cname target for the assessment domains.
+    # Used for mapping vanity domains for questionnaires
+    assessmentcnametarget: ""  # @schema type:string
     # -- NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
     # Unread notifications are always pulled regardless of this setting
     notificationlookbackdays: 30  # @schema type:integer; default:30
@@ -829,6 +832,10 @@ coreConfiguration:
     googledrive:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+      pickerapikey: ""  # @schema type:string
+      legacy:
+        clientid: ""  # @schema type:string
+        redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
     googleworkspace:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
@@ -836,6 +843,10 @@ coreConfiguration:
       applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
       defaulttenant: ""  # @schema type:string
+      legacy:
+        applicationid: ""  # @schema type:string
+        redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+        defaulttenant: ""  # @schema type:string
     azuresecuritycenter:
       applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
@@ -846,10 +857,16 @@ coreConfiguration:
     microsoftteams:
       applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+      defaulttenant: ""  # @schema type:string
     onedrive:
       applicationid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+      defaulttenant: ""  # @schema type:string
       contentmode: "iframe"  # @schema type:string; default:iframe
+      legacy:
+        applicationid: ""  # @schema type:string
+        redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
+        defaulttenant: ""  # @schema type:string
     oidclocal:
       enabled: false  # @schema type:boolean; default:false
       clientid: "local-core-oidc"  # @schema type:string; default:local-core-oidc
@@ -1286,6 +1303,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_GOOGLEDRIVE_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-googledrive-clientsecret"  # @schema type:string
+    # -- core-integrations-googledrive-legacy-clientsecret secret configuration
+    core-integrations-googledrive-legacy-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.googledrive.legacy.clientsecret
+      secretKey: "CORE_INTEGRATIONS_GOOGLEDRIVE_LEGACY_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-googledrive-legacy-clientsecret"  # @schema type:string
     # -- core-integrations-googleworkspace-clientsecret secret configuration
     core-integrations-googleworkspace-clientsecret:
       # -- Enable this external secret
@@ -1302,6 +1327,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_AZUREENTRAID_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-azureentraid-clientsecret"  # @schema type:string
+    # -- core-integrations-azureentraid-legacy-clientsecret secret configuration
+    core-integrations-azureentraid-legacy-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.azureentraid.legacy.clientsecret
+      secretKey: "CORE_INTEGRATIONS_AZUREENTRAID_LEGACY_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-azureentraid-legacy-clientsecret"  # @schema type:string
     # -- core-integrations-azuresecuritycenter-clientsecret secret configuration
     core-integrations-azuresecuritycenter-clientsecret:
       # -- Enable this external secret
@@ -1326,6 +1359,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_ONEDRIVE_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-onedrive-clientsecret"  # @schema type:string
+    # -- core-integrations-onedrive-legacy-clientsecret secret configuration
+    core-integrations-onedrive-legacy-clientsecret:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.onedrive.legacy.clientsecret
+      secretKey: "CORE_INTEGRATIONS_ONEDRIVE_LEGACY_CLIENTSECRET"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-onedrive-legacy-clientsecret"  # @schema type:string
     # -- core-integrations-oidclocal-clientsecret secret configuration
     core-integrations-oidclocal-clientsecret:
       # -- Enable this external secret

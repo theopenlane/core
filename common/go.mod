@@ -1,6 +1,6 @@
 module github.com/theopenlane/core/common
 
-go 1.27.2
+go 1.27.3
 
 require (
 	entgo.io/ent v0.14.6
@@ -67,7 +67,7 @@ require (
 	github.com/stretchr/objx v0.8.0 // indirect
 	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
-	github.com/tidwall/pretty v1.2.1 // indirect
+	github.com/tidwall/pretty v1.2.2 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/tinylib/msgp v1.6.5 // indirect
 	github.com/vektah/gqlparser/v2 v2.5.63 // indirect

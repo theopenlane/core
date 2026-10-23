@@ -781,6 +781,9 @@
                       },
                       "name": {
                         "type": "string"
+                      },
+                      "retired": {
+                        "type": "boolean"
                       }
                     },
                     "type": "object"
@@ -802,6 +805,9 @@
                       },
                       "ref": {
                         "type": "string"
+                      },
+                      "retired": {
+                        "type": "boolean"
                       },
                       "schema": {}
                     },
