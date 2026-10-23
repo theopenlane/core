@@ -31,10 +31,16 @@ func ndaValidator(f storage.File) error {
 	}
 
 	_, err := api.ReadContext(f.RawFile, model.NewDefaultConfiguration())
-	if errors.Is(err, pdfcpu.ErrWrongPassword) {
-		log.Warn().Str("file", f.OriginalName).Msg("rejected password protected nda upload")
+	if err != nil {
+		if errors.Is(err, pdfcpu.ErrWrongPassword) {
+			log.Warn().Str("file", f.OriginalName).Msg("rejected password protected nda upload")
 
-		return ErrPasswordProtectedNDA
+			return ErrPasswordProtectedNDA
+		}
+
+		log.Error().Err(err).Msg("error reading pdf")
+
+		return err
 	}
 
 	return nil
