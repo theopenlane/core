@@ -14,6 +14,7 @@ env:
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
+  GIT_CONFIG_GLOBAL: /tmp/.gitconfig
 
   # helm settings
   HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
@@ -120,6 +121,8 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+                - HOME=/tmp
+                - GIT_CONFIG_GLOBAL=/tmp/.gitconfig
       - label: ":link: link PRs"
         key: "link_pr_automation"
         agents:
