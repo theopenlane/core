@@ -14,6 +14,7 @@ chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
 # Install dependencies
 install_dependencies
+setup_git_auth
 
 # Create workspace
 work=$(create_temp_workspace)
