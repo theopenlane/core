@@ -1,4 +1,4 @@
-version: v0.0.16
+version: v0.0.17
 sha: e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2
 modules:
   base_module:
