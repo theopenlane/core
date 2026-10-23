@@ -19,6 +19,7 @@ env:
   GIT_CONFIG_GLOBAL: $HOME/.gitconfig
   APOLLO_CONFIG_HOME: $HOME
   SONAR_USER_HOME: $HOME/.sonar"
+  SCANNER_WORKDIR_PATH: $HOME/sonar-scanner-work
 
   # helm settings
   HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
