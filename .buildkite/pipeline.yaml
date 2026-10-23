@@ -11,11 +11,13 @@ env:
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
 
   # build settings
-  GOCACHE: $HOME/.cache/go-build
-  GOMODCACHE: $HOME/.cache/go/pkg/mod
-  GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
-  GIT_CONFIG_GLOBAL: /tmp/.gitconfig
-  HOME: /var/lib/buildkite-agent/
+  BK_HOME: /var/lib/buildkite-agent
+  GOCACHE: $BK_HOME/.cache/go-build
+  GOMODCACHE: $BK_HOME/.cache/go/pkg/mod
+  GOLANGCI_LINT_CACHE: $BK_HOME/.cache/golangci-lint
+  HOME: /tmp
+  GIT_CONFIG_GLOBAL: $HOME/.gitconfig
+  APOLLO_CONFIG_HOME: $HOME
 
   # helm settings
   HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
@@ -840,7 +842,6 @@ steps:
               environment:
                 - "APOLLO_KEY"
                 - "BUILDKITE_AGENT_ACCESS_TOKEN"
-                - "APOLLO_CONFIG_HOME=/tmp"
   - group: ":docker: Image Build"
     depends_on: "go-builds"
     key: "image-build"
