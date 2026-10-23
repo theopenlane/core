@@ -16,7 +16,8 @@ if [[ -n "${DRAFT_PR_STUB:-}" && -f "${DRAFT_PR_STUB}" ]]; then
 fi
 
 # Configuration
-repo="${HELM_CHART_REPO}"
+helm_repo="${HELM_CHART_REPO}"
+repo="$(normalize_github_repo "$helm_repo")"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 draft_pr_url_file="${BUILDKITE_BUILD_CHECKOUT_PATH}/.draft_pr_url"
 draft_pr_metadata_file="${BUILDKITE_BUILD_CHECKOUT_PATH}/.draft_pr_metadata"
@@ -62,7 +63,7 @@ fi
 
 # Clone the target repository only when we need to create a new draft PR
 echo "Cloning repository..."
-if ! git clone "$repo" "$work"; then
+if ! git clone "$helm_repo" "$work"; then
   echo "❌ Failed to clone $repo" >&2
   exit 1
 fi

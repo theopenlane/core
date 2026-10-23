@@ -19,6 +19,7 @@ teardown() {
 create_stub_functions() {
     cat > "$TEST_TEMP_DIR/stubs.sh" <<'STUB'
 install_dependencies() { :; }
+setup_git_auth() { :; }
 validate_build_context() { return 0; }
 find_draft_prs() { echo "1:test-branch:\ud83d\udea7 DRAFT: Config changes from core PR #10"; }
 check_core_pr_status() { echo '{"state":"MERGED","title":"Test","updatedAt":"2025-07-15T00:00:00Z"}'; }
@@ -41,6 +42,7 @@ STUB
 @test "draft PR kept when core PR open" {
     cat > "$TEST_TEMP_DIR/stubs.sh" <<'STUB'
 install_dependencies() { :; }
+setup_git_auth() { :; }
 validate_build_context() { return 0; }
 find_draft_prs() { echo "2:test-branch:\ud83d\udea7 DRAFT: Config changes from core PR #20"; }
 check_core_pr_status() { echo '{"state":"OPEN","title":"Test","updatedAt":"2025-07-15T00:00:00Z"}'; }
@@ -60,6 +62,7 @@ STUB
 @test "draft PR closed when core PR missing" {
     cat > "$TEST_TEMP_DIR/stubs.sh" <<'STUB'
 install_dependencies() { :; }
+setup_git_auth() { :; }
 validate_build_context() { return 0; }
 find_draft_prs() { echo "3:test-branch:\ud83d\udea7 DRAFT: Config changes from core PR #30"; }
 check_core_pr_status() { echo ""; }

@@ -42,9 +42,8 @@ install_gh() {
 }
 
 setup_git_auth() {
-    if [[ -n "${GITHUB_TOKEN:-}" ]]; then
-        gh auth setup-git --hostname github.com
-    fi
+    : "${GITHUB_TOKEN:?GITHUB_TOKEN is required}"
+    gh auth setup-git --hostname github.com
 }
 
 # Function to configure git user settings

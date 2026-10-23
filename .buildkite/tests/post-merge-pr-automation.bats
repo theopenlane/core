@@ -13,6 +13,7 @@ teardown() {
 @test "closes draft PR when core PR is merged" {
     cat > "$TEST_TEMP_DIR/stubs.sh" <<'STUB'
 install_dependencies() { :; }
+setup_git_auth() { :; }
 validate_build_context() { return 0; }
 find_draft_prs() { echo "5:draft-core-pr-42:🚧 DRAFT: Config changes from core PR #42"; }
 check_core_pr_status() { echo '{"state":"MERGED","updatedAt":"2026-01-01T00:00:00Z"}'; }
@@ -30,6 +31,7 @@ STUB
 @test "keeps draft PR open when core PR is still open" {
     cat > "$TEST_TEMP_DIR/stubs.sh" <<'STUB'
 install_dependencies() { :; }
+setup_git_auth() { :; }
 validate_build_context() { return 0; }
 find_draft_prs() { echo "6:draft-core-pr-43:🚧 DRAFT: Config changes from core PR #43"; }
 check_core_pr_status() { echo '{"state":"OPEN","updatedAt":"2026-01-01T00:00:00Z"}'; }

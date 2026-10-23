@@ -9,7 +9,8 @@ source "${SCRIPT_DIR}/lib/github.sh"
 source "${SCRIPT_DIR}/lib/templates.sh"
 
 # Configuration
-repo="${HELM_CHART_REPO}"
+helm_repo="${HELM_CHART_REPO}"
+repo="$(normalize_github_repo "$helm_repo")"
 chart_dir="${HELM_CHART_PATH:-charts/openlane}"
 
 # Install dependencies
@@ -24,7 +25,7 @@ log_execution_context "Helm Chart Automation"
 
 # Clone the target repository
 echo "Cloning repository..."
-if ! git clone "$repo" "$work"; then
+if ! git clone "$helm_repo" "$work"; then
   echo "❌ Failed to clone $repo" >&2
   exit 1
 fi
