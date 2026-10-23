@@ -18,14 +18,16 @@ env:
   HOME: /tmp
   GIT_CONFIG_GLOBAL: $HOME/.gitconfig
   APOLLO_CONFIG_HOME: $HOME
+  SONAR_USER_HOME: $HOME/.sonar"
+  SCANNER_WORKDIR_PATH: $HOME/sonar-scanner-work
 
   # helm settings
   HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
   # runner vars
-  LARGE_RUNNER_QUEUE: self-hosted-garage-vms
-  SMALL_RUNNER_QUEUE: self-hosted-garage-vms
+  LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-self-hosted-garage-vms}
+  SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-self-hosted-garage-vms}
   RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
   RUNNER_WORKLOAD_STANDARD: "standard"
 

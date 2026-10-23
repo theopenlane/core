@@ -79,7 +79,7 @@ modules:
         nickname: price_registry_annually
         lookup_key: price_registry_annually
         price_id: price_1Tm59FJIzM4Pa2Zctv6XeooE
-    audience: public
+    audience: private
     product_id: prod_UlcOm2q6nv0DJC
   trust_center_module:
     display_name: Trust Center
@@ -157,7 +157,7 @@ addons:
         nickname: price_trustcenter_branding_annually
         lookup_key: price_branding_trustcenter_yearly
         price_id: price_1UQvl6JIzM4Pa2ZcSzpwqgEA
-    audience: private
+    audience: public
     product_id: prod_VRKVprEOFUrczE
   domain_scanning_addon:
     display_name: Domain and Vulnerability Scanning
@@ -192,7 +192,7 @@ addons:
         metadata:
           increment_gb: "100"
         price_id: price_1S3qXFJIzM4Pa2ZcUKyDYErM
-    audience: public
+    audience: private
     product_id: prod_SzqDCzuPVc6Lrn
   policy_management_addon:
     display_name: Policy and Procedure Management
