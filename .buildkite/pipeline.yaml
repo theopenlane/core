@@ -14,7 +14,9 @@ env:
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
+  GOTMPDIR: $HOME/.cache/go-tmp
   GIT_CONFIG_GLOBAL: /tmp/.gitconfig
+  HOME: /var/lib/buildkite-agent/
 
   # helm settings
   HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
@@ -64,7 +66,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-                - HOME=/tmp
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
@@ -90,7 +92,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
-                - HOME=/tmp
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
@@ -121,7 +123,6 @@ steps:
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
-                - HOME=/tmp
                 - GIT_CONFIG_GLOBAL=/tmp/.gitconfig
       - label: ":link: link PRs"
         key: "link_pr_automation"
@@ -276,6 +277,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
@@ -302,6 +304,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - "GOTOOLCHAIN=auto"
                 - "CGO_ENABLED=0"
@@ -332,6 +335,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
@@ -364,6 +368,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
@@ -414,6 +419,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
@@ -448,6 +454,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
@@ -487,6 +494,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
                 - "/var/run/docker.sock:/var/run/docker.sock"
               environment:
                 - "ANALYTICS_KEY"
@@ -612,6 +620,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - "SONAR_TOKEN"
                 - "SONAR_HOST_URL=$SONAR_HOST"
@@ -664,6 +673,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - "SONAR_TOKEN"
                 - "SONAR_HOST_URL=$SONAR_HOST"
@@ -696,6 +706,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - GOOS=linux
               command: ["task", "go:build:ci"]
@@ -721,6 +732,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - GOOS=darwin
                 - GOARCH=arm64
@@ -743,6 +755,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - GOOS=linux
               command: ["task", "go:build:ci:release"]
@@ -764,6 +777,7 @@ steps:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - $GOTMPDIR:$GOTMPDIR
               environment:
                 - GOOS=darwin
                 - GOARCH=arm64
@@ -842,7 +856,6 @@ steps:
               environment:
                 - "APOLLO_KEY"
                 - "BUILDKITE_AGENT_ACCESS_TOKEN"
-                - HOME=/tmp
   - group: ":docker: Image Build"
     depends_on: "go-builds"
     key: "image-build"
