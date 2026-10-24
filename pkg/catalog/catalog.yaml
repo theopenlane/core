@@ -1,5 +1,5 @@
-version: v0.0.8
-sha: 337ee7f61cf30b2f1b137f45b1cf1fbbf9453060b714de51de856f427d853895
+version: v0.0.11
+sha: 6811e18cc19816a82f351d90f4bdd1c6dc709fdd45bb49c32b00fdf4ca62e13e
 modules:
   base_module:
     display_name: Base Module
@@ -81,7 +81,6 @@ modules:
         price_id: price_1Tm5QPBvxky1R7Sv1ZJwq41b
     audience: private
     product_id: prod_Ulcf3iUMbFB4R4
-    include_with_trial: false
   trust_center_module:
     display_name: Trust Center
     lookup_key: trust_center_module
@@ -122,22 +121,44 @@ modules:
     audience: private
     product_id: prod_SeI46ZmXn9BpA1
 addons:
-  workflow_addon:
-    display_name: Workflow Automation
-    lookup_key: workflow_addon
-    description: Workflow Automation
+  assessment_custom_domain_addon:
+    display_name: Questionnaire custom domain
+    lookup_key: assessment_custom_domain_addon
+    description: Questionnaire custom domain
+    marketing_description: Use a custom domain for your hosted questionnaires
     billing:
       prices:
       - interval: month
-        unit_amount: 5000
-        nickname: price_workflow_monthly
-        lookup_key: price_workflow_monthly
+        unit_amount: 2500
+        nickname: price_questionnaire_custom_domain_monthly
+        lookup_key: price_assessment_custom_domain_monthly
+        price_id: price_1UTledBvxky1R7SvL0lQclW9
       - interval: year
-        unit_amount: 54000
-        nickname: price_workflow_annually
-        lookup_key: price_workflow_annually
+        unit_amount: 27000
+        nickname: price_questionnaire_custom_domain_yearly
+        lookup_key: price_assessment_custom_domain_yearly
+        price_id: price_1UTledBvxky1R7SvkJXP0KCb
     audience: private
-    include_with_trial: false
+    product_id: prod_VUlA6OVEWL9Zje
+  branding_trustcenter_addon:
+    display_name: Trustcenter Branding
+    lookup_key: branding_trustcenter_addon
+    description: Trustcenter Branding
+    marketing_description: Customization option to remove the Openlane branding on your Trustcenter
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 2500
+        nickname: price_trustcenter_branding_monthly
+        lookup_key: price_branding_trustcenter_monthly
+        price_id: price_1UTlefBvxky1R7SvTG4jvlvZ
+      - interval: year
+        unit_amount: 27000
+        nickname: price_trustcenter_branding_annually
+        lookup_key: price_branding_trustcenter_yearly
+        price_id: price_1UTlefBvxky1R7SvOSFEWH4n
+    audience: public
+    product_id: prod_VUlBeezF0iHYEJ
   domain_scanning_addon:
     display_name: Domain and Vulnerability Scanning
     lookup_key: domain_scanning_addon
@@ -171,7 +192,7 @@ addons:
         metadata:
           increment_gb: "100"
         price_id: price_1RizV0Bvxky1R7SvQ7xVtID7
-    audience: public
+    audience: private
     product_id: prod_SeI5CFhlkNjcwx
   policy_management_addon:
     display_name: Policy and Procedure Management
@@ -211,35 +232,21 @@ addons:
         price_id: price_1RizV4Bvxky1R7SvG60NheSe
     audience: beta
     product_id: prod_SeI54PHvjUiTKZ
-  branding_trustcenter_addon:
-    display_name: Trustcenter Branding
-    lookup_key: branding_trustcenter_addon
-    description: Trustcenter Branding
-    marketing_description: Customization option to remove the Openlane branding on your Trustcenter
+  workflow_addon:
+    display_name: Workflow Automation
+    lookup_key: workflow_addon
+    description: Workflow Automation
     billing:
       prices:
       - interval: month
-        unit_amount: 2500
-        nickname: price_trustcenter_branding_monthly
-        lookup_key: price_branding_trustcenter_monthly
+        unit_amount: 5000
+        nickname: price_workflow_monthly
+        lookup_key: price_workflow_monthly
+        price_id: price_1UTlebBvxky1R7SvFrQVG9Y8
       - interval: year
-        unit_amount: 27000
-        nickname: price_trustcenter_branding_annually
-        lookup_key: price_branding_trustcenter_yearly
+        unit_amount: 54000
+        nickname: price_workflow_annually
+        lookup_key: price_workflow_annually
+        price_id: price_1UTlebBvxky1R7SvXD4AnuPg
     audience: private
-  assessment_custom_domain_addon:
-    display_name: Questionnaire custom domain
-    lookup_key: assessment_custom_domain_addon
-    description: Questionnaire custom domain
-    marketing_description: Use a custom domain for your hosted questionnaires
-    billing:
-      prices:
-      - interval: month
-        unit_amount: 2500
-        nickname: price_questionnaire_custom_domain_monthly
-        lookup_key: price_assessment_custom_domain_monthly
-      - interval: year
-        unit_amount: 27000
-        nickname: price_questionnaire_custom_domain_yearly
-        lookup_key: price_assessment_custom_domain_yearly
-    audience: private
+    product_id: prod_VUlARQ9v66M5U3

@@ -24,7 +24,7 @@ const (
 	browserNavigationTimeout = 45000
 	// browserWaitUntil is the Puppeteer navigation completion strategy: "load" fires once HTML, CSS, and scripts are parsed,
 	// which is more reliable for SPAs than "networkidle2" (some never drop below 2 open connections).
-	browserWaitUntil = browser_rendering.JsonNewParamsGotoOptionsWaitUntilStringLoad
+	browserWaitUntil = browser_rendering.JsonNewParamsBodyObjectGotoOptionsWaitUntilStringLoad
 	// browserWaitForTimeout is an additional delay, in milliseconds, held  after the page load event fires and before extraction runs
 	browserWaitForTimeout = 3000
 	// companyProfileWaitForTimeout is a longer post-load delay used for company profile pages
@@ -484,34 +484,36 @@ func (c *Config) getBrowserRenderingJSONParams(url string, prompt string, kind P
 		waitForTimeout = companyProfileWaitForTimeout
 	}
 
-	params := browser_rendering.JsonNewParams{
-		AccountID:      cloudflare.F(c.AccountID),
-		CacheTTL:       cloudflare.Float(float64(c.CacheTTL)),
+	body := browser_rendering.JsonNewParamsBodyObject{
 		URL:            cloudflare.String(url),
 		Prompt:         cloudflare.String(prompt),
 		ResponseFormat: cloudflare.F(schema.toParams()),
-		GotoOptions: cloudflare.F(browser_rendering.JsonNewParamsGotoOptions{
-			WaitUntil: cloudflare.F[browser_rendering.JsonNewParamsGotoOptionsWaitUntilUnion](browserWaitUntil),
+		GotoOptions: cloudflare.F(browser_rendering.JsonNewParamsBodyObjectGotoOptions{
+			WaitUntil: cloudflare.F[browser_rendering.JsonNewParamsBodyObjectGotoOptionsWaitUntilUnion](browserWaitUntil),
 			Timeout:   cloudflare.Float(browserNavigationTimeout),
 		}),
 		WaitForTimeout: cloudflare.Float(float64(waitForTimeout)),
 	}
 
 	if kind == promptTrustCenter {
-		params.WaitForSelector = cloudflare.F(browser_rendering.JsonNewParamsWaitForSelector{
+		body.WaitForSelector = cloudflare.F(browser_rendering.JsonNewParamsBodyObjectWaitForSelector{
 			Selector: cloudflare.String(trustCenterContentSelector),
 			Timeout:  cloudflare.Float(trustCenterWaitForSelectorTimeout),
 		})
-		params.BestAttempt = cloudflare.Bool(true)
+		body.BestAttempt = cloudflare.Bool(true)
 	}
 
-	return params
+	return browser_rendering.JsonNewParams{
+		AccountID: cloudflare.F(c.AccountID),
+		CacheTTL:  cloudflare.Float(float64(c.CacheTTL)),
+		Body:      body,
+	}
 }
 
 // toParams converts the locally built schema into the Cloudflare browser rendering response
 // format, whose json_schema field is an untyped map rather than a typed schema struct
-func (r ResponseFormat) toParams() browser_rendering.JsonNewParamsResponseFormat {
-	out := browser_rendering.JsonNewParamsResponseFormat{Type: cloudflare.String(r.Type)}
+func (r ResponseFormat) toParams() browser_rendering.JsonNewParamsBodyObjectResponseFormat {
+	out := browser_rendering.JsonNewParamsBodyObjectResponseFormat{Type: cloudflare.String(r.Type)}
 
 	data, err := json.Marshal(r.Schema)
 	if err != nil {

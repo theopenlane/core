@@ -12,7 +12,7 @@ if [[ -n "${POST_MERGE_PR_STUB:-}" && -f "${POST_MERGE_PR_STUB}" ]]; then
 fi
 
 # Configuration
-repo="${HELM_CHART_REPO}"
+repo="$(normalize_github_repo "${HELM_CHART_REPO}")"
 
 # Install dependencies
 install_dependencies

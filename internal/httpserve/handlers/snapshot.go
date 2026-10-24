@@ -51,20 +51,22 @@ func (h *Handler) SnapshotHandler(ctx echo.Context) error {
 // getSnapshotParams converts the input SnapshotRequest into Cloudflare SnapshotNewParams
 // for use with the Cloudflare API
 func (h *Handler) getSnapshotParams(in *models.SnapshotRequest) browser_rendering.SnapshotNewParams {
-	params := browser_rendering.SnapshotNewParams{
-		AccountID: cloudflare.F(h.CloudflareConfig.AccountID),
-		CacheTTL:  cloudflare.Float(snapshotCacheTTL),
-		URL:       cloudflare.F(in.URL),
-		ScreenshotOptions: cloudflare.F(browser_rendering.SnapshotNewParamsScreenshotOptions{
-			Type: cloudflare.F(browser_rendering.SnapshotNewParamsScreenshotOptionsTypePNG),
+	body := browser_rendering.SnapshotNewParamsBodyObject{
+		URL: cloudflare.F(in.URL),
+		ScreenshotOptions: cloudflare.F(browser_rendering.SnapshotNewParamsBodyObjectScreenshotOptions{
+			Type: cloudflare.F(browser_rendering.SnapshotNewParamsBodyObjectScreenshotOptionsTypePNG),
 		}),
 	}
 
 	if in.WaitForSelector != "" {
-		params.WaitForSelector = cloudflare.F(browser_rendering.SnapshotNewParamsWaitForSelector{
+		body.WaitForSelector = cloudflare.F(browser_rendering.SnapshotNewParamsBodyObjectWaitForSelector{
 			Selector: cloudflare.F(in.WaitForSelector),
 		})
 	}
 
-	return params
+	return browser_rendering.SnapshotNewParams{
+		AccountID: cloudflare.F(h.CloudflareConfig.AccountID),
+		CacheTTL:  cloudflare.Float(snapshotCacheTTL),
+		Body:      body,
+	}
 }
