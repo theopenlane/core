@@ -1,0 +1,158 @@
+mutation AddUserToReportWithRole ($input: CreateReportMembershipInput!) {
+	createReportMembership(input: $input) {
+		reportMembership {
+			reportID
+			report {
+				id
+				name
+			}
+			id
+			role
+			userID
+			user {
+				displayName
+				email
+				firstName
+				id
+				lastName
+			}
+		}
+	}
+}
+mutation CreateBulkReportMembership ($input: [CreateReportMembershipInput!]) {
+	createBulkReportMembership(input: $input) {
+		reportMemberships {
+			createdAt
+			createdBy
+			id
+			reportID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+mutation CreateReportMembership ($input: CreateReportMembershipInput!) {
+	createReportMembership(input: $input) {
+		reportMembership {
+			createdAt
+			createdBy
+			id
+			reportID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+mutation DeleteBulkReportMembership ($ids: [ID!]!) {
+	deleteBulkReportMembership(ids: $ids) {
+		deletedIDs
+	}
+}
+mutation DeleteReportMembership ($deleteReportMembershipId: ID!) {
+	deleteReportMembership(id: $deleteReportMembershipId) {
+		deletedID
+	}
+}
+query GetAllReportMemberships ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportMembershipOrder!]) {
+	reportMemberships(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				reportID
+				role
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+query GetReportMembershipByID ($reportMembershipId: ID!) {
+	reportMembership(id: $reportMembershipId) {
+		createdAt
+		createdBy
+		id
+		reportID
+		role
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		userID
+	}
+}
+query GetReportMemberships ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportMembershipOrder!], $where: ReportMembershipWhereInput) {
+	reportMemberships(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				reportID
+				role
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+mutation RemoveUserFromReport ($deleteReportMembershipId: ID!) {
+	deleteReportMembership(id: $deleteReportMembershipId) {
+		deletedID
+	}
+}
+mutation UpdateBulkReportMembership ($ids: [ID!]!, $input: UpdateReportMembershipInput!) {
+	updateBulkReportMembership(ids: $ids, input: $input) {
+		reportMemberships {
+			createdAt
+			createdBy
+			id
+			reportID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+	}
+}
+mutation UpdateReportMembership ($updateReportMembershipId: ID!, $input: UpdateReportMembershipInput!) {
+	updateReportMembership(id: $updateReportMembershipId, input: $input) {
+		reportMembership {
+			createdAt
+			createdBy
+			id
+			reportID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}

@@ -1697,6 +1697,23 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"Report": {
+		SchemaName: "Report",
+		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "ReportOwnerEmail",
+				TargetField:     "ReportOwnerID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+		},
+	},
+	"ReportMembership": {
+		SchemaName: "ReportMembership",
+		Rules:      []CSVReferenceRule{},
+	},
 	"Review": {
 		SchemaName: "Review",
 		Rules: []CSVReferenceRule{
@@ -3281,6 +3298,44 @@ type RemediationCSVUpdateInput struct {
 
 // CSVInputWrapper marks RemediationCSVUpdateInput for CSV header preprocessing.
 func (RemediationCSVUpdateInput) CSVInputWrapper() {}
+
+// ReportCSVInput wraps CreateReportInput with CSV reference columns.
+type ReportCSVInput struct {
+	Input            generated.CreateReportInput
+	ReportOwnerEmail string `csv:"ReportOwnerEmail"`
+}
+
+// CSVInputWrapper marks ReportCSVInput for CSV header preprocessing.
+func (ReportCSVInput) CSVInputWrapper() {}
+
+// ReportCSVUpdateInput wraps UpdateReportInput with CSV reference columns for bulk updates.
+type ReportCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID               string `csv:"ID"`
+	Input            generated.UpdateReportInput
+	ReportOwnerEmail string `csv:"ReportOwnerEmail"`
+}
+
+// CSVInputWrapper marks ReportCSVUpdateInput for CSV header preprocessing.
+func (ReportCSVUpdateInput) CSVInputWrapper() {}
+
+// ReportMembershipCSVInput wraps CreateReportMembershipInput with CSV reference columns.
+type ReportMembershipCSVInput struct {
+	Input generated.CreateReportMembershipInput
+}
+
+// CSVInputWrapper marks ReportMembershipCSVInput for CSV header preprocessing.
+func (ReportMembershipCSVInput) CSVInputWrapper() {}
+
+// ReportMembershipCSVUpdateInput wraps UpdateReportMembershipInput with CSV reference columns for bulk updates.
+type ReportMembershipCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID    string `csv:"ID"`
+	Input generated.UpdateReportMembershipInput
+}
+
+// CSVInputWrapper marks ReportMembershipCSVUpdateInput for CSV header preprocessing.
+func (ReportMembershipCSVUpdateInput) CSVInputWrapper() {}
 
 // ReviewCSVInput wraps CreateReviewInput with CSV reference columns.
 type ReviewCSVInput struct {

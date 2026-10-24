@@ -74,6 +74,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -1922,6 +1924,60 @@ func (f TraverseRemediation) Traverse(ctx context.Context, q generated.Query) er
 	return fmt.Errorf("unexpected query type %T. expect *generated.RemediationQuery", q)
 }
 
+// The ReportFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ReportFunc func(context.Context, *generated.ReportQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ReportFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ReportQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ReportQuery", q)
+}
+
+// The TraverseReport type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseReport func(context.Context, *generated.ReportQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseReport) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseReport) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ReportQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ReportQuery", q)
+}
+
+// The ReportMembershipFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ReportMembershipFunc func(context.Context, *generated.ReportMembershipQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ReportMembershipFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ReportMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ReportMembershipQuery", q)
+}
+
+// The TraverseReportMembership type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseReportMembership func(context.Context, *generated.ReportMembershipQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseReportMembership) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseReportMembership) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ReportMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ReportMembershipQuery", q)
+}
+
 // The ReviewFunc type is an adapter to allow the use of ordinary function as a Querier.
 type ReviewFunc func(context.Context, *generated.ReviewQuery) (generated.Value, error)
 
@@ -3000,6 +3056,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ProgramMembershipQuery, predicate.ProgramMembership, programmembership.OrderOption]{typ: generated.TypeProgramMembership, tq: q}, nil
 	case *generated.RemediationQuery:
 		return &query[*generated.RemediationQuery, predicate.Remediation, remediation.OrderOption]{typ: generated.TypeRemediation, tq: q}, nil
+	case *generated.ReportQuery:
+		return &query[*generated.ReportQuery, predicate.Report, report.OrderOption]{typ: generated.TypeReport, tq: q}, nil
+	case *generated.ReportMembershipQuery:
+		return &query[*generated.ReportMembershipQuery, predicate.ReportMembership, reportmembership.OrderOption]{typ: generated.TypeReportMembership, tq: q}, nil
 	case *generated.ReviewQuery:
 		return &query[*generated.ReviewQuery, predicate.Review, review.OrderOption]{typ: generated.TypeReview, tq: q}, nil
 	case *generated.RiskQuery:

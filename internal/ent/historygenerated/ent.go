@@ -55,6 +55,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reporthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reportmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
@@ -182,6 +184,8 @@ func checkColumn(t, c string) error {
 			programhistory.Table:                    programhistory.ValidColumn,
 			programmembershiphistory.Table:          programmembershiphistory.ValidColumn,
 			remediationhistory.Table:                remediationhistory.ValidColumn,
+			reporthistory.Table:                     reporthistory.ValidColumn,
+			reportmembershiphistory.Table:           reportmembershiphistory.ValidColumn,
 			reviewhistory.Table:                     reviewhistory.ValidColumn,
 			riskhistory.Table:                       riskhistory.ValidColumn,
 			sladefinitionhistory.Table:              sladefinitionhistory.ValidColumn,

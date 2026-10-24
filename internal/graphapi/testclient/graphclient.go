@@ -470,6 +470,7 @@ type TestGraphClient interface {
 	GetAllProgramMemberships(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllProgramMemberships, error)
 	GetProgramMembershipByID(ctx context.Context, programMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetProgramMembershipByID, error)
 	GetProgramMemberships(ctx context.Context, where *ProgramMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetProgramMemberships, error)
+	UpdateBulkProgramMembership(ctx context.Context, ids []string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProgramMembership, error)
 	UpdateProgramMembership(ctx context.Context, updateProgramMembershipID string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateProgramMembership, error)
 	CreateBulkCSVRemediation(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVRemediation, error)
 	CreateBulkRemediation(ctx context.Context, input []*CreateRemediationInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkRemediation, error)
@@ -482,6 +483,24 @@ type TestGraphClient interface {
 	UpdateBulkCSVRemediation(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVRemediation, error)
 	UpdateBulkRemediation(ctx context.Context, ids []string, input UpdateRemediationInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkRemediation, error)
 	UpdateRemediation(ctx context.Context, updateRemediationID string, input UpdateRemediationInput, interceptors ...clientv2.RequestInterceptor) (*UpdateRemediation, error)
+	CreateReport(ctx context.Context, input CreateReportInput, interceptors ...clientv2.RequestInterceptor) (*CreateReport, error)
+	DeleteReport(ctx context.Context, deleteReportID string, interceptors ...clientv2.RequestInterceptor) (*DeleteReport, error)
+	GetAllReports(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllReports, error)
+	GetReportByID(ctx context.Context, reportID string, interceptors ...clientv2.RequestInterceptor) (*GetReportByID, error)
+	GetReportMembersByReportID(ctx context.Context, reportID string, interceptors ...clientv2.RequestInterceptor) (*GetReportMembersByReportID, error)
+	GetReports(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportOrder, where *ReportWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetReports, error)
+	UpdateReport(ctx context.Context, updateReportID string, input UpdateReportInput, interceptors ...clientv2.RequestInterceptor) (*UpdateReport, error)
+	AddUserToReportWithRole(ctx context.Context, input CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*AddUserToReportWithRole, error)
+	CreateBulkReportMembership(ctx context.Context, input []*CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkReportMembership, error)
+	CreateReportMembership(ctx context.Context, input CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateReportMembership, error)
+	DeleteBulkReportMembership(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkReportMembership, error)
+	DeleteReportMembership(ctx context.Context, deleteReportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*DeleteReportMembership, error)
+	GetAllReportMemberships(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportMembershipOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllReportMemberships, error)
+	GetReportMembershipByID(ctx context.Context, reportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetReportMembershipByID, error)
+	GetReportMemberships(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportMembershipOrder, where *ReportMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetReportMemberships, error)
+	RemoveUserFromReport(ctx context.Context, deleteReportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*RemoveUserFromReport, error)
+	UpdateBulkReportMembership(ctx context.Context, ids []string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkReportMembership, error)
+	UpdateReportMembership(ctx context.Context, updateReportMembershipID string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateReportMembership, error)
 	CreateBulkCSVReview(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVReview, error)
 	CreateBulkReview(ctx context.Context, input []*CreateReviewInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkReview, error)
 	CreateReview(ctx context.Context, input CreateReviewInput, interceptors ...clientv2.RequestInterceptor) (*CreateReview, error)
@@ -31208,7 +31227,7 @@ type CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains struct {
 	InternalNotes         *string                "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	MappableDomainID      string                 "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Purpose               enums.DomainPurpose    "json:\"purpose\" graphql:\"purpose\""
+	Purpose               *enums.DomainPurpose   "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                  "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -31276,7 +31295,7 @@ func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetP
 	if t == nil {
 		t = &CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains{}
 	}
-	return &t.Purpose
+	return t.Purpose
 }
 func (t *CreateBulkCSVCustomDomain_CreateBulkCSVCustomDomain_CustomDomains) GetSystemInternalID() *string {
 	if t == nil {
@@ -31342,7 +31361,7 @@ type CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains struct {
 	InternalNotes         *string                "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	MappableDomainID      string                 "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Purpose               enums.DomainPurpose    "json:\"purpose\" graphql:\"purpose\""
+	Purpose               *enums.DomainPurpose   "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                  "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string               "json:\"tags,omitempty\" graphql:\"tags\""
@@ -31410,7 +31429,7 @@ func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetPurpose
 	if t == nil {
 		t = &CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains{}
 	}
-	return &t.Purpose
+	return t.Purpose
 }
 func (t *CreateBulkCustomDomain_CreateBulkCustomDomain_CustomDomains) GetSystemInternalID() *string {
 	if t == nil {
@@ -31509,7 +31528,7 @@ type CreateCustomDomain_CreateCustomDomain_CustomDomain struct {
 	InternalNotes         *string                                                             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	MappableDomainID      string                                                              "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Purpose               enums.DomainPurpose                                                 "json:\"purpose\" graphql:\"purpose\""
+	Purpose               *enums.DomainPurpose                                                "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                                                             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                                                               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -31583,7 +31602,7 @@ func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetPurpose() *enums
 	if t == nil {
 		t = &CreateCustomDomain_CreateCustomDomain_CustomDomain{}
 	}
-	return &t.Purpose
+	return t.Purpose
 }
 func (t *CreateCustomDomain_CreateCustomDomain_CustomDomain) GetSystemInternalID() *string {
 	if t == nil {
@@ -32023,7 +32042,7 @@ type GetCustomDomainByID_CustomDomain struct {
 	MappableDomain        GetCustomDomainByID_CustomDomain_MappableDomain   "json:\"mappableDomain\" graphql:\"mappableDomain\""
 	MappableDomainID      string                                            "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                                           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Purpose               enums.DomainPurpose                               "json:\"purpose\" graphql:\"purpose\""
+	Purpose               *enums.DomainPurpose                              "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                                           "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                                             "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string                                          "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32103,7 +32122,7 @@ func (t *GetCustomDomainByID_CustomDomain) GetPurpose() *enums.DomainPurpose {
 	if t == nil {
 		t = &GetCustomDomainByID_CustomDomain{}
 	}
-	return &t.Purpose
+	return t.Purpose
 }
 func (t *GetCustomDomainByID_CustomDomain) GetSystemInternalID() *string {
 	if t == nil {
@@ -32379,7 +32398,7 @@ type UpdateCustomDomain_UpdateCustomDomain_CustomDomain struct {
 	InternalNotes         *string                                                             "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	MappableDomainID      string                                                              "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID               *string                                                             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Purpose               enums.DomainPurpose                                                 "json:\"purpose\" graphql:\"purpose\""
+	Purpose               *enums.DomainPurpose                                                "json:\"purpose,omitempty\" graphql:\"purpose\""
 	SystemInternalID      *string                                                             "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
 	SystemOwned           *bool                                                               "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                  []string                                                            "json:\"tags,omitempty\" graphql:\"tags\""
@@ -32453,7 +32472,7 @@ func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetPurpose() *enums
 	if t == nil {
 		t = &UpdateCustomDomain_UpdateCustomDomain_CustomDomain{}
 	}
-	return &t.Purpose
+	return t.Purpose
 }
 func (t *UpdateCustomDomain_UpdateCustomDomain_CustomDomain) GetSystemInternalID() *string {
 	if t == nil {
@@ -100219,6 +100238,98 @@ func (t *GetProgramMemberships_ProgramMemberships) GetEdges() []*GetProgramMembe
 	return t.Edges
 }
 
+type UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	ProgramID             string     "json:\"programID\" graphql:\"programID\""
+	Role                  enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetID() string {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetProgramID() string {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.ProgramID
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetRole() *enums.Role {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
+	}
+	return &t.Role
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships) GetUserID() string {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships{}
+	}
+	return t.UserID
+}
+
+type UpdateBulkProgramMembership_UpdateBulkProgramMembership struct {
+	NotUpdatedIDs      []string                                                                      "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	ProgramMemberships []*UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships "json:\"programMemberships,omitempty\" graphql:\"programMemberships\""
+	UpdatedIDs         []string                                                                      "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership{}
+	}
+	return t.NotUpdatedIDs
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership) GetProgramMemberships() []*UpdateBulkProgramMembership_UpdateBulkProgramMembership_ProgramMemberships {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership{}
+	}
+	return t.ProgramMemberships
+}
+func (t *UpdateBulkProgramMembership_UpdateBulkProgramMembership) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkProgramMembership_UpdateBulkProgramMembership{}
+	}
+	return t.UpdatedIDs
+}
+
 type UpdateProgramMembership_UpdateProgramMembership_ProgramMembership struct {
 	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -102774,6 +102885,2679 @@ func (t *UpdateRemediation_UpdateRemediation) GetRemediation() *UpdateRemediatio
 		t = &UpdateRemediation_UpdateRemediation{}
 	}
 	return &t.Remediation
+}
+
+type CreateReport_CreateReport_Report_Editors_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateReport_CreateReport_Report_Editors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_Editors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateReport_CreateReport_Report_Editors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_Editors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type CreateReport_CreateReport_Report_Editors_Edges struct {
+	Node *CreateReport_CreateReport_Report_Editors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateReport_CreateReport_Report_Editors_Edges) GetNode() *CreateReport_CreateReport_Report_Editors_Edges_Node {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_Editors_Edges{}
+	}
+	return t.Node
+}
+
+type CreateReport_CreateReport_Report_Editors struct {
+	Edges []*CreateReport_CreateReport_Report_Editors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateReport_CreateReport_Report_Editors) GetEdges() []*CreateReport_CreateReport_Report_Editors_Edges {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_Editors{}
+	}
+	return t.Edges
+}
+
+type CreateReport_CreateReport_Report_Viewers_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateReport_CreateReport_Report_Viewers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_Viewers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateReport_CreateReport_Report_Viewers_Edges_Node) GetName() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_Viewers_Edges_Node{}
+	}
+	return t.Name
+}
+
+type CreateReport_CreateReport_Report_Viewers_Edges struct {
+	Node *CreateReport_CreateReport_Report_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateReport_CreateReport_Report_Viewers_Edges) GetNode() *CreateReport_CreateReport_Report_Viewers_Edges_Node {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_Viewers_Edges{}
+	}
+	return t.Node
+}
+
+type CreateReport_CreateReport_Report_Viewers struct {
+	Edges []*CreateReport_CreateReport_Report_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateReport_CreateReport_Report_Viewers) GetEdges() []*CreateReport_CreateReport_Report_Viewers_Edges {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_Viewers{}
+	}
+	return t.Edges
+}
+
+type CreateReport_CreateReport_Report_BlockedGroups_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateReport_CreateReport_Report_BlockedGroups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_BlockedGroups_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateReport_CreateReport_Report_BlockedGroups_Edges_Node) GetName() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_BlockedGroups_Edges_Node{}
+	}
+	return t.Name
+}
+
+type CreateReport_CreateReport_Report_BlockedGroups_Edges struct {
+	Node *CreateReport_CreateReport_Report_BlockedGroups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateReport_CreateReport_Report_BlockedGroups_Edges) GetNode() *CreateReport_CreateReport_Report_BlockedGroups_Edges_Node {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_BlockedGroups_Edges{}
+	}
+	return t.Node
+}
+
+type CreateReport_CreateReport_Report_BlockedGroups struct {
+	Edges []*CreateReport_CreateReport_Report_BlockedGroups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateReport_CreateReport_Report_BlockedGroups) GetEdges() []*CreateReport_CreateReport_Report_BlockedGroups_Edges {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report_BlockedGroups{}
+	}
+	return t.Edges
+}
+
+type CreateReport_CreateReport_Report struct {
+	BlockedGroups         CreateReport_CreateReport_Report_BlockedGroups "json:\"blockedGroups\" graphql:\"blockedGroups\""
+	CreatedAt             *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string                                         "json:\"displayID\" graphql:\"displayID\""
+	Editors               CreateReport_CreateReport_Report_Editors       "json:\"editors\" graphql:\"editors\""
+	ID                    string                                         "json:\"id\" graphql:\"id\""
+	Name                  string                                         "json:\"name\" graphql:\"name\""
+	OwnerID               *string                                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Query                 string                                         "json:\"query\" graphql:\"query\""
+	ReportKindID          *string                                        "json:\"reportKindID,omitempty\" graphql:\"reportKindID\""
+	ReportKindName        *string                                        "json:\"reportKindName,omitempty\" graphql:\"reportKindName\""
+	ReportOwnerID         *string                                        "json:\"reportOwnerID,omitempty\" graphql:\"reportOwnerID\""
+	RequestorID           *string                                        "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status                enums.ReportStatus                             "json:\"status\" graphql:\"status\""
+	Tags                  []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Variables             map[string]any                                 "json:\"variables,omitempty\" graphql:\"variables\""
+	Viewers               CreateReport_CreateReport_Report_Viewers       "json:\"viewers\" graphql:\"viewers\""
+	Visibility            enums.ReportVisibility                         "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *CreateReport_CreateReport_Report) GetBlockedGroups() *CreateReport_CreateReport_Report_BlockedGroups {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return &t.BlockedGroups
+}
+func (t *CreateReport_CreateReport_Report) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateReport_CreateReport_Report) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateReport_CreateReport_Report) GetDisplayID() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.DisplayID
+}
+func (t *CreateReport_CreateReport_Report) GetEditors() *CreateReport_CreateReport_Report_Editors {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return &t.Editors
+}
+func (t *CreateReport_CreateReport_Report) GetID() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.ID
+}
+func (t *CreateReport_CreateReport_Report) GetName() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.Name
+}
+func (t *CreateReport_CreateReport_Report) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.OwnerID
+}
+func (t *CreateReport_CreateReport_Report) GetQuery() string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.Query
+}
+func (t *CreateReport_CreateReport_Report) GetReportKindID() *string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.ReportKindID
+}
+func (t *CreateReport_CreateReport_Report) GetReportKindName() *string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.ReportKindName
+}
+func (t *CreateReport_CreateReport_Report) GetReportOwnerID() *string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.ReportOwnerID
+}
+func (t *CreateReport_CreateReport_Report) GetRequestorID() *string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.RequestorID
+}
+func (t *CreateReport_CreateReport_Report) GetStatus() *enums.ReportStatus {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return &t.Status
+}
+func (t *CreateReport_CreateReport_Report) GetTags() []string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.Tags
+}
+func (t *CreateReport_CreateReport_Report) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateReport_CreateReport_Report) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateReport_CreateReport_Report) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateReport_CreateReport_Report) GetVariables() map[string]any {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return t.Variables
+}
+func (t *CreateReport_CreateReport_Report) GetViewers() *CreateReport_CreateReport_Report_Viewers {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return &t.Viewers
+}
+func (t *CreateReport_CreateReport_Report) GetVisibility() *enums.ReportVisibility {
+	if t == nil {
+		t = &CreateReport_CreateReport_Report{}
+	}
+	return &t.Visibility
+}
+
+type CreateReport_CreateReport struct {
+	Report CreateReport_CreateReport_Report "json:\"report\" graphql:\"report\""
+}
+
+func (t *CreateReport_CreateReport) GetReport() *CreateReport_CreateReport_Report {
+	if t == nil {
+		t = &CreateReport_CreateReport{}
+	}
+	return &t.Report
+}
+
+type DeleteReport_DeleteReport struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteReport_DeleteReport) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteReport_DeleteReport{}
+	}
+	return t.DeletedID
+}
+
+type GetAllReports_Reports_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllReports_Reports_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllReports_Reports_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllReports_Reports_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllReports_Reports_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllReports_Reports_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllReports_Reports_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllReports_Reports_Edges_Node_Editors_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Editors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Editors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllReports_Reports_Edges_Node_Editors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Editors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetAllReports_Reports_Edges_Node_Editors_Edges struct {
+	Node *GetAllReports_Reports_Edges_Node_Editors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Editors_Edges) GetNode() *GetAllReports_Reports_Edges_Node_Editors_Edges_Node {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Editors_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllReports_Reports_Edges_Node_Editors struct {
+	Edges []*GetAllReports_Reports_Edges_Node_Editors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Editors) GetEdges() []*GetAllReports_Reports_Edges_Node_Editors_Edges {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Editors{}
+	}
+	return t.Edges
+}
+
+type GetAllReports_Reports_Edges_Node_Viewers_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Viewers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Viewers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllReports_Reports_Edges_Node_Viewers_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Viewers_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetAllReports_Reports_Edges_Node_Viewers_Edges struct {
+	Node *GetAllReports_Reports_Edges_Node_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Viewers_Edges) GetNode() *GetAllReports_Reports_Edges_Node_Viewers_Edges_Node {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Viewers_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllReports_Reports_Edges_Node_Viewers struct {
+	Edges []*GetAllReports_Reports_Edges_Node_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Viewers) GetEdges() []*GetAllReports_Reports_Edges_Node_Viewers_Edges {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Viewers{}
+	}
+	return t.Edges
+}
+
+type GetAllReports_Reports_Edges_Node_BlockedGroups_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_BlockedGroups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_BlockedGroups_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllReports_Reports_Edges_Node_BlockedGroups_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_BlockedGroups_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetAllReports_Reports_Edges_Node_BlockedGroups_Edges struct {
+	Node *GetAllReports_Reports_Edges_Node_BlockedGroups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_BlockedGroups_Edges) GetNode() *GetAllReports_Reports_Edges_Node_BlockedGroups_Edges_Node {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_BlockedGroups_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllReports_Reports_Edges_Node_BlockedGroups struct {
+	Edges []*GetAllReports_Reports_Edges_Node_BlockedGroups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_BlockedGroups) GetEdges() []*GetAllReports_Reports_Edges_Node_BlockedGroups_Edges {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_BlockedGroups{}
+	}
+	return t.Edges
+}
+
+type GetAllReports_Reports_Edges_Node_Members_Edges_Node_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Members_Edges_Node_User) GetFirstName() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Members_Edges_Node_User{}
+	}
+	return t.FirstName
+}
+func (t *GetAllReports_Reports_Edges_Node_Members_Edges_Node_User) GetID() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Members_Edges_Node_User{}
+	}
+	return t.ID
+}
+func (t *GetAllReports_Reports_Edges_Node_Members_Edges_Node_User) GetLastName() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Members_Edges_Node_User{}
+	}
+	return t.LastName
+}
+
+type GetAllReports_Reports_Edges_Node_Members_Edges_Node struct {
+	ID   string                                                   "json:\"id\" graphql:\"id\""
+	User GetAllReports_Reports_Edges_Node_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Members_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Members_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllReports_Reports_Edges_Node_Members_Edges_Node) GetUser() *GetAllReports_Reports_Edges_Node_Members_Edges_Node_User {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type GetAllReports_Reports_Edges_Node_Members_Edges struct {
+	Node *GetAllReports_Reports_Edges_Node_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Members_Edges) GetNode() *GetAllReports_Reports_Edges_Node_Members_Edges_Node {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllReports_Reports_Edges_Node_Members struct {
+	Edges []*GetAllReports_Reports_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node_Members) GetEdges() []*GetAllReports_Reports_Edges_Node_Members_Edges {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node_Members{}
+	}
+	return t.Edges
+}
+
+type GetAllReports_Reports_Edges_Node struct {
+	BlockedGroups         GetAllReports_Reports_Edges_Node_BlockedGroups "json:\"blockedGroups\" graphql:\"blockedGroups\""
+	CreatedAt             *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string                                         "json:\"displayID\" graphql:\"displayID\""
+	Editors               GetAllReports_Reports_Edges_Node_Editors       "json:\"editors\" graphql:\"editors\""
+	ID                    string                                         "json:\"id\" graphql:\"id\""
+	Members               GetAllReports_Reports_Edges_Node_Members       "json:\"members\" graphql:\"members\""
+	Name                  string                                         "json:\"name\" graphql:\"name\""
+	OwnerID               *string                                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Query                 string                                         "json:\"query\" graphql:\"query\""
+	ReportKindID          *string                                        "json:\"reportKindID,omitempty\" graphql:\"reportKindID\""
+	ReportKindName        *string                                        "json:\"reportKindName,omitempty\" graphql:\"reportKindName\""
+	ReportOwnerID         *string                                        "json:\"reportOwnerID,omitempty\" graphql:\"reportOwnerID\""
+	RequestorID           *string                                        "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status                enums.ReportStatus                             "json:\"status\" graphql:\"status\""
+	Tags                  []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Variables             map[string]any                                 "json:\"variables,omitempty\" graphql:\"variables\""
+	Viewers               GetAllReports_Reports_Edges_Node_Viewers       "json:\"viewers\" graphql:\"viewers\""
+	Visibility            enums.ReportVisibility                         "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *GetAllReports_Reports_Edges_Node) GetBlockedGroups() *GetAllReports_Reports_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return &t.BlockedGroups
+}
+func (t *GetAllReports_Reports_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllReports_Reports_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllReports_Reports_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllReports_Reports_Edges_Node) GetEditors() *GetAllReports_Reports_Edges_Node_Editors {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return &t.Editors
+}
+func (t *GetAllReports_Reports_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllReports_Reports_Edges_Node) GetMembers() *GetAllReports_Reports_Edges_Node_Members {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return &t.Members
+}
+func (t *GetAllReports_Reports_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllReports_Reports_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllReports_Reports_Edges_Node) GetQuery() string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.Query
+}
+func (t *GetAllReports_Reports_Edges_Node) GetReportKindID() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.ReportKindID
+}
+func (t *GetAllReports_Reports_Edges_Node) GetReportKindName() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.ReportKindName
+}
+func (t *GetAllReports_Reports_Edges_Node) GetReportOwnerID() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.ReportOwnerID
+}
+func (t *GetAllReports_Reports_Edges_Node) GetRequestorID() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.RequestorID
+}
+func (t *GetAllReports_Reports_Edges_Node) GetStatus() *enums.ReportStatus {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetAllReports_Reports_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllReports_Reports_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllReports_Reports_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllReports_Reports_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetAllReports_Reports_Edges_Node) GetVariables() map[string]any {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return t.Variables
+}
+func (t *GetAllReports_Reports_Edges_Node) GetViewers() *GetAllReports_Reports_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return &t.Viewers
+}
+func (t *GetAllReports_Reports_Edges_Node) GetVisibility() *enums.ReportVisibility {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges_Node{}
+	}
+	return &t.Visibility
+}
+
+type GetAllReports_Reports_Edges struct {
+	Node *GetAllReports_Reports_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllReports_Reports_Edges) GetNode() *GetAllReports_Reports_Edges_Node {
+	if t == nil {
+		t = &GetAllReports_Reports_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllReports_Reports struct {
+	Edges      []*GetAllReports_Reports_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllReports_Reports_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllReports_Reports) GetEdges() []*GetAllReports_Reports_Edges {
+	if t == nil {
+		t = &GetAllReports_Reports{}
+	}
+	return t.Edges
+}
+func (t *GetAllReports_Reports) GetPageInfo() *GetAllReports_Reports_PageInfo {
+	if t == nil {
+		t = &GetAllReports_Reports{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllReports_Reports) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllReports_Reports{}
+	}
+	return t.TotalCount
+}
+
+type GetReportByID_Report_Editors_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetReportByID_Report_Editors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReportByID_Report_Editors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReportByID_Report_Editors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetReportByID_Report_Editors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetReportByID_Report_Editors_Edges struct {
+	Node *GetReportByID_Report_Editors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReportByID_Report_Editors_Edges) GetNode() *GetReportByID_Report_Editors_Edges_Node {
+	if t == nil {
+		t = &GetReportByID_Report_Editors_Edges{}
+	}
+	return t.Node
+}
+
+type GetReportByID_Report_Editors struct {
+	Edges []*GetReportByID_Report_Editors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetReportByID_Report_Editors) GetEdges() []*GetReportByID_Report_Editors_Edges {
+	if t == nil {
+		t = &GetReportByID_Report_Editors{}
+	}
+	return t.Edges
+}
+
+type GetReportByID_Report_Viewers_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetReportByID_Report_Viewers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReportByID_Report_Viewers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReportByID_Report_Viewers_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetReportByID_Report_Viewers_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetReportByID_Report_Viewers_Edges struct {
+	Node *GetReportByID_Report_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReportByID_Report_Viewers_Edges) GetNode() *GetReportByID_Report_Viewers_Edges_Node {
+	if t == nil {
+		t = &GetReportByID_Report_Viewers_Edges{}
+	}
+	return t.Node
+}
+
+type GetReportByID_Report_Viewers struct {
+	Edges []*GetReportByID_Report_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetReportByID_Report_Viewers) GetEdges() []*GetReportByID_Report_Viewers_Edges {
+	if t == nil {
+		t = &GetReportByID_Report_Viewers{}
+	}
+	return t.Edges
+}
+
+type GetReportByID_Report_BlockedGroups_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetReportByID_Report_BlockedGroups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReportByID_Report_BlockedGroups_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReportByID_Report_BlockedGroups_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetReportByID_Report_BlockedGroups_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetReportByID_Report_BlockedGroups_Edges struct {
+	Node *GetReportByID_Report_BlockedGroups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReportByID_Report_BlockedGroups_Edges) GetNode() *GetReportByID_Report_BlockedGroups_Edges_Node {
+	if t == nil {
+		t = &GetReportByID_Report_BlockedGroups_Edges{}
+	}
+	return t.Node
+}
+
+type GetReportByID_Report_BlockedGroups struct {
+	Edges []*GetReportByID_Report_BlockedGroups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetReportByID_Report_BlockedGroups) GetEdges() []*GetReportByID_Report_BlockedGroups_Edges {
+	if t == nil {
+		t = &GetReportByID_Report_BlockedGroups{}
+	}
+	return t.Edges
+}
+
+type GetReportByID_Report_Members_Edges_Node_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetReportByID_Report_Members_Edges_Node_User) GetFirstName() *string {
+	if t == nil {
+		t = &GetReportByID_Report_Members_Edges_Node_User{}
+	}
+	return t.FirstName
+}
+func (t *GetReportByID_Report_Members_Edges_Node_User) GetID() string {
+	if t == nil {
+		t = &GetReportByID_Report_Members_Edges_Node_User{}
+	}
+	return t.ID
+}
+func (t *GetReportByID_Report_Members_Edges_Node_User) GetLastName() *string {
+	if t == nil {
+		t = &GetReportByID_Report_Members_Edges_Node_User{}
+	}
+	return t.LastName
+}
+
+type GetReportByID_Report_Members_Edges_Node struct {
+	ID   string                                       "json:\"id\" graphql:\"id\""
+	User GetReportByID_Report_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *GetReportByID_Report_Members_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReportByID_Report_Members_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReportByID_Report_Members_Edges_Node) GetUser() *GetReportByID_Report_Members_Edges_Node_User {
+	if t == nil {
+		t = &GetReportByID_Report_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type GetReportByID_Report_Members_Edges struct {
+	Node *GetReportByID_Report_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReportByID_Report_Members_Edges) GetNode() *GetReportByID_Report_Members_Edges_Node {
+	if t == nil {
+		t = &GetReportByID_Report_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetReportByID_Report_Members struct {
+	Edges []*GetReportByID_Report_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetReportByID_Report_Members) GetEdges() []*GetReportByID_Report_Members_Edges {
+	if t == nil {
+		t = &GetReportByID_Report_Members{}
+	}
+	return t.Edges
+}
+
+type GetReportByID_Report struct {
+	BlockedGroups         GetReportByID_Report_BlockedGroups "json:\"blockedGroups\" graphql:\"blockedGroups\""
+	CreatedAt             *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string                             "json:\"displayID\" graphql:\"displayID\""
+	Editors               GetReportByID_Report_Editors       "json:\"editors\" graphql:\"editors\""
+	ID                    string                             "json:\"id\" graphql:\"id\""
+	Members               GetReportByID_Report_Members       "json:\"members\" graphql:\"members\""
+	Name                  string                             "json:\"name\" graphql:\"name\""
+	OwnerID               *string                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Query                 string                             "json:\"query\" graphql:\"query\""
+	ReportKindID          *string                            "json:\"reportKindID,omitempty\" graphql:\"reportKindID\""
+	ReportKindName        *string                            "json:\"reportKindName,omitempty\" graphql:\"reportKindName\""
+	ReportOwnerID         *string                            "json:\"reportOwnerID,omitempty\" graphql:\"reportOwnerID\""
+	RequestorID           *string                            "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status                enums.ReportStatus                 "json:\"status\" graphql:\"status\""
+	Tags                  []string                           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time                         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Variables             map[string]any                     "json:\"variables,omitempty\" graphql:\"variables\""
+	Viewers               GetReportByID_Report_Viewers       "json:\"viewers\" graphql:\"viewers\""
+	Visibility            enums.ReportVisibility             "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *GetReportByID_Report) GetBlockedGroups() *GetReportByID_Report_BlockedGroups {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return &t.BlockedGroups
+}
+func (t *GetReportByID_Report) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.CreatedAt
+}
+func (t *GetReportByID_Report) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.CreatedBy
+}
+func (t *GetReportByID_Report) GetDisplayID() string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.DisplayID
+}
+func (t *GetReportByID_Report) GetEditors() *GetReportByID_Report_Editors {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return &t.Editors
+}
+func (t *GetReportByID_Report) GetID() string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.ID
+}
+func (t *GetReportByID_Report) GetMembers() *GetReportByID_Report_Members {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return &t.Members
+}
+func (t *GetReportByID_Report) GetName() string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.Name
+}
+func (t *GetReportByID_Report) GetOwnerID() *string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.OwnerID
+}
+func (t *GetReportByID_Report) GetQuery() string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.Query
+}
+func (t *GetReportByID_Report) GetReportKindID() *string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.ReportKindID
+}
+func (t *GetReportByID_Report) GetReportKindName() *string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.ReportKindName
+}
+func (t *GetReportByID_Report) GetReportOwnerID() *string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.ReportOwnerID
+}
+func (t *GetReportByID_Report) GetRequestorID() *string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.RequestorID
+}
+func (t *GetReportByID_Report) GetStatus() *enums.ReportStatus {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return &t.Status
+}
+func (t *GetReportByID_Report) GetTags() []string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.Tags
+}
+func (t *GetReportByID_Report) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetReportByID_Report) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetReportByID_Report) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetReportByID_Report) GetVariables() map[string]any {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return t.Variables
+}
+func (t *GetReportByID_Report) GetViewers() *GetReportByID_Report_Viewers {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return &t.Viewers
+}
+func (t *GetReportByID_Report) GetVisibility() *enums.ReportVisibility {
+	if t == nil {
+		t = &GetReportByID_Report{}
+	}
+	return &t.Visibility
+}
+
+type GetReportMembersByReportID_Report_Members_Edges_Node struct {
+	ID     string     "json:\"id\" graphql:\"id\""
+	Role   enums.Role "json:\"role\" graphql:\"role\""
+	UserID string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *GetReportMembersByReportID_Report_Members_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReportMembersByReportID_Report_Members_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReportMembersByReportID_Report_Members_Edges_Node) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetReportMembersByReportID_Report_Members_Edges_Node{}
+	}
+	return &t.Role
+}
+func (t *GetReportMembersByReportID_Report_Members_Edges_Node) GetUserID() string {
+	if t == nil {
+		t = &GetReportMembersByReportID_Report_Members_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetReportMembersByReportID_Report_Members_Edges struct {
+	Node *GetReportMembersByReportID_Report_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReportMembersByReportID_Report_Members_Edges) GetNode() *GetReportMembersByReportID_Report_Members_Edges_Node {
+	if t == nil {
+		t = &GetReportMembersByReportID_Report_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetReportMembersByReportID_Report_Members struct {
+	Edges []*GetReportMembersByReportID_Report_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetReportMembersByReportID_Report_Members) GetEdges() []*GetReportMembersByReportID_Report_Members_Edges {
+	if t == nil {
+		t = &GetReportMembersByReportID_Report_Members{}
+	}
+	return t.Edges
+}
+
+type GetReportMembersByReportID_Report struct {
+	Members GetReportMembersByReportID_Report_Members "json:\"members\" graphql:\"members\""
+}
+
+func (t *GetReportMembersByReportID_Report) GetMembers() *GetReportMembersByReportID_Report_Members {
+	if t == nil {
+		t = &GetReportMembersByReportID_Report{}
+	}
+	return &t.Members
+}
+
+type GetReports_Reports_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetReports_Reports_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetReports_Reports_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetReports_Reports_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetReports_Reports_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetReports_Reports_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetReports_Reports_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetReports_Reports_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetReports_Reports_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetReports_Reports_Edges_Node_Editors_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Editors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Editors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReports_Reports_Edges_Node_Editors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Editors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetReports_Reports_Edges_Node_Editors_Edges struct {
+	Node *GetReports_Reports_Edges_Node_Editors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Editors_Edges) GetNode() *GetReports_Reports_Edges_Node_Editors_Edges_Node {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Editors_Edges{}
+	}
+	return t.Node
+}
+
+type GetReports_Reports_Edges_Node_Editors struct {
+	Edges []*GetReports_Reports_Edges_Node_Editors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Editors) GetEdges() []*GetReports_Reports_Edges_Node_Editors_Edges {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Editors{}
+	}
+	return t.Edges
+}
+
+type GetReports_Reports_Edges_Node_Viewers_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Viewers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Viewers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReports_Reports_Edges_Node_Viewers_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Viewers_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetReports_Reports_Edges_Node_Viewers_Edges struct {
+	Node *GetReports_Reports_Edges_Node_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Viewers_Edges) GetNode() *GetReports_Reports_Edges_Node_Viewers_Edges_Node {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Viewers_Edges{}
+	}
+	return t.Node
+}
+
+type GetReports_Reports_Edges_Node_Viewers struct {
+	Edges []*GetReports_Reports_Edges_Node_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Viewers) GetEdges() []*GetReports_Reports_Edges_Node_Viewers_Edges {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Viewers{}
+	}
+	return t.Edges
+}
+
+type GetReports_Reports_Edges_Node_BlockedGroups_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetReports_Reports_Edges_Node_BlockedGroups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_BlockedGroups_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReports_Reports_Edges_Node_BlockedGroups_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_BlockedGroups_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetReports_Reports_Edges_Node_BlockedGroups_Edges struct {
+	Node *GetReports_Reports_Edges_Node_BlockedGroups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReports_Reports_Edges_Node_BlockedGroups_Edges) GetNode() *GetReports_Reports_Edges_Node_BlockedGroups_Edges_Node {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_BlockedGroups_Edges{}
+	}
+	return t.Node
+}
+
+type GetReports_Reports_Edges_Node_BlockedGroups struct {
+	Edges []*GetReports_Reports_Edges_Node_BlockedGroups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetReports_Reports_Edges_Node_BlockedGroups) GetEdges() []*GetReports_Reports_Edges_Node_BlockedGroups_Edges {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_BlockedGroups{}
+	}
+	return t.Edges
+}
+
+type GetReports_Reports_Edges_Node_Members_Edges_Node_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Members_Edges_Node_User) GetFirstName() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Members_Edges_Node_User{}
+	}
+	return t.FirstName
+}
+func (t *GetReports_Reports_Edges_Node_Members_Edges_Node_User) GetID() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Members_Edges_Node_User{}
+	}
+	return t.ID
+}
+func (t *GetReports_Reports_Edges_Node_Members_Edges_Node_User) GetLastName() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Members_Edges_Node_User{}
+	}
+	return t.LastName
+}
+
+type GetReports_Reports_Edges_Node_Members_Edges_Node struct {
+	ID   string                                                "json:\"id\" graphql:\"id\""
+	User GetReports_Reports_Edges_Node_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Members_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Members_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReports_Reports_Edges_Node_Members_Edges_Node) GetUser() *GetReports_Reports_Edges_Node_Members_Edges_Node_User {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type GetReports_Reports_Edges_Node_Members_Edges struct {
+	Node *GetReports_Reports_Edges_Node_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Members_Edges) GetNode() *GetReports_Reports_Edges_Node_Members_Edges_Node {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Members_Edges{}
+	}
+	return t.Node
+}
+
+type GetReports_Reports_Edges_Node_Members struct {
+	Edges []*GetReports_Reports_Edges_Node_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetReports_Reports_Edges_Node_Members) GetEdges() []*GetReports_Reports_Edges_Node_Members_Edges {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node_Members{}
+	}
+	return t.Edges
+}
+
+type GetReports_Reports_Edges_Node struct {
+	BlockedGroups         GetReports_Reports_Edges_Node_BlockedGroups "json:\"blockedGroups\" graphql:\"blockedGroups\""
+	CreatedAt             *time.Time                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string                                      "json:\"displayID\" graphql:\"displayID\""
+	Editors               GetReports_Reports_Edges_Node_Editors       "json:\"editors\" graphql:\"editors\""
+	ID                    string                                      "json:\"id\" graphql:\"id\""
+	Members               GetReports_Reports_Edges_Node_Members       "json:\"members\" graphql:\"members\""
+	Name                  string                                      "json:\"name\" graphql:\"name\""
+	OwnerID               *string                                     "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Query                 string                                      "json:\"query\" graphql:\"query\""
+	ReportKindID          *string                                     "json:\"reportKindID,omitempty\" graphql:\"reportKindID\""
+	ReportKindName        *string                                     "json:\"reportKindName,omitempty\" graphql:\"reportKindName\""
+	ReportOwnerID         *string                                     "json:\"reportOwnerID,omitempty\" graphql:\"reportOwnerID\""
+	RequestorID           *string                                     "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status                enums.ReportStatus                          "json:\"status\" graphql:\"status\""
+	Tags                  []string                                    "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time                                  "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                                     "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                                     "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Variables             map[string]any                              "json:\"variables,omitempty\" graphql:\"variables\""
+	Viewers               GetReports_Reports_Edges_Node_Viewers       "json:\"viewers\" graphql:\"viewers\""
+	Visibility            enums.ReportVisibility                      "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *GetReports_Reports_Edges_Node) GetBlockedGroups() *GetReports_Reports_Edges_Node_BlockedGroups {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return &t.BlockedGroups
+}
+func (t *GetReports_Reports_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetReports_Reports_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetReports_Reports_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetReports_Reports_Edges_Node) GetEditors() *GetReports_Reports_Edges_Node_Editors {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return &t.Editors
+}
+func (t *GetReports_Reports_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReports_Reports_Edges_Node) GetMembers() *GetReports_Reports_Edges_Node_Members {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return &t.Members
+}
+func (t *GetReports_Reports_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetReports_Reports_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetReports_Reports_Edges_Node) GetQuery() string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.Query
+}
+func (t *GetReports_Reports_Edges_Node) GetReportKindID() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.ReportKindID
+}
+func (t *GetReports_Reports_Edges_Node) GetReportKindName() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.ReportKindName
+}
+func (t *GetReports_Reports_Edges_Node) GetReportOwnerID() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.ReportOwnerID
+}
+func (t *GetReports_Reports_Edges_Node) GetRequestorID() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.RequestorID
+}
+func (t *GetReports_Reports_Edges_Node) GetStatus() *enums.ReportStatus {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return &t.Status
+}
+func (t *GetReports_Reports_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetReports_Reports_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetReports_Reports_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetReports_Reports_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetReports_Reports_Edges_Node) GetVariables() map[string]any {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return t.Variables
+}
+func (t *GetReports_Reports_Edges_Node) GetViewers() *GetReports_Reports_Edges_Node_Viewers {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return &t.Viewers
+}
+func (t *GetReports_Reports_Edges_Node) GetVisibility() *enums.ReportVisibility {
+	if t == nil {
+		t = &GetReports_Reports_Edges_Node{}
+	}
+	return &t.Visibility
+}
+
+type GetReports_Reports_Edges struct {
+	Node *GetReports_Reports_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReports_Reports_Edges) GetNode() *GetReports_Reports_Edges_Node {
+	if t == nil {
+		t = &GetReports_Reports_Edges{}
+	}
+	return t.Node
+}
+
+type GetReports_Reports struct {
+	Edges      []*GetReports_Reports_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetReports_Reports_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetReports_Reports) GetEdges() []*GetReports_Reports_Edges {
+	if t == nil {
+		t = &GetReports_Reports{}
+	}
+	return t.Edges
+}
+func (t *GetReports_Reports) GetPageInfo() *GetReports_Reports_PageInfo {
+	if t == nil {
+		t = &GetReports_Reports{}
+	}
+	return &t.PageInfo
+}
+func (t *GetReports_Reports) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetReports_Reports{}
+	}
+	return t.TotalCount
+}
+
+type UpdateReport_UpdateReport_Report_Editors_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Editors_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Editors_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateReport_UpdateReport_Report_Editors_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Editors_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateReport_UpdateReport_Report_Editors_Edges struct {
+	Node *UpdateReport_UpdateReport_Report_Editors_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Editors_Edges) GetNode() *UpdateReport_UpdateReport_Report_Editors_Edges_Node {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Editors_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateReport_UpdateReport_Report_Editors struct {
+	Edges []*UpdateReport_UpdateReport_Report_Editors_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Editors) GetEdges() []*UpdateReport_UpdateReport_Report_Editors_Edges {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Editors{}
+	}
+	return t.Edges
+}
+
+type UpdateReport_UpdateReport_Report_Viewers_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Viewers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Viewers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateReport_UpdateReport_Report_Viewers_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Viewers_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateReport_UpdateReport_Report_Viewers_Edges struct {
+	Node *UpdateReport_UpdateReport_Report_Viewers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Viewers_Edges) GetNode() *UpdateReport_UpdateReport_Report_Viewers_Edges_Node {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Viewers_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateReport_UpdateReport_Report_Viewers struct {
+	Edges []*UpdateReport_UpdateReport_Report_Viewers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Viewers) GetEdges() []*UpdateReport_UpdateReport_Report_Viewers_Edges {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Viewers{}
+	}
+	return t.Edges
+}
+
+type UpdateReport_UpdateReport_Report_BlockedGroups_Edges_Node struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_BlockedGroups_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_BlockedGroups_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateReport_UpdateReport_Report_BlockedGroups_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_BlockedGroups_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateReport_UpdateReport_Report_BlockedGroups_Edges struct {
+	Node *UpdateReport_UpdateReport_Report_BlockedGroups_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_BlockedGroups_Edges) GetNode() *UpdateReport_UpdateReport_Report_BlockedGroups_Edges_Node {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_BlockedGroups_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateReport_UpdateReport_Report_BlockedGroups struct {
+	Edges []*UpdateReport_UpdateReport_Report_BlockedGroups_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_BlockedGroups) GetEdges() []*UpdateReport_UpdateReport_Report_BlockedGroups_Edges {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_BlockedGroups{}
+	}
+	return t.Edges
+}
+
+type UpdateReport_UpdateReport_Report_Members_Edges_Node_User struct {
+	FirstName *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID        string  "json:\"id\" graphql:\"id\""
+	LastName  *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Members_Edges_Node_User) GetFirstName() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Members_Edges_Node_User{}
+	}
+	return t.FirstName
+}
+func (t *UpdateReport_UpdateReport_Report_Members_Edges_Node_User) GetID() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Members_Edges_Node_User{}
+	}
+	return t.ID
+}
+func (t *UpdateReport_UpdateReport_Report_Members_Edges_Node_User) GetLastName() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Members_Edges_Node_User{}
+	}
+	return t.LastName
+}
+
+type UpdateReport_UpdateReport_Report_Members_Edges_Node struct {
+	ID   string                                                   "json:\"id\" graphql:\"id\""
+	User UpdateReport_UpdateReport_Report_Members_Edges_Node_User "json:\"user\" graphql:\"user\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Members_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Members_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateReport_UpdateReport_Report_Members_Edges_Node) GetUser() *UpdateReport_UpdateReport_Report_Members_Edges_Node_User {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Members_Edges_Node{}
+	}
+	return &t.User
+}
+
+type UpdateReport_UpdateReport_Report_Members_Edges struct {
+	Node *UpdateReport_UpdateReport_Report_Members_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Members_Edges) GetNode() *UpdateReport_UpdateReport_Report_Members_Edges_Node {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Members_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateReport_UpdateReport_Report_Members struct {
+	Edges []*UpdateReport_UpdateReport_Report_Members_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateReport_UpdateReport_Report_Members) GetEdges() []*UpdateReport_UpdateReport_Report_Members_Edges {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report_Members{}
+	}
+	return t.Edges
+}
+
+type UpdateReport_UpdateReport_Report struct {
+	BlockedGroups         UpdateReport_UpdateReport_Report_BlockedGroups "json:\"blockedGroups\" graphql:\"blockedGroups\""
+	CreatedAt             *time.Time                                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string                                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string                                         "json:\"displayID\" graphql:\"displayID\""
+	Editors               UpdateReport_UpdateReport_Report_Editors       "json:\"editors\" graphql:\"editors\""
+	ID                    string                                         "json:\"id\" graphql:\"id\""
+	Members               UpdateReport_UpdateReport_Report_Members       "json:\"members\" graphql:\"members\""
+	Name                  string                                         "json:\"name\" graphql:\"name\""
+	OwnerID               *string                                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Query                 string                                         "json:\"query\" graphql:\"query\""
+	ReportKindID          *string                                        "json:\"reportKindID,omitempty\" graphql:\"reportKindID\""
+	ReportKindName        *string                                        "json:\"reportKindName,omitempty\" graphql:\"reportKindName\""
+	ReportOwnerID         *string                                        "json:\"reportOwnerID,omitempty\" graphql:\"reportOwnerID\""
+	RequestorID           *string                                        "json:\"requestorID,omitempty\" graphql:\"requestorID\""
+	Status                enums.ReportStatus                             "json:\"status\" graphql:\"status\""
+	Tags                  []string                                       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time                                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string                                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string                                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Variables             map[string]any                                 "json:\"variables,omitempty\" graphql:\"variables\""
+	Viewers               UpdateReport_UpdateReport_Report_Viewers       "json:\"viewers\" graphql:\"viewers\""
+	Visibility            enums.ReportVisibility                         "json:\"visibility\" graphql:\"visibility\""
+}
+
+func (t *UpdateReport_UpdateReport_Report) GetBlockedGroups() *UpdateReport_UpdateReport_Report_BlockedGroups {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return &t.BlockedGroups
+}
+func (t *UpdateReport_UpdateReport_Report) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateReport_UpdateReport_Report) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateReport_UpdateReport_Report) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateReport_UpdateReport_Report) GetEditors() *UpdateReport_UpdateReport_Report_Editors {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return &t.Editors
+}
+func (t *UpdateReport_UpdateReport_Report) GetID() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.ID
+}
+func (t *UpdateReport_UpdateReport_Report) GetMembers() *UpdateReport_UpdateReport_Report_Members {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return &t.Members
+}
+func (t *UpdateReport_UpdateReport_Report) GetName() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.Name
+}
+func (t *UpdateReport_UpdateReport_Report) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateReport_UpdateReport_Report) GetQuery() string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.Query
+}
+func (t *UpdateReport_UpdateReport_Report) GetReportKindID() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.ReportKindID
+}
+func (t *UpdateReport_UpdateReport_Report) GetReportKindName() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.ReportKindName
+}
+func (t *UpdateReport_UpdateReport_Report) GetReportOwnerID() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.ReportOwnerID
+}
+func (t *UpdateReport_UpdateReport_Report) GetRequestorID() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.RequestorID
+}
+func (t *UpdateReport_UpdateReport_Report) GetStatus() *enums.ReportStatus {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return &t.Status
+}
+func (t *UpdateReport_UpdateReport_Report) GetTags() []string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.Tags
+}
+func (t *UpdateReport_UpdateReport_Report) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateReport_UpdateReport_Report) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateReport_UpdateReport_Report) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateReport_UpdateReport_Report) GetVariables() map[string]any {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return t.Variables
+}
+func (t *UpdateReport_UpdateReport_Report) GetViewers() *UpdateReport_UpdateReport_Report_Viewers {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return &t.Viewers
+}
+func (t *UpdateReport_UpdateReport_Report) GetVisibility() *enums.ReportVisibility {
+	if t == nil {
+		t = &UpdateReport_UpdateReport_Report{}
+	}
+	return &t.Visibility
+}
+
+type UpdateReport_UpdateReport struct {
+	Report UpdateReport_UpdateReport_Report "json:\"report\" graphql:\"report\""
+}
+
+func (t *UpdateReport_UpdateReport) GetReport() *UpdateReport_UpdateReport_Report {
+	if t == nil {
+		t = &UpdateReport_UpdateReport{}
+	}
+	return &t.Report
+}
+
+type AddUserToReportWithRole_CreateReportMembership_ReportMembership_Report struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership_Report) GetID() string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership_Report{}
+	}
+	return t.ID
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership_Report) GetName() string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership_Report{}
+	}
+	return t.Name
+}
+
+type AddUserToReportWithRole_CreateReportMembership_ReportMembership_User struct {
+	DisplayName string  "json:\"displayName\" graphql:\"displayName\""
+	Email       string  "json:\"email\" graphql:\"email\""
+	FirstName   *string "json:\"firstName,omitempty\" graphql:\"firstName\""
+	ID          string  "json:\"id\" graphql:\"id\""
+	LastName    *string "json:\"lastName,omitempty\" graphql:\"lastName\""
+}
+
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership_User) GetDisplayName() string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership_User{}
+	}
+	return t.DisplayName
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership_User) GetEmail() string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership_User{}
+	}
+	return t.Email
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership_User) GetFirstName() *string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership_User{}
+	}
+	return t.FirstName
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership_User) GetID() string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership_User{}
+	}
+	return t.ID
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership_User) GetLastName() *string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership_User{}
+	}
+	return t.LastName
+}
+
+type AddUserToReportWithRole_CreateReportMembership_ReportMembership struct {
+	ID       string                                                                 "json:\"id\" graphql:\"id\""
+	Report   AddUserToReportWithRole_CreateReportMembership_ReportMembership_Report "json:\"report\" graphql:\"report\""
+	ReportID string                                                                 "json:\"reportID\" graphql:\"reportID\""
+	Role     enums.Role                                                             "json:\"role\" graphql:\"role\""
+	User     AddUserToReportWithRole_CreateReportMembership_ReportMembership_User   "json:\"user\" graphql:\"user\""
+	UserID   string                                                                 "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership) GetID() string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership{}
+	}
+	return t.ID
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership) GetReport() *AddUserToReportWithRole_CreateReportMembership_ReportMembership_Report {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership{}
+	}
+	return &t.Report
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership) GetReportID() string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership{}
+	}
+	return t.ReportID
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership) GetRole() *enums.Role {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership{}
+	}
+	return &t.Role
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership) GetUser() *AddUserToReportWithRole_CreateReportMembership_ReportMembership_User {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership{}
+	}
+	return &t.User
+}
+func (t *AddUserToReportWithRole_CreateReportMembership_ReportMembership) GetUserID() string {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership_ReportMembership{}
+	}
+	return t.UserID
+}
+
+type AddUserToReportWithRole_CreateReportMembership struct {
+	ReportMembership AddUserToReportWithRole_CreateReportMembership_ReportMembership "json:\"reportMembership\" graphql:\"reportMembership\""
+}
+
+func (t *AddUserToReportWithRole_CreateReportMembership) GetReportMembership() *AddUserToReportWithRole_CreateReportMembership_ReportMembership {
+	if t == nil {
+		t = &AddUserToReportWithRole_CreateReportMembership{}
+	}
+	return &t.ReportMembership
+}
+
+type CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	ReportID              string     "json:\"reportID\" graphql:\"reportID\""
+	Role                  enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships) GetID() string {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships{}
+	}
+	return t.ID
+}
+func (t *CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships) GetReportID() string {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships{}
+	}
+	return t.ReportID
+}
+func (t *CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships) GetRole() *enums.Role {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships{}
+	}
+	return &t.Role
+}
+func (t *CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships) GetUserID() string {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships{}
+	}
+	return t.UserID
+}
+
+type CreateBulkReportMembership_CreateBulkReportMembership struct {
+	ReportMemberships []*CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships "json:\"reportMemberships,omitempty\" graphql:\"reportMemberships\""
+}
+
+func (t *CreateBulkReportMembership_CreateBulkReportMembership) GetReportMemberships() []*CreateBulkReportMembership_CreateBulkReportMembership_ReportMemberships {
+	if t == nil {
+		t = &CreateBulkReportMembership_CreateBulkReportMembership{}
+	}
+	return t.ReportMemberships
+}
+
+type CreateReportMembership_CreateReportMembership_ReportMembership struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	ReportID              string     "json:\"reportID\" graphql:\"reportID\""
+	Role                  enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *CreateReportMembership_CreateReportMembership_ReportMembership) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership_ReportMembership{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateReportMembership_CreateReportMembership_ReportMembership) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership_ReportMembership{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateReportMembership_CreateReportMembership_ReportMembership) GetID() string {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership_ReportMembership{}
+	}
+	return t.ID
+}
+func (t *CreateReportMembership_CreateReportMembership_ReportMembership) GetReportID() string {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership_ReportMembership{}
+	}
+	return t.ReportID
+}
+func (t *CreateReportMembership_CreateReportMembership_ReportMembership) GetRole() *enums.Role {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership_ReportMembership{}
+	}
+	return &t.Role
+}
+func (t *CreateReportMembership_CreateReportMembership_ReportMembership) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership_ReportMembership{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateReportMembership_CreateReportMembership_ReportMembership) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership_ReportMembership{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateReportMembership_CreateReportMembership_ReportMembership) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership_ReportMembership{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateReportMembership_CreateReportMembership_ReportMembership) GetUserID() string {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership_ReportMembership{}
+	}
+	return t.UserID
+}
+
+type CreateReportMembership_CreateReportMembership struct {
+	ReportMembership CreateReportMembership_CreateReportMembership_ReportMembership "json:\"reportMembership\" graphql:\"reportMembership\""
+}
+
+func (t *CreateReportMembership_CreateReportMembership) GetReportMembership() *CreateReportMembership_CreateReportMembership_ReportMembership {
+	if t == nil {
+		t = &CreateReportMembership_CreateReportMembership{}
+	}
+	return &t.ReportMembership
+}
+
+type DeleteBulkReportMembership_DeleteBulkReportMembership struct {
+	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+}
+
+func (t *DeleteBulkReportMembership_DeleteBulkReportMembership) GetDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkReportMembership_DeleteBulkReportMembership{}
+	}
+	return t.DeletedIDs
+}
+
+type DeleteReportMembership_DeleteReportMembership struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteReportMembership_DeleteReportMembership) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteReportMembership_DeleteReportMembership{}
+	}
+	return t.DeletedID
+}
+
+type GetAllReportMemberships_ReportMemberships_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllReportMemberships_ReportMemberships_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllReportMemberships_ReportMemberships_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllReportMemberships_ReportMemberships_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllReportMemberships_ReportMemberships_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllReportMemberships_ReportMemberships_Edges_Node struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	ReportID              string     "json:\"reportID\" graphql:\"reportID\""
+	Role                  enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *GetAllReportMemberships_ReportMemberships_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllReportMemberships_ReportMemberships_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllReportMemberships_ReportMemberships_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllReportMemberships_ReportMemberships_Edges_Node) GetReportID() string {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.ReportID
+}
+func (t *GetAllReportMemberships_ReportMemberships_Edges_Node) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return &t.Role
+}
+func (t *GetAllReportMemberships_ReportMemberships_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllReportMemberships_ReportMemberships_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllReportMemberships_ReportMemberships_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetAllReportMemberships_ReportMemberships_Edges_Node) GetUserID() string {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetAllReportMemberships_ReportMemberships_Edges struct {
+	Node *GetAllReportMemberships_ReportMemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllReportMemberships_ReportMemberships_Edges) GetNode() *GetAllReportMemberships_ReportMemberships_Edges_Node {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllReportMemberships_ReportMemberships struct {
+	Edges      []*GetAllReportMemberships_ReportMemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllReportMemberships_ReportMemberships_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllReportMemberships_ReportMemberships) GetEdges() []*GetAllReportMemberships_ReportMemberships_Edges {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships{}
+	}
+	return t.Edges
+}
+func (t *GetAllReportMemberships_ReportMemberships) GetPageInfo() *GetAllReportMemberships_ReportMemberships_PageInfo {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllReportMemberships_ReportMemberships) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllReportMemberships_ReportMemberships{}
+	}
+	return t.TotalCount
+}
+
+type GetReportMembershipByID_ReportMembership struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	ReportID              string     "json:\"reportID\" graphql:\"reportID\""
+	Role                  enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *GetReportMembershipByID_ReportMembership) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetReportMembershipByID_ReportMembership{}
+	}
+	return t.CreatedAt
+}
+func (t *GetReportMembershipByID_ReportMembership) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetReportMembershipByID_ReportMembership{}
+	}
+	return t.CreatedBy
+}
+func (t *GetReportMembershipByID_ReportMembership) GetID() string {
+	if t == nil {
+		t = &GetReportMembershipByID_ReportMembership{}
+	}
+	return t.ID
+}
+func (t *GetReportMembershipByID_ReportMembership) GetReportID() string {
+	if t == nil {
+		t = &GetReportMembershipByID_ReportMembership{}
+	}
+	return t.ReportID
+}
+func (t *GetReportMembershipByID_ReportMembership) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetReportMembershipByID_ReportMembership{}
+	}
+	return &t.Role
+}
+func (t *GetReportMembershipByID_ReportMembership) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetReportMembershipByID_ReportMembership{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetReportMembershipByID_ReportMembership) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetReportMembershipByID_ReportMembership{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetReportMembershipByID_ReportMembership) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetReportMembershipByID_ReportMembership{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetReportMembershipByID_ReportMembership) GetUserID() string {
+	if t == nil {
+		t = &GetReportMembershipByID_ReportMembership{}
+	}
+	return t.UserID
+}
+
+type GetReportMemberships_ReportMemberships_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetReportMemberships_ReportMemberships_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetReportMemberships_ReportMemberships_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetReportMemberships_ReportMemberships_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetReportMemberships_ReportMemberships_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetReportMemberships_ReportMemberships_Edges_Node struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	ReportID              string     "json:\"reportID\" graphql:\"reportID\""
+	Role                  enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *GetReportMemberships_ReportMemberships_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetReportMemberships_ReportMemberships_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetReportMemberships_ReportMemberships_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetReportMemberships_ReportMemberships_Edges_Node) GetReportID() string {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.ReportID
+}
+func (t *GetReportMemberships_ReportMemberships_Edges_Node) GetRole() *enums.Role {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return &t.Role
+}
+func (t *GetReportMemberships_ReportMemberships_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetReportMemberships_ReportMemberships_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetReportMemberships_ReportMemberships_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetReportMemberships_ReportMemberships_Edges_Node) GetUserID() string {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetReportMemberships_ReportMemberships_Edges struct {
+	Node *GetReportMemberships_ReportMemberships_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetReportMemberships_ReportMemberships_Edges) GetNode() *GetReportMemberships_ReportMemberships_Edges_Node {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships_Edges{}
+	}
+	return t.Node
+}
+
+type GetReportMemberships_ReportMemberships struct {
+	Edges      []*GetReportMemberships_ReportMemberships_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetReportMemberships_ReportMemberships_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                           "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetReportMemberships_ReportMemberships) GetEdges() []*GetReportMemberships_ReportMemberships_Edges {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships{}
+	}
+	return t.Edges
+}
+func (t *GetReportMemberships_ReportMemberships) GetPageInfo() *GetReportMemberships_ReportMemberships_PageInfo {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships{}
+	}
+	return &t.PageInfo
+}
+func (t *GetReportMemberships_ReportMemberships) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetReportMemberships_ReportMemberships{}
+	}
+	return t.TotalCount
+}
+
+type RemoveUserFromReport_DeleteReportMembership struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *RemoveUserFromReport_DeleteReportMembership) GetDeletedID() string {
+	if t == nil {
+		t = &RemoveUserFromReport_DeleteReportMembership{}
+	}
+	return t.DeletedID
+}
+
+type UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	ReportID              string     "json:\"reportID\" graphql:\"reportID\""
+	Role                  enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetID() string {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetReportID() string {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
+	}
+	return t.ReportID
+}
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetRole() *enums.Role {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
+	}
+	return &t.Role
+}
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships) GetUserID() string {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships{}
+	}
+	return t.UserID
+}
+
+type UpdateBulkReportMembership_UpdateBulkReportMembership struct {
+	ReportMemberships []*UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships "json:\"reportMemberships,omitempty\" graphql:\"reportMemberships\""
+	UpdatedIDs        []string                                                                   "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership) GetReportMemberships() []*UpdateBulkReportMembership_UpdateBulkReportMembership_ReportMemberships {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership{}
+	}
+	return t.ReportMemberships
+}
+func (t *UpdateBulkReportMembership_UpdateBulkReportMembership) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkReportMembership_UpdateBulkReportMembership{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateReportMembership_UpdateReportMembership_ReportMembership struct {
+	CreatedAt             *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                    string     "json:\"id\" graphql:\"id\""
+	ReportID              string     "json:\"reportID\" graphql:\"reportID\""
+	Role                  enums.Role "json:\"role\" graphql:\"role\""
+	UpdatedAt             *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                string     "json:\"userID\" graphql:\"userID\""
+}
+
+func (t *UpdateReportMembership_UpdateReportMembership_ReportMembership) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership_ReportMembership{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateReportMembership_UpdateReportMembership_ReportMembership) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership_ReportMembership{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateReportMembership_UpdateReportMembership_ReportMembership) GetID() string {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership_ReportMembership{}
+	}
+	return t.ID
+}
+func (t *UpdateReportMembership_UpdateReportMembership_ReportMembership) GetReportID() string {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership_ReportMembership{}
+	}
+	return t.ReportID
+}
+func (t *UpdateReportMembership_UpdateReportMembership_ReportMembership) GetRole() *enums.Role {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership_ReportMembership{}
+	}
+	return &t.Role
+}
+func (t *UpdateReportMembership_UpdateReportMembership_ReportMembership) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership_ReportMembership{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateReportMembership_UpdateReportMembership_ReportMembership) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership_ReportMembership{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateReportMembership_UpdateReportMembership_ReportMembership) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership_ReportMembership{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateReportMembership_UpdateReportMembership_ReportMembership) GetUserID() string {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership_ReportMembership{}
+	}
+	return t.UserID
+}
+
+type UpdateReportMembership_UpdateReportMembership struct {
+	ReportMembership UpdateReportMembership_UpdateReportMembership_ReportMembership "json:\"reportMembership\" graphql:\"reportMembership\""
+}
+
+func (t *UpdateReportMembership_UpdateReportMembership) GetReportMembership() *UpdateReportMembership_UpdateReportMembership_ReportMembership {
+	if t == nil {
+		t = &UpdateReportMembership_UpdateReportMembership{}
+	}
+	return &t.ReportMembership
 }
 
 type CreateBulkCSVReview_CreateBulkCSVReview_Reviews struct {
@@ -114433,6 +117217,106 @@ func (t *GlobalSearch_Search_Remediations) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_Reports_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Reports_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Reports_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Reports_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Reports_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Reports_Edges_Node struct {
+	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Reports_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GlobalSearch_Search_Reports_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Reports_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GlobalSearch_Search_Reports_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Reports_Edges struct {
+	Node *GlobalSearch_Search_Reports_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_Reports_Edges) GetNode() *GlobalSearch_Search_Reports_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_Reports struct {
+	Edges      []*GlobalSearch_Search_Reports_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Reports_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Reports) GetEdges() []*GlobalSearch_Search_Reports_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Reports) GetPageInfo() *GlobalSearch_Search_Reports_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Reports) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Reports{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_Reviews_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -115865,6 +118749,7 @@ type GlobalSearch_Search struct {
 	Procedures            *GlobalSearch_Search_Procedures            "json:\"procedures,omitempty\" graphql:\"procedures\""
 	Programs              *GlobalSearch_Search_Programs              "json:\"programs,omitempty\" graphql:\"programs\""
 	Remediations          *GlobalSearch_Search_Remediations          "json:\"remediations,omitempty\" graphql:\"remediations\""
+	Reports               *GlobalSearch_Search_Reports               "json:\"reports,omitempty\" graphql:\"reports\""
 	Reviews               *GlobalSearch_Search_Reviews               "json:\"reviews,omitempty\" graphql:\"reviews\""
 	Risks                 *GlobalSearch_Search_Risks                 "json:\"risks,omitempty\" graphql:\"risks\""
 	Scans                 *GlobalSearch_Search_Scans                 "json:\"scans,omitempty\" graphql:\"scans\""
@@ -116036,6 +118921,12 @@ func (t *GlobalSearch_Search) GetRemediations() *GlobalSearch_Search_Remediation
 		t = &GlobalSearch_Search{}
 	}
 	return t.Remediations
+}
+func (t *GlobalSearch_Search) GetReports() *GlobalSearch_Search_Reports {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Reports
 }
 func (t *GlobalSearch_Search) GetReviews() *GlobalSearch_Search_Reviews {
 	if t == nil {
@@ -171551,6 +174442,17 @@ func (t *GetProgramMemberships) GetProgramMemberships() *GetProgramMemberships_P
 	return &t.ProgramMemberships
 }
 
+type UpdateBulkProgramMembership struct {
+	UpdateBulkProgramMembership UpdateBulkProgramMembership_UpdateBulkProgramMembership "json:\"updateBulkProgramMembership\" graphql:\"updateBulkProgramMembership\""
+}
+
+func (t *UpdateBulkProgramMembership) GetUpdateBulkProgramMembership() *UpdateBulkProgramMembership_UpdateBulkProgramMembership {
+	if t == nil {
+		t = &UpdateBulkProgramMembership{}
+	}
+	return &t.UpdateBulkProgramMembership
+}
+
 type UpdateProgramMembership struct {
 	UpdateProgramMembership UpdateProgramMembership_UpdateProgramMembership "json:\"updateProgramMembership\" graphql:\"updateProgramMembership\""
 }
@@ -171681,6 +174583,204 @@ func (t *UpdateRemediation) GetUpdateRemediation() *UpdateRemediation_UpdateReme
 		t = &UpdateRemediation{}
 	}
 	return &t.UpdateRemediation
+}
+
+type CreateReport struct {
+	CreateReport CreateReport_CreateReport "json:\"createReport\" graphql:\"createReport\""
+}
+
+func (t *CreateReport) GetCreateReport() *CreateReport_CreateReport {
+	if t == nil {
+		t = &CreateReport{}
+	}
+	return &t.CreateReport
+}
+
+type DeleteReport struct {
+	DeleteReport DeleteReport_DeleteReport "json:\"deleteReport\" graphql:\"deleteReport\""
+}
+
+func (t *DeleteReport) GetDeleteReport() *DeleteReport_DeleteReport {
+	if t == nil {
+		t = &DeleteReport{}
+	}
+	return &t.DeleteReport
+}
+
+type GetAllReports struct {
+	Reports GetAllReports_Reports "json:\"reports\" graphql:\"reports\""
+}
+
+func (t *GetAllReports) GetReports() *GetAllReports_Reports {
+	if t == nil {
+		t = &GetAllReports{}
+	}
+	return &t.Reports
+}
+
+type GetReportByID struct {
+	Report GetReportByID_Report "json:\"report\" graphql:\"report\""
+}
+
+func (t *GetReportByID) GetReport() *GetReportByID_Report {
+	if t == nil {
+		t = &GetReportByID{}
+	}
+	return &t.Report
+}
+
+type GetReportMembersByReportID struct {
+	Report GetReportMembersByReportID_Report "json:\"report\" graphql:\"report\""
+}
+
+func (t *GetReportMembersByReportID) GetReport() *GetReportMembersByReportID_Report {
+	if t == nil {
+		t = &GetReportMembersByReportID{}
+	}
+	return &t.Report
+}
+
+type GetReports struct {
+	Reports GetReports_Reports "json:\"reports\" graphql:\"reports\""
+}
+
+func (t *GetReports) GetReports() *GetReports_Reports {
+	if t == nil {
+		t = &GetReports{}
+	}
+	return &t.Reports
+}
+
+type UpdateReport struct {
+	UpdateReport UpdateReport_UpdateReport "json:\"updateReport\" graphql:\"updateReport\""
+}
+
+func (t *UpdateReport) GetUpdateReport() *UpdateReport_UpdateReport {
+	if t == nil {
+		t = &UpdateReport{}
+	}
+	return &t.UpdateReport
+}
+
+type AddUserToReportWithRole struct {
+	CreateReportMembership AddUserToReportWithRole_CreateReportMembership "json:\"createReportMembership\" graphql:\"createReportMembership\""
+}
+
+func (t *AddUserToReportWithRole) GetCreateReportMembership() *AddUserToReportWithRole_CreateReportMembership {
+	if t == nil {
+		t = &AddUserToReportWithRole{}
+	}
+	return &t.CreateReportMembership
+}
+
+type CreateBulkReportMembership struct {
+	CreateBulkReportMembership CreateBulkReportMembership_CreateBulkReportMembership "json:\"createBulkReportMembership\" graphql:\"createBulkReportMembership\""
+}
+
+func (t *CreateBulkReportMembership) GetCreateBulkReportMembership() *CreateBulkReportMembership_CreateBulkReportMembership {
+	if t == nil {
+		t = &CreateBulkReportMembership{}
+	}
+	return &t.CreateBulkReportMembership
+}
+
+type CreateReportMembership struct {
+	CreateReportMembership CreateReportMembership_CreateReportMembership "json:\"createReportMembership\" graphql:\"createReportMembership\""
+}
+
+func (t *CreateReportMembership) GetCreateReportMembership() *CreateReportMembership_CreateReportMembership {
+	if t == nil {
+		t = &CreateReportMembership{}
+	}
+	return &t.CreateReportMembership
+}
+
+type DeleteBulkReportMembership struct {
+	DeleteBulkReportMembership DeleteBulkReportMembership_DeleteBulkReportMembership "json:\"deleteBulkReportMembership\" graphql:\"deleteBulkReportMembership\""
+}
+
+func (t *DeleteBulkReportMembership) GetDeleteBulkReportMembership() *DeleteBulkReportMembership_DeleteBulkReportMembership {
+	if t == nil {
+		t = &DeleteBulkReportMembership{}
+	}
+	return &t.DeleteBulkReportMembership
+}
+
+type DeleteReportMembership struct {
+	DeleteReportMembership DeleteReportMembership_DeleteReportMembership "json:\"deleteReportMembership\" graphql:\"deleteReportMembership\""
+}
+
+func (t *DeleteReportMembership) GetDeleteReportMembership() *DeleteReportMembership_DeleteReportMembership {
+	if t == nil {
+		t = &DeleteReportMembership{}
+	}
+	return &t.DeleteReportMembership
+}
+
+type GetAllReportMemberships struct {
+	ReportMemberships GetAllReportMemberships_ReportMemberships "json:\"reportMemberships\" graphql:\"reportMemberships\""
+}
+
+func (t *GetAllReportMemberships) GetReportMemberships() *GetAllReportMemberships_ReportMemberships {
+	if t == nil {
+		t = &GetAllReportMemberships{}
+	}
+	return &t.ReportMemberships
+}
+
+type GetReportMembershipByID struct {
+	ReportMembership GetReportMembershipByID_ReportMembership "json:\"reportMembership\" graphql:\"reportMembership\""
+}
+
+func (t *GetReportMembershipByID) GetReportMembership() *GetReportMembershipByID_ReportMembership {
+	if t == nil {
+		t = &GetReportMembershipByID{}
+	}
+	return &t.ReportMembership
+}
+
+type GetReportMemberships struct {
+	ReportMemberships GetReportMemberships_ReportMemberships "json:\"reportMemberships\" graphql:\"reportMemberships\""
+}
+
+func (t *GetReportMemberships) GetReportMemberships() *GetReportMemberships_ReportMemberships {
+	if t == nil {
+		t = &GetReportMemberships{}
+	}
+	return &t.ReportMemberships
+}
+
+type RemoveUserFromReport struct {
+	DeleteReportMembership RemoveUserFromReport_DeleteReportMembership "json:\"deleteReportMembership\" graphql:\"deleteReportMembership\""
+}
+
+func (t *RemoveUserFromReport) GetDeleteReportMembership() *RemoveUserFromReport_DeleteReportMembership {
+	if t == nil {
+		t = &RemoveUserFromReport{}
+	}
+	return &t.DeleteReportMembership
+}
+
+type UpdateBulkReportMembership struct {
+	UpdateBulkReportMembership UpdateBulkReportMembership_UpdateBulkReportMembership "json:\"updateBulkReportMembership\" graphql:\"updateBulkReportMembership\""
+}
+
+func (t *UpdateBulkReportMembership) GetUpdateBulkReportMembership() *UpdateBulkReportMembership_UpdateBulkReportMembership {
+	if t == nil {
+		t = &UpdateBulkReportMembership{}
+	}
+	return &t.UpdateBulkReportMembership
+}
+
+type UpdateReportMembership struct {
+	UpdateReportMembership UpdateReportMembership_UpdateReportMembership "json:\"updateReportMembership\" graphql:\"updateReportMembership\""
+}
+
+func (t *UpdateReportMembership) GetUpdateReportMembership() *UpdateReportMembership_UpdateReportMembership {
+	if t == nil {
+		t = &UpdateReportMembership{}
+	}
+	return &t.UpdateReportMembership
 }
 
 type CreateBulkCSVReview struct {
@@ -200285,6 +203385,43 @@ func (c *Client) GetProgramMemberships(ctx context.Context, where *ProgramMember
 	return &res, nil
 }
 
+const UpdateBulkProgramMembershipDocument = `mutation UpdateBulkProgramMembership ($ids: [ID!]!, $input: UpdateProgramMembershipInput!) {
+	updateBulkProgramMembership(ids: $ids, input: $input) {
+		programMemberships {
+			createdAt
+			createdBy
+			id
+			programID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+		notUpdatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkProgramMembership(ctx context.Context, ids []string, input UpdateProgramMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkProgramMembership, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkProgramMembership
+	if err := c.Client.Post(ctx, "UpdateBulkProgramMembership", UpdateBulkProgramMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const UpdateProgramMembershipDocument = `mutation UpdateProgramMembership ($updateProgramMembershipId: ID!, $input: UpdateProgramMembershipInput!) {
 	updateProgramMembership(id: $updateProgramMembershipId, input: $input) {
 		programMembership {
@@ -200918,6 +204055,849 @@ func (c *Client) UpdateRemediation(ctx context.Context, updateRemediationID stri
 
 	var res UpdateRemediation
 	if err := c.Client.Post(ctx, "UpdateRemediation", UpdateRemediationDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateReportDocument = `mutation CreateReport ($input: CreateReportInput!) {
+	createReport(input: $input) {
+		report {
+			createdAt
+			createdBy
+			displayID
+			id
+			name
+			ownerID
+			query
+			reportKindID
+			reportKindName
+			reportOwnerID
+			requestorID
+			status
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			variables
+			visibility
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateReport(ctx context.Context, input CreateReportInput, interceptors ...clientv2.RequestInterceptor) (*CreateReport, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateReport
+	if err := c.Client.Post(ctx, "CreateReport", CreateReportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteReportDocument = `mutation DeleteReport ($deleteReportId: ID!) {
+	deleteReport(id: $deleteReportId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteReport(ctx context.Context, deleteReportID string, interceptors ...clientv2.RequestInterceptor) (*DeleteReport, error) {
+	vars := map[string]any{
+		"deleteReportId": deleteReportID,
+	}
+
+	var res DeleteReport
+	if err := c.Client.Post(ctx, "DeleteReport", DeleteReportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllReportsDocument = `query GetAllReports ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportOrder!]) {
+	reports(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				name
+				ownerID
+				query
+				reportKindID
+				reportKindName
+				reportOwnerID
+				requestorID
+				status
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				variables
+				visibility
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				members {
+					edges {
+						node {
+							id
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllReports(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllReports, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
+
+	var res GetAllReports
+	if err := c.Client.Post(ctx, "GetAllReports", GetAllReportsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetReportByIDDocument = `query GetReportByID ($reportId: ID!) {
+	report(id: $reportId) {
+		createdAt
+		createdBy
+		displayID
+		id
+		name
+		ownerID
+		query
+		reportKindID
+		reportKindName
+		reportOwnerID
+		requestorID
+		status
+		tags
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		variables
+		visibility
+		editors {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		viewers {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		blockedGroups {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		members {
+			edges {
+				node {
+					id
+					user {
+						id
+						firstName
+						lastName
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetReportByID(ctx context.Context, reportID string, interceptors ...clientv2.RequestInterceptor) (*GetReportByID, error) {
+	vars := map[string]any{
+		"reportId": reportID,
+	}
+
+	var res GetReportByID
+	if err := c.Client.Post(ctx, "GetReportByID", GetReportByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetReportMembersByReportIDDocument = `query GetReportMembersByReportID ($reportId: ID!) {
+	report(id: $reportId) {
+		members {
+			edges {
+				node {
+					id
+					userID
+					role
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetReportMembersByReportID(ctx context.Context, reportID string, interceptors ...clientv2.RequestInterceptor) (*GetReportMembersByReportID, error) {
+	vars := map[string]any{
+		"reportId": reportID,
+	}
+
+	var res GetReportMembersByReportID
+	if err := c.Client.Post(ctx, "GetReportMembersByReportID", GetReportMembersByReportIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetReportsDocument = `query GetReports ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportOrder!], $where: ReportWhereInput) {
+	reports(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				name
+				ownerID
+				query
+				reportKindID
+				reportKindName
+				reportOwnerID
+				requestorID
+				status
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				variables
+				visibility
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				members {
+					edges {
+						node {
+							id
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetReports(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportOrder, where *ReportWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetReports, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+		"where":   where,
+	}
+
+	var res GetReports
+	if err := c.Client.Post(ctx, "GetReports", GetReportsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateReportDocument = `mutation UpdateReport ($updateReportId: ID!, $input: UpdateReportInput!) {
+	updateReport(id: $updateReportId, input: $input) {
+		report {
+			createdAt
+			createdBy
+			displayID
+			id
+			name
+			ownerID
+			query
+			reportKindID
+			reportKindName
+			reportOwnerID
+			requestorID
+			status
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			variables
+			visibility
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			members {
+				edges {
+					node {
+						id
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateReport(ctx context.Context, updateReportID string, input UpdateReportInput, interceptors ...clientv2.RequestInterceptor) (*UpdateReport, error) {
+	vars := map[string]any{
+		"updateReportId": updateReportID,
+		"input":          input,
+	}
+
+	var res UpdateReport
+	if err := c.Client.Post(ctx, "UpdateReport", UpdateReportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const AddUserToReportWithRoleDocument = `mutation AddUserToReportWithRole ($input: CreateReportMembershipInput!) {
+	createReportMembership(input: $input) {
+		reportMembership {
+			reportID
+			report {
+				id
+				name
+			}
+			id
+			role
+			userID
+			user {
+				displayName
+				email
+				firstName
+				id
+				lastName
+			}
+		}
+	}
+}
+`
+
+func (c *Client) AddUserToReportWithRole(ctx context.Context, input CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*AddUserToReportWithRole, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res AddUserToReportWithRole
+	if err := c.Client.Post(ctx, "AddUserToReportWithRole", AddUserToReportWithRoleDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkReportMembershipDocument = `mutation CreateBulkReportMembership ($input: [CreateReportMembershipInput!]) {
+	createBulkReportMembership(input: $input) {
+		reportMemberships {
+			createdAt
+			createdBy
+			id
+			reportID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkReportMembership(ctx context.Context, input []*CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkReportMembership, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkReportMembership
+	if err := c.Client.Post(ctx, "CreateBulkReportMembership", CreateBulkReportMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateReportMembershipDocument = `mutation CreateReportMembership ($input: CreateReportMembershipInput!) {
+	createReportMembership(input: $input) {
+		reportMembership {
+			createdAt
+			createdBy
+			id
+			reportID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateReportMembership(ctx context.Context, input CreateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateReportMembership, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateReportMembership
+	if err := c.Client.Post(ctx, "CreateReportMembership", CreateReportMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteBulkReportMembershipDocument = `mutation DeleteBulkReportMembership ($ids: [ID!]!) {
+	deleteBulkReportMembership(ids: $ids) {
+		deletedIDs
+	}
+}
+`
+
+func (c *Client) DeleteBulkReportMembership(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkReportMembership, error) {
+	vars := map[string]any{
+		"ids": ids,
+	}
+
+	var res DeleteBulkReportMembership
+	if err := c.Client.Post(ctx, "DeleteBulkReportMembership", DeleteBulkReportMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteReportMembershipDocument = `mutation DeleteReportMembership ($deleteReportMembershipId: ID!) {
+	deleteReportMembership(id: $deleteReportMembershipId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteReportMembership(ctx context.Context, deleteReportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*DeleteReportMembership, error) {
+	vars := map[string]any{
+		"deleteReportMembershipId": deleteReportMembershipID,
+	}
+
+	var res DeleteReportMembership
+	if err := c.Client.Post(ctx, "DeleteReportMembership", DeleteReportMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllReportMembershipsDocument = `query GetAllReportMemberships ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportMembershipOrder!]) {
+	reportMemberships(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				reportID
+				role
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllReportMemberships(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportMembershipOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllReportMemberships, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
+
+	var res GetAllReportMemberships
+	if err := c.Client.Post(ctx, "GetAllReportMemberships", GetAllReportMembershipsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetReportMembershipByIDDocument = `query GetReportMembershipByID ($reportMembershipId: ID!) {
+	reportMembership(id: $reportMembershipId) {
+		createdAt
+		createdBy
+		id
+		reportID
+		role
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		userID
+	}
+}
+`
+
+func (c *Client) GetReportMembershipByID(ctx context.Context, reportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetReportMembershipByID, error) {
+	vars := map[string]any{
+		"reportMembershipId": reportMembershipID,
+	}
+
+	var res GetReportMembershipByID
+	if err := c.Client.Post(ctx, "GetReportMembershipByID", GetReportMembershipByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetReportMembershipsDocument = `query GetReportMemberships ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportMembershipOrder!], $where: ReportMembershipWhereInput) {
+	reportMemberships(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				id
+				reportID
+				role
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetReportMemberships(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*ReportMembershipOrder, where *ReportMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetReportMemberships, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+		"where":   where,
+	}
+
+	var res GetReportMemberships
+	if err := c.Client.Post(ctx, "GetReportMemberships", GetReportMembershipsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const RemoveUserFromReportDocument = `mutation RemoveUserFromReport ($deleteReportMembershipId: ID!) {
+	deleteReportMembership(id: $deleteReportMembershipId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) RemoveUserFromReport(ctx context.Context, deleteReportMembershipID string, interceptors ...clientv2.RequestInterceptor) (*RemoveUserFromReport, error) {
+	vars := map[string]any{
+		"deleteReportMembershipId": deleteReportMembershipID,
+	}
+
+	var res RemoveUserFromReport
+	if err := c.Client.Post(ctx, "RemoveUserFromReport", RemoveUserFromReportDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkReportMembershipDocument = `mutation UpdateBulkReportMembership ($ids: [ID!]!, $input: UpdateReportMembershipInput!) {
+	updateBulkReportMembership(ids: $ids, input: $input) {
+		reportMemberships {
+			createdAt
+			createdBy
+			id
+			reportID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkReportMembership(ctx context.Context, ids []string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkReportMembership, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkReportMembership
+	if err := c.Client.Post(ctx, "UpdateBulkReportMembership", UpdateBulkReportMembershipDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateReportMembershipDocument = `mutation UpdateReportMembership ($updateReportMembershipId: ID!, $input: UpdateReportMembershipInput!) {
+	updateReportMembership(id: $updateReportMembershipId, input: $input) {
+		reportMembership {
+			createdAt
+			createdBy
+			id
+			reportID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) UpdateReportMembership(ctx context.Context, updateReportMembershipID string, input UpdateReportMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateReportMembership, error) {
+	vars := map[string]any{
+		"updateReportMembershipId": updateReportMembershipID,
+		"input":                    input,
+	}
+
+	var res UpdateReportMembership
+	if err := c.Client.Post(ctx, "UpdateReportMembership", UpdateReportMembershipDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -203381,6 +207361,23 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 					id
 					tags
 					title
+				}
+			}
+		}
+		reports {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					displayID
+					id
+					name
+					tags
 				}
 			}
 		}
@@ -217762,6 +221759,7 @@ var DocumentOperationNames = map[string]string{
 	GetAllProgramMembershipsDocument:              "GetAllProgramMemberships",
 	GetProgramMembershipByIDDocument:              "GetProgramMembershipByID",
 	GetProgramMembershipsDocument:                 "GetProgramMemberships",
+	UpdateBulkProgramMembershipDocument:           "UpdateBulkProgramMembership",
 	UpdateProgramMembershipDocument:               "UpdateProgramMembership",
 	CreateBulkCSVRemediationDocument:              "CreateBulkCSVRemediation",
 	CreateBulkRemediationDocument:                 "CreateBulkRemediation",
@@ -217774,6 +221772,24 @@ var DocumentOperationNames = map[string]string{
 	UpdateBulkCSVRemediationDocument:              "UpdateBulkCSVRemediation",
 	UpdateBulkRemediationDocument:                 "UpdateBulkRemediation",
 	UpdateRemediationDocument:                     "UpdateRemediation",
+	CreateReportDocument:                          "CreateReport",
+	DeleteReportDocument:                          "DeleteReport",
+	GetAllReportsDocument:                         "GetAllReports",
+	GetReportByIDDocument:                         "GetReportByID",
+	GetReportMembersByReportIDDocument:            "GetReportMembersByReportID",
+	GetReportsDocument:                            "GetReports",
+	UpdateReportDocument:                          "UpdateReport",
+	AddUserToReportWithRoleDocument:               "AddUserToReportWithRole",
+	CreateBulkReportMembershipDocument:            "CreateBulkReportMembership",
+	CreateReportMembershipDocument:                "CreateReportMembership",
+	DeleteBulkReportMembershipDocument:            "DeleteBulkReportMembership",
+	DeleteReportMembershipDocument:                "DeleteReportMembership",
+	GetAllReportMembershipsDocument:               "GetAllReportMemberships",
+	GetReportMembershipByIDDocument:               "GetReportMembershipByID",
+	GetReportMembershipsDocument:                  "GetReportMemberships",
+	RemoveUserFromReportDocument:                  "RemoveUserFromReport",
+	UpdateBulkReportMembershipDocument:            "UpdateBulkReportMembership",
+	UpdateReportMembershipDocument:                "UpdateReportMembership",
 	CreateBulkCSVReviewDocument:                   "CreateBulkCSVReview",
 	CreateBulkReviewDocument:                      "CreateBulkReview",
 	CreateReviewDocument:                          "CreateReview",

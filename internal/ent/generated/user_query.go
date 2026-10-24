@@ -32,6 +32,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
@@ -70,6 +72,8 @@ type UserQuery struct {
 	withAssigneeTasks                *TaskQuery
 	withPrograms                     *ProgramQuery
 	withProgramsOwned                *ProgramQuery
+	withReports                      *ReportQuery
+	withReportsOwned                 *ReportQuery
 	withPlatformsOwned               *PlatformQuery
 	withIdentityHolderProfiles       *IdentityHolderQuery
 	withImpersonationEvents          *ImpersonationEventQuery
@@ -77,6 +81,7 @@ type UserQuery struct {
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
 	withProgramMemberships           *ProgramMembershipQuery
+	withReportMemberships            *ReportMembershipQuery
 	loadTotal                        []func(context.Context, []*User) error
 	modifiers                        []func(*sql.Selector)
 	withNamedPersonalAccessTokens    map[string]*PersonalAccessTokenQuery
@@ -97,6 +102,8 @@ type UserQuery struct {
 	withNamedAssigneeTasks           map[string]*TaskQuery
 	withNamedPrograms                map[string]*ProgramQuery
 	withNamedProgramsOwned           map[string]*ProgramQuery
+	withNamedReports                 map[string]*ReportQuery
+	withNamedReportsOwned            map[string]*ReportQuery
 	withNamedPlatformsOwned          map[string]*PlatformQuery
 	withNamedIdentityHolderProfiles  map[string]*IdentityHolderQuery
 	withNamedImpersonationEvents     map[string]*ImpersonationEventQuery
@@ -104,6 +111,7 @@ type UserQuery struct {
 	withNamedGroupMemberships        map[string]*GroupMembershipQuery
 	withNamedOrgMemberships          map[string]*OrgMembershipQuery
 	withNamedProgramMemberships      map[string]*ProgramMembershipQuery
+	withNamedReportMemberships       map[string]*ReportMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -580,6 +588,50 @@ func (_q *UserQuery) QueryProgramsOwned() *ProgramQuery {
 	return query
 }
 
+// QueryReports chains the current query on the "reports" edge.
+func (_q *UserQuery) QueryReports() *ReportQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.ReportsTable, user.ReportsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReportsOwned chains the current query on the "reports_owned" edge.
+func (_q *UserQuery) QueryReportsOwned() *ReportQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.ReportsOwnedTable, user.ReportsOwnedColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryPlatformsOwned chains the current query on the "platforms_owned" edge.
 func (_q *UserQuery) QueryPlatformsOwned() *PlatformQuery {
 	query := (&PlatformClient{config: _q.config}).Query()
@@ -727,6 +779,28 @@ func (_q *UserQuery) QueryProgramMemberships() *ProgramMembershipQuery {
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(programmembership.Table, programmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, user.ProgramMembershipsTable, user.ProgramMembershipsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReportMemberships chains the current query on the "report_memberships" edge.
+func (_q *UserQuery) QueryReportMemberships() *ReportMembershipQuery {
+	query := (&ReportMembershipClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(reportmembership.Table, reportmembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, user.ReportMembershipsTable, user.ReportMembershipsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -946,6 +1020,8 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withAssigneeTasks:           _q.withAssigneeTasks.Clone(),
 		withPrograms:                _q.withPrograms.Clone(),
 		withProgramsOwned:           _q.withProgramsOwned.Clone(),
+		withReports:                 _q.withReports.Clone(),
+		withReportsOwned:            _q.withReportsOwned.Clone(),
 		withPlatformsOwned:          _q.withPlatformsOwned.Clone(),
 		withIdentityHolderProfiles:  _q.withIdentityHolderProfiles.Clone(),
 		withImpersonationEvents:     _q.withImpersonationEvents.Clone(),
@@ -953,6 +1029,7 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withGroupMemberships:        _q.withGroupMemberships.Clone(),
 		withOrgMemberships:          _q.withOrgMemberships.Clone(),
 		withProgramMemberships:      _q.withProgramMemberships.Clone(),
+		withReportMemberships:       _q.withReportMemberships.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1180,6 +1257,28 @@ func (_q *UserQuery) WithProgramsOwned(opts ...func(*ProgramQuery)) *UserQuery {
 	return _q
 }
 
+// WithReports tells the query-builder to eager-load the nodes that are connected to
+// the "reports" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithReports(opts ...func(*ReportQuery)) *UserQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReports = query
+	return _q
+}
+
+// WithReportsOwned tells the query-builder to eager-load the nodes that are connected to
+// the "reports_owned" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithReportsOwned(opts ...func(*ReportQuery)) *UserQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReportsOwned = query
+	return _q
+}
+
 // WithPlatformsOwned tells the query-builder to eager-load the nodes that are connected to
 // the "platforms_owned" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *UserQuery) WithPlatformsOwned(opts ...func(*PlatformQuery)) *UserQuery {
@@ -1254,6 +1353,17 @@ func (_q *UserQuery) WithProgramMemberships(opts ...func(*ProgramMembershipQuery
 		opt(query)
 	}
 	_q.withProgramMemberships = query
+	return _q
+}
+
+// WithReportMemberships tells the query-builder to eager-load the nodes that are connected to
+// the "report_memberships" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithReportMemberships(opts ...func(*ReportMembershipQuery)) *UserQuery {
+	query := (&ReportMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReportMemberships = query
 	return _q
 }
 
@@ -1341,7 +1451,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [30]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
@@ -1362,6 +1472,8 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withAssigneeTasks != nil,
 			_q.withPrograms != nil,
 			_q.withProgramsOwned != nil,
+			_q.withReports != nil,
+			_q.withReportsOwned != nil,
 			_q.withPlatformsOwned != nil,
 			_q.withIdentityHolderProfiles != nil,
 			_q.withImpersonationEvents != nil,
@@ -1369,6 +1481,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withGroupMemberships != nil,
 			_q.withOrgMemberships != nil,
 			_q.withProgramMemberships != nil,
+			_q.withReportMemberships != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -1538,6 +1651,20 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	if query := _q.withReports; query != nil {
+		if err := _q.loadReports(ctx, query, nodes,
+			func(n *User) { n.Edges.Reports = []*Report{} },
+			func(n *User, e *Report) { n.Edges.Reports = append(n.Edges.Reports, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReportsOwned; query != nil {
+		if err := _q.loadReportsOwned(ctx, query, nodes,
+			func(n *User) { n.Edges.ReportsOwned = []*Report{} },
+			func(n *User, e *Report) { n.Edges.ReportsOwned = append(n.Edges.ReportsOwned, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withPlatformsOwned; query != nil {
 		if err := _q.loadPlatformsOwned(ctx, query, nodes,
 			func(n *User) { n.Edges.PlatformsOwned = []*Platform{} },
@@ -1592,6 +1719,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User, e *ProgramMembership) {
 				n.Edges.ProgramMemberships = append(n.Edges.ProgramMemberships, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReportMemberships; query != nil {
+		if err := _q.loadReportMemberships(ctx, query, nodes,
+			func(n *User) { n.Edges.ReportMemberships = []*ReportMembership{} },
+			func(n *User, e *ReportMembership) { n.Edges.ReportMemberships = append(n.Edges.ReportMemberships, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1721,6 +1855,20 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedReports {
+		if err := _q.loadReports(ctx, query, nodes,
+			func(n *User) { n.appendNamedReports(name) },
+			func(n *User, e *Report) { n.appendNamedReports(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReportsOwned {
+		if err := _q.loadReportsOwned(ctx, query, nodes,
+			func(n *User) { n.appendNamedReportsOwned(name) },
+			func(n *User, e *Report) { n.appendNamedReportsOwned(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedPlatformsOwned {
 		if err := _q.loadPlatformsOwned(ctx, query, nodes,
 			func(n *User) { n.appendNamedPlatformsOwned(name) },
@@ -1767,6 +1915,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadProgramMemberships(ctx, query, nodes,
 			func(n *User) { n.appendNamedProgramMemberships(name) },
 			func(n *User, e *ProgramMembership) { n.appendNamedProgramMemberships(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReportMemberships {
+		if err := _q.loadReportMemberships(ctx, query, nodes,
+			func(n *User) { n.appendNamedReportMemberships(name) },
+			func(n *User, e *ReportMembership) { n.appendNamedReportMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2538,6 +2693,97 @@ func (_q *UserQuery) loadProgramsOwned(ctx context.Context, query *ProgramQuery,
 	}
 	return nil
 }
+func (_q *UserQuery) loadReports(ctx context.Context, query *ReportQuery, nodes []*User, init func(*User), assign func(*User, *Report)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*User)
+	nids := make(map[string]map[*User]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(user.ReportsTable)
+		s.Join(joinT).On(s.C(report.FieldID), joinT.C(user.ReportsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(user.ReportsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(user.ReportsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*User]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Report](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "reports" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *UserQuery) loadReportsOwned(ctx context.Context, query *ReportQuery, nodes []*User, init func(*User), assign func(*User, *Report)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(report.FieldReportOwnerID)
+	}
+	query.Where(predicate.Report(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.ReportsOwnedColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ReportOwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "report_owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *UserQuery) loadPlatformsOwned(ctx context.Context, query *PlatformQuery, nodes []*User, init func(*User), assign func(*User, *Platform)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*User)
@@ -2736,6 +2982,37 @@ func (_q *UserQuery) loadProgramMemberships(ctx context.Context, query *ProgramM
 	}
 	query.Where(predicate.ProgramMembership(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(user.ProgramMembershipsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *UserQuery) loadReportMemberships(ctx context.Context, query *ReportMembershipQuery, nodes []*User, init func(*User), assign func(*User, *ReportMembership)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(reportmembership.FieldUserID)
+	}
+	query.Where(predicate.ReportMembership(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.ReportMembershipsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -3101,6 +3378,34 @@ func (_q *UserQuery) WithNamedProgramsOwned(name string, opts ...func(*ProgramQu
 	return _q
 }
 
+// WithNamedReports tells the query-builder to eager-load the nodes that are connected to the "reports"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedReports(name string, opts ...func(*ReportQuery)) *UserQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReports == nil {
+		_q.withNamedReports = make(map[string]*ReportQuery)
+	}
+	_q.withNamedReports[name] = query
+	return _q
+}
+
+// WithNamedReportsOwned tells the query-builder to eager-load the nodes that are connected to the "reports_owned"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedReportsOwned(name string, opts ...func(*ReportQuery)) *UserQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReportsOwned == nil {
+		_q.withNamedReportsOwned = make(map[string]*ReportQuery)
+	}
+	_q.withNamedReportsOwned[name] = query
+	return _q
+}
+
 // WithNamedPlatformsOwned tells the query-builder to eager-load the nodes that are connected to the "platforms_owned"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *UserQuery) WithNamedPlatformsOwned(name string, opts ...func(*PlatformQuery)) *UserQuery {
@@ -3196,6 +3501,20 @@ func (_q *UserQuery) WithNamedProgramMemberships(name string, opts ...func(*Prog
 		_q.withNamedProgramMemberships = make(map[string]*ProgramMembershipQuery)
 	}
 	_q.withNamedProgramMemberships[name] = query
+	return _q
+}
+
+// WithNamedReportMemberships tells the query-builder to eager-load the nodes that are connected to the "report_memberships"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedReportMemberships(name string, opts ...func(*ReportMembershipQuery)) *UserQuery {
+	query := (&ReportMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReportMemberships == nil {
+		_q.withNamedReportMemberships = make(map[string]*ReportMembershipQuery)
+	}
+	_q.withNamedReportMemberships[name] = query
 	return _q
 }
 

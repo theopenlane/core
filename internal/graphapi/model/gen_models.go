@@ -2837,6 +2837,70 @@ type RemediationUpdatePayload struct {
 	Remediation *generated.Remediation `json:"remediation"`
 }
 
+// Return response for createReport mutation
+type ReportCreatePayload struct {
+	// Created report
+	Report *generated.Report `json:"report"`
+}
+
+// Return response for deleteReport mutation
+type ReportDeletePayload struct {
+	// Deleted report ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkReportMembership mutation
+type ReportMembershipBulkCreatePayload struct {
+	// Created reportMemberships
+	ReportMemberships []*generated.ReportMembership `json:"reportMemberships,omitempty"`
+}
+
+// Return response for deleteBulkReportMembership mutation
+type ReportMembershipBulkDeletePayload struct {
+	// Deleted reportMembership IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// Error returned when the bulk delete is only partially applied
+	Error *string `json:"error,omitempty"`
+	// IDs of reportMemberships that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+}
+
+// Return response for updateBulkReportMembership mutation
+type ReportMembershipBulkUpdatePayload struct {
+	// Updated reportMemberships
+	ReportMemberships []*generated.ReportMembership `json:"reportMemberships,omitempty"`
+	// IDs of the updated reportMemberships
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
+}
+
+// Return response for createReportMembership mutation
+type ReportMembershipCreatePayload struct {
+	// Created reportMembership
+	ReportMembership *generated.ReportMembership `json:"reportMembership"`
+}
+
+// Return response for deleteReportMembership mutation
+type ReportMembershipDeletePayload struct {
+	// Deleted reportMembership ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateReportMembership mutation
+type ReportMembershipUpdatePayload struct {
+	// Updated reportMembership
+	ReportMembership *generated.ReportMembership `json:"reportMembership"`
+}
+
+// Return response for updateReport mutation
+type ReportUpdatePayload struct {
+	// Updated report
+	Report *generated.Report `json:"report"`
+}
+
 // Input for resendCampaignIncompleteTargets mutation
 type ResendCampaignIncompleteInput struct {
 	// ID of the campaign
@@ -3078,6 +3142,7 @@ type SearchResults struct {
 	Procedures            *generated.ProcedureConnection            `json:"procedures,omitempty"`
 	Programs              *generated.ProgramConnection              `json:"programs,omitempty"`
 	Remediations          *generated.RemediationConnection          `json:"remediations,omitempty"`
+	Reports               *generated.ReportConnection               `json:"reports,omitempty"`
 	Reviews               *generated.ReviewConnection               `json:"reviews,omitempty"`
 	Risks                 *generated.RiskConnection                 `json:"risks,omitempty"`
 	Scans                 *generated.ScanConnection                 `json:"scans,omitempty"`

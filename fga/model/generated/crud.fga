@@ -250,6 +250,17 @@ extend type organization
     define remediation_creator: [group#member]
     define can_create_remediation: can_edit or can_edit_remediation or remediation_creator or can_manage_risk or can_manage_compliance
 
+    define can_view_report: [service, user, group#member] or can_edit_report or full_access
+    define can_edit_report: [service, user, group#member] or can_delete_report or full_access
+    define can_delete_report: [service, user, group#member] or full_access
+    define report_creator: [group#member]
+    define can_create_report: can_edit or can_edit_report or report_creator
+
+    define can_view_report_membership: [service, user] or can_edit_report_membership or can_view_report or full_access
+    define can_edit_report_membership: [service, user] or can_delete_report_membership or can_edit_report or full_access
+    define can_delete_report_membership: [service, user] or can_delete_report or full_access
+    define can_create_report_membership: can_edit or can_edit_report_membership
+
     define can_view_review: [service, user, group#member] or auditor or auditor or can_edit_review or can_manage_compliance or can_manage_risk or full_access
     define can_edit_review: [service, user, group#member] or auditor or can_delete_review or can_manage_compliance or can_manage_risk or full_access
     define can_delete_review: [service, user, group#member] or auditor or can_manage_compliance or can_manage_risk or full_access

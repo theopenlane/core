@@ -465,6 +465,23 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    reports {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
     reviews {
       totalCount
       pageInfo {

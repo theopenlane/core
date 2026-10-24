@@ -110,6 +110,10 @@ const (
 	EdgePrograms = "programs"
 	// EdgeProgramsOwned holds the string denoting the programs_owned edge name in mutations.
 	EdgeProgramsOwned = "programs_owned"
+	// EdgeReports holds the string denoting the reports edge name in mutations.
+	EdgeReports = "reports"
+	// EdgeReportsOwned holds the string denoting the reports_owned edge name in mutations.
+	EdgeReportsOwned = "reports_owned"
 	// EdgePlatformsOwned holds the string denoting the platforms_owned edge name in mutations.
 	EdgePlatformsOwned = "platforms_owned"
 	// EdgeIdentityHolderProfiles holds the string denoting the identity_holder_profiles edge name in mutations.
@@ -124,6 +128,8 @@ const (
 	EdgeOrgMemberships = "org_memberships"
 	// EdgeProgramMemberships holds the string denoting the program_memberships edge name in mutations.
 	EdgeProgramMemberships = "program_memberships"
+	// EdgeReportMemberships holds the string denoting the report_memberships edge name in mutations.
+	EdgeReportMemberships = "report_memberships"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 	// PersonalAccessTokensTable is the table that holds the personal_access_tokens relation/edge.
@@ -256,6 +262,18 @@ const (
 	ProgramsOwnedInverseTable = "programs"
 	// ProgramsOwnedColumn is the table column denoting the programs_owned relation/edge.
 	ProgramsOwnedColumn = "program_owner_id"
+	// ReportsTable is the table that holds the reports relation/edge. The primary key declared below.
+	ReportsTable = "report_memberships"
+	// ReportsInverseTable is the table name for the Report entity.
+	// It exists in this package in order to avoid circular dependency with the "report" package.
+	ReportsInverseTable = "reports"
+	// ReportsOwnedTable is the table that holds the reports_owned relation/edge.
+	ReportsOwnedTable = "reports"
+	// ReportsOwnedInverseTable is the table name for the Report entity.
+	// It exists in this package in order to avoid circular dependency with the "report" package.
+	ReportsOwnedInverseTable = "reports"
+	// ReportsOwnedColumn is the table column denoting the reports_owned relation/edge.
+	ReportsOwnedColumn = "report_owner_id"
 	// PlatformsOwnedTable is the table that holds the platforms_owned relation/edge.
 	PlatformsOwnedTable = "platforms"
 	// PlatformsOwnedInverseTable is the table name for the Platform entity.
@@ -305,6 +323,13 @@ const (
 	ProgramMembershipsInverseTable = "program_memberships"
 	// ProgramMembershipsColumn is the table column denoting the program_memberships relation/edge.
 	ProgramMembershipsColumn = "user_id"
+	// ReportMembershipsTable is the table that holds the report_memberships relation/edge.
+	ReportMembershipsTable = "report_memberships"
+	// ReportMembershipsInverseTable is the table name for the ReportMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "reportmembership" package.
+	ReportMembershipsInverseTable = "report_memberships"
+	// ReportMembershipsColumn is the table column denoting the report_memberships relation/edge.
+	ReportMembershipsColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -354,6 +379,9 @@ var (
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"user_id", "program_id"}
+	// ReportsPrimaryKey and ReportsColumn2 are the table columns denoting the
+	// primary key for the reports relation (M2M).
+	ReportsPrimaryKey = []string{"user_id", "report_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -838,6 +866,34 @@ func ByProgramsOwned(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByReportsCount orders the results by reports count.
+func ByReportsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportsStep(), opts...)
+	}
+}
+
+// ByReports orders the results by reports terms.
+func ByReports(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReportsOwnedCount orders the results by reports_owned count.
+func ByReportsOwnedCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportsOwnedStep(), opts...)
+	}
+}
+
+// ByReportsOwned orders the results by reports_owned terms.
+func ByReportsOwned(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportsOwnedStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByPlatformsOwnedCount orders the results by platforms_owned count.
 func ByPlatformsOwnedCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -933,6 +989,20 @@ func ByProgramMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByProgramMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProgramMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReportMembershipsCount orders the results by report_memberships count.
+func ByReportMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportMembershipsStep(), opts...)
+	}
+}
+
+// ByReportMemberships orders the results by report_memberships terms.
+func ByReportMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newPersonalAccessTokensStep() *sqlgraph.Step {
@@ -1075,6 +1145,20 @@ func newProgramsOwnedStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ProgramsOwnedTable, ProgramsOwnedColumn),
 	)
 }
+func newReportsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ReportsTable, ReportsPrimaryKey...),
+	)
+}
+func newReportsOwnedStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportsOwnedInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ReportsOwnedTable, ReportsOwnedColumn),
+	)
+}
 func newPlatformsOwnedStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1122,6 +1206,13 @@ func newProgramMembershipsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramMembershipsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, ProgramMembershipsTable, ProgramMembershipsColumn),
+	)
+}
+func newReportMembershipsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportMembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, ReportMembershipsTable, ReportMembershipsColumn),
 	)
 }
 

@@ -93,6 +93,23 @@ query GetProgramMemberships ($where: ProgramMembershipWhereInput) {
 		}
 	}
 }
+mutation UpdateBulkProgramMembership ($ids: [ID!]!, $input: UpdateProgramMembershipInput!) {
+	updateBulkProgramMembership(ids: $ids, input: $input) {
+		programMemberships {
+			createdAt
+			createdBy
+			id
+			programID
+			role
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+		notUpdatedIDs
+	}
+}
 mutation UpdateProgramMembership ($updateProgramMembershipId: ID!, $input: UpdateProgramMembershipInput!) {
 	updateProgramMembership(id: $updateProgramMembershipId, input: $input) {
 		programMembership {
