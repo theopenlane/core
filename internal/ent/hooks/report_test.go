@@ -14,7 +14,7 @@ func TestIsQueryValid(t *testing.T) {
 		hasError  bool
 	}{
 		{
-			name:  "can store a valid query without variables",
+			name: "can store a valid query without variables",
 			query: `{
   controls {
     totalCount
@@ -22,7 +22,7 @@ func TestIsQueryValid(t *testing.T) {
 }`,
 		},
 		{
-			name:  "can store a valid query that has variables",
+			name: "can store a valid query that has variables",
 			query: `query Report($include: Boolean!) {
   controls @include(if: $include) {
     totalCount
@@ -33,26 +33,26 @@ func TestIsQueryValid(t *testing.T) {
 			},
 		},
 		{
-			name:  "cannot store an invalid query",
-			query: `query {`,
+			name:     "cannot store an invalid query",
+			query:    `query {`,
 			hasError: true,
 		},
 		{
-			name:  "unknown field in query should fail validation",
+			name: "unknown field in query should fail validation",
 			query: `{
   nonexistentReportField
 }`,
 			hasError: true,
 		},
 		{
-			name:  "report should not allow for mutation",
+			name: "report should not allow for mutation",
 			query: `mutation {
   __typename
 }`,
 			hasError: true,
 		},
 		{
-			name:  "multiple queries are not allowed",
+			name: "multiple queries are not allowed",
 			query: `query A {
   controls {
     totalCount
@@ -66,7 +66,7 @@ query B {
 			hasError: true,
 		},
 		{
-			name:  "query that needs a variable must have it present",
+			name: "query that needs a variable must have it present",
 			query: `query Report($include: Boolean!) {
   controls @include(if: $include) {
     totalCount
@@ -75,7 +75,7 @@ query B {
 			hasError: true,
 		},
 		{
-			name:  "query with invalid variable type should fail",
+			name: "query with invalid variable type should fail",
 			query: `query Report($include: Boolean!) {
   controls @include(if: $include) {
     totalCount
@@ -84,7 +84,7 @@ query B {
 			variables: map[string]any{
 				"include": "yes",
 			},
-			hasError:  true,
+			hasError: true,
 		},
 	}
 
