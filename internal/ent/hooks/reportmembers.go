@@ -16,7 +16,7 @@ import (
 )
 
 // HookReportMembers makes sure the visibility rules are respected. members can be added to
-// reports except it is a private one which only the owner can be a memeber of
+// reports except it is a private one which only the owner can be a member of
 func HookReportMembers() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ReportMembershipFunc(func(ctx context.Context, m *generated.ReportMembershipMutation) (ent.Value, error) {
@@ -61,7 +61,7 @@ func HookReportMembers() ent.Hook {
 			}
 
 			if exists {
-				return nil, ErrReportPrivate
+				return nil, ErrReportIsPrivate
 			}
 
 			return next.Mutate(ctx, m)
@@ -75,21 +75,24 @@ func createReportMember(ctx context.Context, m *generated.ReportMembershipMutati
 		return nil
 	}
 
-	reportID, ok := m.ReportID()
+	id, ok := m.ReportID()
 	if !ok {
 		return nil
 	}
 
-	report, err := m.Client().Report.Get(ctx, reportID)
+	report, err := m.Client().Report.Query().
+		Where(report.ID(id)).
+		Select(report.FieldVisibility, report.FieldOwnerID).
+		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("report_id", reportID).Msg("failed to get report for membership creation")
+		logx.FromContext(ctx).Error().Err(err).Str("report_id", id).Msg("failed to get report for membership creation")
 
 		return err
 	}
 
 	// cannot add members to a private report
 	if report.Visibility == enums.ReportVisibilityPrivate {
-		return ErrReportPrivate
+		return ErrReportIsPrivate
 	}
 
 	memberID, err := m.Client().OrgMembership.Query().

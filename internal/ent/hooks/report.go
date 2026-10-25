@@ -28,7 +28,8 @@ import (
 var (
 	gqlSchema = gqlgenerated.NewExecutableSchema(gqlgenerated.Config{}).Schema()
 
-	ErrReportPrivate = errors.New("you cannot add or update membership of a private report. change visibility to restricted first.")
+	// ErrReportIsPrivate is returned when adding members to a private report
+	ErrReportIsPrivate = errors.New("you cannot add or update membership of a private report. change visibility to restricted first")
 )
 
 // isQueryValid checks if the provided query string is valid against the server. it also validates
@@ -41,7 +42,7 @@ func isQueryValid(query string, variables map[string]any) error {
 
 	// only queries should ever be allowed + one query per report
 	if len(document.Operations) != 1 || document.Operations[0].Operation != ast.Query {
-		return errors.New("reporting must contain exactly one query operation")
+		return errors.New("reporting must contain exactly one query operation") //nolint:err113
 	}
 
 	_, err := validator.VariableValues(gqlSchema, document.Operations[0], variables)
@@ -134,7 +135,7 @@ func HookReportAuthz() ent.Hook {
 
 			// reports required to have restricted visibility for it to have members or groups
 			if addedGroupAccess && requestedVisibility == enums.ReportVisibilityPrivate {
-				return nil, ErrReportPrivate
+				return nil, ErrReportIsPrivate
 			}
 
 			v, err := next.Mutate(ctx, m)
@@ -194,7 +195,7 @@ func HookReportGroupPermissions() ent.Hook {
 			}
 
 			if ok {
-				return nil, ErrReportPrivate
+				return nil, ErrReportIsPrivate
 			}
 
 			return next.Mutate(ctx, m)
