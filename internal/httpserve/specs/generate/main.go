@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"go/format"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -100,7 +101,12 @@ func runEmitTypes() error {
 		return err
 	}
 
-	if err := os.WriteFile(filepath.Join(outputDir, instancesFilename), []byte(content), specFilePerm); err != nil {
+	formatted, err := format.Source([]byte(content))
+	if err != nil {
+		return fmt.Errorf("format instances file: %w", err)
+	}
+
+	if err := os.WriteFile(filepath.Join(outputDir, instancesFilename), formatted, specFilePerm); err != nil {
 		return fmt.Errorf("write instances file: %w", err)
 	}
 
