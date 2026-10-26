@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
@@ -41,6 +42,7 @@ type CampaignQuery struct {
 	order                           []campaign.OrderOption
 	inters                          []Interceptor
 	predicates                      []predicate.Campaign
+	withIntegrationRuns             *IntegrationRunQuery
 	withOwner                       *OrganizationQuery
 	withBlockedGroups               *GroupQuery
 	withEditors                     *GroupQuery
@@ -64,6 +66,7 @@ type CampaignQuery struct {
 	withWorkflowObjectRefs          *WorkflowObjectRefQuery
 	loadTotal                       []func(context.Context, []*Campaign) error
 	modifiers                       []func(*sql.Selector)
+	withNamedIntegrationRuns        map[string]*IntegrationRunQuery
 	withNamedBlockedGroups          map[string]*GroupQuery
 	withNamedEditors                map[string]*GroupQuery
 	withNamedViewers                map[string]*GroupQuery
@@ -109,6 +112,28 @@ func (_q *CampaignQuery) Unique(unique bool) *CampaignQuery {
 func (_q *CampaignQuery) Order(o ...campaign.OrderOption) *CampaignQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *CampaignQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, campaign.IntegrationRunsTable, campaign.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -765,6 +790,7 @@ func (_q *CampaignQuery) Clone() *CampaignQuery {
 		order:                           append([]campaign.OrderOption{}, _q.order...),
 		inters:                          append([]Interceptor{}, _q.inters...),
 		predicates:                      append([]predicate.Campaign{}, _q.predicates...),
+		withIntegrationRuns:             _q.withIntegrationRuns.Clone(),
 		withOwner:                       _q.withOwner.Clone(),
 		withBlockedGroups:               _q.withBlockedGroups.Clone(),
 		withEditors:                     _q.withEditors.Clone(),
@@ -791,6 +817,17 @@ func (_q *CampaignQuery) Clone() *CampaignQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CampaignQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *CampaignQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -1108,7 +1145,8 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 	var (
 		nodes       = []*Campaign{}
 		_spec       = _q.querySpec()
-		loadedTypes = [21]bool{
+		loadedTypes = [22]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1152,6 +1190,13 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Campaign) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Campaign, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
@@ -1294,6 +1339,13 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Campaign) { n.appendNamedIntegrationRuns(name) },
+			func(n *Campaign, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Campaign) { n.appendNamedBlockedGroups(name) },
@@ -1379,6 +1431,37 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 	return nodes, nil
 }
 
+func (_q *CampaignQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Campaign, init func(*Campaign), assign func(*Campaign, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Campaign)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(campaign.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.campaign_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "campaign_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "campaign_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *CampaignQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Campaign, init func(*Campaign), assign func(*Campaign, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Campaign)
@@ -2374,6 +2457,20 @@ func (_q *CampaignQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *CampaignQuery) Modify(modifiers ...func(s *sql.Selector)) *CampaignSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *CampaignQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *CampaignQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"

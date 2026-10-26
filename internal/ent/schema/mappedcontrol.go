@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -115,6 +116,7 @@ func (m MappedControl) Edges() []ent.Edge {
 func (m MappedControl) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(m),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newOrgOwnedMixin(m),
 			// add group edit permissions to the mapped control
@@ -127,6 +129,9 @@ func (m MappedControl) Mixin() []ent.Mixin {
 func (MappedControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }
 

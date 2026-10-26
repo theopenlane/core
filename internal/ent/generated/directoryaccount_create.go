@@ -184,6 +184,12 @@ func (_c *DirectoryAccountCreate) SetNillableIntegrationRunID(v *string) *Direct
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *DirectoryAccountCreate) SetExternalID(v string) *DirectoryAccountCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *DirectoryAccountCreate) SetOwnerID(v string) *DirectoryAccountCreate {
 	_c.mutation.SetOwnerID(v)
@@ -307,12 +313,6 @@ func (_c *DirectoryAccountCreate) SetNillableDirectoryName(v *string) *Directory
 	if v != nil {
 		_c.SetDirectoryName(*v)
 	}
-	return _c
-}
-
-// SetExternalID sets the "external_id" field.
-func (_c *DirectoryAccountCreate) SetExternalID(v string) *DirectoryAccountCreate {
-	_c.mutation.SetExternalID(v)
 	return _c
 }
 
@@ -889,6 +889,14 @@ func (_c *DirectoryAccountCreate) check() error {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.display_id": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.ExternalID(); !ok {
+		return &ValidationError{Name: "external_id", err: errors.New(`generated: missing required field "DirectoryAccount.external_id"`)}
+	}
+	if v, ok := _c.mutation.ExternalID(); ok {
+		if err := directoryaccount.ExternalIDValidator(v); err != nil {
+			return &ValidationError{Name: "external_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.external_id": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := directoryaccount.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.owner_id": %w`, err)}
@@ -902,14 +910,6 @@ func (_c *DirectoryAccountCreate) check() error {
 	if v, ok := _c.mutation.PlatformID(); ok {
 		if err := directoryaccount.PlatformIDValidator(v); err != nil {
 			return &ValidationError{Name: "platform_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.platform_id": %w`, err)}
-		}
-	}
-	if _, ok := _c.mutation.ExternalID(); !ok {
-		return &ValidationError{Name: "external_id", err: errors.New(`generated: missing required field "DirectoryAccount.external_id"`)}
-	}
-	if v, ok := _c.mutation.ExternalID(); ok {
-		if err := directoryaccount.ExternalIDValidator(v); err != nil {
-			return &ValidationError{Name: "external_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.external_id": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.EmailAliases(); ok {
@@ -1037,6 +1037,10 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 		_spec.SetField(directoryaccount.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(directoryaccount.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.EnvironmentName(); ok {
 		_spec.SetField(directoryaccount.FieldEnvironmentName, field.TypeString, value)
 		_node.EnvironmentName = value
@@ -1048,10 +1052,6 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.DirectoryName(); ok {
 		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
 		_node.DirectoryName = &value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(directoryaccount.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.SecondaryKey(); ok {
 		_spec.SetField(directoryaccount.FieldSecondaryKey, field.TypeString, value)

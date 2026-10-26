@@ -47,6 +47,8 @@ type DirectoryGroup struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the environment of the directory_group
@@ -61,8 +63,6 @@ type DirectoryGroup struct {
 	IntegrationID string `json:"integration_id,omitempty"`
 	// optional platform associated with this directory group
 	PlatformID string `json:"platform_id,omitempty"`
-	// stable identifier from the directory system
-	ExternalID string `json:"external_id,omitempty"`
 	// primary group email address, when applicable
 	Email *string `json:"email,omitempty"`
 	// directory supplied display name
@@ -233,7 +233,7 @@ func (*DirectoryGroup) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directorygroup.FieldMemberCount:
 			values[i] = new(sql.NullInt64)
-		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldUpdatedByImpersonator, directorygroup.FieldDisplayID, directorygroup.FieldSourceDefinitionID, directorygroup.FieldSourceDefinitionVersion, directorygroup.FieldSourceInstanceID, directorygroup.FieldManagedBy, directorygroup.FieldIntegrationRunID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion, directorygroup.FieldDirectoryName:
+		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldUpdatedByImpersonator, directorygroup.FieldDisplayID, directorygroup.FieldSourceDefinitionID, directorygroup.FieldSourceDefinitionVersion, directorygroup.FieldSourceInstanceID, directorygroup.FieldManagedBy, directorygroup.FieldIntegrationRunID, directorygroup.FieldExternalID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion, directorygroup.FieldDirectoryName:
 			values[i] = new(sql.NullString)
 		case directorygroup.FieldCreatedAt, directorygroup.FieldUpdatedAt, directorygroup.FieldAddedAt, directorygroup.FieldRemovedAt, directorygroup.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -333,6 +333,12 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
 			}
+		case directorygroup.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		case directorygroup.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -374,12 +380,6 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
 			} else if value.Valid {
 				_m.PlatformID = value.String
-			}
-		case directorygroup.FieldExternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_id", values[i])
-			} else if value.Valid {
-				_m.ExternalID = value.String
 			}
 		case directorygroup.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -601,6 +601,9 @@ func (_m *DirectoryGroup) String() string {
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -621,9 +624,6 @@ func (_m *DirectoryGroup) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("platform_id=")
 	builder.WriteString(_m.PlatformID)
-	builder.WriteString(", ")
-	builder.WriteString("external_id=")
-	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	if v := _m.Email; v != nil {
 		builder.WriteString("email=")

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
@@ -27,26 +28,28 @@ import (
 // ControlImplementationQuery is the builder for querying ControlImplementation entities.
 type ControlImplementationQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []controlimplementation.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.ControlImplementation
-	withOwner              *OrganizationQuery
-	withBlockedGroups      *GroupQuery
-	withEditors            *GroupQuery
-	withViewers            *GroupQuery
-	withControls           *ControlQuery
-	withSubcontrols        *SubcontrolQuery
-	withTasks              *TaskQuery
-	withFKs                bool
-	loadTotal              []func(context.Context, []*ControlImplementation) error
-	modifiers              []func(*sql.Selector)
-	withNamedBlockedGroups map[string]*GroupQuery
-	withNamedEditors       map[string]*GroupQuery
-	withNamedViewers       map[string]*GroupQuery
-	withNamedControls      map[string]*ControlQuery
-	withNamedSubcontrols   map[string]*SubcontrolQuery
-	withNamedTasks         map[string]*TaskQuery
+	ctx                      *QueryContext
+	order                    []controlimplementation.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.ControlImplementation
+	withIntegrationRuns      *IntegrationRunQuery
+	withOwner                *OrganizationQuery
+	withBlockedGroups        *GroupQuery
+	withEditors              *GroupQuery
+	withViewers              *GroupQuery
+	withControls             *ControlQuery
+	withSubcontrols          *SubcontrolQuery
+	withTasks                *TaskQuery
+	withFKs                  bool
+	loadTotal                []func(context.Context, []*ControlImplementation) error
+	modifiers                []func(*sql.Selector)
+	withNamedIntegrationRuns map[string]*IntegrationRunQuery
+	withNamedBlockedGroups   map[string]*GroupQuery
+	withNamedEditors         map[string]*GroupQuery
+	withNamedViewers         map[string]*GroupQuery
+	withNamedControls        map[string]*ControlQuery
+	withNamedSubcontrols     map[string]*SubcontrolQuery
+	withNamedTasks           map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -81,6 +84,28 @@ func (_q *ControlImplementationQuery) Unique(unique bool) *ControlImplementation
 func (_q *ControlImplementationQuery) Order(o ...controlimplementation.OrderOption) *ControlImplementationQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *ControlImplementationQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(controlimplementation.Table, controlimplementation.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, controlimplementation.IntegrationRunsTable, controlimplementation.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -424,23 +449,35 @@ func (_q *ControlImplementationQuery) Clone() *ControlImplementationQuery {
 		return nil
 	}
 	return &ControlImplementationQuery{
-		config:            _q.config,
-		ctx:               _q.ctx.Clone(),
-		order:             append([]controlimplementation.OrderOption{}, _q.order...),
-		inters:            append([]Interceptor{}, _q.inters...),
-		predicates:        append([]predicate.ControlImplementation{}, _q.predicates...),
-		withOwner:         _q.withOwner.Clone(),
-		withBlockedGroups: _q.withBlockedGroups.Clone(),
-		withEditors:       _q.withEditors.Clone(),
-		withViewers:       _q.withViewers.Clone(),
-		withControls:      _q.withControls.Clone(),
-		withSubcontrols:   _q.withSubcontrols.Clone(),
-		withTasks:         _q.withTasks.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]controlimplementation.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.ControlImplementation{}, _q.predicates...),
+		withIntegrationRuns: _q.withIntegrationRuns.Clone(),
+		withOwner:           _q.withOwner.Clone(),
+		withBlockedGroups:   _q.withBlockedGroups.Clone(),
+		withEditors:         _q.withEditors.Clone(),
+		withViewers:         _q.withViewers.Clone(),
+		withControls:        _q.withControls.Clone(),
+		withSubcontrols:     _q.withSubcontrols.Clone(),
+		withTasks:           _q.withTasks.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *ControlImplementationQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -605,7 +642,8 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 		nodes       = []*ControlImplementation{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -638,6 +676,15 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *ControlImplementation) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *ControlImplementation, e *IntegrationRun) {
+				n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e)
+			}); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
@@ -684,6 +731,13 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *ControlImplementation) { n.Edges.Tasks = []*Task{} },
 			func(n *ControlImplementation, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *ControlImplementation) { n.appendNamedIntegrationRuns(name) },
+			func(n *ControlImplementation, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -737,6 +791,37 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 	return nodes, nil
 }
 
+func (_q *ControlImplementationQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ControlImplementation)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(controlimplementation.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.control_implementation_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "control_implementation_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "control_implementation_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *ControlImplementationQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*ControlImplementation, init func(*ControlImplementation), assign func(*ControlImplementation, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ControlImplementation)
@@ -1228,6 +1313,20 @@ func (_q *ControlImplementationQuery) sqlQuery(ctx context.Context) *sql.Selecto
 func (_q *ControlImplementationQuery) Modify(modifiers ...func(s *sql.Selector)) *ControlImplementationSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlImplementationQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *ControlImplementationQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"

@@ -99,6 +99,7 @@ func (ControlImplementation) Fields() []ent.Field {
 func (c ControlImplementation) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(c),
 			newObjectOwnedMixin[generated.ControlImplementation](c,
 				withParents(Control{}, Subcontrol{}),
 				withOrganizationOwner(),
@@ -161,6 +162,9 @@ func (c ControlImplementation) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALAssembly("implemented-requirement"),
 		),
 		entx.FGACrudParent(Control{}.Name()),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }
 

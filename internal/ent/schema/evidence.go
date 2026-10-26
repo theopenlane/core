@@ -168,6 +168,7 @@ func (e Evidence) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "EVD",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(e),
 			newObjectOwnedMixin[generated.Evidence](e,
 				withParents(
 					Control{}, Subcontrol{}, ControlObjective{}, Program{},
@@ -281,6 +282,9 @@ func (e Evidence) Annotations() []schema.Annotation {
 			),
 			oscalgen.WithOSCALAssembly("back-matter-resource"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }
 

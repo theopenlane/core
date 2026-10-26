@@ -278,6 +278,26 @@ func (_u *ActionPlanUpdate) ClearIntegrationRunID() *ActionPlanUpdate {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *ActionPlanUpdate) SetExternalID(v string) *ActionPlanUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableExternalID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ActionPlanUpdate) ClearExternalID() *ActionPlanUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *ActionPlanUpdate) SetName(v string) *ActionPlanUpdate {
 	_u.mutation.SetName(v)
@@ -1854,6 +1874,12 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(actionplan.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(actionplan.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(actionplan.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)
 	}
@@ -3211,6 +3237,26 @@ func (_u *ActionPlanUpdateOne) SetNillableIntegrationRunID(v *string) *ActionPla
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *ActionPlanUpdateOne) ClearIntegrationRunID() *ActionPlanUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *ActionPlanUpdateOne) SetExternalID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableExternalID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ActionPlanUpdateOne) ClearExternalID() *ActionPlanUpdateOne {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -4819,6 +4865,12 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(actionplan.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(actionplan.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(actionplan.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)

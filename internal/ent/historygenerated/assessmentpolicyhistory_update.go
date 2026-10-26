@@ -88,6 +88,24 @@ func (_u *AssessmentPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(assessmentpolicyhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmentpolicyhistory.FieldOwnerID, field.TypeString)
 	}
@@ -202,6 +220,24 @@ func (_u *AssessmentPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(assessmentpolicyhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(assessmentpolicyhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmentpolicyhistory.FieldOwnerID, field.TypeString)

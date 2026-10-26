@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -12,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
@@ -22,14 +24,16 @@ import (
 // TagDefinitionQuery is the builder for querying TagDefinition entities.
 type TagDefinitionQuery struct {
 	config
-	ctx        *QueryContext
-	order      []tagdefinition.OrderOption
-	inters     []Interceptor
-	predicates []predicate.TagDefinition
-	withOwner  *OrganizationQuery
-	withFKs    bool
-	loadTotal  []func(context.Context, []*TagDefinition) error
-	modifiers  []func(*sql.Selector)
+	ctx                      *QueryContext
+	order                    []tagdefinition.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.TagDefinition
+	withIntegrationRuns      *IntegrationRunQuery
+	withOwner                *OrganizationQuery
+	withFKs                  bool
+	loadTotal                []func(context.Context, []*TagDefinition) error
+	modifiers                []func(*sql.Selector)
+	withNamedIntegrationRuns map[string]*IntegrationRunQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -64,6 +68,28 @@ func (_q *TagDefinitionQuery) Unique(unique bool) *TagDefinitionQuery {
 func (_q *TagDefinitionQuery) Order(o ...tagdefinition.OrderOption) *TagDefinitionQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *TagDefinitionQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(tagdefinition.Table, tagdefinition.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, tagdefinition.IntegrationRunsTable, tagdefinition.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -275,17 +301,29 @@ func (_q *TagDefinitionQuery) Clone() *TagDefinitionQuery {
 		return nil
 	}
 	return &TagDefinitionQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]tagdefinition.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.TagDefinition{}, _q.predicates...),
-		withOwner:  _q.withOwner.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]tagdefinition.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.TagDefinition{}, _q.predicates...),
+		withIntegrationRuns: _q.withIntegrationRuns.Clone(),
+		withOwner:           _q.withOwner.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TagDefinitionQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *TagDefinitionQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -384,7 +422,8 @@ func (_q *TagDefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		nodes       = []*TagDefinition{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 		}
 	)
@@ -412,9 +451,25 @@ func (_q *TagDefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *TagDefinition) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *TagDefinition, e *IntegrationRun) {
+				n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *TagDefinition, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *TagDefinition) { n.appendNamedIntegrationRuns(name) },
+			func(n *TagDefinition, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -426,6 +481,37 @@ func (_q *TagDefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
+func (_q *TagDefinitionQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*TagDefinition, init func(*TagDefinition), assign func(*TagDefinition, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TagDefinition)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(tagdefinition.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.tag_definition_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "tag_definition_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "tag_definition_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *TagDefinitionQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*TagDefinition, init func(*TagDefinition), assign func(*TagDefinition, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TagDefinition)
@@ -551,6 +637,20 @@ func (_q *TagDefinitionQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *TagDefinitionQuery) Modify(modifiers ...func(s *sql.Selector)) *TagDefinitionSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TagDefinitionQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *TagDefinitionQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied

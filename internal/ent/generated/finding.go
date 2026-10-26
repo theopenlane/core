@@ -53,6 +53,8 @@ type Finding struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the internal owner for the finding when no user, group, or identity holder is linked
@@ -99,8 +101,6 @@ type Finding struct {
 	FindingStatusID string `json:"finding_status_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
-	// external identifier from the integration source for the finding
-	ExternalID string `json:"external_id,omitempty"`
 	// incoming source severity
 	SecurityLevel enums.SecurityLevel `json:"security_level,omitempty"`
 	// the owner of the finding
@@ -649,7 +649,7 @@ func (*Finding) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case finding.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldUpdatedByImpersonator, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldSourceDefinitionID, finding.FieldSourceDefinitionVersion, finding.FieldSourceInstanceID, finding.FieldManagedBy, finding.FieldIntegrationRunID, finding.FieldOwnerID, finding.FieldInternalOwner, finding.FieldInternalOwnerUserID, finding.FieldInternalOwnerGroupID, finding.FieldInternalOwnerIdentityHolderID, finding.FieldReviewedBy, finding.FieldReviewedByUserID, finding.FieldReviewedByGroupID, finding.FieldReviewedByIdentityHolderID, finding.FieldAssignedTo, finding.FieldAssignedToUserID, finding.FieldAssignedToGroupID, finding.FieldAssignedToIdentityHolderID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldExternalID, finding.FieldSecurityLevel, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldExternalURI:
+		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldUpdatedByImpersonator, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldSourceDefinitionID, finding.FieldSourceDefinitionVersion, finding.FieldSourceInstanceID, finding.FieldManagedBy, finding.FieldIntegrationRunID, finding.FieldExternalID, finding.FieldOwnerID, finding.FieldInternalOwner, finding.FieldInternalOwnerUserID, finding.FieldInternalOwnerGroupID, finding.FieldInternalOwnerIdentityHolderID, finding.FieldReviewedBy, finding.FieldReviewedByUserID, finding.FieldReviewedByGroupID, finding.FieldReviewedByIdentityHolderID, finding.FieldAssignedTo, finding.FieldAssignedToUserID, finding.FieldAssignedToGroupID, finding.FieldAssignedToIdentityHolderID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldSecurityLevel, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case finding.FieldCreatedAt, finding.FieldUpdatedAt, finding.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -760,6 +760,12 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case finding.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case finding.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -900,12 +906,6 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
 				_m.WorkflowEligibleMarker = value.Bool
-			}
-		case finding.FieldExternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_id", values[i])
-			} else if value.Valid {
-				_m.ExternalID = value.String
 			}
 		case finding.FieldSecurityLevel:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1400,6 +1400,9 @@ func (_m *Finding) String() string {
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -1472,9 +1475,6 @@ func (_m *Finding) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
-	builder.WriteString(", ")
-	builder.WriteString("external_id=")
-	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("security_level=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SecurityLevel))

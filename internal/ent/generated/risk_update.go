@@ -265,6 +265,26 @@ func (_u *RiskUpdate) ClearIntegrationRunID() *RiskUpdate {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *RiskUpdate) SetExternalID(v string) *RiskUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableExternalID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *RiskUpdate) ClearExternalID() *RiskUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetStakeholderName sets the "stakeholder_name" field.
 func (_u *RiskUpdate) SetStakeholderName(v string) *RiskUpdate {
 	_u.mutation.SetStakeholderName(v)
@@ -602,26 +622,6 @@ func (_u *RiskUpdate) SetNillableWorkflowEligibleMarker(v *bool) *RiskUpdate {
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *RiskUpdate) ClearWorkflowEligibleMarker() *RiskUpdate {
 	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *RiskUpdate) SetExternalID(v string) *RiskUpdate {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *RiskUpdate) SetNillableExternalID(v *string) *RiskUpdate {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *RiskUpdate) ClearExternalID() *RiskUpdate {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -2208,6 +2208,12 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(risk.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(risk.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.StakeholderName(); ok {
 		_spec.SetField(risk.FieldStakeholderName, field.TypeString, value)
 	}
@@ -2249,12 +2255,6 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(risk.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(risk.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IntegrationID(); ok {
 		_spec.SetField(risk.FieldIntegrationID, field.TypeString, value)
@@ -3976,6 +3976,26 @@ func (_u *RiskUpdateOne) ClearIntegrationRunID() *RiskUpdateOne {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *RiskUpdateOne) SetExternalID(v string) *RiskUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableExternalID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *RiskUpdateOne) ClearExternalID() *RiskUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetStakeholderName sets the "stakeholder_name" field.
 func (_u *RiskUpdateOne) SetStakeholderName(v string) *RiskUpdateOne {
 	_u.mutation.SetStakeholderName(v)
@@ -4313,26 +4333,6 @@ func (_u *RiskUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *RiskUpdateO
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *RiskUpdateOne) ClearWorkflowEligibleMarker() *RiskUpdateOne {
 	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *RiskUpdateOne) SetExternalID(v string) *RiskUpdateOne {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *RiskUpdateOne) SetNillableExternalID(v *string) *RiskUpdateOne {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *RiskUpdateOne) ClearExternalID() *RiskUpdateOne {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -5949,6 +5949,12 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(risk.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(risk.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.StakeholderName(); ok {
 		_spec.SetField(risk.FieldStakeholderName, field.TypeString, value)
 	}
@@ -5990,12 +5996,6 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(risk.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(risk.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IntegrationID(); ok {
 		_spec.SetField(risk.FieldIntegrationID, field.TypeString, value)

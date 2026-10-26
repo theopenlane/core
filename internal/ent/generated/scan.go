@@ -42,6 +42,18 @@ type Scan struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -107,6 +119,8 @@ type Scan struct {
 
 // ScanEdges holds the relations/edges for other nodes in the graph.
 type ScanEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -161,10 +175,11 @@ type ScanEdges struct {
 	PerformedByGroup *Group `json:"performed_by_group,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [26]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
-	totalCount [26]map[string]int
+	totalCount [27]map[string]int
 
+	namedIntegrationRuns map[string][]*IntegrationRun
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
 	namedAssets          map[string][]*Asset
@@ -181,12 +196,21 @@ type ScanEdges struct {
 	namedFindings        map[string][]*Finding
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ScanEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -195,7 +219,7 @@ func (e ScanEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -204,7 +228,7 @@ func (e ScanEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -215,7 +239,7 @@ func (e ScanEdges) EditorsOrErr() ([]*Group, error) {
 func (e ScanEdges) ReviewedByUserOrErr() (*User, error) {
 	if e.ReviewedByUser != nil {
 		return e.ReviewedByUser, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewed_by_user"}
@@ -226,7 +250,7 @@ func (e ScanEdges) ReviewedByUserOrErr() (*User, error) {
 func (e ScanEdges) ReviewedByGroupOrErr() (*Group, error) {
 	if e.ReviewedByGroup != nil {
 		return e.ReviewedByGroup, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewed_by_group"}
@@ -237,7 +261,7 @@ func (e ScanEdges) ReviewedByGroupOrErr() (*Group, error) {
 func (e ScanEdges) ReviewedByIdentityHolderOrErr() (*IdentityHolder, error) {
 	if e.ReviewedByIdentityHolder != nil {
 		return e.ReviewedByIdentityHolder, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: identityholder.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewed_by_identity_holder"}
@@ -248,7 +272,7 @@ func (e ScanEdges) ReviewedByIdentityHolderOrErr() (*IdentityHolder, error) {
 func (e ScanEdges) AssignedToUserOrErr() (*User, error) {
 	if e.AssignedToUser != nil {
 		return e.AssignedToUser, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigned_to_user"}
@@ -259,7 +283,7 @@ func (e ScanEdges) AssignedToUserOrErr() (*User, error) {
 func (e ScanEdges) AssignedToGroupOrErr() (*Group, error) {
 	if e.AssignedToGroup != nil {
 		return e.AssignedToGroup, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigned_to_group"}
@@ -270,7 +294,7 @@ func (e ScanEdges) AssignedToGroupOrErr() (*Group, error) {
 func (e ScanEdges) AssignedToIdentityHolderOrErr() (*IdentityHolder, error) {
 	if e.AssignedToIdentityHolder != nil {
 		return e.AssignedToIdentityHolder, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: identityholder.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigned_to_identity_holder"}
@@ -281,7 +305,7 @@ func (e ScanEdges) AssignedToIdentityHolderOrErr() (*IdentityHolder, error) {
 func (e ScanEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -292,7 +316,7 @@ func (e ScanEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e ScanEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -301,7 +325,7 @@ func (e ScanEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -310,7 +334,7 @@ func (e ScanEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -319,7 +343,7 @@ func (e ScanEdges) EntitiesOrErr() ([]*Entity, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -328,7 +352,7 @@ func (e ScanEdges) EvidenceOrErr() ([]*Evidence, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -337,7 +361,7 @@ func (e ScanEdges) FilesOrErr() ([]*File, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -346,7 +370,7 @@ func (e ScanEdges) RemediationsOrErr() ([]*Remediation, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -355,7 +379,7 @@ func (e ScanEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -364,7 +388,7 @@ func (e ScanEdges) TasksOrErr() ([]*Task, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -373,7 +397,7 @@ func (e ScanEdges) PlatformsOrErr() ([]*Platform, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -382,7 +406,7 @@ func (e ScanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -391,7 +415,7 @@ func (e ScanEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -400,7 +424,7 @@ func (e ScanEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -411,7 +435,7 @@ func (e ScanEdges) FindingsOrErr() ([]*Finding, error) {
 func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 	if e.GeneratedByPlatform != nil {
 		return e.GeneratedByPlatform, nil
-	} else if e.loadedTypes[23] {
+	} else if e.loadedTypes[24] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "generated_by_platform"}
@@ -422,7 +446,7 @@ func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 	if e.PerformedByUser != nil {
 		return e.PerformedByUser, nil
-	} else if e.loadedTypes[24] {
+	} else if e.loadedTypes[25] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_user"}
@@ -433,7 +457,7 @@ func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 func (e ScanEdges) PerformedByGroupOrErr() (*Group, error) {
 	if e.PerformedByGroup != nil {
 		return e.PerformedByGroup, nil
-	} else if e.loadedTypes[25] {
+	} else if e.loadedTypes[26] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_group"}
@@ -452,7 +476,7 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scan.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldReviewedByIdentityHolderID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldAssignedToIdentityHolderID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
+		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldSourceDefinitionID, scan.FieldSourceDefinitionVersion, scan.FieldSourceInstanceID, scan.FieldManagedBy, scan.FieldIntegrationRunID, scan.FieldExternalID, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldReviewedByIdentityHolderID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldAssignedToIdentityHolderID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
 			values[i] = new(sql.NullString)
 		case scan.FieldCreatedAt, scan.FieldUpdatedAt, scan.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -529,6 +553,42 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case scan.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case scan.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case scan.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case scan.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case scan.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case scan.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case scan.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -727,6 +787,11 @@ func (_m *Scan) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the Scan entity.
+func (_m *Scan) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewScanClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the Scan entity.
 func (_m *Scan) QueryOwner() *OrganizationQuery {
 	return NewScanClient(_m.config).QueryOwner(_m)
@@ -906,6 +971,24 @@ func (_m *Scan) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -1001,6 +1084,30 @@ func (_m *Scan) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

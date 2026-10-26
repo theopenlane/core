@@ -139,6 +139,11 @@ func IntegrationRunID(v string) predicate.ContactHistory {
 	return predicate.ContactHistory(sql.FieldEQ(FieldIntegrationRunID, v))
 }
 
+// ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
+func ExternalID(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldEQ(FieldExternalID, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.ContactHistory {
 	return predicate.ContactHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -172,11 +177,6 @@ func PhoneNumber(v string) predicate.ContactHistory {
 // Address applies equality check predicate on the "address" field. It's identical to AddressEQ.
 func Address(v string) predicate.ContactHistory {
 	return predicate.ContactHistory(sql.FieldEQ(FieldAddress, v))
-}
-
-// ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
-func ExternalID(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldEQ(FieldExternalID, v))
 }
 
 // IntegrationID applies equality check predicate on the "integration_id" field. It's identical to IntegrationIDEQ.
@@ -1159,6 +1159,81 @@ func IntegrationRunIDContainsFold(v string) predicate.ContactHistory {
 	return predicate.ContactHistory(sql.FieldContainsFold(FieldIntegrationRunID, v))
 }
 
+// ExternalIDEQ applies the EQ predicate on the "external_id" field.
+func ExternalIDEQ(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldEQ(FieldExternalID, v))
+}
+
+// ExternalIDNEQ applies the NEQ predicate on the "external_id" field.
+func ExternalIDNEQ(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldNEQ(FieldExternalID, v))
+}
+
+// ExternalIDIn applies the In predicate on the "external_id" field.
+func ExternalIDIn(vs ...string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldIn(FieldExternalID, vs...))
+}
+
+// ExternalIDNotIn applies the NotIn predicate on the "external_id" field.
+func ExternalIDNotIn(vs ...string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldNotIn(FieldExternalID, vs...))
+}
+
+// ExternalIDGT applies the GT predicate on the "external_id" field.
+func ExternalIDGT(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldGT(FieldExternalID, v))
+}
+
+// ExternalIDGTE applies the GTE predicate on the "external_id" field.
+func ExternalIDGTE(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldGTE(FieldExternalID, v))
+}
+
+// ExternalIDLT applies the LT predicate on the "external_id" field.
+func ExternalIDLT(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldLT(FieldExternalID, v))
+}
+
+// ExternalIDLTE applies the LTE predicate on the "external_id" field.
+func ExternalIDLTE(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldLTE(FieldExternalID, v))
+}
+
+// ExternalIDContains applies the Contains predicate on the "external_id" field.
+func ExternalIDContains(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldContains(FieldExternalID, v))
+}
+
+// ExternalIDHasPrefix applies the HasPrefix predicate on the "external_id" field.
+func ExternalIDHasPrefix(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldHasPrefix(FieldExternalID, v))
+}
+
+// ExternalIDHasSuffix applies the HasSuffix predicate on the "external_id" field.
+func ExternalIDHasSuffix(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldHasSuffix(FieldExternalID, v))
+}
+
+// ExternalIDIsNil applies the IsNil predicate on the "external_id" field.
+func ExternalIDIsNil() predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldIsNull(FieldExternalID))
+}
+
+// ExternalIDNotNil applies the NotNil predicate on the "external_id" field.
+func ExternalIDNotNil() predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldNotNull(FieldExternalID))
+}
+
+// ExternalIDEqualFold applies the EqualFold predicate on the "external_id" field.
+func ExternalIDEqualFold(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldEqualFold(FieldExternalID, v))
+}
+
+// ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
+func ExternalIDContainsFold(v string) predicate.ContactHistory {
+	return predicate.ContactHistory(sql.FieldContainsFold(FieldExternalID, v))
+}
+
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.ContactHistory {
 	return predicate.ContactHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -1712,81 +1787,6 @@ func StatusNotIn(vs ...enums.UserStatus) predicate.ContactHistory {
 		v[i] = vs[i]
 	}
 	return predicate.ContactHistory(sql.FieldNotIn(FieldStatus, v...))
-}
-
-// ExternalIDEQ applies the EQ predicate on the "external_id" field.
-func ExternalIDEQ(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldEQ(FieldExternalID, v))
-}
-
-// ExternalIDNEQ applies the NEQ predicate on the "external_id" field.
-func ExternalIDNEQ(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldNEQ(FieldExternalID, v))
-}
-
-// ExternalIDIn applies the In predicate on the "external_id" field.
-func ExternalIDIn(vs ...string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldIn(FieldExternalID, vs...))
-}
-
-// ExternalIDNotIn applies the NotIn predicate on the "external_id" field.
-func ExternalIDNotIn(vs ...string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldNotIn(FieldExternalID, vs...))
-}
-
-// ExternalIDGT applies the GT predicate on the "external_id" field.
-func ExternalIDGT(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldGT(FieldExternalID, v))
-}
-
-// ExternalIDGTE applies the GTE predicate on the "external_id" field.
-func ExternalIDGTE(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldGTE(FieldExternalID, v))
-}
-
-// ExternalIDLT applies the LT predicate on the "external_id" field.
-func ExternalIDLT(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldLT(FieldExternalID, v))
-}
-
-// ExternalIDLTE applies the LTE predicate on the "external_id" field.
-func ExternalIDLTE(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldLTE(FieldExternalID, v))
-}
-
-// ExternalIDContains applies the Contains predicate on the "external_id" field.
-func ExternalIDContains(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldContains(FieldExternalID, v))
-}
-
-// ExternalIDHasPrefix applies the HasPrefix predicate on the "external_id" field.
-func ExternalIDHasPrefix(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldHasPrefix(FieldExternalID, v))
-}
-
-// ExternalIDHasSuffix applies the HasSuffix predicate on the "external_id" field.
-func ExternalIDHasSuffix(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldHasSuffix(FieldExternalID, v))
-}
-
-// ExternalIDIsNil applies the IsNil predicate on the "external_id" field.
-func ExternalIDIsNil() predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldIsNull(FieldExternalID))
-}
-
-// ExternalIDNotNil applies the NotNil predicate on the "external_id" field.
-func ExternalIDNotNil() predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldNotNull(FieldExternalID))
-}
-
-// ExternalIDEqualFold applies the EqualFold predicate on the "external_id" field.
-func ExternalIDEqualFold(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldEqualFold(FieldExternalID, v))
-}
-
-// ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
-func ExternalIDContainsFold(v string) predicate.ContactHistory {
-	return predicate.ContactHistory(sql.FieldContainsFold(FieldExternalID, v))
 }
 
 // IntegrationIDEQ applies the EQ predicate on the "integration_id" field.

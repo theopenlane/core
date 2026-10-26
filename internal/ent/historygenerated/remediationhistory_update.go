@@ -97,6 +97,24 @@ func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(remediationhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(remediationhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(remediationhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(remediationhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(remediationhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(remediationhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(remediationhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(remediationhistory.FieldOwnerID, field.TypeString)
 	}
@@ -123,9 +141,6 @@ func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(remediationhistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(remediationhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.ExternalOwnerIDCleared() {
 		_spec.ClearField(remediationhistory.FieldExternalOwnerID, field.TypeString)
@@ -302,6 +317,24 @@ func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reme
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(remediationhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(remediationhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(remediationhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(remediationhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(remediationhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(remediationhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(remediationhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(remediationhistory.FieldOwnerID, field.TypeString)
 	}
@@ -328,9 +361,6 @@ func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reme
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(remediationhistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(remediationhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.ExternalOwnerIDCleared() {
 		_spec.ClearField(remediationhistory.FieldExternalOwnerID, field.TypeString)

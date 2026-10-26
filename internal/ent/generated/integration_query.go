@@ -2604,6 +2604,7 @@ func (_q *IntegrationQuery) loadIntegrationRuns(ctx context.Context, query *Inte
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(integrationrun.FieldIntegrationID)
 	}

@@ -226,6 +226,20 @@ func (_c *RiskCreate) SetNillableIntegrationRunID(v *string) *RiskCreate {
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *RiskCreate) SetExternalID(v string) *RiskCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableExternalID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *RiskCreate) SetOwnerID(v string) *RiskCreate {
 	_c.mutation.SetOwnerID(v)
@@ -474,20 +488,6 @@ func (_c *RiskCreate) SetWorkflowEligibleMarker(v bool) *RiskCreate {
 func (_c *RiskCreate) SetNillableWorkflowEligibleMarker(v *bool) *RiskCreate {
 	if v != nil {
 		_c.SetWorkflowEligibleMarker(*v)
-	}
-	return _c
-}
-
-// SetExternalID sets the "external_id" field.
-func (_c *RiskCreate) SetExternalID(v string) *RiskCreate {
-	_c.mutation.SetExternalID(v)
-	return _c
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_c *RiskCreate) SetNillableExternalID(v *string) *RiskCreate {
-	if v != nil {
-		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -1429,6 +1429,10 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.StakeholderName(); ok {
 		_spec.SetField(risk.FieldStakeholderName, field.TypeString, value)
 		_node.StakeholderName = value
@@ -1456,10 +1460,6 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(risk.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(risk.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(risk.FieldIntegrationID, field.TypeString, value)

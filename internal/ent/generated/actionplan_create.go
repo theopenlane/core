@@ -227,6 +227,20 @@ func (_c *ActionPlanCreate) SetNillableIntegrationRunID(v *string) *ActionPlanCr
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *ActionPlanCreate) SetExternalID(v string) *ActionPlanCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableExternalID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *ActionPlanCreate) SetName(v string) *ActionPlanCreate {
 	_c.mutation.SetName(v)
@@ -1298,6 +1312,10 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(actionplan.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(actionplan.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)

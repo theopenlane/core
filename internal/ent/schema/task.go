@@ -201,6 +201,7 @@ func (t Task) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "TSK",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(t),
 			newObjectOwnedMixin[generated.Task](t,
 				// ensure these are added to the fga model so that permissions can be set properly
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{},
@@ -392,6 +393,9 @@ func (Task) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
 			oscalgen.WithOSCALAssembly("poam-item"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }
 

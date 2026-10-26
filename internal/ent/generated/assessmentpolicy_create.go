@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
@@ -93,6 +94,90 @@ func (_c *AssessmentPolicyCreate) SetNillableUpdatedByImpersonator(v *string) *A
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *AssessmentPolicyCreate) SetSourceDefinitionID(v string) *AssessmentPolicyCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *AssessmentPolicyCreate) SetNillableSourceDefinitionID(v *string) *AssessmentPolicyCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *AssessmentPolicyCreate) SetSourceDefinitionVersion(v string) *AssessmentPolicyCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *AssessmentPolicyCreate) SetNillableSourceDefinitionVersion(v *string) *AssessmentPolicyCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *AssessmentPolicyCreate) SetSourceInstanceID(v string) *AssessmentPolicyCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *AssessmentPolicyCreate) SetNillableSourceInstanceID(v *string) *AssessmentPolicyCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *AssessmentPolicyCreate) SetManagedBy(v string) *AssessmentPolicyCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *AssessmentPolicyCreate) SetNillableManagedBy(v *string) *AssessmentPolicyCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *AssessmentPolicyCreate) SetIntegrationRunID(v string) *AssessmentPolicyCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *AssessmentPolicyCreate) SetNillableIntegrationRunID(v *string) *AssessmentPolicyCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *AssessmentPolicyCreate) SetExternalID(v string) *AssessmentPolicyCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *AssessmentPolicyCreate) SetNillableExternalID(v *string) *AssessmentPolicyCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *AssessmentPolicyCreate) SetOwnerID(v string) *AssessmentPolicyCreate {
 	_c.mutation.SetOwnerID(v)
@@ -145,6 +230,21 @@ func (_c *AssessmentPolicyCreate) SetNillableID(v *string) *AssessmentPolicyCrea
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *AssessmentPolicyCreate) AddIntegrationRunIDs(ids ...string) *AssessmentPolicyCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *AssessmentPolicyCreate) AddIntegrationRuns(v ...*IntegrationRun) *AssessmentPolicyCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -297,9 +397,49 @@ func (_c *AssessmentPolicyCreate) createSpec() (*AssessmentPolicy, *sqlgraph.Cre
 		_spec.SetField(assessmentpolicy.FieldUpdatedByImpersonator, field.TypeString, value)
 		_node.UpdatedByImpersonator = &value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(assessmentpolicy.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(assessmentpolicy.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(assessmentpolicy.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.PolicyRevision(); ok {
 		_spec.SetField(assessmentpolicy.FieldPolicyRevision, field.TypeString, value)
 		_node.PolicyRevision = value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentpolicy.IntegrationRunsTable,
+			Columns: []string{assessmentpolicy.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

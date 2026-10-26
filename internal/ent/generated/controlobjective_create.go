@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -152,6 +153,90 @@ func (_c *ControlObjectiveCreate) SetRevision(v string) *ControlObjectiveCreate 
 func (_c *ControlObjectiveCreate) SetNillableRevision(v *string) *ControlObjectiveCreate {
 	if v != nil {
 		_c.SetRevision(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *ControlObjectiveCreate) SetSourceDefinitionID(v string) *ControlObjectiveCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *ControlObjectiveCreate) SetNillableSourceDefinitionID(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *ControlObjectiveCreate) SetSourceDefinitionVersion(v string) *ControlObjectiveCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *ControlObjectiveCreate) SetNillableSourceDefinitionVersion(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *ControlObjectiveCreate) SetSourceInstanceID(v string) *ControlObjectiveCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *ControlObjectiveCreate) SetNillableSourceInstanceID(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *ControlObjectiveCreate) SetManagedBy(v string) *ControlObjectiveCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *ControlObjectiveCreate) SetNillableManagedBy(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *ControlObjectiveCreate) SetIntegrationRunID(v string) *ControlObjectiveCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *ControlObjectiveCreate) SetNillableIntegrationRunID(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *ControlObjectiveCreate) SetExternalID(v string) *ControlObjectiveCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *ControlObjectiveCreate) SetNillableExternalID(v *string) *ControlObjectiveCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -320,6 +405,21 @@ func (_c *ControlObjectiveCreate) SetNillableID(v *string) *ControlObjectiveCrea
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *ControlObjectiveCreate) AddIntegrationRunIDs(ids ...string) *ControlObjectiveCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *ControlObjectiveCreate) AddIntegrationRuns(v ...*IntegrationRun) *ControlObjectiveCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -701,6 +801,30 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 		_spec.SetField(controlobjective.FieldRevision, field.TypeString, value)
 		_node.Revision = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(controlobjective.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(controlobjective.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(controlobjective.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(controlobjective.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(controlobjective.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(controlobjective.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(controlobjective.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -744,6 +868,22 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 	if value, ok := _c.mutation.Subcategory(); ok {
 		_spec.SetField(controlobjective.FieldSubcategory, field.TypeString, value)
 		_node.Subcategory = value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlobjective.IntegrationRunsTable,
+			Columns: []string{controlobjective.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

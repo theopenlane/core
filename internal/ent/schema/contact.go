@@ -101,13 +101,6 @@ func (Contact) Fields() []ent.Field {
 			).
 			GoType(enums.UserStatus("")).
 			Default(enums.UserStatusActive.String()),
-		field.String("external_id").
-			Comment("stable identifier assigned by the source system, used for integration ingest deduplication").
-			Optional().
-			Annotations(
-				entgql.OrderField("external_id"),
-				entx.IntegrationMappingField(),
-			),
 		field.String("integration_id").
 			Comment("integration that sourced this contact, when populated via integration ingest").
 			Optional().
@@ -130,7 +123,7 @@ func (Contact) Fields() []ent.Field {
 func (c Contact) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: c},
+			newProvenanceMixin(c),
 			newOrgOwnedMixin(c),
 		},
 	}.getMixins(c)
@@ -177,6 +170,6 @@ func (c Contact) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaContact),
 		entx.NewExportable(),
-		entx.IntegrationMappingSchema().StockPersist().LookupAlternative("external_id").LookupAlternative("email"),
+		entx.IntegrationMappingSchema().StockPersist().LookupAlternative(externalIDFieldName).LookupAlternative("email"),
 	}
 }

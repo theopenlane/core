@@ -15,8 +15,10 @@ mutation CreateBulkCSVRemediation ($input: Upload!) {
 			externalURI
 			id
 			instructions
+			integrationRunID
 			intent
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			ownerReference
@@ -26,6 +28,9 @@ mutation CreateBulkCSVRemediation ($input: Upload!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -58,8 +63,10 @@ mutation CreateBulkRemediation ($input: [CreateRemediationInput!]) {
 			externalURI
 			id
 			instructions
+			integrationRunID
 			intent
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			ownerReference
@@ -69,6 +76,9 @@ mutation CreateBulkRemediation ($input: [CreateRemediationInput!]) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -101,8 +111,10 @@ mutation CreateRemediation ($input: CreateRemediationInput!) {
 			externalURI
 			id
 			instructions
+			integrationRunID
 			intent
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			ownerReference
@@ -112,6 +124,9 @@ mutation CreateRemediation ($input: CreateRemediationInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -195,8 +210,10 @@ query GetRemediationByID ($remediationId: ID!) {
 		externalURI
 		id
 		instructions
+		integrationRunID
 		intent
 		internalNotes
+		managedBy
 		metadata
 		ownerID
 		ownerReference
@@ -206,6 +223,9 @@ query GetRemediationByID ($remediationId: ID!) {
 		scopeID
 		scopeName
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		state
 		status
 		summary
@@ -277,8 +297,10 @@ mutation UpdateBulkCSVRemediation ($input: Upload!) {
 			externalURI
 			id
 			instructions
+			integrationRunID
 			intent
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			ownerReference
@@ -288,6 +310,9 @@ mutation UpdateBulkCSVRemediation ($input: Upload!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -323,8 +348,10 @@ mutation UpdateBulkRemediation ($ids: [ID!]!, $input: UpdateRemediationInput!) {
 			externalURI
 			id
 			instructions
+			integrationRunID
 			intent
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			ownerReference
@@ -334,6 +361,9 @@ mutation UpdateBulkRemediation ($ids: [ID!]!, $input: UpdateRemediationInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary
@@ -369,8 +399,10 @@ mutation UpdateRemediation ($updateRemediationId: ID!, $input: UpdateRemediation
 			externalURI
 			id
 			instructions
+			integrationRunID
 			intent
 			internalNotes
+			managedBy
 			metadata
 			ownerID
 			ownerReference
@@ -380,6 +412,9 @@ mutation UpdateRemediation ($updateRemediationId: ID!, $input: UpdateRemediation
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			state
 			status
 			summary

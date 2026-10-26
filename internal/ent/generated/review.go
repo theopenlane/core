@@ -39,6 +39,18 @@ type Review struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -55,8 +67,6 @@ type Review struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the review
 	ScopeID string `json:"scope_id,omitempty"`
-	// external identifier from the integration source for the review
-	ExternalID string `json:"external_id,omitempty"`
 	// external identifier from the integration source for the review
 	ExternalOwnerID string `json:"external_owner_id,omitempty"`
 	// title of the review
@@ -101,6 +111,8 @@ type Review struct {
 
 // ReviewEdges holds the relations/edges for other nodes in the graph.
 type ReviewEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -145,10 +157,11 @@ type ReviewEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [22]bool
 	// totalCount holds the count of the edges above.
-	totalCount [21]map[string]int
+	totalCount [22]map[string]int
 
+	namedIntegrationRuns  map[string][]*IntegrationRun
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
 	namedIntegrations     map[string][]*Integration
@@ -168,12 +181,21 @@ type ReviewEdges struct {
 	namedInternalPolicies map[string][]*InternalPolicy
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e ReviewEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ReviewEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -182,7 +204,7 @@ func (e ReviewEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -191,7 +213,7 @@ func (e ReviewEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -202,7 +224,7 @@ func (e ReviewEdges) EditorsOrErr() ([]*Group, error) {
 func (e ReviewEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -213,7 +235,7 @@ func (e ReviewEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e ReviewEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -222,7 +244,7 @@ func (e ReviewEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -231,7 +253,7 @@ func (e ReviewEdges) IntegrationsOrErr() ([]*Integration, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -240,7 +262,7 @@ func (e ReviewEdges) FindingsOrErr() ([]*Finding, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -249,7 +271,7 @@ func (e ReviewEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -258,7 +280,7 @@ func (e ReviewEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -267,7 +289,7 @@ func (e ReviewEdges) RemediationsOrErr() ([]*Remediation, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -276,7 +298,7 @@ func (e ReviewEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -285,7 +307,7 @@ func (e ReviewEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -294,7 +316,7 @@ func (e ReviewEdges) RisksOrErr() ([]*Risk, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -303,7 +325,7 @@ func (e ReviewEdges) ProgramsOrErr() ([]*Program, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -312,7 +334,7 @@ func (e ReviewEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -321,7 +343,7 @@ func (e ReviewEdges) EntitiesOrErr() ([]*Entity, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -332,7 +354,7 @@ func (e ReviewEdges) TasksOrErr() ([]*Task, error) {
 func (e ReviewEdges) ReviewerOrErr() (*User, error) {
 	if e.Reviewer != nil {
 		return e.Reviewer, nil
-	} else if e.loadedTypes[17] {
+	} else if e.loadedTypes[18] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewer"}
@@ -341,7 +363,7 @@ func (e ReviewEdges) ReviewerOrErr() (*User, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -350,7 +372,7 @@ func (e ReviewEdges) CommentsOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -359,7 +381,7 @@ func (e ReviewEdges) FilesOrErr() ([]*File, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e ReviewEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -376,7 +398,7 @@ func (*Review) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case review.FieldSystemOwned, review.FieldApproved:
 			values[i] = new(sql.NullBool)
-		case review.FieldID, review.FieldCreatedBy, review.FieldUpdatedBy, review.FieldUpdatedByImpersonator, review.FieldDeletedBy, review.FieldOwnerID, review.FieldInternalNotes, review.FieldSystemInternalID, review.FieldEnvironmentName, review.FieldEnvironmentID, review.FieldScopeName, review.FieldScopeID, review.FieldExternalID, review.FieldExternalOwnerID, review.FieldTitle, review.FieldState, review.FieldStatus, review.FieldCategory, review.FieldClassification, review.FieldSummary, review.FieldDetails, review.FieldReporter, review.FieldReviewerID, review.FieldSource, review.FieldExternalURI:
+		case review.FieldID, review.FieldCreatedBy, review.FieldUpdatedBy, review.FieldUpdatedByImpersonator, review.FieldDeletedBy, review.FieldSourceDefinitionID, review.FieldSourceDefinitionVersion, review.FieldSourceInstanceID, review.FieldManagedBy, review.FieldIntegrationRunID, review.FieldExternalID, review.FieldOwnerID, review.FieldInternalNotes, review.FieldSystemInternalID, review.FieldEnvironmentName, review.FieldEnvironmentID, review.FieldScopeName, review.FieldScopeID, review.FieldExternalOwnerID, review.FieldTitle, review.FieldState, review.FieldStatus, review.FieldCategory, review.FieldClassification, review.FieldSummary, review.FieldDetails, review.FieldReporter, review.FieldReviewerID, review.FieldSource, review.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case review.FieldCreatedAt, review.FieldUpdatedAt, review.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -452,6 +474,42 @@ func (_m *Review) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case review.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case review.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case review.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case review.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case review.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case review.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		case review.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -501,12 +559,6 @@ func (_m *Review) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
 			} else if value.Valid {
 				_m.ScopeID = value.String
-			}
-		case review.FieldExternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_id", values[i])
-			} else if value.Valid {
-				_m.ExternalID = value.String
 			}
 		case review.FieldExternalOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -634,6 +686,11 @@ func (_m *Review) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Review) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryIntegrationRuns queries the "integration_runs" edge of the Review entity.
+func (_m *Review) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewReviewClient(_m.config).QueryIntegrationRuns(_m)
 }
 
 // QueryOwner queries the "owner" edge of the Review entity.
@@ -790,6 +847,24 @@ func (_m *Review) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -817,9 +892,6 @@ func (_m *Review) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
-	builder.WriteString(", ")
-	builder.WriteString("external_id=")
-	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("external_owner_id=")
 	builder.WriteString(_m.ExternalOwnerID)
@@ -882,6 +954,30 @@ func (_m *Review) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.RawPayload))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Review) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Review) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

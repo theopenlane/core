@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -47,6 +48,7 @@ type TaskQuery struct {
 	order                           []task.OrderOption
 	inters                          []Interceptor
 	predicates                      []predicate.Task
+	withIntegrationRuns             *IntegrationRunQuery
 	withOwner                       *OrganizationQuery
 	withTaskKind                    *CustomTypeEnumQuery
 	withEnvironment                 *CustomTypeEnumQuery
@@ -76,6 +78,7 @@ type TaskQuery struct {
 	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Task) error
 	modifiers                       []func(*sql.Selector)
+	withNamedIntegrationRuns        map[string]*IntegrationRunQuery
 	withNamedComments               map[string]*NoteQuery
 	withNamedGroups                 map[string]*GroupQuery
 	withNamedInternalPolicies       map[string]*InternalPolicyQuery
@@ -129,6 +132,28 @@ func (_q *TaskQuery) Unique(unique bool) *TaskQuery {
 func (_q *TaskQuery) Order(o ...task.OrderOption) *TaskQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *TaskQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, task.IntegrationRunsTable, task.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -895,6 +920,7 @@ func (_q *TaskQuery) Clone() *TaskQuery {
 		order:                      append([]task.OrderOption{}, _q.order...),
 		inters:                     append([]Interceptor{}, _q.inters...),
 		predicates:                 append([]predicate.Task{}, _q.predicates...),
+		withIntegrationRuns:        _q.withIntegrationRuns.Clone(),
 		withOwner:                  _q.withOwner.Clone(),
 		withTaskKind:               _q.withTaskKind.Clone(),
 		withEnvironment:            _q.withEnvironment.Clone(),
@@ -926,6 +952,17 @@ func (_q *TaskQuery) Clone() *TaskQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *TaskQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -1299,7 +1336,8 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		nodes       = []*Task{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [27]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withTaskKind != nil,
 			_q.withEnvironment != nil,
@@ -1351,6 +1389,13 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Task) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Task, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
@@ -1531,6 +1576,13 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Task) { n.appendNamedIntegrationRuns(name) },
+			func(n *Task, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Task) { n.appendNamedComments(name) },
@@ -1672,6 +1724,37 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	return nodes, nil
 }
 
+func (_q *TaskQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Task, init func(*Task), assign func(*Task, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Task)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(task.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.task_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "task_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "task_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *TaskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Task, init func(*Task), assign func(*Task, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Task)
@@ -3064,6 +3147,20 @@ func (_q *TaskQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *TaskQuery) Modify(modifiers ...func(s *sql.Selector)) *TaskSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *TaskQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"

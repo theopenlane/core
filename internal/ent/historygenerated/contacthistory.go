@@ -55,6 +55,8 @@ type ContactHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the full name of the contact
@@ -71,8 +73,6 @@ type ContactHistory struct {
 	Address string `json:"address,omitempty"`
 	// status of the contact
 	Status enums.UserStatus `json:"status,omitempty"`
-	// stable identifier assigned by the source system, used for integration ingest deduplication
-	ExternalID string `json:"external_id,omitempty"`
 	// integration that sourced this contact, when populated via integration ingest
 	IntegrationID string `json:"integration_id,omitempty"`
 	// time when this contact was last observed by the source integration
@@ -91,7 +91,7 @@ func (*ContactHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case contacthistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldCreatedBy, contacthistory.FieldUpdatedBy, contacthistory.FieldUpdatedByImpersonator, contacthistory.FieldDeletedBy, contacthistory.FieldSourceDefinitionID, contacthistory.FieldSourceDefinitionVersion, contacthistory.FieldSourceInstanceID, contacthistory.FieldManagedBy, contacthistory.FieldIntegrationRunID, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus, contacthistory.FieldExternalID, contacthistory.FieldIntegrationID:
+		case contacthistory.FieldID, contacthistory.FieldRef, contacthistory.FieldCreatedBy, contacthistory.FieldUpdatedBy, contacthistory.FieldUpdatedByImpersonator, contacthistory.FieldDeletedBy, contacthistory.FieldSourceDefinitionID, contacthistory.FieldSourceDefinitionVersion, contacthistory.FieldSourceInstanceID, contacthistory.FieldManagedBy, contacthistory.FieldIntegrationRunID, contacthistory.FieldExternalID, contacthistory.FieldOwnerID, contacthistory.FieldFullName, contacthistory.FieldTitle, contacthistory.FieldCompany, contacthistory.FieldEmail, contacthistory.FieldPhoneNumber, contacthistory.FieldAddress, contacthistory.FieldStatus, contacthistory.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case contacthistory.FieldHistoryTime, contacthistory.FieldCreatedAt, contacthistory.FieldUpdatedAt, contacthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -215,6 +215,12 @@ func (_m *ContactHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
 			}
+		case contacthistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		case contacthistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -262,12 +268,6 @@ func (_m *ContactHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.UserStatus(value.String)
-			}
-		case contacthistory.FieldExternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_id", values[i])
-			} else if value.Valid {
-				_m.ExternalID = value.String
 			}
 		case contacthistory.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -368,6 +368,9 @@ func (_m *ContactHistory) String() string {
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -391,9 +394,6 @@ func (_m *ContactHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("external_id=")
-	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)

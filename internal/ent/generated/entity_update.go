@@ -268,6 +268,26 @@ func (_u *EntityUpdate) ClearIntegrationRunID() *EntityUpdate {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *EntityUpdate) SetExternalID(v string) *EntityUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableExternalID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityUpdate) ClearExternalID() *EntityUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetInternalOwner sets the "internal_owner" field.
 func (_u *EntityUpdate) SetInternalOwner(v string) *EntityUpdate {
 	_u.mutation.SetInternalOwner(v)
@@ -1467,26 +1487,6 @@ func (_u *EntityUpdate) SetNillableLogoFileID(v *string) *EntityUpdate {
 // ClearLogoFileID clears the value of the "logo_file_id" field.
 func (_u *EntityUpdate) ClearLogoFileID() *EntityUpdate {
 	_u.mutation.ClearLogoFileID()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *EntityUpdate) SetExternalID(v string) *EntityUpdate {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *EntityUpdate) SetNillableExternalID(v *string) *EntityUpdate {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *EntityUpdate) ClearExternalID() *EntityUpdate {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -2900,6 +2900,12 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(entity.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entity.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(entity.FieldInternalOwner, field.TypeString, value)
 	}
@@ -3215,12 +3221,6 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(entity.FieldLogoRemoteURL, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(entity.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ObservedAt(); ok {
 		_spec.SetField(entity.FieldObservedAt, field.TypeTime, value)
@@ -5171,6 +5171,26 @@ func (_u *EntityUpdateOne) ClearIntegrationRunID() *EntityUpdateOne {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *EntityUpdateOne) SetExternalID(v string) *EntityUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableExternalID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EntityUpdateOne) ClearExternalID() *EntityUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetInternalOwner sets the "internal_owner" field.
 func (_u *EntityUpdateOne) SetInternalOwner(v string) *EntityUpdateOne {
 	_u.mutation.SetInternalOwner(v)
@@ -6370,26 +6390,6 @@ func (_u *EntityUpdateOne) SetNillableLogoFileID(v *string) *EntityUpdateOne {
 // ClearLogoFileID clears the value of the "logo_file_id" field.
 func (_u *EntityUpdateOne) ClearLogoFileID() *EntityUpdateOne {
 	_u.mutation.ClearLogoFileID()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *EntityUpdateOne) SetExternalID(v string) *EntityUpdateOne {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *EntityUpdateOne) SetNillableExternalID(v *string) *EntityUpdateOne {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *EntityUpdateOne) ClearExternalID() *EntityUpdateOne {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -7833,6 +7833,12 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(entity.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(entity.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(entity.FieldInternalOwner, field.TypeString, value)
 	}
@@ -8148,12 +8154,6 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	}
 	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(entity.FieldLogoRemoteURL, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(entity.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(entity.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ObservedAt(); ok {
 		_spec.SetField(entity.FieldObservedAt, field.TypeTime, value)

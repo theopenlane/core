@@ -198,6 +198,7 @@ func (c Control) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "CTL",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(c),
 			// add the common overlap between control and subcontrol
 			ControlMixin{
 				SchemaType: c,
@@ -283,5 +284,11 @@ func (c Control) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("implemented-requirement"),
 		),
+		// match the unique index for controls not linked to a standard
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("ref_code").
+			LookupWhereNull("standard_id"),
 	}
 }

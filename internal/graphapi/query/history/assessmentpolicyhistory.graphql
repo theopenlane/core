@@ -12,13 +12,19 @@ query GetAllAssessmentPolicyHistories ($first: Int, $last: Int, $after: Cursor, 
 				assessmentID
 				createdAt
 				createdBy
+				externalID
 				historyTime
 				id
+				integrationRunID
 				internalPolicyID
+				managedBy
 				operation
 				ownerID
 				policyRevision
 				ref
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				updatedAt
 				updatedBy
 				updatedByImpersonator
@@ -40,13 +46,19 @@ query GetAssessmentPolicyHistories ($first: Int, $last: Int, $after: Cursor, $be
 				assessmentID
 				createdAt
 				createdBy
+				externalID
 				historyTime
 				id
+				integrationRunID
 				internalPolicyID
+				managedBy
 				operation
 				ownerID
 				policyRevision
 				ref
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				updatedAt
 				updatedBy
 				updatedByImpersonator
