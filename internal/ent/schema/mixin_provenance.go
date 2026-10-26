@@ -185,7 +185,7 @@ func (p ProvenanceMixin) Indexes() []ent.Index {
 }
 
 // Edges of the ProvenanceMixin
-func (m ProvenanceMixin) Edges() []ent.Edge {
+func (p ProvenanceMixin) Edges() []ent.Edge {
 	return []ent.Edge{
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: m.SchemaType,
