@@ -273,41 +273,51 @@ func syncReportAccessTuples(ctx context.Context, m *generated.ReportMutation, st
 		deletes = append(deletes, orgAccessTuple)
 	}
 
-	// changing to private visibility needs to clear out the groups + members
-	if m.Op().Is(ent.OpUpdateOne) && storedReport.Visibility == enums.ReportVisibilityPrivate {
-		cleanupCtx := entfga.WithDeleteTuplesFirst(auth.WithInternalOperationContext(ctx))
-
-		ids, err := m.Client().Group.Query().
-			Where(group.Or(
-				group.HasReportEditorsWith(report.ID(storedReport.ID)),
-				group.HasReportViewersWith(report.ID(storedReport.ID)),
-			)).
-			IDs(auth.WithInternalReadContext(ctx))
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to get report groups for private visibility")
-
-			return err
-		}
-
-		err = m.Client().Report.UpdateOneID(storedReport.ID).
-			RemoveEditorIDs(ids...).
-			RemoveViewerIDs(ids...).
-			Exec(cleanupCtx)
-		if err != nil {
-			return err
-		}
-
-		_, err = m.Client().ReportMembership.Delete().
-			Where(
-				reportmembership.ReportID(storedReport.ID),
-				reportmembership.UserIDNEQ(storedReport.CreatedBy),
-			).
-			Exec(cleanupCtx)
-		if err != nil {
-			return err
-		}
+	if err := wipeExistingPrivateAccess(ctx, m, storedReport); err != nil {
+		return err
 	}
 
 	_, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, writes, deletes)
 	return err
+}
+
+func wipeExistingPrivateAccess(ctx context.Context, m *generated.ReportMutation, storedReport *generated.Report) error {
+	// changing to private visibility needs to clear out the groups + members
+	if !m.Op().Is(ent.OpUpdateOne) || storedReport.Visibility != enums.ReportVisibilityPrivate {
+		return nil
+	}
+
+	cleanupCtx := entfga.WithDeleteTuplesFirst(auth.WithInternalOperationContext(ctx))
+
+	ids, err := m.Client().Group.Query().
+		Where(group.Or(
+			group.HasReportEditorsWith(report.ID(storedReport.ID)),
+			group.HasReportViewersWith(report.ID(storedReport.ID)),
+		)).
+		IDs(auth.WithInternalReadContext(ctx))
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get report groups for private visibility")
+
+		return err
+	}
+
+	err = m.Client().Report.UpdateOneID(storedReport.ID).
+		RemoveEditorIDs(ids...).
+		RemoveViewerIDs(ids...).
+		Exec(cleanupCtx)
+	if err != nil {
+		return err
+	}
+
+	_, err = m.Client().ReportMembership.Delete().
+		Where(
+			reportmembership.ReportID(storedReport.ID),
+			reportmembership.UserIDNEQ(storedReport.CreatedBy),
+		).
+		Exec(cleanupCtx)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
