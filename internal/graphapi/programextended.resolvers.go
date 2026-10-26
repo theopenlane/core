@@ -8,11 +8,6 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -20,6 +15,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProgramWithMembers is the resolver for the createProgramWithMembers field.
