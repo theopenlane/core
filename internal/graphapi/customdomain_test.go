@@ -12,6 +12,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -253,6 +254,85 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 	}
 
 	(&th.Cleanup[*generated.MappableDomainDeleteOne]{Client: suite.Client.DB.MappableDomain, ID: mappableDomain.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+}
+
+func TestMutationCreateCustomDomain_Features(t *testing.T) {
+
+	mappableDomain := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+
+	tsOnlyUser := suite.UserBuilder(context.Background(), t, models.CatalogTrustCenterModule)
+	assessmentOnlyUser := suite.UserBuilder(context.Background(), t, models.CatalogAssessmentCustomDomainAddon)
+	validUser := suite.UserBuilder(context.Background(), t, models.CatalogTrustCenterModule, models.CatalogAssessmentCustomDomainAddon)
+
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(tsOnlyUser.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(assessmentOnlyUser.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(validUser.UserCtx, t)
+		(&th.Cleanup[*generated.MappableDomainDeleteOne]{Client: suite.Client.DB.MappableDomain, ID: mappableDomain.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	})
+
+	tt := []struct {
+		name        string
+		user        th.TestUserDetails
+		purpose     enums.DomainPurpose
+		expectedErr string
+	}{
+		{
+			name:    "can create trust center domain with trust center module",
+			user:    tsOnlyUser,
+			purpose: enums.DomainPurposeTrustcenter,
+		},
+		{
+			name:        "cannot create assessment domain with only trust center module",
+			user:        tsOnlyUser,
+			purpose:     enums.DomainPurposeAssessment,
+			expectedErr: th.NotFoundErrorMsg,
+		},
+		{
+			name:        "cannot create trust center domain with only assessment domain addon",
+			user:        assessmentOnlyUser,
+			purpose:     enums.DomainPurposeTrustcenter,
+			expectedErr: th.NotFoundErrorMsg,
+		},
+		{
+			name:    "can create assessment domain with assessment domain addon",
+			user:    assessmentOnlyUser,
+			purpose: enums.DomainPurposeAssessment,
+		},
+		{
+			name:    "can create trust center domain with both features",
+			user:    validUser,
+			purpose: enums.DomainPurposeTrustcenter,
+		},
+		{
+			name:    "can create assessment domain with both features",
+			user:    validUser,
+			purpose: enums.DomainPurposeAssessment,
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			input := testclient.CreateCustomDomainInput{
+				CnameRecord:      string(tc.purpose) + "-" + tc.user.OrganizationID + ".example.com",
+				MappableDomainID: mappableDomain.ID,
+				OwnerID:          lo.ToPtr(tc.user.OrganizationID),
+				Purpose:          lo.ToPtr(tc.purpose),
+				DomainType:       lo.ToPtr(enums.CustomDomainTypeExternal),
+			}
+
+			resp, err := suite.Client.API.CreateCustomDomain(tc.user.UserCtx, input)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.purpose, lo.FromPtr(resp.CreateCustomDomain.CustomDomain.GetPurpose())))
+			assert.Check(t, is.Equal(tc.user.OrganizationID, *resp.CreateCustomDomain.CustomDomain.OwnerID))
+		})
+	}
 }
 
 func TestMutationDeleteCustomDomain(t *testing.T) {
