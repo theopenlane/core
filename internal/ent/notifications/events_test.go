@@ -87,8 +87,8 @@ func TestRegisterGalaListeners(t *testing.T) {
 		return s.ApprovalSpec != nil
 	})
 
-	// mention and approval fan-outs plus five explicit listeners
-	require.Len(t, ids, mentionable+approvals+5)
+	// mention and approval fan-outs plus six explicit listeners
+	require.Len(t, ids, mentionable+approvals+6)
 
 	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeTask), entityops.OpCreate))
 	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeInternalPolicy), entityops.OpUpdate))
@@ -100,4 +100,8 @@ func TestRegisterGalaListeners(t *testing.T) {
 	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeProgram), ent.OpUpdate.String()))
 	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeProgram), ent.OpUpdateOne.String()))
 	assert.False(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeProgram), ent.OpCreate.String()))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeReportMembership), entityops.OpCreate))
+	assert.False(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeReportMembership), entityops.OpUpdate))
+	assert.False(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeReportMembership), entityops.OpUpdateOne))
+	assert.False(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeReportMembership), entityops.OpDelete))
 }
