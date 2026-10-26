@@ -14845,6 +14845,8 @@ type CreateNoteInput struct {
 	RiskID            *string       `json:"risk_id,omitempty"`
 	InternalPolicyID  *string       `json:"internal_policy_id,omitempty"`
 	ReviewID          *string       `json:"review_id,omitempty"`
+	VulnerabilityID   *string       `json:"vulnerability_id,omitempty"`
+	FindingID         *string       `json:"finding_id,omitempty"`
 	EvidenceID        *string       `json:"evidence_id,omitempty"`
 	TrustCenterID     *string       `json:"trust_center_id,omitempty"`
 	DiscussionID      *string       `json:"discussion_id,omitempty"`
@@ -14894,6 +14896,12 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.ReviewID; v != nil {
 		m.SetReviewID(*v)
 	}
+	if v := i.VulnerabilityID; v != nil {
+		m.SetVulnerabilityID(*v)
+	}
+	if v := i.FindingID; v != nil {
+		m.SetFindingID(*v)
+	}
 	if v := i.EvidenceID; v != nil {
 		m.SetEvidenceID(*v)
 	}
@@ -14942,6 +14950,10 @@ type UpdateNoteInput struct {
 	InternalPolicyID        *string `json:"internal_policy_id,omitempty"`
 	ClearReview             bool
 	ReviewID                *string `json:"review_id,omitempty"`
+	ClearVulnerability      bool
+	VulnerabilityID         *string `json:"vulnerability_id,omitempty"`
+	ClearFinding            bool
+	FindingID               *string `json:"finding_id,omitempty"`
 	ClearEvidence           bool
 	EvidenceID              *string `json:"evidence_id,omitempty"`
 	ClearTrustCenter        bool
@@ -15026,6 +15038,18 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.ReviewID; v != nil {
 		m.SetReviewID(*v)
+	}
+	if i.ClearVulnerability {
+		m.ClearVulnerability()
+	}
+	if v := i.VulnerabilityID; v != nil {
+		m.SetVulnerabilityID(*v)
+	}
+	if i.ClearFinding {
+		m.ClearFinding()
+	}
+	if v := i.FindingID; v != nil {
+		m.SetFindingID(*v)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()

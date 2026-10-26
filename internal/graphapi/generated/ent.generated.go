@@ -440,6 +440,10 @@ type UpdateEvidenceInputResolver interface {
 	AddComment(ctx context.Context, obj *generated.UpdateEvidenceInput, data *generated.CreateNoteInput) error
 	DeleteComment(ctx context.Context, obj *generated.UpdateEvidenceInput, data *string) error
 }
+type UpdateFindingInputResolver interface {
+	AddComment(ctx context.Context, obj *generated.UpdateFindingInput, data *generated.CreateNoteInput) error
+	DeleteComment(ctx context.Context, obj *generated.UpdateFindingInput, data *string) error
+}
 type UpdateGroupInputResolver interface {
 	AddGroupMembers(ctx context.Context, obj *generated.UpdateGroupInput, data []*generated.CreateGroupMembershipInput) error
 	RemoveGroupMembers(ctx context.Context, obj *generated.UpdateGroupInput, data []string) error
@@ -507,6 +511,10 @@ type UpdateTrustCenterInputResolver interface {
 	AddPost(ctx context.Context, obj *generated.UpdateTrustCenterInput, data *generated.CreateNoteInput) error
 	DeletePost(ctx context.Context, obj *generated.UpdateTrustCenterInput, data *string) error
 	UpdateTrustCenterSetting(ctx context.Context, obj *generated.UpdateTrustCenterInput, data *generated.UpdateTrustCenterSettingInput) error
+}
+type UpdateVulnerabilityInputResolver interface {
+	AddComment(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *generated.CreateNoteInput) error
+	DeleteComment(ctx context.Context, obj *generated.UpdateVulnerabilityInput, data *string) error
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -106814,6 +106822,70 @@ func (ec *executionContext) fieldContext_Note_review(_ context.Context, field gr
 	return fc, nil
 }
 
+func (ec *executionContext) _Note_vulnerability(ctx context.Context, field graphql.CollectedField, obj *generated.Note) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Note_vulnerability(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Vulnerability(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Vulnerability) graphql.Marshaler {
+			return ec.marshalOVulnerability2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerability(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Note_vulnerability(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Note",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Vulnerability(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Note_finding(ctx context.Context, field graphql.CollectedField, obj *generated.Note) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Note_finding(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Finding(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Finding) graphql.Marshaler {
+			return ec.marshalOFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFinding(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Note_finding(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Note",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Finding(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Note_evidence(ctx context.Context, field graphql.CollectedField, obj *generated.Note) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -211063,7 +211135,7 @@ func (ec *executionContext) unmarshalInputCreateNoteInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "text", "textJSON", "noteRef", "isEdited", "notifySubscribers", "ownerID", "taskID", "controlID", "subcontrolID", "procedureID", "riskID", "internalPolicyID", "reviewID", "evidenceID", "trustCenterID", "discussionID", "trustCenterFaqIDs", "fileIDs"}
+	fieldsInOrder := [...]string{"title", "text", "textJSON", "noteRef", "isEdited", "notifySubscribers", "ownerID", "taskID", "controlID", "subcontrolID", "procedureID", "riskID", "internalPolicyID", "reviewID", "vulnerabilityID", "findingID", "evidenceID", "trustCenterID", "discussionID", "trustCenterFaqIDs", "fileIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -211168,6 +211240,20 @@ func (ec *executionContext) unmarshalInputCreateNoteInput(ctx context.Context, o
 				return it, err
 			}
 			it.ReviewID = data
+		case "vulnerabilityID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vulnerabilityID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VulnerabilityID = data
+		case "findingID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FindingID = data
 		case "evidenceID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("evidenceID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -270576,7 +270662,7 @@ func (ec *executionContext) unmarshalInputNoteWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "text", "textNEQ", "textIn", "textNotIn", "textContains", "textHasPrefix", "textHasSuffix", "textEqualFold", "textContainsFold", "noteRef", "noteRefNEQ", "noteRefIn", "noteRefNotIn", "noteRefContains", "noteRefHasPrefix", "noteRefHasSuffix", "noteRefIsNil", "noteRefNotNil", "noteRefEqualFold", "noteRefContainsFold", "discussionID", "discussionIDNEQ", "discussionIDIn", "discussionIDNotIn", "discussionIDContains", "discussionIDHasPrefix", "discussionIDHasSuffix", "discussionIDIsNil", "discussionIDNotNil", "discussionIDEqualFold", "discussionIDContainsFold", "isEdited", "isEditedNEQ", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "notifySubscribers", "notifySubscribersNEQ", "notifySubscribersIsNil", "notifySubscribersNotNil", "notifiedAt", "notifiedAtGT", "notifiedAtGTE", "notifiedAtLT", "notifiedAtLTE", "notifiedAtIsNil", "notifiedAtNotNil", "hasOwner", "hasOwnerWith", "hasTask", "hasTaskWith", "hasControl", "hasControlWith", "hasSubcontrol", "hasSubcontrolWith", "hasProcedure", "hasProcedureWith", "hasRisk", "hasRiskWith", "hasInternalPolicy", "hasInternalPolicyWith", "hasReview", "hasReviewWith", "hasEvidence", "hasEvidenceWith", "hasTrustCenter", "hasTrustCenterWith", "hasDiscussion", "hasDiscussionWith", "hasTrustCenterFaqs", "hasTrustCenterFaqsWith", "hasFiles", "hasFilesWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "text", "textNEQ", "textIn", "textNotIn", "textContains", "textHasPrefix", "textHasSuffix", "textEqualFold", "textContainsFold", "noteRef", "noteRefNEQ", "noteRefIn", "noteRefNotIn", "noteRefContains", "noteRefHasPrefix", "noteRefHasSuffix", "noteRefIsNil", "noteRefNotNil", "noteRefEqualFold", "noteRefContainsFold", "discussionID", "discussionIDNEQ", "discussionIDIn", "discussionIDNotIn", "discussionIDContains", "discussionIDHasPrefix", "discussionIDHasSuffix", "discussionIDIsNil", "discussionIDNotNil", "discussionIDEqualFold", "discussionIDContainsFold", "isEdited", "isEditedNEQ", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "notifySubscribers", "notifySubscribersNEQ", "notifySubscribersIsNil", "notifySubscribersNotNil", "notifiedAt", "notifiedAtGT", "notifiedAtGTE", "notifiedAtLT", "notifiedAtLTE", "notifiedAtIsNil", "notifiedAtNotNil", "hasOwner", "hasOwnerWith", "hasTask", "hasTaskWith", "hasControl", "hasControlWith", "hasSubcontrol", "hasSubcontrolWith", "hasProcedure", "hasProcedureWith", "hasRisk", "hasRiskWith", "hasInternalPolicy", "hasInternalPolicyWith", "hasReview", "hasReviewWith", "hasVulnerability", "hasVulnerabilityWith", "hasFinding", "hasFindingWith", "hasEvidence", "hasEvidenceWith", "hasTrustCenter", "hasTrustCenterWith", "hasDiscussion", "hasDiscussionWith", "hasTrustCenterFaqs", "hasTrustCenterFaqsWith", "hasFiles", "hasFilesWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -271689,6 +271775,34 @@ func (ec *executionContext) unmarshalInputNoteWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.HasReviewWith = data
+		case "hasVulnerability":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerability"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerability = data
+		case "hasVulnerabilityWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilityWith"))
+			data, err := ec.unmarshalOVulnerabilityWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilityWith = data
+		case "hasFinding":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFinding"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFinding = data
+		case "hasFindingWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingWith"))
+			data, err := ec.unmarshalOFindingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindingWith = data
 		case "hasEvidence":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEvidence"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -342858,7 +342972,7 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "findingStatusName", "clearFindingStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "externalOwnerID", "clearExternalOwnerID", "source", "clearSource", "resourceName", "clearResourceName", "displayName", "clearDisplayName", "state", "clearState", "category", "clearCategory", "categories", "appendCategories", "clearCategories", "findingClass", "clearFindingClass", "severity", "clearSeverity", "numericSeverity", "clearNumericSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "open", "clearOpen", "blocksProduction", "clearBlocksProduction", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "assessmentID", "clearAssessmentID", "description", "clearDescription", "recommendation", "clearRecommendation", "recommendedActions", "clearRecommendedActions", "references", "appendReferences", "clearReferences", "stepsToReproduce", "appendStepsToReproduce", "clearStepsToReproduce", "targets", "appendTargets", "clearTargets", "targetDetails", "clearTargetDetails", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "eventTime", "clearEventTime", "reportedAt", "clearReportedAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "findingStatusID", "clearFindingStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "findingStatusName", "clearFindingStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "externalOwnerID", "clearExternalOwnerID", "source", "clearSource", "resourceName", "clearResourceName", "displayName", "clearDisplayName", "state", "clearState", "category", "clearCategory", "categories", "appendCategories", "clearCategories", "findingClass", "clearFindingClass", "severity", "clearSeverity", "numericSeverity", "clearNumericSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "open", "clearOpen", "blocksProduction", "clearBlocksProduction", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "assessmentID", "clearAssessmentID", "description", "clearDescription", "recommendation", "clearRecommendation", "recommendedActions", "clearRecommendedActions", "references", "appendReferences", "clearReferences", "stepsToReproduce", "appendStepsToReproduce", "clearStepsToReproduce", "targets", "appendTargets", "clearTargets", "targetDetails", "clearTargetDetails", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "eventTime", "clearEventTime", "reportedAt", "clearReportedAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "findingStatusID", "clearFindingStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -344202,6 +344316,24 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 				return it, err
 			}
 			it.ClearCheckResults = data
+		case "addComment":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addComment"))
+			data, err := ec.unmarshalOCreateNoteInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateNoteInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.Resolvers.UpdateFindingInput().AddComment(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "deleteComment":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deleteComment"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.Resolvers.UpdateFindingInput().DeleteComment(ctx, &it, data); err != nil {
+				return it, err
+			}
 		}
 	}
 	return it, nil
@@ -348737,7 +348869,7 @@ func (ec *executionContext) unmarshalInputUpdateNoteInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "clearTitle", "text", "textJSON", "appendTextJSON", "clearTextJSON", "noteRef", "clearNoteRef", "isEdited", "taskID", "clearTask", "controlID", "clearControl", "subcontrolID", "clearSubcontrol", "procedureID", "clearProcedure", "riskID", "clearRisk", "internalPolicyID", "clearInternalPolicy", "reviewID", "clearReview", "evidenceID", "clearEvidence", "trustCenterID", "clearTrustCenter", "discussionID", "clearDiscussion", "addTrustCenterFaqIDs", "removeTrustCenterFaqIDs", "clearTrustCenterFaqs", "addFileIDs", "removeFileIDs", "clearFiles"}
+	fieldsInOrder := [...]string{"title", "clearTitle", "text", "textJSON", "appendTextJSON", "clearTextJSON", "noteRef", "clearNoteRef", "isEdited", "taskID", "clearTask", "controlID", "clearControl", "subcontrolID", "clearSubcontrol", "procedureID", "clearProcedure", "riskID", "clearRisk", "internalPolicyID", "clearInternalPolicy", "reviewID", "clearReview", "vulnerabilityID", "clearVulnerability", "findingID", "clearFinding", "evidenceID", "clearEvidence", "trustCenterID", "clearTrustCenter", "discussionID", "clearDiscussion", "addTrustCenterFaqIDs", "removeTrustCenterFaqIDs", "clearTrustCenterFaqs", "addFileIDs", "removeFileIDs", "clearFiles"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -348905,6 +349037,34 @@ func (ec *executionContext) unmarshalInputUpdateNoteInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearReview = data
+		case "vulnerabilityID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vulnerabilityID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VulnerabilityID = data
+		case "clearVulnerability":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVulnerability"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearVulnerability = data
+		case "findingID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FindingID = data
+		case "clearFinding":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFinding"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearFinding = data
 		case "evidenceID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("evidenceID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -366559,7 +366719,7 @@ func (ec *executionContext) unmarshalInputUpdateVulnerabilityInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "vulnerabilityStatusName", "clearVulnerabilityStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalOwnerID", "clearExternalOwnerID", "externalID", "cveID", "clearCveID", "source", "clearSource", "displayName", "clearDisplayName", "category", "clearCategory", "severity", "clearSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "summary", "clearSummary", "description", "clearDescription", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "open", "clearOpen", "blocking", "clearBlocking", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "references", "appendReferences", "clearReferences", "impacts", "appendImpacts", "clearImpacts", "cweIds", "appendCweIds", "clearCweIds", "vulnerableVersionRange", "clearVulnerableVersionRange", "firstPatchedVersion", "clearFirstPatchedVersion", "fixAvailable", "clearFixAvailable", "packageName", "clearPackageName", "packageEcosystem", "clearPackageEcosystem", "manifestPath", "clearManifestPath", "dependencyScope", "clearDependencyScope", "publishedAt", "clearPublishedAt", "discoveredAt", "clearDiscoveredAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "dismissedAt", "clearDismissedAt", "dismissedReason", "clearDismissedReason", "dismissedComment", "clearDismissedComment", "fixedAt", "clearFixedAt", "autoDismissedAt", "clearAutoDismissedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "vulnerabilityStatusID", "clearVulnerabilityStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addFindingIDs", "removeFindingIDs", "clearFindings", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "vulnerabilityStatusName", "clearVulnerabilityStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalOwnerID", "clearExternalOwnerID", "externalID", "cveID", "clearCveID", "source", "clearSource", "displayName", "clearDisplayName", "category", "clearCategory", "severity", "clearSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "summary", "clearSummary", "description", "clearDescription", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "open", "clearOpen", "blocking", "clearBlocking", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "references", "appendReferences", "clearReferences", "impacts", "appendImpacts", "clearImpacts", "cweIds", "appendCweIds", "clearCweIds", "vulnerableVersionRange", "clearVulnerableVersionRange", "firstPatchedVersion", "clearFirstPatchedVersion", "fixAvailable", "clearFixAvailable", "packageName", "clearPackageName", "packageEcosystem", "clearPackageEcosystem", "manifestPath", "clearManifestPath", "dependencyScope", "clearDependencyScope", "publishedAt", "clearPublishedAt", "discoveredAt", "clearDiscoveredAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "dismissedAt", "clearDismissedAt", "dismissedReason", "clearDismissedReason", "dismissedComment", "clearDismissedComment", "fixedAt", "clearFixedAt", "autoDismissedAt", "clearAutoDismissedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "vulnerabilityStatusID", "clearVulnerabilityStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addFindingIDs", "removeFindingIDs", "clearFindings", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -367938,6 +368098,24 @@ func (ec *executionContext) unmarshalInputUpdateVulnerabilityInput(ctx context.C
 				return it, err
 			}
 			it.ClearWorkflowObjectRefs = data
+		case "addComment":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addComment"))
+			data, err := ec.unmarshalOCreateNoteInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateNoteInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.Resolvers.UpdateVulnerabilityInput().AddComment(ctx, &it, data); err != nil {
+				return it, err
+			}
+		case "deleteComment":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deleteComment"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			if err = ec.Resolvers.UpdateVulnerabilityInput().DeleteComment(ctx, &it, data); err != nil {
+				return it, err
+			}
 		}
 	}
 	return it, nil
@@ -402915,6 +403093,18 @@ func (ec *executionContext) _Note(ctx context.Context, sel ast.SelectionSet, obj
 				true, false,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Note_review(ctx, field, obj)
+				})
+		case "vulnerability":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Note_vulnerability(ctx, field, obj)
+				})
+		case "finding":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Note_finding(ctx, field, obj)
 				})
 		case "evidence":
 			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
