@@ -188,7 +188,7 @@ func (p ProvenanceMixin) Indexes() []ent.Index {
 func (p ProvenanceMixin) Edges() []ent.Edge {
 	return []ent.Edge{
 		edgeToWithPagination(&edgeDefinition{
-			fromSchema: m.SchemaType,
+			fromSchema: p.SchemaType,
 			edgeSchema: IntegrationRun{},
 			comment:    "integration runs that have written to this record",
 			annotations: []schema.Annotation{
