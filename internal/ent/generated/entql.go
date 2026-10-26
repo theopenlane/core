@@ -517,6 +517,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			checkresult.FieldSourceInstanceID:        {Type: field.TypeString, Column: checkresult.FieldSourceInstanceID},
 			checkresult.FieldManagedBy:               {Type: field.TypeString, Column: checkresult.FieldManagedBy},
 			checkresult.FieldIntegrationRunID:        {Type: field.TypeString, Column: checkresult.FieldIntegrationRunID},
+			checkresult.FieldOwnerID:                 {Type: field.TypeString, Column: checkresult.FieldOwnerID},
 			checkresult.FieldStatus:                  {Type: field.TypeEnum, Column: checkresult.FieldStatus},
 			checkresult.FieldSource:                  {Type: field.TypeString, Column: checkresult.FieldSource},
 			checkresult.FieldLastObservedAt:          {Type: field.TypeTime, Column: checkresult.FieldLastObservedAt},
@@ -5427,6 +5428,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"CheckResult",
 		"IntegrationRun",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   checkresult.OwnerTable,
+			Columns: []string{checkresult.OwnerColumn},
+			Bidi:    false,
+		},
+		"CheckResult",
+		"Organization",
 	)
 	graph.MustAddE(
 		"blocked_groups",
@@ -13563,6 +13576,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Organization",
 		"VendorRiskScore",
+	)
+	graph.MustAddE(
+		"check_results",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CheckResultsTable,
+			Columns: []string{organization.CheckResultsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"CheckResult",
 	)
 	graph.MustAddE(
 		"members",
@@ -23059,6 +23084,11 @@ func (f *CheckResultFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(checkresult.FieldIntegrationRunID))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *CheckResultFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(checkresult.FieldOwnerID))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *CheckResultFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(checkresult.FieldStatus))
@@ -23102,6 +23132,20 @@ func (f *CheckResultFilter) WhereHasIntegrationRuns() {
 // WhereHasIntegrationRunsWith applies a predicate to check if query has an edge integration_runs with a given conditions (other predicates).
 func (f *CheckResultFilter) WhereHasIntegrationRunsWith(preds ...predicate.IntegrationRun) {
 	f.Where(entql.HasEdgeWith("integration_runs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *CheckResultFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *CheckResultFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -40529,6 +40573,20 @@ func (f *OrganizationFilter) WhereHasVendorRiskScores() {
 // WhereHasVendorRiskScoresWith applies a predicate to check if query has an edge vendor_risk_scores with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) {
 	f.Where(entql.HasEdgeWith("vendor_risk_scores", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasCheckResults applies a predicate to check if query has an edge check_results.
+func (f *OrganizationFilter) WhereHasCheckResults() {
+	f.Where(entql.HasEdge("check_results"))
+}
+
+// WhereHasCheckResultsWith applies a predicate to check if query has an edge check_results with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasCheckResultsWith(preds ...predicate.CheckResult) {
+	f.Where(entql.HasEdgeWith("check_results", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

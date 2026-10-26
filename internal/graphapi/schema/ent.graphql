@@ -7065,6 +7065,10 @@ type CheckResult implements Node {
   """
   integrationRunID: String
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   current status of the control
   """
   status: CheckResultCheckStatus!
@@ -7123,6 +7127,7 @@ type CheckResult implements Node {
     """
     where: IntegrationRunWhereInput
   ): IntegrationRunConnection!
+  owner: Organization
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -7494,6 +7499,20 @@ input CheckResultWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   status field predicates
   """
   status: CheckResultCheckStatus
@@ -7583,6 +7602,11 @@ input CheckResultWhereInput {
   """
   hasIntegrationRuns: Boolean
   hasIntegrationRunsWith: [IntegrationRunWhereInput!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
   """
   blocked_groups edge predicates
   """
@@ -12683,6 +12707,7 @@ input CreateCheckResultInput {
   """
   parentExternalID: String
   integrationRunIDs: [ID!]
+  ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]

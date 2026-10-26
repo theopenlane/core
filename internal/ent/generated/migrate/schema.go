@@ -1065,6 +1065,7 @@ var (
 		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "parent_external_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// CheckResultsTable holds the schema information for the "check_results" table.
 	CheckResultsTable = &schema.Table{
@@ -1076,6 +1077,12 @@ var (
 				Symbol:     "check_results_integrations_check_results",
 				Columns:    []*schema.Column{CheckResultsColumns[20]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "check_results_organizations_check_results",
+				Columns:    []*schema.Column{CheckResultsColumns[21]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1094,6 +1101,11 @@ var (
 				Name:    "checkresult_integration_run_id",
 				Unique:  false,
 				Columns: []*schema.Column{CheckResultsColumns[13]},
+			},
+			{
+				Name:    "check_result_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{CheckResultsColumns[21]},
 			},
 		},
 	}
@@ -16923,6 +16935,7 @@ func init() {
 	CampaignTargetsTable.ForeignKeys[4].RefTable = SubscribersTable
 	CampaignTargetsTable.ForeignKeys[5].RefTable = UsersTable
 	CheckResultsTable.ForeignKeys[0].RefTable = IntegrationsTable
+	CheckResultsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	ContactsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ControlsTable.ForeignKeys[0].RefTable = GroupsTable
 	ControlsTable.ForeignKeys[1].RefTable = GroupsTable

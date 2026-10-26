@@ -827,6 +827,8 @@ type ComplexityRoot struct {
 		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		LastObservedAt          func(childComplexity int) int
 		ManagedBy               func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
 		ParentExternalID        func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		SourceDefinitionID      func(childComplexity int) int
@@ -11894,6 +11896,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CheckResult.ManagedBy(childComplexity), true
+	case "CheckResult.owner":
+		if e.ComplexityRoot.CheckResult.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResult.Owner(childComplexity), true
+	case "CheckResult.ownerID":
+		if e.ComplexityRoot.CheckResult.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResult.OwnerID(childComplexity), true
 	case "CheckResult.parentExternalID":
 		if e.ComplexityRoot.CheckResult.ParentExternalID == nil {
 			break
@@ -64907,6 +64921,10 @@ type CheckResult implements Node {
   """
   integrationRunID: String
   """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
   current status of the control
   """
   status: CheckResultCheckStatus!
@@ -64965,6 +64983,7 @@ type CheckResult implements Node {
     """
     where: IntegrationRunWhereInput
   ): IntegrationRunConnection!
+  owner: Organization
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -65336,6 +65355,20 @@ input CheckResultWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
   status field predicates
   """
   status: CheckResultCheckStatus
@@ -65425,6 +65458,11 @@ input CheckResultWhereInput {
   """
   hasIntegrationRuns: Boolean
   hasIntegrationRunsWith: [IntegrationRunWhereInput!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
   """
   blocked_groups edge predicates
   """
@@ -70525,6 +70563,7 @@ input CreateCheckResultInput {
   """
   parentExternalID: String
   integrationRunIDs: [ID!]
+  ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
@@ -161214,6 +161253,8 @@ func (ec *executionContext) childFields_CheckResult(ctx context.Context, field g
 		return ec.fieldContext_CheckResult_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_CheckResult_integrationRunID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_CheckResult_ownerID(ctx, field)
 	case "status":
 		return ec.fieldContext_CheckResult_status(ctx, field)
 	case "source":
@@ -161230,6 +161271,8 @@ func (ec *executionContext) childFields_CheckResult(ctx context.Context, field g
 		return ec.fieldContext_CheckResult_integrationID(ctx, field)
 	case "integrationRuns":
 		return ec.fieldContext_CheckResult_integrationRuns(ctx, field)
+	case "owner":
+		return ec.fieldContext_CheckResult_owner(ctx, field)
 	case "blockedGroups":
 		return ec.fieldContext_CheckResult_blockedGroups(ctx, field)
 	case "editors":

@@ -22,7 +22,7 @@ var ExportableSchemas = map[string]info{"ASSESSMENT": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: false,
 }, "CHECK_RESULT": info{
-	hasOwnerField:       false,
+	hasOwnerField:       true,
 	hasSystemOwnedField: false,
 }, "CONTACT": info{
 	hasOwnerField:       true,

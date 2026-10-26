@@ -17167,6 +17167,7 @@ type CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults struct {
 	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
 	Source                  string            "json:\"source\" graphql:\"source\""
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
@@ -17232,6 +17233,12 @@ func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetMana
 		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
 	}
 	return t.ManagedBy
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.OwnerID
 }
 func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetParentExternalID() *string {
 	if t == nil {
@@ -17315,6 +17322,7 @@ type CreateBulkCheckResult_CreateBulkCheckResult_CheckResults struct {
 	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
 	Source                  string            "json:\"source\" graphql:\"source\""
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
@@ -17380,6 +17388,12 @@ func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetManagedBy(
 		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
 	}
 	return t.ManagedBy
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.OwnerID
 }
 func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetParentExternalID() *string {
 	if t == nil {
@@ -17463,6 +17477,7 @@ type CreateCheckResult_CreateCheckResult_CheckResult struct {
 	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
 	Source                  string            "json:\"source\" graphql:\"source\""
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
@@ -17528,6 +17543,12 @@ func (t *CreateCheckResult_CreateCheckResult_CheckResult) GetManagedBy() *string
 		t = &CreateCheckResult_CreateCheckResult_CheckResult{}
 	}
 	return t.ManagedBy
+}
+func (t *CreateCheckResult_CreateCheckResult_CheckResult) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateCheckResult_CreateCheckResult_CheckResult{}
+	}
+	return t.OwnerID
 }
 func (t *CreateCheckResult_CreateCheckResult_CheckResult) GetParentExternalID() *string {
 	if t == nil {
@@ -17679,6 +17700,7 @@ type GetAllCheckResults_CheckResults_Edges_Node struct {
 	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
 	Source                  string            "json:\"source\" graphql:\"source\""
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
@@ -17744,6 +17766,12 @@ func (t *GetAllCheckResults_CheckResults_Edges_Node) GetManagedBy() *string {
 		t = &GetAllCheckResults_CheckResults_Edges_Node{}
 	}
 	return t.ManagedBy
+}
+func (t *GetAllCheckResults_CheckResults_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllCheckResults_CheckResults_Edges_Node{}
+	}
+	return t.OwnerID
 }
 func (t *GetAllCheckResults_CheckResults_Edges_Node) GetParentExternalID() *string {
 	if t == nil {
@@ -17852,6 +17880,7 @@ type GetCheckResultByID_CheckResult struct {
 	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
 	Source                  string            "json:\"source\" graphql:\"source\""
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
@@ -17917,6 +17946,12 @@ func (t *GetCheckResultByID_CheckResult) GetManagedBy() *string {
 		t = &GetCheckResultByID_CheckResult{}
 	}
 	return t.ManagedBy
+}
+func (t *GetCheckResultByID_CheckResult) GetOwnerID() *string {
+	if t == nil {
+		t = &GetCheckResultByID_CheckResult{}
+	}
+	return t.OwnerID
 }
 func (t *GetCheckResultByID_CheckResult) GetParentExternalID() *string {
 	if t == nil {
@@ -18021,6 +18056,7 @@ type GetCheckResults_CheckResults_Edges_Node struct {
 	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
 	Source                  string            "json:\"source\" graphql:\"source\""
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
@@ -18086,6 +18122,12 @@ func (t *GetCheckResults_CheckResults_Edges_Node) GetManagedBy() *string {
 		t = &GetCheckResults_CheckResults_Edges_Node{}
 	}
 	return t.ManagedBy
+}
+func (t *GetCheckResults_CheckResults_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetCheckResults_CheckResults_Edges_Node{}
+	}
+	return t.OwnerID
 }
 func (t *GetCheckResults_CheckResults_Edges_Node) GetParentExternalID() *string {
 	if t == nil {
@@ -18194,6 +18236,7 @@ type UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults struct {
 	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
 	Source                  string            "json:\"source\" graphql:\"source\""
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
@@ -18259,6 +18302,12 @@ func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetMana
 		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
 	}
 	return t.ManagedBy
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.OwnerID
 }
 func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetParentExternalID() *string {
 	if t == nil {
@@ -18363,6 +18412,7 @@ type UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults struct {
 	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
 	Source                  string            "json:\"source\" graphql:\"source\""
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
@@ -18428,6 +18478,12 @@ func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetManagedBy(
 		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
 	}
 	return t.ManagedBy
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.OwnerID
 }
 func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetParentExternalID() *string {
 	if t == nil {
@@ -18532,6 +18588,7 @@ type UpdateCheckResult_UpdateCheckResult_CheckResult struct {
 	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
 	Source                  string            "json:\"source\" graphql:\"source\""
 	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
@@ -18597,6 +18654,12 @@ func (t *UpdateCheckResult_UpdateCheckResult_CheckResult) GetManagedBy() *string
 		t = &UpdateCheckResult_UpdateCheckResult_CheckResult{}
 	}
 	return t.ManagedBy
+}
+func (t *UpdateCheckResult_UpdateCheckResult_CheckResult) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateCheckResult_UpdateCheckResult_CheckResult{}
+	}
+	return t.OwnerID
 }
 func (t *UpdateCheckResult_UpdateCheckResult_CheckResult) GetParentExternalID() *string {
 	if t == nil {
@@ -185016,6 +185079,7 @@ const CreateBulkCSVCheckResultDocument = `mutation CreateBulkCSVCheckResult ($in
 			integrationRunID
 			lastObservedAt
 			managedBy
+			ownerID
 			parentExternalID
 			source
 			sourceDefinitionID
@@ -185060,6 +185124,7 @@ const CreateBulkCheckResultDocument = `mutation CreateBulkCheckResult ($input: [
 			integrationRunID
 			lastObservedAt
 			managedBy
+			ownerID
 			parentExternalID
 			source
 			sourceDefinitionID
@@ -185104,6 +185169,7 @@ const CreateCheckResultDocument = `mutation CreateCheckResult ($input: CreateChe
 			integrationRunID
 			lastObservedAt
 			managedBy
+			ownerID
 			parentExternalID
 			source
 			sourceDefinitionID
@@ -185206,6 +185272,7 @@ const GetAllCheckResultsDocument = `query GetAllCheckResults ($first: Int, $last
 				integrationRunID
 				lastObservedAt
 				managedBy
+				ownerID
 				parentExternalID
 				source
 				sourceDefinitionID
@@ -185254,6 +185321,7 @@ const GetCheckResultByIDDocument = `query GetCheckResultByID ($checkResultId: ID
 		integrationRunID
 		lastObservedAt
 		managedBy
+		ownerID
 		parentExternalID
 		source
 		sourceDefinitionID
@@ -185305,6 +185373,7 @@ const GetCheckResultsDocument = `query GetCheckResults ($first: Int, $last: Int,
 				integrationRunID
 				lastObservedAt
 				managedBy
+				ownerID
 				parentExternalID
 				source
 				sourceDefinitionID
@@ -185355,6 +185424,7 @@ const UpdateBulkCSVCheckResultDocument = `mutation UpdateBulkCSVCheckResult ($in
 			integrationRunID
 			lastObservedAt
 			managedBy
+			ownerID
 			parentExternalID
 			source
 			sourceDefinitionID
@@ -185402,6 +185472,7 @@ const UpdateBulkCheckResultDocument = `mutation UpdateBulkCheckResult ($ids: [ID
 			integrationRunID
 			lastObservedAt
 			managedBy
+			ownerID
 			parentExternalID
 			source
 			sourceDefinitionID
@@ -185450,6 +185521,7 @@ const UpdateCheckResultDocument = `mutation UpdateCheckResult ($updateCheckResul
 			integrationRunID
 			lastObservedAt
 			managedBy
+			ownerID
 			parentExternalID
 			source
 			sourceDefinitionID

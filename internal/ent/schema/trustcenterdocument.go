@@ -180,7 +180,7 @@ func (TrustCenterDoc) Indexes() []ent.Index {
 func (TrustCenterDoc) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaTrustCenterDoc),
-		entfga.SettingsChecks("trust_center"),
+		entfga.SettingsChecks(TrustCenter{}.Name()),
 		entfga.SelfAccessChecks(),
 	}
 }

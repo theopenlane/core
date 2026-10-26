@@ -12872,6 +12872,19 @@ type CheckResultWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "status" field predicates.
 	Status      *enums.CheckStatus  `json:"status,omitempty"`
 	StatusNEQ   *enums.CheckStatus  `json:"statusNEQ,omitempty"`
@@ -12956,6 +12969,10 @@ type CheckResultWhereInput struct {
 	// "integration_runs" edge predicates.
 	HasIntegrationRuns     *bool                       `json:"hasIntegrationRuns,omitempty"`
 	HasIntegrationRunsWith []*IntegrationRunWhereInput `json:"hasIntegrationRunsWith,omitempty"`
+
+	// "owner" edge predicates.
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
 	// "blocked_groups" edge predicates.
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
@@ -13377,6 +13394,39 @@ func (i *CheckResultWhereInput) P() (predicate.CheckResult, error) {
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, checkresult.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, checkresult.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, checkresult.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, checkresult.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, checkresult.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, checkresult.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, checkresult.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, checkresult.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, checkresult.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, checkresult.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, checkresult.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, checkresult.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
 	if i.Status != nil {
 		predicates = append(predicates, checkresult.StatusEQ(*i.Status))
 	}
@@ -13595,6 +13645,25 @@ func (i *CheckResultWhereInput) P() (predicate.CheckResult, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, checkresult.HasIntegrationRunsWith(with...))
+	}
+	if i.HasOwner != nil {
+		p := checkresult.HasOwner()
+		if !*i.HasOwner {
+			p = checkresult.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOwnerWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
+		for _, w := range i.HasOwnerWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOwnerWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, checkresult.HasOwnerWith(with...))
 	}
 	if i.HasBlockedGroups != nil {
 		p := checkresult.HasBlockedGroups()

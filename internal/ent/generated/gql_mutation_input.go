@@ -3135,6 +3135,7 @@ type CreateCheckResultInput struct {
 	Details           *string            `json:"details,omitempty"`
 	ParentExternalID  *string            `json:"parent_external_id,omitempty"`
 	IntegrationRunIDs []string           `json:"integration_run_ids,omitempty"`
+	OwnerID           *string            `json:"owner_id,omitempty"`
 	BlockedGroupIDs   []string           `json:"blocked_group_ids,omitempty"`
 	EditorIDs         []string           `json:"editor_ids,omitempty"`
 	ViewerIDs         []string           `json:"viewer_ids,omitempty"`
@@ -3166,6 +3167,9 @@ func (i *CreateCheckResultInput) Mutate(m *CheckResultMutation) {
 	}
 	if v := i.IntegrationRunIDs; len(v) > 0 {
 		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)

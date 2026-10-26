@@ -996,21 +996,26 @@ func init() {
 
 	checkresult.Hooks[5] = checkresultMixinHooks8[0]
 
-	checkresult.Hooks[6] = checkresultMixinHooks9[0]
+	checkresult.Hooks[6] = checkresultMixinHooks8[1]
 
-	checkresult.Hooks[7] = checkresultMixinHooks9[1]
+	checkresult.Hooks[7] = checkresultMixinHooks9[0]
 
-	checkresult.Hooks[8] = checkresultMixinHooks9[2]
+	checkresult.Hooks[8] = checkresultMixinHooks9[1]
+
+	checkresult.Hooks[9] = checkresultMixinHooks9[2]
 	checkresultMixinInters3 := checkresultMixin[3].Interceptors()
 	checkresultMixinInters8 := checkresultMixin[8].Interceptors()
 	checkresult.Interceptors[0] = checkresultMixinInters3[0]
 	checkresult.Interceptors[1] = checkresultMixinInters8[0]
+	checkresult.Interceptors[2] = checkresultMixinInters8[1]
 	checkresultMixinFields0 := checkresultMixin[0].Fields()
 	_ = checkresultMixinFields0
 	checkresultMixinFields4 := checkresultMixin[4].Fields()
 	_ = checkresultMixinFields4
 	checkresultMixinFields5 := checkresultMixin[5].Fields()
 	_ = checkresultMixinFields5
+	checkresultMixinFields8 := checkresultMixin[8].Fields()
+	_ = checkresultMixinFields8
 	checkresultFields := schema.CheckResult{}.Fields()
 	_ = checkresultFields
 	// checkresultDescCreatedAt is the schema descriptor for created_at field.
@@ -1027,6 +1032,10 @@ func init() {
 	checkresultDescTags := checkresultMixinFields5[0].Descriptor()
 	// checkresult.DefaultTags holds the default value on creation for the tags field.
 	checkresult.DefaultTags = checkresultDescTags.Default.([]string)
+	// checkresultDescOwnerID is the schema descriptor for owner_id field.
+	checkresultDescOwnerID := checkresultMixinFields8[0].Descriptor()
+	// checkresult.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	checkresult.OwnerIDValidator = checkresultDescOwnerID.Validators[0].(func(string) error)
 	// checkresultDescID is the schema descriptor for id field.
 	checkresultDescID := checkresultMixinFields4[0].Descriptor()
 	// checkresult.DefaultID holds the default value on creation for the id field.
@@ -3325,14 +3334,27 @@ func init() {
 	// groupmembership.DefaultID holds the default value on creation for the id field.
 	groupmembership.DefaultID = groupmembershipDescID.Default.(func() string)
 	groupsettingMixin := schema.GroupSetting{}.Mixin()
+	groupsetting.Policy = privacy.NewPolicies(schema.GroupSetting{})
+	groupsetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := groupsetting.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	groupsettingMixinHooks0 := groupsettingMixin[0].Hooks()
 	groupsettingMixinHooks1 := groupsettingMixin[1].Hooks()
 	groupsettingMixinHooks3 := groupsettingMixin[3].Hooks()
 	groupsettingHooks := schema.GroupSetting{}.Hooks()
-	groupsetting.Hooks[0] = groupsettingMixinHooks0[0]
-	groupsetting.Hooks[1] = groupsettingMixinHooks1[0]
-	groupsetting.Hooks[2] = groupsettingMixinHooks3[0]
-	groupsetting.Hooks[3] = groupsettingHooks[0]
+
+	groupsetting.Hooks[1] = groupsettingMixinHooks0[0]
+
+	groupsetting.Hooks[2] = groupsettingMixinHooks1[0]
+
+	groupsetting.Hooks[3] = groupsettingMixinHooks3[0]
+
+	groupsetting.Hooks[4] = groupsettingHooks[0]
 	groupsettingMixinInters3 := groupsettingMixin[3].Interceptors()
 	groupsettingInters := schema.GroupSetting{}.Interceptors()
 	groupsetting.Interceptors[0] = groupsettingMixinInters3[0]

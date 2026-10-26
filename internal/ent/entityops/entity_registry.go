@@ -2209,6 +2209,7 @@ var (
 			Lower: "checkresult",
 		},
 		ProjectionType:        reflect.TypeFor[CheckResultProjection](),
+		OwnerField:            checkresult.FieldOwnerID,
 		IntegrationFKField:    "integration_id",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
@@ -2255,6 +2256,29 @@ var (
 			}
 
 			return nil
+		},
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "check_result", Operation: refOpQuery}
+
+			entities, err := client.CheckResult.Query().
+				Where(checkresult.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "check_result", Operation: refOpLoad, EntityID: entityID}
@@ -7399,6 +7423,7 @@ func init() {
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "last_observed_at", Label: "LastObservedAt", Type: "models.DateTime", InputKey: "last_observed_at", Clearable: true, Volatile: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id", LookupKey: true, Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -11007,6 +11032,15 @@ func init() {
 			TargetType:  "IntegrationRun",
 			CreateField: "integration_run_ids",
 			AddField:    "add_integration_run_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "viewers",
@@ -15707,6 +15741,14 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "check_result_creator_ids",
 			AddField:    "add_check_result_creator_ids",
+		},
+		{
+			Name:        "check_results",
+			Label:       "CheckResults",
+			Target:      SchemaCheckResult,
+			TargetType:  "CheckResult",
+			CreateField: "check_result_ids",
+			AddField:    "add_check_result_ids",
 		},
 		{
 			Name:        "children",
@@ -21558,6 +21600,34 @@ func init() {
 
 		return results, nil
 	}
+	SchemaCheckResult.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "check_result", Operation: refOpQuery}
+
+		if !SchemaCheckResult.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "check_result"))
+		}
+
+		entities, err := client.CheckResult.Query().
+			Where(checkresult.OwnerID(orgID)).
+			Where(predicate.CheckResult(matchKeyIn(SchemaCheckResult, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
 	SchemaContact.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "contact", Operation: refOpQuery}
 
@@ -23031,6 +23101,13 @@ func init() {
 		input, err := jsonx.Decode[generated.CreateCheckResultInput](payload)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := checkresult.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "check_result", "owner_id", err)
+				input.OwnerID = nil
+			}
 		}
 		prepared, err := json.Marshal(input)
 		if err != nil {
@@ -25603,6 +25680,7 @@ func init() {
 
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.CheckResult.Query()
+			query = query.Where(checkresult.OwnerID(ownerID))
 			query = query.Where(predicate.CheckResult(matchKeyIn(SchemaCheckResult, primary, chunk)))
 
 			entities, err := query.All(ctx)

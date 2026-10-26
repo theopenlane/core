@@ -30024,6 +30024,8 @@ type CheckResultMutation struct {
 	integration_runs          map[string]struct{}
 	removedintegration_runs   map[string]struct{}
 	clearedintegration_runs   bool
+	owner                     *string
+	clearedowner              bool
 	blocked_groups            map[string]struct{}
 	removedblocked_groups     map[string]struct{}
 	clearedblocked_groups     bool
@@ -30803,6 +30805,55 @@ func (m *CheckResultMutation) ResetIntegrationRunID() {
 	delete(m.clearedFields, checkresult.FieldIntegrationRunID)
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (m *CheckResultMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *CheckResultMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the CheckResult entity.
+// If the CheckResult object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CheckResultMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *CheckResultMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[checkresult.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *CheckResultMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[checkresult.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *CheckResultMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, checkresult.FieldOwnerID)
+}
+
 // SetStatus sets the "status" field.
 func (m *CheckResultMutation) SetStatus(es enums.CheckStatus) {
 	m.status = &es
@@ -31174,6 +31225,33 @@ func (m *CheckResultMutation) ResetIntegrationRuns() {
 	m.removedintegration_runs = nil
 }
 
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *CheckResultMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[checkresult.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *CheckResultMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *CheckResultMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *CheckResultMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by ids.
 func (m *CheckResultMutation) AddBlockedGroupIDs(ids ...string) {
 	if m.blocked_groups == nil {
@@ -31505,7 +31583,7 @@ func (m *CheckResultMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CheckResultMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 21)
 	if m.created_at != nil {
 		fields = append(fields, checkresult.FieldCreatedAt)
 	}
@@ -31544,6 +31622,9 @@ func (m *CheckResultMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, checkresult.FieldIntegrationRunID)
+	}
+	if m.owner != nil {
+		fields = append(fields, checkresult.FieldOwnerID)
 	}
 	if m.status != nil {
 		fields = append(fields, checkresult.FieldStatus)
@@ -31600,6 +31681,8 @@ func (m *CheckResultMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case checkresult.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case checkresult.FieldOwnerID:
+		return m.OwnerID()
 	case checkresult.FieldStatus:
 		return m.Status()
 	case checkresult.FieldSource:
@@ -31649,6 +31732,8 @@ func (m *CheckResultMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldManagedBy(ctx)
 	case checkresult.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case checkresult.FieldOwnerID:
+		return m.OldOwnerID(ctx)
 	case checkresult.FieldStatus:
 		return m.OldStatus(ctx)
 	case checkresult.FieldSource:
@@ -31762,6 +31847,13 @@ func (m *CheckResultMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case checkresult.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
 		return nil
 	case checkresult.FieldStatus:
 		v, ok := value.(enums.CheckStatus)
@@ -31881,6 +31973,9 @@ func (m *CheckResultMutation) ClearedFields() []string {
 	if m.FieldCleared(checkresult.FieldIntegrationRunID) {
 		fields = append(fields, checkresult.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(checkresult.FieldOwnerID) {
+		fields = append(fields, checkresult.FieldOwnerID)
+	}
 	if m.FieldCleared(checkresult.FieldLastObservedAt) {
 		fields = append(fields, checkresult.FieldLastObservedAt)
 	}
@@ -31949,6 +32044,9 @@ func (m *CheckResultMutation) ClearField(name string) error {
 	case checkresult.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case checkresult.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
 	case checkresult.FieldLastObservedAt:
 		m.ClearLastObservedAt()
 		return nil
@@ -32011,6 +32109,9 @@ func (m *CheckResultMutation) ResetField(name string) error {
 	case checkresult.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
 		return nil
+	case checkresult.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
 	case checkresult.FieldStatus:
 		m.ResetStatus()
 		return nil
@@ -32038,9 +32139,12 @@ func (m *CheckResultMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CheckResultMutation) AddedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.integration_runs != nil {
 		edges = append(edges, checkresult.EdgeIntegrationRuns)
+	}
+	if m.owner != nil {
+		edges = append(edges, checkresult.EdgeOwner)
 	}
 	if m.blocked_groups != nil {
 		edges = append(edges, checkresult.EdgeBlockedGroups)
@@ -32073,6 +32177,10 @@ func (m *CheckResultMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case checkresult.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
 	case checkresult.EdgeBlockedGroups:
 		ids := make([]ent.Value, 0, len(m.blocked_groups))
 		for id := range m.blocked_groups {
@@ -32113,7 +32221,7 @@ func (m *CheckResultMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CheckResultMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, checkresult.EdgeIntegrationRuns)
 	}
@@ -32181,9 +32289,12 @@ func (m *CheckResultMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CheckResultMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 7)
+	edges := make([]string, 0, 8)
 	if m.clearedintegration_runs {
 		edges = append(edges, checkresult.EdgeIntegrationRuns)
+	}
+	if m.clearedowner {
+		edges = append(edges, checkresult.EdgeOwner)
 	}
 	if m.clearedblocked_groups {
 		edges = append(edges, checkresult.EdgeBlockedGroups)
@@ -32212,6 +32323,8 @@ func (m *CheckResultMutation) EdgeCleared(name string) bool {
 	switch name {
 	case checkresult.EdgeIntegrationRuns:
 		return m.clearedintegration_runs
+	case checkresult.EdgeOwner:
+		return m.clearedowner
 	case checkresult.EdgeBlockedGroups:
 		return m.clearedblocked_groups
 	case checkresult.EdgeEditors:
@@ -32232,6 +32345,9 @@ func (m *CheckResultMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *CheckResultMutation) ClearEdge(name string) error {
 	switch name {
+	case checkresult.EdgeOwner:
+		m.ClearOwner()
+		return nil
 	case checkresult.EdgeIntegration:
 		m.ClearIntegration()
 		return nil
@@ -32245,6 +32361,9 @@ func (m *CheckResultMutation) ResetEdge(name string) error {
 	switch name {
 	case checkresult.EdgeIntegrationRuns:
 		m.ResetIntegrationRuns()
+		return nil
+	case checkresult.EdgeOwner:
+		m.ResetOwner()
 		return nil
 	case checkresult.EdgeBlockedGroups:
 		m.ResetBlockedGroups()
@@ -169304,6 +169423,9 @@ type OrganizationMutation struct {
 	vendor_risk_scores                            map[string]struct{}
 	removedvendor_risk_scores                     map[string]struct{}
 	clearedvendor_risk_scores                     bool
+	check_results                                 map[string]struct{}
+	removedcheck_results                          map[string]struct{}
+	clearedcheck_results                          bool
 	members                                       map[string]struct{}
 	removedmembers                                map[string]struct{}
 	clearedmembers                                bool
@@ -178723,6 +178845,60 @@ func (m *OrganizationMutation) ResetVendorRiskScores() {
 	m.removedvendor_risk_scores = nil
 }
 
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by ids.
+func (m *OrganizationMutation) AddCheckResultIDs(ids ...string) {
+	if m.check_results == nil {
+		m.check_results = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.check_results[ids[i]] = struct{}{}
+	}
+}
+
+// ClearCheckResults clears the "check_results" edge to the CheckResult entity.
+func (m *OrganizationMutation) ClearCheckResults() {
+	m.clearedcheck_results = true
+}
+
+// CheckResultsCleared reports if the "check_results" edge to the CheckResult entity was cleared.
+func (m *OrganizationMutation) CheckResultsCleared() bool {
+	return m.clearedcheck_results
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to the CheckResult entity by IDs.
+func (m *OrganizationMutation) RemoveCheckResultIDs(ids ...string) {
+	if m.removedcheck_results == nil {
+		m.removedcheck_results = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.check_results, ids[i])
+		m.removedcheck_results[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedCheckResults returns the removed IDs of the "check_results" edge to the CheckResult entity.
+func (m *OrganizationMutation) RemovedCheckResultsIDs() (ids []string) {
+	for id := range m.removedcheck_results {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// CheckResultsIDs returns the "check_results" edge IDs in the mutation.
+func (m *OrganizationMutation) CheckResultsIDs() (ids []string) {
+	for id := range m.check_results {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetCheckResults resets all changes to the "check_results" edge.
+func (m *OrganizationMutation) ResetCheckResults() {
+	m.check_results = nil
+	m.clearedcheck_results = false
+	m.removedcheck_results = nil
+}
+
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by ids.
 func (m *OrganizationMutation) AddMemberIDs(ids ...string) {
 	if m.members == nil {
@@ -179298,7 +179474,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 158)
+	edges := make([]string, 0, 159)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -179769,6 +179945,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.vendor_risk_scores != nil {
 		edges = append(edges, organization.EdgeVendorRiskScores)
+	}
+	if m.check_results != nil {
+		edges = append(edges, organization.EdgeCheckResults)
 	}
 	if m.members != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -180716,6 +180895,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeCheckResults:
+		ids := make([]ent.Value, 0, len(m.check_results))
+		for id := range m.check_results {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.members))
 		for id := range m.members {
@@ -180728,7 +180913,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 158)
+	edges := make([]string, 0, 159)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -181190,6 +181375,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedvendor_risk_scores != nil {
 		edges = append(edges, organization.EdgeVendorRiskScores)
+	}
+	if m.removedcheck_results != nil {
+		edges = append(edges, organization.EdgeCheckResults)
 	}
 	if m.removedmembers != nil {
 		edges = append(edges, organization.EdgeMembers)
@@ -182125,6 +182313,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeCheckResults:
+		ids := make([]ent.Value, 0, len(m.removedcheck_results))
+		for id := range m.removedcheck_results {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeMembers:
 		ids := make([]ent.Value, 0, len(m.removedmembers))
 		for id := range m.removedmembers {
@@ -182137,7 +182331,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 158)
+	edges := make([]string, 0, 159)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -182609,6 +182803,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedvendor_risk_scores {
 		edges = append(edges, organization.EdgeVendorRiskScores)
 	}
+	if m.clearedcheck_results {
+		edges = append(edges, organization.EdgeCheckResults)
+	}
 	if m.clearedmembers {
 		edges = append(edges, organization.EdgeMembers)
 	}
@@ -182933,6 +183130,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedvendor_scoring_configs
 	case organization.EdgeVendorRiskScores:
 		return m.clearedvendor_risk_scores
+	case organization.EdgeCheckResults:
+		return m.clearedcheck_results
 	case organization.EdgeMembers:
 		return m.clearedmembers
 	}
@@ -183430,6 +183629,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeVendorRiskScores:
 		m.ResetVendorRiskScores()
+		return nil
+	case organization.EdgeCheckResults:
+		m.ResetCheckResults()
 		return nil
 	case organization.EdgeMembers:
 		m.ResetMembers()

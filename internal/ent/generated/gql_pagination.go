@@ -41640,6 +41640,7 @@ func (_q *CheckResultQuery) clonePage() *CheckResultQuery {
 			c.withNamedIntegrationRuns[name] = q.clonePage()
 		}
 	}
+	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
 		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
@@ -45874,6 +45875,13 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 		c.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery, len(_q.withNamedVendorRiskScores))
 		for name, q := range _q.withNamedVendorRiskScores {
 			c.withNamedVendorRiskScores[name] = q.clonePage()
+		}
+	}
+	c.withCheckResults = _q.withCheckResults.clonePage()
+	if _q.withNamedCheckResults != nil {
+		c.withNamedCheckResults = make(map[string]*CheckResultQuery, len(_q.withNamedCheckResults))
+		for name, q := range _q.withNamedCheckResults {
+			c.withNamedCheckResults[name] = q.clonePage()
 		}
 	}
 	c.withMembers = _q.withMembers.clonePage()

@@ -330,6 +330,7 @@ type CheckResultProjection struct {
 	IntegrationRunID        string            `json:"integration_run_id,omitempty"`
 	LastObservedAt          models.DateTime   `json:"last_observed_at,omitempty"`
 	ManagedBy               string            `json:"managed_by,omitempty"`
+	OwnerID                 string            `json:"owner_id,omitempty"`
 	ParentExternalID        string            `json:"parent_external_id,omitempty"`
 	Source                  string            `json:"source,omitempty"`
 	SourceDefinitionID      string            `json:"source_definition_id,omitempty"`

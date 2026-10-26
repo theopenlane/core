@@ -200,7 +200,7 @@ func (o OrganizationSetting) Edges() []ent.Edge {
 func (o OrganizationSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaOrganizationSetting),
-		entfga.SettingsChecks("organization"),
+		entfga.SettingsChecks(Organization{}.Name()),
 		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
 		entx.FGACrudParent(Organization{}.Name()),
 	}

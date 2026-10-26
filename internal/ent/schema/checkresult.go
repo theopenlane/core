@@ -97,6 +97,7 @@ func (c CheckResult) Mixin() []ent.Mixin {
 				withParents(
 					Control{},
 				),
+				withOrganizationOwner(),
 			),
 			newGroupPermissionsMixin(),
 		},

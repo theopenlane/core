@@ -4228,6 +4228,22 @@ func (c *CheckResultClient) QueryIntegrationRuns(_m *CheckResult) *IntegrationRu
 	return query
 }
 
+// QueryOwner queries the owner edge of a CheckResult.
+func (c *CheckResultClient) QueryOwner(_m *CheckResult) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(checkresult.Table, checkresult.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, checkresult.OwnerTable, checkresult.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBlockedGroups queries the blocked_groups edge of a CheckResult.
 func (c *CheckResultClient) QueryBlockedGroups(_m *CheckResult) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -21548,6 +21564,22 @@ func (c *OrganizationClient) QueryVendorRiskScores(_m *Organization) *VendorRisk
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorRiskScoresTable, organization.VendorRiskScoresColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCheckResults queries the check_results edge of a Organization.
+func (c *OrganizationClient) QueryCheckResults(_m *Organization) *CheckResultQuery {
+	query := (&CheckResultClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CheckResultsTable, organization.CheckResultsColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

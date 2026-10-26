@@ -147,7 +147,7 @@ func (TrustCenterFAQ) Modules() []models.OrgModule {
 // Annotations of the TrustCenterFAQ
 func (TrustCenterFAQ) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.SettingsChecks("trust_center"),
+		entfga.SettingsChecks(TrustCenter{}.Name()),
 		entx.NewExportable(),
 		entgql.QueryField("trustCenterFAQs"),
 		entsql.Annotation{Table: "trust_center_faqs"},

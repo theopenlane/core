@@ -4074,6 +4074,8 @@ type CheckResult struct {
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID *string `json:"integrationRunID,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// current status of the control
 	Status enums.CheckStatus `json:"status"`
 	// source that set the check result
@@ -4089,6 +4091,7 @@ type CheckResult struct {
 	// integration that owns this check result
 	IntegrationID   *string                   `json:"integrationID,omitempty"`
 	IntegrationRuns *IntegrationRunConnection `json:"integrationRuns"`
+	Owner           *Organization             `json:"owner,omitempty"`
 	BlockedGroups   *GroupConnection          `json:"blockedGroups"`
 	Editors         *GroupConnection          `json:"editors"`
 	Viewers         *GroupConnection          `json:"viewers"`
@@ -4297,6 +4300,18 @@ type CheckResultWhereInput struct {
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 	// status field predicates
 	Status      *enums.CheckStatus  `json:"status,omitempty"`
 	StatusNeq   *enums.CheckStatus  `json:"statusNEQ,omitempty"`
@@ -4371,6 +4386,9 @@ type CheckResultWhereInput struct {
 	// integration_runs edge predicates
 	HasIntegrationRuns     *bool                       `json:"hasIntegrationRuns,omitempty"`
 	HasIntegrationRunsWith []*IntegrationRunWhereInput `json:"hasIntegrationRunsWith,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 	// blocked_groups edge predicates
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -7205,6 +7223,7 @@ type CreateCheckResultInput struct {
 	// external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name
 	ParentExternalID  *string  `json:"parentExternalID,omitempty"`
 	IntegrationRunIDs []string `json:"integrationRunIDs,omitempty"`
+	OwnerID           *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs         []string `json:"editorIDs,omitempty"`
 	ViewerIDs         []string `json:"viewerIDs,omitempty"`
