@@ -18,11 +18,7 @@ import (
 func DenyIfMissingCustomDomainFeature() privacy.CustomDomainMutationRuleFunc {
 	return privacy.CustomDomainMutationRuleFunc(func(ctx context.Context, m *generated.CustomDomainMutation) error {
 
-		if !m.Op().Is(ent.OpCreate) {
-			return privacy.Skip
-		}
-
-		if !utils.ModulesEnabled(m.Client()) {
+		if !m.Op().Is(ent.OpCreate) || !utils.ModulesEnabled(m.Client()) {
 			return privacy.Skip
 		}
 
