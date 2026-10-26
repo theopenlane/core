@@ -71,7 +71,7 @@ require (
 	github.com/knadh/koanf/providers/posflag v1.0.2
 	github.com/knadh/koanf/v2 v2.3.8
 	github.com/labstack/echo-contrib v0.50.1
-	github.com/labstack/echo/v4 v4.16.0
+	github.com/labstack/echo/v4 v4.16.2
 	github.com/labstack/gommon v0.5.0
 	github.com/lestrrat-go/httprc/v3 v3.0.6
 	github.com/lestrrat-go/jwx/v4 v4.5.0
@@ -275,7 +275,7 @@ require (
 	github.com/knadh/koanf/maps v0.1.2 // indirect
 	github.com/knadh/koanf/providers/structs v1.0.0 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
-	github.com/labstack/echo/v5 v5.4.1 // indirect
+	github.com/labstack/echo/v5 v5.4.2 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
 	github.com/lestrrat-go/jwx/v3 v3.2.0 // indirect

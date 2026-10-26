@@ -58,7 +58,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jwx-go/jwkfetch/v4 v4.0.4 // indirect
 	github.com/knadh/koanf/maps v0.1.2 // indirect
-	github.com/labstack/echo/v5 v5.4.1 // indirect
+	github.com/labstack/echo/v5 v5.4.2 // indirect
 	github.com/labstack/gommon v0.5.0 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
