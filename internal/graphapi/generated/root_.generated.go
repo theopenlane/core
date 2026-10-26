@@ -304,6 +304,7 @@ type ComplexityRoot struct {
 		OwnerID                 func(childComplexity int) int
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		PolicyAttestations      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentPolicyOrder, where *generated.AssessmentPolicyWhereInput) int
+		RemoveBranding          func(childComplexity int) int
 		ResponseDueDuration     func(childComplexity int) int
 		SystemInternalID        func(childComplexity int) int
 		SystemOwned             func(childComplexity int) int
@@ -9214,6 +9215,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Assessment.PolicyAttestations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentPolicyOrder), args["where"].(*generated.AssessmentPolicyWhereInput)), true
+	case "Assessment.removeBranding":
+		if e.ComplexityRoot.Assessment.RemoveBranding == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Assessment.RemoveBranding(childComplexity), true
 	case "Assessment.responseDueDuration":
 		if e.ComplexityRoot.Assessment.ResponseDueDuration == nil {
 			break
@@ -52493,7 +52500,15 @@ input CreateAssessmentDomainInput {
 }
 `, BuiltIn: false},
 	{Name: "../schema/assessmentextended.graphql", Input: `extend type Assessment {
+    """
+    the anonymous questionnaire access URL for system-owned assessments
+    """
     accessURL: String
+
+    """
+    decides whether to hide or show the Openlane branding on the assessment page
+    """
+    removeBranding: Boolean
 }
 
 """
@@ -155161,6 +155176,8 @@ func (ec *executionContext) childFields_Assessment(ctx context.Context, field gr
 		return ec.fieldContext_Assessment_workflowTimeline(ctx, field)
 	case "accessURL":
 		return ec.fieldContext_Assessment_accessURL(ctx, field)
+	case "removeBranding":
+		return ec.fieldContext_Assessment_removeBranding(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type Assessment", field.Name)
 }

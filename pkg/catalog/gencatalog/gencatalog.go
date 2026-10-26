@@ -27,6 +27,24 @@ var DefaultCatalog = models.Catalog{
 			MarketingDescription: "Use a custom domain for your hosted questionnaires",
 			ProductID:            "prod_VUlA6OVEWL9Zje",
 		},
+		string(models.CatalogBrandingAssessmentAddon): models.Feature{
+			Audience: "public",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_branding_assessment_monthly",
+				Nickname:   "price_assessment_branding_monthly",
+				UnitAmount: int64(2500),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_branding_assessment_yearly",
+				Nickname:   "price_assessment_branding_annually",
+				UnitAmount: int64(27000),
+			}}},
+			Description:          "Assessment Branding",
+			DisplayName:          "Assessment Branding",
+			LookupKey:            "branding_assessment_addon",
+			MarketingDescription: "Customization option to remove the Openlane branding on your assessments",
+		},
 		string(models.CatalogBrandingTrustcenterAddon): models.Feature{
 			Audience: "public",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{

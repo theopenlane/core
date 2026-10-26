@@ -1093,7 +1093,10 @@ type Assessment struct {
 	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
 	// Returns the workflow event timeline for this assessment across all workflow instances
 	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
-	AccessURL        *string                  `json:"accessURL,omitempty"`
+	// the anonymous questionnaire access URL for system-owned assessments
+	AccessURL *string `json:"accessURL,omitempty"`
+	// decides whether to hide or show the Openlane branding on the assessment page
+	RemoveBranding *bool `json:"removeBranding,omitempty"`
 }
 
 func (Assessment) IsNode() {}

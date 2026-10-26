@@ -423,6 +423,7 @@ func init() {
 	assessment.Interceptors[1] = assessmentMixinInters7[0]
 	assessment.Interceptors[2] = assessmentMixinInters7[1]
 	assessment.Interceptors[3] = assessmentInters[0]
+	assessment.Interceptors[4] = assessmentInters[1]
 	assessmentMixinFields0 := assessmentMixin[0].Fields()
 	_ = assessmentMixinFields0
 	assessmentMixinFields4 := assessmentMixin[4].Fields()

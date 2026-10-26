@@ -2383,7 +2383,14 @@ type Assessment implements Node @modules(names: ["compliance_module"]) {
 	Returns the workflow event timeline for this assessment across all workflow instances
 	"""
 	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
+	"""
+	the anonymous questionnaire access URL for system-owned assessments
+	"""
 	accessURL: String
+	"""
+	decides whether to hide or show the Openlane branding on the assessment page
+	"""
+	removeBranding: Boolean
 }
 """
 AssessmentAssessmentType is enum for the field assessment_type

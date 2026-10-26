@@ -140,6 +140,22 @@ addons:
         price_id: price_1UTledBvxky1R7SvkJXP0KCb
     audience: private
     product_id: prod_VUlA6OVEWL9Zje
+  branding_assessment_addon:
+    display_name: Assessment Branding
+    lookup_key: branding_assessment_addon
+    description: Assessment Branding
+    marketing_description: Customization option to remove the Openlane branding on your assessments
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 2500
+        nickname: price_assessment_branding_monthly
+        lookup_key: price_branding_assessment_monthly
+      - interval: year
+        unit_amount: 27000
+        nickname: price_assessment_branding_annually
+        lookup_key: price_branding_assessment_yearly
+    audience: public
   branding_trustcenter_addon:
     display_name: Trustcenter Branding
     lookup_key: branding_trustcenter_addon

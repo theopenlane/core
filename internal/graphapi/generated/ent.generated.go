@@ -54181,6 +54181,29 @@ func (ec *executionContext) fieldContext_Assessment_accessURL(_ context.Context,
 	return graphql.NewScalarFieldContext("Assessment", field, false, false, "String")
 }
 
+func (ec *executionContext) _Assessment_removeBranding(ctx context.Context, field graphql.CollectedField, obj *generated.Assessment) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Assessment_removeBranding(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.RemoveBranding, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Assessment_removeBranding(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Assessment", field, false, false, "Boolean")
+}
+
 func (ec *executionContext) _AssessmentConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentConnection) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -389954,6 +389977,11 @@ func (ec *executionContext) _Assessment(ctx context.Context, sel ast.SelectionSe
 				})
 		case "accessURL":
 			out.Values[i] = ec._Assessment_accessURL(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "removeBranding":
+			out.Values[i] = ec._Assessment_removeBranding(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
