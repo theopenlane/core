@@ -43,7 +43,7 @@ func TestMutationCreateAssessmentDomain(t *testing.T) {
 		customDomain, err := suite.Client.API.GetCustomDomainByID(org.Owner.UserCtx, resp.CreateAssessmentDomain.CustomDomain.ID)
 		assert.NilError(t, err)
 
-		assert.Check(t, is.Equal(enums.DomainPurposeAssessment, lo.FromPtr(customDomain.CustomDomain.Purpose)))
+		assert.Check(t, is.Equal(enums.DomainPurposeAssessment, lo.FromPtr(customDomain.CustomDomain.GetPurpose())))
 		assert.Check(t, is.Equal(enums.CustomDomainTypeExternal, customDomain.CustomDomain.DomainType))
 		assert.Check(t, is.Equal(mappableDomain.ID, customDomain.CustomDomain.MappableDomainID))
 	})

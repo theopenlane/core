@@ -149,6 +149,9 @@ func (e CustomDomain) Policy() ent.Policy {
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),
+		policy.WithMutationRulesBeforeScope(
+			rule.DenyIfMissingCustomDomainFeature(),
+		),
 	)
 }
 
