@@ -1,5 +1,13 @@
 extend type Assessment {
+    """
+    signed jwt link that can be shared to access and fill the assessment
+    """
     accessURL: String
+
+    """
+    decides whether to hide or show the Openlane branding on the assessment page
+    """
+    removeBranding: String
 }
 
 """
