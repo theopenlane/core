@@ -82,7 +82,12 @@ func TestCustomDomainRule(t *testing.T) {
 			}
 
 			require.ErrorIs(t, err, privacy.Deny)
-			require.ErrorContains(t, err, rule.ErrFeaturesNotEnabled.Error())
+			feature := models.CatalogTrustCenterModule
+			if tt.purpose == enums.DomainPurposeAssessment {
+				feature = models.CatalogAssessmentCustomDomainAddon
+			}
+
+			require.ErrorContains(t, err, feature.String())
 		})
 	}
 }

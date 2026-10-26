@@ -48,7 +48,7 @@ func DenyIfMissingCustomDomainFeature() privacy.CustomDomainMutationRuleFunc {
 			}
 
 			if !ok {
-				return privacy.Denyf(ErrFeaturesNotEnabled.Error())
+				return privacy.Denyf("feature %s not enabled", feature)
 			}
 		}
 

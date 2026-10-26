@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
@@ -287,13 +286,13 @@ func TestMutationCreateCustomDomain_Features(t *testing.T) {
 			name:        "cannot create assessment domain with only trust center module",
 			user:        tsOnlyUser,
 			purpose:     enums.DomainPurposeAssessment,
-			expectedErr: interceptors.ErrFeatureNotEnabled.Error(),
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "cannot create trust center domain with only assessment domain addon",
 			user:        assessmentOnlyUser,
 			purpose:     enums.DomainPurposeTrustcenter,
-			expectedErr: interceptors.ErrFeatureNotEnabled.Error(),
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:    "can create assessment domain with assessment domain addon",
