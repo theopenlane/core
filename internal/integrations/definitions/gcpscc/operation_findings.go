@@ -2,9 +2,11 @@ package gcpscc
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
+	"net/url"
 	"strings"
 	"time"
 
@@ -25,6 +27,49 @@ const (
 	findingsPageSize = 100
 	// findingsMaxPageSize is the maximum number of findings that can be requested per API page
 	findingsMaxPageSize = 1000
+	// findingConsoleURLBase is the SCC console page for a single finding, followed by the escaped finding name
+	findingConsoleURLBase = "https://console.cloud.google.com/security/command-center/findingsv2;name="
+	// cvssv31Prefix is the version prefix for CVSS v3.1 vector strings
+	cvssv31Prefix = "CVSS:3.1"
+	// cvssVectorKey is the payload key holding the CVSS vector built from the SCC cvssv3 metrics
+	cvssVectorKey = "cvss_vector"
+)
+
+var (
+	// cvssAttackVector maps SCC attack vectors to CVSS codes
+	cvssAttackVector = map[securitycenterpb.Cvssv3_AttackVector]string{
+		securitycenterpb.Cvssv3_ATTACK_VECTOR_NETWORK:  "N",
+		securitycenterpb.Cvssv3_ATTACK_VECTOR_ADJACENT: "A",
+		securitycenterpb.Cvssv3_ATTACK_VECTOR_LOCAL:    "L",
+		securitycenterpb.Cvssv3_ATTACK_VECTOR_PHYSICAL: "P",
+	}
+	// cvssAttackComplexity maps SCC attack complexities to CVSS codes
+	cvssAttackComplexity = map[securitycenterpb.Cvssv3_AttackComplexity]string{
+		securitycenterpb.Cvssv3_ATTACK_COMPLEXITY_LOW:  "L",
+		securitycenterpb.Cvssv3_ATTACK_COMPLEXITY_HIGH: "H",
+	}
+	// cvssPrivilegesRequired maps SCC privileges required to CVSS codes
+	cvssPrivilegesRequired = map[securitycenterpb.Cvssv3_PrivilegesRequired]string{
+		securitycenterpb.Cvssv3_PRIVILEGES_REQUIRED_NONE: "N",
+		securitycenterpb.Cvssv3_PRIVILEGES_REQUIRED_LOW:  "L",
+		securitycenterpb.Cvssv3_PRIVILEGES_REQUIRED_HIGH: "H",
+	}
+	// cvssUserInteraction maps SCC user interaction to CVSS codes
+	cvssUserInteraction = map[securitycenterpb.Cvssv3_UserInteraction]string{
+		securitycenterpb.Cvssv3_USER_INTERACTION_NONE:     "N",
+		securitycenterpb.Cvssv3_USER_INTERACTION_REQUIRED: "R",
+	}
+	// cvssScope maps SCC scopes to CVSS codes
+	cvssScope = map[securitycenterpb.Cvssv3_Scope]string{
+		securitycenterpb.Cvssv3_SCOPE_UNCHANGED: "U",
+		securitycenterpb.Cvssv3_SCOPE_CHANGED:   "C",
+	}
+	// cvssImpact maps SCC confidentiality, integrity, and availability impacts to CVSS codes
+	cvssImpact = map[securitycenterpb.Cvssv3_Impact]string{
+		securitycenterpb.Cvssv3_IMPACT_HIGH: "H",
+		securitycenterpb.Cvssv3_IMPACT_LOW:  "L",
+		securitycenterpb.Cvssv3_IMPACT_NONE: "N",
+	}
 )
 
 // runFindingsCollect collects GCP SCC findings from configured sources
@@ -65,6 +110,8 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, c C
 			if finding == nil {
 				continue
 			}
+
+			finding.ExternalUri = findingConsoleURL(finding, result.GetResource())
 
 			envelope, err := buildFindingEnvelope(sourceName, finding, marshaler)
 			if err != nil {
@@ -136,7 +183,79 @@ func buildFindingEnvelope(sourceName string, finding *securitycenterpb.Finding, 
 		return types.MappingEnvelope{}, ErrFindingEncode
 	}
 
+	rawPayload, err = withCVSSVector(rawPayload, cvssv31Vector(finding.GetVulnerability().GetCve().GetCvssv3()))
+	if err != nil {
+		return types.MappingEnvelope{}, ErrFindingEncode
+	}
+
 	return providerkit.RawEnvelope(resolveFindingResource(sourceName, finding), rawPayload), nil
+}
+
+// withCVSSVector adds the CVSS vector string to a serialized finding payload
+func withCVSSVector(rawPayload []byte, vector string) ([]byte, error) {
+	if vector == "" {
+		return rawPayload, nil
+	}
+
+	var payload map[string]any
+	if err := json.Unmarshal(rawPayload, &payload); err != nil {
+		return nil, err
+	}
+
+	payload[cvssVectorKey] = vector
+
+	return json.Marshal(payload)
+}
+
+// cvssv31Vector builds a CVSS v3.1 vector string from the SCC cvssv3 metrics, empty when any metric is unspecified
+func cvssv31Vector(cvss *securitycenterpb.Cvssv3) string {
+	metrics := []struct {
+		key   string
+		value string
+	}{
+		{key: "AV", value: cvssAttackVector[cvss.GetAttackVector()]},
+		{key: "AC", value: cvssAttackComplexity[cvss.GetAttackComplexity()]},
+		{key: "PR", value: cvssPrivilegesRequired[cvss.GetPrivilegesRequired()]},
+		{key: "UI", value: cvssUserInteraction[cvss.GetUserInteraction()]},
+		{key: "S", value: cvssScope[cvss.GetScope()]},
+		{key: "C", value: cvssImpact[cvss.GetConfidentialityImpact()]},
+		{key: "I", value: cvssImpact[cvss.GetIntegrityImpact()]},
+		{key: "A", value: cvssImpact[cvss.GetAvailabilityImpact()]},
+	}
+
+	parts := []string{cvssv31Prefix}
+
+	for _, metric := range metrics {
+		if metric.value == "" {
+			return ""
+		}
+
+		parts = append(parts, metric.key+":"+metric.value)
+	}
+
+	return strings.Join(parts, "/")
+}
+
+// findingConsoleURL builds the SCC console deep link for a finding
+func findingConsoleURL(finding *securitycenterpb.Finding, resource *securitycenterpb.ListFindingsResponse_ListFindingsResult_Resource) string {
+	name := finding.GetName()
+	if name == "" {
+		return finding.GetExternalUri()
+	}
+
+	consoleURL := findingConsoleURLBase + url.PathEscape(name)
+
+	if project := resource.GetGcpMetadata().GetProjectDisplayName(); project != "" {
+		return consoleURL + "?" + url.Values{"project": {project}}.Encode()
+	}
+
+	if rest, ok := strings.CutPrefix(name, organizationParentPrefix); ok {
+		orgID, _, _ := strings.Cut(rest, "/")
+
+		return consoleURL + "?" + url.Values{"organizationId": {orgID}}.Encode()
+	}
+
+	return consoleURL
 }
 
 // resolveFindingResource chooses the resource identifier used for ingest

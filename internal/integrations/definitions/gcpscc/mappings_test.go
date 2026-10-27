@@ -172,7 +172,7 @@ func TestGCPSCCMappingsVulnerabilityExample(t *testing.T) {
 	assert.Equal(t, "2025-07-03T23:55:56.581Z", mapped["discovered_at"])
 	assert.Equal(t, "2025-07-10T03:12:40.174Z", mapped["source_updated_at"])
 	assert.Equal(t, float64(6.5), mapped["score"])
-	assert.Equal(t, "ATTACK_VECTOR_NETWORK", mapped["vector"])
+	assert.Equal(t, "", mapped["vector"])
 	assert.Equal(t, "RUNTIME", mapped["dependency_scope"])
 	assert.Equal(t, true, mapped["fix_available"])
 	assert.Equal(t, "3.5.1-r0", mapped["first_patched_version"])
