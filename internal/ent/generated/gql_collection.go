@@ -37741,11 +37741,6 @@ func (_q *HushQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, hush.FieldSecretName)
 				fieldSeen[hush.FieldSecretName] = struct{}{}
 			}
-		case "credentialSet":
-			if _, ok := fieldSeen[hush.FieldCredentialSet]; !ok {
-				selectedFields = append(selectedFields, hush.FieldCredentialSet)
-				fieldSeen[hush.FieldCredentialSet] = struct{}{}
-			}
 		case "metadata":
 			if _, ok := fieldSeen[hush.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, hush.FieldMetadata)
@@ -58418,11 +58413,6 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderClientID)
 				fieldSeen[organizationsetting.FieldIdentityProviderClientID] = struct{}{}
 			}
-		case "identityProviderClientSecret":
-			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderClientSecret]; !ok {
-				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderClientSecret)
-				fieldSeen[organizationsetting.FieldIdentityProviderClientSecret] = struct{}{}
-			}
 		case "identityProviderMetadataEndpoint":
 			if _, ok := fieldSeen[organizationsetting.FieldIdentityProviderMetadataEndpoint]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldIdentityProviderMetadataEndpoint)
@@ -58487,11 +58477,6 @@ func (_q *OrganizationSettingQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[organizationsetting.FieldAllowSupportAccess]; !ok {
 				selectedFields = append(selectedFields, organizationsetting.FieldAllowSupportAccess)
 				fieldSeen[organizationsetting.FieldAllowSupportAccess] = struct{}{}
-			}
-		case "complianceWebhookToken":
-			if _, ok := fieldSeen[organizationsetting.FieldComplianceWebhookToken]; !ok {
-				selectedFields = append(selectedFields, organizationsetting.FieldComplianceWebhookToken)
-				fieldSeen[organizationsetting.FieldComplianceWebhookToken] = struct{}{}
 			}
 		case "paymentMethodAdded":
 			if _, ok := fieldSeen[organizationsetting.FieldPaymentMethodAdded]; !ok {

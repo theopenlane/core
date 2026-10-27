@@ -12812,7 +12812,6 @@ type CreateHushInput struct {
 	Kind             *string                `json:"kind,omitempty"`
 	SecretName       *string                `json:"secret_name,omitempty"`
 	SecretValue      *string                `json:"secret_value,omitempty"`
-	CredentialSet    *models.CredentialSet  `json:"credential_set,omitempty"`
 	Metadata         map[string]interface{} `json:"metadata,omitempty"`
 	LastUsedAt       *time.Time             `json:"last_used_at,omitempty"`
 	ExpiresAt        *time.Time             `json:"expires_at,omitempty"`
@@ -12842,9 +12841,6 @@ func (i *CreateHushInput) Mutate(m *HushMutation) {
 	}
 	if v := i.SecretValue; v != nil {
 		m.SetSecretValue(*v)
-	}
-	if v := i.CredentialSet; v != nil {
-		m.SetCredentialSet(*v)
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
@@ -12886,8 +12882,6 @@ type UpdateHushInput struct {
 	Description           *string `json:"description,omitempty"`
 	ClearKind             bool
 	Kind                  *string `json:"kind,omitempty"`
-	ClearCredentialSet    bool
-	CredentialSet         *models.CredentialSet `json:"credential_set,omitempty"`
 	ClearMetadata         bool
 	Metadata              map[string]interface{} `json:"metadata,omitempty"`
 	ClearLastUsedAt       bool
@@ -12935,12 +12929,6 @@ func (i *UpdateHushInput) Mutate(m *HushMutation) {
 	}
 	if v := i.Kind; v != nil {
 		m.SetKind(*v)
-	}
-	if i.ClearCredentialSet {
-		m.ClearCredentialSet()
-	}
-	if v := i.CredentialSet; v != nil {
-		m.SetCredentialSet(*v)
 	}
 	if i.ClearMetadata {
 		m.ClearMetadata()
@@ -17795,7 +17783,6 @@ type CreateOrganizationSettingInput struct {
 	MultifactorAuthEnforced          *bool              `json:"multifactor_auth_enforced,omitempty"`
 	SSOExemptDomains                 []string           `json:"sso_exempt_domains,omitempty"`
 	AllowSupportAccess               *bool              `json:"allow_support_access,omitempty"`
-	ComplianceWebhookToken           *string            `json:"compliance_webhook_token,omitempty"`
 	OrganizationID                   *string            `json:"organization_id,omitempty"`
 	FileIDs                          []string           `json:"file_ids,omitempty"`
 }
@@ -17880,9 +17867,6 @@ func (i *CreateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	if v := i.AllowSupportAccess; v != nil {
 		m.SetAllowSupportAccess(*v)
 	}
-	if v := i.ComplianceWebhookToken; v != nil {
-		m.SetComplianceWebhookToken(*v)
-	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
 	}
@@ -17953,8 +17937,6 @@ type UpdateOrganizationSettingInput struct {
 	AppendSSOExemptDomains                []string
 	ClearAllowSupportAccess               bool
 	AllowSupportAccess                    *bool `json:"allow_support_access,omitempty"`
-	ClearComplianceWebhookToken           bool
-	ComplianceWebhookToken                *string `json:"compliance_webhook_token,omitempty"`
 	ClearPendingDeletionAt                bool
 	PendingDeletionAt                     *models.DateTime `json:"pending_deletion_at,omitempty"`
 	ClearOrganization                     bool
@@ -18127,12 +18109,6 @@ func (i *UpdateOrganizationSettingInput) Mutate(m *OrganizationSettingMutation) 
 	}
 	if v := i.AllowSupportAccess; v != nil {
 		m.SetAllowSupportAccess(*v)
-	}
-	if i.ClearComplianceWebhookToken {
-		m.ClearComplianceWebhookToken()
-	}
-	if v := i.ComplianceWebhookToken; v != nil {
-		m.SetComplianceWebhookToken(*v)
 	}
 	if i.ClearPendingDeletionAt {
 		m.ClearPendingDeletionAt()

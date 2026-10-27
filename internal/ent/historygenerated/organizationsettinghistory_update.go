@@ -166,9 +166,6 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.AllowSupportAccessCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool)
 	}
-	if _u.mutation.ComplianceWebhookTokenCleared() {
-		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
-	}
 	if _u.mutation.PendingDeletionAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime)
 	}
@@ -358,9 +355,6 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.AllowSupportAccessCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool)
-	}
-	if _u.mutation.ComplianceWebhookTokenCleared() {
-		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
 	}
 	if _u.mutation.PendingDeletionAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime)

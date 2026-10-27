@@ -98203,29 +98203,6 @@ func (ec *executionContext) fieldContext_Hush_secretName(_ context.Context, fiel
 	return graphql.NewScalarFieldContext("Hush", field, false, false, "String")
 }
 
-func (ec *executionContext) _Hush_credentialSet(ctx context.Context, field graphql.CollectedField, obj *generated.Hush) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Hush_credentialSet(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.CredentialSet, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v models.CredentialSet) graphql.Marshaler {
-			return ec.marshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐCredentialSet(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_Hush_credentialSet(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("Hush", field, false, false, "CredentialSet")
-}
-
 func (ec *executionContext) _Hush_metadata(ctx context.Context, field graphql.CollectedField, obj *generated.Hush) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -119704,29 +119681,6 @@ func (ec *executionContext) fieldContext_OrganizationSetting_identityProviderCli
 	return graphql.NewScalarFieldContext("OrganizationSetting", field, false, false, "String")
 }
 
-func (ec *executionContext) _OrganizationSetting_identityProviderClientSecret(ctx context.Context, field graphql.CollectedField, obj *generated.OrganizationSetting) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSetting_identityProviderClientSecret(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.IdentityProviderClientSecret, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOString2ᚖstring(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_OrganizationSetting_identityProviderClientSecret(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationSetting", field, false, false, "String")
-}
-
 func (ec *executionContext) _OrganizationSetting_identityProviderMetadataEndpoint(ctx context.Context, field graphql.CollectedField, obj *generated.OrganizationSetting) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -120024,29 +119978,6 @@ func (ec *executionContext) _OrganizationSetting_allowSupportAccess(ctx context.
 }
 func (ec *executionContext) fieldContext_OrganizationSetting_allowSupportAccess(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("OrganizationSetting", field, false, false, "Boolean")
-}
-
-func (ec *executionContext) _OrganizationSetting_complianceWebhookToken(ctx context.Context, field graphql.CollectedField, obj *generated.OrganizationSetting) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.ComplianceWebhookToken, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOString2string(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_OrganizationSetting_complianceWebhookToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationSetting", field, false, false, "String")
 }
 
 func (ec *executionContext) _OrganizationSetting_paymentMethodAdded(ctx context.Context, field graphql.CollectedField, obj *generated.OrganizationSetting) (ret graphql.Marshaler) {
@@ -218368,7 +218299,7 @@ func (ec *executionContext) unmarshalInputCreateHushInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"internalNotes", "systemInternalID", "name", "description", "kind", "secretName", "secretValue", "credentialSet", "metadata", "lastUsedAt", "expiresAt", "ownerID", "integrationIDs", "fileIDs", "eventIDs"}
+	fieldsInOrder := [...]string{"internalNotes", "systemInternalID", "name", "description", "kind", "secretName", "secretValue", "metadata", "lastUsedAt", "expiresAt", "ownerID", "integrationIDs", "fileIDs", "eventIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -218458,13 +218389,6 @@ func (ec *executionContext) unmarshalInputCreateHushInput(ctx context.Context, o
 				return it, err
 			}
 			it.SecretValue = data
-		case "credentialSet":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("credentialSet"))
-			data, err := ec.unmarshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐCredentialSet(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CredentialSet = data
 		case "metadata":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("metadata"))
 			data, err := ec.unmarshalOMap2map(ctx, v)
@@ -221553,7 +221477,7 @@ func (ec *executionContext) unmarshalInputCreateOrganizationSettingInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "domains", "billingContact", "billingEmail", "billingPhone", "billingAddress", "taxIdentifier", "geoLocation", "billingNotificationsEnabled", "allowedEmailDomains", "allowMatchingDomainsAutojoin", "identityProvider", "identityProviderClientID", "identityProviderClientSecret", "identityProviderMetadataEndpoint", "identityProviderEntityID", "oidcDiscoveryEndpoint", "samlSigninURL", "samlIssuer", "samlCert", "identityProviderLoginEnforced", "identityProviderJitProvisioning", "jitAllowedEmailDomains", "multifactorAuthEnforced", "ssoExemptDomains", "allowSupportAccess", "complianceWebhookToken", "organizationID", "fileIDs"}
+	fieldsInOrder := [...]string{"tags", "domains", "billingContact", "billingEmail", "billingPhone", "billingAddress", "taxIdentifier", "geoLocation", "billingNotificationsEnabled", "allowedEmailDomains", "allowMatchingDomainsAutojoin", "identityProvider", "identityProviderClientID", "identityProviderClientSecret", "identityProviderMetadataEndpoint", "identityProviderEntityID", "oidcDiscoveryEndpoint", "samlSigninURL", "samlIssuer", "samlCert", "identityProviderLoginEnforced", "identityProviderJitProvisioning", "jitAllowedEmailDomains", "multifactorAuthEnforced", "ssoExemptDomains", "allowSupportAccess", "organizationID", "fileIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -221742,13 +221666,6 @@ func (ec *executionContext) unmarshalInputCreateOrganizationSettingInput(ctx con
 				return it, err
 			}
 			it.AllowSupportAccess = data
-		case "complianceWebhookToken":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookToken"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookToken = data
 		case "organizationID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("organizationID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -289981,7 +289898,7 @@ func (ec *executionContext) unmarshalInputOrganizationSettingWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "billingContact", "billingContactNEQ", "billingContactIn", "billingContactNotIn", "billingContactContains", "billingContactHasPrefix", "billingContactHasSuffix", "billingContactIsNil", "billingContactNotNil", "billingContactEqualFold", "billingContactContainsFold", "billingEmail", "billingEmailNEQ", "billingEmailIn", "billingEmailNotIn", "billingEmailContains", "billingEmailHasPrefix", "billingEmailHasSuffix", "billingEmailIsNil", "billingEmailNotNil", "billingEmailEqualFold", "billingEmailContainsFold", "billingPhone", "billingPhoneNEQ", "billingPhoneIn", "billingPhoneNotIn", "billingPhoneContains", "billingPhoneHasPrefix", "billingPhoneHasSuffix", "billingPhoneIsNil", "billingPhoneNotNil", "billingPhoneEqualFold", "billingPhoneContainsFold", "taxIdentifier", "taxIdentifierNEQ", "taxIdentifierIn", "taxIdentifierNotIn", "taxIdentifierContains", "taxIdentifierHasPrefix", "taxIdentifierHasSuffix", "taxIdentifierIsNil", "taxIdentifierNotNil", "taxIdentifierEqualFold", "taxIdentifierContainsFold", "geoLocation", "geoLocationNEQ", "geoLocationIn", "geoLocationNotIn", "geoLocationIsNil", "geoLocationNotNil", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDIsNil", "organizationIDNotNil", "organizationIDEqualFold", "organizationIDContainsFold", "billingNotificationsEnabled", "billingNotificationsEnabledNEQ", "allowMatchingDomainsAutojoin", "allowMatchingDomainsAutojoinNEQ", "allowMatchingDomainsAutojoinIsNil", "allowMatchingDomainsAutojoinNotNil", "identityProvider", "identityProviderNEQ", "identityProviderIn", "identityProviderNotIn", "identityProviderIsNil", "identityProviderNotNil", "identityProviderClientID", "identityProviderClientIDNEQ", "identityProviderClientIDIn", "identityProviderClientIDNotIn", "identityProviderClientIDContains", "identityProviderClientIDHasPrefix", "identityProviderClientIDHasSuffix", "identityProviderClientIDIsNil", "identityProviderClientIDNotNil", "identityProviderClientIDEqualFold", "identityProviderClientIDContainsFold", "identityProviderClientSecret", "identityProviderClientSecretNEQ", "identityProviderClientSecretIn", "identityProviderClientSecretNotIn", "identityProviderClientSecretContains", "identityProviderClientSecretHasPrefix", "identityProviderClientSecretHasSuffix", "identityProviderClientSecretIsNil", "identityProviderClientSecretNotNil", "identityProviderClientSecretEqualFold", "identityProviderClientSecretContainsFold", "identityProviderMetadataEndpoint", "identityProviderMetadataEndpointNEQ", "identityProviderMetadataEndpointIn", "identityProviderMetadataEndpointNotIn", "identityProviderMetadataEndpointContains", "identityProviderMetadataEndpointHasPrefix", "identityProviderMetadataEndpointHasSuffix", "identityProviderMetadataEndpointIsNil", "identityProviderMetadataEndpointNotNil", "identityProviderMetadataEndpointEqualFold", "identityProviderMetadataEndpointContainsFold", "identityProviderAuthTested", "identityProviderAuthTestedNEQ", "identityProviderEntityID", "identityProviderEntityIDNEQ", "identityProviderEntityIDIn", "identityProviderEntityIDNotIn", "identityProviderEntityIDContains", "identityProviderEntityIDHasPrefix", "identityProviderEntityIDHasSuffix", "identityProviderEntityIDIsNil", "identityProviderEntityIDNotNil", "identityProviderEntityIDEqualFold", "identityProviderEntityIDContainsFold", "oidcDiscoveryEndpoint", "oidcDiscoveryEndpointNEQ", "oidcDiscoveryEndpointIn", "oidcDiscoveryEndpointNotIn", "oidcDiscoveryEndpointContains", "oidcDiscoveryEndpointHasPrefix", "oidcDiscoveryEndpointHasSuffix", "oidcDiscoveryEndpointIsNil", "oidcDiscoveryEndpointNotNil", "oidcDiscoveryEndpointEqualFold", "oidcDiscoveryEndpointContainsFold", "samlSigninURL", "samlSigninURLNEQ", "samlSigninURLIn", "samlSigninURLNotIn", "samlSigninURLContains", "samlSigninURLHasPrefix", "samlSigninURLHasSuffix", "samlSigninURLIsNil", "samlSigninURLNotNil", "samlSigninURLEqualFold", "samlSigninURLContainsFold", "samlIssuer", "samlIssuerNEQ", "samlIssuerIn", "samlIssuerNotIn", "samlIssuerContains", "samlIssuerHasPrefix", "samlIssuerHasSuffix", "samlIssuerIsNil", "samlIssuerNotNil", "samlIssuerEqualFold", "samlIssuerContainsFold", "samlCert", "samlCertNEQ", "samlCertIn", "samlCertNotIn", "samlCertContains", "samlCertHasPrefix", "samlCertHasSuffix", "samlCertIsNil", "samlCertNotNil", "samlCertEqualFold", "samlCertContainsFold", "identityProviderLoginEnforced", "identityProviderLoginEnforcedNEQ", "identityProviderJitProvisioning", "identityProviderJitProvisioningNEQ", "multifactorAuthEnforced", "multifactorAuthEnforcedNEQ", "multifactorAuthEnforcedIsNil", "multifactorAuthEnforcedNotNil", "allowSupportAccess", "allowSupportAccessNEQ", "allowSupportAccessIsNil", "allowSupportAccessNotNil", "complianceWebhookToken", "complianceWebhookTokenNEQ", "complianceWebhookTokenIn", "complianceWebhookTokenNotIn", "complianceWebhookTokenContains", "complianceWebhookTokenHasPrefix", "complianceWebhookTokenHasSuffix", "complianceWebhookTokenIsNil", "complianceWebhookTokenNotNil", "complianceWebhookTokenEqualFold", "complianceWebhookTokenContainsFold", "paymentMethodAdded", "paymentMethodAddedNEQ", "pendingDeletionAt", "pendingDeletionAtGT", "pendingDeletionAtGTE", "pendingDeletionAtLT", "pendingDeletionAtLTE", "pendingDeletionAtIsNil", "pendingDeletionAtNotNil", "hasOrganization", "hasOrganizationWith", "hasFiles", "hasFilesWith", "tagsHas", "domainsHas", "allowedEmailDomainsHas", "jitAllowedEmailDomainsHas", "ssoExemptDomainsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "billingContact", "billingContactNEQ", "billingContactIn", "billingContactNotIn", "billingContactContains", "billingContactHasPrefix", "billingContactHasSuffix", "billingContactIsNil", "billingContactNotNil", "billingContactEqualFold", "billingContactContainsFold", "billingEmail", "billingEmailNEQ", "billingEmailIn", "billingEmailNotIn", "billingEmailContains", "billingEmailHasPrefix", "billingEmailHasSuffix", "billingEmailIsNil", "billingEmailNotNil", "billingEmailEqualFold", "billingEmailContainsFold", "billingPhone", "billingPhoneNEQ", "billingPhoneIn", "billingPhoneNotIn", "billingPhoneContains", "billingPhoneHasPrefix", "billingPhoneHasSuffix", "billingPhoneIsNil", "billingPhoneNotNil", "billingPhoneEqualFold", "billingPhoneContainsFold", "taxIdentifier", "taxIdentifierNEQ", "taxIdentifierIn", "taxIdentifierNotIn", "taxIdentifierContains", "taxIdentifierHasPrefix", "taxIdentifierHasSuffix", "taxIdentifierIsNil", "taxIdentifierNotNil", "taxIdentifierEqualFold", "taxIdentifierContainsFold", "geoLocation", "geoLocationNEQ", "geoLocationIn", "geoLocationNotIn", "geoLocationIsNil", "geoLocationNotNil", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDIsNil", "organizationIDNotNil", "organizationIDEqualFold", "organizationIDContainsFold", "billingNotificationsEnabled", "billingNotificationsEnabledNEQ", "allowMatchingDomainsAutojoin", "allowMatchingDomainsAutojoinNEQ", "allowMatchingDomainsAutojoinIsNil", "allowMatchingDomainsAutojoinNotNil", "identityProvider", "identityProviderNEQ", "identityProviderIn", "identityProviderNotIn", "identityProviderIsNil", "identityProviderNotNil", "identityProviderClientID", "identityProviderClientIDNEQ", "identityProviderClientIDIn", "identityProviderClientIDNotIn", "identityProviderClientIDContains", "identityProviderClientIDHasPrefix", "identityProviderClientIDHasSuffix", "identityProviderClientIDIsNil", "identityProviderClientIDNotNil", "identityProviderClientIDEqualFold", "identityProviderClientIDContainsFold", "identityProviderMetadataEndpoint", "identityProviderMetadataEndpointNEQ", "identityProviderMetadataEndpointIn", "identityProviderMetadataEndpointNotIn", "identityProviderMetadataEndpointContains", "identityProviderMetadataEndpointHasPrefix", "identityProviderMetadataEndpointHasSuffix", "identityProviderMetadataEndpointIsNil", "identityProviderMetadataEndpointNotNil", "identityProviderMetadataEndpointEqualFold", "identityProviderMetadataEndpointContainsFold", "identityProviderAuthTested", "identityProviderAuthTestedNEQ", "identityProviderEntityID", "identityProviderEntityIDNEQ", "identityProviderEntityIDIn", "identityProviderEntityIDNotIn", "identityProviderEntityIDContains", "identityProviderEntityIDHasPrefix", "identityProviderEntityIDHasSuffix", "identityProviderEntityIDIsNil", "identityProviderEntityIDNotNil", "identityProviderEntityIDEqualFold", "identityProviderEntityIDContainsFold", "oidcDiscoveryEndpoint", "oidcDiscoveryEndpointNEQ", "oidcDiscoveryEndpointIn", "oidcDiscoveryEndpointNotIn", "oidcDiscoveryEndpointContains", "oidcDiscoveryEndpointHasPrefix", "oidcDiscoveryEndpointHasSuffix", "oidcDiscoveryEndpointIsNil", "oidcDiscoveryEndpointNotNil", "oidcDiscoveryEndpointEqualFold", "oidcDiscoveryEndpointContainsFold", "samlSigninURL", "samlSigninURLNEQ", "samlSigninURLIn", "samlSigninURLNotIn", "samlSigninURLContains", "samlSigninURLHasPrefix", "samlSigninURLHasSuffix", "samlSigninURLIsNil", "samlSigninURLNotNil", "samlSigninURLEqualFold", "samlSigninURLContainsFold", "samlIssuer", "samlIssuerNEQ", "samlIssuerIn", "samlIssuerNotIn", "samlIssuerContains", "samlIssuerHasPrefix", "samlIssuerHasSuffix", "samlIssuerIsNil", "samlIssuerNotNil", "samlIssuerEqualFold", "samlIssuerContainsFold", "samlCert", "samlCertNEQ", "samlCertIn", "samlCertNotIn", "samlCertContains", "samlCertHasPrefix", "samlCertHasSuffix", "samlCertIsNil", "samlCertNotNil", "samlCertEqualFold", "samlCertContainsFold", "identityProviderLoginEnforced", "identityProviderLoginEnforcedNEQ", "identityProviderJitProvisioning", "identityProviderJitProvisioningNEQ", "multifactorAuthEnforced", "multifactorAuthEnforcedNEQ", "multifactorAuthEnforcedIsNil", "multifactorAuthEnforcedNotNil", "allowSupportAccess", "allowSupportAccessNEQ", "allowSupportAccessIsNil", "allowSupportAccessNotNil", "paymentMethodAdded", "paymentMethodAddedNEQ", "pendingDeletionAt", "pendingDeletionAtGT", "pendingDeletionAtGTE", "pendingDeletionAtLT", "pendingDeletionAtLTE", "pendingDeletionAtIsNil", "pendingDeletionAtNotNil", "hasOrganization", "hasOrganizationWith", "hasFiles", "hasFilesWith", "tagsHas", "domainsHas", "allowedEmailDomainsHas", "jitAllowedEmailDomainsHas", "ssoExemptDomainsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -290968,83 +290885,6 @@ func (ec *executionContext) unmarshalInputOrganizationSettingWhereInput(ctx cont
 				return it, err
 			}
 			it.IdentityProviderClientIDContainsFold = data
-		case "identityProviderClientSecret":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecret"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecret = data
-		case "identityProviderClientSecretNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretNEQ = data
-		case "identityProviderClientSecretIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretIn = data
-		case "identityProviderClientSecretNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretNotIn = data
-		case "identityProviderClientSecretContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretContains = data
-		case "identityProviderClientSecretHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretHasPrefix = data
-		case "identityProviderClientSecretHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretHasSuffix = data
-		case "identityProviderClientSecretIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretIsNil = data
-		case "identityProviderClientSecretNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretNotNil = data
-		case "identityProviderClientSecretEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretEqualFold = data
-		case "identityProviderClientSecretContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderClientSecretContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IdentityProviderClientSecretContainsFold = data
 		case "identityProviderMetadataEndpoint":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("identityProviderMetadataEndpoint"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -291605,83 +291445,6 @@ func (ec *executionContext) unmarshalInputOrganizationSettingWhereInput(ctx cont
 				return it, err
 			}
 			it.AllowSupportAccessNotNil = data
-		case "complianceWebhookToken":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookToken"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookToken = data
-		case "complianceWebhookTokenNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenNEQ = data
-		case "complianceWebhookTokenIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenIn = data
-		case "complianceWebhookTokenNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenNotIn = data
-		case "complianceWebhookTokenContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenContains = data
-		case "complianceWebhookTokenHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenHasPrefix = data
-		case "complianceWebhookTokenHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenHasSuffix = data
-		case "complianceWebhookTokenIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenIsNil = data
-		case "complianceWebhookTokenNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenNotNil = data
-		case "complianceWebhookTokenEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenEqualFold = data
-		case "complianceWebhookTokenContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookTokenContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookTokenContainsFold = data
 		case "paymentMethodAdded":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("paymentMethodAdded"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -363234,7 +362997,7 @@ func (ec *executionContext) unmarshalInputUpdateHushInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "name", "description", "clearDescription", "kind", "clearKind", "credentialSet", "clearCredentialSet", "metadata", "clearMetadata", "lastUsedAt", "clearLastUsedAt", "expiresAt", "clearExpiresAt", "ownerID", "clearOwner", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addFileIDs", "removeFileIDs", "clearFiles", "addEventIDs", "removeEventIDs", "clearEvents"}
+	fieldsInOrder := [...]string{"internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "name", "description", "clearDescription", "kind", "clearKind", "metadata", "clearMetadata", "lastUsedAt", "clearLastUsedAt", "expiresAt", "clearExpiresAt", "ownerID", "clearOwner", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addFileIDs", "removeFileIDs", "clearFiles", "addEventIDs", "removeEventIDs", "clearEvents"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -363353,20 +363116,6 @@ func (ec *executionContext) unmarshalInputUpdateHushInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearKind = data
-		case "credentialSet":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("credentialSet"))
-			data, err := ec.unmarshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐCredentialSet(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CredentialSet = data
-		case "clearCredentialSet":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearCredentialSet"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearCredentialSet = data
 		case "metadata":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("metadata"))
 			data, err := ec.unmarshalOMap2map(ctx, v)
@@ -369503,7 +369252,7 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationSettingInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "domains", "appendDomains", "clearDomains", "billingContact", "clearBillingContact", "billingEmail", "clearBillingEmail", "billingPhone", "clearBillingPhone", "billingAddress", "clearBillingAddress", "taxIdentifier", "clearTaxIdentifier", "geoLocation", "clearGeoLocation", "billingNotificationsEnabled", "allowedEmailDomains", "appendAllowedEmailDomains", "clearAllowedEmailDomains", "allowMatchingDomainsAutojoin", "clearAllowMatchingDomainsAutojoin", "identityProvider", "clearIdentityProvider", "identityProviderClientID", "clearIdentityProviderClientID", "identityProviderClientSecret", "clearIdentityProviderClientSecret", "identityProviderMetadataEndpoint", "clearIdentityProviderMetadataEndpoint", "identityProviderEntityID", "clearIdentityProviderEntityID", "oidcDiscoveryEndpoint", "clearOidcDiscoveryEndpoint", "samlSigninURL", "clearSamlSigninURL", "samlIssuer", "clearSamlIssuer", "samlCert", "clearSamlCert", "identityProviderLoginEnforced", "identityProviderJitProvisioning", "jitAllowedEmailDomains", "appendJitAllowedEmailDomains", "clearJitAllowedEmailDomains", "multifactorAuthEnforced", "clearMultifactorAuthEnforced", "ssoExemptDomains", "appendSSOExemptDomains", "clearSSOExemptDomains", "allowSupportAccess", "clearAllowSupportAccess", "complianceWebhookToken", "clearComplianceWebhookToken", "pendingDeletionAt", "clearPendingDeletionAt", "organizationID", "clearOrganization", "addFileIDs", "removeFileIDs", "clearFiles"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "domains", "appendDomains", "clearDomains", "billingContact", "clearBillingContact", "billingEmail", "clearBillingEmail", "billingPhone", "clearBillingPhone", "billingAddress", "clearBillingAddress", "taxIdentifier", "clearTaxIdentifier", "geoLocation", "clearGeoLocation", "billingNotificationsEnabled", "allowedEmailDomains", "appendAllowedEmailDomains", "clearAllowedEmailDomains", "allowMatchingDomainsAutojoin", "clearAllowMatchingDomainsAutojoin", "identityProvider", "clearIdentityProvider", "identityProviderClientID", "clearIdentityProviderClientID", "identityProviderClientSecret", "clearIdentityProviderClientSecret", "identityProviderMetadataEndpoint", "clearIdentityProviderMetadataEndpoint", "identityProviderEntityID", "clearIdentityProviderEntityID", "oidcDiscoveryEndpoint", "clearOidcDiscoveryEndpoint", "samlSigninURL", "clearSamlSigninURL", "samlIssuer", "clearSamlIssuer", "samlCert", "clearSamlCert", "identityProviderLoginEnforced", "identityProviderJitProvisioning", "jitAllowedEmailDomains", "appendJitAllowedEmailDomains", "clearJitAllowedEmailDomains", "multifactorAuthEnforced", "clearMultifactorAuthEnforced", "ssoExemptDomains", "appendSSOExemptDomains", "clearSSOExemptDomains", "allowSupportAccess", "clearAllowSupportAccess", "pendingDeletionAt", "clearPendingDeletionAt", "organizationID", "clearOrganization", "addFileIDs", "removeFileIDs", "clearFiles"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -369888,20 +369637,6 @@ func (ec *executionContext) unmarshalInputUpdateOrganizationSettingInput(ctx con
 				return it, err
 			}
 			it.ClearAllowSupportAccess = data
-		case "complianceWebhookToken":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("complianceWebhookToken"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ComplianceWebhookToken = data
-		case "clearComplianceWebhookToken":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearComplianceWebhookToken"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearComplianceWebhookToken = data
 		case "pendingDeletionAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pendingDeletionAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
@@ -418489,11 +418224,6 @@ func (ec *executionContext) _Hush(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
-		case "credentialSet":
-			out.Values[i] = ec._Hush_credentialSet(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		case "metadata":
 			out.Values[i] = ec._Hush_metadata(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -423698,11 +423428,6 @@ func (ec *executionContext) _OrganizationSetting(ctx context.Context, sel ast.Se
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
-		case "identityProviderClientSecret":
-			out.Values[i] = ec._OrganizationSetting_identityProviderClientSecret(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		case "identityProviderMetadataEndpoint":
 			out.Values[i] = ec._OrganizationSetting_identityProviderMetadataEndpoint(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -423765,11 +423490,6 @@ func (ec *executionContext) _OrganizationSetting(ctx context.Context, sel ast.Se
 			}
 		case "allowSupportAccess":
 			out.Values[i] = ec._OrganizationSetting_allowSupportAccess(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "complianceWebhookToken":
-			out.Values[i] = ec._OrganizationSetting_complianceWebhookToken(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

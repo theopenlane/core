@@ -72,7 +72,7 @@ type OrganizationSettingHistory struct {
 	// client ID for SSO integration
 	IdentityProviderClientID *string `json:"identity_provider_client_id,omitempty"`
 	// client secret for SSO integration
-	IdentityProviderClientSecret *string `json:"identity_provider_client_secret,omitempty"`
+	IdentityProviderClientSecret *string `json:"-"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint string `json:"identity_provider_metadata_endpoint,omitempty"`
 	// has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
@@ -99,8 +99,6 @@ type OrganizationSettingHistory struct {
 	SSOExemptDomains []string `json:"sso_exempt_domains,omitempty"`
 	// allow Openlane support to access this organization without a directory account
 	AllowSupportAccess bool `json:"allow_support_access,omitempty"`
-	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken string `json:"compliance_webhook_token,omitempty"`
 	// whether or not a payment method has been added to the account
 	PaymentMethodAdded bool `json:"payment_method_added,omitempty"`
 	// when will this organization be deleted? usually this is after org has not added a payment method after n period
@@ -121,7 +119,7 @@ func (*OrganizationSettingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case organizationsettinghistory.FieldBillingNotificationsEnabled, organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, organizationsettinghistory.FieldIdentityProviderAuthTested, organizationsettinghistory.FieldIdentityProviderLoginEnforced, organizationsettinghistory.FieldIdentityProviderJitProvisioning, organizationsettinghistory.FieldMultifactorAuthEnforced, organizationsettinghistory.FieldAllowSupportAccess, organizationsettinghistory.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
-		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldUpdatedByImpersonator, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldIdentityProvider, organizationsettinghistory.FieldIdentityProviderClientID, organizationsettinghistory.FieldIdentityProviderClientSecret, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, organizationsettinghistory.FieldIdentityProviderEntityID, organizationsettinghistory.FieldOidcDiscoveryEndpoint, organizationsettinghistory.FieldSamlSigninURL, organizationsettinghistory.FieldSamlIssuer, organizationsettinghistory.FieldSamlCert, organizationsettinghistory.FieldComplianceWebhookToken:
+		case organizationsettinghistory.FieldID, organizationsettinghistory.FieldRef, organizationsettinghistory.FieldCreatedBy, organizationsettinghistory.FieldUpdatedBy, organizationsettinghistory.FieldUpdatedByImpersonator, organizationsettinghistory.FieldDeletedBy, organizationsettinghistory.FieldBillingContact, organizationsettinghistory.FieldBillingEmail, organizationsettinghistory.FieldBillingPhone, organizationsettinghistory.FieldTaxIdentifier, organizationsettinghistory.FieldGeoLocation, organizationsettinghistory.FieldOrganizationID, organizationsettinghistory.FieldIdentityProvider, organizationsettinghistory.FieldIdentityProviderClientID, organizationsettinghistory.FieldIdentityProviderClientSecret, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, organizationsettinghistory.FieldIdentityProviderEntityID, organizationsettinghistory.FieldOidcDiscoveryEndpoint, organizationsettinghistory.FieldSamlSigninURL, organizationsettinghistory.FieldSamlIssuer, organizationsettinghistory.FieldSamlCert:
 			values[i] = new(sql.NullString)
 		case organizationsettinghistory.FieldHistoryTime, organizationsettinghistory.FieldCreatedAt, organizationsettinghistory.FieldUpdatedAt, organizationsettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -389,12 +387,6 @@ func (_m *OrganizationSettingHistory) assignValues(columns []string, values []an
 			} else if value.Valid {
 				_m.AllowSupportAccess = value.Bool
 			}
-		case organizationsettinghistory.FieldComplianceWebhookToken:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field compliance_webhook_token", values[i])
-			} else if value.Valid {
-				_m.ComplianceWebhookToken = value.String
-			}
 		case organizationsettinghistory.FieldPaymentMethodAdded:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field payment_method_added", values[i])
@@ -520,10 +512,7 @@ func (_m *OrganizationSettingHistory) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.IdentityProviderClientSecret; v != nil {
-		builder.WriteString("identity_provider_client_secret=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("identity_provider_client_secret=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_metadata_endpoint=")
 	builder.WriteString(_m.IdentityProviderMetadataEndpoint)
@@ -563,9 +552,6 @@ func (_m *OrganizationSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("allow_support_access=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AllowSupportAccess))
-	builder.WriteString(", ")
-	builder.WriteString("compliance_webhook_token=")
-	builder.WriteString(_m.ComplianceWebhookToken)
 	builder.WriteString(", ")
 	builder.WriteString("payment_method_added=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PaymentMethodAdded))

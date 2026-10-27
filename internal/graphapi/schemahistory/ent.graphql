@@ -13907,10 +13907,6 @@ type HushHistory implements Node {
   """
   secretName: String
   """
-  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-  """
-  credentialSet: CredentialSet
-  """
   additional metadata about the credential
   """
   metadata: Map
@@ -19095,10 +19091,6 @@ type OrganizationSettingHistory implements Node {
   """
   identityProviderClientID: String
   """
-  client secret for SSO integration
-  """
-  identityProviderClientSecret: String
-  """
   metadata URL for the SSO provider
   """
   identityProviderMetadataEndpoint: String
@@ -19150,10 +19142,6 @@ type OrganizationSettingHistory implements Node {
   allow Openlane support to access this organization without a directory account
   """
   allowSupportAccess: Boolean
-  """
-  unique token used to receive compliance webhook events
-  """
-  complianceWebhookToken: String
   """
   whether or not a payment method has been added to the account
   """
@@ -19466,20 +19454,6 @@ input OrganizationSettingHistoryWhereInput {
   identityProviderClientIDEqualFold: String
   identityProviderClientIDContainsFold: String
   """
-  identity_provider_client_secret field predicates
-  """
-  identityProviderClientSecret: String
-  identityProviderClientSecretNEQ: String
-  identityProviderClientSecretIn: [String!]
-  identityProviderClientSecretNotIn: [String!]
-  identityProviderClientSecretContains: String
-  identityProviderClientSecretHasPrefix: String
-  identityProviderClientSecretHasSuffix: String
-  identityProviderClientSecretIsNil: Boolean
-  identityProviderClientSecretNotNil: Boolean
-  identityProviderClientSecretEqualFold: String
-  identityProviderClientSecretContainsFold: String
-  """
   identity_provider_metadata_endpoint field predicates
   """
   identityProviderMetadataEndpoint: String
@@ -19592,20 +19566,6 @@ input OrganizationSettingHistoryWhereInput {
   allowSupportAccessNEQ: Boolean
   allowSupportAccessIsNil: Boolean
   allowSupportAccessNotNil: Boolean
-  """
-  compliance_webhook_token field predicates
-  """
-  complianceWebhookToken: String
-  complianceWebhookTokenNEQ: String
-  complianceWebhookTokenIn: [String!]
-  complianceWebhookTokenNotIn: [String!]
-  complianceWebhookTokenContains: String
-  complianceWebhookTokenHasPrefix: String
-  complianceWebhookTokenHasSuffix: String
-  complianceWebhookTokenIsNil: Boolean
-  complianceWebhookTokenNotNil: Boolean
-  complianceWebhookTokenEqualFold: String
-  complianceWebhookTokenContainsFold: String
   """
   payment_method_added field predicates
   """

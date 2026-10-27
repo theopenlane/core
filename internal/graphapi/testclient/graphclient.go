@@ -65,8 +65,8 @@ type TestGraphClient interface {
 	UpdateAsset(ctx context.Context, updateAssetID string, input UpdateAssetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAsset, error)
 	UpdateBulkAsset(ctx context.Context, ids []string, input UpdateAssetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkAsset, error)
 	UpdateBulkCSVAsset(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVAsset, error)
-	CreateBulkCampaign(ctx context.Context, input []*CreateCampaignInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCampaign, error)
 	CreateBulkCSVCampaign(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCampaign, error)
+	CreateBulkCampaign(ctx context.Context, input []*CreateCampaignInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCampaign, error)
 	CreateCampaign(ctx context.Context, input CreateCampaignInput, interceptors ...clientv2.RequestInterceptor) (*CreateCampaign, error)
 	DeleteCampaign(ctx context.Context, deleteCampaignID string, interceptors ...clientv2.RequestInterceptor) (*DeleteCampaign, error)
 	GetAllCampaigns(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*CampaignOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllCampaigns, error)
@@ -86,16 +86,16 @@ type TestGraphClient interface {
 	GetCampaignTargetByID(ctx context.Context, campaignTargetID string, interceptors ...clientv2.RequestInterceptor) (*GetCampaignTargetByID, error)
 	GetCampaignTargets(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*CampaignTargetOrder, where *CampaignTargetWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCampaignTargets, error)
 	UpdateCampaignTarget(ctx context.Context, updateCampaignTargetID string, input UpdateCampaignTargetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCampaignTarget, error)
-	CreateBulkCheckResult(ctx context.Context, input []*CreateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCheckResult, error)
 	CreateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCheckResult, error)
+	CreateBulkCheckResult(ctx context.Context, input []*CreateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCheckResult, error)
 	CreateCheckResult(ctx context.Context, input CreateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateCheckResult, error)
 	DeleteBulkCheckResult(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkCheckResult, error)
 	DeleteCheckResult(ctx context.Context, deleteCheckResultID string, interceptors ...clientv2.RequestInterceptor) (*DeleteCheckResult, error)
 	GetAllCheckResults(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*CheckResultOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllCheckResults, error)
 	GetCheckResultByID(ctx context.Context, checkResultID string, interceptors ...clientv2.RequestInterceptor) (*GetCheckResultByID, error)
 	GetCheckResults(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*CheckResultOrder, where *CheckResultWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCheckResults, error)
-	UpdateBulkCheckResult(ctx context.Context, ids []string, input UpdateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCheckResult, error)
 	UpdateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVCheckResult, error)
+	UpdateBulkCheckResult(ctx context.Context, ids []string, input UpdateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCheckResult, error)
 	UpdateCheckResult(ctx context.Context, updateCheckResultID string, input UpdateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCheckResult, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
@@ -604,12 +604,12 @@ type TestGraphClient interface {
 	CreateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterCompliance, error)
 	CreateBulkTrustCenterCompliance(ctx context.Context, input []*CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterCompliance, error)
 	CreateTrustCenterCompliance(ctx context.Context, input CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterCompliance, error)
+	CreateTrustCenterComplianceWithStandardDocs(ctx context.Context, input CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterComplianceWithStandardDocs, error)
 	DeleteTrustCenterCompliance(ctx context.Context, deleteTrustCenterComplianceID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterCompliance, error)
 	GetAllTrustCenterCompliances(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterCompliances, error)
 	GetTrustCenterComplianceByID(ctx context.Context, trustCenterComplianceID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceByID, error)
 	GetTrustCenterCompliances(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterCompliances, error)
 	UpdateTrustCenterCompliance(ctx context.Context, updateTrustCenterComplianceID string, input UpdateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterCompliance, error)
-	CreateTrustCenterComplianceWithStandardDocs(ctx context.Context, input CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterComplianceWithStandardDocs, error)
 	CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error)
 	DeleteTrustCenterDoc(ctx context.Context, deleteTrustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterDoc, error)
 	GetAllTrustCenterDocs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterDocs, error)
@@ -11589,357 +11589,6 @@ func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset) GetUpdatedIDs() []string {
 	return t.UpdatedIDs
 }
 
-type CreateBulkCampaign_CreateBulkCampaign_Campaigns struct {
-	AssessmentID                  *string              "json:\"assessmentID,omitempty\" graphql:\"assessmentID\""
-	CampaignType                  enums.CampaignType   "json:\"campaignType\" graphql:\"campaignType\""
-	CompletedAt                   *models.DateTime     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt                     *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                     *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description                   *string              "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID                     string               "json:\"displayID\" graphql:\"displayID\""
-	DueDate                       *models.DateTime     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	EmailBrandingID               *string              "json:\"emailBrandingID,omitempty\" graphql:\"emailBrandingID\""
-	EmailTemplateID               *string              "json:\"emailTemplateID,omitempty\" graphql:\"emailTemplateID\""
-	EntityID                      *string              "json:\"entityID,omitempty\" graphql:\"entityID\""
-	ExternalID                    *string              "json:\"externalID,omitempty\" graphql:\"externalID\""
-	ID                            string               "json:\"id\" graphql:\"id\""
-	IntegrationID                 *string              "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	IntegrationRunID              *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	InternalOwner                 *string              "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
-	InternalOwnerGroupID          *string              "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
-	InternalOwnerIdentityHolderID *string              "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
-	InternalOwnerUserID           *string              "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
-	IsActive                      bool                 "json:\"isActive\" graphql:\"isActive\""
-	IsRecurring                   bool                 "json:\"isRecurring\" graphql:\"isRecurring\""
-	LastResentAt                  *models.DateTime     "json:\"lastResentAt,omitempty\" graphql:\"lastResentAt\""
-	LastRunAt                     *models.DateTime     "json:\"lastRunAt,omitempty\" graphql:\"lastRunAt\""
-	LaunchedAt                    *models.DateTime     "json:\"launchedAt,omitempty\" graphql:\"launchedAt\""
-	ManagedBy                     *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
-	Metadata                      map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Name                          string               "json:\"name\" graphql:\"name\""
-	NextRunAt                     *models.DateTime     "json:\"nextRunAt,omitempty\" graphql:\"nextRunAt\""
-	OwnerID                       *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RecipientCount                *int64               "json:\"recipientCount,omitempty\" graphql:\"recipientCount\""
-	RecurrenceCron                *string              "json:\"recurrenceCron,omitempty\" graphql:\"recurrenceCron\""
-	RecurrenceEndAt               *models.DateTime     "json:\"recurrenceEndAt,omitempty\" graphql:\"recurrenceEndAt\""
-	RecurrenceFrequency           *enums.Frequency     "json:\"recurrenceFrequency,omitempty\" graphql:\"recurrenceFrequency\""
-	RecurrenceInterval            *int64               "json:\"recurrenceInterval,omitempty\" graphql:\"recurrenceInterval\""
-	RecurrenceTimezone            *string              "json:\"recurrenceTimezone,omitempty\" graphql:\"recurrenceTimezone\""
-	ResendCount                   *int64               "json:\"resendCount,omitempty\" graphql:\"resendCount\""
-	ScheduledAt                   *models.DateTime     "json:\"scheduledAt,omitempty\" graphql:\"scheduledAt\""
-	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
-	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
-	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
-	Status                        enums.CampaignStatus "json:\"status\" graphql:\"status\""
-	Tags                          []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID                    *string              "json:\"templateID,omitempty\" graphql:\"templateID\""
-	TrustCenterID                 *string              "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt                     *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                     *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator         *string              "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	WorkflowEligibleMarker        *bool                "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
-}
-
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetAssessmentID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.AssessmentID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetCampaignType() *enums.CampaignType {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return &t.CampaignType
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetCompletedAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.CompletedAt
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetDisplayID() string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.DisplayID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetDueDate() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.DueDate
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetEmailBrandingID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.EmailBrandingID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetEmailTemplateID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.EmailTemplateID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetEntityID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.EntityID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetExternalID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.ExternalID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetID() string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetIntegrationID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.IntegrationID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetIntegrationRunID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.IntegrationRunID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetInternalOwner() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.InternalOwner
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetInternalOwnerGroupID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.InternalOwnerGroupID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetInternalOwnerIdentityHolderID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.InternalOwnerIdentityHolderID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetInternalOwnerUserID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.InternalOwnerUserID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetIsActive() bool {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.IsActive
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetIsRecurring() bool {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.IsRecurring
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetLastResentAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.LastResentAt
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetLastRunAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.LastRunAt
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetLaunchedAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.LaunchedAt
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetManagedBy() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.ManagedBy
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetMetadata() map[string]any {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.Metadata
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetName() string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.Name
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetNextRunAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.NextRunAt
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecipientCount() *int64 {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.RecipientCount
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceCron() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.RecurrenceCron
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceEndAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.RecurrenceEndAt
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceFrequency() *enums.Frequency {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.RecurrenceFrequency
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceInterval() *int64 {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.RecurrenceInterval
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceTimezone() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.RecurrenceTimezone
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetResendCount() *int64 {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.ResendCount
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetScheduledAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.ScheduledAt
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetSourceDefinitionID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.SourceDefinitionID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetSourceDefinitionVersion() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.SourceDefinitionVersion
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetSourceInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.SourceInstanceID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetStatus() *enums.CampaignStatus {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return &t.Status
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetTemplateID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.TemplateID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetTrustCenterID() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.TrustCenterID
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetWorkflowEligibleMarker() *bool {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
-	}
-	return t.WorkflowEligibleMarker
-}
-
-type CreateBulkCampaign_CreateBulkCampaign struct {
-	Campaigns []*CreateBulkCampaign_CreateBulkCampaign_Campaigns "json:\"campaigns,omitempty\" graphql:\"campaigns\""
-}
-
-func (t *CreateBulkCampaign_CreateBulkCampaign) GetCampaigns() []*CreateBulkCampaign_CreateBulkCampaign_Campaigns {
-	if t == nil {
-		t = &CreateBulkCampaign_CreateBulkCampaign{}
-	}
-	return t.Campaigns
-}
-
 type CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns struct {
 	AssessmentID                  *string              "json:\"assessmentID,omitempty\" graphql:\"assessmentID\""
 	CampaignType                  enums.CampaignType   "json:\"campaignType\" graphql:\"campaignType\""
@@ -12287,6 +11936,357 @@ type CreateBulkCSVCampaign_CreateBulkCSVCampaign struct {
 func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign) GetCampaigns() []*CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns {
 	if t == nil {
 		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign{}
+	}
+	return t.Campaigns
+}
+
+type CreateBulkCampaign_CreateBulkCampaign_Campaigns struct {
+	AssessmentID                  *string              "json:\"assessmentID,omitempty\" graphql:\"assessmentID\""
+	CampaignType                  enums.CampaignType   "json:\"campaignType\" graphql:\"campaignType\""
+	CompletedAt                   *models.DateTime     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt                     *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                     *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description                   *string              "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID                     string               "json:\"displayID\" graphql:\"displayID\""
+	DueDate                       *models.DateTime     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	EmailBrandingID               *string              "json:\"emailBrandingID,omitempty\" graphql:\"emailBrandingID\""
+	EmailTemplateID               *string              "json:\"emailTemplateID,omitempty\" graphql:\"emailTemplateID\""
+	EntityID                      *string              "json:\"entityID,omitempty\" graphql:\"entityID\""
+	ExternalID                    *string              "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                            string               "json:\"id\" graphql:\"id\""
+	IntegrationID                 *string              "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalOwner                 *string              "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	InternalOwnerGroupID          *string              "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
+	InternalOwnerIdentityHolderID *string              "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
+	InternalOwnerUserID           *string              "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
+	IsActive                      bool                 "json:\"isActive\" graphql:\"isActive\""
+	IsRecurring                   bool                 "json:\"isRecurring\" graphql:\"isRecurring\""
+	LastResentAt                  *models.DateTime     "json:\"lastResentAt,omitempty\" graphql:\"lastResentAt\""
+	LastRunAt                     *models.DateTime     "json:\"lastRunAt,omitempty\" graphql:\"lastRunAt\""
+	LaunchedAt                    *models.DateTime     "json:\"launchedAt,omitempty\" graphql:\"launchedAt\""
+	ManagedBy                     *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Metadata                      map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                          string               "json:\"name\" graphql:\"name\""
+	NextRunAt                     *models.DateTime     "json:\"nextRunAt,omitempty\" graphql:\"nextRunAt\""
+	OwnerID                       *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RecipientCount                *int64               "json:\"recipientCount,omitempty\" graphql:\"recipientCount\""
+	RecurrenceCron                *string              "json:\"recurrenceCron,omitempty\" graphql:\"recurrenceCron\""
+	RecurrenceEndAt               *models.DateTime     "json:\"recurrenceEndAt,omitempty\" graphql:\"recurrenceEndAt\""
+	RecurrenceFrequency           *enums.Frequency     "json:\"recurrenceFrequency,omitempty\" graphql:\"recurrenceFrequency\""
+	RecurrenceInterval            *int64               "json:\"recurrenceInterval,omitempty\" graphql:\"recurrenceInterval\""
+	RecurrenceTimezone            *string              "json:\"recurrenceTimezone,omitempty\" graphql:\"recurrenceTimezone\""
+	ResendCount                   *int64               "json:\"resendCount,omitempty\" graphql:\"resendCount\""
+	ScheduledAt                   *models.DateTime     "json:\"scheduledAt,omitempty\" graphql:\"scheduledAt\""
+	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Status                        enums.CampaignStatus "json:\"status\" graphql:\"status\""
+	Tags                          []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID                    *string              "json:\"templateID,omitempty\" graphql:\"templateID\""
+	TrustCenterID                 *string              "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt                     *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                     *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator         *string              "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	WorkflowEligibleMarker        *bool                "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
+}
+
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetAssessmentID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetCampaignType() *enums.CampaignType {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return &t.CampaignType
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetCompletedAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.CompletedAt
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetDueDate() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.DueDate
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetEmailBrandingID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.EmailBrandingID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetEmailTemplateID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.EmailTemplateID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetEntityID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.EntityID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetExternalID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.ExternalID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetID() string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetIntegrationID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.IntegrationID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.IntegrationRunID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetInternalOwner() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.InternalOwner
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetInternalOwnerGroupID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.InternalOwnerGroupID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetInternalOwnerIdentityHolderID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.InternalOwnerIdentityHolderID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetInternalOwnerUserID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.InternalOwnerUserID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetIsActive() bool {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.IsActive
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetIsRecurring() bool {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.IsRecurring
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetLastResentAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.LastResentAt
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetLastRunAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.LastRunAt
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetLaunchedAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.LaunchedAt
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.ManagedBy
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetName() string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetNextRunAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.NextRunAt
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecipientCount() *int64 {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.RecipientCount
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceCron() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.RecurrenceCron
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceEndAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.RecurrenceEndAt
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.RecurrenceFrequency
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceInterval() *int64 {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.RecurrenceInterval
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetRecurrenceTimezone() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.RecurrenceTimezone
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetResendCount() *int64 {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.ResendCount
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetScheduledAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.ScheduledAt
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.SourceInstanceID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetStatus() *enums.CampaignStatus {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetTemplateID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.TemplateID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.TrustCenterID
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkCampaign_CreateBulkCampaign_Campaigns) GetWorkflowEligibleMarker() *bool {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign_Campaigns{}
+	}
+	return t.WorkflowEligibleMarker
+}
+
+type CreateBulkCampaign_CreateBulkCampaign struct {
+	Campaigns []*CreateBulkCampaign_CreateBulkCampaign_Campaigns "json:\"campaigns,omitempty\" graphql:\"campaigns\""
+}
+
+func (t *CreateBulkCampaign_CreateBulkCampaign) GetCampaigns() []*CreateBulkCampaign_CreateBulkCampaign_Campaigns {
+	if t == nil {
+		t = &CreateBulkCampaign_CreateBulkCampaign{}
 	}
 	return t.Campaigns
 }
@@ -17158,161 +17158,6 @@ func (t *UpdateCampaignTarget_UpdateCampaignTarget) GetCampaignTarget() *UpdateC
 	return &t.CampaignTarget
 }
 
-type CreateBulkCheckResult_CreateBulkCheckResult_CheckResults struct {
-	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details                 *string           "json:\"details,omitempty\" graphql:\"details\""
-	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                      string            "json:\"id\" graphql:\"id\""
-	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
-	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
-	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
-	Source                  string            "json:\"source\" graphql:\"source\""
-	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
-	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
-	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
-	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
-	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy               *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator   *string           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetDetails() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.Details
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetExternalURI() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.ExternalURI
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetID() string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetIntegrationID() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.IntegrationID
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetIntegrationRunID() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.IntegrationRunID
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.LastObservedAt
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetManagedBy() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.ManagedBy
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetParentExternalID() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.ParentExternalID
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSource() string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.Source
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSourceDefinitionID() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.SourceDefinitionID
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSourceDefinitionVersion() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.SourceDefinitionVersion
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSourceInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.SourceInstanceID
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return &t.Status
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type CreateBulkCheckResult_CreateBulkCheckResult struct {
-	CheckResults []*CreateBulkCheckResult_CreateBulkCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
-}
-
-func (t *CreateBulkCheckResult_CreateBulkCheckResult) GetCheckResults() []*CreateBulkCheckResult_CreateBulkCheckResult_CheckResults {
-	if t == nil {
-		t = &CreateBulkCheckResult_CreateBulkCheckResult{}
-	}
-	return t.CheckResults
-}
-
 type CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults struct {
 	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -17464,6 +17309,161 @@ type CreateBulkCSVCheckResult_CreateBulkCSVCheckResult struct {
 func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult) GetCheckResults() []*CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults {
 	if t == nil {
 		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult{}
+	}
+	return t.CheckResults
+}
+
+type CreateBulkCheckResult_CreateBulkCheckResult_CheckResults struct {
+	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string           "json:\"details,omitempty\" graphql:\"details\""
+	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string            "json:\"id\" graphql:\"id\""
+	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
+	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
+	Source                  string            "json:\"source\" graphql:\"source\""
+	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
+	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetDetails() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.Details
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetExternalURI() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.ExternalURI
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetID() string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetIntegrationID() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.IntegrationID
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.IntegrationRunID
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.LastObservedAt
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.ManagedBy
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetParentExternalID() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.ParentExternalID
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSource() string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.Source
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.SourceInstanceID
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type CreateBulkCheckResult_CreateBulkCheckResult struct {
+	CheckResults []*CreateBulkCheckResult_CreateBulkCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
+}
+
+func (t *CreateBulkCheckResult_CreateBulkCheckResult) GetCheckResults() []*CreateBulkCheckResult_CreateBulkCheckResult_CheckResults {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult{}
 	}
 	return t.CheckResults
 }
@@ -18227,182 +18227,6 @@ func (t *GetCheckResults_CheckResults) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults struct {
-	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details                 *string           "json:\"details,omitempty\" graphql:\"details\""
-	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                      string            "json:\"id\" graphql:\"id\""
-	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
-	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
-	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
-	Source                  string            "json:\"source\" graphql:\"source\""
-	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
-	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
-	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
-	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
-	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy               *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator   *string           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetDetails() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.Details
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetExternalURI() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.ExternalURI
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetID() string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.ID
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetIntegrationID() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.IntegrationID
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetIntegrationRunID() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.IntegrationRunID
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.LastObservedAt
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetManagedBy() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.ManagedBy
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetOwnerID() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.OwnerID
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetParentExternalID() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.ParentExternalID
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSource() string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.Source
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSourceDefinitionID() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.SourceDefinitionID
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSourceDefinitionVersion() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.SourceDefinitionVersion
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSourceInstanceID() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.SourceInstanceID
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return &t.Status
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetTags() []string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.Tags
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.UpdatedBy
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type UpdateBulkCheckResult_UpdateBulkCheckResult struct {
-	CheckResults  []*UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
-	Error         *string                                                     "json:\"error,omitempty\" graphql:\"error\""
-	NotUpdatedIDs []string                                                    "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
-	UpdatedIDs    []string                                                    "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
-}
-
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetCheckResults() []*UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
-	}
-	return t.CheckResults
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetError() *string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
-	}
-	return t.Error
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetNotUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
-	}
-	return t.NotUpdatedIDs
-}
-func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
-	}
-	return t.UpdatedIDs
-}
-
 type UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults struct {
 	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -18575,6 +18399,182 @@ func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetNotUpdatedIDs() [
 func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetUpdatedIDs() []string {
 	if t == nil {
 		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults struct {
+	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string           "json:\"details,omitempty\" graphql:\"details\""
+	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string            "json:\"id\" graphql:\"id\""
+	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
+	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
+	Source                  string            "json:\"source\" graphql:\"source\""
+	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
+	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetExternalURI() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.ExternalURI
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetID() string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetIntegrationID() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.IntegrationID
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.IntegrationRunID
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.LastObservedAt
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.ManagedBy
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetParentExternalID() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.ParentExternalID
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSource() string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.Source
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.SourceInstanceID
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return &t.Status
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateBulkCheckResult_UpdateBulkCheckResult struct {
+	CheckResults  []*UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
+	Error         *string                                                     "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                    "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                                    "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetCheckResults() []*UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
+	}
+	return t.CheckResults
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
+	}
+	return t.NotUpdatedIDs
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
 	}
 	return t.UpdatedIDs
 }
@@ -64625,7 +64625,6 @@ func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes_Integrations) GetEdges() []*
 type CreateBulkCSVHush_CreateBulkCSVHush_Hushes struct {
 	CreatedAt             *time.Time                                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CredentialSet         *models.CredentialSet                                   "json:\"credentialSet,omitempty\" graphql:\"credentialSet\""
 	Description           *string                                                 "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt             *time.Time                                              "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID                    string                                                  "json:\"id\" graphql:\"id\""
@@ -64655,12 +64654,6 @@ func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetCreatedBy() *string {
 		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
 	}
 	return t.CreatedBy
-}
-func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetCredentialSet() *models.CredentialSet {
-	if t == nil {
-		t = &CreateBulkCSVHush_CreateBulkCSVHush_Hushes{}
-	}
-	return t.CredentialSet
 }
 func (t *CreateBulkCSVHush_CreateBulkCSVHush_Hushes) GetDescription() *string {
 	if t == nil {
@@ -64806,7 +64799,6 @@ func (t *CreateBulkHush_CreateBulkHush_Hushes_Integrations) GetEdges() []*Create
 type CreateBulkHush_CreateBulkHush_Hushes struct {
 	CreatedAt             *time.Time                                        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CredentialSet         *models.CredentialSet                             "json:\"credentialSet,omitempty\" graphql:\"credentialSet\""
 	Description           *string                                           "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt             *time.Time                                        "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID                    string                                            "json:\"id\" graphql:\"id\""
@@ -64836,12 +64828,6 @@ func (t *CreateBulkHush_CreateBulkHush_Hushes) GetCreatedBy() *string {
 		t = &CreateBulkHush_CreateBulkHush_Hushes{}
 	}
 	return t.CreatedBy
-}
-func (t *CreateBulkHush_CreateBulkHush_Hushes) GetCredentialSet() *models.CredentialSet {
-	if t == nil {
-		t = &CreateBulkHush_CreateBulkHush_Hushes{}
-	}
-	return t.CredentialSet
 }
 func (t *CreateBulkHush_CreateBulkHush_Hushes) GetDescription() *string {
 	if t == nil {
@@ -64987,7 +64973,6 @@ func (t *CreateHush_CreateHush_Hush_Integrations) GetEdges() []*CreateHush_Creat
 type CreateHush_CreateHush_Hush struct {
 	CreatedAt             *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CredentialSet         *models.CredentialSet                   "json:\"credentialSet,omitempty\" graphql:\"credentialSet\""
 	Description           *string                                 "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt             *time.Time                              "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID                    string                                  "json:\"id\" graphql:\"id\""
@@ -65017,12 +65002,6 @@ func (t *CreateHush_CreateHush_Hush) GetCreatedBy() *string {
 		t = &CreateHush_CreateHush_Hush{}
 	}
 	return t.CreatedBy
-}
-func (t *CreateHush_CreateHush_Hush) GetCredentialSet() *models.CredentialSet {
-	if t == nil {
-		t = &CreateHush_CreateHush_Hush{}
-	}
-	return t.CredentialSet
 }
 func (t *CreateHush_CreateHush_Hush) GetDescription() *string {
 	if t == nil {
@@ -65304,7 +65283,6 @@ func (t *GetHushByID_Hush_Integrations) GetEdges() []*GetHushByID_Hush_Integrati
 type GetHushByID_Hush struct {
 	CreatedAt             *time.Time                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CredentialSet         *models.CredentialSet         "json:\"credentialSet,omitempty\" graphql:\"credentialSet\""
 	Description           *string                       "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt             *time.Time                    "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID                    string                        "json:\"id\" graphql:\"id\""
@@ -65334,12 +65312,6 @@ func (t *GetHushByID_Hush) GetCreatedBy() *string {
 		t = &GetHushByID_Hush{}
 	}
 	return t.CreatedBy
-}
-func (t *GetHushByID_Hush) GetCredentialSet() *models.CredentialSet {
-	if t == nil {
-		t = &GetHushByID_Hush{}
-	}
-	return t.CredentialSet
 }
 func (t *GetHushByID_Hush) GetDescription() *string {
 	if t == nil {
@@ -65610,7 +65582,6 @@ func (t *UpdateHush_UpdateHush_Hush_Integrations) GetEdges() []*UpdateHush_Updat
 type UpdateHush_UpdateHush_Hush struct {
 	CreatedAt             *time.Time                              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string                                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	CredentialSet         *models.CredentialSet                   "json:\"credentialSet,omitempty\" graphql:\"credentialSet\""
 	Description           *string                                 "json:\"description,omitempty\" graphql:\"description\""
 	ExpiresAt             *time.Time                              "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	ID                    string                                  "json:\"id\" graphql:\"id\""
@@ -65640,12 +65611,6 @@ func (t *UpdateHush_UpdateHush_Hush) GetCreatedBy() *string {
 		t = &UpdateHush_UpdateHush_Hush{}
 	}
 	return t.CreatedBy
-}
-func (t *UpdateHush_UpdateHush_Hush) GetCredentialSet() *models.CredentialSet {
-	if t == nil {
-		t = &UpdateHush_UpdateHush_Hush{}
-	}
-	return t.CredentialSet
 }
 func (t *UpdateHush_UpdateHush_Hush) GetDescription() *string {
 	if t == nil {
@@ -87814,7 +87779,6 @@ type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	BillingContact                   *string                                                                  "json:\"billingContact,omitempty\" graphql:\"billingContact\""
 	BillingEmail                     *string                                                                  "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone                     *string                                                                  "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	ComplianceWebhookToken           *string                                                                  "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
 	CreatedAt                        *time.Time                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                        *string                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Domains                          []string                                                                 "json:\"domains,omitempty\" graphql:\"domains\""
@@ -87822,7 +87786,6 @@ type GetAllOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	ID                               string                                                                   "json:\"id\" graphql:\"id\""
 	IdentityProvider                 *enums.SSOProvider                                                       "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
 	IdentityProviderAuthTested       bool                                                                     "json:\"identityProviderAuthTested\" graphql:\"identityProviderAuthTested\""
-	IdentityProviderClientSecret     *string                                                                  "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string                                                                  "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderLoginEnforced    bool                                                                     "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
 	IdentityProviderMetadataEndpoint *string                                                                  "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
@@ -87870,12 +87833,6 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingP
 	}
 	return t.BillingPhone
 }
-func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetComplianceWebhookToken() *string {
-	if t == nil {
-		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
-	}
-	return t.ComplianceWebhookToken
-}
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -87917,12 +87874,6 @@ func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentity
 		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.IdentityProviderAuthTested
-}
-func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
-	if t == nil {
-		t = &GetAllOrganizationSettings_OrganizationSettings_Edges_Node{}
-	}
-	return t.IdentityProviderClientSecret
 }
 func (t *GetAllOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderEntityID() *string {
 	if t == nil {
@@ -88028,7 +87979,6 @@ type GetOrganizationSettingByID_OrganizationSetting struct {
 	BillingEmail                     *string                                                      "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingNotificationsEnabled      bool                                                         "json:\"billingNotificationsEnabled\" graphql:\"billingNotificationsEnabled\""
 	BillingPhone                     *string                                                      "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	ComplianceWebhookToken           *string                                                      "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
 	CreatedAt                        *time.Time                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                        *string                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Domains                          []string                                                     "json:\"domains,omitempty\" graphql:\"domains\""
@@ -88037,7 +87987,6 @@ type GetOrganizationSettingByID_OrganizationSetting struct {
 	IdentityProvider                 *enums.SSOProvider                                           "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
 	IdentityProviderAuthTested       bool                                                         "json:\"identityProviderAuthTested\" graphql:\"identityProviderAuthTested\""
 	IdentityProviderClientID         *string                                                      "json:\"identityProviderClientID,omitempty\" graphql:\"identityProviderClientID\""
-	IdentityProviderClientSecret     *string                                                      "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string                                                      "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderJitProvisioning  bool                                                         "json:\"identityProviderJitProvisioning\" graphql:\"identityProviderJitProvisioning\""
 	IdentityProviderLoginEnforced    bool                                                         "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
@@ -88108,12 +88057,6 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetBillingPhone() *stri
 	}
 	return t.BillingPhone
 }
-func (t *GetOrganizationSettingByID_OrganizationSetting) GetComplianceWebhookToken() *string {
-	if t == nil {
-		t = &GetOrganizationSettingByID_OrganizationSetting{}
-	}
-	return t.ComplianceWebhookToken
-}
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
@@ -88161,12 +88104,6 @@ func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderClie
 		t = &GetOrganizationSettingByID_OrganizationSetting{}
 	}
 	return t.IdentityProviderClientID
-}
-func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderClientSecret() *string {
-	if t == nil {
-		t = &GetOrganizationSettingByID_OrganizationSetting{}
-	}
-	return t.IdentityProviderClientSecret
 }
 func (t *GetOrganizationSettingByID_OrganizationSetting) GetIdentityProviderEntityID() *string {
 	if t == nil {
@@ -88314,7 +88251,6 @@ type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	BillingContact                   *string                                                               "json:\"billingContact,omitempty\" graphql:\"billingContact\""
 	BillingEmail                     *string                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingPhone                     *string                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	ComplianceWebhookToken           *string                                                               "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
 	CreatedAt                        *time.Time                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                        *string                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Domains                          []string                                                              "json:\"domains,omitempty\" graphql:\"domains\""
@@ -88322,7 +88258,6 @@ type GetOrganizationSettings_OrganizationSettings_Edges_Node struct {
 	ID                               string                                                                "json:\"id\" graphql:\"id\""
 	IdentityProvider                 *enums.SSOProvider                                                    "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
 	IdentityProviderAuthTested       bool                                                                  "json:\"identityProviderAuthTested\" graphql:\"identityProviderAuthTested\""
-	IdentityProviderClientSecret     *string                                                               "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string                                                               "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderLoginEnforced    bool                                                                  "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
 	IdentityProviderMetadataEndpoint *string                                                               "json:\"identityProviderMetadataEndpoint,omitempty\" graphql:\"identityProviderMetadataEndpoint\""
@@ -88370,12 +88305,6 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetBillingPhon
 	}
 	return t.BillingPhone
 }
-func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetComplianceWebhookToken() *string {
-	if t == nil {
-		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
-	}
-	return t.ComplianceWebhookToken
-}
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
@@ -88417,12 +88346,6 @@ func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityPro
 		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
 	}
 	return t.IdentityProviderAuthTested
-}
-func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderClientSecret() *string {
-	if t == nil {
-		t = &GetOrganizationSettings_OrganizationSettings_Edges_Node{}
-	}
-	return t.IdentityProviderClientSecret
 }
 func (t *GetOrganizationSettings_OrganizationSettings_Edges_Node) GetIdentityProviderEntityID() *string {
 	if t == nil {
@@ -88528,7 +88451,6 @@ type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting str
 	BillingEmail                     *string                                                                               "json:\"billingEmail,omitempty\" graphql:\"billingEmail\""
 	BillingNotificationsEnabled      bool                                                                                  "json:\"billingNotificationsEnabled\" graphql:\"billingNotificationsEnabled\""
 	BillingPhone                     *string                                                                               "json:\"billingPhone,omitempty\" graphql:\"billingPhone\""
-	ComplianceWebhookToken           *string                                                                               "json:\"complianceWebhookToken,omitempty\" graphql:\"complianceWebhookToken\""
 	CreatedAt                        *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                        *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Domains                          []string                                                                              "json:\"domains,omitempty\" graphql:\"domains\""
@@ -88537,7 +88459,6 @@ type UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting str
 	IdentityProvider                 *enums.SSOProvider                                                                    "json:\"identityProvider,omitempty\" graphql:\"identityProvider\""
 	IdentityProviderAuthTested       bool                                                                                  "json:\"identityProviderAuthTested\" graphql:\"identityProviderAuthTested\""
 	IdentityProviderClientID         *string                                                                               "json:\"identityProviderClientID,omitempty\" graphql:\"identityProviderClientID\""
-	IdentityProviderClientSecret     *string                                                                               "json:\"identityProviderClientSecret,omitempty\" graphql:\"identityProviderClientSecret\""
 	IdentityProviderEntityID         *string                                                                               "json:\"identityProviderEntityID,omitempty\" graphql:\"identityProviderEntityID\""
 	IdentityProviderJitProvisioning  bool                                                                                  "json:\"identityProviderJitProvisioning\" graphql:\"identityProviderJitProvisioning\""
 	IdentityProviderLoginEnforced    bool                                                                                  "json:\"identityProviderLoginEnforced\" graphql:\"identityProviderLoginEnforced\""
@@ -88608,12 +88529,6 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 	}
 	return t.BillingPhone
 }
-func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetComplianceWebhookToken() *string {
-	if t == nil {
-		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
-	}
-	return t.ComplianceWebhookToken
-}
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
@@ -88661,12 +88576,6 @@ func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting
 		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
 	}
 	return t.IdentityProviderClientID
-}
-func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderClientSecret() *string {
-	if t == nil {
-		t = &UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting{}
-	}
-	return t.IdentityProviderClientSecret
 }
 func (t *UpdateOrganizationSetting_UpdateOrganizationSetting_OrganizationSetting) GetIdentityProviderEntityID() *string {
 	if t == nil {
@@ -140546,6 +140455,64 @@ func (t *CreateTrustCenterCompliance_CreateTrustCenterCompliance) GetTrustCenter
 	return &t.TrustCenterCompliance
 }
 
+type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs struct {
+	TotalCount int64 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs{}
+	}
+	return t.TotalCount
+}
+
+type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard struct {
+	ID              string                                                                                                                 "json:\"id\" graphql:\"id\""
+	TrustCenterDocs CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs "json:\"trustCenterDocs\" graphql:\"trustCenterDocs\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetTrustCenterDocs() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return &t.TrustCenterDocs
+}
+
+type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance struct {
+	ID       string                                                                                                 "json:\"id\" graphql:\"id\""
+	Standard CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard "json:\"standard\" graphql:\"standard\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance) GetStandard() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return &t.Standard
+}
+
+type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance struct {
+	TrustCenterCompliance CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance "json:\"trustCenterCompliance\" graphql:\"trustCenterCompliance\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance) GetTrustCenterCompliance() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance{}
+	}
+	return &t.TrustCenterCompliance
+}
+
 type DeleteTrustCenterCompliance_DeleteTrustCenterCompliance struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -141222,64 +141189,6 @@ type UpdateTrustCenterCompliance_UpdateTrustCenterCompliance struct {
 func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance) GetTrustCenterCompliance() *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance_TrustCenterCompliance {
 	if t == nil {
 		t = &UpdateTrustCenterCompliance_UpdateTrustCenterCompliance{}
-	}
-	return &t.TrustCenterCompliance
-}
-
-type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs struct {
-	TotalCount int64 "json:\"totalCount\" graphql:\"totalCount\""
-}
-
-func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs) GetTotalCount() int64 {
-	if t == nil {
-		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs{}
-	}
-	return t.TotalCount
-}
-
-type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard struct {
-	ID              string                                                                                                                 "json:\"id\" graphql:\"id\""
-	TrustCenterDocs CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs "json:\"trustCenterDocs\" graphql:\"trustCenterDocs\""
-}
-
-func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetID() string {
-	if t == nil {
-		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
-	}
-	return t.ID
-}
-func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetTrustCenterDocs() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs {
-	if t == nil {
-		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
-	}
-	return &t.TrustCenterDocs
-}
-
-type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance struct {
-	ID       string                                                                                                 "json:\"id\" graphql:\"id\""
-	Standard CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard "json:\"standard\" graphql:\"standard\""
-}
-
-func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance) GetID() string {
-	if t == nil {
-		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance{}
-	}
-	return t.ID
-}
-func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance) GetStandard() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard {
-	if t == nil {
-		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance{}
-	}
-	return &t.Standard
-}
-
-type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance struct {
-	TrustCenterCompliance CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance "json:\"trustCenterCompliance\" graphql:\"trustCenterCompliance\""
-}
-
-func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance) GetTrustCenterCompliance() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance {
-	if t == nil {
-		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance{}
 	}
 	return &t.TrustCenterCompliance
 }
@@ -173220,17 +173129,6 @@ func (t *UpdateBulkCSVAsset) GetUpdateBulkCSVAsset() *UpdateBulkCSVAsset_UpdateB
 	return &t.UpdateBulkCSVAsset
 }
 
-type CreateBulkCampaign struct {
-	CreateBulkCampaign CreateBulkCampaign_CreateBulkCampaign "json:\"createBulkCampaign\" graphql:\"createBulkCampaign\""
-}
-
-func (t *CreateBulkCampaign) GetCreateBulkCampaign() *CreateBulkCampaign_CreateBulkCampaign {
-	if t == nil {
-		t = &CreateBulkCampaign{}
-	}
-	return &t.CreateBulkCampaign
-}
-
 type CreateBulkCSVCampaign struct {
 	CreateBulkCSVCampaign CreateBulkCSVCampaign_CreateBulkCSVCampaign "json:\"createBulkCSVCampaign\" graphql:\"createBulkCSVCampaign\""
 }
@@ -173240,6 +173138,17 @@ func (t *CreateBulkCSVCampaign) GetCreateBulkCSVCampaign() *CreateBulkCSVCampaig
 		t = &CreateBulkCSVCampaign{}
 	}
 	return &t.CreateBulkCSVCampaign
+}
+
+type CreateBulkCampaign struct {
+	CreateBulkCampaign CreateBulkCampaign_CreateBulkCampaign "json:\"createBulkCampaign\" graphql:\"createBulkCampaign\""
+}
+
+func (t *CreateBulkCampaign) GetCreateBulkCampaign() *CreateBulkCampaign_CreateBulkCampaign {
+	if t == nil {
+		t = &CreateBulkCampaign{}
+	}
+	return &t.CreateBulkCampaign
 }
 
 type CreateCampaign struct {
@@ -173451,17 +173360,6 @@ func (t *UpdateCampaignTarget) GetUpdateCampaignTarget() *UpdateCampaignTarget_U
 	return &t.UpdateCampaignTarget
 }
 
-type CreateBulkCheckResult struct {
-	CreateBulkCheckResult CreateBulkCheckResult_CreateBulkCheckResult "json:\"createBulkCheckResult\" graphql:\"createBulkCheckResult\""
-}
-
-func (t *CreateBulkCheckResult) GetCreateBulkCheckResult() *CreateBulkCheckResult_CreateBulkCheckResult {
-	if t == nil {
-		t = &CreateBulkCheckResult{}
-	}
-	return &t.CreateBulkCheckResult
-}
-
 type CreateBulkCSVCheckResult struct {
 	CreateBulkCSVCheckResult CreateBulkCSVCheckResult_CreateBulkCSVCheckResult "json:\"createBulkCSVCheckResult\" graphql:\"createBulkCSVCheckResult\""
 }
@@ -173471,6 +173369,17 @@ func (t *CreateBulkCSVCheckResult) GetCreateBulkCSVCheckResult() *CreateBulkCSVC
 		t = &CreateBulkCSVCheckResult{}
 	}
 	return &t.CreateBulkCSVCheckResult
+}
+
+type CreateBulkCheckResult struct {
+	CreateBulkCheckResult CreateBulkCheckResult_CreateBulkCheckResult "json:\"createBulkCheckResult\" graphql:\"createBulkCheckResult\""
+}
+
+func (t *CreateBulkCheckResult) GetCreateBulkCheckResult() *CreateBulkCheckResult_CreateBulkCheckResult {
+	if t == nil {
+		t = &CreateBulkCheckResult{}
+	}
+	return &t.CreateBulkCheckResult
 }
 
 type CreateCheckResult struct {
@@ -173539,17 +173448,6 @@ func (t *GetCheckResults) GetCheckResults() *GetCheckResults_CheckResults {
 	return &t.CheckResults
 }
 
-type UpdateBulkCheckResult struct {
-	UpdateBulkCheckResult UpdateBulkCheckResult_UpdateBulkCheckResult "json:\"updateBulkCheckResult\" graphql:\"updateBulkCheckResult\""
-}
-
-func (t *UpdateBulkCheckResult) GetUpdateBulkCheckResult() *UpdateBulkCheckResult_UpdateBulkCheckResult {
-	if t == nil {
-		t = &UpdateBulkCheckResult{}
-	}
-	return &t.UpdateBulkCheckResult
-}
-
 type UpdateBulkCSVCheckResult struct {
 	UpdateBulkCSVCheckResult UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult "json:\"updateBulkCSVCheckResult\" graphql:\"updateBulkCSVCheckResult\""
 }
@@ -173559,6 +173457,17 @@ func (t *UpdateBulkCSVCheckResult) GetUpdateBulkCSVCheckResult() *UpdateBulkCSVC
 		t = &UpdateBulkCSVCheckResult{}
 	}
 	return &t.UpdateBulkCSVCheckResult
+}
+
+type UpdateBulkCheckResult struct {
+	UpdateBulkCheckResult UpdateBulkCheckResult_UpdateBulkCheckResult "json:\"updateBulkCheckResult\" graphql:\"updateBulkCheckResult\""
+}
+
+func (t *UpdateBulkCheckResult) GetUpdateBulkCheckResult() *UpdateBulkCheckResult_UpdateBulkCheckResult {
+	if t == nil {
+		t = &UpdateBulkCheckResult{}
+	}
+	return &t.UpdateBulkCheckResult
 }
 
 type UpdateCheckResult struct {
@@ -179156,6 +179065,17 @@ func (t *CreateTrustCenterCompliance) GetCreateTrustCenterCompliance() *CreateTr
 	return &t.CreateTrustCenterCompliance
 }
 
+type CreateTrustCenterComplianceWithStandardDocs struct {
+	CreateTrustCenterCompliance CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance "json:\"createTrustCenterCompliance\" graphql:\"createTrustCenterCompliance\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs) GetCreateTrustCenterCompliance() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs{}
+	}
+	return &t.CreateTrustCenterCompliance
+}
+
 type DeleteTrustCenterCompliance struct {
 	DeleteTrustCenterCompliance DeleteTrustCenterCompliance_DeleteTrustCenterCompliance "json:\"deleteTrustCenterCompliance\" graphql:\"deleteTrustCenterCompliance\""
 }
@@ -179209,17 +179129,6 @@ func (t *UpdateTrustCenterCompliance) GetUpdateTrustCenterCompliance() *UpdateTr
 		t = &UpdateTrustCenterCompliance{}
 	}
 	return &t.UpdateTrustCenterCompliance
-}
-
-type CreateTrustCenterComplianceWithStandardDocs struct {
-	CreateTrustCenterCompliance CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance "json:\"createTrustCenterCompliance\" graphql:\"createTrustCenterCompliance\""
-}
-
-func (t *CreateTrustCenterComplianceWithStandardDocs) GetCreateTrustCenterCompliance() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance {
-	if t == nil {
-		t = &CreateTrustCenterComplianceWithStandardDocs{}
-	}
-	return &t.CreateTrustCenterCompliance
 }
 
 type CreateTrustCenterDoc struct {
@@ -183834,79 +183743,6 @@ func (c *Client) UpdateBulkCSVAsset(ctx context.Context, input graphql.Upload, i
 	return &res, nil
 }
 
-const CreateBulkCampaignDocument = `mutation CreateBulkCampaign ($input: [CreateCampaignInput!]) {
-	createBulkCampaign(input: $input) {
-		campaigns {
-			assessmentID
-			campaignType
-			completedAt
-			createdAt
-			createdBy
-			description
-			displayID
-			dueDate
-			emailBrandingID
-			emailTemplateID
-			entityID
-			externalID
-			id
-			integrationID
-			integrationRunID
-			internalOwner
-			internalOwnerGroupID
-			internalOwnerIdentityHolderID
-			internalOwnerUserID
-			isActive
-			isRecurring
-			lastResentAt
-			lastRunAt
-			launchedAt
-			managedBy
-			metadata
-			name
-			nextRunAt
-			ownerID
-			recipientCount
-			recurrenceCron
-			recurrenceEndAt
-			recurrenceFrequency
-			recurrenceInterval
-			recurrenceTimezone
-			resendCount
-			scheduledAt
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			templateID
-			trustCenterID
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			workflowEligibleMarker
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCampaign(ctx context.Context, input []*CreateCampaignInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCampaign, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCampaign
-	if err := c.Client.Post(ctx, "CreateBulkCampaign", CreateBulkCampaignDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateBulkCSVCampaignDocument = `mutation CreateBulkCSVCampaign ($input: Upload!) {
 	createBulkCSVCampaign(input: $input) {
 		campaigns {
@@ -183970,6 +183806,79 @@ func (c *Client) CreateBulkCSVCampaign(ctx context.Context, input graphql.Upload
 
 	var res CreateBulkCSVCampaign
 	if err := c.Client.Post(ctx, "CreateBulkCSVCampaign", CreateBulkCSVCampaignDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCampaignDocument = `mutation CreateBulkCampaign ($input: [CreateCampaignInput!]) {
+	createBulkCampaign(input: $input) {
+		campaigns {
+			assessmentID
+			campaignType
+			completedAt
+			createdAt
+			createdBy
+			description
+			displayID
+			dueDate
+			emailBrandingID
+			emailTemplateID
+			entityID
+			externalID
+			id
+			integrationID
+			integrationRunID
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
+			isActive
+			isRecurring
+			lastResentAt
+			lastRunAt
+			launchedAt
+			managedBy
+			metadata
+			name
+			nextRunAt
+			ownerID
+			recipientCount
+			recurrenceCron
+			recurrenceEndAt
+			recurrenceFrequency
+			recurrenceInterval
+			recurrenceTimezone
+			resendCount
+			scheduledAt
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			status
+			tags
+			templateID
+			trustCenterID
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			workflowEligibleMarker
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCampaign(ctx context.Context, input []*CreateCampaignInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCampaign, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCampaign
+	if err := c.Client.Post(ctx, "CreateBulkCampaign", CreateBulkCampaignDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -185137,51 +185046,6 @@ func (c *Client) UpdateCampaignTarget(ctx context.Context, updateCampaignTargetI
 	return &res, nil
 }
 
-const CreateBulkCheckResultDocument = `mutation CreateBulkCheckResult ($input: [CreateCheckResultInput!]) {
-	createBulkCheckResult(input: $input) {
-		checkResults {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			ownerID
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCheckResult(ctx context.Context, input []*CreateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCheckResult, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCheckResult
-	if err := c.Client.Post(ctx, "CreateBulkCheckResult", CreateBulkCheckResultDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateBulkCSVCheckResultDocument = `mutation CreateBulkCSVCheckResult ($input: Upload!) {
 	createBulkCSVCheckResult(input: $input) {
 		checkResults {
@@ -185217,6 +185081,51 @@ func (c *Client) CreateBulkCSVCheckResult(ctx context.Context, input graphql.Upl
 
 	var res CreateBulkCSVCheckResult
 	if err := c.Client.Post(ctx, "CreateBulkCSVCheckResult", CreateBulkCSVCheckResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCheckResultDocument = `mutation CreateBulkCheckResult ($input: [CreateCheckResultInput!]) {
+	createBulkCheckResult(input: $input) {
+		checkResults {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			integrationRunID
+			lastObservedAt
+			managedBy
+			ownerID
+			parentExternalID
+			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			status
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCheckResult(ctx context.Context, input []*CreateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCheckResult, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCheckResult
+	if err := c.Client.Post(ctx, "CreateBulkCheckResult", CreateBulkCheckResultDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -185482,6 +185391,54 @@ func (c *Client) GetCheckResults(ctx context.Context, first *int64, last *int64,
 	return &res, nil
 }
 
+const UpdateBulkCSVCheckResultDocument = `mutation UpdateBulkCSVCheckResult ($input: Upload!) {
+	updateBulkCSVCheckResult(input: $input) {
+		checkResults {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			integrationRunID
+			lastObservedAt
+			managedBy
+			ownerID
+			parentExternalID
+			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			status
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+		updatedIDs
+		notUpdatedIDs
+		error
+	}
+}
+`
+
+func (c *Client) UpdateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVCheckResult, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkCSVCheckResult
+	if err := c.Client.Post(ctx, "UpdateBulkCSVCheckResult", UpdateBulkCSVCheckResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const UpdateBulkCheckResultDocument = `mutation UpdateBulkCheckResult ($ids: [ID!]!, $input: UpdateCheckResultInput!) {
 	updateBulkCheckResult(ids: $ids, input: $input) {
 		checkResults {
@@ -185521,54 +185478,6 @@ func (c *Client) UpdateBulkCheckResult(ctx context.Context, ids []string, input 
 
 	var res UpdateBulkCheckResult
 	if err := c.Client.Post(ctx, "UpdateBulkCheckResult", UpdateBulkCheckResultDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const UpdateBulkCSVCheckResultDocument = `mutation UpdateBulkCSVCheckResult ($input: Upload!) {
-	updateBulkCSVCheckResult(input: $input) {
-		checkResults {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			ownerID
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-		updatedIDs
-		notUpdatedIDs
-		error
-	}
-}
-`
-
-func (c *Client) UpdateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVCheckResult, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res UpdateBulkCSVCheckResult
-	if err := c.Client.Post(ctx, "UpdateBulkCSVCheckResult", UpdateBulkCSVCheckResultDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -197289,7 +197198,6 @@ const CreateBulkCSVHushDocument = `mutation CreateBulkCSVHush ($input: Upload!) 
 		hushes {
 			createdAt
 			createdBy
-			credentialSet
 			description
 			expiresAt
 			id
@@ -197339,7 +197247,6 @@ const CreateBulkHushDocument = `mutation CreateBulkHush ($input: [CreateHushInpu
 		hushes {
 			createdAt
 			createdBy
-			credentialSet
 			description
 			expiresAt
 			id
@@ -197389,7 +197296,6 @@ const CreateHushDocument = `mutation CreateHush ($input: CreateHushInput!) {
 		hush {
 			createdAt
 			createdBy
-			credentialSet
 			description
 			expiresAt
 			id
@@ -197480,7 +197386,6 @@ const GetHushByIDDocument = `query GetHushByID ($hushId: ID!) {
 	hush(id: $hushId) {
 		createdAt
 		createdBy
-		credentialSet
 		description
 		expiresAt
 		id
@@ -197573,7 +197478,6 @@ const UpdateHushDocument = `mutation UpdateHush ($updateHushId: ID!, $input: Upd
 		hush {
 			createdAt
 			createdBy
-			credentialSet
 			description
 			expiresAt
 			id
@@ -203073,9 +202977,7 @@ const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 				identityProviderEntityID
 				identityProviderLoginEnforced
 				oidcDiscoveryEndpoint
-				identityProviderClientSecret
 				identityProviderMetadataEndpoint
-				complianceWebhookToken
 				organization {
 					id
 					displayName
@@ -203111,7 +203013,6 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 		billingEmail
 		billingNotificationsEnabled
 		billingPhone
-		complianceWebhookToken
 		createdAt
 		createdBy
 		domains
@@ -203120,7 +203021,6 @@ const GetOrganizationSettingByIDDocument = `query GetOrganizationSettingByID ($o
 		identityProvider
 		identityProviderAuthTested
 		identityProviderClientID
-		identityProviderClientSecret
 		identityProviderEntityID
 		identityProviderJitProvisioning
 		identityProviderLoginEnforced
@@ -203188,10 +203088,8 @@ const GetOrganizationSettingsDocument = `query GetOrganizationSettings ($where: 
 				identityProviderEntityID
 				identityProviderLoginEnforced
 				oidcDiscoveryEndpoint
-				identityProviderClientSecret
 				identityProviderMetadataEndpoint
 				identityProviderAuthTested
-				complianceWebhookToken
 				organization {
 					id
 					displayName
@@ -203230,7 +203128,6 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			billingEmail
 			billingNotificationsEnabled
 			billingPhone
-			complianceWebhookToken
 			createdAt
 			createdBy
 			domains
@@ -203239,7 +203136,6 @@ const UpdateOrganizationSettingDocument = `mutation UpdateOrganizationSetting ($
 			identityProvider
 			identityProviderAuthTested
 			identityProviderClientID
-			identityProviderClientSecret
 			identityProviderEntityID
 			identityProviderJitProvisioning
 			identityProviderLoginEnforced
@@ -215552,6 +215448,38 @@ func (c *Client) CreateTrustCenterCompliance(ctx context.Context, input CreateTr
 	return &res, nil
 }
 
+const CreateTrustCenterComplianceWithStandardDocsDocument = `mutation CreateTrustCenterComplianceWithStandardDocs ($input: CreateTrustCenterComplianceInput!) {
+	createTrustCenterCompliance(input: $input) {
+		trustCenterCompliance {
+			id
+			standard {
+				id
+				trustCenterDocs {
+					totalCount
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterComplianceWithStandardDocs(ctx context.Context, input CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterComplianceWithStandardDocs, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenterComplianceWithStandardDocs
+	if err := c.Client.Post(ctx, "CreateTrustCenterComplianceWithStandardDocs", CreateTrustCenterComplianceWithStandardDocsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteTrustCenterComplianceDocument = `mutation DeleteTrustCenterCompliance ($deleteTrustCenterComplianceId: ID!) {
 	deleteTrustCenterCompliance(id: $deleteTrustCenterComplianceId) {
 		deletedID
@@ -215757,38 +215685,6 @@ func (c *Client) UpdateTrustCenterCompliance(ctx context.Context, updateTrustCen
 
 	var res UpdateTrustCenterCompliance
 	if err := c.Client.Post(ctx, "UpdateTrustCenterCompliance", UpdateTrustCenterComplianceDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateTrustCenterComplianceWithStandardDocsDocument = `mutation CreateTrustCenterComplianceWithStandardDocs ($input: CreateTrustCenterComplianceInput!) {
-	createTrustCenterCompliance(input: $input) {
-		trustCenterCompliance {
-			id
-			standard {
-				id
-				trustCenterDocs {
-					totalCount
-				}
-			}
-		}
-	}
-}
-`
-
-func (c *Client) CreateTrustCenterComplianceWithStandardDocs(ctx context.Context, input CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterComplianceWithStandardDocs, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateTrustCenterComplianceWithStandardDocs
-	if err := c.Client.Post(ctx, "CreateTrustCenterComplianceWithStandardDocs", CreateTrustCenterComplianceWithStandardDocsDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -224467,8 +224363,8 @@ var DocumentOperationNames = map[string]string{
 	UpdateAssetDocument:                                 "UpdateAsset",
 	UpdateBulkAssetDocument:                             "UpdateBulkAsset",
 	UpdateBulkCSVAssetDocument:                          "UpdateBulkCSVAsset",
-	CreateBulkCampaignDocument:                          "CreateBulkCampaign",
 	CreateBulkCSVCampaignDocument:                       "CreateBulkCSVCampaign",
+	CreateBulkCampaignDocument:                          "CreateBulkCampaign",
 	CreateCampaignDocument:                              "CreateCampaign",
 	DeleteCampaignDocument:                              "DeleteCampaign",
 	GetAllCampaignsDocument:                             "GetAllCampaigns",
@@ -224488,16 +224384,16 @@ var DocumentOperationNames = map[string]string{
 	GetCampaignTargetByIDDocument:                       "GetCampaignTargetByID",
 	GetCampaignTargetsDocument:                          "GetCampaignTargets",
 	UpdateCampaignTargetDocument:                        "UpdateCampaignTarget",
-	CreateBulkCheckResultDocument:                       "CreateBulkCheckResult",
 	CreateBulkCSVCheckResultDocument:                    "CreateBulkCSVCheckResult",
+	CreateBulkCheckResultDocument:                       "CreateBulkCheckResult",
 	CreateCheckResultDocument:                           "CreateCheckResult",
 	DeleteBulkCheckResultDocument:                       "DeleteBulkCheckResult",
 	DeleteCheckResultDocument:                           "DeleteCheckResult",
 	GetAllCheckResultsDocument:                          "GetAllCheckResults",
 	GetCheckResultByIDDocument:                          "GetCheckResultByID",
 	GetCheckResultsDocument:                             "GetCheckResults",
-	UpdateBulkCheckResultDocument:                       "UpdateBulkCheckResult",
 	UpdateBulkCSVCheckResultDocument:                    "UpdateBulkCSVCheckResult",
+	UpdateBulkCheckResultDocument:                       "UpdateBulkCheckResult",
 	UpdateCheckResultDocument:                           "UpdateCheckResult",
 	CreateBulkCSVContactDocument:                        "CreateBulkCSVContact",
 	CreateBulkContactDocument:                           "CreateBulkContact",
@@ -225006,12 +224902,12 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkCSVTrustCenterComplianceDocument:          "CreateBulkCSVTrustCenterCompliance",
 	CreateBulkTrustCenterComplianceDocument:             "CreateBulkTrustCenterCompliance",
 	CreateTrustCenterComplianceDocument:                 "CreateTrustCenterCompliance",
+	CreateTrustCenterComplianceWithStandardDocsDocument: "CreateTrustCenterComplianceWithStandardDocs",
 	DeleteTrustCenterComplianceDocument:                 "DeleteTrustCenterCompliance",
 	GetAllTrustCenterCompliancesDocument:                "GetAllTrustCenterCompliances",
 	GetTrustCenterComplianceByIDDocument:                "GetTrustCenterComplianceByID",
 	GetTrustCenterCompliancesDocument:                   "GetTrustCenterCompliances",
 	UpdateTrustCenterComplianceDocument:                 "UpdateTrustCenterCompliance",
-	CreateTrustCenterComplianceWithStandardDocsDocument: "CreateTrustCenterComplianceWithStandardDocs",
 	CreateTrustCenterDocDocument:                        "CreateTrustCenterDoc",
 	DeleteTrustCenterDocDocument:                        "DeleteTrustCenterDoc",
 	GetAllTrustCenterDocsDocument:                       "GetAllTrustCenterDocs",

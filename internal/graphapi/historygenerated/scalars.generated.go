@@ -283,16 +283,6 @@ func (ec *executionContext) marshalOAssignmentOutcome2githubᚗcomᚋtheopenlane
 	return v
 }
 
-func (ec *executionContext) unmarshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐCredentialSet(ctx context.Context, v any) (models.CredentialSet, error) {
-	var res models.CredentialSet
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐCredentialSet(ctx context.Context, sel ast.SelectionSet, v models.CredentialSet) graphql.Marshaler {
-	return v
-}
-
 func (ec *executionContext) unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, v any) (*models.DateTime, error) {
 	if v == nil {
 		return nil, nil

@@ -6331,7 +6331,6 @@ var (
 		{Name: "multifactor_auth_enforced", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "sso_exempt_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "allow_support_access", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "compliance_webhook_token", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "payment_method_added", Type: field.TypeBool, Default: false},
 		{Name: "pending_deletion_at", Type: field.TypeTime, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
@@ -6344,7 +6343,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "organization_settings_organizations_setting",
-				Columns:    []*schema.Column{OrganizationSettingsColumns[38]},
+				Columns:    []*schema.Column{OrganizationSettingsColumns[37]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6353,7 +6352,7 @@ var (
 			{
 				Name:    "organization_setting_organization_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{OrganizationSettingsColumns[38]},
+				Columns: []*schema.Column{OrganizationSettingsColumns[37]},
 			},
 		},
 	}
