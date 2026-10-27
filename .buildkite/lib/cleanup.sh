@@ -1,10 +1,10 @@
 #!/bin/bash
 # Disk and cache cleanup shared by the pre-command and post-command hooks
 
-# cache locations come only from the pipeline env
-GO_BUILD_CACHE="${GOCACHE:?GOCACHE must be set in the pipeline env}"
-GO_MOD_CACHE="${GOMODCACHE:?GOMODCACHE must be set in the pipeline env}"
-GOLANGCI_LINT_CACHE_DIR="${GOLANGCI_LINT_CACHE:?GOLANGCI_LINT_CACHE must be set in the pipeline env}"
+# cache locations come only from the pipeline env, which the pipeline upload job does not get
+GO_BUILD_CACHE="${GOCACHE:-}"
+GO_MOD_CACHE="${GOMODCACHE:-}"
+GOLANGCI_LINT_CACHE_DIR="${GOLANGCI_LINT_CACHE:-}"
 
 # disk usage percent a job must start under
 CACHE_CLEANUP_THRESHOLD="${CACHE_CLEANUP_THRESHOLD:-65}"
@@ -13,8 +13,16 @@ DISK_RETRY_THRESHOLD="${DISK_RETRY_THRESHOLD:-90}"
 DISK_RETRY_EXIT_CODE=75
 # cache files modified within this many minutes may be in use by another job on the runner
 CACHE_IN_USE_MINUTES=30
-# agents on the same runner share the caches, so only one prunes at a time
-CACHE_CLEANUP_LOCK="$(dirname "$GO_BUILD_CACHE")/openlane-cache-cleanup.lock"
+
+# caches_configured reports whether the pipeline env set every cache path, skipping cache work for jobs like the pipeline upload
+caches_configured() {
+    if [[ -n "$GO_BUILD_CACHE" && -n "$GO_MOD_CACHE" && -n "$GOLANGCI_LINT_CACHE_DIR" ]]; then
+        return 0
+    fi
+
+    echo "⏭️  Cache paths are not set for this job, skipping cache work"
+    return 1
+}
 
 # disk_usage_percent prints the used percentage of the current filesystem, failing when it cannot be read
 disk_usage_percent() {
@@ -26,6 +34,7 @@ disk_usage_percent() {
 
 # ensure_cache_dirs creates the cache directories the build tools write to
 ensure_cache_dirs() {
+    caches_configured || return 0
     mkdir -p "$GO_BUILD_CACHE" "$GO_MOD_CACHE" "$GOLANGCI_LINT_CACHE_DIR" 2>/dev/null || true
 }
 
@@ -63,7 +72,10 @@ prune_cache_until_below() {
 free_disk_to_threshold() {
     local locked=false
 
-    if command -v flock >/dev/null 2>&1 && exec 9>"$CACHE_CLEANUP_LOCK"; then
+    caches_configured || return 0
+
+    # agents on the same runner share the caches, so only one prunes at a time
+    if command -v flock >/dev/null 2>&1 && exec 9>"$(dirname "$GO_BUILD_CACHE")/openlane-cache-cleanup.lock"; then
         echo "🔒 Waiting for the runner cache cleanup lock..."
         flock -w 600 9 && locked=true
     fi
@@ -82,6 +94,8 @@ free_disk_to_threshold() {
 
 # prune_build_caches trims the go build, golangci-lint, and go module download caches by age
 prune_build_caches() {
+    caches_configured || return 0
+
     prune_cache_dir "🔍 Go build" "$GO_BUILD_CACHE" 5
     prune_cache_dir "🔍 Golangci-lint" "$GOLANGCI_LINT_CACHE_DIR" 5
     # go only reads module zips when extracting, the extracted module trees stay since running builds read them
