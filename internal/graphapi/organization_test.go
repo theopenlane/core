@@ -638,7 +638,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 
 	ownerMembershipID, err := suite.Client.DB.OrgMembership.Query().
 		Where(orgmembership.UserID(orgUser.ID), orgmembership.OrganizationID(org.ID)).
-		OnlyID(reqCtx)
+		OnlyID(ent.NewContext(reqCtx, suite.Client.DB))
 	assert.NilError(t, err)
 
 	// avatar file setup
@@ -962,7 +962,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 	_, err = suite.Client.API.UpdateOrganization(reqCtx, org.ID, testclient.UpdateOrganizationInput{RemoveOrgMembers: []string{om.ID}}, nil, nil)
 	assert.NilError(t, err)
 
-	memberExists, err := suite.Client.DB.OrgMembership.Query().Where(orgmembership.ID(om.ID)).Exist(reqCtx)
+	memberExists, err := suite.Client.DB.OrgMembership.Query().Where(orgmembership.ID(om.ID)).Exist(ent.NewContext(reqCtx, suite.Client.DB))
 	assert.NilError(t, err)
 	assert.Check(t, !memberExists)
 
