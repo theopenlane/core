@@ -9,7 +9,9 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -103,6 +105,18 @@ func TestQueryGroupMembers(t *testing.T) {
 			assert.Check(t, is.Equal(tc.expected.Role, resp.GroupMemberships.Edges[0].Node.Role))
 		})
 	}
+
+	ownerSeesHistory, err := suite.Client.DB.HistoryClient.GroupMembershipHistory.Query().
+		Where(groupmembershiphistory.GroupID(group.ID)).
+		Exist(history.WithContext(th.SharedTestUser1.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, ownerSeesHistory)
+
+	otherOrgSeesHistory, err := suite.Client.DB.HistoryClient.GroupMembershipHistory.Query().
+		Where(groupmembershiphistory.GroupID(group.ID)).
+		Exist(history.WithContext(th.SharedTestUser2.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, !otherOrgSeesHistory)
 
 	// delete created group
 	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, ID: group.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)

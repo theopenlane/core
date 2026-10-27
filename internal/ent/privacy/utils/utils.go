@@ -5,6 +5,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -157,4 +158,19 @@ func PaymentMethodCheckRequired(client *generated.Client) bool {
 	}
 
 	return client.EntConfig.Billing.RequirePaymentMethod
+}
+
+// CheckCallerOrgMembership checks if the caller in context holds any role in orgID
+func CheckCallerOrgMembership(ctx context.Context, authz fgax.Client, orgID string) (bool, error) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok {
+		return false, auth.ErrNoAuthUser
+	}
+
+	return authz.CheckOrgAccess(ctx, fgax.AccessCheck{
+		SubjectID:   caller.SubjectID,
+		SubjectType: caller.SubjectType(),
+		ObjectID:    orgID,
+		Relation:    fgax.CanViewOrg,
+	})
 }

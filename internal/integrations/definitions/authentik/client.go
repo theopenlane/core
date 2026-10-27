@@ -16,8 +16,15 @@ const (
 	authentikRequestTimeout = 30 * time.Second
 )
 
+// clientBuilder returns the Authentik client constructor, allowPrivate permits non-public base urls for local development
+func clientBuilder(allowPrivate bool) func(context.Context, types.ConnectionRequest[CredentialSchema]) (*authentikSDK.APIClient, error) {
+	return func(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*authentikSDK.APIClient, error) {
+		return buildClient(req, allowPrivate)
+	}
+}
+
 // buildClient constructs the Authentik API client for one installation
-func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*authentikSDK.APIClient, error) {
+func buildClient(req types.ConnectionRequest[CredentialSchema], allowPrivate bool) (*authentikSDK.APIClient, error) {
 	cred := req.Credential
 
 	switch {
@@ -32,7 +39,7 @@ func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema
 		return nil, err
 	}
 
-	httpClient, err := urlx.NewHTTPClient(httpclient.Timeout(authentikRequestTimeout))
+	httpClient, err := urlx.NewCustomerHTTPClient(baseURL.String(), allowPrivate, httpclient.Timeout(authentikRequestTimeout))
 	if err != nil {
 		return nil, err
 	}

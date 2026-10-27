@@ -214,11 +214,6 @@ func AllowSupportAccess(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldAllowSupportAccess, v))
 }
 
-// ComplianceWebhookToken applies equality check predicate on the "compliance_webhook_token" field. It's identical to ComplianceWebhookTokenEQ.
-func ComplianceWebhookToken(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldComplianceWebhookToken, v))
-}
-
 // PaymentMethodAdded applies equality check predicate on the "payment_method_added" field. It's identical to PaymentMethodAddedEQ.
 func PaymentMethodAdded(v bool) predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldPaymentMethodAdded, v))
@@ -2027,81 +2022,6 @@ func AllowSupportAccessIsNil() predicate.OrganizationSettingHistory {
 // AllowSupportAccessNotNil applies the NotNil predicate on the "allow_support_access" field.
 func AllowSupportAccessNotNil() predicate.OrganizationSettingHistory {
 	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldAllowSupportAccess))
-}
-
-// ComplianceWebhookTokenEQ applies the EQ predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenEQ(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldEQ(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenNEQ applies the NEQ predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenNEQ(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldNEQ(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenIn applies the In predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenIn(vs ...string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldIn(FieldComplianceWebhookToken, vs...))
-}
-
-// ComplianceWebhookTokenNotIn applies the NotIn predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenNotIn(vs ...string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldNotIn(FieldComplianceWebhookToken, vs...))
-}
-
-// ComplianceWebhookTokenGT applies the GT predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenGT(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldGT(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenGTE applies the GTE predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenGTE(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldGTE(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenLT applies the LT predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenLT(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldLT(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenLTE applies the LTE predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenLTE(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldLTE(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenContains applies the Contains predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenContains(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldContains(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenHasPrefix applies the HasPrefix predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenHasPrefix(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldHasPrefix(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenHasSuffix applies the HasSuffix predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenHasSuffix(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldHasSuffix(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenIsNil applies the IsNil predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenIsNil() predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldIsNull(FieldComplianceWebhookToken))
-}
-
-// ComplianceWebhookTokenNotNil applies the NotNil predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenNotNil() predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldNotNull(FieldComplianceWebhookToken))
-}
-
-// ComplianceWebhookTokenEqualFold applies the EqualFold predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenEqualFold(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldEqualFold(FieldComplianceWebhookToken, v))
-}
-
-// ComplianceWebhookTokenContainsFold applies the ContainsFold predicate on the "compliance_webhook_token" field.
-func ComplianceWebhookTokenContainsFold(v string) predicate.OrganizationSettingHistory {
-	return predicate.OrganizationSettingHistory(sql.FieldContainsFold(FieldComplianceWebhookToken, v))
 }
 
 // PaymentMethodAddedEQ applies the EQ predicate on the "payment_method_added" field.

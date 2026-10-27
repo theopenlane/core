@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
@@ -1118,21 +1117,6 @@ func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) (cont
 	}
 
 	return auth.ResolveOrganizationForContext(ctx, inputOrgID)
-}
-
-// CheckCallerOrgMembership checks if the caller in context holds any role in orgID
-func CheckCallerOrgMembership(ctx context.Context, authz fgax.Client, orgID string) (bool, error) {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok {
-		return false, auth.ErrNoAuthUser
-	}
-
-	return authz.CheckOrgAccess(ctx, fgax.AccessCheck{
-		SubjectID:   caller.SubjectID,
-		SubjectType: caller.SubjectType(),
-		ObjectID:    orgID,
-		Relation:    fgax.CanViewOrg,
-	})
 }
 
 // SetOrganizationInAuthContextBulkRequest sets the organization in the auth context based on the input if it is not already set.

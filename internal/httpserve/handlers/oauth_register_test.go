@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/iam/auth"
@@ -139,5 +140,51 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		recorder, out := send(t, registerJSON)
 		assert.Equal(t, http.StatusBadRequest, recorder.Code)
 		assert.Equal(t, handlers.InvalidInputErrCode, out.ErrorCode)
+	})
+
+	t.Run("sso enforced default org redirects to sso instead of issuing tokens", func(t *testing.T) {
+		suite.ClearTestData()
+
+		email := "antman@theopenlane.io"
+		ensureUserAbsent(t, email)
+
+		registerJSON := models.OauthTokenRequest{
+			Name:             "Ant Man",
+			Email:            email,
+			AuthProvider:     enums.AuthProviderGitHub.String(),
+			ExternalUserID:   "123456",
+			ExternalUserName: "scarletwitch",
+			ClientToken:      "gh_thistokenisvalid",
+		}
+
+		recorder, _ := send(t, registerJSON)
+		require.Equal(t, http.StatusOK, recorder.Code)
+
+		org := suite.ssoEnforcedOrg()
+
+		antman, err := suite.db.User.Query().Where(user.Email(email)).WithSetting().Only(auth.WithInternalOperationContext(testUser1.UserCtx))
+		require.NoError(t, err)
+
+		memberCtx := generated.NewContext(auth.WithInternalOperationContext(auth.NewTestContextWithOrgID(antman.ID, org.ID)), suite.db)
+
+		require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+			OrganizationID: org.ID,
+			UserID:         antman.ID,
+			Role:           &enums.RoleMember,
+		}).Exec(memberCtx))
+
+		require.NoError(t, suite.db.UserSetting.UpdateOneID(antman.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
+
+		body, err := json.Marshal(registerJSON)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/oauth/register", strings.NewReader(string(body)))
+		req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+		rec := httptest.NewRecorder()
+		suite.e.ServeHTTP(rec, req)
+
+		assert.Equal(t, http.StatusFound, rec.Code)
+		assert.NotContains(t, rec.Body.String(), "access_token")
 	})
 }

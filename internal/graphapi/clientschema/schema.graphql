@@ -16188,10 +16188,6 @@ input CreateHushInput {
 	"""
 	secretValue: String
 	"""
-	a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	"""
-	credentialSet: CredentialSet
-	"""
 	additional metadata about the credential
 	"""
 	metadata: Map
@@ -17193,10 +17189,6 @@ input CreateOrganizationSettingInput {
 	allow Openlane support to access this organization without a directory account
 	"""
 	allowSupportAccess: Boolean
-	"""
-	unique token used to receive compliance webhook events
-	"""
-	complianceWebhookToken: String
 	organizationID: ID
 	fileIDs: [ID!]
 }
@@ -37525,10 +37517,6 @@ type Hush implements Node {
 	"""
 	secretName: String
 	"""
-	a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	"""
-	credentialSet: CredentialSet
-	"""
 	additional metadata about the credential
 	"""
 	metadata: Map
@@ -57578,10 +57566,6 @@ type OrganizationSetting implements Node {
 	"""
 	identityProviderClientID: String
 	"""
-	client secret for SSO integration
-	"""
-	identityProviderClientSecret: String
-	"""
 	metadata URL for the SSO provider
 	"""
 	identityProviderMetadataEndpoint: String
@@ -57633,10 +57617,6 @@ type OrganizationSetting implements Node {
 	allow Openlane support to access this organization without a directory account
 	"""
 	allowSupportAccess: Boolean
-	"""
-	unique token used to receive compliance webhook events
-	"""
-	complianceWebhookToken: String
 	"""
 	whether or not a payment method has been added to the account
 	"""
@@ -58017,20 +57997,6 @@ input OrganizationSettingWhereInput {
 	identityProviderClientIDEqualFold: String
 	identityProviderClientIDContainsFold: String
 	"""
-	identity_provider_client_secret field predicates
-	"""
-	identityProviderClientSecret: String
-	identityProviderClientSecretNEQ: String
-	identityProviderClientSecretIn: [String!]
-	identityProviderClientSecretNotIn: [String!]
-	identityProviderClientSecretContains: String
-	identityProviderClientSecretHasPrefix: String
-	identityProviderClientSecretHasSuffix: String
-	identityProviderClientSecretIsNil: Boolean
-	identityProviderClientSecretNotNil: Boolean
-	identityProviderClientSecretEqualFold: String
-	identityProviderClientSecretContainsFold: String
-	"""
 	identity_provider_metadata_endpoint field predicates
 	"""
 	identityProviderMetadataEndpoint: String
@@ -58143,20 +58109,6 @@ input OrganizationSettingWhereInput {
 	allowSupportAccessNEQ: Boolean
 	allowSupportAccessIsNil: Boolean
 	allowSupportAccessNotNil: Boolean
-	"""
-	compliance_webhook_token field predicates
-	"""
-	complianceWebhookToken: String
-	complianceWebhookTokenNEQ: String
-	complianceWebhookTokenIn: [String!]
-	complianceWebhookTokenNotIn: [String!]
-	complianceWebhookTokenContains: String
-	complianceWebhookTokenHasPrefix: String
-	complianceWebhookTokenHasSuffix: String
-	complianceWebhookTokenIsNil: Boolean
-	complianceWebhookTokenNotNil: Boolean
-	complianceWebhookTokenEqualFold: String
-	complianceWebhookTokenContainsFold: String
 	"""
 	payment_method_added field predicates
 	"""
@@ -92010,11 +91962,6 @@ input UpdateHushInput {
 	kind: String
 	clearKind: Boolean
 	"""
-	a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	"""
-	credentialSet: CredentialSet
-	clearCredentialSet: Boolean
-	"""
 	additional metadata about the credential
 	"""
 	metadata: Map
@@ -93402,11 +93349,6 @@ input UpdateOrganizationSettingInput {
 	"""
 	allowSupportAccess: Boolean
 	clearAllowSupportAccess: Boolean
-	"""
-	unique token used to receive compliance webhook events
-	"""
-	complianceWebhookToken: String
-	clearComplianceWebhookToken: Boolean
 	"""
 	when will this organization be deleted? usually this is after org has not added a payment method after n period
 	"""

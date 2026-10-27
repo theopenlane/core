@@ -12,14 +12,26 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/logx"
 )
 
+// historyObjectOwnerTables maps a history object owner to the parent table whose owner scopes it to an organization
+var historyObjectOwnerTables = map[string]string{
+	entityops.SchemaGroup.Snake:       group.Table,
+	entityops.SchemaProgram.Snake:     program.Table,
+	entityops.SchemaTrustCenter.Snake: trustcenter.Table,
+}
+
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization
-func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string) ent.Interceptor {
-	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
+// TODO (sfunk): update generated schemas to drop old orgOwned param
+func HistoryAccess(relation string, _, userOwed bool, objectOwner string) ent.Interceptor {
+	return TraverseFunc(func(ctx context.Context, q Query) error {
 		caller, ok := auth.CallerFromContext(ctx)
 		if !ok {
 			return auth.ErrNoAuthUser
@@ -65,18 +77,19 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 			)
 		}
 
-		return addFilter(ctx, q, orgOwned, userOwed, allowedOrgs)
+		return addFilter(ctx, q, userOwed, objectOwner, allowedOrgs)
 	})
 }
 
 // addFilter adds a filter to the query based on the authenticated user's organization
-func addFilter(ctx context.Context, q Query, orgOwned, userOwed bool, allowedOrgs []string) error {
+func addFilter(ctx context.Context, q Query, userOwed bool, objectOwner string, allowedOrgs []string) error {
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
 
 	switch {
+	// special cases of top level owned objects of organization or user
 	case q.Type() == "OrganizationHistory":
 		q.WhereP(
 			sql.FieldIn("ref", allowedOrgs...),
@@ -84,10 +97,6 @@ func addFilter(ctx context.Context, q Query, orgOwned, userOwed bool, allowedOrg
 	case q.Type() == "OrganizationSettingHistory" || q.Type() == "OrgMembershipHistory":
 		q.WhereP(
 			sql.FieldIn("organization_id", allowedOrgs...),
-		)
-	case orgOwned:
-		q.WhereP(
-			sql.FieldIn("owner_id", allowedOrgs...),
 		)
 	case q.Type() == "UserHistory":
 		q.WhereP(
@@ -100,6 +109,36 @@ func addFilter(ctx context.Context, q Query, orgOwned, userOwed bool, allowedOrg
 	case userOwed:
 		q.WhereP(
 			sql.FieldIn("owner_id", userID),
+		)
+	case objectOwner != "":
+		// fga can grant audit log access beyond the caller's orgs (e.g. public trust centers), so also limit to parents the caller's orgs own
+		parentTable, ok := historyObjectOwnerTables[objectOwner]
+		parentSchema, found := entityops.LookupSchema(objectOwner)
+
+		if !ok || !found || parentSchema.OwnerField == "" {
+			logx.FromContext(ctx).Error().Str("history_type", q.Type()).Str("object_owner", objectOwner).Msg("history object owner has no organization scoping")
+
+			return ErrRetrievingObjects
+		}
+
+		q.WhereP(parentOwnedByOrgsP(parentTable, parentSchema.OwnerField, objectOwner+"_id", allowedOrgs))
+	default:
+		// history of schemas with no organization owner, such as system managed mappable domains, is only for system admins
+		// fallback here, its better to not return data than expose
+		// cross org data
+		schema, ok := entityops.LookupSchema(strings.TrimSuffix(q.Type(), "History"))
+		if !ok || schema.OwnerField == "" {
+			if !auth.IsSystemAdminFromContext(ctx) {
+				logx.FromContext(ctx).Info().Str("history_type", q.Type()).Msg("history with no organization owner is only available to system admins")
+
+				return ErrRetrievingObjects
+			}
+
+			return nil
+		}
+
+		q.WhereP(
+			sql.FieldIn(schema.OwnerField, allowedOrgs...),
 		)
 	}
 

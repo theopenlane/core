@@ -2992,7 +2992,6 @@ type ComplexityRoot struct {
 	Hush struct {
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
-		CredentialSet         func(childComplexity int) int
 		Description           func(childComplexity int) int
 		Events                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
 		ExpiresAt             func(childComplexity int) int
@@ -4779,7 +4778,6 @@ type ComplexityRoot struct {
 		BillingEmail                     func(childComplexity int) int
 		BillingNotificationsEnabled      func(childComplexity int) int
 		BillingPhone                     func(childComplexity int) int
-		ComplianceWebhookToken           func(childComplexity int) int
 		CreatedAt                        func(childComplexity int) int
 		CreatedBy                        func(childComplexity int) int
 		Domains                          func(childComplexity int) int
@@ -4789,7 +4787,6 @@ type ComplexityRoot struct {
 		IdentityProvider                 func(childComplexity int) int
 		IdentityProviderAuthTested       func(childComplexity int) int
 		IdentityProviderClientID         func(childComplexity int) int
-		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderJitProvisioning  func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
@@ -22120,12 +22117,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Hush.CreatedBy(childComplexity), true
-	case "Hush.credentialSet":
-		if e.ComplexityRoot.Hush.CredentialSet == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Hush.CredentialSet(childComplexity), true
 	case "Hush.description":
 		if e.ComplexityRoot.Hush.Description == nil {
 			break
@@ -34709,12 +34700,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSetting.BillingPhone(childComplexity), true
-	case "OrganizationSetting.complianceWebhookToken":
-		if e.ComplexityRoot.OrganizationSetting.ComplianceWebhookToken == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSetting.ComplianceWebhookToken(childComplexity), true
 	case "OrganizationSetting.createdAt":
 		if e.ComplexityRoot.OrganizationSetting.CreatedAt == nil {
 			break
@@ -34774,12 +34759,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSetting.IdentityProviderClientID(childComplexity), true
-	case "OrganizationSetting.identityProviderClientSecret":
-		if e.ComplexityRoot.OrganizationSetting.IdentityProviderClientSecret == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSetting.IdentityProviderClientSecret(childComplexity), true
 	case "OrganizationSetting.identityProviderEntityID":
 		if e.ComplexityRoot.OrganizationSetting.IdentityProviderEntityID == nil {
 			break
@@ -72461,10 +72440,6 @@ input CreateHushInput {
   """
   secretValue: String
   """
-  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-  """
-  credentialSet: CredentialSet
-  """
   additional metadata about the credential
   """
   metadata: Map
@@ -73445,10 +73420,6 @@ input CreateOrganizationSettingInput {
   allow Openlane support to access this organization without a directory account
   """
   allowSupportAccess: Boolean
-  """
-  unique token used to receive compliance webhook events
-  """
-  complianceWebhookToken: String
   organizationID: ID
   fileIDs: [ID!]
 }
@@ -92158,10 +92129,6 @@ type Hush implements Node {
   """
   secretName: String
   """
-  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-  """
-  credentialSet: CredentialSet
-  """
   additional metadata about the credential
   """
   metadata: Map
@@ -104840,10 +104807,6 @@ type OrganizationSetting implements Node {
   """
   identityProviderClientID: String
   """
-  client secret for SSO integration
-  """
-  identityProviderClientSecret: String
-  """
   metadata URL for the SSO provider
   """
   identityProviderMetadataEndpoint: String
@@ -104895,10 +104858,6 @@ type OrganizationSetting implements Node {
   allow Openlane support to access this organization without a directory account
   """
   allowSupportAccess: Boolean
-  """
-  unique token used to receive compliance webhook events
-  """
-  complianceWebhookToken: String
   """
   whether or not a payment method has been added to the account
   """
@@ -105205,20 +105164,6 @@ input OrganizationSettingWhereInput {
   identityProviderClientIDEqualFold: String
   identityProviderClientIDContainsFold: String
   """
-  identity_provider_client_secret field predicates
-  """
-  identityProviderClientSecret: String
-  identityProviderClientSecretNEQ: String
-  identityProviderClientSecretIn: [String!]
-  identityProviderClientSecretNotIn: [String!]
-  identityProviderClientSecretContains: String
-  identityProviderClientSecretHasPrefix: String
-  identityProviderClientSecretHasSuffix: String
-  identityProviderClientSecretIsNil: Boolean
-  identityProviderClientSecretNotNil: Boolean
-  identityProviderClientSecretEqualFold: String
-  identityProviderClientSecretContainsFold: String
-  """
   identity_provider_metadata_endpoint field predicates
   """
   identityProviderMetadataEndpoint: String
@@ -105331,20 +105276,6 @@ input OrganizationSettingWhereInput {
   allowSupportAccessNEQ: Boolean
   allowSupportAccessIsNil: Boolean
   allowSupportAccessNotNil: Boolean
-  """
-  compliance_webhook_token field predicates
-  """
-  complianceWebhookToken: String
-  complianceWebhookTokenNEQ: String
-  complianceWebhookTokenIn: [String!]
-  complianceWebhookTokenNotIn: [String!]
-  complianceWebhookTokenContains: String
-  complianceWebhookTokenHasPrefix: String
-  complianceWebhookTokenHasSuffix: String
-  complianceWebhookTokenIsNil: Boolean
-  complianceWebhookTokenNotNil: Boolean
-  complianceWebhookTokenEqualFold: String
-  complianceWebhookTokenContainsFold: String
   """
   payment_method_added field predicates
   """
@@ -134820,11 +134751,6 @@ input UpdateHushInput {
   kind: String
   clearKind: Boolean
   """
-  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-  """
-  credentialSet: CredentialSet
-  clearCredentialSet: Boolean
-  """
   additional metadata about the credential
   """
   metadata: Map
@@ -136203,11 +136129,6 @@ input UpdateOrganizationSettingInput {
   """
   allowSupportAccess: Boolean
   clearAllowSupportAccess: Boolean
-  """
-  unique token used to receive compliance webhook events
-  """
-  complianceWebhookToken: String
-  clearComplianceWebhookToken: Boolean
   """
   when will this organization be deleted? usually this is after org has not added a payment method after n period
   """
@@ -165608,8 +165529,6 @@ func (ec *executionContext) childFields_Hush(ctx context.Context, field graphql.
 		return ec.fieldContext_Hush_kind(ctx, field)
 	case "secretName":
 		return ec.fieldContext_Hush_secretName(ctx, field)
-	case "credentialSet":
-		return ec.fieldContext_Hush_credentialSet(ctx, field)
 	case "metadata":
 		return ec.fieldContext_Hush_metadata(ctx, field)
 	case "lastUsedAt":
@@ -167980,8 +167899,6 @@ func (ec *executionContext) childFields_OrganizationSetting(ctx context.Context,
 		return ec.fieldContext_OrganizationSetting_identityProvider(ctx, field)
 	case "identityProviderClientID":
 		return ec.fieldContext_OrganizationSetting_identityProviderClientID(ctx, field)
-	case "identityProviderClientSecret":
-		return ec.fieldContext_OrganizationSetting_identityProviderClientSecret(ctx, field)
 	case "identityProviderMetadataEndpoint":
 		return ec.fieldContext_OrganizationSetting_identityProviderMetadataEndpoint(ctx, field)
 	case "identityProviderAuthTested":
@@ -168008,8 +167925,6 @@ func (ec *executionContext) childFields_OrganizationSetting(ctx context.Context,
 		return ec.fieldContext_OrganizationSetting_ssoExemptDomains(ctx, field)
 	case "allowSupportAccess":
 		return ec.fieldContext_OrganizationSetting_allowSupportAccess(ctx, field)
-	case "complianceWebhookToken":
-		return ec.fieldContext_OrganizationSetting_complianceWebhookToken(ctx, field)
 	case "paymentMethodAdded":
 		return ec.fieldContext_OrganizationSetting_paymentMethodAdded(ctx, field)
 	case "pendingDeletionAt":
