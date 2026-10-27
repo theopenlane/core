@@ -110,11 +110,6 @@ func InterceptorAssessmentBranding() ent.Interceptor {
 				return nil, err
 			}
 
-			if !auth.IsAnonymousFromContext(ctx) ||
-				(!graphutils.CheckForRequestedField(ctx, "removeBranding") && !auth.IsInternalReadRequest(ctx)) {
-				return v, nil
-			}
-
 			assessments, ok := v.([]*generated.Assessment)
 			if !ok {
 				return v, nil
