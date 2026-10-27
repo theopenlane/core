@@ -84,10 +84,6 @@ func addFilter(ctx context.Context, q Query, orgOwned, userOwed, objectScoped bo
 		q.WhereP(
 			sql.FieldIn("organization_id", allowedOrgs...),
 		)
-	case orgOwned:
-		q.WhereP(
-			sql.FieldIn("owner_id", allowedOrgs...),
-		)
 	case q.Type() == "UserHistory":
 		q.WhereP(
 			sql.FieldIn("ref", userID),
@@ -102,8 +98,8 @@ func addFilter(ctx context.Context, q Query, orgOwned, userOwed, objectScoped bo
 		)
 	case q.Type() == "MappableDomainHistory":
 		// mappable domains are system managed and have no owning organization, so there is nothing to scope
-	case !objectScoped:
-		// history tables without an authz derived filter come from org owned schemas, so scope them to the caller's orgs
+	case orgOwned || !objectScoped:
+		// org owned history and history tables without an authz derived filter are scoped to the caller's orgs
 		q.WhereP(
 			sql.FieldIn("owner_id", allowedOrgs...),
 		)
