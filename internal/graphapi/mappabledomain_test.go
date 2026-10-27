@@ -68,7 +68,7 @@ func TestQueryMappableDomainByID(t *testing.T) {
 	_, err = suite.Client.DB.HistoryClient.MappableDomainHistory.Query().
 		Where(mappabledomainhistory.Ref(mappableDomain.ID)).
 		Exist(history.WithContext(th.SharedTestUser1.UserCtx))
-	assert.ErrorContains(t, err, interceptors.ErrUnscopedHistory.Error())
+	assert.ErrorContains(t, err, interceptors.ErrRetrievingObjects.Error())
 
 	(&th.Cleanup[*generated.MappableDomainDeleteOne]{Client: suite.Client.DB.MappableDomain, ID: mappableDomain.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }

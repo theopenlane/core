@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/logx"
 )
 
 // historyObjectOwnerTables maps a history object owner to the parent table whose owner_id scopes it to an organization
@@ -28,7 +29,8 @@ var historyObjectOwnerTables = map[string]string{
 }
 
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization
-func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string) ent.Interceptor {
+// TODO (sfunk)
+func HistoryAccess(relation string, _, userOwed bool, objectOwner string) ent.Interceptor {
 	return TraverseFunc(func(ctx context.Context, q Query) error {
 		caller, ok := auth.CallerFromContext(ctx)
 		if !ok {
@@ -111,11 +113,15 @@ func addFilter(ctx context.Context, q Query, userOwed bool, objectOwner string, 
 	case objectOwner != "":
 		// fga can grant audit log access beyond the caller's orgs (e.g. public trust centers), so also limit to parents the caller's orgs own
 		parentTable, ok := historyObjectOwnerTables[objectOwner]
-		if !ok {
-			return ErrUnscopedHistory
+		parentSchema, found := entityops.LookupSchema(objectOwner)
+
+		if !ok || !found || parentSchema.OwnerField == "" {
+			logx.FromContext(ctx).Error().Str("history_type", q.Type()).Str("object_owner", objectOwner).Msg("history object owner has no organization scoping")
+
+			return ErrRetrievingObjects
 		}
 
-		q.WhereP(parentOwnedByOrgsP(parentTable, objectOwner+"_id", allowedOrgs))
+		q.WhereP(parentOwnedByOrgsP(parentTable, parentSchema.OwnerField, objectOwner+"_id", allowedOrgs))
 	default:
 		// history of schemas with no organization owner, such as system managed mappable domains, is only for system admins
 		// fallback here, its better to not return data than expose
@@ -123,7 +129,9 @@ func addFilter(ctx context.Context, q Query, userOwed bool, objectOwner string, 
 		schema, ok := entityops.LookupSchema(strings.TrimSuffix(q.Type(), "History"))
 		if !ok || schema.OwnerField == "" {
 			if !auth.IsSystemAdminFromContext(ctx) {
-				return ErrUnscopedHistory
+				logx.FromContext(ctx).Info().Str("history_type", q.Type()).Msg("history with no organization owner is only available to system admins")
+
+				return ErrRetrievingObjects
 			}
 
 			return nil

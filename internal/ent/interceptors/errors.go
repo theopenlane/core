@@ -15,6 +15,4 @@ var (
 	ErrFeatureNotEnabled = errors.New("feature not enabled for organization")
 	// ErrBulkActionNotCompleted is returned when bulk actions do not completely apply to all provided ids
 	ErrBulkActionNotCompleted = errors.New("bulk action did not apply to the entire ids provided")
-	// ErrUnscopedHistory is returned when a history table has no organization scoping for the caller
-	ErrUnscopedHistory = errors.New("history table has no organization scoping")
 )
