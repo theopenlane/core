@@ -28,7 +28,7 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 	}
 
 	// only a user signed in with their own session is issued a new one, tokens and impersonation sessions are not
-	if _, interactive := authmanager.InteractiveUserCaller(ctx); !interactive {
+	if _, interactive := auth.InteractiveUserCallerFromContext(ctx); !interactive {
 		return ctx, nil
 	}
 

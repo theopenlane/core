@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
-	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 	"github.com/theopenlane/logx"
@@ -41,7 +40,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	caller, ok := authmanager.InteractiveUserCaller(reqCtx)
+	caller, ok := auth.InteractiveUserCallerFromContext(reqCtx)
 	if !ok {
 		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
@@ -151,7 +150,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
-	caller, ok := authmanager.InteractiveUserCaller(reqCtx)
+	caller, ok := auth.InteractiveUserCallerFromContext(reqCtx)
 	if !ok || caller.SubjectID != userID {
 		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
