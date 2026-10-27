@@ -121,7 +121,7 @@ func checkOrganizationMutation(ctx context.Context, m ent.Mutation, orgID string
 			return privacy.Skip
 		}
 
-		if err := CheckOrgAccess(ctx, fgax.CanView, parentOrgID); access.Allow(err) {
+		if err := checkOrgAccess(ctx, fgax.CanView, parentOrgID); access.Allow(err) {
 			return privacy.Skip
 		}
 

@@ -18,10 +18,6 @@ import (
 
 // EmailTemplateCatalog is the resolver for the emailTemplateCatalog field.
 func (r *queryResolver) EmailTemplateCatalog(ctx context.Context) (*model.EmailTemplateCatalog, error) {
-	if err := r.ensureEmailTemplateViewAccess(ctx); err != nil {
-		return nil, err
-	}
-
 	emailClient, err := r.emailRuntimeClient()
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed resolving email runtime client for template catalog")
@@ -81,10 +77,6 @@ func (r *queryResolver) EmailTemplateCatalog(ctx context.Context) (*model.EmailT
 
 // PreviewEmailTemplate is the resolver for the previewEmailTemplate field.
 func (r *queryResolver) PreviewEmailTemplate(ctx context.Context, key string, defaults map[string]any) (string, error) {
-	if err := r.ensureEmailTemplateViewAccess(ctx); err != nil {
-		return "", err
-	}
-
 	emailClient, err := r.emailRuntimeClient()
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("key", key).Msg("failed resolving email runtime client for template preview")
