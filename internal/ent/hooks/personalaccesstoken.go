@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 )
 
 const (
@@ -31,9 +32,29 @@ func HookCreatePersonalAccessToken() ent.Hook {
 			// set user on the token
 			m.SetOwnerID(userID)
 
+			if err := ensurePATOrgMemberships(ctx, m); err != nil {
+				return nil, err
+			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate)
+}
+
+// ensurePATOrgMemberships rejects adding an organization to a token unless the token owner is a member of it
+func ensurePATOrgMemberships(ctx context.Context, m *generated.PersonalAccessTokenMutation) error {
+	for _, orgID := range m.OrganizationsIDs() {
+		member, err := utils.CheckCallerOrgMembership(ctx, m.Authz, orgID)
+		if err != nil {
+			return err
+		}
+
+		if !member {
+			return generated.ErrPermissionDenied
+		}
+	}
+
+	return nil
 }
 
 // HookUpdatePersonalAccessToken runs on access token update and redacts the token
@@ -44,6 +65,10 @@ func HookUpdatePersonalAccessToken() ent.Hook {
 			_, ok := m.OwnerID()
 			if ok {
 				m.ClearOwner()
+			}
+
+			if err := ensurePATOrgMemberships(ctx, m); err != nil {
+				return nil, err
 			}
 
 			retVal, err := next.Mutate(ctx, m)

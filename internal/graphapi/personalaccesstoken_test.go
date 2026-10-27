@@ -147,6 +147,14 @@ func TestMutationCreatePersonalAccessToken(t *testing.T) {
 			},
 		},
 		{
+			name: "cannot add an org the user is not a member of",
+			input: testclient.CreatePersonalAccessTokenInput{
+				Name:            "forthethingz",
+				OrganizationIDs: []string{th.SharedTestUser2.OrganizationID},
+			},
+			errorMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
 			name: "happy path, name only",
 			input: testclient.CreatePersonalAccessTokenInput{
 				Name: "forthethingz",
@@ -266,6 +274,14 @@ func TestMutationUpdatePersonalAccessToken(t *testing.T) {
 			input: testclient.UpdatePersonalAccessTokenInput{
 				RemoveOrganizationIDs: []string{th.SharedTestUser1.OrganizationID},
 			},
+		},
+		{
+			name:    "cannot add an org the user is not a member of",
+			tokenID: token.ID,
+			input: testclient.UpdatePersonalAccessTokenInput{
+				AddOrganizationIDs: []string{th.SharedTestUser2.OrganizationID},
+			},
+			errorMsg: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:    "invalid token id",

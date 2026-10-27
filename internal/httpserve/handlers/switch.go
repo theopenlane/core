@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/iam/sessions"
 
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/logx"
 )
 
@@ -21,11 +22,10 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	caller, ok := auth.CallerFromContext(reqCtx)
+	// only a user signed in with their own session can switch, tokens and impersonation sessions cannot mint a new session
+	caller, ok := authmanager.InteractiveUserCaller(reqCtx)
 	if !ok {
-		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
-
-		return h.BadRequest(ctx, auth.ErrNoAuthUser)
+		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
 
 	// ensure the user is not already in the target organization

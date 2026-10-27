@@ -32,7 +32,7 @@ import (
 // email) use local file-based senders instead of calling provider APIs
 func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Builder {
 	return []registry.Builder{
-		authentik.Builder(),
+		authentik.Builder(devMode),
 		awssecurityhub.Builder(cfg.AWSSecurityHub),
 		azureentraid.Builder(cfg.AzureEntraID),
 		azuresecuritycenter.Builder(cfg.AzureSecurityCenter),
@@ -42,17 +42,17 @@ func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Buil
 		githubapp.Builder(cfg.GitHubApp),
 		googledrive.Builder(cfg.GoogleDrive),
 		googleworkspace.Builder(cfg.GoogleWorkspace),
-		keycloak.Builder(),
+		keycloak.Builder(devMode),
 		microsoftteams.Builder(cfg.MicrosoftTeams),
 		objectstore.Builder(&cfg.ObjectStoreRuntime, federationIssuer, cfg.ObjectStore),
 		oci.Builder(),
 		onedrive.Builder(cfg.OneDrive),
 		oidclocal.Builder(cfg.OIDCLocal),
-		okta.Builder(),
+		okta.Builder(devMode),
 		scim.Builder(),
 		slack.Builder(cfg.Slack, &cfg.SlackRuntime, devMode),
 		system.Builder(cfg.PaymentReminder, cfg.OrganizationDelete, cfg.IntegrationLifecycle),
 		tailscale.Builder(),
-		zitadel.Builder(),
+		zitadel.Builder(devMode),
 	}
 }

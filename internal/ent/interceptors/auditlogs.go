@@ -65,12 +65,12 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 			)
 		}
 
-		return addFilter(ctx, q, orgOwned, userOwed, allowedOrgs)
+		return addFilter(ctx, q, orgOwned, userOwed, objectOwner != "", allowedOrgs)
 	})
 }
 
 // addFilter adds a filter to the query based on the authenticated user's organization
-func addFilter(ctx context.Context, q Query, orgOwned, userOwed bool, allowedOrgs []string) error {
+func addFilter(ctx context.Context, q Query, orgOwned, userOwed, objectScoped bool, allowedOrgs []string) error {
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
@@ -100,6 +100,13 @@ func addFilter(ctx context.Context, q Query, orgOwned, userOwed bool, allowedOrg
 	case userOwed:
 		q.WhereP(
 			sql.FieldIn("owner_id", userID),
+		)
+	case q.Type() == "MappableDomainHistory":
+		// mappable domains are system managed and have no owning organization, so there is nothing to scope
+	case !objectScoped:
+		// history tables without an authz derived filter come from org owned schemas, so scope them to the caller's orgs
+		q.WhereP(
+			sql.FieldIn("owner_id", allowedOrgs...),
 		)
 	}
 

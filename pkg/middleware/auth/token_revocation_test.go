@@ -9,6 +9,7 @@ import (
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
 )
 
 // TestAPITokenRevocation verifies that an inactive or revoked API token is rejected at authentication
@@ -76,10 +77,20 @@ func TestPATRevocation(t *testing.T) {
 
 	userMustSSOFunc = func(context.Context, *generated.Client, string, string) (bool, error) { return false, nil }
 	isSystemAdminFunc = func(context.Context, *generated.Client, string, string) (bool, error) { return false, nil }
-	getOrgRoleFunc = func(context.Context, *generated.Client, string, string) *auth.OrganizationRoleType { return nil }
 
 	user := &generated.User{ID: "u1", Email: "u@example.com", DisplayName: "u"}
 	org := &generated.Organization{ID: "org", Name: "org"}
+	otherOrg := &generated.Organization{ID: "other-org", Name: "other-org"}
+
+	getOrgRoleFunc = func(_ context.Context, _ *generated.Client, _ string, orgID string) *auth.OrganizationRoleType {
+		if orgID != org.ID {
+			return nil
+		}
+
+		role := auth.MemberRole
+
+		return &role
+	}
 
 	newPAT := func() *generated.PersonalAccessToken {
 		return &generated.PersonalAccessToken{
@@ -131,5 +142,33 @@ func TestPATRevocation(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, pat.ID, id)
 		assert.Equal(t, user.ID, au.SubjectID)
+	})
+
+	t.Run("orgs the owner is not a member of are dropped", func(t *testing.T) {
+		pat := newPAT()
+		pat.IsActive = true
+		pat.Edges.Organizations = []*generated.Organization{org, otherOrg}
+
+		fetchPATFunc = func(context.Context, *generated.Client, string) (*generated.PersonalAccessToken, error) {
+			return pat, nil
+		}
+
+		au, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
+		assert.NoError(t, err)
+		assert.Equal(t, []string{org.ID}, au.OrganizationIDs)
+		assert.Equal(t, auth.MemberRole, au.OrganizationRole)
+	})
+
+	t.Run("token with no member orgs is rejected", func(t *testing.T) {
+		pat := newPAT()
+		pat.IsActive = true
+		pat.Edges.Organizations = []*generated.Organization{otherOrg}
+
+		fetchPATFunc = func(context.Context, *generated.Client, string) (*generated.PersonalAccessToken, error) {
+			return pat, nil
+		}
+
+		_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
+		assert.ErrorIs(t, err, rout.ErrInvalidCredentials)
 	})
 }

@@ -423,10 +423,11 @@ func TestMutationCreateOrgMemberRoleCeiling(t *testing.T) {
 	t.Cleanup(func() { th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t) })
 
 	testCases := []struct {
-		name   string
-		ctx    context.Context
-		role   enums.Role
-		errMsg string
+		name     string
+		ctx      context.Context
+		role     enums.Role
+		emptyOrg bool
+		errMsg   string
 	}{
 		{
 			name: "admin can add admin",
@@ -473,14 +474,46 @@ func TestMutationCreateOrgMemberRoleCeiling(t *testing.T) {
 			role:   enums.RoleAdmin,
 			errMsg: th.NotAuthorizedErrorMsg,
 		},
+		{
+			name:     "admin can add admin with an empty organization id",
+			ctx:      org.Admin.UserCtx,
+			role:     enums.RoleAdmin,
+			emptyOrg: true,
+		},
+		{
+			name:     "member cannot add owner with an empty organization id",
+			ctx:      org.Member.UserCtx,
+			role:     enums.RoleOwner,
+			emptyOrg: true,
+			errMsg:   th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:     "member cannot add super admin with an empty organization id",
+			ctx:      org.Member.UserCtx,
+			role:     enums.RoleSuperAdmin,
+			emptyOrg: true,
+			errMsg:   th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:     "admin cannot add owner with an empty organization id",
+			ctx:      org.Admin.UserCtx,
+			role:     enums.RoleOwner,
+			emptyOrg: true,
+			errMsg:   th.NotAuthorizedErrorMsg,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			target := (&th.UserBuilder{Client: suite.Client}).MustNew(org.Owner.UserCtx, t)
 
+			orgID := org.Owner.OrganizationID
+			if tc.emptyOrg {
+				orgID = ""
+			}
+
 			input := testclient.CreateOrgMembershipInput{
-				OrganizationID: org.Owner.OrganizationID,
+				OrganizationID: orgID,
 				UserID:         target.ID,
 				Role:           &tc.role,
 			}
@@ -511,6 +544,20 @@ func TestMutationCreateOrgMemberRoleCeiling(t *testing.T) {
 			}
 
 			_, err := suite.Client.API.CreateBulkOrgMembers(org.Admin.UserCtx, input)
+			assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+		})
+
+		t.Run("bulk, member cannot add "+role.String()+" with an empty organization id", func(t *testing.T) {
+			target := (&th.UserBuilder{Client: suite.Client}).MustNew(org.Owner.UserCtx, t)
+
+			input := []*testclient.CreateOrgMembershipInput{
+				{
+					UserID: target.ID,
+					Role:   &role,
+				},
+			}
+
+			_, err := suite.Client.API.CreateBulkOrgMembers(org.Member.UserCtx, input)
 			assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 		})
 	}

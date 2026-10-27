@@ -106,6 +106,20 @@ func PublicOnly() httpclient.Option {
 	})
 }
 
+// NewCustomerHTTPClient returns a client for requests to a customer-supplied URL, rejecting non-public
+// destinations unless allowPrivate is set, which is only for local development
+func NewCustomerHTTPClient(rawURL string, allowPrivate bool, opts ...httpclient.Option) (*http.Client, error) {
+	if !allowPrivate {
+		if _, err := ValidatePublicURL(rawURL); err != nil {
+			return nil, err
+		}
+
+		opts = append(opts, PublicOnly())
+	}
+
+	return NewHTTPClient(opts...)
+}
+
 func publicOnlyControl(_ string, address string, _ syscall.RawConn) error {
 	host, _, err := net.SplitHostPort(address)
 	if err != nil {

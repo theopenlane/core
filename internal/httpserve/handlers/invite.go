@@ -18,6 +18,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 	"github.com/theopenlane/logx"
 )
@@ -50,6 +51,11 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	}
 
 	reqCtx := ctx.Request().Context()
+
+	// accepting an invite mints a new session, so only a user signed in with their own session can accept
+	if _, ok := authmanager.InteractiveUserCaller(reqCtx); !ok {
+		return h.Unauthorized(ctx, ErrAuthenticationRequired)
+	}
 
 	// get the authenticated user from the context
 	subjectID, err := auth.GetSubjectIDFromContext(reqCtx)

@@ -102,14 +102,14 @@ func trustCenterInterceptor(applyToAllRequests, allowAnonAccess bool) ent.Interc
 }
 
 func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyToAllRequests, allowAnonAccess bool) error {
-	// skip if we are creating an object, no need to filter
-	if isMutationRequest(ctx) {
-		return nil
-	}
-
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok {
 		return auth.ErrNoAuthUser
+	}
+
+	// anonymous trust center callers read back what they submit, so skip the filter for their mutations
+	if isMutationRequest(ctx) && caller.Has(auth.CapTrustCenterAnonymous) {
+		return nil
 	}
 
 	// system admins and trusted internal callers that bypass org scoping (e.g. scheduled pollers

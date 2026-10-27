@@ -77,6 +77,17 @@ func (a *Client) GenerateUserAuthSessionWithOrg(ctx context.Context, w http.Resp
 	return auth, nil
 }
 
+// InteractiveUserCaller returns the caller when it is a user signed in with their own session,
+// the only kind of caller that may be issued or extend a user session
+func InteractiveUserCaller(ctx context.Context) (*auth.Caller, bool) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller.AuthenticationType != auth.JWTAuthentication || caller.IsAnonymous() || caller.IsImpersonated() {
+		return nil, false
+	}
+
+	return caller, true
+}
+
 // GenerateUserAuthSession creates a new auth session for the user and their default organization id
 // this is used during the login process
 func (a *Client) GenerateUserAuthSession(ctx context.Context, w http.ResponseWriter, user *generated.User) (*models.AuthData, error) {

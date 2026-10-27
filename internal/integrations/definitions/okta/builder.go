@@ -6,8 +6,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// Builder returns the Okta definition builder
-func Builder() registry.Builder {
+// Builder returns the Okta definition builder, devMode allows non-public org urls for local development
+func Builder(devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			ID:           definitionID.ID(),
@@ -25,7 +25,7 @@ func Builder() registry.Builder {
 				oktaConnection.
 					Name("Okta API Token").
 					Description("Configure Okta access using an API token from your organization.").
-					Provides(buildClient).
+					Provides(clientBuilder(devMode)).
 					Verified(verify).
 					Disconnects("Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Okta admin console under Security > API.", nil),
 			},

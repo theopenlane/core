@@ -89,8 +89,9 @@ func TestPATTokenSSOAuthorization(t *testing.T) {
 	}
 
 	getOrgRoleFunc = func(ctx context.Context, db *ent.Client, userID, orgID string) *auth.OrganizationRoleType {
-		// return nil, sso doesn't depend on role
-		return nil
+		// the owner is a member, sso doesn't depend on the role
+		role := auth.MemberRole
+		return &role
 	}
 
 	_, _, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")
@@ -155,7 +156,8 @@ func TestPATTokenSSOExemptOwner(t *testing.T) {
 		return false, nil
 	}
 	getOrgRoleFunc = func(ctx context.Context, db *ent.Client, userID, orgID string) *auth.OrganizationRoleType {
-		return nil
+		role := auth.MemberRole
+		return &role
 	}
 
 	au, id, err := isValidPersonalAccessToken(context.Background(), (*generated.Client)(nil), pat.Token, "")

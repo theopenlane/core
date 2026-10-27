@@ -18,8 +18,22 @@ const (
 	zitadelDefaultPageSize = 100
 )
 
+// patClientBuilder returns the Personal Access Token client constructor, allowPrivate permits non-public instances for local development
+func patClientBuilder(allowPrivate bool) func(context.Context, types.ConnectionRequest[CredentialSchema]) (Client, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[CredentialSchema]) (Client, error) {
+		return patClient(ctx, req, allowPrivate)
+	}
+}
+
+// oauthClientBuilder returns the OAuth client constructor, allowPrivate permits non-public instances for local development
+func oauthClientBuilder(allowPrivate bool) func(context.Context, types.ConnectionRequest[OAuthCredentialSchema]) (Client, error) {
+	return func(ctx context.Context, req types.ConnectionRequest[OAuthCredentialSchema]) (Client, error) {
+		return oauthClient(ctx, req, allowPrivate)
+	}
+}
+
 // patClient builds the Zitadel client from a Personal Access Token credential
-func patClient(ctx context.Context, req types.ConnectionRequest[CredentialSchema]) (Client, error) {
+func patClient(ctx context.Context, req types.ConnectionRequest[CredentialSchema], allowPrivate bool) (Client, error) {
 	switch {
 	case req.Credential.Domain == "":
 		return Client{}, ErrDomainMissing
@@ -27,11 +41,11 @@ func patClient(ctx context.Context, req types.ConnectionRequest[CredentialSchema
 		return Client{}, ErrTokenMissing
 	}
 
-	return newClient(ctx, req.Credential.Domain, client.PAT(req.Credential.Token))
+	return newClient(ctx, req.Credential.Domain, client.PAT(req.Credential.Token), allowPrivate)
 }
 
 // oauthClient builds the Zitadel client from an OAuth client-credentials credential
-func oauthClient(ctx context.Context, req types.ConnectionRequest[OAuthCredentialSchema]) (Client, error) {
+func oauthClient(ctx context.Context, req types.ConnectionRequest[OAuthCredentialSchema], allowPrivate bool) (Client, error) {
 	switch {
 	case req.Credential.Domain == "":
 		return Client{}, ErrDomainMissing
@@ -41,12 +55,19 @@ func oauthClient(ctx context.Context, req types.ConnectionRequest[OAuthCredentia
 
 	auth := client.PasswordAuthentication(req.Credential.ClientID, req.Credential.ClientSecret, oidc.ScopeOpenID, client.ScopeZitadelAPI())
 
-	return newClient(ctx, req.Credential.Domain, auth)
+	return newClient(ctx, req.Credential.Domain, auth, allowPrivate)
 }
 
 // newClient constructs the Zitadel API client for the instance domain with the given token source
-func newClient(ctx context.Context, domain string, auth client.TokenSourceInitializer) (Client, error) {
+func newClient(ctx context.Context, domain string, auth client.TokenSourceInitializer, allowPrivate bool) (Client, error) {
 	host, opts := parseHost(domain)
+
+	// the instance domain is customer-supplied, so outside local development it must name a public host
+	if !allowPrivate {
+		if _, err := urlx.ValidatePublicURL("https://" + host); err != nil {
+			return Client{}, err
+		}
+	}
 
 	api, err := client.New(
 		ctx,

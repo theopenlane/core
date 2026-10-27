@@ -10,6 +10,7 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -17,6 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -192,6 +194,18 @@ func TestQueryContacts(t *testing.T) {
 			assert.Assert(t, resp != nil)
 		})
 	}
+
+	ownerSeesHistory, err := suite.Client.DB.HistoryClient.ContactHistory.Query().
+		Where(contacthistory.Ref(contact1.ID)).
+		Exist(history.WithContext(th.SharedTestUser1.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, ownerSeesHistory)
+
+	otherOrgSeesHistory, err := suite.Client.DB.HistoryClient.ContactHistory.Query().
+		Where(contacthistory.Ref(contact1.ID)).
+		Exist(history.WithContext(th.SharedTestUser2.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, !otherOrgSeesHistory)
 
 	(&th.Cleanup[*generated.ContactDeleteOne]{Client: suite.Client.DB.Contact, ID: contact1.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.ContactDeleteOne]{Client: suite.Client.DB.Contact, ID: contact2.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
