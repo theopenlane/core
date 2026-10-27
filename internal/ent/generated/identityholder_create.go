@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
@@ -148,6 +149,90 @@ func (_c *IdentityHolderCreate) SetDisplayID(v string) *IdentityHolderCreate {
 // SetTags sets the "tags" field.
 func (_c *IdentityHolderCreate) SetTags(v []string) *IdentityHolderCreate {
 	_c.mutation.SetTags(v)
+	return _c
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *IdentityHolderCreate) SetSourceDefinitionID(v string) *IdentityHolderCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *IdentityHolderCreate) SetNillableSourceDefinitionID(v *string) *IdentityHolderCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *IdentityHolderCreate) SetSourceDefinitionVersion(v string) *IdentityHolderCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *IdentityHolderCreate) SetNillableSourceDefinitionVersion(v *string) *IdentityHolderCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *IdentityHolderCreate) SetSourceInstanceID(v string) *IdentityHolderCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *IdentityHolderCreate) SetNillableSourceInstanceID(v *string) *IdentityHolderCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *IdentityHolderCreate) SetManagedBy(v string) *IdentityHolderCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *IdentityHolderCreate) SetNillableManagedBy(v *string) *IdentityHolderCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *IdentityHolderCreate) SetIntegrationRunID(v string) *IdentityHolderCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *IdentityHolderCreate) SetNillableIntegrationRunID(v *string) *IdentityHolderCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *IdentityHolderCreate) SetExternalID(v string) *IdentityHolderCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *IdentityHolderCreate) SetNillableExternalID(v *string) *IdentityHolderCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
 	return _c
 }
 
@@ -565,6 +650,21 @@ func (_c *IdentityHolderCreate) SetNillableID(v *string) *IdentityHolderCreate {
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *IdentityHolderCreate) AddIntegrationRunIDs(ids ...string) *IdentityHolderCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *IdentityHolderCreate) AddIntegrationRuns(v ...*IntegrationRun) *IdentityHolderCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1136,6 +1236,30 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 		_spec.SetField(identityholder.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(identityholder.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(identityholder.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(identityholder.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(identityholder.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(identityholder.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(identityholder.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.InternalOwner(); ok {
 		_spec.SetField(identityholder.FieldInternalOwner, field.TypeString, value)
 		_node.InternalOwner = value
@@ -1227,6 +1351,22 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 	if value, ok := _c.mutation.AvatarRemoteURL(); ok {
 		_spec.SetField(identityholder.FieldAvatarRemoteURL, field.TypeString, value)
 		_node.AvatarRemoteURL = &value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.IntegrationRunsTable,
+			Columns: []string{identityholder.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

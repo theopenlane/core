@@ -76,6 +76,16 @@ extend input UpdateReviewInput {
     deleteComment: ID
 }
 
+extend input UpdateVulnerabilityInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateFindingInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend input CreateTrustCenterFAQInput {
     createNote: CreateNoteInput
 }
@@ -277,6 +287,42 @@ extend type Mutation{
         noteFiles: [Upload!]
         noteFilesMetadata: [FileMetadataInput!]
     ): ReviewUpdatePayload!
+    """
+    Update an existing vulnerability comment
+    """
+    updateVulnerabilityComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
+    ): VulnerabilityUpdatePayload!
+    """
+    Update an existing finding comment
+    """
+    updateFindingComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
+    ): FindingUpdatePayload!
     """
     Delete an existing note
     """

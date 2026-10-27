@@ -6,14 +6,20 @@ mutation CreateBulkCSVTemplate ($input: Upload!) {
 			description
 			environmentID
 			environmentName
+			externalID
 			id
+			integrationRunID
 			internalNotes
 			jsonconfig
 			kind
+			managedBy
 			name
 			ownerID
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			tags
@@ -35,14 +41,20 @@ mutation CreateBulkTemplate ($input: [CreateTemplateInput!]) {
 			description
 			environmentID
 			environmentName
+			externalID
 			id
+			integrationRunID
 			internalNotes
 			jsonconfig
 			kind
+			managedBy
 			name
 			ownerID
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			tags

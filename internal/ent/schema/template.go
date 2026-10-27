@@ -100,6 +100,7 @@ func (Template) Fields() []ent.Field {
 func (t Template) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(t),
 			newObjectOwnedMixin[generated.Template](t,
 				withParents(TrustCenter{}),
 				withOrganizationOwner(),
@@ -167,6 +168,11 @@ func (Template) Annotations() []schema.Annotation {
 			Check: fmt.Sprintf("trust_center_id IS NOT NULL OR kind != '%s'", enums.TemplateKindTrustCenterNda.String()),
 		},
 		entfga.SelfAccessChecks(),
+		// match the unique name index within the template type
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("name", "template_type"),
 	}
 }
 

@@ -1012,8 +1012,6 @@ type WebauthnRegistrationResponse struct {
 	rout.Reply
 	// Message is the message value
 	Message string `json:"message,omitempty"`
-	// AuthData is the authdata value
-	AuthData
 }
 
 // ExampleResponse returns an example WebauthnRegistrationResponse for OpenAPI documentation
@@ -1021,12 +1019,6 @@ func (r *WebauthnRegistrationResponse) ExampleResponse() any {
 	return WebauthnRegistrationResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "WebAuthn registration successful",
-		AuthData: AuthData{
-			AccessToken:  "access_token",
-			RefreshToken: "refresh_token",
-			Session:      "session",
-			TokenType:    "bearer",
-		},
 	}
 }
 
@@ -1150,10 +1142,6 @@ var ExampleWebauthnLoginResponse = WebauthnLoginResponse{
 var ExampleWebauthnRegistrationResponse = WebauthnRegistrationResponse{
 	Reply:   rout.Reply{Success: true},
 	Message: "Registration successful",
-	AuthData: AuthData{
-		AccessToken:  "access_token_here",
-		RefreshToken: "refresh_token_here",
-	},
 }
 
 // =========

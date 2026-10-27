@@ -191,7 +191,7 @@ func (Asset) Indexes() []ent.Index {
 func (a Asset) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: a},
+			newProvenanceMixin(a),
 			newObjectOwnedMixin[generated.Asset](a,
 				withParents(Platform{}, Entity{}),
 				withOrganizationOwner(),
@@ -309,6 +309,8 @@ func (a Asset) Annotations() []schema.Annotation {
 		),
 		entx.IntegrationMappingSchema().
 			StockPersist().
-			Exclude("source_platform_id"),
+			Exclude("source_platform_id").
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("source_identifier"),
 	}
 }

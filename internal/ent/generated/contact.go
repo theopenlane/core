@@ -47,6 +47,8 @@ type Contact struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the full name of the contact
@@ -63,8 +65,6 @@ type Contact struct {
 	Address string `json:"address,omitempty"`
 	// status of the contact
 	Status enums.UserStatus `json:"status,omitempty"`
-	// stable identifier assigned by the source system, used for integration ingest deduplication
-	ExternalID string `json:"external_id,omitempty"`
 	// integration that sourced this contact, when populated via integration ingest
 	IntegrationID string `json:"integration_id,omitempty"`
 	// time when this contact was last observed by the source integration
@@ -179,7 +179,7 @@ func (*Contact) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case contact.FieldTags:
 			values[i] = new([]byte)
-		case contact.FieldID, contact.FieldCreatedBy, contact.FieldUpdatedBy, contact.FieldUpdatedByImpersonator, contact.FieldDeletedBy, contact.FieldSourceDefinitionID, contact.FieldSourceDefinitionVersion, contact.FieldSourceInstanceID, contact.FieldManagedBy, contact.FieldIntegrationRunID, contact.FieldOwnerID, contact.FieldFullName, contact.FieldTitle, contact.FieldCompany, contact.FieldEmail, contact.FieldPhoneNumber, contact.FieldAddress, contact.FieldStatus, contact.FieldExternalID, contact.FieldIntegrationID:
+		case contact.FieldID, contact.FieldCreatedBy, contact.FieldUpdatedBy, contact.FieldUpdatedByImpersonator, contact.FieldDeletedBy, contact.FieldSourceDefinitionID, contact.FieldSourceDefinitionVersion, contact.FieldSourceInstanceID, contact.FieldManagedBy, contact.FieldIntegrationRunID, contact.FieldExternalID, contact.FieldOwnerID, contact.FieldFullName, contact.FieldTitle, contact.FieldCompany, contact.FieldEmail, contact.FieldPhoneNumber, contact.FieldAddress, contact.FieldStatus, contact.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case contact.FieldCreatedAt, contact.FieldUpdatedAt, contact.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -285,6 +285,12 @@ func (_m *Contact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
 			}
+		case contact.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		case contact.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -332,12 +338,6 @@ func (_m *Contact) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.UserStatus(value.String)
-			}
-		case contact.FieldExternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_id", values[i])
-			} else if value.Valid {
-				_m.ExternalID = value.String
 			}
 		case contact.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -464,6 +464,9 @@ func (_m *Contact) String() string {
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -487,9 +490,6 @@ func (_m *Contact) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("external_id=")
-	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)

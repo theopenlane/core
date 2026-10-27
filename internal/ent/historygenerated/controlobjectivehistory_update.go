@@ -100,6 +100,24 @@ func (_u *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldRevision, field.TypeString)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldOwnerID, field.TypeString)
 	}
@@ -253,6 +271,24 @@ func (_u *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldRevision, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldOwnerID, field.TypeString)

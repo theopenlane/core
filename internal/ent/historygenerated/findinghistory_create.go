@@ -239,6 +239,20 @@ func (_c *FindingHistoryCreate) SetNillableIntegrationRunID(v *string) *FindingH
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *FindingHistoryCreate) SetExternalID(v string) *FindingHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableExternalID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *FindingHistoryCreate) SetOwnerID(v string) *FindingHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -557,20 +571,6 @@ func (_c *FindingHistoryCreate) SetWorkflowEligibleMarker(v bool) *FindingHistor
 func (_c *FindingHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *FindingHistoryCreate {
 	if v != nil {
 		_c.SetWorkflowEligibleMarker(*v)
-	}
-	return _c
-}
-
-// SetExternalID sets the "external_id" field.
-func (_c *FindingHistoryCreate) SetExternalID(v string) *FindingHistoryCreate {
-	_c.mutation.SetExternalID(v)
-	return _c
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_c *FindingHistoryCreate) SetNillableExternalID(v *string) *FindingHistoryCreate {
-	if v != nil {
-		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -1265,6 +1265,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(findinghistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -1356,10 +1360,6 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(findinghistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.SecurityLevel(); ok {
 		_spec.SetField(findinghistory.FieldSecurityLevel, field.TypeEnum, value)

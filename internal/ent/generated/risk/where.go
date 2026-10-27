@@ -132,6 +132,11 @@ func IntegrationRunID(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldIntegrationRunID, v))
 }
 
+// ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
+func ExternalID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldExternalID, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldOwnerID, v))
@@ -220,11 +225,6 @@ func ScopeID(v string) predicate.Risk {
 // WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
 func WorkflowEligibleMarker(v bool) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
-}
-
-// ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
-func ExternalID(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEQ(FieldExternalID, v))
 }
 
 // IntegrationID applies equality check predicate on the "integration_id" field. It's identical to IntegrationIDEQ.
@@ -1205,6 +1205,81 @@ func IntegrationRunIDEqualFold(v string) predicate.Risk {
 // IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
 func IntegrationRunIDContainsFold(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldContainsFold(FieldIntegrationRunID, v))
+}
+
+// ExternalIDEQ applies the EQ predicate on the "external_id" field.
+func ExternalIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldExternalID, v))
+}
+
+// ExternalIDNEQ applies the NEQ predicate on the "external_id" field.
+func ExternalIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldExternalID, v))
+}
+
+// ExternalIDIn applies the In predicate on the "external_id" field.
+func ExternalIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldExternalID, vs...))
+}
+
+// ExternalIDNotIn applies the NotIn predicate on the "external_id" field.
+func ExternalIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldExternalID, vs...))
+}
+
+// ExternalIDGT applies the GT predicate on the "external_id" field.
+func ExternalIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldExternalID, v))
+}
+
+// ExternalIDGTE applies the GTE predicate on the "external_id" field.
+func ExternalIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldExternalID, v))
+}
+
+// ExternalIDLT applies the LT predicate on the "external_id" field.
+func ExternalIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldExternalID, v))
+}
+
+// ExternalIDLTE applies the LTE predicate on the "external_id" field.
+func ExternalIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldExternalID, v))
+}
+
+// ExternalIDContains applies the Contains predicate on the "external_id" field.
+func ExternalIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldExternalID, v))
+}
+
+// ExternalIDHasPrefix applies the HasPrefix predicate on the "external_id" field.
+func ExternalIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldExternalID, v))
+}
+
+// ExternalIDHasSuffix applies the HasSuffix predicate on the "external_id" field.
+func ExternalIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldExternalID, v))
+}
+
+// ExternalIDIsNil applies the IsNil predicate on the "external_id" field.
+func ExternalIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldExternalID))
+}
+
+// ExternalIDNotNil applies the NotNil predicate on the "external_id" field.
+func ExternalIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldExternalID))
+}
+
+// ExternalIDEqualFold applies the EqualFold predicate on the "external_id" field.
+func ExternalIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldExternalID, v))
+}
+
+// ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
+func ExternalIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldExternalID, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -2500,81 +2575,6 @@ func WorkflowEligibleMarkerIsNil() predicate.Risk {
 // WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
 func WorkflowEligibleMarkerNotNil() predicate.Risk {
 	return predicate.Risk(sql.FieldNotNull(FieldWorkflowEligibleMarker))
-}
-
-// ExternalIDEQ applies the EQ predicate on the "external_id" field.
-func ExternalIDEQ(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEQ(FieldExternalID, v))
-}
-
-// ExternalIDNEQ applies the NEQ predicate on the "external_id" field.
-func ExternalIDNEQ(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldNEQ(FieldExternalID, v))
-}
-
-// ExternalIDIn applies the In predicate on the "external_id" field.
-func ExternalIDIn(vs ...string) predicate.Risk {
-	return predicate.Risk(sql.FieldIn(FieldExternalID, vs...))
-}
-
-// ExternalIDNotIn applies the NotIn predicate on the "external_id" field.
-func ExternalIDNotIn(vs ...string) predicate.Risk {
-	return predicate.Risk(sql.FieldNotIn(FieldExternalID, vs...))
-}
-
-// ExternalIDGT applies the GT predicate on the "external_id" field.
-func ExternalIDGT(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldGT(FieldExternalID, v))
-}
-
-// ExternalIDGTE applies the GTE predicate on the "external_id" field.
-func ExternalIDGTE(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldGTE(FieldExternalID, v))
-}
-
-// ExternalIDLT applies the LT predicate on the "external_id" field.
-func ExternalIDLT(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldLT(FieldExternalID, v))
-}
-
-// ExternalIDLTE applies the LTE predicate on the "external_id" field.
-func ExternalIDLTE(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldLTE(FieldExternalID, v))
-}
-
-// ExternalIDContains applies the Contains predicate on the "external_id" field.
-func ExternalIDContains(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldContains(FieldExternalID, v))
-}
-
-// ExternalIDHasPrefix applies the HasPrefix predicate on the "external_id" field.
-func ExternalIDHasPrefix(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldHasPrefix(FieldExternalID, v))
-}
-
-// ExternalIDHasSuffix applies the HasSuffix predicate on the "external_id" field.
-func ExternalIDHasSuffix(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldHasSuffix(FieldExternalID, v))
-}
-
-// ExternalIDIsNil applies the IsNil predicate on the "external_id" field.
-func ExternalIDIsNil() predicate.Risk {
-	return predicate.Risk(sql.FieldIsNull(FieldExternalID))
-}
-
-// ExternalIDNotNil applies the NotNil predicate on the "external_id" field.
-func ExternalIDNotNil() predicate.Risk {
-	return predicate.Risk(sql.FieldNotNull(FieldExternalID))
-}
-
-// ExternalIDEqualFold applies the EqualFold predicate on the "external_id" field.
-func ExternalIDEqualFold(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldEqualFold(FieldExternalID, v))
-}
-
-// ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
-func ExternalIDContainsFold(v string) predicate.Risk {
-	return predicate.Risk(sql.FieldContainsFold(FieldExternalID, v))
 }
 
 // IntegrationIDEQ applies the EQ predicate on the "integration_id" field.

@@ -112,6 +112,9 @@ func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(riskhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(riskhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
 	}
@@ -165,9 +168,6 @@ func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(riskhistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(riskhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.IntegrationIDCleared() {
 		_spec.ClearField(riskhistory.FieldIntegrationID, field.TypeString)
@@ -371,6 +371,9 @@ func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(riskhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(riskhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
 	}
@@ -424,9 +427,6 @@ func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(riskhistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(riskhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.IntegrationIDCleared() {
 		_spec.ClearField(riskhistory.FieldIntegrationID, field.TypeString)

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
@@ -128,6 +129,126 @@ func (_u *CustomTypeEnumUpdate) SetNillableDeletedBy(v *string) *CustomTypeEnumU
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *CustomTypeEnumUpdate) ClearDeletedBy() *CustomTypeEnumUpdate {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *CustomTypeEnumUpdate) SetSourceDefinitionID(v string) *CustomTypeEnumUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdate) SetNillableSourceDefinitionID(v *string) *CustomTypeEnumUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *CustomTypeEnumUpdate) ClearSourceDefinitionID() *CustomTypeEnumUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *CustomTypeEnumUpdate) SetSourceDefinitionVersion(v string) *CustomTypeEnumUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdate) SetNillableSourceDefinitionVersion(v *string) *CustomTypeEnumUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *CustomTypeEnumUpdate) ClearSourceDefinitionVersion() *CustomTypeEnumUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *CustomTypeEnumUpdate) SetSourceInstanceID(v string) *CustomTypeEnumUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdate) SetNillableSourceInstanceID(v *string) *CustomTypeEnumUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *CustomTypeEnumUpdate) ClearSourceInstanceID() *CustomTypeEnumUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *CustomTypeEnumUpdate) SetManagedBy(v string) *CustomTypeEnumUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdate) SetNillableManagedBy(v *string) *CustomTypeEnumUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *CustomTypeEnumUpdate) ClearManagedBy() *CustomTypeEnumUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *CustomTypeEnumUpdate) SetIntegrationRunID(v string) *CustomTypeEnumUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdate) SetNillableIntegrationRunID(v *string) *CustomTypeEnumUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *CustomTypeEnumUpdate) ClearIntegrationRunID() *CustomTypeEnumUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *CustomTypeEnumUpdate) SetExternalID(v string) *CustomTypeEnumUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdate) SetNillableExternalID(v *string) *CustomTypeEnumUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *CustomTypeEnumUpdate) ClearExternalID() *CustomTypeEnumUpdate {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -249,6 +370,21 @@ func (_u *CustomTypeEnumUpdate) SetNillableIcon(v *string) *CustomTypeEnumUpdate
 func (_u *CustomTypeEnumUpdate) ClearIcon() *CustomTypeEnumUpdate {
 	_u.mutation.ClearIcon()
 	return _u
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *CustomTypeEnumUpdate) AddIntegrationRunIDs(ids ...string) *CustomTypeEnumUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *CustomTypeEnumUpdate) AddIntegrationRuns(v ...*IntegrationRun) *CustomTypeEnumUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -409,6 +545,27 @@ func (_u *CustomTypeEnumUpdate) AddPlatforms(v ...*Platform) *CustomTypeEnumUpda
 // Mutation returns the CustomTypeEnumMutation object of the builder.
 func (_u *CustomTypeEnumUpdate) Mutation() *CustomTypeEnumMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *CustomTypeEnumUpdate) ClearIntegrationRuns() *CustomTypeEnumUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *CustomTypeEnumUpdate) RemoveIntegrationRunIDs(ids ...string) *CustomTypeEnumUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *CustomTypeEnumUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *CustomTypeEnumUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -733,6 +890,42 @@ func (_u *CustomTypeEnumUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(customtypeenum.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(customtypeenum.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(customtypeenum.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(customtypeenum.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(customtypeenum.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(customtypeenum.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(customtypeenum.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(customtypeenum.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(customtypeenum.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(customtypeenum.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(customtypeenum.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(customtypeenum.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(customtypeenum.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(customtypeenum.FieldSystemOwned, field.TypeBool)
 	}
@@ -765,6 +958,51 @@ func (_u *CustomTypeEnumUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.IconCleared() {
 		_spec.ClearField(customtypeenum.FieldIcon, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customtypeenum.IntegrationRunsTable,
+			Columns: []string{customtypeenum.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customtypeenum.IntegrationRunsTable,
+			Columns: []string{customtypeenum.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customtypeenum.IntegrationRunsTable,
+			Columns: []string{customtypeenum.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1359,6 +1597,126 @@ func (_u *CustomTypeEnumUpdateOne) ClearDeletedBy() *CustomTypeEnumUpdateOne {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *CustomTypeEnumUpdateOne) SetSourceDefinitionID(v string) *CustomTypeEnumUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdateOne) SetNillableSourceDefinitionID(v *string) *CustomTypeEnumUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *CustomTypeEnumUpdateOne) ClearSourceDefinitionID() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *CustomTypeEnumUpdateOne) SetSourceDefinitionVersion(v string) *CustomTypeEnumUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdateOne) SetNillableSourceDefinitionVersion(v *string) *CustomTypeEnumUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *CustomTypeEnumUpdateOne) ClearSourceDefinitionVersion() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *CustomTypeEnumUpdateOne) SetSourceInstanceID(v string) *CustomTypeEnumUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdateOne) SetNillableSourceInstanceID(v *string) *CustomTypeEnumUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *CustomTypeEnumUpdateOne) ClearSourceInstanceID() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *CustomTypeEnumUpdateOne) SetManagedBy(v string) *CustomTypeEnumUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdateOne) SetNillableManagedBy(v *string) *CustomTypeEnumUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *CustomTypeEnumUpdateOne) ClearManagedBy() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *CustomTypeEnumUpdateOne) SetIntegrationRunID(v string) *CustomTypeEnumUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdateOne) SetNillableIntegrationRunID(v *string) *CustomTypeEnumUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *CustomTypeEnumUpdateOne) ClearIntegrationRunID() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *CustomTypeEnumUpdateOne) SetExternalID(v string) *CustomTypeEnumUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdateOne) SetNillableExternalID(v *string) *CustomTypeEnumUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *CustomTypeEnumUpdateOne) ClearExternalID() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *CustomTypeEnumUpdateOne) SetOwnerID(v string) *CustomTypeEnumUpdateOne {
 	_u.mutation.SetOwnerID(v)
@@ -1477,6 +1835,21 @@ func (_u *CustomTypeEnumUpdateOne) SetNillableIcon(v *string) *CustomTypeEnumUpd
 func (_u *CustomTypeEnumUpdateOne) ClearIcon() *CustomTypeEnumUpdateOne {
 	_u.mutation.ClearIcon()
 	return _u
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *CustomTypeEnumUpdateOne) AddIntegrationRunIDs(ids ...string) *CustomTypeEnumUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *CustomTypeEnumUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *CustomTypeEnumUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1637,6 +2010,27 @@ func (_u *CustomTypeEnumUpdateOne) AddPlatforms(v ...*Platform) *CustomTypeEnumU
 // Mutation returns the CustomTypeEnumMutation object of the builder.
 func (_u *CustomTypeEnumUpdateOne) Mutation() *CustomTypeEnumMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *CustomTypeEnumUpdateOne) ClearIntegrationRuns() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *CustomTypeEnumUpdateOne) RemoveIntegrationRunIDs(ids ...string) *CustomTypeEnumUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *CustomTypeEnumUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *CustomTypeEnumUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -1991,6 +2385,42 @@ func (_u *CustomTypeEnumUpdateOne) sqlSave(ctx context.Context) (_node *CustomTy
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(customtypeenum.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(customtypeenum.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(customtypeenum.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(customtypeenum.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(customtypeenum.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(customtypeenum.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(customtypeenum.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(customtypeenum.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(customtypeenum.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(customtypeenum.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(customtypeenum.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(customtypeenum.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(customtypeenum.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(customtypeenum.FieldSystemOwned, field.TypeBool)
 	}
@@ -2023,6 +2453,51 @@ func (_u *CustomTypeEnumUpdateOne) sqlSave(ctx context.Context) (_node *CustomTy
 	}
 	if _u.mutation.IconCleared() {
 		_spec.ClearField(customtypeenum.FieldIcon, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customtypeenum.IntegrationRunsTable,
+			Columns: []string{customtypeenum.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customtypeenum.IntegrationRunsTable,
+			Columns: []string{customtypeenum.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customtypeenum.IntegrationRunsTable,
+			Columns: []string{customtypeenum.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -17,6 +17,7 @@ mutation CreateBulkCSVProcedure ($input: Upload!) {
 			environmentName
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions
@@ -77,6 +78,7 @@ mutation CreateBulkProcedure ($input: [CreateProcedureInput!]) {
 			environmentName
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions
@@ -137,6 +139,7 @@ mutation CreateProcedure ($input: CreateProcedureInput!) {
 			environmentName
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions
@@ -318,6 +321,7 @@ query GetProcedureByID ($procedureId: ID!) {
 		environmentName
 		externalContents
 		externalFileID
+		externalID
 		fileID
 		id
 		improvementSuggestions
@@ -440,6 +444,7 @@ mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
 			environmentName
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions
@@ -503,6 +508,7 @@ mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!
 			environmentName
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions

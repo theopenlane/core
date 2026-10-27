@@ -86,6 +86,7 @@ func (Assessment) Fields() []ent.Field {
 func (a Assessment) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(a),
 			newObjectOwnedMixin[generated.Assessment](a,
 				withParents(Campaign{}),
 				withOrganizationOwner(),
@@ -145,6 +146,9 @@ func (Assessment) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }
 

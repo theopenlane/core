@@ -182,6 +182,90 @@ func (_c *ControlObjectiveHistoryCreate) SetNillableRevision(v *string) *Control
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *ControlObjectiveHistoryCreate) SetSourceDefinitionID(v string) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *ControlObjectiveHistoryCreate) SetNillableSourceDefinitionID(v *string) *ControlObjectiveHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *ControlObjectiveHistoryCreate) SetSourceDefinitionVersion(v string) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *ControlObjectiveHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *ControlObjectiveHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *ControlObjectiveHistoryCreate) SetSourceInstanceID(v string) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *ControlObjectiveHistoryCreate) SetNillableSourceInstanceID(v *string) *ControlObjectiveHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *ControlObjectiveHistoryCreate) SetManagedBy(v string) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *ControlObjectiveHistoryCreate) SetNillableManagedBy(v *string) *ControlObjectiveHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *ControlObjectiveHistoryCreate) SetIntegrationRunID(v string) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *ControlObjectiveHistoryCreate) SetNillableIntegrationRunID(v *string) *ControlObjectiveHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *ControlObjectiveHistoryCreate) SetExternalID(v string) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *ControlObjectiveHistoryCreate) SetNillableExternalID(v *string) *ControlObjectiveHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ControlObjectiveHistoryCreate) SetOwnerID(v string) *ControlObjectiveHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -551,6 +635,30 @@ func (_c *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistory,
 	if value, ok := _c.mutation.Revision(); ok {
 		_spec.SetField(controlobjectivehistory.FieldRevision, field.TypeString, value)
 		_node.Revision = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(controlobjectivehistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(controlobjectivehistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(controlobjectivehistory.FieldOwnerID, field.TypeString, value)

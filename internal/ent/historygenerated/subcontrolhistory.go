@@ -47,6 +47,18 @@ type SubcontrolHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// human readable title of the control for quick identification
@@ -139,7 +151,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case subcontrolhistory.FieldSystemOwned, subcontrolhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldUpdatedByImpersonator, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldExternalUUID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationDescription, subcontrolhistory.FieldPublicRepresentation, subcontrolhistory.FieldSource, subcontrolhistory.FieldSourceName, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldReferenceFrameworkRevision, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldSubcontrolKindName, subcontrolhistory.FieldSubcontrolKindID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldUpdatedByImpersonator, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldSourceDefinitionID, subcontrolhistory.FieldSourceDefinitionVersion, subcontrolhistory.FieldSourceInstanceID, subcontrolhistory.FieldManagedBy, subcontrolhistory.FieldIntegrationRunID, subcontrolhistory.FieldExternalID, subcontrolhistory.FieldExternalUUID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationDescription, subcontrolhistory.FieldPublicRepresentation, subcontrolhistory.FieldSource, subcontrolhistory.FieldSourceName, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldReferenceFrameworkRevision, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldSubcontrolKindName, subcontrolhistory.FieldSubcontrolKindID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -238,6 +250,42 @@ func (_m *SubcontrolHistory) assignValues(columns []string, values []any) error 
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case subcontrolhistory.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case subcontrolhistory.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case subcontrolhistory.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case subcontrolhistory.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case subcontrolhistory.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case subcontrolhistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case subcontrolhistory.FieldExternalUUID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -575,6 +623,24 @@ func (_m *SubcontrolHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	if v := _m.ExternalUUID; v != nil {
 		builder.WriteString("external_uuid=")

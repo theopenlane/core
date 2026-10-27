@@ -126,7 +126,7 @@ func (TrustCenterEntity) Indexes() []ent.Index {
 func (TrustCenterEntity) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaTrustCenterEntity),
-		entfga.SettingsChecks("trust_center"),
+		entfga.SettingsChecks(TrustCenter{}.Name()),
 	}
 }
 

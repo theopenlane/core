@@ -21,6 +21,7 @@ mutation CreateActionPlan ($input: CreateActionPlanInput!) {
 			dueDate
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions
@@ -83,6 +84,7 @@ mutation CreateBulkActionPlan ($input: [CreateActionPlanInput!]) {
 			dueDate
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions
@@ -145,6 +147,7 @@ mutation CreateBulkCSVActionPlan ($input: Upload!) {
 			dueDate
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions
@@ -211,6 +214,7 @@ query GetActionPlanByID ($actionPlanId: ID!) {
 		dueDate
 		externalContents
 		externalFileID
+		externalID
 		fileID
 		id
 		improvementSuggestions
@@ -320,6 +324,7 @@ mutation UpdateActionPlan ($updateActionPlanId: ID!, $input: UpdateActionPlanInp
 			dueDate
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions
@@ -382,6 +387,7 @@ mutation UpdateBulkActionPlan ($ids: [ID!]!, $input: UpdateActionPlanInput!) {
 			dueDate
 			externalContents
 			externalFileID
+			externalID
 			fileID
 			id
 			improvementSuggestions

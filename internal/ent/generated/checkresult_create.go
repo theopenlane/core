@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // CheckResultCreate is the builder for creating a CheckResult entity.
@@ -201,6 +202,20 @@ func (_c *CheckResultCreate) SetNillableIntegrationRunID(v *string) *CheckResult
 	return _c
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (_c *CheckResultCreate) SetOwnerID(v string) *CheckResultCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *CheckResultCreate) SetNillableOwnerID(v *string) *CheckResultCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *CheckResultCreate) SetStatus(v enums.CheckStatus) *CheckResultCreate {
 	_c.mutation.SetStatus(v)
@@ -318,6 +333,11 @@ func (_c *CheckResultCreate) AddIntegrationRuns(v ...*IntegrationRun) *CheckResu
 		ids[i] = v[i].ID
 	}
 	return _c.AddIntegrationRunIDs(ids...)
+}
+
+// SetOwner sets the "owner" edge to the Organization entity.
+func (_c *CheckResultCreate) SetOwner(v *Organization) *CheckResultCreate {
+	return _c.SetOwnerID(v.ID)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -471,6 +491,11 @@ func (_c *CheckResultCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *CheckResultCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := checkresult.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CheckResult.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "CheckResult.status"`)}
 	}
@@ -607,6 +632,23 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   checkresult.OwnerTable,
+			Columns: []string{checkresult.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {

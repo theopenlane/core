@@ -44,6 +44,8 @@ const (
 	FieldManagedBy = "managed_by"
 	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -60,6 +62,8 @@ const (
 	FieldIntegrationID = "integration_id"
 	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
 	EdgeIntegrationRuns = "integration_runs"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -79,6 +83,13 @@ const (
 	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
 	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
 	IntegrationRunsInverseTable = "integration_runs"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "check_results"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
 	BlockedGroupsTable = "groups"
 	// BlockedGroupsInverseTable is the table name for the Group entity.
@@ -135,6 +146,7 @@ var Columns = []string{
 	FieldSourceInstanceID,
 	FieldManagedBy,
 	FieldIntegrationRunID,
+	FieldOwnerID,
 	FieldStatus,
 	FieldSource,
 	FieldLastObservedAt,
@@ -172,8 +184,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Hooks        [10]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -183,6 +195,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -267,6 +281,11 @@ func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
 }
 
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
@@ -313,6 +332,13 @@ func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -397,6 +423,13 @@ func newIntegrationRunsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, IntegrationRunsTable, IntegrationRunsPrimaryKey...),
+	)
+}
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
 func newBlockedGroupsStep() *sqlgraph.Step {

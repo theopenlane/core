@@ -97,6 +97,24 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(reviewhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(reviewhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(reviewhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(reviewhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(reviewhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(reviewhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(reviewhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldOwnerID, field.TypeString)
 	}
@@ -120,9 +138,6 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(reviewhistory.FieldScopeID, field.TypeString)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(reviewhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.ExternalOwnerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldExternalOwnerID, field.TypeString)
@@ -293,6 +308,24 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(reviewhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(reviewhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(reviewhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(reviewhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(reviewhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(reviewhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(reviewhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldOwnerID, field.TypeString)
 	}
@@ -316,9 +349,6 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(reviewhistory.FieldScopeID, field.TypeString)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(reviewhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.ExternalOwnerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldExternalOwnerID, field.TypeString)

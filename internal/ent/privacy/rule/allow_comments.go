@@ -19,6 +19,10 @@ func CheckIfCommentOnly() privacy.MutationRuleFunc {
 			return privacy.Skipf("mutation is a create operation, skipping bypass")
 		}
 
+		if len(m.ClearedFields()) > 0 || len(m.ClearedEdges()) > 0 {
+			return privacy.Skipf("mutation clears fields or edges, skipping bypass")
+		}
+
 		// get the list of added and removed edges and fields in the mutation
 		addedEdges := m.AddedEdges()
 		removedEdges := m.RemovedEdges()

@@ -32,6 +32,18 @@ type CustomTypeEnum struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -61,6 +73,8 @@ type CustomTypeEnum struct {
 
 // CustomTypeEnumEdges holds the relations/edges for other nodes in the graph.
 type CustomTypeEnumEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Tasks holds the value of the tasks edge.
@@ -85,10 +99,11 @@ type CustomTypeEnumEdges struct {
 	Platforms []*Platform `json:"platforms,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [12]map[string]int
 
+	namedIntegrationRuns  map[string][]*IntegrationRun
 	namedTasks            map[string][]*Task
 	namedControls         map[string][]*Control
 	namedSubcontrols      map[string][]*Subcontrol
@@ -101,12 +116,21 @@ type CustomTypeEnumEdges struct {
 	namedPlatforms        map[string][]*Platform
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e CustomTypeEnumEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CustomTypeEnumEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -115,7 +139,7 @@ func (e CustomTypeEnumEdges) OwnerOrErr() (*Organization, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -124,7 +148,7 @@ func (e CustomTypeEnumEdges) TasksOrErr() ([]*Task, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -133,7 +157,7 @@ func (e CustomTypeEnumEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -142,7 +166,7 @@ func (e CustomTypeEnumEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -151,7 +175,7 @@ func (e CustomTypeEnumEdges) RisksOrErr() ([]*Risk, error) {
 // RiskCategoriesOrErr returns the RiskCategories value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) RiskCategoriesOrErr() ([]*Risk, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.RiskCategories, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_categories"}
@@ -160,7 +184,7 @@ func (e CustomTypeEnumEdges) RiskCategoriesOrErr() ([]*Risk, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -169,7 +193,7 @@ func (e CustomTypeEnumEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) 
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -178,7 +202,7 @@ func (e CustomTypeEnumEdges) ProceduresOrErr() ([]*Procedure, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -187,7 +211,7 @@ func (e CustomTypeEnumEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -196,7 +220,7 @@ func (e CustomTypeEnumEdges) ProgramsOrErr() ([]*Program, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e CustomTypeEnumEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -209,7 +233,7 @@ func (*CustomTypeEnum) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case customtypeenum.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case customtypeenum.FieldID, customtypeenum.FieldCreatedBy, customtypeenum.FieldUpdatedBy, customtypeenum.FieldUpdatedByImpersonator, customtypeenum.FieldDeletedBy, customtypeenum.FieldOwnerID, customtypeenum.FieldInternalNotes, customtypeenum.FieldSystemInternalID, customtypeenum.FieldObjectType, customtypeenum.FieldField, customtypeenum.FieldName, customtypeenum.FieldDescription, customtypeenum.FieldColor, customtypeenum.FieldIcon:
+		case customtypeenum.FieldID, customtypeenum.FieldCreatedBy, customtypeenum.FieldUpdatedBy, customtypeenum.FieldUpdatedByImpersonator, customtypeenum.FieldDeletedBy, customtypeenum.FieldSourceDefinitionID, customtypeenum.FieldSourceDefinitionVersion, customtypeenum.FieldSourceInstanceID, customtypeenum.FieldManagedBy, customtypeenum.FieldIntegrationRunID, customtypeenum.FieldExternalID, customtypeenum.FieldOwnerID, customtypeenum.FieldInternalNotes, customtypeenum.FieldSystemInternalID, customtypeenum.FieldObjectType, customtypeenum.FieldField, customtypeenum.FieldName, customtypeenum.FieldDescription, customtypeenum.FieldColor, customtypeenum.FieldIcon:
 			values[i] = new(sql.NullString)
 		case customtypeenum.FieldCreatedAt, customtypeenum.FieldUpdatedAt, customtypeenum.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -278,6 +302,42 @@ func (_m *CustomTypeEnum) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				_m.DeletedBy = value.String
+			}
+		case customtypeenum.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case customtypeenum.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case customtypeenum.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case customtypeenum.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case customtypeenum.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case customtypeenum.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case customtypeenum.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -359,6 +419,11 @@ func (_m *CustomTypeEnum) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *CustomTypeEnum) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryIntegrationRuns queries the "integration_runs" edge of the CustomTypeEnum entity.
+func (_m *CustomTypeEnum) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewCustomTypeEnumClient(_m.config).QueryIntegrationRuns(_m)
 }
 
 // QueryOwner queries the "owner" edge of the CustomTypeEnum entity.
@@ -462,6 +527,24 @@ func (_m *CustomTypeEnum) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -497,6 +580,30 @@ func (_m *CustomTypeEnum) String() string {
 	builder.WriteString(_m.Icon)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *CustomTypeEnum) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *CustomTypeEnum) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedTasks returns the Tasks named value or an error if the edge was not

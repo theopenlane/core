@@ -33,6 +33,18 @@ type TagDefinition struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -60,13 +72,26 @@ type TagDefinition struct {
 
 // TagDefinitionEdges holds the relations/edges for other nodes in the graph.
 type TagDefinitionEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
+
+	namedIntegrationRuns map[string][]*IntegrationRun
+}
+
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e TagDefinitionEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -74,7 +99,7 @@ type TagDefinitionEdges struct {
 func (e TagDefinitionEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -89,7 +114,7 @@ func (*TagDefinition) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case tagdefinition.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case tagdefinition.FieldID, tagdefinition.FieldCreatedBy, tagdefinition.FieldUpdatedBy, tagdefinition.FieldUpdatedByImpersonator, tagdefinition.FieldDeletedBy, tagdefinition.FieldOwnerID, tagdefinition.FieldInternalNotes, tagdefinition.FieldSystemInternalID, tagdefinition.FieldName, tagdefinition.FieldSlug, tagdefinition.FieldDescription, tagdefinition.FieldColor:
+		case tagdefinition.FieldID, tagdefinition.FieldCreatedBy, tagdefinition.FieldUpdatedBy, tagdefinition.FieldUpdatedByImpersonator, tagdefinition.FieldDeletedBy, tagdefinition.FieldSourceDefinitionID, tagdefinition.FieldSourceDefinitionVersion, tagdefinition.FieldSourceInstanceID, tagdefinition.FieldManagedBy, tagdefinition.FieldIntegrationRunID, tagdefinition.FieldExternalID, tagdefinition.FieldOwnerID, tagdefinition.FieldInternalNotes, tagdefinition.FieldSystemInternalID, tagdefinition.FieldName, tagdefinition.FieldSlug, tagdefinition.FieldDescription, tagdefinition.FieldColor:
 			values[i] = new(sql.NullString)
 		case tagdefinition.FieldCreatedAt, tagdefinition.FieldUpdatedAt, tagdefinition.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -158,6 +183,42 @@ func (_m *TagDefinition) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
 			} else if value.Valid {
 				_m.DeletedBy = value.String
+			}
+		case tagdefinition.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case tagdefinition.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case tagdefinition.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case tagdefinition.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case tagdefinition.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case tagdefinition.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case tagdefinition.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -237,6 +298,11 @@ func (_m *TagDefinition) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the TagDefinition entity.
+func (_m *TagDefinition) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewTagDefinitionClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the TagDefinition entity.
 func (_m *TagDefinition) QueryOwner() *OrganizationQuery {
 	return NewTagDefinitionClient(_m.config).QueryOwner(_m)
@@ -288,6 +354,24 @@ func (_m *TagDefinition) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -320,6 +404,30 @@ func (_m *TagDefinition) String() string {
 	builder.WriteString(_m.Color)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TagDefinition) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TagDefinition) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // TagDefinitions is a parsable slice of TagDefinition.

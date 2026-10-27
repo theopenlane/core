@@ -274,6 +274,7 @@ func (o Organization) Edges() []ent.Edge {
 		hiddenOwnerEdge(o, Discussion{}),
 		hiddenOwnerEdge(o, VendorScoringConfig{}),
 		hiddenOwnerEdge(o, VendorRiskScore{}),
+		hiddenOwnerEdge(o, CheckResult{}),
 	}
 }
 

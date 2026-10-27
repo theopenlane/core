@@ -196,6 +196,34 @@ var Columns = []string{
 	FieldMetrics,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "integration_runs"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"assessment_integration_runs",
+	"assessment_policy_integration_runs",
+	"campaign_integration_runs",
+	"control_integration_runs",
+	"control_implementation_integration_runs",
+	"control_objective_integration_runs",
+	"custom_type_enum_integration_runs",
+	"email_template_integration_runs",
+	"evidence_integration_runs",
+	"group_integration_runs",
+	"identity_holder_integration_runs",
+	"mapped_control_integration_runs",
+	"narrative_integration_runs",
+	"platform_integration_runs",
+	"program_integration_runs",
+	"remediation_integration_runs",
+	"review_integration_runs",
+	"scan_integration_runs",
+	"subcontrol_integration_runs",
+	"system_detail_integration_runs",
+	"tag_definition_integration_runs",
+	"task_integration_runs",
+	"template_integration_runs",
+}
+
 var (
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
@@ -242,6 +270,11 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}

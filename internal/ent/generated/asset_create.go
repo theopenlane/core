@@ -214,6 +214,20 @@ func (_c *AssetCreate) SetNillableIntegrationRunID(v *string) *AssetCreate {
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *AssetCreate) SetExternalID(v string) *AssetCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableExternalID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *AssetCreate) SetOwnerID(v string) *AssetCreate {
 	_c.mutation.SetOwnerID(v)
@@ -1372,6 +1386,10 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(asset.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(asset.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.InternalOwner(); ok {
 		_spec.SetField(asset.FieldInternalOwner, field.TypeString, value)

@@ -252,6 +252,20 @@ func (_c *InternalPolicyHistoryCreate) SetNillableIntegrationRunID(v *string) *I
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *InternalPolicyHistoryCreate) SetExternalID(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableExternalID(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *InternalPolicyHistoryCreate) SetOwnerID(v string) *InternalPolicyHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -932,6 +946,10 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldOwnerID, field.TypeString, value)

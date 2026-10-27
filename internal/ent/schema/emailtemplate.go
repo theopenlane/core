@@ -223,6 +223,7 @@ func (e EmailTemplate) Mixin() []ent.Mixin {
 		excludeTags:     true,
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(e),
 			newObjectOwnedMixin[generated.EmailTemplate](e,
 				withParents(Integration{}, WorkflowDefinition{}, WorkflowInstance{}),
 				withOrganizationOwner(),
@@ -264,5 +265,8 @@ func (EmailTemplate) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaEmailTemplate),
 		entfga.SelfAccessChecks(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }

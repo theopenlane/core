@@ -130,7 +130,7 @@ func (p PersonalAccessToken) Edges() []ent.Edge {
 			edgeSchema: Organization{},
 			comment:    "the organization(s) the token is associated with",
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck()},
+				accessmap.EdgeViewCheck(Organization{}.Name())},
 		}),
 		defaultEdgeToWithPagination(p, Event{}),
 	}

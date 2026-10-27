@@ -166,7 +166,7 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 		prefix:          "PLC",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: i},
+			newProvenanceMixin(i),
 			// all policies must be associated to an organization
 			// unless they are system owned to be used as templates
 			newOrgOwnedMixin(i),
@@ -201,7 +201,10 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("component"),
 		),
-		entx.IntegrationMappingSchema().StockPersist(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("external_file_id"),
 	}
 }
 

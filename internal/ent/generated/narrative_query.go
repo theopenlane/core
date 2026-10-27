@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -32,6 +33,7 @@ type NarrativeQuery struct {
 	order                     []narrative.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.Narrative
+	withIntegrationRuns       *IntegrationRunQuery
 	withOwner                 *OrganizationQuery
 	withBlockedGroups         *GroupQuery
 	withEditors               *GroupQuery
@@ -43,6 +45,7 @@ type NarrativeQuery struct {
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*Narrative) error
 	modifiers                 []func(*sql.Selector)
+	withNamedIntegrationRuns  map[string]*IntegrationRunQuery
 	withNamedBlockedGroups    map[string]*GroupQuery
 	withNamedEditors          map[string]*GroupQuery
 	withNamedViewers          map[string]*GroupQuery
@@ -84,6 +87,28 @@ func (_q *NarrativeQuery) Unique(unique bool) *NarrativeQuery {
 func (_q *NarrativeQuery) Order(o ...narrative.OrderOption) *NarrativeQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *NarrativeQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(narrative.Table, narrative.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, narrative.IntegrationRunsTable, narrative.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -454,6 +479,7 @@ func (_q *NarrativeQuery) Clone() *NarrativeQuery {
 		order:                append([]narrative.OrderOption{}, _q.order...),
 		inters:               append([]Interceptor{}, _q.inters...),
 		predicates:           append([]predicate.Narrative{}, _q.predicates...),
+		withIntegrationRuns:  _q.withIntegrationRuns.Clone(),
 		withOwner:            _q.withOwner.Clone(),
 		withBlockedGroups:    _q.withBlockedGroups.Clone(),
 		withEditors:          _q.withEditors.Clone(),
@@ -467,6 +493,17 @@ func (_q *NarrativeQuery) Clone() *NarrativeQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NarrativeQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *NarrativeQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -642,7 +679,8 @@ func (_q *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 		nodes       = []*Narrative{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [9]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -676,6 +714,13 @@ func (_q *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Narrative) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Narrative, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
@@ -729,6 +774,13 @@ func (_q *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 		if err := _q.loadProcedures(ctx, query, nodes,
 			func(n *Narrative) { n.Edges.Procedures = []*Procedure{} },
 			func(n *Narrative, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Narrative) { n.appendNamedIntegrationRuns(name) },
+			func(n *Narrative, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -789,6 +841,37 @@ func (_q *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 	return nodes, nil
 }
 
+func (_q *NarrativeQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Narrative)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(narrative.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.narrative_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "narrative_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "narrative_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *NarrativeQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Narrative, init func(*Narrative), assign func(*Narrative, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Narrative)
@@ -1341,6 +1424,20 @@ func (_q *NarrativeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *NarrativeQuery) Modify(modifiers ...func(s *sql.Selector)) *NarrativeSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *NarrativeQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *NarrativeQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"

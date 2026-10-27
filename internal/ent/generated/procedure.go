@@ -53,6 +53,8 @@ type Procedure struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the procedure
@@ -392,7 +394,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired, procedure.FieldSystemOwned, procedure.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldUpdatedByImpersonator, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldSourceDefinitionID, procedure.FieldSourceDefinitionVersion, procedure.FieldSourceInstanceID, procedure.FieldManagedBy, procedure.FieldIntegrationRunID, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldManagementMode, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldExternalFileID, procedure.FieldExternalContents, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID, procedure.FieldEnvironmentName, procedure.FieldEnvironmentID, procedure.FieldScopeName, procedure.FieldScopeID:
+		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldUpdatedByImpersonator, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldSourceDefinitionID, procedure.FieldSourceDefinitionVersion, procedure.FieldSourceInstanceID, procedure.FieldManagedBy, procedure.FieldIntegrationRunID, procedure.FieldExternalID, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldManagementMode, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldExternalFileID, procedure.FieldExternalContents, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID, procedure.FieldEnvironmentName, procedure.FieldEnvironmentID, procedure.FieldScopeName, procedure.FieldScopeID:
 			values[i] = new(sql.NullString)
 		case procedure.FieldCreatedAt, procedure.FieldUpdatedAt, procedure.FieldDeletedAt, procedure.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -515,6 +517,12 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case procedure.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case procedure.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -931,6 +939,9 @@ func (_m *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

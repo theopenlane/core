@@ -44,6 +44,18 @@ type MappedControlHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -76,7 +88,7 @@ func (*MappedControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case mappedcontrolhistory.FieldConfidence:
 			values[i] = new(sql.NullInt64)
-		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldUpdatedByImpersonator, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldInternalNotes, mappedcontrolhistory.FieldSystemInternalID, mappedcontrolhistory.FieldOwnerID, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation, mappedcontrolhistory.FieldSource:
+		case mappedcontrolhistory.FieldID, mappedcontrolhistory.FieldRef, mappedcontrolhistory.FieldCreatedBy, mappedcontrolhistory.FieldUpdatedBy, mappedcontrolhistory.FieldUpdatedByImpersonator, mappedcontrolhistory.FieldDeletedBy, mappedcontrolhistory.FieldSourceDefinitionID, mappedcontrolhistory.FieldSourceDefinitionVersion, mappedcontrolhistory.FieldSourceInstanceID, mappedcontrolhistory.FieldManagedBy, mappedcontrolhistory.FieldIntegrationRunID, mappedcontrolhistory.FieldExternalID, mappedcontrolhistory.FieldInternalNotes, mappedcontrolhistory.FieldSystemInternalID, mappedcontrolhistory.FieldOwnerID, mappedcontrolhistory.FieldMappingType, mappedcontrolhistory.FieldRelation, mappedcontrolhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case mappedcontrolhistory.FieldHistoryTime, mappedcontrolhistory.FieldCreatedAt, mappedcontrolhistory.FieldUpdatedAt, mappedcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -169,6 +181,42 @@ func (_m *MappedControlHistory) assignValues(columns []string, values []any) err
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case mappedcontrolhistory.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case mappedcontrolhistory.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case mappedcontrolhistory.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case mappedcontrolhistory.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case mappedcontrolhistory.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case mappedcontrolhistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case mappedcontrolhistory.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -291,6 +339,24 @@ func (_m *MappedControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
