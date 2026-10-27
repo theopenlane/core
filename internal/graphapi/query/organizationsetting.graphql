@@ -22,9 +22,7 @@ query GetAllOrganizationSettings {
 				identityProviderEntityID
 				identityProviderLoginEnforced
 				oidcDiscoveryEndpoint
-				identityProviderClientSecret
 				identityProviderMetadataEndpoint
-				complianceWebhookToken
 				organization {
 					id
 					displayName
@@ -43,7 +41,6 @@ query GetOrganizationSettingByID ($organizationSettingId: ID!) {
 		billingEmail
 		billingNotificationsEnabled
 		billingPhone
-		complianceWebhookToken
 		createdAt
 		createdBy
 		domains
@@ -52,7 +49,6 @@ query GetOrganizationSettingByID ($organizationSettingId: ID!) {
 		identityProvider
 		identityProviderAuthTested
 		identityProviderClientID
-		identityProviderClientSecret
 		identityProviderEntityID
 		identityProviderJitProvisioning
 		identityProviderLoginEnforced
@@ -101,10 +97,8 @@ query GetOrganizationSettings ($where: OrganizationSettingWhereInput!) {
 				identityProviderEntityID
 				identityProviderLoginEnforced
 				oidcDiscoveryEndpoint
-				identityProviderClientSecret
 				identityProviderMetadataEndpoint
 				identityProviderAuthTested
-				complianceWebhookToken
 				organization {
 					id
 					displayName
@@ -124,7 +118,6 @@ mutation UpdateOrganizationSetting ($updateOrganizationSettingId: ID!, $input: U
 			billingEmail
 			billingNotificationsEnabled
 			billingPhone
-			complianceWebhookToken
 			createdAt
 			createdBy
 			domains
@@ -133,7 +126,6 @@ mutation UpdateOrganizationSetting ($updateOrganizationSettingId: ID!, $input: U
 			identityProvider
 			identityProviderAuthTested
 			identityProviderClientID
-			identityProviderClientSecret
 			identityProviderEntityID
 			identityProviderJitProvisioning
 			identityProviderLoginEnforced

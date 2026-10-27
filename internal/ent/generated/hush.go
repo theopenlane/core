@@ -53,7 +53,7 @@ type Hush struct {
 	// the secret value
 	SecretValue string `json:"-"`
 	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	CredentialSet models.CredentialSet `json:"credential_set,omitempty"`
+	CredentialSet models.CredentialSet `json:"-"`
 	// additional metadata about the credential
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// LastUsedAt holds the value of the "last_used_at" field.
@@ -397,8 +397,7 @@ func (_m *Hush) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("secret_value=<sensitive>")
 	builder.WriteString(", ")
-	builder.WriteString("credential_set=")
-	builder.WriteString(fmt.Sprintf("%v", _m.CredentialSet))
+	builder.WriteString("credential_set=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))

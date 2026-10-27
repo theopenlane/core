@@ -11,7 +11,6 @@ query GetAllHushHistories {
 			node {
 				createdAt
 				createdBy
-				credentialSet
 				description
 				expiresAt
 				historyTime
@@ -46,7 +45,6 @@ query GetHushHistories ($first: Int, $last: Int, $where: HushHistoryWhereInput) 
 			node {
 				createdAt
 				createdBy
-				credentialSet
 				description
 				expiresAt
 				historyTime

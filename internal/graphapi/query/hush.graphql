@@ -3,7 +3,6 @@ mutation CreateBulkCSVHush ($input: Upload!) {
 		hushes {
 			createdAt
 			createdBy
-			credentialSet
 			description
 			expiresAt
 			id
@@ -34,7 +33,6 @@ mutation CreateBulkHush ($input: [CreateHushInput!]) {
 		hushes {
 			createdAt
 			createdBy
-			credentialSet
 			description
 			expiresAt
 			id
@@ -65,7 +63,6 @@ mutation CreateHush ($input: CreateHushInput!) {
 		hush {
 			createdAt
 			createdBy
-			credentialSet
 			description
 			expiresAt
 			id
@@ -120,7 +117,6 @@ query GetHushByID ($hushId: ID!) {
 	hush(id: $hushId) {
 		createdAt
 		createdBy
-		credentialSet
 		description
 		expiresAt
 		id
@@ -175,7 +171,6 @@ mutation UpdateHush ($updateHushId: ID!, $input: UpdateHushInput!) {
 		hush {
 			createdAt
 			createdBy
-			credentialSet
 			description
 			expiresAt
 			id

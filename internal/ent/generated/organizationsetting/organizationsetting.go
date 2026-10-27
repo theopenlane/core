@@ -88,8 +88,6 @@ const (
 	FieldSSOExemptDomains = "sso_exempt_domains"
 	// FieldAllowSupportAccess holds the string denoting the allow_support_access field in the database.
 	FieldAllowSupportAccess = "allow_support_access"
-	// FieldComplianceWebhookToken holds the string denoting the compliance_webhook_token field in the database.
-	FieldComplianceWebhookToken = "compliance_webhook_token"
 	// FieldPaymentMethodAdded holds the string denoting the payment_method_added field in the database.
 	FieldPaymentMethodAdded = "payment_method_added"
 	// FieldPendingDeletionAt holds the string denoting the pending_deletion_at field in the database.
@@ -152,7 +150,6 @@ var Columns = []string{
 	FieldMultifactorAuthEnforced,
 	FieldSSOExemptDomains,
 	FieldAllowSupportAccess,
-	FieldComplianceWebhookToken,
 	FieldPaymentMethodAdded,
 	FieldPendingDeletionAt,
 }
@@ -218,8 +215,6 @@ var (
 	SSOExemptDomainsValidator func([]string) error
 	// DefaultAllowSupportAccess holds the default value on creation for the "allow_support_access" field.
 	DefaultAllowSupportAccess bool
-	// DefaultComplianceWebhookToken holds the default value on creation for the "compliance_webhook_token" field.
-	DefaultComplianceWebhookToken func() string
 	// DefaultPaymentMethodAdded holds the default value on creation for the "payment_method_added" field.
 	DefaultPaymentMethodAdded bool
 	// DefaultID holds the default value on creation for the "id" field.
@@ -401,11 +396,6 @@ func ByMultifactorAuthEnforced(opts ...sql.OrderTermOption) OrderOption {
 // ByAllowSupportAccess orders the results by the allow_support_access field.
 func ByAllowSupportAccess(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAllowSupportAccess, opts...).ToFunc()
-}
-
-// ByComplianceWebhookToken orders the results by the compliance_webhook_token field.
-func ByComplianceWebhookToken(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldComplianceWebhookToken, opts...).ToFunc()
 }
 
 // ByPaymentMethodAdded orders the results by the payment_method_added field.

@@ -2400,7 +2400,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldMultifactorAuthEnforced:          {Type: field.TypeBool, Column: organizationsetting.FieldMultifactorAuthEnforced},
 			organizationsetting.FieldSSOExemptDomains:                 {Type: field.TypeJSON, Column: organizationsetting.FieldSSOExemptDomains},
 			organizationsetting.FieldAllowSupportAccess:               {Type: field.TypeBool, Column: organizationsetting.FieldAllowSupportAccess},
-			organizationsetting.FieldComplianceWebhookToken:           {Type: field.TypeString, Column: organizationsetting.FieldComplianceWebhookToken},
 			organizationsetting.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsetting.FieldPaymentMethodAdded},
 			organizationsetting.FieldPendingDeletionAt:                {Type: field.TypeTime, Column: organizationsetting.FieldPendingDeletionAt},
 		},
@@ -40820,11 +40819,6 @@ func (f *OrganizationSettingFilter) WhereSSOExemptDomains(p entql.BytesP) {
 // WhereAllowSupportAccess applies the entql bool predicate on the allow_support_access field.
 func (f *OrganizationSettingFilter) WhereAllowSupportAccess(p entql.BoolP) {
 	f.Where(p.Field(organizationsetting.FieldAllowSupportAccess))
-}
-
-// WhereComplianceWebhookToken applies the entql string predicate on the compliance_webhook_token field.
-func (f *OrganizationSettingFilter) WhereComplianceWebhookToken(p entql.StringP) {
-	f.Where(p.Field(organizationsetting.FieldComplianceWebhookToken))
 }
 
 // WherePaymentMethodAdded applies the entql bool predicate on the payment_method_added field.

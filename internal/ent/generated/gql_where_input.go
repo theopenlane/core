@@ -67208,19 +67208,6 @@ type OrganizationSettingWhereInput struct {
 	IdentityProviderClientIDEqualFold    *string  `json:"identityProviderClientIDEqualFold,omitempty"`
 	IdentityProviderClientIDContainsFold *string  `json:"identityProviderClientIDContainsFold,omitempty"`
 
-	// "identity_provider_client_secret" field predicates.
-	IdentityProviderClientSecret             *string  `json:"identityProviderClientSecret,omitempty"`
-	IdentityProviderClientSecretNEQ          *string  `json:"identityProviderClientSecretNEQ,omitempty"`
-	IdentityProviderClientSecretIn           []string `json:"identityProviderClientSecretIn,omitempty"`
-	IdentityProviderClientSecretNotIn        []string `json:"identityProviderClientSecretNotIn,omitempty"`
-	IdentityProviderClientSecretContains     *string  `json:"identityProviderClientSecretContains,omitempty"`
-	IdentityProviderClientSecretHasPrefix    *string  `json:"identityProviderClientSecretHasPrefix,omitempty"`
-	IdentityProviderClientSecretHasSuffix    *string  `json:"identityProviderClientSecretHasSuffix,omitempty"`
-	IdentityProviderClientSecretIsNil        bool     `json:"identityProviderClientSecretIsNil,omitempty"`
-	IdentityProviderClientSecretNotNil       bool     `json:"identityProviderClientSecretNotNil,omitempty"`
-	IdentityProviderClientSecretEqualFold    *string  `json:"identityProviderClientSecretEqualFold,omitempty"`
-	IdentityProviderClientSecretContainsFold *string  `json:"identityProviderClientSecretContainsFold,omitempty"`
-
 	// "identity_provider_metadata_endpoint" field predicates.
 	IdentityProviderMetadataEndpoint             *string  `json:"identityProviderMetadataEndpoint,omitempty"`
 	IdentityProviderMetadataEndpointNEQ          *string  `json:"identityProviderMetadataEndpointNEQ,omitempty"`
@@ -67322,19 +67309,6 @@ type OrganizationSettingWhereInput struct {
 	AllowSupportAccessNEQ    *bool `json:"allowSupportAccessNEQ,omitempty"`
 	AllowSupportAccessIsNil  bool  `json:"allowSupportAccessIsNil,omitempty"`
 	AllowSupportAccessNotNil bool  `json:"allowSupportAccessNotNil,omitempty"`
-
-	// "compliance_webhook_token" field predicates.
-	ComplianceWebhookToken             *string  `json:"complianceWebhookToken,omitempty"`
-	ComplianceWebhookTokenNEQ          *string  `json:"complianceWebhookTokenNEQ,omitempty"`
-	ComplianceWebhookTokenIn           []string `json:"complianceWebhookTokenIn,omitempty"`
-	ComplianceWebhookTokenNotIn        []string `json:"complianceWebhookTokenNotIn,omitempty"`
-	ComplianceWebhookTokenContains     *string  `json:"complianceWebhookTokenContains,omitempty"`
-	ComplianceWebhookTokenHasPrefix    *string  `json:"complianceWebhookTokenHasPrefix,omitempty"`
-	ComplianceWebhookTokenHasSuffix    *string  `json:"complianceWebhookTokenHasSuffix,omitempty"`
-	ComplianceWebhookTokenIsNil        bool     `json:"complianceWebhookTokenIsNil,omitempty"`
-	ComplianceWebhookTokenNotNil       bool     `json:"complianceWebhookTokenNotNil,omitempty"`
-	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
-	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
 
 	// "payment_method_added" field predicates.
 	PaymentMethodAdded    *bool `json:"paymentMethodAdded,omitempty"`
@@ -67855,39 +67829,6 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.IdentityProviderClientIDContainsFold != nil {
 		predicates = append(predicates, organizationsetting.IdentityProviderClientIDContainsFold(*i.IdentityProviderClientIDContainsFold))
 	}
-	if i.IdentityProviderClientSecret != nil {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretEQ(*i.IdentityProviderClientSecret))
-	}
-	if i.IdentityProviderClientSecretNEQ != nil {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretNEQ(*i.IdentityProviderClientSecretNEQ))
-	}
-	if len(i.IdentityProviderClientSecretIn) > 0 {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretIn(i.IdentityProviderClientSecretIn...))
-	}
-	if len(i.IdentityProviderClientSecretNotIn) > 0 {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretNotIn(i.IdentityProviderClientSecretNotIn...))
-	}
-	if i.IdentityProviderClientSecretContains != nil {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretContains(*i.IdentityProviderClientSecretContains))
-	}
-	if i.IdentityProviderClientSecretHasPrefix != nil {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretHasPrefix(*i.IdentityProviderClientSecretHasPrefix))
-	}
-	if i.IdentityProviderClientSecretHasSuffix != nil {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretHasSuffix(*i.IdentityProviderClientSecretHasSuffix))
-	}
-	if i.IdentityProviderClientSecretIsNil {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretIsNil())
-	}
-	if i.IdentityProviderClientSecretNotNil {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretNotNil())
-	}
-	if i.IdentityProviderClientSecretEqualFold != nil {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretEqualFold(*i.IdentityProviderClientSecretEqualFold))
-	}
-	if i.IdentityProviderClientSecretContainsFold != nil {
-		predicates = append(predicates, organizationsetting.IdentityProviderClientSecretContainsFold(*i.IdentityProviderClientSecretContainsFold))
-	}
 	if i.IdentityProviderMetadataEndpoint != nil {
 		predicates = append(predicates, organizationsetting.IdentityProviderMetadataEndpointEQ(*i.IdentityProviderMetadataEndpoint))
 	}
@@ -68127,39 +68068,6 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	}
 	if i.AllowSupportAccessNotNil {
 		predicates = append(predicates, organizationsetting.AllowSupportAccessNotNil())
-	}
-	if i.ComplianceWebhookToken != nil {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenEQ(*i.ComplianceWebhookToken))
-	}
-	if i.ComplianceWebhookTokenNEQ != nil {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenNEQ(*i.ComplianceWebhookTokenNEQ))
-	}
-	if len(i.ComplianceWebhookTokenIn) > 0 {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenIn(i.ComplianceWebhookTokenIn...))
-	}
-	if len(i.ComplianceWebhookTokenNotIn) > 0 {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenNotIn(i.ComplianceWebhookTokenNotIn...))
-	}
-	if i.ComplianceWebhookTokenContains != nil {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenContains(*i.ComplianceWebhookTokenContains))
-	}
-	if i.ComplianceWebhookTokenHasPrefix != nil {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenHasPrefix(*i.ComplianceWebhookTokenHasPrefix))
-	}
-	if i.ComplianceWebhookTokenHasSuffix != nil {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenHasSuffix(*i.ComplianceWebhookTokenHasSuffix))
-	}
-	if i.ComplianceWebhookTokenIsNil {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenIsNil())
-	}
-	if i.ComplianceWebhookTokenNotNil {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenNotNil())
-	}
-	if i.ComplianceWebhookTokenEqualFold != nil {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenEqualFold(*i.ComplianceWebhookTokenEqualFold))
-	}
-	if i.ComplianceWebhookTokenContainsFold != nil {
-		predicates = append(predicates, organizationsetting.ComplianceWebhookTokenContainsFold(*i.ComplianceWebhookTokenContainsFold))
 	}
 	if i.PaymentMethodAdded != nil {
 		predicates = append(predicates, organizationsetting.PaymentMethodAddedEQ(*i.PaymentMethodAdded))
