@@ -28,7 +28,7 @@ import (
 func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -174,7 +174,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -253,7 +253,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -367,8 +367,8 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -521,8 +521,8 @@ func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 func (suite *HandlerTestSuite) TestAnonymousQuestionnaireRejectsDraft() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -599,8 +599,8 @@ func (suite *HandlerTestSuite) TestAnonymousQuestionnaireRejectsDraft() {
 func (suite *HandlerTestSuite) TestIdentifiedQuestionnaireAllowsDraft() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -744,7 +744,7 @@ func (suite *HandlerTestSuite) TestIdentifiedQuestionnaireAllowsDraft() {
 func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -939,7 +939,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)

@@ -13,21 +13,7 @@ import (
 )
 
 func TestBlockNonTrustCenterAnonymous(t *testing.T) {
-	next := func(c echox.Context) error {
-		c.Response().WriteHeader(http.StatusOK)
-		return nil
-	}
-
-	makeCtx := func(caller *auth.Caller) echox.Context {
-		e := echox.New()
-		req := httptest.NewRequest(http.MethodPost, "/query", nil)
-		if caller != nil {
-			req = req.WithContext(auth.WithCaller(req.Context(), caller))
-		}
-		return e.NewContext(req, httptest.NewRecorder())
-	}
-
-	mw := BlockNonTrustCenterAnonymous()(next)
+	mw := BlockNonTrustCenterAnonymous()(okHandler)
 
 	t.Run("questionnaire anon caller is blocked", func(t *testing.T) {
 		caller := auth.NewQuestionnaireCaller("org1", "anon_questionnaire_abc", "Anon", "")

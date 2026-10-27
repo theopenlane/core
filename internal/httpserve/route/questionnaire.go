@@ -17,7 +17,7 @@ func registerQuestionnaireHandler(router *Router) error {
 		OperationID:  "GetQuestionnaire",
 		IncludeInOAS: true,
 		Security:     handlers.AuthenticatedSecurity,
-		Middlewares:  *authenticatedEndpoint,
+		Middlewares:  *questionnaireEndpoint,
 		Handler:      router.Handler.GetQuestionnaire,
 	}
 
@@ -35,7 +35,7 @@ func registerQuestionnaireSubmitHandler(router *Router) error {
 		OperationID:  "SubmitQuestionnaire",
 		IncludeInOAS: true,
 		Security:     handlers.AuthenticatedSecurity,
-		Middlewares:  *authenticatedEndpoint,
+		Middlewares:  *questionnaireEndpoint,
 		Handler:      router.Handler.SubmitQuestionnaire,
 	}
 
