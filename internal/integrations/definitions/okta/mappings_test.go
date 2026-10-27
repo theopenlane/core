@@ -9,7 +9,7 @@ import (
 )
 
 func TestMappingExpressionsValid(t *testing.T) {
-	def, err := Builder()()
+	def, err := Builder(false)()
 	assert.NilError(t, err)
 
 	mappingtest.AssertExpressionsValid(t, def.Mappings)

@@ -6,8 +6,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// Builder returns the Keycloak definition builder
-func Builder() registry.Builder {
+// Builder returns the Keycloak definition builder, devMode allows non-public base urls for local development
+func Builder(devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			ID:           definitionID.ID(),
@@ -25,7 +25,7 @@ func Builder() registry.Builder {
 				clientCredentials.
 					Name("Keycloak Client Credentials").
 					Description("Configure Keycloak access using client credentials from your realm.").
-					Provides(buildClient).
+					Provides(clientBuilder(devMode)).
 					Verified(verify).
 					Disconnects("Removes the stored client credentials from Openlane. If the client is no longer needed, disable or delete it in your Keycloak admin console under Clients.", nil),
 			},

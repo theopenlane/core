@@ -377,23 +377,8 @@ func TestAPITokenScopeEnforcement(t *testing.T) {
 	readToken := (&th.APITokenBuilder{Client: suite.Client, Scopes: []string{"organization:read", "group:read", "org_subscription:read", "org_membership:read", "file:read"}}).MustNew(orgCtx, t)
 	writeToken := (&th.APITokenBuilder{Client: suite.Client, Scopes: []string{"group:write"}}).MustNew(orgCtx, t)
 
-	makeClient := func(token string) *testclient.TestClient {
-		authHeader := testclient.Authorization{
-			BearerToken: token,
-		}
-
-		c, err := testutils.TestClientWithAuth(
-			suite.Client.DB,
-			suite.Client.ObjectStore,
-			testclient.WithCredentials(authHeader),
-		)
-		th.RequireNoError(t, err)
-
-		return c
-	}
-
-	readClient := makeClient(readToken.Token)
-	writeClient := makeClient(writeToken.Token)
+	readClient := newAPITokenTestClient(t, readToken.Token)
+	writeClient := newAPITokenTestClient(t, writeToken.Token)
 
 	// read-only scope can fetch org details, this query includes groups so the token must have read:group scope as well
 	_, err := readClient.GetOrganizationByID(context.Background(), localTestUser.Owner.OrganizationID)
@@ -413,7 +398,37 @@ func TestAPITokenScopeEnforcement(t *testing.T) {
 	assert.Assert(t, groupResp != nil)
 	assert.Check(t, groupResp.CreateGroup.Group.ID != "")
 
+	_, err = readClient.GetAllAPITokens(context.Background())
+	assert.NilError(t, err)
+
+	_, err = readClient.CreateAPIToken(context.Background(), testclient.CreateAPITokenInput{
+		Name:   gofakeit.AppName(),
+		Scopes: []string{"group:write"},
+	})
+	assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+
+	_, err = readClient.UpdateAPIToken(context.Background(), readToken.ID, testclient.UpdateAPITokenInput{
+		AppendScopes: []string{"group:write"},
+	})
+	assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+
+	_, err = writeClient.DeleteAPIToken(context.Background(), readToken.ID)
+	assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+
 	th.CleanupOrganizationDataWithContext(orgCtx, t)
+}
+
+func newAPITokenTestClient(t *testing.T, token string) *testclient.TestClient {
+	t.Helper()
+
+	c, err := testutils.TestClientWithAuth(
+		suite.Client.DB,
+		suite.Client.ObjectStore,
+		testclient.WithCredentials(testclient.Authorization{BearerToken: token}),
+	)
+	th.RequireNoError(t, err)
+
+	return c
 }
 
 func TestAPITokenObjectScopeTuples(t *testing.T) {

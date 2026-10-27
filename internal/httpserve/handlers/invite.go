@@ -51,6 +51,11 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
+	// accepting an invite mints a new session, so only a user signed in with their own session can accept
+	if _, ok := auth.InteractiveUserCallerFromContext(reqCtx); !ok {
+		return h.Unauthorized(ctx, ErrAuthenticationRequired)
+	}
+
 	// get the authenticated user from the context
 	subjectID, err := auth.GetSubjectIDFromContext(reqCtx)
 	if err != nil {

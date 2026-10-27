@@ -231,12 +231,19 @@ func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, 
 
 	c := withTransactionalMutation(ctx)
 
-	_, err := c.OrgMembership.Delete().Where(
+	ids, err := c.OrgMembership.Query().Where(
 		orgmembership.OrganizationID(*orgID),
 		orgmembership.IDIn(data...),
-	).Exec(ctx)
+	).IDs(ctx)
 	if err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
+	}
+
+	// delete one at a time so the member delete hook applies owner protection and tuple cleanup to each
+	for _, id := range ids {
+		if err := c.OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
+		}
 	}
 
 	return nil
@@ -253,23 +260,13 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 
 	c := withTransactionalMutation(ctx)
 
-	// get setting ID to Update
-	settingID := obj.SettingID
-	if settingID == nil {
-		org, err := c.Organization.Get(ctx, *orgID)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
-		}
-
-		setting, err := org.Setting(ctx)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
-		}
-
-		settingID = &setting.ID
+	// get setting ID to Update, always the organization's own setting
+	settingID, err := orgSettingID(ctx, *orgID, obj.SettingID)
+	if err != nil {
+		return err
 	}
 
-	if err := c.OrganizationSetting.UpdateOneID(*settingID).SetInput(*data).Exec(ctx); err != nil {
+	if err := c.OrganizationSetting.UpdateOneID(settingID).SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
 	}
 
