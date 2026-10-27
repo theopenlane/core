@@ -153,6 +153,13 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrNonceMissing)
 	}
 
+	// the organization whose identity provider authenticates the user is the only one the session can be issued for
+	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
+	if err != nil || orgCookie.Value != in.OrganizationID {
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, ErrSSOOrganizationMismatch)
+	}
+
 	// attach nonce to context for OIDC token validation
 	nonceCtx := ssoNonceContextKey.Set(reqCtx, nonce(nonceCookie.Value))
 	// exchange the code for OIDC tokens
@@ -160,6 +167,28 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	if err != nil {
 		metrics.RecordLogin(false)
 		return h.BadRequest(ctx, err)
+	}
+
+	// some providers (e.g. Entra ID) omit email_verified, so only an explicit false is rejected
+	if _, ok := tokens.IDTokenClaims.Claims["email_verified"]; ok && !bool(tokens.IDTokenClaims.EmailVerified) {
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, ErrSSOEmailNotVerified)
+	}
+
+	// an existing user can only be signed in by the identity provider of an organization they already belong to
+	allowed, err := h.ssoExistingUserAllowed(reqCtx, tokens.IDTokenClaims.Email, in.OrganizationID)
+	if err != nil {
+		metrics.RecordLogin(false)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to check sso user organization membership")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest)
+	}
+
+	if !allowed {
+		metrics.RecordLogin(false)
+		logx.FromContext(reqCtx).Warn().Str("email", tokens.IDTokenClaims.Email).Str("organization_id", in.OrganizationID).Msg("existing user is not a member of the sso organization")
+
+		return h.Forbidden(ctx, ErrSSONoOrganizationAccess)
 	}
 
 	// attach the OIDC email to the context for user provisioning
@@ -194,12 +223,6 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 
 	// set the context for the authenticated user
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
-
-	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
-	if err != nil {
-		metrics.RecordLogin(false)
-		return h.BadRequest(ctx, err)
-	}
 
 	// just-in-time provision the user into the organization when SSO is enforced and the org opts in,
 	// so a directory-authenticated user gains access instead of falling back to their personal org

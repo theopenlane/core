@@ -15,8 +15,8 @@ func registerWebauthnRegistrationHandler(router *Router) (err error) {
 		Description: "Begin WebAuthn registration process and return credential creation options",
 		Tags:        []string{"webauthn", "authentication"},
 		OperationID: "WebauthnRegistration",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
+		Security:    handlers.AuthenticatedSecurity,
+		Middlewares: *authenticatedEndpoint,
 		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.BeginWebauthnRegistration,
 	}
@@ -33,8 +33,8 @@ func registerWebauthnVerificationsHandler(router *Router) (err error) {
 		Description: "Complete WebAuthn registration process by verifying the credential creation response",
 		Tags:        []string{"webauthn", "authentication"},
 		OperationID: "WebauthnRegistrationVerification",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
+		Security:    handlers.AuthenticatedSecurity,
+		Middlewares: *authenticatedEndpoint,
 		RateLimit:   authFlowRateLimit,
 		Handler:     router.Handler.FinishWebauthnRegistration,
 	}

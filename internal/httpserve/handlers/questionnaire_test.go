@@ -22,6 +22,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 )
 
 func (suite *HandlerTestSuite) TestGetQuestionnaire() {
@@ -1279,6 +1280,62 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireCaller() {
 			documentDataIDs = append(documentDataIDs, updatedResponse.DocumentDataID)
 		}
 	})
+
+	rejectedCallers := []struct {
+		name   string
+		caller *auth.Caller
+	}{
+		{
+			name: "anonymous trust center caller cannot submit",
+			caller: &auth.Caller{
+				SubjectID:        "anon_trustcenter_" + ulids.New().String(),
+				OrganizationID:   testUser1.OrganizationID,
+				OrganizationRole: auth.AnonymousRole,
+				Capabilities:     auth.CapTrustCenterAnonymous,
+			},
+		},
+		{
+			name: "api token cannot submit",
+			caller: &auth.Caller{
+				SubjectID:          ulids.New().String(),
+				OrganizationID:     testUser1.OrganizationID,
+				OrganizationIDs:    []string{testUser1.OrganizationID},
+				AuthenticationType: auth.APITokenAuthentication,
+			},
+		},
+		{
+			name: "support access caller cannot submit",
+			caller: &auth.Caller{
+				SubjectID:          ulids.New().String(),
+				OrganizationID:     testUser1.OrganizationID,
+				OrganizationIDs:    []string{testUser1.OrganizationID},
+				AuthenticationType: auth.JWTAuthentication,
+				Capabilities:       auth.CapOrgSupport,
+			},
+		},
+	}
+
+	for _, rc := range rejectedCallers {
+		t.Run(rc.name, func(t *testing.T) {
+			before, err := suite.db.AssessmentResponse.Query().Where(assessmentresponse.AssessmentIDEQ(assessment.ID)).Count(testUser1.UserCtx)
+			require.NoError(t, err)
+
+			bodyBytes, err := json.Marshal(submissionData)
+			require.NoError(t, err)
+
+			req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+			req.Header.Set("Content-Type", "application/json")
+
+			recorder := httptest.NewRecorder()
+			suite.e.ServeHTTP(recorder, req.WithContext(auth.WithCaller(context.Background(), rc.caller)))
+
+			assert.Equal(t, http.StatusUnauthorized, recorder.Code)
+
+			after, err := suite.db.AssessmentResponse.Query().Where(assessmentresponse.AssessmentIDEQ(assessment.ID)).Count(testUser1.UserCtx)
+			require.NoError(t, err)
+			assert.Equal(t, before, after)
+		})
+	}
 
 	for _, docID := range documentDataIDs {
 		err := suite.db.DocumentData.DeleteOneID(docID).Exec(testUser1.UserCtx)
