@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 )
@@ -64,12 +65,12 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 			)
 		}
 
-		return addFilter(ctx, q, orgOwned, userOwed, objectOwner != "", allowedOrgs)
+		return addFilter(ctx, q, orgOwned, userOwed, objectOwner, allowedOrgs)
 	})
 }
 
 // addFilter adds a filter to the query based on the authenticated user's organization
-func addFilter(ctx context.Context, q Query, orgOwned, userOwed, objectScoped bool, allowedOrgs []string) error {
+func addFilter(ctx context.Context, q Query, orgOwned, userOwed bool, objectOwner string, allowedOrgs []string) error {
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
@@ -98,7 +99,10 @@ func addFilter(ctx context.Context, q Query, orgOwned, userOwed, objectScoped bo
 		)
 	case q.Type() == "MappableDomainHistory":
 		// mappable domains are system managed and have no owning organization, so there is nothing to scope
-	case orgOwned || !objectScoped:
+	case objectOwner == entityops.SchemaTrustCenter.Snake:
+		// trust centers are publicly viewable, which grants every user audit log access in fga, so limit to trust centers the caller's orgs own
+		q.WhereP(trustCenterOwnedByOrgsP(allowedOrgs))
+	case orgOwned || objectOwner == "":
 		// org owned history and history tables without an authz derived filter are scoped to the caller's orgs
 		q.WhereP(
 			sql.FieldIn("owner_id", allowedOrgs...),

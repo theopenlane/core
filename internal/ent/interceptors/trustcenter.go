@@ -107,11 +107,6 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 		return auth.ErrNoAuthUser
 	}
 
-	// anonymous trust center callers read back what they submit, so skip the filter for their mutations
-	if isMutationRequest(ctx) && caller.Has(auth.CapTrustCenterAnonymous) {
-		return nil
-	}
-
 	// system admins and trusted internal callers that bypass org scoping (e.g. scheduled pollers
 	// sweeping every organization) read trust center children across all organizations
 	if auth.HasCrossOrgCapabilities(ctx) {
@@ -119,7 +114,8 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
-		return applyAnonTrustCenterFilter(q, tcID, allowAnonAccess)
+		// anonymous callers read back what they submit in a mutation, so scope those reads to their trust center instead of denying them
+		return applyAnonTrustCenterFilter(q, tcID, allowAnonAccess || isMutationRequest(ctx))
 	}
 
 	// deny all trust center requests that did not have a trust center key
