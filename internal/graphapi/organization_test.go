@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -896,14 +895,14 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
-			name:  "remove members, owner cannot be removed",
+			name:  "remove members, owner cannot remove themselves",
 			orgID: org.ID,
 			updateInput: testclient.UpdateOrganizationInput{
 				RemoveOrgMembers: []string{ownerMembershipID},
 			},
 			client:   suite.Client.API,
 			ctx:      reqCtx,
-			errorMsg: hooks.ErrOrgOwnerCannotBeDeleted.Error(),
+			errorMsg: th.NotAuthorizedErrorMsg,
 		},
 	}
 

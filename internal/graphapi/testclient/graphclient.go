@@ -65,8 +65,8 @@ type TestGraphClient interface {
 	UpdateAsset(ctx context.Context, updateAssetID string, input UpdateAssetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAsset, error)
 	UpdateBulkAsset(ctx context.Context, ids []string, input UpdateAssetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkAsset, error)
 	UpdateBulkCSVAsset(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVAsset, error)
-	CreateBulkCSVCampaign(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCampaign, error)
 	CreateBulkCampaign(ctx context.Context, input []*CreateCampaignInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCampaign, error)
+	CreateBulkCSVCampaign(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCampaign, error)
 	CreateCampaign(ctx context.Context, input CreateCampaignInput, interceptors ...clientv2.RequestInterceptor) (*CreateCampaign, error)
 	DeleteCampaign(ctx context.Context, deleteCampaignID string, interceptors ...clientv2.RequestInterceptor) (*DeleteCampaign, error)
 	GetAllCampaigns(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*CampaignOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllCampaigns, error)
@@ -86,16 +86,16 @@ type TestGraphClient interface {
 	GetCampaignTargetByID(ctx context.Context, campaignTargetID string, interceptors ...clientv2.RequestInterceptor) (*GetCampaignTargetByID, error)
 	GetCampaignTargets(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*CampaignTargetOrder, where *CampaignTargetWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCampaignTargets, error)
 	UpdateCampaignTarget(ctx context.Context, updateCampaignTargetID string, input UpdateCampaignTargetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCampaignTarget, error)
-	CreateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCheckResult, error)
 	CreateBulkCheckResult(ctx context.Context, input []*CreateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCheckResult, error)
+	CreateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCheckResult, error)
 	CreateCheckResult(ctx context.Context, input CreateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*CreateCheckResult, error)
 	DeleteBulkCheckResult(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkCheckResult, error)
 	DeleteCheckResult(ctx context.Context, deleteCheckResultID string, interceptors ...clientv2.RequestInterceptor) (*DeleteCheckResult, error)
 	GetAllCheckResults(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*CheckResultOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllCheckResults, error)
 	GetCheckResultByID(ctx context.Context, checkResultID string, interceptors ...clientv2.RequestInterceptor) (*GetCheckResultByID, error)
 	GetCheckResults(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*CheckResultOrder, where *CheckResultWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetCheckResults, error)
-	UpdateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVCheckResult, error)
 	UpdateBulkCheckResult(ctx context.Context, ids []string, input UpdateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCheckResult, error)
+	UpdateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVCheckResult, error)
 	UpdateCheckResult(ctx context.Context, updateCheckResultID string, input UpdateCheckResultInput, interceptors ...clientv2.RequestInterceptor) (*UpdateCheckResult, error)
 	CreateBulkCSVContact(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVContact, error)
 	CreateBulkContact(ctx context.Context, input []*CreateContactInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkContact, error)
@@ -609,6 +609,7 @@ type TestGraphClient interface {
 	GetTrustCenterComplianceByID(ctx context.Context, trustCenterComplianceID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterComplianceByID, error)
 	GetTrustCenterCompliances(ctx context.Context, first *int64, last *int64, where *TrustCenterComplianceWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterCompliances, error)
 	UpdateTrustCenterCompliance(ctx context.Context, updateTrustCenterComplianceID string, input UpdateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterCompliance, error)
+	CreateTrustCenterComplianceWithStandardDocs(ctx context.Context, input CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterComplianceWithStandardDocs, error)
 	CreateTrustCenterDoc(ctx context.Context, input CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterDoc, error)
 	DeleteTrustCenterDoc(ctx context.Context, deleteTrustCenterDocID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterDoc, error)
 	GetAllTrustCenterDocs(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterDocs, error)
@@ -11588,357 +11589,6 @@ func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset) GetUpdatedIDs() []string {
 	return t.UpdatedIDs
 }
 
-type CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns struct {
-	AssessmentID                  *string              "json:\"assessmentID,omitempty\" graphql:\"assessmentID\""
-	CampaignType                  enums.CampaignType   "json:\"campaignType\" graphql:\"campaignType\""
-	CompletedAt                   *models.DateTime     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt                     *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                     *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Description                   *string              "json:\"description,omitempty\" graphql:\"description\""
-	DisplayID                     string               "json:\"displayID\" graphql:\"displayID\""
-	DueDate                       *models.DateTime     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
-	EmailBrandingID               *string              "json:\"emailBrandingID,omitempty\" graphql:\"emailBrandingID\""
-	EmailTemplateID               *string              "json:\"emailTemplateID,omitempty\" graphql:\"emailTemplateID\""
-	EntityID                      *string              "json:\"entityID,omitempty\" graphql:\"entityID\""
-	ExternalID                    *string              "json:\"externalID,omitempty\" graphql:\"externalID\""
-	ID                            string               "json:\"id\" graphql:\"id\""
-	IntegrationID                 *string              "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	IntegrationRunID              *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	InternalOwner                 *string              "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
-	InternalOwnerGroupID          *string              "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
-	InternalOwnerIdentityHolderID *string              "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
-	InternalOwnerUserID           *string              "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
-	IsActive                      bool                 "json:\"isActive\" graphql:\"isActive\""
-	IsRecurring                   bool                 "json:\"isRecurring\" graphql:\"isRecurring\""
-	LastResentAt                  *models.DateTime     "json:\"lastResentAt,omitempty\" graphql:\"lastResentAt\""
-	LastRunAt                     *models.DateTime     "json:\"lastRunAt,omitempty\" graphql:\"lastRunAt\""
-	LaunchedAt                    *models.DateTime     "json:\"launchedAt,omitempty\" graphql:\"launchedAt\""
-	ManagedBy                     *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
-	Metadata                      map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Name                          string               "json:\"name\" graphql:\"name\""
-	NextRunAt                     *models.DateTime     "json:\"nextRunAt,omitempty\" graphql:\"nextRunAt\""
-	OwnerID                       *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RecipientCount                *int64               "json:\"recipientCount,omitempty\" graphql:\"recipientCount\""
-	RecurrenceCron                *string              "json:\"recurrenceCron,omitempty\" graphql:\"recurrenceCron\""
-	RecurrenceEndAt               *models.DateTime     "json:\"recurrenceEndAt,omitempty\" graphql:\"recurrenceEndAt\""
-	RecurrenceFrequency           *enums.Frequency     "json:\"recurrenceFrequency,omitempty\" graphql:\"recurrenceFrequency\""
-	RecurrenceInterval            *int64               "json:\"recurrenceInterval,omitempty\" graphql:\"recurrenceInterval\""
-	RecurrenceTimezone            *string              "json:\"recurrenceTimezone,omitempty\" graphql:\"recurrenceTimezone\""
-	ResendCount                   *int64               "json:\"resendCount,omitempty\" graphql:\"resendCount\""
-	ScheduledAt                   *models.DateTime     "json:\"scheduledAt,omitempty\" graphql:\"scheduledAt\""
-	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
-	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
-	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
-	Status                        enums.CampaignStatus "json:\"status\" graphql:\"status\""
-	Tags                          []string             "json:\"tags,omitempty\" graphql:\"tags\""
-	TemplateID                    *string              "json:\"templateID,omitempty\" graphql:\"templateID\""
-	TrustCenterID                 *string              "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
-	UpdatedAt                     *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                     *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator         *string              "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-	WorkflowEligibleMarker        *bool                "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
-}
-
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetAssessmentID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.AssessmentID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetCampaignType() *enums.CampaignType {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return &t.CampaignType
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetCompletedAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.CompletedAt
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetDescription() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.Description
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetDisplayID() string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.DisplayID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetDueDate() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.DueDate
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetEmailBrandingID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.EmailBrandingID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetEmailTemplateID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.EmailTemplateID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetEntityID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.EntityID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetExternalID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.ExternalID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetIntegrationID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.IntegrationID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetIntegrationRunID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.IntegrationRunID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetInternalOwner() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.InternalOwner
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetInternalOwnerGroupID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.InternalOwnerGroupID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetInternalOwnerIdentityHolderID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.InternalOwnerIdentityHolderID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetInternalOwnerUserID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.InternalOwnerUserID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetIsActive() bool {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.IsActive
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetIsRecurring() bool {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.IsRecurring
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetLastResentAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.LastResentAt
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetLastRunAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.LastRunAt
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetLaunchedAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.LaunchedAt
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetManagedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.ManagedBy
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetMetadata() map[string]any {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.Metadata
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetName() string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.Name
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetNextRunAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.NextRunAt
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecipientCount() *int64 {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.RecipientCount
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceCron() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.RecurrenceCron
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceEndAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.RecurrenceEndAt
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceFrequency() *enums.Frequency {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.RecurrenceFrequency
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceInterval() *int64 {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.RecurrenceInterval
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceTimezone() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.RecurrenceTimezone
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetResendCount() *int64 {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.ResendCount
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetScheduledAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.ScheduledAt
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetSourceDefinitionID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.SourceDefinitionID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetSourceDefinitionVersion() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.SourceDefinitionVersion
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetSourceInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.SourceInstanceID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetStatus() *enums.CampaignStatus {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return &t.Status
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetTemplateID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.TemplateID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetTrustCenterID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.TrustCenterID
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.UpdatedByImpersonator
-}
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetWorkflowEligibleMarker() *bool {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
-	}
-	return t.WorkflowEligibleMarker
-}
-
-type CreateBulkCSVCampaign_CreateBulkCSVCampaign struct {
-	Campaigns []*CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns "json:\"campaigns,omitempty\" graphql:\"campaigns\""
-}
-
-func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign) GetCampaigns() []*CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns {
-	if t == nil {
-		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign{}
-	}
-	return t.Campaigns
-}
-
 type CreateBulkCampaign_CreateBulkCampaign_Campaigns struct {
 	AssessmentID                  *string              "json:\"assessmentID,omitempty\" graphql:\"assessmentID\""
 	CampaignType                  enums.CampaignType   "json:\"campaignType\" graphql:\"campaignType\""
@@ -12286,6 +11936,357 @@ type CreateBulkCampaign_CreateBulkCampaign struct {
 func (t *CreateBulkCampaign_CreateBulkCampaign) GetCampaigns() []*CreateBulkCampaign_CreateBulkCampaign_Campaigns {
 	if t == nil {
 		t = &CreateBulkCampaign_CreateBulkCampaign{}
+	}
+	return t.Campaigns
+}
+
+type CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns struct {
+	AssessmentID                  *string              "json:\"assessmentID,omitempty\" graphql:\"assessmentID\""
+	CampaignType                  enums.CampaignType   "json:\"campaignType\" graphql:\"campaignType\""
+	CompletedAt                   *models.DateTime     "json:\"completedAt,omitempty\" graphql:\"completedAt\""
+	CreatedAt                     *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                     *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description                   *string              "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID                     string               "json:\"displayID\" graphql:\"displayID\""
+	DueDate                       *models.DateTime     "json:\"dueDate,omitempty\" graphql:\"dueDate\""
+	EmailBrandingID               *string              "json:\"emailBrandingID,omitempty\" graphql:\"emailBrandingID\""
+	EmailTemplateID               *string              "json:\"emailTemplateID,omitempty\" graphql:\"emailTemplateID\""
+	EntityID                      *string              "json:\"entityID,omitempty\" graphql:\"entityID\""
+	ExternalID                    *string              "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID                            string               "json:\"id\" graphql:\"id\""
+	IntegrationID                 *string              "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalOwner                 *string              "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	InternalOwnerGroupID          *string              "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
+	InternalOwnerIdentityHolderID *string              "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
+	InternalOwnerUserID           *string              "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
+	IsActive                      bool                 "json:\"isActive\" graphql:\"isActive\""
+	IsRecurring                   bool                 "json:\"isRecurring\" graphql:\"isRecurring\""
+	LastResentAt                  *models.DateTime     "json:\"lastResentAt,omitempty\" graphql:\"lastResentAt\""
+	LastRunAt                     *models.DateTime     "json:\"lastRunAt,omitempty\" graphql:\"lastRunAt\""
+	LaunchedAt                    *models.DateTime     "json:\"launchedAt,omitempty\" graphql:\"launchedAt\""
+	ManagedBy                     *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	Metadata                      map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                          string               "json:\"name\" graphql:\"name\""
+	NextRunAt                     *models.DateTime     "json:\"nextRunAt,omitempty\" graphql:\"nextRunAt\""
+	OwnerID                       *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	RecipientCount                *int64               "json:\"recipientCount,omitempty\" graphql:\"recipientCount\""
+	RecurrenceCron                *string              "json:\"recurrenceCron,omitempty\" graphql:\"recurrenceCron\""
+	RecurrenceEndAt               *models.DateTime     "json:\"recurrenceEndAt,omitempty\" graphql:\"recurrenceEndAt\""
+	RecurrenceFrequency           *enums.Frequency     "json:\"recurrenceFrequency,omitempty\" graphql:\"recurrenceFrequency\""
+	RecurrenceInterval            *int64               "json:\"recurrenceInterval,omitempty\" graphql:\"recurrenceInterval\""
+	RecurrenceTimezone            *string              "json:\"recurrenceTimezone,omitempty\" graphql:\"recurrenceTimezone\""
+	ResendCount                   *int64               "json:\"resendCount,omitempty\" graphql:\"resendCount\""
+	ScheduledAt                   *models.DateTime     "json:\"scheduledAt,omitempty\" graphql:\"scheduledAt\""
+	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Status                        enums.CampaignStatus "json:\"status\" graphql:\"status\""
+	Tags                          []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateID                    *string              "json:\"templateID,omitempty\" graphql:\"templateID\""
+	TrustCenterID                 *string              "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
+	UpdatedAt                     *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                     *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator         *string              "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	WorkflowEligibleMarker        *bool                "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
+}
+
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetAssessmentID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.AssessmentID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetCampaignType() *enums.CampaignType {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return &t.CampaignType
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetCompletedAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.CompletedAt
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetDueDate() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.DueDate
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetEmailBrandingID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.EmailBrandingID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetEmailTemplateID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.EmailTemplateID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetEntityID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.EntityID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetExternalID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.ExternalID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetIntegrationID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.IntegrationID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.IntegrationRunID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetInternalOwner() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.InternalOwner
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetInternalOwnerGroupID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.InternalOwnerGroupID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetInternalOwnerIdentityHolderID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.InternalOwnerIdentityHolderID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetInternalOwnerUserID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.InternalOwnerUserID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetIsActive() bool {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.IsActive
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetIsRecurring() bool {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.IsRecurring
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetLastResentAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.LastResentAt
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetLastRunAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.LastRunAt
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetLaunchedAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.LaunchedAt
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.ManagedBy
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetNextRunAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.NextRunAt
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecipientCount() *int64 {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.RecipientCount
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceCron() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.RecurrenceCron
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceEndAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.RecurrenceEndAt
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceFrequency() *enums.Frequency {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.RecurrenceFrequency
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceInterval() *int64 {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.RecurrenceInterval
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetRecurrenceTimezone() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.RecurrenceTimezone
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetResendCount() *int64 {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.ResendCount
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetScheduledAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.ScheduledAt
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.SourceInstanceID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetStatus() *enums.CampaignStatus {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetTemplateID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.TemplateID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetTrustCenterID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.TrustCenterID
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns) GetWorkflowEligibleMarker() *bool {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns{}
+	}
+	return t.WorkflowEligibleMarker
+}
+
+type CreateBulkCSVCampaign_CreateBulkCSVCampaign struct {
+	Campaigns []*CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns "json:\"campaigns,omitempty\" graphql:\"campaigns\""
+}
+
+func (t *CreateBulkCSVCampaign_CreateBulkCSVCampaign) GetCampaigns() []*CreateBulkCSVCampaign_CreateBulkCSVCampaign_Campaigns {
+	if t == nil {
+		t = &CreateBulkCSVCampaign_CreateBulkCSVCampaign{}
 	}
 	return t.Campaigns
 }
@@ -17157,161 +17158,6 @@ func (t *UpdateCampaignTarget_UpdateCampaignTarget) GetCampaignTarget() *UpdateC
 	return &t.CampaignTarget
 }
 
-type CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults struct {
-	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details                 *string           "json:\"details,omitempty\" graphql:\"details\""
-	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                      string            "json:\"id\" graphql:\"id\""
-	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
-	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
-	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
-	Source                  string            "json:\"source\" graphql:\"source\""
-	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
-	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
-	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
-	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
-	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy               *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator   *string           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetDetails() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.Details
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetExternalURI() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.ExternalURI
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetIntegrationID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.IntegrationID
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetIntegrationRunID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.IntegrationRunID
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.LastObservedAt
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetManagedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.ManagedBy
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetParentExternalID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.ParentExternalID
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSource() string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.Source
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSourceDefinitionID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.SourceDefinitionID
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSourceDefinitionVersion() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.SourceDefinitionVersion
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSourceInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.SourceInstanceID
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return &t.Status
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetTags() []string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.Tags
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type CreateBulkCSVCheckResult_CreateBulkCSVCheckResult struct {
-	CheckResults []*CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
-}
-
-func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult) GetCheckResults() []*CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult{}
-	}
-	return t.CheckResults
-}
-
 type CreateBulkCheckResult_CreateBulkCheckResult_CheckResults struct {
 	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -17463,6 +17309,161 @@ type CreateBulkCheckResult_CreateBulkCheckResult struct {
 func (t *CreateBulkCheckResult_CreateBulkCheckResult) GetCheckResults() []*CreateBulkCheckResult_CreateBulkCheckResult_CheckResults {
 	if t == nil {
 		t = &CreateBulkCheckResult_CreateBulkCheckResult{}
+	}
+	return t.CheckResults
+}
+
+type CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults struct {
+	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string           "json:\"details,omitempty\" graphql:\"details\""
+	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string            "json:\"id\" graphql:\"id\""
+	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
+	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
+	Source                  string            "json:\"source\" graphql:\"source\""
+	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
+	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetDetails() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.Details
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetExternalURI() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.ExternalURI
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetIntegrationID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.IntegrationID
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.IntegrationRunID
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.LastObservedAt
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetManagedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.ManagedBy
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetParentExternalID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.ParentExternalID
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSource() string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.Source
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.SourceInstanceID
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return &t.Status
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type CreateBulkCSVCheckResult_CreateBulkCSVCheckResult struct {
+	CheckResults []*CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
+}
+
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult) GetCheckResults() []*CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult{}
 	}
 	return t.CheckResults
 }
@@ -18226,182 +18227,6 @@ func (t *GetCheckResults_CheckResults) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
-type UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults struct {
-	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Details                 *string           "json:\"details,omitempty\" graphql:\"details\""
-	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
-	ID                      string            "json:\"id\" graphql:\"id\""
-	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
-	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
-	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
-	Source                  string            "json:\"source\" graphql:\"source\""
-	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
-	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
-	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
-	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
-	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy               *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator   *string           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetDetails() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.Details
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetExternalURI() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.ExternalURI
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetID() string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.ID
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetIntegrationID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.IntegrationID
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetIntegrationRunID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.IntegrationRunID
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.LastObservedAt
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetManagedBy() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.ManagedBy
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetOwnerID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.OwnerID
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetParentExternalID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.ParentExternalID
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSource() string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.Source
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSourceDefinitionID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.SourceDefinitionID
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSourceDefinitionVersion() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.SourceDefinitionVersion
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSourceInstanceID() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.SourceInstanceID
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return &t.Status
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetTags() []string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.Tags
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.UpdatedBy
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult struct {
-	CheckResults  []*UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
-	Error         *string                                                           "json:\"error,omitempty\" graphql:\"error\""
-	NotUpdatedIDs []string                                                          "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
-	UpdatedIDs    []string                                                          "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
-}
-
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetCheckResults() []*UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
-	}
-	return t.CheckResults
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetError() *string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
-	}
-	return t.Error
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetNotUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
-	}
-	return t.NotUpdatedIDs
-}
-func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetUpdatedIDs() []string {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
-	}
-	return t.UpdatedIDs
-}
-
 type UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults struct {
 	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -18574,6 +18399,182 @@ func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetNotUpdatedIDs() []strin
 func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetUpdatedIDs() []string {
 	if t == nil {
 		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults struct {
+	CreatedAt               *time.Time        "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy               *string           "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Details                 *string           "json:\"details,omitempty\" graphql:\"details\""
+	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	ID                      string            "json:\"id\" graphql:\"id\""
+	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
+	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	OwnerID                 *string           "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
+	Source                  string            "json:\"source\" graphql:\"source\""
+	SourceDefinitionID      *string           "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion *string           "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID        *string           "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	Status                  enums.CheckStatus "json:\"status\" graphql:\"status\""
+	Tags                    []string          "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt               *time.Time        "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy               *string           "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator   *string           "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetDetails() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.Details
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetExternalURI() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.ExternalURI
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetID() string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetIntegrationID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.IntegrationID
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.IntegrationRunID
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.LastObservedAt
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetManagedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.ManagedBy
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetParentExternalID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.ParentExternalID
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSource() string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.Source
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.SourceInstanceID
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetStatus() *enums.CheckStatus {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return &t.Status
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult struct {
+	CheckResults  []*UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
+	Error         *string                                                           "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                          "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                                          "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetCheckResults() []*UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
+	}
+	return t.CheckResults
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
+	}
+	return t.NotUpdatedIDs
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
 	}
 	return t.UpdatedIDs
 }
@@ -141225,6 +141226,64 @@ func (t *UpdateTrustCenterCompliance_UpdateTrustCenterCompliance) GetTrustCenter
 	return &t.TrustCenterCompliance
 }
 
+type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs struct {
+	TotalCount int64 "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs) GetTotalCount() int64 {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs{}
+	}
+	return t.TotalCount
+}
+
+type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard struct {
+	ID              string                                                                                                                 "json:\"id\" graphql:\"id\""
+	TrustCenterDocs CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs "json:\"trustCenterDocs\" graphql:\"trustCenterDocs\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard) GetTrustCenterDocs() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard_TrustCenterDocs {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard{}
+	}
+	return &t.TrustCenterDocs
+}
+
+type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance struct {
+	ID       string                                                                                                 "json:\"id\" graphql:\"id\""
+	Standard CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard "json:\"standard\" graphql:\"standard\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance) GetStandard() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance_Standard {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance{}
+	}
+	return &t.Standard
+}
+
+type CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance struct {
+	TrustCenterCompliance CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance "json:\"trustCenterCompliance\" graphql:\"trustCenterCompliance\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance) GetTrustCenterCompliance() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance_TrustCenterCompliance {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance{}
+	}
+	return &t.TrustCenterCompliance
+}
+
 type CreateTrustCenterDoc_CreateTrustCenterDoc_TrustCenterDoc_Standard struct {
 	ID        string  "json:\"id\" graphql:\"id\""
 	Name      string  "json:\"name\" graphql:\"name\""
@@ -173161,17 +173220,6 @@ func (t *UpdateBulkCSVAsset) GetUpdateBulkCSVAsset() *UpdateBulkCSVAsset_UpdateB
 	return &t.UpdateBulkCSVAsset
 }
 
-type CreateBulkCSVCampaign struct {
-	CreateBulkCSVCampaign CreateBulkCSVCampaign_CreateBulkCSVCampaign "json:\"createBulkCSVCampaign\" graphql:\"createBulkCSVCampaign\""
-}
-
-func (t *CreateBulkCSVCampaign) GetCreateBulkCSVCampaign() *CreateBulkCSVCampaign_CreateBulkCSVCampaign {
-	if t == nil {
-		t = &CreateBulkCSVCampaign{}
-	}
-	return &t.CreateBulkCSVCampaign
-}
-
 type CreateBulkCampaign struct {
 	CreateBulkCampaign CreateBulkCampaign_CreateBulkCampaign "json:\"createBulkCampaign\" graphql:\"createBulkCampaign\""
 }
@@ -173181,6 +173229,17 @@ func (t *CreateBulkCampaign) GetCreateBulkCampaign() *CreateBulkCampaign_CreateB
 		t = &CreateBulkCampaign{}
 	}
 	return &t.CreateBulkCampaign
+}
+
+type CreateBulkCSVCampaign struct {
+	CreateBulkCSVCampaign CreateBulkCSVCampaign_CreateBulkCSVCampaign "json:\"createBulkCSVCampaign\" graphql:\"createBulkCSVCampaign\""
+}
+
+func (t *CreateBulkCSVCampaign) GetCreateBulkCSVCampaign() *CreateBulkCSVCampaign_CreateBulkCSVCampaign {
+	if t == nil {
+		t = &CreateBulkCSVCampaign{}
+	}
+	return &t.CreateBulkCSVCampaign
 }
 
 type CreateCampaign struct {
@@ -173392,17 +173451,6 @@ func (t *UpdateCampaignTarget) GetUpdateCampaignTarget() *UpdateCampaignTarget_U
 	return &t.UpdateCampaignTarget
 }
 
-type CreateBulkCSVCheckResult struct {
-	CreateBulkCSVCheckResult CreateBulkCSVCheckResult_CreateBulkCSVCheckResult "json:\"createBulkCSVCheckResult\" graphql:\"createBulkCSVCheckResult\""
-}
-
-func (t *CreateBulkCSVCheckResult) GetCreateBulkCSVCheckResult() *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult {
-	if t == nil {
-		t = &CreateBulkCSVCheckResult{}
-	}
-	return &t.CreateBulkCSVCheckResult
-}
-
 type CreateBulkCheckResult struct {
 	CreateBulkCheckResult CreateBulkCheckResult_CreateBulkCheckResult "json:\"createBulkCheckResult\" graphql:\"createBulkCheckResult\""
 }
@@ -173412,6 +173460,17 @@ func (t *CreateBulkCheckResult) GetCreateBulkCheckResult() *CreateBulkCheckResul
 		t = &CreateBulkCheckResult{}
 	}
 	return &t.CreateBulkCheckResult
+}
+
+type CreateBulkCSVCheckResult struct {
+	CreateBulkCSVCheckResult CreateBulkCSVCheckResult_CreateBulkCSVCheckResult "json:\"createBulkCSVCheckResult\" graphql:\"createBulkCSVCheckResult\""
+}
+
+func (t *CreateBulkCSVCheckResult) GetCreateBulkCSVCheckResult() *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult{}
+	}
+	return &t.CreateBulkCSVCheckResult
 }
 
 type CreateCheckResult struct {
@@ -173480,17 +173539,6 @@ func (t *GetCheckResults) GetCheckResults() *GetCheckResults_CheckResults {
 	return &t.CheckResults
 }
 
-type UpdateBulkCSVCheckResult struct {
-	UpdateBulkCSVCheckResult UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult "json:\"updateBulkCSVCheckResult\" graphql:\"updateBulkCSVCheckResult\""
-}
-
-func (t *UpdateBulkCSVCheckResult) GetUpdateBulkCSVCheckResult() *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult {
-	if t == nil {
-		t = &UpdateBulkCSVCheckResult{}
-	}
-	return &t.UpdateBulkCSVCheckResult
-}
-
 type UpdateBulkCheckResult struct {
 	UpdateBulkCheckResult UpdateBulkCheckResult_UpdateBulkCheckResult "json:\"updateBulkCheckResult\" graphql:\"updateBulkCheckResult\""
 }
@@ -173500,6 +173548,17 @@ func (t *UpdateBulkCheckResult) GetUpdateBulkCheckResult() *UpdateBulkCheckResul
 		t = &UpdateBulkCheckResult{}
 	}
 	return &t.UpdateBulkCheckResult
+}
+
+type UpdateBulkCSVCheckResult struct {
+	UpdateBulkCSVCheckResult UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult "json:\"updateBulkCSVCheckResult\" graphql:\"updateBulkCSVCheckResult\""
+}
+
+func (t *UpdateBulkCSVCheckResult) GetUpdateBulkCSVCheckResult() *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult{}
+	}
+	return &t.UpdateBulkCSVCheckResult
 }
 
 type UpdateCheckResult struct {
@@ -179152,6 +179211,17 @@ func (t *UpdateTrustCenterCompliance) GetUpdateTrustCenterCompliance() *UpdateTr
 	return &t.UpdateTrustCenterCompliance
 }
 
+type CreateTrustCenterComplianceWithStandardDocs struct {
+	CreateTrustCenterCompliance CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance "json:\"createTrustCenterCompliance\" graphql:\"createTrustCenterCompliance\""
+}
+
+func (t *CreateTrustCenterComplianceWithStandardDocs) GetCreateTrustCenterCompliance() *CreateTrustCenterComplianceWithStandardDocs_CreateTrustCenterCompliance {
+	if t == nil {
+		t = &CreateTrustCenterComplianceWithStandardDocs{}
+	}
+	return &t.CreateTrustCenterCompliance
+}
+
 type CreateTrustCenterDoc struct {
 	CreateTrustCenterDoc CreateTrustCenterDoc_CreateTrustCenterDoc "json:\"createTrustCenterDoc\" graphql:\"createTrustCenterDoc\""
 }
@@ -183764,79 +183834,6 @@ func (c *Client) UpdateBulkCSVAsset(ctx context.Context, input graphql.Upload, i
 	return &res, nil
 }
 
-const CreateBulkCSVCampaignDocument = `mutation CreateBulkCSVCampaign ($input: Upload!) {
-	createBulkCSVCampaign(input: $input) {
-		campaigns {
-			assessmentID
-			campaignType
-			completedAt
-			createdAt
-			createdBy
-			description
-			displayID
-			dueDate
-			emailBrandingID
-			emailTemplateID
-			entityID
-			externalID
-			id
-			integrationID
-			integrationRunID
-			internalOwner
-			internalOwnerGroupID
-			internalOwnerIdentityHolderID
-			internalOwnerUserID
-			isActive
-			isRecurring
-			lastResentAt
-			lastRunAt
-			launchedAt
-			managedBy
-			metadata
-			name
-			nextRunAt
-			ownerID
-			recipientCount
-			recurrenceCron
-			recurrenceEndAt
-			recurrenceFrequency
-			recurrenceInterval
-			recurrenceTimezone
-			resendCount
-			scheduledAt
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			templateID
-			trustCenterID
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-			workflowEligibleMarker
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVCampaign(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCampaign, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVCampaign
-	if err := c.Client.Post(ctx, "CreateBulkCSVCampaign", CreateBulkCSVCampaignDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateBulkCampaignDocument = `mutation CreateBulkCampaign ($input: [CreateCampaignInput!]) {
 	createBulkCampaign(input: $input) {
 		campaigns {
@@ -183900,6 +183897,79 @@ func (c *Client) CreateBulkCampaign(ctx context.Context, input []*CreateCampaign
 
 	var res CreateBulkCampaign
 	if err := c.Client.Post(ctx, "CreateBulkCampaign", CreateBulkCampaignDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVCampaignDocument = `mutation CreateBulkCSVCampaign ($input: Upload!) {
+	createBulkCSVCampaign(input: $input) {
+		campaigns {
+			assessmentID
+			campaignType
+			completedAt
+			createdAt
+			createdBy
+			description
+			displayID
+			dueDate
+			emailBrandingID
+			emailTemplateID
+			entityID
+			externalID
+			id
+			integrationID
+			integrationRunID
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
+			isActive
+			isRecurring
+			lastResentAt
+			lastRunAt
+			launchedAt
+			managedBy
+			metadata
+			name
+			nextRunAt
+			ownerID
+			recipientCount
+			recurrenceCron
+			recurrenceEndAt
+			recurrenceFrequency
+			recurrenceInterval
+			recurrenceTimezone
+			resendCount
+			scheduledAt
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			status
+			tags
+			templateID
+			trustCenterID
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			workflowEligibleMarker
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVCampaign(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCampaign, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVCampaign
+	if err := c.Client.Post(ctx, "CreateBulkCSVCampaign", CreateBulkCSVCampaignDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -185067,51 +185137,6 @@ func (c *Client) UpdateCampaignTarget(ctx context.Context, updateCampaignTargetI
 	return &res, nil
 }
 
-const CreateBulkCSVCheckResultDocument = `mutation CreateBulkCSVCheckResult ($input: Upload!) {
-	createBulkCSVCheckResult(input: $input) {
-		checkResults {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			ownerID
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCheckResult, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVCheckResult
-	if err := c.Client.Post(ctx, "CreateBulkCSVCheckResult", CreateBulkCSVCheckResultDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const CreateBulkCheckResultDocument = `mutation CreateBulkCheckResult ($input: [CreateCheckResultInput!]) {
 	createBulkCheckResult(input: $input) {
 		checkResults {
@@ -185147,6 +185172,51 @@ func (c *Client) CreateBulkCheckResult(ctx context.Context, input []*CreateCheck
 
 	var res CreateBulkCheckResult
 	if err := c.Client.Post(ctx, "CreateBulkCheckResult", CreateBulkCheckResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVCheckResultDocument = `mutation CreateBulkCSVCheckResult ($input: Upload!) {
+	createBulkCSVCheckResult(input: $input) {
+		checkResults {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			integrationRunID
+			lastObservedAt
+			managedBy
+			ownerID
+			parentExternalID
+			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			status
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCheckResult, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVCheckResult
+	if err := c.Client.Post(ctx, "CreateBulkCSVCheckResult", CreateBulkCSVCheckResultDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -185412,54 +185482,6 @@ func (c *Client) GetCheckResults(ctx context.Context, first *int64, last *int64,
 	return &res, nil
 }
 
-const UpdateBulkCSVCheckResultDocument = `mutation UpdateBulkCSVCheckResult ($input: Upload!) {
-	updateBulkCSVCheckResult(input: $input) {
-		checkResults {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			ownerID
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-		updatedIDs
-		notUpdatedIDs
-		error
-	}
-}
-`
-
-func (c *Client) UpdateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVCheckResult, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res UpdateBulkCSVCheckResult
-	if err := c.Client.Post(ctx, "UpdateBulkCSVCheckResult", UpdateBulkCSVCheckResultDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
 const UpdateBulkCheckResultDocument = `mutation UpdateBulkCheckResult ($ids: [ID!]!, $input: UpdateCheckResultInput!) {
 	updateBulkCheckResult(ids: $ids, input: $input) {
 		checkResults {
@@ -185499,6 +185521,54 @@ func (c *Client) UpdateBulkCheckResult(ctx context.Context, ids []string, input 
 
 	var res UpdateBulkCheckResult
 	if err := c.Client.Post(ctx, "UpdateBulkCheckResult", UpdateBulkCheckResultDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkCSVCheckResultDocument = `mutation UpdateBulkCSVCheckResult ($input: Upload!) {
+	updateBulkCSVCheckResult(input: $input) {
+		checkResults {
+			createdAt
+			createdBy
+			details
+			externalURI
+			id
+			integrationID
+			integrationRunID
+			lastObservedAt
+			managedBy
+			ownerID
+			parentExternalID
+			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			status
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+		updatedIDs
+		notUpdatedIDs
+		error
+	}
+}
+`
+
+func (c *Client) UpdateBulkCSVCheckResult(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVCheckResult, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkCSVCheckResult
+	if err := c.Client.Post(ctx, "UpdateBulkCSVCheckResult", UpdateBulkCSVCheckResultDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -215697,6 +215767,38 @@ func (c *Client) UpdateTrustCenterCompliance(ctx context.Context, updateTrustCen
 	return &res, nil
 }
 
+const CreateTrustCenterComplianceWithStandardDocsDocument = `mutation CreateTrustCenterComplianceWithStandardDocs ($input: CreateTrustCenterComplianceInput!) {
+	createTrustCenterCompliance(input: $input) {
+		trustCenterCompliance {
+			id
+			standard {
+				id
+				trustCenterDocs {
+					totalCount
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterComplianceWithStandardDocs(ctx context.Context, input CreateTrustCenterComplianceInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterComplianceWithStandardDocs, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenterComplianceWithStandardDocs
+	if err := c.Client.Post(ctx, "CreateTrustCenterComplianceWithStandardDocs", CreateTrustCenterComplianceWithStandardDocsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTrustCenterDocDocument = `mutation CreateTrustCenterDoc ($input: CreateTrustCenterDocInput!, $trustCenterDocFile: Upload!) {
 	createTrustCenterDoc(input: $input, trustCenterDocFile: $trustCenterDocFile) {
 		trustCenterDoc {
@@ -224313,768 +224415,769 @@ func (c *Client) GetWorkflowObjectRefs(ctx context.Context, first *int64, last *
 }
 
 var DocumentOperationNames = map[string]string{
-	CreateActionPlanDocument:                      "CreateActionPlan",
-	CreateBulkActionPlanDocument:                  "CreateBulkActionPlan",
-	CreateBulkCSVActionPlanDocument:               "CreateBulkCSVActionPlan",
-	DeleteActionPlanDocument:                      "DeleteActionPlan",
-	GetActionPlanByIDDocument:                     "GetActionPlanByID",
-	GetActionPlansDocument:                        "GetActionPlans",
-	GetAllActionPlansDocument:                     "GetAllActionPlans",
-	UpdateActionPlanDocument:                      "UpdateActionPlan",
-	UpdateBulkActionPlanDocument:                  "UpdateBulkActionPlan",
-	CreateAPITokenDocument:                        "CreateAPIToken",
-	DeleteAPITokenDocument:                        "DeleteAPIToken",
-	GetAPITokenByIDDocument:                       "GetAPITokenByID",
-	GetAPITokensDocument:                          "GetAPITokens",
-	GetAllAPITokensDocument:                       "GetAllAPITokens",
-	UpdateAPITokenDocument:                        "UpdateAPIToken",
-	CreateAssessmentDocument:                      "CreateAssessment",
-	CreateAssessmentTemplateDocument:              "CreateAssessmentTemplate",
-	CreateAssessmentWithPoliciesDocument:          "CreateAssessmentWithPolicies",
-	DeleteAssessmentDocument:                      "DeleteAssessment",
-	DeleteBulkAssessmentDocument:                  "DeleteBulkAssessment",
-	GetAllAssessmentsDocument:                     "GetAllAssessments",
-	GetAssessmentByIDDocument:                     "GetAssessmentByID",
-	GetAssessmentsDocument:                        "GetAssessments",
-	UpdateAssessmentDocument:                      "UpdateAssessment",
-	CreateAssessmentDomainDocument:                "CreateAssessmentDomain",
-	CreateAssessmentPolicyDocument:                "CreateAssessmentPolicy",
-	CreateBulkAssessmentPolicyDocument:            "CreateBulkAssessmentPolicy",
-	CreateBulkCSVAssessmentPolicyDocument:         "CreateBulkCSVAssessmentPolicy",
-	DeleteAssessmentPolicyDocument:                "DeleteAssessmentPolicy",
-	DeleteBulkAssessmentPolicyDocument:            "DeleteBulkAssessmentPolicy",
-	GetAllAssessmentPoliciesDocument:              "GetAllAssessmentPolicies",
-	GetAssessmentPoliciesDocument:                 "GetAssessmentPolicies",
-	GetAssessmentPolicyByIDDocument:               "GetAssessmentPolicyByID",
-	UpdateAssessmentPolicyDocument:                "UpdateAssessmentPolicy",
-	UpdateBulkAssessmentPolicyDocument:            "UpdateBulkAssessmentPolicy",
-	UpdateBulkCSVAssessmentPolicyDocument:         "UpdateBulkCSVAssessmentPolicy",
-	CreateAssessmentResponseDocument:              "CreateAssessmentResponse",
-	DeleteAssessmentResponseDocument:              "DeleteAssessmentResponse",
-	GetAllAssessmentResponsesDocument:             "GetAllAssessmentResponses",
-	GetAssessmentResponseByIDDocument:             "GetAssessmentResponseByID",
-	GetAssessmentResponsesDocument:                "GetAssessmentResponses",
-	CreateAssetDocument:                           "CreateAsset",
-	CreateBulkAssetDocument:                       "CreateBulkAsset",
-	CreateBulkCSVAssetDocument:                    "CreateBulkCSVAsset",
-	DeleteAssetDocument:                           "DeleteAsset",
-	DeleteBulkAssetDocument:                       "DeleteBulkAsset",
-	GetAllAssetsDocument:                          "GetAllAssets",
-	GetAssetByIDDocument:                          "GetAssetByID",
-	GetAssetsDocument:                             "GetAssets",
-	UpdateAssetDocument:                           "UpdateAsset",
-	UpdateBulkAssetDocument:                       "UpdateBulkAsset",
-	UpdateBulkCSVAssetDocument:                    "UpdateBulkCSVAsset",
-	CreateBulkCSVCampaignDocument:                 "CreateBulkCSVCampaign",
-	CreateBulkCampaignDocument:                    "CreateBulkCampaign",
-	CreateCampaignDocument:                        "CreateCampaign",
-	DeleteCampaignDocument:                        "DeleteCampaign",
-	GetAllCampaignsDocument:                       "GetAllCampaigns",
-	GetCampaignByIDDocument:                       "GetCampaignByID",
-	GetCampaignsDocument:                          "GetCampaigns",
-	UpdateCampaignDocument:                        "UpdateCampaign",
-	CreateCampaignWithTargetsDocument:             "CreateCampaignWithTargets",
-	CreateCampaignWithTargetsCSVDocument:          "CreateCampaignWithTargetsCSV",
-	LaunchCampaignDocument:                        "LaunchCampaign",
-	ResendCampaignIncompleteTargetsDocument:       "ResendCampaignIncompleteTargets",
-	SendCampaignTestEmailDocument:                 "SendCampaignTestEmail",
-	CreateBulkCSVCampaignTargetDocument:           "CreateBulkCSVCampaignTarget",
-	CreateBulkCampaignTargetDocument:              "CreateBulkCampaignTarget",
-	CreateCampaignTargetDocument:                  "CreateCampaignTarget",
-	DeleteCampaignTargetDocument:                  "DeleteCampaignTarget",
-	GetAllCampaignTargetsDocument:                 "GetAllCampaignTargets",
-	GetCampaignTargetByIDDocument:                 "GetCampaignTargetByID",
-	GetCampaignTargetsDocument:                    "GetCampaignTargets",
-	UpdateCampaignTargetDocument:                  "UpdateCampaignTarget",
-	CreateBulkCSVCheckResultDocument:              "CreateBulkCSVCheckResult",
-	CreateBulkCheckResultDocument:                 "CreateBulkCheckResult",
-	CreateCheckResultDocument:                     "CreateCheckResult",
-	DeleteBulkCheckResultDocument:                 "DeleteBulkCheckResult",
-	DeleteCheckResultDocument:                     "DeleteCheckResult",
-	GetAllCheckResultsDocument:                    "GetAllCheckResults",
-	GetCheckResultByIDDocument:                    "GetCheckResultByID",
-	GetCheckResultsDocument:                       "GetCheckResults",
-	UpdateBulkCSVCheckResultDocument:              "UpdateBulkCSVCheckResult",
-	UpdateBulkCheckResultDocument:                 "UpdateBulkCheckResult",
-	UpdateCheckResultDocument:                     "UpdateCheckResult",
-	CreateBulkCSVContactDocument:                  "CreateBulkCSVContact",
-	CreateBulkContactDocument:                     "CreateBulkContact",
-	CreateContactDocument:                         "CreateContact",
-	DeleteContactDocument:                         "DeleteContact",
-	GetAllContactsDocument:                        "GetAllContacts",
-	GetContactByIDDocument:                        "GetContactByID",
-	GetContactsDocument:                           "GetContacts",
-	UpdateBulkContactDocument:                     "UpdateBulkContact",
-	UpdateContactDocument:                         "UpdateContact",
-	CreateBulkCSVControlDocument:                  "CreateBulkCSVControl",
-	CreateBulkControlDocument:                     "CreateBulkControl",
-	CreateControlDocument:                         "CreateControl",
-	DeleteBulkControlDocument:                     "DeleteBulkControl",
-	DeleteControlDocument:                         "DeleteControl",
-	GetAllControlsDocument:                        "GetAllControls",
-	GetControlByIDDocument:                        "GetControlByID",
-	GetControlsDocument:                           "GetControls",
-	GetTrustCenterControlByIDDocument:             "GetTrustCenterControlByID",
-	GetTrustCenterControlsDocument:                "GetTrustCenterControls",
-	UpdateBulkControlDocument:                     "UpdateBulkControl",
-	UpdateControlDocument:                         "UpdateControl",
-	CloneBulkCSVControlDocument:                   "CloneBulkCSVControl",
-	CreateControlsByCloneDocument:                 "CreateControlsByClone",
-	CreateControlsByCloneReturnIDDocument:         "CreateControlsByCloneReturnID",
-	GetControlCategoriesDocument:                  "GetControlCategories",
-	GetControlCategoriesWithFrameworkDocument:     "GetControlCategoriesWithFramework",
-	GetControlsGroupByCategoryDocument:            "GetControlsGroupByCategory",
-	GetControlSubcategoriesDocument:               "GetControlSubcategories",
-	GetControlSubcategoriesWithFrameworkDocument:  "GetControlSubcategoriesWithFramework",
-	UpdateControlCommentDocument:                  "UpdateControlComment",
-	CreateBulkCSVControlImplementationDocument:    "CreateBulkCSVControlImplementation",
-	CreateBulkControlImplementationDocument:       "CreateBulkControlImplementation",
-	CreateControlImplementationDocument:           "CreateControlImplementation",
-	DeleteControlImplementationDocument:           "DeleteControlImplementation",
-	GetAllControlImplementationsDocument:          "GetAllControlImplementations",
-	GetControlImplementationByIDDocument:          "GetControlImplementationByID",
-	GetControlImplementationsDocument:             "GetControlImplementations",
-	UpdateControlImplementationDocument:           "UpdateControlImplementation",
-	CreateBulkCSVControlObjectiveDocument:         "CreateBulkCSVControlObjective",
-	CreateBulkControlObjectiveDocument:            "CreateBulkControlObjective",
-	CreateControlObjectiveDocument:                "CreateControlObjective",
-	DeleteControlObjectiveDocument:                "DeleteControlObjective",
-	GetAllControlObjectivesDocument:               "GetAllControlObjectives",
-	GetControlObjectiveByIDDocument:               "GetControlObjectiveByID",
-	GetControlObjectivesDocument:                  "GetControlObjectives",
-	UpdateControlObjectiveDocument:                "UpdateControlObjective",
-	GetAllControlReportsDocument:                  "GetAllControlReports",
-	GetControlReportsDocument:                     "GetControlReports",
-	GetControlReportsByCategoryDocument:           "GetControlReportsByCategory",
-	CreateBulkCSVCustomDomainDocument:             "CreateBulkCSVCustomDomain",
-	CreateBulkCustomDomainDocument:                "CreateBulkCustomDomain",
-	CreateCustomDomainDocument:                    "CreateCustomDomain",
-	DeleteCustomDomainDocument:                    "DeleteCustomDomain",
-	GetAllCustomDomainsDocument:                   "GetAllCustomDomains",
-	GetCustomDomainByIDDocument:                   "GetCustomDomainByID",
-	GetCustomDomainsDocument:                      "GetCustomDomains",
-	UpdateCustomDomainDocument:                    "UpdateCustomDomain",
-	ValidateCustomDomainDocument:                  "ValidateCustomDomain",
-	CreateBulkCSVCustomTypeEnumDocument:           "CreateBulkCSVCustomTypeEnum",
-	CreateBulkCustomTypeEnumDocument:              "CreateBulkCustomTypeEnum",
-	CreateCustomTypeEnumDocument:                  "CreateCustomTypeEnum",
-	DeleteCustomTypeEnumDocument:                  "DeleteCustomTypeEnum",
-	GetAllCustomTypeEnumsDocument:                 "GetAllCustomTypeEnums",
-	GetCustomTypeEnumByIDDocument:                 "GetCustomTypeEnumByID",
-	GetCustomTypeEnumsDocument:                    "GetCustomTypeEnums",
-	UpdateCustomTypeEnumDocument:                  "UpdateCustomTypeEnum",
-	CreateBulkCSVDirectoryAccountDocument:         "CreateBulkCSVDirectoryAccount",
-	CreateBulkDirectoryAccountDocument:            "CreateBulkDirectoryAccount",
-	CreateDirectoryAccountDocument:                "CreateDirectoryAccount",
-	DeleteDirectoryAccountDocument:                "DeleteDirectoryAccount",
-	GetAllDirectoryAccountsDocument:               "GetAllDirectoryAccounts",
-	GetDirectoryAccountByIDDocument:               "GetDirectoryAccountByID",
-	GetDirectoryAccountsDocument:                  "GetDirectoryAccounts",
-	UpdateDirectoryAccountDocument:                "UpdateDirectoryAccount",
-	CreateBulkCSVDirectoryGroupDocument:           "CreateBulkCSVDirectoryGroup",
-	CreateBulkDirectoryGroupDocument:              "CreateBulkDirectoryGroup",
-	CreateDirectoryGroupDocument:                  "CreateDirectoryGroup",
-	DeleteDirectoryGroupDocument:                  "DeleteDirectoryGroup",
-	GetAllDirectoryGroupsDocument:                 "GetAllDirectoryGroups",
-	GetDirectoryGroupByIDDocument:                 "GetDirectoryGroupByID",
-	GetDirectoryGroupsDocument:                    "GetDirectoryGroups",
-	UpdateDirectoryGroupDocument:                  "UpdateDirectoryGroup",
-	CreateBulkCSVDirectoryMembershipDocument:      "CreateBulkCSVDirectoryMembership",
-	CreateBulkDirectoryMembershipDocument:         "CreateBulkDirectoryMembership",
-	CreateDirectoryMembershipDocument:             "CreateDirectoryMembership",
-	DeleteDirectoryMembershipDocument:             "DeleteDirectoryMembership",
-	GetAllDirectoryMembershipsDocument:            "GetAllDirectoryMemberships",
-	GetDirectoryMembershipByIDDocument:            "GetDirectoryMembershipByID",
-	GetDirectoryMembershipsDocument:               "GetDirectoryMemberships",
-	UpdateDirectoryMembershipDocument:             "UpdateDirectoryMembership",
-	CreateBulkCSVDiscussionDocument:               "CreateBulkCSVDiscussion",
-	CreateBulkDiscussionDocument:                  "CreateBulkDiscussion",
-	CreateDiscussionDocument:                      "CreateDiscussion",
-	DeleteDiscussionDocument:                      "DeleteDiscussion",
-	GetAllDiscussionsDocument:                     "GetAllDiscussions",
-	GetDiscussionByIDDocument:                     "GetDiscussionByID",
-	GetDiscussionsDocument:                        "GetDiscussions",
-	UpdateDiscussionDocument:                      "UpdateDiscussion",
-	CreateBulkCSVDNSVerificationDocument:          "CreateBulkCSVDNSVerification",
-	CreateBulkDNSVerificationDocument:             "CreateBulkDNSVerification",
-	CreateDNSVerificationDocument:                 "CreateDNSVerification",
-	DeleteDNSVerificationDocument:                 "DeleteDNSVerification",
-	GetAllDNSVerificationsDocument:                "GetAllDNSVerifications",
-	GetDNSVerificationByIDDocument:                "GetDNSVerificationByID",
-	GetDNSVerificationsDocument:                   "GetDNSVerifications",
-	UpdateDNSVerificationDocument:                 "UpdateDNSVerification",
-	CreateDocumentDataDocument:                    "CreateDocumentData",
-	DeleteDocumentDataDocument:                    "DeleteDocumentData",
-	GetDocumentDataByIDDocument:                   "GetDocumentDataByID",
-	UpdateDocumentDataDocument:                    "UpdateDocumentData",
-	ImportDomainScanReviewDocument:                "ImportDomainScanReview",
-	CreateBulkCSVEmailTemplateDocument:            "CreateBulkCSVEmailTemplate",
-	CreateBulkEmailTemplateDocument:               "CreateBulkEmailTemplate",
-	CreateEmailTemplateDocument:                   "CreateEmailTemplate",
-	DeleteBulkEmailTemplateDocument:               "DeleteBulkEmailTemplate",
-	DeleteEmailTemplateDocument:                   "DeleteEmailTemplate",
-	GetAllEmailTemplatesDocument:                  "GetAllEmailTemplates",
-	GetEmailTemplateByIDDocument:                  "GetEmailTemplateByID",
-	GetEmailTemplatesDocument:                     "GetEmailTemplates",
-	PreviewEmailTemplateDocument:                  "PreviewEmailTemplate",
-	UpdateBulkCSVEmailTemplateDocument:            "UpdateBulkCSVEmailTemplate",
-	UpdateBulkEmailTemplateDocument:               "UpdateBulkEmailTemplate",
-	UpdateEmailTemplateDocument:                   "UpdateEmailTemplate",
-	CreateBulkCSVEntityDocument:                   "CreateBulkCSVEntity",
-	CreateBulkEntityDocument:                      "CreateBulkEntity",
-	CreateEntityDocument:                          "CreateEntity",
-	DeleteEntityDocument:                          "DeleteEntity",
-	GetAllEntitiesDocument:                        "GetAllEntities",
-	GetEntitiesDocument:                           "GetEntities",
-	GetEntityByIDDocument:                         "GetEntityByID",
-	UpdateEntityDocument:                          "UpdateEntity",
-	CreateBulkCSVEntityTypeDocument:               "CreateBulkCSVEntityType",
-	CreateBulkEntityTypeDocument:                  "CreateBulkEntityType",
-	CreateEntityTypeDocument:                      "CreateEntityType",
-	DeleteEntityTypeDocument:                      "DeleteEntityType",
-	GetAllEntityTypesDocument:                     "GetAllEntityTypes",
-	GetEntityTypeByIDDocument:                     "GetEntityTypeByID",
-	GetEntityTypesDocument:                        "GetEntityTypes",
-	UpdateEntityTypeDocument:                      "UpdateEntityType",
-	CreateBulkCSVEventDocument:                    "CreateBulkCSVEvent",
-	CreateBulkEventDocument:                       "CreateBulkEvent",
-	CreateEventDocument:                           "CreateEvent",
-	DeleteEventDocument:                           "DeleteEvent",
-	GetAllEventsDocument:                          "GetAllEvents",
-	GetEventByIDDocument:                          "GetEventByID",
-	GetEventsDocument:                             "GetEvents",
-	UpdateEventDocument:                           "UpdateEvent",
-	CreateBulkCSVEvidenceDocument:                 "CreateBulkCSVEvidence",
-	CreateEvidenceDocument:                        "CreateEvidence",
-	DeleteEvidenceDocument:                        "DeleteEvidence",
-	GetAllEvidencesDocument:                       "GetAllEvidences",
-	GetEvidenceByIDDocument:                       "GetEvidenceByID",
-	GetEvidencesDocument:                          "GetEvidences",
-	UpdateBulkEvidenceDocument:                    "UpdateBulkEvidence",
-	UpdateEvidenceDocument:                        "UpdateEvidence",
-	UpdateEvidenceCommentDocument:                 "UpdateEvidenceComment",
-	CreateExportDocument:                          "CreateExport",
-	DeleteBulkExportDocument:                      "DeleteBulkExport",
-	DeleteExportDocument:                          "DeleteExport",
-	GetAllExportsDocument:                         "GetAllExports",
-	GetExportByIDDocument:                         "GetExportByID",
-	GetExportsDocument:                            "GetExports",
-	UpdateExportDocument:                          "UpdateExport",
-	DeleteFileDocument:                            "DeleteFile",
-	GetAllFilesDocument:                           "GetAllFiles",
-	GetFileByIDDocument:                           "GetFileByID",
-	GetFilesDocument:                              "GetFiles",
-	CreateBulkCSVFindingDocument:                  "CreateBulkCSVFinding",
-	CreateBulkFindingDocument:                     "CreateBulkFinding",
-	CreateFindingDocument:                         "CreateFinding",
-	DeleteBulkFindingDocument:                     "DeleteBulkFinding",
-	DeleteFindingDocument:                         "DeleteFinding",
-	GetAllFindingsDocument:                        "GetAllFindings",
-	GetFindingByIDDocument:                        "GetFindingByID",
-	GetFindingsDocument:                           "GetFindings",
-	UpdateBulkCSVFindingDocument:                  "UpdateBulkCSVFinding",
-	UpdateBulkFindingDocument:                     "UpdateBulkFinding",
-	UpdateFindingDocument:                         "UpdateFinding",
-	UpdateFindingCommentDocument:                  "UpdateFindingComment",
-	CreateBulkCSVFindingControlDocument:           "CreateBulkCSVFindingControl",
-	CreateBulkFindingControlDocument:              "CreateBulkFindingControl",
-	CreateFindingControlDocument:                  "CreateFindingControl",
-	DeleteBulkFindingControlDocument:              "DeleteBulkFindingControl",
-	DeleteFindingControlDocument:                  "DeleteFindingControl",
-	GetAllFindingControlsDocument:                 "GetAllFindingControls",
-	GetFindingControlByIDDocument:                 "GetFindingControlByID",
-	GetFindingControlsDocument:                    "GetFindingControls",
-	UpdateFindingControlDocument:                  "UpdateFindingControl",
-	CreateBulkCSVGroupDocument:                    "CreateBulkCSVGroup",
-	CreateBulkGroupDocument:                       "CreateBulkGroup",
-	CreateGroupDocument:                           "CreateGroup",
-	CreateGroupByCloneDocument:                    "CreateGroupByClone",
-	CreateGroupSimpleDocument:                     "CreateGroupSimple",
-	CreateGroupWithMembersDocument:                "CreateGroupWithMembers",
-	DeleteGroupDocument:                           "DeleteGroup",
-	GetAllGroupsDocument:                          "GetAllGroups",
-	GetGroupByIDDocument:                          "GetGroupByID",
-	GetGroupInfoDocument:                          "GetGroupInfo",
-	GetGroupsDocument:                             "GetGroups",
-	UpdateGroupDocument:                           "UpdateGroup",
-	AddUserToGroupWithRoleDocument:                "AddUserToGroupWithRole",
-	CreateBulkCSVGroupMembersDocument:             "CreateBulkCSVGroupMembers",
-	CreateBulkGroupMembersDocument:                "CreateBulkGroupMembers",
-	GetGroupMembersByGroupIDDocument:              "GetGroupMembersByGroupID",
-	RemoveUserFromGroupDocument:                   "RemoveUserFromGroup",
-	UpdateUserRoleInGroupDocument:                 "UpdateUserRoleInGroup",
-	GetAllGroupSettingsDocument:                   "GetAllGroupSettings",
-	GetGroupSettingByIDDocument:                   "GetGroupSettingByID",
-	GetGroupSettingsDocument:                      "GetGroupSettings",
-	UpdateGroupSettingDocument:                    "UpdateGroupSetting",
-	CreateBulkCSVHushDocument:                     "CreateBulkCSVHush",
-	CreateBulkHushDocument:                        "CreateBulkHush",
-	CreateHushDocument:                            "CreateHush",
-	GetAllHushesDocument:                          "GetAllHushes",
-	GetHushByIDDocument:                           "GetHushByID",
-	GetHushesDocument:                             "GetHushes",
-	UpdateHushDocument:                            "UpdateHush",
-	CreateBulkCSVIdentityHolderDocument:           "CreateBulkCSVIdentityHolder",
-	CreateBulkIdentityHolderDocument:              "CreateBulkIdentityHolder",
-	CreateIdentityHolderDocument:                  "CreateIdentityHolder",
-	DeleteIdentityHolderDocument:                  "DeleteIdentityHolder",
-	GetAllIdentityHoldersDocument:                 "GetAllIdentityHolders",
-	GetIdentityHolderByIDDocument:                 "GetIdentityHolderByID",
-	GetIdentityHolderDirectoryAccountsDocument:    "GetIdentityHolderDirectoryAccounts",
-	GetIdentityHoldersDocument:                    "GetIdentityHolders",
-	UpdateIdentityHolderDocument:                  "UpdateIdentityHolder",
-	DeleteIntegrationDocument:                     "DeleteIntegration",
-	GetAllIntegrationsDocument:                    "GetAllIntegrations",
-	GetIntegrationByIDDocument:                    "GetIntegrationByID",
-	GetIntegrationByIDWithSecretsDocument:         "GetIntegrationByIDWithSecrets",
-	GetIntegrationsDocument:                       "GetIntegrations",
-	CreateBulkCSVInternalPolicyDocument:           "CreateBulkCSVInternalPolicy",
-	CreateBulkInternalPolicyDocument:              "CreateBulkInternalPolicy",
-	CreateInternalPolicyDocument:                  "CreateInternalPolicy",
-	CreateUploadInternalPolicyDocument:            "CreateUploadInternalPolicy",
-	DeleteInternalPolicyDocument:                  "DeleteInternalPolicy",
-	GetAllInternalPoliciesDocument:                "GetAllInternalPolicies",
-	GetInternalPoliciesDocument:                   "GetInternalPolicies",
-	GetInternalPolicyByIDDocument:                 "GetInternalPolicyByID",
-	UpdateBulkInternalPolicyDocument:              "UpdateBulkInternalPolicy",
-	UpdateInternalPolicyDocument:                  "UpdateInternalPolicy",
-	UpdateInternalPolicyCommentDocument:           "UpdateInternalPolicyComment",
-	CreateBulkCSVInviteDocument:                   "CreateBulkCSVInvite",
-	CreateBulkInviteDocument:                      "CreateBulkInvite",
-	CreateInviteDocument:                          "CreateInvite",
-	DeleteInviteDocument:                          "DeleteInvite",
-	GetAllInvitesDocument:                         "GetAllInvites",
-	GetInviteByIDDocument:                         "GetInviteByID",
-	InvitesByOrgIDDocument:                        "InvitesByOrgID",
-	CreateBulkCSVMappableDomainDocument:           "CreateBulkCSVMappableDomain",
-	CreateBulkMappableDomainDocument:              "CreateBulkMappableDomain",
-	CreateMappableDomainDocument:                  "CreateMappableDomain",
-	DeleteMappableDomainDocument:                  "DeleteMappableDomain",
-	GetAllMappableDomainsDocument:                 "GetAllMappableDomains",
-	GetMappableDomainByIDDocument:                 "GetMappableDomainByID",
-	GetMappableDomainsDocument:                    "GetMappableDomains",
-	UpdateMappableDomainDocument:                  "UpdateMappableDomain",
-	CreateBulkCSVMappedControlDocument:            "CreateBulkCSVMappedControl",
-	CreateBulkMappedControlDocument:               "CreateBulkMappedControl",
-	CreateMappedControlDocument:                   "CreateMappedControl",
-	DeleteMappedControlDocument:                   "DeleteMappedControl",
-	GetAllMappedControlsDocument:                  "GetAllMappedControls",
-	GetMappedControlByIDDocument:                  "GetMappedControlByID",
-	GetMappedControlsDocument:                     "GetMappedControls",
-	UpdateMappedControlDocument:                   "UpdateMappedControl",
-	CreateBulkCSVNarrativeDocument:                "CreateBulkCSVNarrative",
-	CreateBulkNarrativeDocument:                   "CreateBulkNarrative",
-	CreateNarrativeDocument:                       "CreateNarrative",
-	DeleteNarrativeDocument:                       "DeleteNarrative",
-	GetAllNarrativesDocument:                      "GetAllNarratives",
-	GetNarrativeByIDDocument:                      "GetNarrativeByID",
-	GetNarrativesDocument:                         "GetNarratives",
-	UpdateNarrativeDocument:                       "UpdateNarrative",
-	GetNoteByIDDocument:                           "GetNoteByID",
-	DeleteNoteDocument:                            "DeleteNote",
-	CreateNotificationDocument:                    "CreateNotification",
-	UpdateNotificationDocument:                    "UpdateNotification",
-	CreateBulkCSVNotificationPreferenceDocument:   "CreateBulkCSVNotificationPreference",
-	CreateBulkNotificationPreferenceDocument:      "CreateBulkNotificationPreference",
-	CreateNotificationPreferenceDocument:          "CreateNotificationPreference",
-	DeleteBulkNotificationPreferenceDocument:      "DeleteBulkNotificationPreference",
-	DeleteNotificationPreferenceDocument:          "DeleteNotificationPreference",
-	GetAllNotificationPreferencesDocument:         "GetAllNotificationPreferences",
-	GetNotificationPreferenceByIDDocument:         "GetNotificationPreferenceByID",
-	GetNotificationPreferencesDocument:            "GetNotificationPreferences",
-	UpdateBulkCSVNotificationPreferenceDocument:   "UpdateBulkCSVNotificationPreference",
-	UpdateBulkNotificationPreferenceDocument:      "UpdateBulkNotificationPreference",
-	UpdateNotificationPreferenceDocument:          "UpdateNotificationPreference",
-	CreateBulkCSVNotificationTemplateDocument:     "CreateBulkCSVNotificationTemplate",
-	CreateBulkNotificationTemplateDocument:        "CreateBulkNotificationTemplate",
-	CreateNotificationTemplateDocument:            "CreateNotificationTemplate",
-	DeleteBulkNotificationTemplateDocument:        "DeleteBulkNotificationTemplate",
-	DeleteNotificationTemplateDocument:            "DeleteNotificationTemplate",
-	GetAllNotificationTemplatesDocument:           "GetAllNotificationTemplates",
-	GetNotificationTemplateByIDDocument:           "GetNotificationTemplateByID",
-	GetNotificationTemplatesDocument:              "GetNotificationTemplates",
-	UpdateBulkCSVNotificationTemplateDocument:     "UpdateBulkCSVNotificationTemplate",
-	UpdateBulkNotificationTemplateDocument:        "UpdateBulkNotificationTemplate",
-	UpdateNotificationTemplateDocument:            "UpdateNotificationTemplate",
-	CreateOnboardingDocument:                      "CreateOnboarding",
-	CreateOrganizationDocument:                    "CreateOrganization",
-	CreateOrganizationWithMembersDocument:         "CreateOrganizationWithMembers",
-	DeleteOrganizationDocument:                    "DeleteOrganization",
-	GetAllOrganizationsDocument:                   "GetAllOrganizations",
-	GetOrganizationByIDDocument:                   "GetOrganizationByID",
-	GetOrganizationsDocument:                      "GetOrganizations",
-	TransferOrganizationOwnershipDocument:         "TransferOrganizationOwnership",
-	UpdateOrganizationDocument:                    "UpdateOrganization",
-	GetAllOrganizationSettingsDocument:            "GetAllOrganizationSettings",
-	GetOrganizationSettingByIDDocument:            "GetOrganizationSettingByID",
-	GetOrganizationSettingsDocument:               "GetOrganizationSettings",
-	UpdateOrganizationSettingDocument:             "UpdateOrganizationSetting",
-	AddUserToOrgWithRoleDocument:                  "AddUserToOrgWithRole",
-	CreateBulkCSVOrgMembersDocument:               "CreateBulkCSVOrgMembers",
-	CreateBulkOrgMembersDocument:                  "CreateBulkOrgMembers",
-	GetOrgMembersByOrgIDDocument:                  "GetOrgMembersByOrgID",
-	LeaveOrganizationDocument:                     "LeaveOrganization",
-	RemoveBulkUsersFromOrgDocument:                "RemoveBulkUsersFromOrg",
-	RemoveUserFromOrgDocument:                     "RemoveUserFromOrg",
-	UpdateBulkOrgMemberRolesDocument:              "UpdateBulkOrgMemberRoles",
-	UpdateUserRoleInOrgDocument:                   "UpdateUserRoleInOrg",
-	GetAllOrgSubscriptionsDocument:                "GetAllOrgSubscriptions",
-	GetOrgSubscriptionByIDDocument:                "GetOrgSubscriptionByID",
-	GetOrgSubscriptionsDocument:                   "GetOrgSubscriptions",
-	CreatePersonalAccessTokenDocument:             "CreatePersonalAccessToken",
-	DeletePersonalAccessTokenDocument:             "DeletePersonalAccessToken",
-	GetAllPersonalAccessTokensDocument:            "GetAllPersonalAccessTokens",
-	GetPersonalAccessTokenByIDDocument:            "GetPersonalAccessTokenByID",
-	GetPersonalAccessTokensDocument:               "GetPersonalAccessTokens",
-	UpdatePersonalAccessTokenDocument:             "UpdatePersonalAccessToken",
-	CreateBulkCSVPlatformDocument:                 "CreateBulkCSVPlatform",
-	CreateBulkPlatformDocument:                    "CreateBulkPlatform",
-	CreatePlatformDocument:                        "CreatePlatform",
-	DeletePlatformDocument:                        "DeletePlatform",
-	GetAllPlatformsDocument:                       "GetAllPlatforms",
-	GetPlatformByIDDocument:                       "GetPlatformByID",
-	GetPlatformsDocument:                          "GetPlatforms",
-	UpdatePlatformDocument:                        "UpdatePlatform",
-	CreateBulkCSVProcedureDocument:                "CreateBulkCSVProcedure",
-	CreateBulkProcedureDocument:                   "CreateBulkProcedure",
-	CreateProcedureDocument:                       "CreateProcedure",
-	CreateUploadProcedureDocument:                 "CreateUploadProcedure",
-	DeleteBulkProcedureDocument:                   "DeleteBulkProcedure",
-	DeleteProcedureDocument:                       "DeleteProcedure",
-	GetAllProceduresDocument:                      "GetAllProcedures",
-	GetProcedureByIDDocument:                      "GetProcedureByID",
-	GetProceduresDocument:                         "GetProcedures",
-	UpdateBulkProcedureDocument:                   "UpdateBulkProcedure",
-	UpdateProcedureDocument:                       "UpdateProcedure",
-	CreateBulkCSVProgramDocument:                  "CreateBulkCSVProgram",
-	CreateBulkProgramDocument:                     "CreateBulkProgram",
-	CreateControlWithSubcontrolsDocument:          "CreateControlWithSubcontrols",
-	CreateFullProgramDocument:                     "CreateFullProgram",
-	CreateFullProgramReturnIDsDocument:            "CreateFullProgramReturnIDs",
-	CreateProgramDocument:                         "CreateProgram",
-	CreateProgramWithMembersDocument:              "CreateProgramWithMembers",
-	DeleteProgramDocument:                         "DeleteProgram",
-	GetAllProgramsDocument:                        "GetAllPrograms",
-	GetProgramByIDDocument:                        "GetProgramByID",
-	GetProgramsDocument:                           "GetPrograms",
-	UpdateProgramDocument:                         "UpdateProgram",
-	AddUserToProgramWithRoleDocument:              "AddUserToProgramWithRole",
-	CreateBulkCSVProgramMembersDocument:           "CreateBulkCSVProgramMembers",
-	CreateBulkProgramMembersDocument:              "CreateBulkProgramMembers",
-	GetProgramMembersByProgramIDDocument:          "GetProgramMembersByProgramID",
-	RemoveUserFromProgramDocument:                 "RemoveUserFromProgram",
-	UpdateUserRoleInProgramDocument:               "UpdateUserRoleInProgram",
-	CreateBulkCSVProgramMembershipDocument:        "CreateBulkCSVProgramMembership",
-	CreateBulkProgramMembershipDocument:           "CreateBulkProgramMembership",
-	CreateProgramMembershipDocument:               "CreateProgramMembership",
-	DeleteProgramMembershipDocument:               "DeleteProgramMembership",
-	GetAllProgramMembershipsDocument:              "GetAllProgramMemberships",
-	GetProgramMembershipByIDDocument:              "GetProgramMembershipByID",
-	GetProgramMembershipsDocument:                 "GetProgramMemberships",
-	UpdateProgramMembershipDocument:               "UpdateProgramMembership",
-	CreateBulkCSVRemediationDocument:              "CreateBulkCSVRemediation",
-	CreateBulkRemediationDocument:                 "CreateBulkRemediation",
-	CreateRemediationDocument:                     "CreateRemediation",
-	DeleteBulkRemediationDocument:                 "DeleteBulkRemediation",
-	DeleteRemediationDocument:                     "DeleteRemediation",
-	GetAllRemediationsDocument:                    "GetAllRemediations",
-	GetRemediationByIDDocument:                    "GetRemediationByID",
-	GetRemediationsDocument:                       "GetRemediations",
-	UpdateBulkCSVRemediationDocument:              "UpdateBulkCSVRemediation",
-	UpdateBulkRemediationDocument:                 "UpdateBulkRemediation",
-	UpdateRemediationDocument:                     "UpdateRemediation",
-	CreateBulkCSVReviewDocument:                   "CreateBulkCSVReview",
-	CreateBulkReviewDocument:                      "CreateBulkReview",
-	CreateReviewDocument:                          "CreateReview",
-	DeleteBulkReviewReviewDocument:                "DeleteBulkReviewReview",
-	DeleteReviewDocument:                          "DeleteReview",
-	GetAllReviewsDocument:                         "GetAllReviews",
-	GetReviewByIDDocument:                         "GetReviewByID",
-	GetReviewsDocument:                            "GetReviews",
-	UpdateBulkCSVReviewDocument:                   "UpdateBulkCSVReview",
-	UpdateBulkReviewDocument:                      "UpdateBulkReview",
-	UpdateReviewDocument:                          "UpdateReview",
-	UpdateReviewCommentDocument:                   "UpdateReviewComment",
-	CreateBulkCSVRiskDocument:                     "CreateBulkCSVRisk",
-	CreateBulkRiskDocument:                        "CreateBulkRisk",
-	CreateRiskDocument:                            "CreateRisk",
-	DeleteRiskDocument:                            "DeleteRisk",
-	GetAllRisksDocument:                           "GetAllRisks",
-	GetRiskByIDDocument:                           "GetRiskByID",
-	GetRisksDocument:                              "GetRisks",
-	UpdateBulkRiskDocument:                        "UpdateBulkRisk",
-	UpdateRiskDocument:                            "UpdateRisk",
-	CreateBulkCSVScanDocument:                     "CreateBulkCSVScan",
-	CreateBulkScanDocument:                        "CreateBulkScan",
-	CreateScanDocument:                            "CreateScan",
-	DeleteScanDocument:                            "DeleteScan",
-	GetAllScansDocument:                           "GetAllScans",
-	GetScanByIDDocument:                           "GetScanByID",
-	GetScansDocument:                              "GetScans",
-	UpdateScanDocument:                            "UpdateScan",
-	GlobalSearchDocument:                          "GlobalSearch",
-	CreateBulkCSVSLADefinitionDocument:            "CreateBulkCSVSLADefinition",
-	CreateBulkSLADefinitionDocument:               "CreateBulkSLADefinition",
-	CreateSLADefinitionDocument:                   "CreateSLADefinition",
-	DeleteBulkSLADefinitionDocument:               "DeleteBulkSLADefinition",
-	DeleteSLADefinitionDocument:                   "DeleteSLADefinition",
-	GetAllSLADefinitionsDocument:                  "GetAllSLADefinitions",
-	GetSLADefinitionByIDDocument:                  "GetSLADefinitionByID",
-	GetSLADefinitionsDocument:                     "GetSLADefinitions",
-	UpdateBulkCSVSLADefinitionDocument:            "UpdateBulkCSVSLADefinition",
-	UpdateBulkSLADefinitionDocument:               "UpdateBulkSLADefinition",
-	UpdateSLADefinitionDocument:                   "UpdateSLADefinition",
-	CreateStandardDocument:                        "CreateStandard",
-	DeleteStandardDocument:                        "DeleteStandard",
-	GetAllStandardsDocument:                       "GetAllStandards",
-	GetStandardByIDDocument:                       "GetStandardByID",
-	GetStandardsDocument:                          "GetStandards",
-	UpdateStandardDocument:                        "UpdateStandard",
-	CreateBulkCSVSubcontrolDocument:               "CreateBulkCSVSubcontrol",
-	CreateBulkSubcontrolDocument:                  "CreateBulkSubcontrol",
-	CreateSubcontrolDocument:                      "CreateSubcontrol",
-	DeleteSubcontrolDocument:                      "DeleteSubcontrol",
-	GetAllSubcontrolsDocument:                     "GetAllSubcontrols",
-	GetSubcontrolByIDDocument:                     "GetSubcontrolByID",
-	GetSubcontrolsDocument:                        "GetSubcontrols",
-	UpdateSubcontrolDocument:                      "UpdateSubcontrol",
-	CreateBulkCSVSubprocessorDocument:             "CreateBulkCSVSubprocessor",
-	CreateBulkSubprocessorDocument:                "CreateBulkSubprocessor",
-	CreateSubprocessorDocument:                    "CreateSubprocessor",
-	DeleteSubprocessorDocument:                    "DeleteSubprocessor",
-	GetAllSubprocessorsDocument:                   "GetAllSubprocessors",
-	GetSubprocessorByIDDocument:                   "GetSubprocessorByID",
-	GetSubprocessorsDocument:                      "GetSubprocessors",
-	UpdateBulkSubprocessorDocument:                "UpdateBulkSubprocessor",
-	UpdateSubprocessorDocument:                    "UpdateSubprocessor",
-	CreateBulkCSVSubscriberDocument:               "CreateBulkCSVSubscriber",
-	CreateBulkSubscriberDocument:                  "CreateBulkSubscriber",
-	CreateSubscriberDocument:                      "CreateSubscriber",
-	DeleteSubscriberDocument:                      "DeleteSubscriber",
-	GetAllSubscribersDocument:                     "GetAllSubscribers",
-	GetSubscriberByEmailDocument:                  "GetSubscriberByEmail",
-	GetSubscribersDocument:                        "GetSubscribers",
-	UpdateSubscriberDocument:                      "UpdateSubscriber",
-	CreateBulkCSVSystemDetailDocument:             "CreateBulkCSVSystemDetail",
-	CreateBulkSystemDetailDocument:                "CreateBulkSystemDetail",
-	CreateSystemDetailDocument:                    "CreateSystemDetail",
-	DeleteBulkSystemDetailDocument:                "DeleteBulkSystemDetail",
-	DeleteSystemDetailDocument:                    "DeleteSystemDetail",
-	GetAllSystemDetailsDocument:                   "GetAllSystemDetails",
-	GetSystemDetailByIDDocument:                   "GetSystemDetailByID",
-	GetSystemDetailsDocument:                      "GetSystemDetails",
-	UpdateBulkCSVSystemDetailDocument:             "UpdateBulkCSVSystemDetail",
-	UpdateBulkSystemDetailDocument:                "UpdateBulkSystemDetail",
-	UpdateSystemDetailDocument:                    "UpdateSystemDetail",
-	CreateBulkCSVTagDefinitionDocument:            "CreateBulkCSVTagDefinition",
-	CreateBulkTagDefinitionDocument:               "CreateBulkTagDefinition",
-	CreateTagDefinitionDocument:                   "CreateTagDefinition",
-	DeleteTagDefinitionDocument:                   "DeleteTagDefinition",
-	GetAllTagDefinitionsDocument:                  "GetAllTagDefinitions",
-	GetTagDefinitionByIDDocument:                  "GetTagDefinitionByID",
-	GetTagDefinitionsDocument:                     "GetTagDefinitions",
-	UpdateTagDefinitionDocument:                   "UpdateTagDefinition",
-	CreateBulkCSVTaskDocument:                     "CreateBulkCSVTask",
-	CreateBulkTaskDocument:                        "CreateBulkTask",
-	CreateTaskDocument:                            "CreateTask",
-	DeleteTaskDocument:                            "DeleteTask",
-	GetAllTasksDocument:                           "GetAllTasks",
-	GetTaskByIDDocument:                           "GetTaskByID",
-	GetTasksDocument:                              "GetTasks",
-	UpdateBulkTaskDocument:                        "UpdateBulkTask",
-	UpdateTaskDocument:                            "UpdateTask",
-	UpdateTaskCommentDocument:                     "UpdateTaskComment",
-	CreateBulkCSVTemplateDocument:                 "CreateBulkCSVTemplate",
-	CreateBulkTemplateDocument:                    "CreateBulkTemplate",
-	CreateTemplateDocument:                        "CreateTemplate",
-	GetAllTemplatesDocument:                       "GetAllTemplates",
-	GetTemplateByIDDocument:                       "GetTemplateByID",
-	UpdateTemplateDocument:                        "UpdateTemplate",
-	CreateTFASettingDocument:                      "CreateTFASetting",
-	GetAllTFASettingsDocument:                     "GetAllTFASettings",
-	GetTFASettingDocument:                         "GetTFASetting",
-	UpdateTFASettingDocument:                      "UpdateTFASetting",
-	CreateTrustCenterDocument:                     "CreateTrustCenter",
-	DeleteTrustCenterDocument:                     "DeleteTrustCenter",
-	GetAllTrustCentersDocument:                    "GetAllTrustCenters",
-	GetTrustCenterByIDDocument:                    "GetTrustCenterByID",
-	GetTrustCenterFrontendQueryDocument:           "GetTrustCenterFrontendQuery",
-	GetTrustCentersDocument:                       "GetTrustCenters",
-	UpdateTrustCenterDocument:                     "UpdateTrustCenter",
-	CreateBulkCSVTrustCenterComplianceDocument:    "CreateBulkCSVTrustCenterCompliance",
-	CreateBulkTrustCenterComplianceDocument:       "CreateBulkTrustCenterCompliance",
-	CreateTrustCenterComplianceDocument:           "CreateTrustCenterCompliance",
-	DeleteTrustCenterComplianceDocument:           "DeleteTrustCenterCompliance",
-	GetAllTrustCenterCompliancesDocument:          "GetAllTrustCenterCompliances",
-	GetTrustCenterComplianceByIDDocument:          "GetTrustCenterComplianceByID",
-	GetTrustCenterCompliancesDocument:             "GetTrustCenterCompliances",
-	UpdateTrustCenterComplianceDocument:           "UpdateTrustCenterCompliance",
-	CreateTrustCenterDocDocument:                  "CreateTrustCenterDoc",
-	DeleteTrustCenterDocDocument:                  "DeleteTrustCenterDoc",
-	GetAllTrustCenterDocsDocument:                 "GetAllTrustCenterDocs",
-	GetTrustCenterDocByIDDocument:                 "GetTrustCenterDocByID",
-	GetTrustCenterDocsDocument:                    "GetTrustCenterDocs",
-	UpdateTrustCenterDocDocument:                  "UpdateTrustCenterDoc",
-	CreateTrustCenterDomainDocument:               "CreateTrustCenterDomain",
-	CreateBulkCSVTrustCenterEntityDocument:        "CreateBulkCSVTrustCenterEntity",
-	CreateBulkTrustCenterEntityDocument:           "CreateBulkTrustCenterEntity",
-	CreateTrustCenterEntityDocument:               "CreateTrustCenterEntity",
-	DeleteTrustCenterEntityDocument:               "DeleteTrustCenterEntity",
-	GetAlltrustCenterEntitiesDocument:             "GetAlltrustCenterEntities",
-	GetTrustCenterEntitiesDocument:                "GetTrustCenterEntities",
-	GetTrustCenterEntityByIDDocument:              "GetTrustCenterEntityByID",
-	UpdateTrustCenterEntityDocument:               "UpdateTrustCenterEntity",
-	CreateBulkCSVTrustCenterFaqDocument:           "CreateBulkCSVTrustCenterFAQ",
-	CreateBulkTrustCenterFaqDocument:              "CreateBulkTrustCenterFAQ",
-	CreateTrustCenterFaqDocument:                  "CreateTrustCenterFAQ",
-	DeleteBulkTrustCenterFaqDocument:              "DeleteBulkTrustCenterFAQ",
-	DeleteTrustCenterFaqDocument:                  "DeleteTrustCenterFAQ",
-	GetAllTrustCenterFaqsDocument:                 "GetAllTrustCenterFAQS",
-	GetTrustCenterFAQByIDDocument:                 "GetTrustCenterFAQByID",
-	GetTrustCenterFaqsDocument:                    "GetTrustCenterFAQS",
-	UpdateBulkCSVTrustCenterFaqDocument:           "UpdateBulkCSVTrustCenterFAQ",
-	UpdateBulkTrustCenterFaqDocument:              "UpdateBulkTrustCenterFAQ",
-	UpdateTrustCenterFaqDocument:                  "UpdateTrustCenterFAQ",
-	CreateTrustCenterNdaDocument:                  "CreateTrustCenterNda",
-	SubmitTrustCenterNDAResponseDocument:          "SubmitTrustCenterNDAResponse",
-	UpdateTrustCenterNdaDocument:                  "UpdateTrustCenterNda",
-	CreateBulkCSVTrustCenterNDARequestDocument:    "CreateBulkCSVTrustCenterNDARequest",
-	CreateBulkTrustCenterNDARequestDocument:       "CreateBulkTrustCenterNDARequest",
-	CreateTrustCenterNDARequestDocument:           "CreateTrustCenterNDARequest",
-	DeleteBulkTrustCenterNDARequestDocument:       "DeleteBulkTrustCenterNDARequest",
-	DeleteTrustCenterNDARequestDocument:           "DeleteTrustCenterNDARequest",
-	GetAllTrustCenterNDARequestsDocument:          "GetAllTrustCenterNDARequests",
-	GetTrustCenterNDARequestByIDDocument:          "GetTrustCenterNDARequestByID",
-	GetTrustCenterNDARequestsDocument:             "GetTrustCenterNDARequests",
-	RequestNewTrustCenterTokenDocument:            "RequestNewTrustCenterToken",
-	UpdateTrustCenterNDARequestDocument:           "UpdateTrustCenterNDARequest",
-	CreateTrustCenterPreviewSettingDocument:       "CreateTrustCenterPreviewSetting",
-	CreateTrustCenterSettingDocument:              "CreateTrustCenterSetting",
-	DeleteTrustCenterSettingDocument:              "DeleteTrustCenterSetting",
-	GetAllTrustCenterSettingsDocument:             "GetAllTrustCenterSettings",
-	GetTrustCenterSettingByIDDocument:             "GetTrustCenterSettingByID",
-	GetTrustCenterSettingsDocument:                "GetTrustCenterSettings",
-	UpdateTrustCenterSettingDocument:              "UpdateTrustCenterSetting",
-	CreateBulkCSVTrustCenterSubprocessorDocument:  "CreateBulkCSVTrustCenterSubprocessor",
-	CreateBulkTrustCenterSubprocessorDocument:     "CreateBulkTrustCenterSubprocessor",
-	CreateTrustCenterSubprocessorDocument:         "CreateTrustCenterSubprocessor",
-	DeleteTrustCenterSubprocessorDocument:         "DeleteTrustCenterSubprocessor",
-	GetAllTrustCenterSubprocessorsDocument:        "GetAllTrustCenterSubprocessors",
-	GetTrustCenterSubprocessorByIDDocument:        "GetTrustCenterSubprocessorByID",
-	GetTrustCenterSubprocessorsDocument:           "GetTrustCenterSubprocessors",
-	UpdateBulkTrustCenterSubprocessorDocument:     "UpdateBulkTrustCenterSubprocessor",
-	UpdateTrustCenterSubprocessorDocument:         "UpdateTrustCenterSubprocessor",
-	CreateTrustCenterWatermarkConfigDocument:      "CreateTrustCenterWatermarkConfig",
-	DeleteTrustCenterWatermarkConfigDocument:      "DeleteTrustCenterWatermarkConfig",
-	GetAllTrustCenterWatermarkConfigsDocument:     "GetAllTrustCenterWatermarkConfigs",
-	GetTrustCenterWatermarkConfigByIDDocument:     "GetTrustCenterWatermarkConfigByID",
-	GetTrustCenterWatermarkConfigsDocument:        "GetTrustCenterWatermarkConfigs",
-	UpdateTrustCenterWatermarkConfigDocument:      "UpdateTrustCenterWatermarkConfig",
-	CreateUserDocument:                            "CreateUser",
-	DeleteUserDocument:                            "DeleteUser",
-	GetAllUsersDocument:                           "GetAllUsers",
-	GetSelfDocument:                               "GetSelf",
-	GetUserByIDDocument:                           "GetUserByID",
-	GetUserByIDWithOrgsDocument:                   "GetUserByIDWithOrgs",
-	UpdateUserDocument:                            "UpdateUser",
-	GetAllUserSettingsDocument:                    "GetAllUserSettings",
-	GetUserSettingByIDDocument:                    "GetUserSettingByID",
-	GetUserSettingsDocument:                       "GetUserSettings",
-	UpdateUserSettingDocument:                     "UpdateUserSetting",
-	CreateBulkCSVVendorRiskScoreDocument:          "CreateBulkCSVVendorRiskScore",
-	CreateBulkVendorRiskScoreDocument:             "CreateBulkVendorRiskScore",
-	CreateVendorRiskScoreDocument:                 "CreateVendorRiskScore",
-	DeleteBulkVendorRiskScoreDocument:             "DeleteBulkVendorRiskScore",
-	DeleteVendorRiskScoreDocument:                 "DeleteVendorRiskScore",
-	GetAllVendorRiskScoresDocument:                "GetAllVendorRiskScores",
-	GetVendorRiskScoreByIDDocument:                "GetVendorRiskScoreByID",
-	GetVendorRiskScoresDocument:                   "GetVendorRiskScores",
-	UpdateBulkCSVVendorRiskScoreDocument:          "UpdateBulkCSVVendorRiskScore",
-	UpdateBulkVendorRiskScoreDocument:             "UpdateBulkVendorRiskScore",
-	UpdateVendorRiskScoreDocument:                 "UpdateVendorRiskScore",
-	CreateBulkCSVVendorScoringConfigDocument:      "CreateBulkCSVVendorScoringConfig",
-	CreateBulkVendorScoringConfigDocument:         "CreateBulkVendorScoringConfig",
-	CreateVendorScoringConfigDocument:             "CreateVendorScoringConfig",
-	DeleteBulkVendorScoringConfigDocument:         "DeleteBulkVendorScoringConfig",
-	DeleteVendorScoringConfigDocument:             "DeleteVendorScoringConfig",
-	GetAllVendorScoringConfigsDocument:            "GetAllVendorScoringConfigs",
-	GetVendorScoringConfigByIDDocument:            "GetVendorScoringConfigByID",
-	GetVendorScoringConfigsDocument:               "GetVendorScoringConfigs",
-	UpdateBulkCSVVendorScoringConfigDocument:      "UpdateBulkCSVVendorScoringConfig",
-	UpdateBulkVendorScoringConfigDocument:         "UpdateBulkVendorScoringConfig",
-	UpdateVendorScoringConfigDocument:             "UpdateVendorScoringConfig",
-	CreateBulkCSVVulnerabilityDocument:            "CreateBulkCSVVulnerability",
-	CreateBulkVulnerabilityDocument:               "CreateBulkVulnerability",
-	CreateVulnerabilityDocument:                   "CreateVulnerability",
-	DeleteBulkVulnerabilityDocument:               "DeleteBulkVulnerability",
-	DeleteVulnerabilityDocument:                   "DeleteVulnerability",
-	GetAllVulnerabilitiesDocument:                 "GetAllVulnerabilities",
-	GetVulnerabilitiesDocument:                    "GetVulnerabilities",
-	GetVulnerabilityByIDDocument:                  "GetVulnerabilityByID",
-	UpdateBulkCSVVulnerabilityDocument:            "UpdateBulkCSVVulnerability",
-	UpdateBulkVulnerabilityDocument:               "UpdateBulkVulnerability",
-	UpdateVulnerabilityDocument:                   "UpdateVulnerability",
-	UpdateVulnerabilityCommentDocument:            "UpdateVulnerabilityComment",
-	DeleteWebauthnDocument:                        "DeleteWebauthn",
-	GetAllWebauthnsDocument:                       "GetAllWebauthns",
-	ApproveWorkflowAssignmentDocument:             "ApproveWorkflowAssignment",
-	RejectWorkflowAssignmentDocument:              "RejectWorkflowAssignment",
-	GetMyWorkflowAssignmentsDocument:              "GetMyWorkflowAssignments",
-	GetActionPlanWorkflowStatusDocument:           "GetActionPlanWorkflowStatus",
-	GetActionPlanWorkflowTimelineDocument:         "GetActionPlanWorkflowTimeline",
-	GetAssessmentWorkflowStatusDocument:           "GetAssessmentWorkflowStatus",
-	GetAssessmentWorkflowTimelineDocument:         "GetAssessmentWorkflowTimeline",
-	GetAssessmentResponseWorkflowStatusDocument:   "GetAssessmentResponseWorkflowStatus",
-	GetAssessmentResponseWorkflowTimelineDocument: "GetAssessmentResponseWorkflowTimeline",
-	GetCampaignWorkflowStatusDocument:             "GetCampaignWorkflowStatus",
-	GetCampaignWorkflowTimelineDocument:           "GetCampaignWorkflowTimeline",
-	GetCampaignTargetWorkflowStatusDocument:       "GetCampaignTargetWorkflowStatus",
-	GetCampaignTargetWorkflowTimelineDocument:     "GetCampaignTargetWorkflowTimeline",
-	GetControlWorkflowStatusDocument:              "GetControlWorkflowStatus",
-	GetControlWorkflowTimelineDocument:            "GetControlWorkflowTimeline",
-	GetEvidenceWorkflowStatusDocument:             "GetEvidenceWorkflowStatus",
-	GetEvidenceWorkflowTimelineDocument:           "GetEvidenceWorkflowTimeline",
-	GetFindingWorkflowStatusDocument:              "GetFindingWorkflowStatus",
-	GetFindingWorkflowTimelineDocument:            "GetFindingWorkflowTimeline",
-	GetIdentityHolderWorkflowStatusDocument:       "GetIdentityHolderWorkflowStatus",
-	GetIdentityHolderWorkflowTimelineDocument:     "GetIdentityHolderWorkflowTimeline",
-	GetInternalPolicyWorkflowStatusDocument:       "GetInternalPolicyWorkflowStatus",
-	GetInternalPolicyWorkflowTimelineDocument:     "GetInternalPolicyWorkflowTimeline",
-	GetPlatformWorkflowStatusDocument:             "GetPlatformWorkflowStatus",
-	GetPlatformWorkflowTimelineDocument:           "GetPlatformWorkflowTimeline",
-	GetProcedureWorkflowStatusDocument:            "GetProcedureWorkflowStatus",
-	GetProcedureWorkflowTimelineDocument:          "GetProcedureWorkflowTimeline",
-	GetRemediationWorkflowStatusDocument:          "GetRemediationWorkflowStatus",
-	GetRemediationWorkflowTimelineDocument:        "GetRemediationWorkflowTimeline",
-	GetRiskWorkflowStatusDocument:                 "GetRiskWorkflowStatus",
-	GetRiskWorkflowTimelineDocument:               "GetRiskWorkflowTimeline",
-	GetSubcontrolWorkflowStatusDocument:           "GetSubcontrolWorkflowStatus",
-	GetSubcontrolWorkflowTimelineDocument:         "GetSubcontrolWorkflowTimeline",
-	GetTaskWorkflowStatusDocument:                 "GetTaskWorkflowStatus",
-	GetTaskWorkflowTimelineDocument:               "GetTaskWorkflowTimeline",
-	GetVulnerabilityWorkflowStatusDocument:        "GetVulnerabilityWorkflowStatus",
-	GetVulnerabilityWorkflowTimelineDocument:      "GetVulnerabilityWorkflowTimeline",
-	GetAllWorkflowAssignmentsDocument:             "GetAllWorkflowAssignments",
-	GetWorkflowAssignmentByIDDocument:             "GetWorkflowAssignmentByID",
-	GetWorkflowAssignmentsDocument:                "GetWorkflowAssignments",
-	GetAllWorkflowAssignmentTargetsDocument:       "GetAllWorkflowAssignmentTargets",
-	GetWorkflowAssignmentTargetByIDDocument:       "GetWorkflowAssignmentTargetByID",
-	GetWorkflowAssignmentTargetsDocument:          "GetWorkflowAssignmentTargets",
-	CreateBulkCSVWorkflowDefinitionDocument:       "CreateBulkCSVWorkflowDefinition",
-	CreateBulkWorkflowDefinitionDocument:          "CreateBulkWorkflowDefinition",
-	CreateWorkflowDefinitionDocument:              "CreateWorkflowDefinition",
-	DeleteWorkflowDefinitionDocument:              "DeleteWorkflowDefinition",
-	GetAllWorkflowDefinitionsDocument:             "GetAllWorkflowDefinitions",
-	GetWorkflowDefinitionByIDDocument:             "GetWorkflowDefinitionByID",
-	GetWorkflowDefinitionsDocument:                "GetWorkflowDefinitions",
-	UpdateWorkflowDefinitionDocument:              "UpdateWorkflowDefinition",
-	GetAllWorkflowEventsDocument:                  "GetAllWorkflowEvents",
-	GetWorkflowEventByIDDocument:                  "GetWorkflowEventByID",
-	GetWorkflowEventsDocument:                     "GetWorkflowEvents",
-	GetAllWorkflowInstancesDocument:               "GetAllWorkflowInstances",
-	GetWorkflowInstanceByIDDocument:               "GetWorkflowInstanceByID",
-	GetWorkflowInstancesDocument:                  "GetWorkflowInstances",
-	GetAllWorkflowObjectRefsDocument:              "GetAllWorkflowObjectRefs",
-	GetWorkflowObjectRefByIDDocument:              "GetWorkflowObjectRefByID",
-	GetWorkflowObjectRefsDocument:                 "GetWorkflowObjectRefs",
+	CreateActionPlanDocument:                            "CreateActionPlan",
+	CreateBulkActionPlanDocument:                        "CreateBulkActionPlan",
+	CreateBulkCSVActionPlanDocument:                     "CreateBulkCSVActionPlan",
+	DeleteActionPlanDocument:                            "DeleteActionPlan",
+	GetActionPlanByIDDocument:                           "GetActionPlanByID",
+	GetActionPlansDocument:                              "GetActionPlans",
+	GetAllActionPlansDocument:                           "GetAllActionPlans",
+	UpdateActionPlanDocument:                            "UpdateActionPlan",
+	UpdateBulkActionPlanDocument:                        "UpdateBulkActionPlan",
+	CreateAPITokenDocument:                              "CreateAPIToken",
+	DeleteAPITokenDocument:                              "DeleteAPIToken",
+	GetAPITokenByIDDocument:                             "GetAPITokenByID",
+	GetAPITokensDocument:                                "GetAPITokens",
+	GetAllAPITokensDocument:                             "GetAllAPITokens",
+	UpdateAPITokenDocument:                              "UpdateAPIToken",
+	CreateAssessmentDocument:                            "CreateAssessment",
+	CreateAssessmentTemplateDocument:                    "CreateAssessmentTemplate",
+	CreateAssessmentWithPoliciesDocument:                "CreateAssessmentWithPolicies",
+	DeleteAssessmentDocument:                            "DeleteAssessment",
+	DeleteBulkAssessmentDocument:                        "DeleteBulkAssessment",
+	GetAllAssessmentsDocument:                           "GetAllAssessments",
+	GetAssessmentByIDDocument:                           "GetAssessmentByID",
+	GetAssessmentsDocument:                              "GetAssessments",
+	UpdateAssessmentDocument:                            "UpdateAssessment",
+	CreateAssessmentDomainDocument:                      "CreateAssessmentDomain",
+	CreateAssessmentPolicyDocument:                      "CreateAssessmentPolicy",
+	CreateBulkAssessmentPolicyDocument:                  "CreateBulkAssessmentPolicy",
+	CreateBulkCSVAssessmentPolicyDocument:               "CreateBulkCSVAssessmentPolicy",
+	DeleteAssessmentPolicyDocument:                      "DeleteAssessmentPolicy",
+	DeleteBulkAssessmentPolicyDocument:                  "DeleteBulkAssessmentPolicy",
+	GetAllAssessmentPoliciesDocument:                    "GetAllAssessmentPolicies",
+	GetAssessmentPoliciesDocument:                       "GetAssessmentPolicies",
+	GetAssessmentPolicyByIDDocument:                     "GetAssessmentPolicyByID",
+	UpdateAssessmentPolicyDocument:                      "UpdateAssessmentPolicy",
+	UpdateBulkAssessmentPolicyDocument:                  "UpdateBulkAssessmentPolicy",
+	UpdateBulkCSVAssessmentPolicyDocument:               "UpdateBulkCSVAssessmentPolicy",
+	CreateAssessmentResponseDocument:                    "CreateAssessmentResponse",
+	DeleteAssessmentResponseDocument:                    "DeleteAssessmentResponse",
+	GetAllAssessmentResponsesDocument:                   "GetAllAssessmentResponses",
+	GetAssessmentResponseByIDDocument:                   "GetAssessmentResponseByID",
+	GetAssessmentResponsesDocument:                      "GetAssessmentResponses",
+	CreateAssetDocument:                                 "CreateAsset",
+	CreateBulkAssetDocument:                             "CreateBulkAsset",
+	CreateBulkCSVAssetDocument:                          "CreateBulkCSVAsset",
+	DeleteAssetDocument:                                 "DeleteAsset",
+	DeleteBulkAssetDocument:                             "DeleteBulkAsset",
+	GetAllAssetsDocument:                                "GetAllAssets",
+	GetAssetByIDDocument:                                "GetAssetByID",
+	GetAssetsDocument:                                   "GetAssets",
+	UpdateAssetDocument:                                 "UpdateAsset",
+	UpdateBulkAssetDocument:                             "UpdateBulkAsset",
+	UpdateBulkCSVAssetDocument:                          "UpdateBulkCSVAsset",
+	CreateBulkCampaignDocument:                          "CreateBulkCampaign",
+	CreateBulkCSVCampaignDocument:                       "CreateBulkCSVCampaign",
+	CreateCampaignDocument:                              "CreateCampaign",
+	DeleteCampaignDocument:                              "DeleteCampaign",
+	GetAllCampaignsDocument:                             "GetAllCampaigns",
+	GetCampaignByIDDocument:                             "GetCampaignByID",
+	GetCampaignsDocument:                                "GetCampaigns",
+	UpdateCampaignDocument:                              "UpdateCampaign",
+	CreateCampaignWithTargetsDocument:                   "CreateCampaignWithTargets",
+	CreateCampaignWithTargetsCSVDocument:                "CreateCampaignWithTargetsCSV",
+	LaunchCampaignDocument:                              "LaunchCampaign",
+	ResendCampaignIncompleteTargetsDocument:             "ResendCampaignIncompleteTargets",
+	SendCampaignTestEmailDocument:                       "SendCampaignTestEmail",
+	CreateBulkCSVCampaignTargetDocument:                 "CreateBulkCSVCampaignTarget",
+	CreateBulkCampaignTargetDocument:                    "CreateBulkCampaignTarget",
+	CreateCampaignTargetDocument:                        "CreateCampaignTarget",
+	DeleteCampaignTargetDocument:                        "DeleteCampaignTarget",
+	GetAllCampaignTargetsDocument:                       "GetAllCampaignTargets",
+	GetCampaignTargetByIDDocument:                       "GetCampaignTargetByID",
+	GetCampaignTargetsDocument:                          "GetCampaignTargets",
+	UpdateCampaignTargetDocument:                        "UpdateCampaignTarget",
+	CreateBulkCheckResultDocument:                       "CreateBulkCheckResult",
+	CreateBulkCSVCheckResultDocument:                    "CreateBulkCSVCheckResult",
+	CreateCheckResultDocument:                           "CreateCheckResult",
+	DeleteBulkCheckResultDocument:                       "DeleteBulkCheckResult",
+	DeleteCheckResultDocument:                           "DeleteCheckResult",
+	GetAllCheckResultsDocument:                          "GetAllCheckResults",
+	GetCheckResultByIDDocument:                          "GetCheckResultByID",
+	GetCheckResultsDocument:                             "GetCheckResults",
+	UpdateBulkCheckResultDocument:                       "UpdateBulkCheckResult",
+	UpdateBulkCSVCheckResultDocument:                    "UpdateBulkCSVCheckResult",
+	UpdateCheckResultDocument:                           "UpdateCheckResult",
+	CreateBulkCSVContactDocument:                        "CreateBulkCSVContact",
+	CreateBulkContactDocument:                           "CreateBulkContact",
+	CreateContactDocument:                               "CreateContact",
+	DeleteContactDocument:                               "DeleteContact",
+	GetAllContactsDocument:                              "GetAllContacts",
+	GetContactByIDDocument:                              "GetContactByID",
+	GetContactsDocument:                                 "GetContacts",
+	UpdateBulkContactDocument:                           "UpdateBulkContact",
+	UpdateContactDocument:                               "UpdateContact",
+	CreateBulkCSVControlDocument:                        "CreateBulkCSVControl",
+	CreateBulkControlDocument:                           "CreateBulkControl",
+	CreateControlDocument:                               "CreateControl",
+	DeleteBulkControlDocument:                           "DeleteBulkControl",
+	DeleteControlDocument:                               "DeleteControl",
+	GetAllControlsDocument:                              "GetAllControls",
+	GetControlByIDDocument:                              "GetControlByID",
+	GetControlsDocument:                                 "GetControls",
+	GetTrustCenterControlByIDDocument:                   "GetTrustCenterControlByID",
+	GetTrustCenterControlsDocument:                      "GetTrustCenterControls",
+	UpdateBulkControlDocument:                           "UpdateBulkControl",
+	UpdateControlDocument:                               "UpdateControl",
+	CloneBulkCSVControlDocument:                         "CloneBulkCSVControl",
+	CreateControlsByCloneDocument:                       "CreateControlsByClone",
+	CreateControlsByCloneReturnIDDocument:               "CreateControlsByCloneReturnID",
+	GetControlCategoriesDocument:                        "GetControlCategories",
+	GetControlCategoriesWithFrameworkDocument:           "GetControlCategoriesWithFramework",
+	GetControlsGroupByCategoryDocument:                  "GetControlsGroupByCategory",
+	GetControlSubcategoriesDocument:                     "GetControlSubcategories",
+	GetControlSubcategoriesWithFrameworkDocument:        "GetControlSubcategoriesWithFramework",
+	UpdateControlCommentDocument:                        "UpdateControlComment",
+	CreateBulkCSVControlImplementationDocument:          "CreateBulkCSVControlImplementation",
+	CreateBulkControlImplementationDocument:             "CreateBulkControlImplementation",
+	CreateControlImplementationDocument:                 "CreateControlImplementation",
+	DeleteControlImplementationDocument:                 "DeleteControlImplementation",
+	GetAllControlImplementationsDocument:                "GetAllControlImplementations",
+	GetControlImplementationByIDDocument:                "GetControlImplementationByID",
+	GetControlImplementationsDocument:                   "GetControlImplementations",
+	UpdateControlImplementationDocument:                 "UpdateControlImplementation",
+	CreateBulkCSVControlObjectiveDocument:               "CreateBulkCSVControlObjective",
+	CreateBulkControlObjectiveDocument:                  "CreateBulkControlObjective",
+	CreateControlObjectiveDocument:                      "CreateControlObjective",
+	DeleteControlObjectiveDocument:                      "DeleteControlObjective",
+	GetAllControlObjectivesDocument:                     "GetAllControlObjectives",
+	GetControlObjectiveByIDDocument:                     "GetControlObjectiveByID",
+	GetControlObjectivesDocument:                        "GetControlObjectives",
+	UpdateControlObjectiveDocument:                      "UpdateControlObjective",
+	GetAllControlReportsDocument:                        "GetAllControlReports",
+	GetControlReportsDocument:                           "GetControlReports",
+	GetControlReportsByCategoryDocument:                 "GetControlReportsByCategory",
+	CreateBulkCSVCustomDomainDocument:                   "CreateBulkCSVCustomDomain",
+	CreateBulkCustomDomainDocument:                      "CreateBulkCustomDomain",
+	CreateCustomDomainDocument:                          "CreateCustomDomain",
+	DeleteCustomDomainDocument:                          "DeleteCustomDomain",
+	GetAllCustomDomainsDocument:                         "GetAllCustomDomains",
+	GetCustomDomainByIDDocument:                         "GetCustomDomainByID",
+	GetCustomDomainsDocument:                            "GetCustomDomains",
+	UpdateCustomDomainDocument:                          "UpdateCustomDomain",
+	ValidateCustomDomainDocument:                        "ValidateCustomDomain",
+	CreateBulkCSVCustomTypeEnumDocument:                 "CreateBulkCSVCustomTypeEnum",
+	CreateBulkCustomTypeEnumDocument:                    "CreateBulkCustomTypeEnum",
+	CreateCustomTypeEnumDocument:                        "CreateCustomTypeEnum",
+	DeleteCustomTypeEnumDocument:                        "DeleteCustomTypeEnum",
+	GetAllCustomTypeEnumsDocument:                       "GetAllCustomTypeEnums",
+	GetCustomTypeEnumByIDDocument:                       "GetCustomTypeEnumByID",
+	GetCustomTypeEnumsDocument:                          "GetCustomTypeEnums",
+	UpdateCustomTypeEnumDocument:                        "UpdateCustomTypeEnum",
+	CreateBulkCSVDirectoryAccountDocument:               "CreateBulkCSVDirectoryAccount",
+	CreateBulkDirectoryAccountDocument:                  "CreateBulkDirectoryAccount",
+	CreateDirectoryAccountDocument:                      "CreateDirectoryAccount",
+	DeleteDirectoryAccountDocument:                      "DeleteDirectoryAccount",
+	GetAllDirectoryAccountsDocument:                     "GetAllDirectoryAccounts",
+	GetDirectoryAccountByIDDocument:                     "GetDirectoryAccountByID",
+	GetDirectoryAccountsDocument:                        "GetDirectoryAccounts",
+	UpdateDirectoryAccountDocument:                      "UpdateDirectoryAccount",
+	CreateBulkCSVDirectoryGroupDocument:                 "CreateBulkCSVDirectoryGroup",
+	CreateBulkDirectoryGroupDocument:                    "CreateBulkDirectoryGroup",
+	CreateDirectoryGroupDocument:                        "CreateDirectoryGroup",
+	DeleteDirectoryGroupDocument:                        "DeleteDirectoryGroup",
+	GetAllDirectoryGroupsDocument:                       "GetAllDirectoryGroups",
+	GetDirectoryGroupByIDDocument:                       "GetDirectoryGroupByID",
+	GetDirectoryGroupsDocument:                          "GetDirectoryGroups",
+	UpdateDirectoryGroupDocument:                        "UpdateDirectoryGroup",
+	CreateBulkCSVDirectoryMembershipDocument:            "CreateBulkCSVDirectoryMembership",
+	CreateBulkDirectoryMembershipDocument:               "CreateBulkDirectoryMembership",
+	CreateDirectoryMembershipDocument:                   "CreateDirectoryMembership",
+	DeleteDirectoryMembershipDocument:                   "DeleteDirectoryMembership",
+	GetAllDirectoryMembershipsDocument:                  "GetAllDirectoryMemberships",
+	GetDirectoryMembershipByIDDocument:                  "GetDirectoryMembershipByID",
+	GetDirectoryMembershipsDocument:                     "GetDirectoryMemberships",
+	UpdateDirectoryMembershipDocument:                   "UpdateDirectoryMembership",
+	CreateBulkCSVDiscussionDocument:                     "CreateBulkCSVDiscussion",
+	CreateBulkDiscussionDocument:                        "CreateBulkDiscussion",
+	CreateDiscussionDocument:                            "CreateDiscussion",
+	DeleteDiscussionDocument:                            "DeleteDiscussion",
+	GetAllDiscussionsDocument:                           "GetAllDiscussions",
+	GetDiscussionByIDDocument:                           "GetDiscussionByID",
+	GetDiscussionsDocument:                              "GetDiscussions",
+	UpdateDiscussionDocument:                            "UpdateDiscussion",
+	CreateBulkCSVDNSVerificationDocument:                "CreateBulkCSVDNSVerification",
+	CreateBulkDNSVerificationDocument:                   "CreateBulkDNSVerification",
+	CreateDNSVerificationDocument:                       "CreateDNSVerification",
+	DeleteDNSVerificationDocument:                       "DeleteDNSVerification",
+	GetAllDNSVerificationsDocument:                      "GetAllDNSVerifications",
+	GetDNSVerificationByIDDocument:                      "GetDNSVerificationByID",
+	GetDNSVerificationsDocument:                         "GetDNSVerifications",
+	UpdateDNSVerificationDocument:                       "UpdateDNSVerification",
+	CreateDocumentDataDocument:                          "CreateDocumentData",
+	DeleteDocumentDataDocument:                          "DeleteDocumentData",
+	GetDocumentDataByIDDocument:                         "GetDocumentDataByID",
+	UpdateDocumentDataDocument:                          "UpdateDocumentData",
+	ImportDomainScanReviewDocument:                      "ImportDomainScanReview",
+	CreateBulkCSVEmailTemplateDocument:                  "CreateBulkCSVEmailTemplate",
+	CreateBulkEmailTemplateDocument:                     "CreateBulkEmailTemplate",
+	CreateEmailTemplateDocument:                         "CreateEmailTemplate",
+	DeleteBulkEmailTemplateDocument:                     "DeleteBulkEmailTemplate",
+	DeleteEmailTemplateDocument:                         "DeleteEmailTemplate",
+	GetAllEmailTemplatesDocument:                        "GetAllEmailTemplates",
+	GetEmailTemplateByIDDocument:                        "GetEmailTemplateByID",
+	GetEmailTemplatesDocument:                           "GetEmailTemplates",
+	PreviewEmailTemplateDocument:                        "PreviewEmailTemplate",
+	UpdateBulkCSVEmailTemplateDocument:                  "UpdateBulkCSVEmailTemplate",
+	UpdateBulkEmailTemplateDocument:                     "UpdateBulkEmailTemplate",
+	UpdateEmailTemplateDocument:                         "UpdateEmailTemplate",
+	CreateBulkCSVEntityDocument:                         "CreateBulkCSVEntity",
+	CreateBulkEntityDocument:                            "CreateBulkEntity",
+	CreateEntityDocument:                                "CreateEntity",
+	DeleteEntityDocument:                                "DeleteEntity",
+	GetAllEntitiesDocument:                              "GetAllEntities",
+	GetEntitiesDocument:                                 "GetEntities",
+	GetEntityByIDDocument:                               "GetEntityByID",
+	UpdateEntityDocument:                                "UpdateEntity",
+	CreateBulkCSVEntityTypeDocument:                     "CreateBulkCSVEntityType",
+	CreateBulkEntityTypeDocument:                        "CreateBulkEntityType",
+	CreateEntityTypeDocument:                            "CreateEntityType",
+	DeleteEntityTypeDocument:                            "DeleteEntityType",
+	GetAllEntityTypesDocument:                           "GetAllEntityTypes",
+	GetEntityTypeByIDDocument:                           "GetEntityTypeByID",
+	GetEntityTypesDocument:                              "GetEntityTypes",
+	UpdateEntityTypeDocument:                            "UpdateEntityType",
+	CreateBulkCSVEventDocument:                          "CreateBulkCSVEvent",
+	CreateBulkEventDocument:                             "CreateBulkEvent",
+	CreateEventDocument:                                 "CreateEvent",
+	DeleteEventDocument:                                 "DeleteEvent",
+	GetAllEventsDocument:                                "GetAllEvents",
+	GetEventByIDDocument:                                "GetEventByID",
+	GetEventsDocument:                                   "GetEvents",
+	UpdateEventDocument:                                 "UpdateEvent",
+	CreateBulkCSVEvidenceDocument:                       "CreateBulkCSVEvidence",
+	CreateEvidenceDocument:                              "CreateEvidence",
+	DeleteEvidenceDocument:                              "DeleteEvidence",
+	GetAllEvidencesDocument:                             "GetAllEvidences",
+	GetEvidenceByIDDocument:                             "GetEvidenceByID",
+	GetEvidencesDocument:                                "GetEvidences",
+	UpdateBulkEvidenceDocument:                          "UpdateBulkEvidence",
+	UpdateEvidenceDocument:                              "UpdateEvidence",
+	UpdateEvidenceCommentDocument:                       "UpdateEvidenceComment",
+	CreateExportDocument:                                "CreateExport",
+	DeleteBulkExportDocument:                            "DeleteBulkExport",
+	DeleteExportDocument:                                "DeleteExport",
+	GetAllExportsDocument:                               "GetAllExports",
+	GetExportByIDDocument:                               "GetExportByID",
+	GetExportsDocument:                                  "GetExports",
+	UpdateExportDocument:                                "UpdateExport",
+	DeleteFileDocument:                                  "DeleteFile",
+	GetAllFilesDocument:                                 "GetAllFiles",
+	GetFileByIDDocument:                                 "GetFileByID",
+	GetFilesDocument:                                    "GetFiles",
+	CreateBulkCSVFindingDocument:                        "CreateBulkCSVFinding",
+	CreateBulkFindingDocument:                           "CreateBulkFinding",
+	CreateFindingDocument:                               "CreateFinding",
+	DeleteBulkFindingDocument:                           "DeleteBulkFinding",
+	DeleteFindingDocument:                               "DeleteFinding",
+	GetAllFindingsDocument:                              "GetAllFindings",
+	GetFindingByIDDocument:                              "GetFindingByID",
+	GetFindingsDocument:                                 "GetFindings",
+	UpdateBulkCSVFindingDocument:                        "UpdateBulkCSVFinding",
+	UpdateBulkFindingDocument:                           "UpdateBulkFinding",
+	UpdateFindingDocument:                               "UpdateFinding",
+	UpdateFindingCommentDocument:                        "UpdateFindingComment",
+	CreateBulkCSVFindingControlDocument:                 "CreateBulkCSVFindingControl",
+	CreateBulkFindingControlDocument:                    "CreateBulkFindingControl",
+	CreateFindingControlDocument:                        "CreateFindingControl",
+	DeleteBulkFindingControlDocument:                    "DeleteBulkFindingControl",
+	DeleteFindingControlDocument:                        "DeleteFindingControl",
+	GetAllFindingControlsDocument:                       "GetAllFindingControls",
+	GetFindingControlByIDDocument:                       "GetFindingControlByID",
+	GetFindingControlsDocument:                          "GetFindingControls",
+	UpdateFindingControlDocument:                        "UpdateFindingControl",
+	CreateBulkCSVGroupDocument:                          "CreateBulkCSVGroup",
+	CreateBulkGroupDocument:                             "CreateBulkGroup",
+	CreateGroupDocument:                                 "CreateGroup",
+	CreateGroupByCloneDocument:                          "CreateGroupByClone",
+	CreateGroupSimpleDocument:                           "CreateGroupSimple",
+	CreateGroupWithMembersDocument:                      "CreateGroupWithMembers",
+	DeleteGroupDocument:                                 "DeleteGroup",
+	GetAllGroupsDocument:                                "GetAllGroups",
+	GetGroupByIDDocument:                                "GetGroupByID",
+	GetGroupInfoDocument:                                "GetGroupInfo",
+	GetGroupsDocument:                                   "GetGroups",
+	UpdateGroupDocument:                                 "UpdateGroup",
+	AddUserToGroupWithRoleDocument:                      "AddUserToGroupWithRole",
+	CreateBulkCSVGroupMembersDocument:                   "CreateBulkCSVGroupMembers",
+	CreateBulkGroupMembersDocument:                      "CreateBulkGroupMembers",
+	GetGroupMembersByGroupIDDocument:                    "GetGroupMembersByGroupID",
+	RemoveUserFromGroupDocument:                         "RemoveUserFromGroup",
+	UpdateUserRoleInGroupDocument:                       "UpdateUserRoleInGroup",
+	GetAllGroupSettingsDocument:                         "GetAllGroupSettings",
+	GetGroupSettingByIDDocument:                         "GetGroupSettingByID",
+	GetGroupSettingsDocument:                            "GetGroupSettings",
+	UpdateGroupSettingDocument:                          "UpdateGroupSetting",
+	CreateBulkCSVHushDocument:                           "CreateBulkCSVHush",
+	CreateBulkHushDocument:                              "CreateBulkHush",
+	CreateHushDocument:                                  "CreateHush",
+	GetAllHushesDocument:                                "GetAllHushes",
+	GetHushByIDDocument:                                 "GetHushByID",
+	GetHushesDocument:                                   "GetHushes",
+	UpdateHushDocument:                                  "UpdateHush",
+	CreateBulkCSVIdentityHolderDocument:                 "CreateBulkCSVIdentityHolder",
+	CreateBulkIdentityHolderDocument:                    "CreateBulkIdentityHolder",
+	CreateIdentityHolderDocument:                        "CreateIdentityHolder",
+	DeleteIdentityHolderDocument:                        "DeleteIdentityHolder",
+	GetAllIdentityHoldersDocument:                       "GetAllIdentityHolders",
+	GetIdentityHolderByIDDocument:                       "GetIdentityHolderByID",
+	GetIdentityHolderDirectoryAccountsDocument:          "GetIdentityHolderDirectoryAccounts",
+	GetIdentityHoldersDocument:                          "GetIdentityHolders",
+	UpdateIdentityHolderDocument:                        "UpdateIdentityHolder",
+	DeleteIntegrationDocument:                           "DeleteIntegration",
+	GetAllIntegrationsDocument:                          "GetAllIntegrations",
+	GetIntegrationByIDDocument:                          "GetIntegrationByID",
+	GetIntegrationByIDWithSecretsDocument:               "GetIntegrationByIDWithSecrets",
+	GetIntegrationsDocument:                             "GetIntegrations",
+	CreateBulkCSVInternalPolicyDocument:                 "CreateBulkCSVInternalPolicy",
+	CreateBulkInternalPolicyDocument:                    "CreateBulkInternalPolicy",
+	CreateInternalPolicyDocument:                        "CreateInternalPolicy",
+	CreateUploadInternalPolicyDocument:                  "CreateUploadInternalPolicy",
+	DeleteInternalPolicyDocument:                        "DeleteInternalPolicy",
+	GetAllInternalPoliciesDocument:                      "GetAllInternalPolicies",
+	GetInternalPoliciesDocument:                         "GetInternalPolicies",
+	GetInternalPolicyByIDDocument:                       "GetInternalPolicyByID",
+	UpdateBulkInternalPolicyDocument:                    "UpdateBulkInternalPolicy",
+	UpdateInternalPolicyDocument:                        "UpdateInternalPolicy",
+	UpdateInternalPolicyCommentDocument:                 "UpdateInternalPolicyComment",
+	CreateBulkCSVInviteDocument:                         "CreateBulkCSVInvite",
+	CreateBulkInviteDocument:                            "CreateBulkInvite",
+	CreateInviteDocument:                                "CreateInvite",
+	DeleteInviteDocument:                                "DeleteInvite",
+	GetAllInvitesDocument:                               "GetAllInvites",
+	GetInviteByIDDocument:                               "GetInviteByID",
+	InvitesByOrgIDDocument:                              "InvitesByOrgID",
+	CreateBulkCSVMappableDomainDocument:                 "CreateBulkCSVMappableDomain",
+	CreateBulkMappableDomainDocument:                    "CreateBulkMappableDomain",
+	CreateMappableDomainDocument:                        "CreateMappableDomain",
+	DeleteMappableDomainDocument:                        "DeleteMappableDomain",
+	GetAllMappableDomainsDocument:                       "GetAllMappableDomains",
+	GetMappableDomainByIDDocument:                       "GetMappableDomainByID",
+	GetMappableDomainsDocument:                          "GetMappableDomains",
+	UpdateMappableDomainDocument:                        "UpdateMappableDomain",
+	CreateBulkCSVMappedControlDocument:                  "CreateBulkCSVMappedControl",
+	CreateBulkMappedControlDocument:                     "CreateBulkMappedControl",
+	CreateMappedControlDocument:                         "CreateMappedControl",
+	DeleteMappedControlDocument:                         "DeleteMappedControl",
+	GetAllMappedControlsDocument:                        "GetAllMappedControls",
+	GetMappedControlByIDDocument:                        "GetMappedControlByID",
+	GetMappedControlsDocument:                           "GetMappedControls",
+	UpdateMappedControlDocument:                         "UpdateMappedControl",
+	CreateBulkCSVNarrativeDocument:                      "CreateBulkCSVNarrative",
+	CreateBulkNarrativeDocument:                         "CreateBulkNarrative",
+	CreateNarrativeDocument:                             "CreateNarrative",
+	DeleteNarrativeDocument:                             "DeleteNarrative",
+	GetAllNarrativesDocument:                            "GetAllNarratives",
+	GetNarrativeByIDDocument:                            "GetNarrativeByID",
+	GetNarrativesDocument:                               "GetNarratives",
+	UpdateNarrativeDocument:                             "UpdateNarrative",
+	GetNoteByIDDocument:                                 "GetNoteByID",
+	DeleteNoteDocument:                                  "DeleteNote",
+	CreateNotificationDocument:                          "CreateNotification",
+	UpdateNotificationDocument:                          "UpdateNotification",
+	CreateBulkCSVNotificationPreferenceDocument:         "CreateBulkCSVNotificationPreference",
+	CreateBulkNotificationPreferenceDocument:            "CreateBulkNotificationPreference",
+	CreateNotificationPreferenceDocument:                "CreateNotificationPreference",
+	DeleteBulkNotificationPreferenceDocument:            "DeleteBulkNotificationPreference",
+	DeleteNotificationPreferenceDocument:                "DeleteNotificationPreference",
+	GetAllNotificationPreferencesDocument:               "GetAllNotificationPreferences",
+	GetNotificationPreferenceByIDDocument:               "GetNotificationPreferenceByID",
+	GetNotificationPreferencesDocument:                  "GetNotificationPreferences",
+	UpdateBulkCSVNotificationPreferenceDocument:         "UpdateBulkCSVNotificationPreference",
+	UpdateBulkNotificationPreferenceDocument:            "UpdateBulkNotificationPreference",
+	UpdateNotificationPreferenceDocument:                "UpdateNotificationPreference",
+	CreateBulkCSVNotificationTemplateDocument:           "CreateBulkCSVNotificationTemplate",
+	CreateBulkNotificationTemplateDocument:              "CreateBulkNotificationTemplate",
+	CreateNotificationTemplateDocument:                  "CreateNotificationTemplate",
+	DeleteBulkNotificationTemplateDocument:              "DeleteBulkNotificationTemplate",
+	DeleteNotificationTemplateDocument:                  "DeleteNotificationTemplate",
+	GetAllNotificationTemplatesDocument:                 "GetAllNotificationTemplates",
+	GetNotificationTemplateByIDDocument:                 "GetNotificationTemplateByID",
+	GetNotificationTemplatesDocument:                    "GetNotificationTemplates",
+	UpdateBulkCSVNotificationTemplateDocument:           "UpdateBulkCSVNotificationTemplate",
+	UpdateBulkNotificationTemplateDocument:              "UpdateBulkNotificationTemplate",
+	UpdateNotificationTemplateDocument:                  "UpdateNotificationTemplate",
+	CreateOnboardingDocument:                            "CreateOnboarding",
+	CreateOrganizationDocument:                          "CreateOrganization",
+	CreateOrganizationWithMembersDocument:               "CreateOrganizationWithMembers",
+	DeleteOrganizationDocument:                          "DeleteOrganization",
+	GetAllOrganizationsDocument:                         "GetAllOrganizations",
+	GetOrganizationByIDDocument:                         "GetOrganizationByID",
+	GetOrganizationsDocument:                            "GetOrganizations",
+	TransferOrganizationOwnershipDocument:               "TransferOrganizationOwnership",
+	UpdateOrganizationDocument:                          "UpdateOrganization",
+	GetAllOrganizationSettingsDocument:                  "GetAllOrganizationSettings",
+	GetOrganizationSettingByIDDocument:                  "GetOrganizationSettingByID",
+	GetOrganizationSettingsDocument:                     "GetOrganizationSettings",
+	UpdateOrganizationSettingDocument:                   "UpdateOrganizationSetting",
+	AddUserToOrgWithRoleDocument:                        "AddUserToOrgWithRole",
+	CreateBulkCSVOrgMembersDocument:                     "CreateBulkCSVOrgMembers",
+	CreateBulkOrgMembersDocument:                        "CreateBulkOrgMembers",
+	GetOrgMembersByOrgIDDocument:                        "GetOrgMembersByOrgID",
+	LeaveOrganizationDocument:                           "LeaveOrganization",
+	RemoveBulkUsersFromOrgDocument:                      "RemoveBulkUsersFromOrg",
+	RemoveUserFromOrgDocument:                           "RemoveUserFromOrg",
+	UpdateBulkOrgMemberRolesDocument:                    "UpdateBulkOrgMemberRoles",
+	UpdateUserRoleInOrgDocument:                         "UpdateUserRoleInOrg",
+	GetAllOrgSubscriptionsDocument:                      "GetAllOrgSubscriptions",
+	GetOrgSubscriptionByIDDocument:                      "GetOrgSubscriptionByID",
+	GetOrgSubscriptionsDocument:                         "GetOrgSubscriptions",
+	CreatePersonalAccessTokenDocument:                   "CreatePersonalAccessToken",
+	DeletePersonalAccessTokenDocument:                   "DeletePersonalAccessToken",
+	GetAllPersonalAccessTokensDocument:                  "GetAllPersonalAccessTokens",
+	GetPersonalAccessTokenByIDDocument:                  "GetPersonalAccessTokenByID",
+	GetPersonalAccessTokensDocument:                     "GetPersonalAccessTokens",
+	UpdatePersonalAccessTokenDocument:                   "UpdatePersonalAccessToken",
+	CreateBulkCSVPlatformDocument:                       "CreateBulkCSVPlatform",
+	CreateBulkPlatformDocument:                          "CreateBulkPlatform",
+	CreatePlatformDocument:                              "CreatePlatform",
+	DeletePlatformDocument:                              "DeletePlatform",
+	GetAllPlatformsDocument:                             "GetAllPlatforms",
+	GetPlatformByIDDocument:                             "GetPlatformByID",
+	GetPlatformsDocument:                                "GetPlatforms",
+	UpdatePlatformDocument:                              "UpdatePlatform",
+	CreateBulkCSVProcedureDocument:                      "CreateBulkCSVProcedure",
+	CreateBulkProcedureDocument:                         "CreateBulkProcedure",
+	CreateProcedureDocument:                             "CreateProcedure",
+	CreateUploadProcedureDocument:                       "CreateUploadProcedure",
+	DeleteBulkProcedureDocument:                         "DeleteBulkProcedure",
+	DeleteProcedureDocument:                             "DeleteProcedure",
+	GetAllProceduresDocument:                            "GetAllProcedures",
+	GetProcedureByIDDocument:                            "GetProcedureByID",
+	GetProceduresDocument:                               "GetProcedures",
+	UpdateBulkProcedureDocument:                         "UpdateBulkProcedure",
+	UpdateProcedureDocument:                             "UpdateProcedure",
+	CreateBulkCSVProgramDocument:                        "CreateBulkCSVProgram",
+	CreateBulkProgramDocument:                           "CreateBulkProgram",
+	CreateControlWithSubcontrolsDocument:                "CreateControlWithSubcontrols",
+	CreateFullProgramDocument:                           "CreateFullProgram",
+	CreateFullProgramReturnIDsDocument:                  "CreateFullProgramReturnIDs",
+	CreateProgramDocument:                               "CreateProgram",
+	CreateProgramWithMembersDocument:                    "CreateProgramWithMembers",
+	DeleteProgramDocument:                               "DeleteProgram",
+	GetAllProgramsDocument:                              "GetAllPrograms",
+	GetProgramByIDDocument:                              "GetProgramByID",
+	GetProgramsDocument:                                 "GetPrograms",
+	UpdateProgramDocument:                               "UpdateProgram",
+	AddUserToProgramWithRoleDocument:                    "AddUserToProgramWithRole",
+	CreateBulkCSVProgramMembersDocument:                 "CreateBulkCSVProgramMembers",
+	CreateBulkProgramMembersDocument:                    "CreateBulkProgramMembers",
+	GetProgramMembersByProgramIDDocument:                "GetProgramMembersByProgramID",
+	RemoveUserFromProgramDocument:                       "RemoveUserFromProgram",
+	UpdateUserRoleInProgramDocument:                     "UpdateUserRoleInProgram",
+	CreateBulkCSVProgramMembershipDocument:              "CreateBulkCSVProgramMembership",
+	CreateBulkProgramMembershipDocument:                 "CreateBulkProgramMembership",
+	CreateProgramMembershipDocument:                     "CreateProgramMembership",
+	DeleteProgramMembershipDocument:                     "DeleteProgramMembership",
+	GetAllProgramMembershipsDocument:                    "GetAllProgramMemberships",
+	GetProgramMembershipByIDDocument:                    "GetProgramMembershipByID",
+	GetProgramMembershipsDocument:                       "GetProgramMemberships",
+	UpdateProgramMembershipDocument:                     "UpdateProgramMembership",
+	CreateBulkCSVRemediationDocument:                    "CreateBulkCSVRemediation",
+	CreateBulkRemediationDocument:                       "CreateBulkRemediation",
+	CreateRemediationDocument:                           "CreateRemediation",
+	DeleteBulkRemediationDocument:                       "DeleteBulkRemediation",
+	DeleteRemediationDocument:                           "DeleteRemediation",
+	GetAllRemediationsDocument:                          "GetAllRemediations",
+	GetRemediationByIDDocument:                          "GetRemediationByID",
+	GetRemediationsDocument:                             "GetRemediations",
+	UpdateBulkCSVRemediationDocument:                    "UpdateBulkCSVRemediation",
+	UpdateBulkRemediationDocument:                       "UpdateBulkRemediation",
+	UpdateRemediationDocument:                           "UpdateRemediation",
+	CreateBulkCSVReviewDocument:                         "CreateBulkCSVReview",
+	CreateBulkReviewDocument:                            "CreateBulkReview",
+	CreateReviewDocument:                                "CreateReview",
+	DeleteBulkReviewReviewDocument:                      "DeleteBulkReviewReview",
+	DeleteReviewDocument:                                "DeleteReview",
+	GetAllReviewsDocument:                               "GetAllReviews",
+	GetReviewByIDDocument:                               "GetReviewByID",
+	GetReviewsDocument:                                  "GetReviews",
+	UpdateBulkCSVReviewDocument:                         "UpdateBulkCSVReview",
+	UpdateBulkReviewDocument:                            "UpdateBulkReview",
+	UpdateReviewDocument:                                "UpdateReview",
+	UpdateReviewCommentDocument:                         "UpdateReviewComment",
+	CreateBulkCSVRiskDocument:                           "CreateBulkCSVRisk",
+	CreateBulkRiskDocument:                              "CreateBulkRisk",
+	CreateRiskDocument:                                  "CreateRisk",
+	DeleteRiskDocument:                                  "DeleteRisk",
+	GetAllRisksDocument:                                 "GetAllRisks",
+	GetRiskByIDDocument:                                 "GetRiskByID",
+	GetRisksDocument:                                    "GetRisks",
+	UpdateBulkRiskDocument:                              "UpdateBulkRisk",
+	UpdateRiskDocument:                                  "UpdateRisk",
+	CreateBulkCSVScanDocument:                           "CreateBulkCSVScan",
+	CreateBulkScanDocument:                              "CreateBulkScan",
+	CreateScanDocument:                                  "CreateScan",
+	DeleteScanDocument:                                  "DeleteScan",
+	GetAllScansDocument:                                 "GetAllScans",
+	GetScanByIDDocument:                                 "GetScanByID",
+	GetScansDocument:                                    "GetScans",
+	UpdateScanDocument:                                  "UpdateScan",
+	GlobalSearchDocument:                                "GlobalSearch",
+	CreateBulkCSVSLADefinitionDocument:                  "CreateBulkCSVSLADefinition",
+	CreateBulkSLADefinitionDocument:                     "CreateBulkSLADefinition",
+	CreateSLADefinitionDocument:                         "CreateSLADefinition",
+	DeleteBulkSLADefinitionDocument:                     "DeleteBulkSLADefinition",
+	DeleteSLADefinitionDocument:                         "DeleteSLADefinition",
+	GetAllSLADefinitionsDocument:                        "GetAllSLADefinitions",
+	GetSLADefinitionByIDDocument:                        "GetSLADefinitionByID",
+	GetSLADefinitionsDocument:                           "GetSLADefinitions",
+	UpdateBulkCSVSLADefinitionDocument:                  "UpdateBulkCSVSLADefinition",
+	UpdateBulkSLADefinitionDocument:                     "UpdateBulkSLADefinition",
+	UpdateSLADefinitionDocument:                         "UpdateSLADefinition",
+	CreateStandardDocument:                              "CreateStandard",
+	DeleteStandardDocument:                              "DeleteStandard",
+	GetAllStandardsDocument:                             "GetAllStandards",
+	GetStandardByIDDocument:                             "GetStandardByID",
+	GetStandardsDocument:                                "GetStandards",
+	UpdateStandardDocument:                              "UpdateStandard",
+	CreateBulkCSVSubcontrolDocument:                     "CreateBulkCSVSubcontrol",
+	CreateBulkSubcontrolDocument:                        "CreateBulkSubcontrol",
+	CreateSubcontrolDocument:                            "CreateSubcontrol",
+	DeleteSubcontrolDocument:                            "DeleteSubcontrol",
+	GetAllSubcontrolsDocument:                           "GetAllSubcontrols",
+	GetSubcontrolByIDDocument:                           "GetSubcontrolByID",
+	GetSubcontrolsDocument:                              "GetSubcontrols",
+	UpdateSubcontrolDocument:                            "UpdateSubcontrol",
+	CreateBulkCSVSubprocessorDocument:                   "CreateBulkCSVSubprocessor",
+	CreateBulkSubprocessorDocument:                      "CreateBulkSubprocessor",
+	CreateSubprocessorDocument:                          "CreateSubprocessor",
+	DeleteSubprocessorDocument:                          "DeleteSubprocessor",
+	GetAllSubprocessorsDocument:                         "GetAllSubprocessors",
+	GetSubprocessorByIDDocument:                         "GetSubprocessorByID",
+	GetSubprocessorsDocument:                            "GetSubprocessors",
+	UpdateBulkSubprocessorDocument:                      "UpdateBulkSubprocessor",
+	UpdateSubprocessorDocument:                          "UpdateSubprocessor",
+	CreateBulkCSVSubscriberDocument:                     "CreateBulkCSVSubscriber",
+	CreateBulkSubscriberDocument:                        "CreateBulkSubscriber",
+	CreateSubscriberDocument:                            "CreateSubscriber",
+	DeleteSubscriberDocument:                            "DeleteSubscriber",
+	GetAllSubscribersDocument:                           "GetAllSubscribers",
+	GetSubscriberByEmailDocument:                        "GetSubscriberByEmail",
+	GetSubscribersDocument:                              "GetSubscribers",
+	UpdateSubscriberDocument:                            "UpdateSubscriber",
+	CreateBulkCSVSystemDetailDocument:                   "CreateBulkCSVSystemDetail",
+	CreateBulkSystemDetailDocument:                      "CreateBulkSystemDetail",
+	CreateSystemDetailDocument:                          "CreateSystemDetail",
+	DeleteBulkSystemDetailDocument:                      "DeleteBulkSystemDetail",
+	DeleteSystemDetailDocument:                          "DeleteSystemDetail",
+	GetAllSystemDetailsDocument:                         "GetAllSystemDetails",
+	GetSystemDetailByIDDocument:                         "GetSystemDetailByID",
+	GetSystemDetailsDocument:                            "GetSystemDetails",
+	UpdateBulkCSVSystemDetailDocument:                   "UpdateBulkCSVSystemDetail",
+	UpdateBulkSystemDetailDocument:                      "UpdateBulkSystemDetail",
+	UpdateSystemDetailDocument:                          "UpdateSystemDetail",
+	CreateBulkCSVTagDefinitionDocument:                  "CreateBulkCSVTagDefinition",
+	CreateBulkTagDefinitionDocument:                     "CreateBulkTagDefinition",
+	CreateTagDefinitionDocument:                         "CreateTagDefinition",
+	DeleteTagDefinitionDocument:                         "DeleteTagDefinition",
+	GetAllTagDefinitionsDocument:                        "GetAllTagDefinitions",
+	GetTagDefinitionByIDDocument:                        "GetTagDefinitionByID",
+	GetTagDefinitionsDocument:                           "GetTagDefinitions",
+	UpdateTagDefinitionDocument:                         "UpdateTagDefinition",
+	CreateBulkCSVTaskDocument:                           "CreateBulkCSVTask",
+	CreateBulkTaskDocument:                              "CreateBulkTask",
+	CreateTaskDocument:                                  "CreateTask",
+	DeleteTaskDocument:                                  "DeleteTask",
+	GetAllTasksDocument:                                 "GetAllTasks",
+	GetTaskByIDDocument:                                 "GetTaskByID",
+	GetTasksDocument:                                    "GetTasks",
+	UpdateBulkTaskDocument:                              "UpdateBulkTask",
+	UpdateTaskDocument:                                  "UpdateTask",
+	UpdateTaskCommentDocument:                           "UpdateTaskComment",
+	CreateBulkCSVTemplateDocument:                       "CreateBulkCSVTemplate",
+	CreateBulkTemplateDocument:                          "CreateBulkTemplate",
+	CreateTemplateDocument:                              "CreateTemplate",
+	GetAllTemplatesDocument:                             "GetAllTemplates",
+	GetTemplateByIDDocument:                             "GetTemplateByID",
+	UpdateTemplateDocument:                              "UpdateTemplate",
+	CreateTFASettingDocument:                            "CreateTFASetting",
+	GetAllTFASettingsDocument:                           "GetAllTFASettings",
+	GetTFASettingDocument:                               "GetTFASetting",
+	UpdateTFASettingDocument:                            "UpdateTFASetting",
+	CreateTrustCenterDocument:                           "CreateTrustCenter",
+	DeleteTrustCenterDocument:                           "DeleteTrustCenter",
+	GetAllTrustCentersDocument:                          "GetAllTrustCenters",
+	GetTrustCenterByIDDocument:                          "GetTrustCenterByID",
+	GetTrustCenterFrontendQueryDocument:                 "GetTrustCenterFrontendQuery",
+	GetTrustCentersDocument:                             "GetTrustCenters",
+	UpdateTrustCenterDocument:                           "UpdateTrustCenter",
+	CreateBulkCSVTrustCenterComplianceDocument:          "CreateBulkCSVTrustCenterCompliance",
+	CreateBulkTrustCenterComplianceDocument:             "CreateBulkTrustCenterCompliance",
+	CreateTrustCenterComplianceDocument:                 "CreateTrustCenterCompliance",
+	DeleteTrustCenterComplianceDocument:                 "DeleteTrustCenterCompliance",
+	GetAllTrustCenterCompliancesDocument:                "GetAllTrustCenterCompliances",
+	GetTrustCenterComplianceByIDDocument:                "GetTrustCenterComplianceByID",
+	GetTrustCenterCompliancesDocument:                   "GetTrustCenterCompliances",
+	UpdateTrustCenterComplianceDocument:                 "UpdateTrustCenterCompliance",
+	CreateTrustCenterComplianceWithStandardDocsDocument: "CreateTrustCenterComplianceWithStandardDocs",
+	CreateTrustCenterDocDocument:                        "CreateTrustCenterDoc",
+	DeleteTrustCenterDocDocument:                        "DeleteTrustCenterDoc",
+	GetAllTrustCenterDocsDocument:                       "GetAllTrustCenterDocs",
+	GetTrustCenterDocByIDDocument:                       "GetTrustCenterDocByID",
+	GetTrustCenterDocsDocument:                          "GetTrustCenterDocs",
+	UpdateTrustCenterDocDocument:                        "UpdateTrustCenterDoc",
+	CreateTrustCenterDomainDocument:                     "CreateTrustCenterDomain",
+	CreateBulkCSVTrustCenterEntityDocument:              "CreateBulkCSVTrustCenterEntity",
+	CreateBulkTrustCenterEntityDocument:                 "CreateBulkTrustCenterEntity",
+	CreateTrustCenterEntityDocument:                     "CreateTrustCenterEntity",
+	DeleteTrustCenterEntityDocument:                     "DeleteTrustCenterEntity",
+	GetAlltrustCenterEntitiesDocument:                   "GetAlltrustCenterEntities",
+	GetTrustCenterEntitiesDocument:                      "GetTrustCenterEntities",
+	GetTrustCenterEntityByIDDocument:                    "GetTrustCenterEntityByID",
+	UpdateTrustCenterEntityDocument:                     "UpdateTrustCenterEntity",
+	CreateBulkCSVTrustCenterFaqDocument:                 "CreateBulkCSVTrustCenterFAQ",
+	CreateBulkTrustCenterFaqDocument:                    "CreateBulkTrustCenterFAQ",
+	CreateTrustCenterFaqDocument:                        "CreateTrustCenterFAQ",
+	DeleteBulkTrustCenterFaqDocument:                    "DeleteBulkTrustCenterFAQ",
+	DeleteTrustCenterFaqDocument:                        "DeleteTrustCenterFAQ",
+	GetAllTrustCenterFaqsDocument:                       "GetAllTrustCenterFAQS",
+	GetTrustCenterFAQByIDDocument:                       "GetTrustCenterFAQByID",
+	GetTrustCenterFaqsDocument:                          "GetTrustCenterFAQS",
+	UpdateBulkCSVTrustCenterFaqDocument:                 "UpdateBulkCSVTrustCenterFAQ",
+	UpdateBulkTrustCenterFaqDocument:                    "UpdateBulkTrustCenterFAQ",
+	UpdateTrustCenterFaqDocument:                        "UpdateTrustCenterFAQ",
+	CreateTrustCenterNdaDocument:                        "CreateTrustCenterNda",
+	SubmitTrustCenterNDAResponseDocument:                "SubmitTrustCenterNDAResponse",
+	UpdateTrustCenterNdaDocument:                        "UpdateTrustCenterNda",
+	CreateBulkCSVTrustCenterNDARequestDocument:          "CreateBulkCSVTrustCenterNDARequest",
+	CreateBulkTrustCenterNDARequestDocument:             "CreateBulkTrustCenterNDARequest",
+	CreateTrustCenterNDARequestDocument:                 "CreateTrustCenterNDARequest",
+	DeleteBulkTrustCenterNDARequestDocument:             "DeleteBulkTrustCenterNDARequest",
+	DeleteTrustCenterNDARequestDocument:                 "DeleteTrustCenterNDARequest",
+	GetAllTrustCenterNDARequestsDocument:                "GetAllTrustCenterNDARequests",
+	GetTrustCenterNDARequestByIDDocument:                "GetTrustCenterNDARequestByID",
+	GetTrustCenterNDARequestsDocument:                   "GetTrustCenterNDARequests",
+	RequestNewTrustCenterTokenDocument:                  "RequestNewTrustCenterToken",
+	UpdateTrustCenterNDARequestDocument:                 "UpdateTrustCenterNDARequest",
+	CreateTrustCenterPreviewSettingDocument:             "CreateTrustCenterPreviewSetting",
+	CreateTrustCenterSettingDocument:                    "CreateTrustCenterSetting",
+	DeleteTrustCenterSettingDocument:                    "DeleteTrustCenterSetting",
+	GetAllTrustCenterSettingsDocument:                   "GetAllTrustCenterSettings",
+	GetTrustCenterSettingByIDDocument:                   "GetTrustCenterSettingByID",
+	GetTrustCenterSettingsDocument:                      "GetTrustCenterSettings",
+	UpdateTrustCenterSettingDocument:                    "UpdateTrustCenterSetting",
+	CreateBulkCSVTrustCenterSubprocessorDocument:        "CreateBulkCSVTrustCenterSubprocessor",
+	CreateBulkTrustCenterSubprocessorDocument:           "CreateBulkTrustCenterSubprocessor",
+	CreateTrustCenterSubprocessorDocument:               "CreateTrustCenterSubprocessor",
+	DeleteTrustCenterSubprocessorDocument:               "DeleteTrustCenterSubprocessor",
+	GetAllTrustCenterSubprocessorsDocument:              "GetAllTrustCenterSubprocessors",
+	GetTrustCenterSubprocessorByIDDocument:              "GetTrustCenterSubprocessorByID",
+	GetTrustCenterSubprocessorsDocument:                 "GetTrustCenterSubprocessors",
+	UpdateBulkTrustCenterSubprocessorDocument:           "UpdateBulkTrustCenterSubprocessor",
+	UpdateTrustCenterSubprocessorDocument:               "UpdateTrustCenterSubprocessor",
+	CreateTrustCenterWatermarkConfigDocument:            "CreateTrustCenterWatermarkConfig",
+	DeleteTrustCenterWatermarkConfigDocument:            "DeleteTrustCenterWatermarkConfig",
+	GetAllTrustCenterWatermarkConfigsDocument:           "GetAllTrustCenterWatermarkConfigs",
+	GetTrustCenterWatermarkConfigByIDDocument:           "GetTrustCenterWatermarkConfigByID",
+	GetTrustCenterWatermarkConfigsDocument:              "GetTrustCenterWatermarkConfigs",
+	UpdateTrustCenterWatermarkConfigDocument:            "UpdateTrustCenterWatermarkConfig",
+	CreateUserDocument:                                  "CreateUser",
+	DeleteUserDocument:                                  "DeleteUser",
+	GetAllUsersDocument:                                 "GetAllUsers",
+	GetSelfDocument:                                     "GetSelf",
+	GetUserByIDDocument:                                 "GetUserByID",
+	GetUserByIDWithOrgsDocument:                         "GetUserByIDWithOrgs",
+	UpdateUserDocument:                                  "UpdateUser",
+	GetAllUserSettingsDocument:                          "GetAllUserSettings",
+	GetUserSettingByIDDocument:                          "GetUserSettingByID",
+	GetUserSettingsDocument:                             "GetUserSettings",
+	UpdateUserSettingDocument:                           "UpdateUserSetting",
+	CreateBulkCSVVendorRiskScoreDocument:                "CreateBulkCSVVendorRiskScore",
+	CreateBulkVendorRiskScoreDocument:                   "CreateBulkVendorRiskScore",
+	CreateVendorRiskScoreDocument:                       "CreateVendorRiskScore",
+	DeleteBulkVendorRiskScoreDocument:                   "DeleteBulkVendorRiskScore",
+	DeleteVendorRiskScoreDocument:                       "DeleteVendorRiskScore",
+	GetAllVendorRiskScoresDocument:                      "GetAllVendorRiskScores",
+	GetVendorRiskScoreByIDDocument:                      "GetVendorRiskScoreByID",
+	GetVendorRiskScoresDocument:                         "GetVendorRiskScores",
+	UpdateBulkCSVVendorRiskScoreDocument:                "UpdateBulkCSVVendorRiskScore",
+	UpdateBulkVendorRiskScoreDocument:                   "UpdateBulkVendorRiskScore",
+	UpdateVendorRiskScoreDocument:                       "UpdateVendorRiskScore",
+	CreateBulkCSVVendorScoringConfigDocument:            "CreateBulkCSVVendorScoringConfig",
+	CreateBulkVendorScoringConfigDocument:               "CreateBulkVendorScoringConfig",
+	CreateVendorScoringConfigDocument:                   "CreateVendorScoringConfig",
+	DeleteBulkVendorScoringConfigDocument:               "DeleteBulkVendorScoringConfig",
+	DeleteVendorScoringConfigDocument:                   "DeleteVendorScoringConfig",
+	GetAllVendorScoringConfigsDocument:                  "GetAllVendorScoringConfigs",
+	GetVendorScoringConfigByIDDocument:                  "GetVendorScoringConfigByID",
+	GetVendorScoringConfigsDocument:                     "GetVendorScoringConfigs",
+	UpdateBulkCSVVendorScoringConfigDocument:            "UpdateBulkCSVVendorScoringConfig",
+	UpdateBulkVendorScoringConfigDocument:               "UpdateBulkVendorScoringConfig",
+	UpdateVendorScoringConfigDocument:                   "UpdateVendorScoringConfig",
+	CreateBulkCSVVulnerabilityDocument:                  "CreateBulkCSVVulnerability",
+	CreateBulkVulnerabilityDocument:                     "CreateBulkVulnerability",
+	CreateVulnerabilityDocument:                         "CreateVulnerability",
+	DeleteBulkVulnerabilityDocument:                     "DeleteBulkVulnerability",
+	DeleteVulnerabilityDocument:                         "DeleteVulnerability",
+	GetAllVulnerabilitiesDocument:                       "GetAllVulnerabilities",
+	GetVulnerabilitiesDocument:                          "GetVulnerabilities",
+	GetVulnerabilityByIDDocument:                        "GetVulnerabilityByID",
+	UpdateBulkCSVVulnerabilityDocument:                  "UpdateBulkCSVVulnerability",
+	UpdateBulkVulnerabilityDocument:                     "UpdateBulkVulnerability",
+	UpdateVulnerabilityDocument:                         "UpdateVulnerability",
+	UpdateVulnerabilityCommentDocument:                  "UpdateVulnerabilityComment",
+	DeleteWebauthnDocument:                              "DeleteWebauthn",
+	GetAllWebauthnsDocument:                             "GetAllWebauthns",
+	ApproveWorkflowAssignmentDocument:                   "ApproveWorkflowAssignment",
+	RejectWorkflowAssignmentDocument:                    "RejectWorkflowAssignment",
+	GetMyWorkflowAssignmentsDocument:                    "GetMyWorkflowAssignments",
+	GetActionPlanWorkflowStatusDocument:                 "GetActionPlanWorkflowStatus",
+	GetActionPlanWorkflowTimelineDocument:               "GetActionPlanWorkflowTimeline",
+	GetAssessmentWorkflowStatusDocument:                 "GetAssessmentWorkflowStatus",
+	GetAssessmentWorkflowTimelineDocument:               "GetAssessmentWorkflowTimeline",
+	GetAssessmentResponseWorkflowStatusDocument:         "GetAssessmentResponseWorkflowStatus",
+	GetAssessmentResponseWorkflowTimelineDocument:       "GetAssessmentResponseWorkflowTimeline",
+	GetCampaignWorkflowStatusDocument:                   "GetCampaignWorkflowStatus",
+	GetCampaignWorkflowTimelineDocument:                 "GetCampaignWorkflowTimeline",
+	GetCampaignTargetWorkflowStatusDocument:             "GetCampaignTargetWorkflowStatus",
+	GetCampaignTargetWorkflowTimelineDocument:           "GetCampaignTargetWorkflowTimeline",
+	GetControlWorkflowStatusDocument:                    "GetControlWorkflowStatus",
+	GetControlWorkflowTimelineDocument:                  "GetControlWorkflowTimeline",
+	GetEvidenceWorkflowStatusDocument:                   "GetEvidenceWorkflowStatus",
+	GetEvidenceWorkflowTimelineDocument:                 "GetEvidenceWorkflowTimeline",
+	GetFindingWorkflowStatusDocument:                    "GetFindingWorkflowStatus",
+	GetFindingWorkflowTimelineDocument:                  "GetFindingWorkflowTimeline",
+	GetIdentityHolderWorkflowStatusDocument:             "GetIdentityHolderWorkflowStatus",
+	GetIdentityHolderWorkflowTimelineDocument:           "GetIdentityHolderWorkflowTimeline",
+	GetInternalPolicyWorkflowStatusDocument:             "GetInternalPolicyWorkflowStatus",
+	GetInternalPolicyWorkflowTimelineDocument:           "GetInternalPolicyWorkflowTimeline",
+	GetPlatformWorkflowStatusDocument:                   "GetPlatformWorkflowStatus",
+	GetPlatformWorkflowTimelineDocument:                 "GetPlatformWorkflowTimeline",
+	GetProcedureWorkflowStatusDocument:                  "GetProcedureWorkflowStatus",
+	GetProcedureWorkflowTimelineDocument:                "GetProcedureWorkflowTimeline",
+	GetRemediationWorkflowStatusDocument:                "GetRemediationWorkflowStatus",
+	GetRemediationWorkflowTimelineDocument:              "GetRemediationWorkflowTimeline",
+	GetRiskWorkflowStatusDocument:                       "GetRiskWorkflowStatus",
+	GetRiskWorkflowTimelineDocument:                     "GetRiskWorkflowTimeline",
+	GetSubcontrolWorkflowStatusDocument:                 "GetSubcontrolWorkflowStatus",
+	GetSubcontrolWorkflowTimelineDocument:               "GetSubcontrolWorkflowTimeline",
+	GetTaskWorkflowStatusDocument:                       "GetTaskWorkflowStatus",
+	GetTaskWorkflowTimelineDocument:                     "GetTaskWorkflowTimeline",
+	GetVulnerabilityWorkflowStatusDocument:              "GetVulnerabilityWorkflowStatus",
+	GetVulnerabilityWorkflowTimelineDocument:            "GetVulnerabilityWorkflowTimeline",
+	GetAllWorkflowAssignmentsDocument:                   "GetAllWorkflowAssignments",
+	GetWorkflowAssignmentByIDDocument:                   "GetWorkflowAssignmentByID",
+	GetWorkflowAssignmentsDocument:                      "GetWorkflowAssignments",
+	GetAllWorkflowAssignmentTargetsDocument:             "GetAllWorkflowAssignmentTargets",
+	GetWorkflowAssignmentTargetByIDDocument:             "GetWorkflowAssignmentTargetByID",
+	GetWorkflowAssignmentTargetsDocument:                "GetWorkflowAssignmentTargets",
+	CreateBulkCSVWorkflowDefinitionDocument:             "CreateBulkCSVWorkflowDefinition",
+	CreateBulkWorkflowDefinitionDocument:                "CreateBulkWorkflowDefinition",
+	CreateWorkflowDefinitionDocument:                    "CreateWorkflowDefinition",
+	DeleteWorkflowDefinitionDocument:                    "DeleteWorkflowDefinition",
+	GetAllWorkflowDefinitionsDocument:                   "GetAllWorkflowDefinitions",
+	GetWorkflowDefinitionByIDDocument:                   "GetWorkflowDefinitionByID",
+	GetWorkflowDefinitionsDocument:                      "GetWorkflowDefinitions",
+	UpdateWorkflowDefinitionDocument:                    "UpdateWorkflowDefinition",
+	GetAllWorkflowEventsDocument:                        "GetAllWorkflowEvents",
+	GetWorkflowEventByIDDocument:                        "GetWorkflowEventByID",
+	GetWorkflowEventsDocument:                           "GetWorkflowEvents",
+	GetAllWorkflowInstancesDocument:                     "GetAllWorkflowInstances",
+	GetWorkflowInstanceByIDDocument:                     "GetWorkflowInstanceByID",
+	GetWorkflowInstancesDocument:                        "GetWorkflowInstances",
+	GetAllWorkflowObjectRefsDocument:                    "GetAllWorkflowObjectRefs",
+	GetWorkflowObjectRefByIDDocument:                    "GetWorkflowObjectRefByID",
+	GetWorkflowObjectRefsDocument:                       "GetWorkflowObjectRefs",
 }

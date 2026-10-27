@@ -704,6 +704,19 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 		})
 	}
 
+	publicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	_, err := suite.Client.DB.TrustCenterDoc.UpdateOneID(trustCenterDoc1.ID).SetStandardID(publicStandard.ID).Save(dbCtx)
+	assert.NilError(t, err)
+
+	complianceResp, err := suite.Client.API.CreateTrustCenterComplianceWithStandardDocs(tcOrg2.Owner.UserCtx, testclient.CreateTrustCenterComplianceInput{
+		StandardID:    publicStandard.ID,
+		TrustCenterID: &trustCenter2.ID,
+	})
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(int64(0), complianceResp.CreateTrustCenterCompliance.TrustCenterCompliance.Standard.TrustCenterDocs.TotalCount))
+
 	// Clean up
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 	th.CleanupOrganizationDataWithContext(tcOrg2.Owner.UserCtx, t)
