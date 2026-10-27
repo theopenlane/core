@@ -10,9 +10,12 @@ mutation CreateBulkCSVScan ($input: Upload!) {
 			discoveredVulnerabilityIds
 			environmentID
 			environmentName
+			externalID
 			generatedByPlatformID
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			nextScanRunAt
 			ownerID
@@ -28,6 +31,9 @@ mutation CreateBulkCSVScan ($input: Upload!) {
 			scanType
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			systemInternalID
 			systemOwned
@@ -51,9 +57,12 @@ mutation CreateBulkScan ($input: [CreateScanInput!]) {
 			discoveredVulnerabilityIds
 			environmentID
 			environmentName
+			externalID
 			generatedByPlatformID
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			nextScanRunAt
 			ownerID
@@ -69,6 +78,9 @@ mutation CreateBulkScan ($input: [CreateScanInput!]) {
 			scanType
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			systemInternalID
 			systemOwned
@@ -92,9 +104,12 @@ mutation CreateScan ($input: CreateScanInput!) {
 			discoveredVulnerabilityIds
 			environmentID
 			environmentName
+			externalID
 			generatedByPlatformID
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			nextScanRunAt
 			ownerID
@@ -110,6 +125,9 @@ mutation CreateScan ($input: CreateScanInput!) {
 			scanType
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			systemInternalID
 			systemOwned
@@ -163,9 +181,12 @@ query GetScanByID ($scanId: ID!) {
 		discoveredVulnerabilityIds
 		environmentID
 		environmentName
+		externalID
 		generatedByPlatformID
 		id
+		integrationRunID
 		internalNotes
+		managedBy
 		metadata
 		nextScanRunAt
 		ownerID
@@ -181,6 +202,9 @@ query GetScanByID ($scanId: ID!) {
 		scanType
 		scopeID
 		scopeName
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		status
 		systemInternalID
 		systemOwned
@@ -229,9 +253,12 @@ mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
 			discoveredVulnerabilityIds
 			environmentID
 			environmentName
+			externalID
 			generatedByPlatformID
 			id
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			nextScanRunAt
 			ownerID
@@ -247,6 +274,9 @@ mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
 			scanType
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			systemInternalID
 			systemOwned

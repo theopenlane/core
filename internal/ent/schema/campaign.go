@@ -257,6 +257,7 @@ func (c Campaign) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "CMP",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(c),
 			newObjectOwnedMixin[generated.Campaign](c,
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
@@ -357,6 +358,9 @@ func (Campaign) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }
 

@@ -227,6 +227,20 @@ func (_c *FindingCreate) SetNillableIntegrationRunID(v *string) *FindingCreate {
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *FindingCreate) SetExternalID(v string) *FindingCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableExternalID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *FindingCreate) SetOwnerID(v string) *FindingCreate {
 	_c.mutation.SetOwnerID(v)
@@ -545,20 +559,6 @@ func (_c *FindingCreate) SetWorkflowEligibleMarker(v bool) *FindingCreate {
 func (_c *FindingCreate) SetNillableWorkflowEligibleMarker(v *bool) *FindingCreate {
 	if v != nil {
 		_c.SetWorkflowEligibleMarker(*v)
-	}
-	return _c
-}
-
-// SetExternalID sets the "external_id" field.
-func (_c *FindingCreate) SetExternalID(v string) *FindingCreate {
-	_c.mutation.SetExternalID(v)
-	return _c
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_c *FindingCreate) SetNillableExternalID(v *string) *FindingCreate {
-	if v != nil {
-		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -1643,6 +1643,10 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_spec.SetField(finding.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.InternalOwner(); ok {
 		_spec.SetField(finding.FieldInternalOwner, field.TypeString, value)
 		_node.InternalOwner = value
@@ -1682,10 +1686,6 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(finding.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.SecurityLevel(); ok {
 		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)

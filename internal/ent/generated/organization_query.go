@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
@@ -263,6 +264,7 @@ type OrganizationQuery struct {
 	withDiscussions                             *DiscussionQuery
 	withVendorScoringConfigs                    *VendorScoringConfigQuery
 	withVendorRiskScores                        *VendorRiskScoreQuery
+	withCheckResults                            *CheckResultQuery
 	withMembers                                 *OrgMembershipQuery
 	loadTotal                                   []func(context.Context, []*Organization) error
 	modifiers                                   []func(*sql.Selector)
@@ -420,6 +422,7 @@ type OrganizationQuery struct {
 	withNamedDiscussions                        map[string]*DiscussionQuery
 	withNamedVendorScoringConfigs               map[string]*VendorScoringConfigQuery
 	withNamedVendorRiskScores                   map[string]*VendorRiskScoreQuery
+	withNamedCheckResults                       map[string]*CheckResultQuery
 	withNamedMembers                            map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -3911,6 +3914,28 @@ func (_q *OrganizationQuery) QueryVendorRiskScores() *VendorRiskScoreQuery {
 	return query
 }
 
+// QueryCheckResults chains the current query on the "check_results" edge.
+func (_q *OrganizationQuery) QueryCheckResults() *CheckResultQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.CheckResultsTable, organization.CheckResultsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -4282,6 +4307,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withDiscussions:                        _q.withDiscussions.Clone(),
 		withVendorScoringConfigs:               _q.withVendorScoringConfigs.Clone(),
 		withVendorRiskScores:                   _q.withVendorRiskScores.Clone(),
+		withCheckResults:                       _q.withCheckResults.Clone(),
 		withMembers:                            _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -6017,6 +6043,17 @@ func (_q *OrganizationQuery) WithVendorRiskScores(opts ...func(*VendorRiskScoreQ
 	return _q
 }
 
+// WithCheckResults tells the query-builder to eager-load the nodes that are connected to
+// the "check_results" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithCheckResults(opts ...func(*CheckResultQuery)) *OrganizationQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCheckResults = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -6112,7 +6149,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [158]bool{
+		loadedTypes = [159]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6270,6 +6307,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withDiscussions != nil,
 			_q.withVendorScoringConfigs != nil,
 			_q.withVendorRiskScores != nil,
+			_q.withCheckResults != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -7506,6 +7544,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withCheckResults; query != nil {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *Organization) { n.Edges.CheckResults = []*CheckResult{} },
+			func(n *Organization, e *CheckResult) { n.Edges.CheckResults = append(n.Edges.CheckResults, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -8590,6 +8635,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadVendorRiskScores(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedVendorRiskScores(name) },
 			func(n *Organization, e *VendorRiskScore) { n.appendNamedVendorRiskScores(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCheckResults {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedCheckResults(name) },
+			func(n *Organization, e *CheckResult) { n.appendNamedCheckResults(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -11180,6 +11232,7 @@ func (_q *OrganizationQuery) loadIntegrationRuns(ctx context.Context, query *Int
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(integrationrun.FieldOwnerID)
 	}
@@ -13544,6 +13597,36 @@ func (_q *OrganizationQuery) loadVendorRiskScores(ctx context.Context, query *Ve
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadCheckResults(ctx context.Context, query *CheckResultQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *CheckResult)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(checkresult.FieldOwnerID)
+	}
+	query.Where(predicate.CheckResult(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.CheckResultsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -15828,6 +15911,20 @@ func (_q *OrganizationQuery) WithNamedVendorRiskScores(name string, opts ...func
 		_q.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery)
 	}
 	_q.withNamedVendorRiskScores[name] = query
+	return _q
+}
+
+// WithNamedCheckResults tells the query-builder to eager-load the nodes that are connected to the "check_results"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedCheckResults(name string, opts ...func(*CheckResultQuery)) *OrganizationQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCheckResults == nil {
+		_q.withNamedCheckResults = make(map[string]*CheckResultQuery)
+	}
+	_q.withNamedCheckResults[name] = query
 	return _q
 }
 

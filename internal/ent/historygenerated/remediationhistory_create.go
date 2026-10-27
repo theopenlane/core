@@ -169,6 +169,90 @@ func (_c *RemediationHistoryCreate) SetTags(v []string) *RemediationHistoryCreat
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *RemediationHistoryCreate) SetSourceDefinitionID(v string) *RemediationHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableSourceDefinitionID(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *RemediationHistoryCreate) SetSourceDefinitionVersion(v string) *RemediationHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *RemediationHistoryCreate) SetSourceInstanceID(v string) *RemediationHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableSourceInstanceID(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *RemediationHistoryCreate) SetManagedBy(v string) *RemediationHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableManagedBy(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *RemediationHistoryCreate) SetIntegrationRunID(v string) *RemediationHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableIntegrationRunID(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *RemediationHistoryCreate) SetExternalID(v string) *RemediationHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableExternalID(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *RemediationHistoryCreate) SetOwnerID(v string) *RemediationHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -291,20 +375,6 @@ func (_c *RemediationHistoryCreate) SetWorkflowEligibleMarker(v bool) *Remediati
 func (_c *RemediationHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *RemediationHistoryCreate {
 	if v != nil {
 		_c.SetWorkflowEligibleMarker(*v)
-	}
-	return _c
-}
-
-// SetExternalID sets the "external_id" field.
-func (_c *RemediationHistoryCreate) SetExternalID(v string) *RemediationHistoryCreate {
-	_c.mutation.SetExternalID(v)
-	return _c
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_c *RemediationHistoryCreate) SetNillableExternalID(v *string) *RemediationHistoryCreate {
-	if v != nil {
-		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -769,6 +839,30 @@ func (_c *RemediationHistoryCreate) createSpec() (*RemediationHistory, *sqlgraph
 		_spec.SetField(remediationhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(remediationhistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(remediationhistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(remediationhistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(remediationhistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(remediationhistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(remediationhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -804,10 +898,6 @@ func (_c *RemediationHistoryCreate) createSpec() (*RemediationHistory, *sqlgraph
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(remediationhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(remediationhistory.FieldExternalOwnerID, field.TypeString, value)

@@ -142,7 +142,7 @@ func (TrustCenterSubprocessor) Modules() []models.OrgModule {
 // Annotations of the TrustCenterSubprocessor
 func (t TrustCenterSubprocessor) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.SettingsChecks("trust_center"),
+		entfga.SettingsChecks(TrustCenter{}.Name()),
 		entx.NewExportable(),
 	}
 }

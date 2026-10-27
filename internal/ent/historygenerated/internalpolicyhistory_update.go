@@ -115,6 +115,9 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldOwnerID, field.TypeString)
 	}
@@ -346,6 +349,9 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldOwnerID, field.TypeString)

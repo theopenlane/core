@@ -169,6 +169,90 @@ func (_c *EvidenceHistoryCreate) SetTags(v []string) *EvidenceHistoryCreate {
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *EvidenceHistoryCreate) SetSourceDefinitionID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableSourceDefinitionID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *EvidenceHistoryCreate) SetSourceDefinitionVersion(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *EvidenceHistoryCreate) SetSourceInstanceID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableSourceInstanceID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *EvidenceHistoryCreate) SetManagedBy(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableManagedBy(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *EvidenceHistoryCreate) SetIntegrationRunID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableIntegrationRunID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *EvidenceHistoryCreate) SetExternalID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableExternalID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *EvidenceHistoryCreate) SetOwnerID(v string) *EvidenceHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -639,6 +723,30 @@ func (_c *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(evidencehistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(evidencehistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(evidencehistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(evidencehistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(evidencehistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(evidencehistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(evidencehistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(evidencehistory.FieldOwnerID, field.TypeString, value)

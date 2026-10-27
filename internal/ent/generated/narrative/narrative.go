@@ -33,6 +33,18 @@ const (
 	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldSourceDefinitionID holds the string denoting the source_definition_id field in the database.
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion holds the string denoting the source_definition_version field in the database.
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID holds the string denoting the source_instance_id field in the database.
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldManagedBy holds the string denoting the managed_by field in the database.
+	FieldManagedBy = "managed_by"
+	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
+	FieldIntegrationRunID = "integration_run_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -47,6 +59,8 @@ const (
 	FieldDescription = "description"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
+	EdgeIntegrationRuns = "integration_runs"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -65,6 +79,13 @@ const (
 	EdgeProcedures = "procedures"
 	// Table holds the table name of the narrative in the database.
 	Table = "narratives"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge.
+	IntegrationRunsTable = "integration_runs"
+	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
+	IntegrationRunsInverseTable = "integration_runs"
+	// IntegrationRunsColumn is the table column denoting the integration_runs relation/edge.
+	IntegrationRunsColumn = "narrative_integration_runs"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "narratives"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -121,6 +142,12 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDisplayID,
 	FieldTags,
+	FieldSourceDefinitionID,
+	FieldSourceDefinitionVersion,
+	FieldSourceInstanceID,
+	FieldManagedBy,
+	FieldIntegrationRunID,
+	FieldExternalID,
 	FieldOwnerID,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -253,6 +280,36 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
+// BySourceDefinitionID orders the results by the source_definition_id field.
+func BySourceDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionID, opts...).ToFunc()
+}
+
+// BySourceDefinitionVersion orders the results by the source_definition_version field.
+func BySourceDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionVersion, opts...).ToFunc()
+}
+
+// BySourceInstanceID orders the results by the source_instance_id field.
+func BySourceInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceInstanceID, opts...).ToFunc()
+}
+
+// ByManagedBy orders the results by the managed_by field.
+func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagedBy, opts...).ToFunc()
+}
+
+// ByIntegrationRunID orders the results by the integration_run_id field.
+func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -286,6 +343,20 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByDetails orders the results by the details field.
 func ByDetails(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDetails, opts...).ToFunc()
+}
+
+// ByIntegrationRunsCount orders the results by integration_runs count.
+func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRunsStep(), opts...)
+	}
+}
+
+// ByIntegrationRuns orders the results by integration_runs terms.
+func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
 }
 
 // ByOwnerField orders the results by owner field.
@@ -391,6 +462,13 @@ func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProceduresStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newIntegrationRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRunsTable, IntegrationRunsColumn),
+	)
 }
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

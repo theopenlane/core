@@ -11,8 +11,10 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 )
 
 // GroupSetting holds the schema definition for the GroupSetting entity
@@ -106,4 +108,13 @@ func (GroupSetting) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 	}.getMixins(GroupSetting{})
+}
+
+// Policy of the GroupSetting
+func (GroupSetting) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			entfga.CheckEditAccess[*generated.GroupSettingMutation](),
+		),
+	)
 }

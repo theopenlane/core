@@ -13,11 +13,13 @@ mutation CreateBulkCSVIdentityHolder ($input: Upload!) {
 			endDate
 			environmentID
 			environmentName
+			externalID
 			externalReferenceID
 			externalUserID
 			fullName
 			id
 			identityHolderType
+			integrationRunID
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
@@ -25,11 +27,15 @@ mutation CreateBulkCSVIdentityHolder ($input: Upload!) {
 			isActive
 			isOpenlaneUser
 			location
+			managedBy
 			metadata
 			ownerID
 			phoneNumber
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -58,11 +64,13 @@ mutation CreateBulkIdentityHolder ($input: [CreateIdentityHolderInput!]) {
 			endDate
 			environmentID
 			environmentName
+			externalID
 			externalReferenceID
 			externalUserID
 			fullName
 			id
 			identityHolderType
+			integrationRunID
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
@@ -70,11 +78,15 @@ mutation CreateBulkIdentityHolder ($input: [CreateIdentityHolderInput!]) {
 			isActive
 			isOpenlaneUser
 			location
+			managedBy
 			metadata
 			ownerID
 			phoneNumber
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -103,11 +115,13 @@ mutation CreateIdentityHolder ($input: CreateIdentityHolderInput!) {
 			endDate
 			environmentID
 			environmentName
+			externalID
 			externalReferenceID
 			externalUserID
 			fullName
 			id
 			identityHolderType
+			integrationRunID
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
@@ -115,11 +129,15 @@ mutation CreateIdentityHolder ($input: CreateIdentityHolderInput!) {
 			isActive
 			isOpenlaneUser
 			location
+			managedBy
 			metadata
 			ownerID
 			phoneNumber
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -161,11 +179,13 @@ query GetAllIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: C
 				endDate
 				environmentID
 				environmentName
+				externalID
 				externalReferenceID
 				externalUserID
 				fullName
 				id
 				identityHolderType
+				integrationRunID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
@@ -173,11 +193,15 @@ query GetAllIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: C
 				isActive
 				isOpenlaneUser
 				location
+				managedBy
 				metadata
 				ownerID
 				phoneNumber
 				scopeID
 				scopeName
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				startDate
 				status
 				tags
@@ -230,11 +254,13 @@ query GetIdentityHolderByID ($identityHolderId: ID!) {
 		endDate
 		environmentID
 		environmentName
+		externalID
 		externalReferenceID
 		externalUserID
 		fullName
 		id
 		identityHolderType
+		integrationRunID
 		internalOwner
 		internalOwnerGroupID
 		internalOwnerIdentityHolderID
@@ -242,11 +268,15 @@ query GetIdentityHolderByID ($identityHolderId: ID!) {
 		isActive
 		isOpenlaneUser
 		location
+		managedBy
 		metadata
 		ownerID
 		phoneNumber
 		scopeID
 		scopeName
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		startDate
 		status
 		tags
@@ -366,11 +396,13 @@ query GetIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				endDate
 				environmentID
 				environmentName
+				externalID
 				externalReferenceID
 				externalUserID
 				fullName
 				id
 				identityHolderType
+				integrationRunID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
@@ -378,11 +410,15 @@ query GetIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				isActive
 				isOpenlaneUser
 				location
+				managedBy
 				metadata
 				ownerID
 				phoneNumber
 				scopeID
 				scopeName
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				startDate
 				status
 				tags
@@ -422,11 +458,13 @@ mutation UpdateIdentityHolder ($updateIdentityHolderId: ID!, $input: UpdateIdent
 			endDate
 			environmentID
 			environmentName
+			externalID
 			externalReferenceID
 			externalUserID
 			fullName
 			id
 			identityHolderType
+			integrationRunID
 			internalOwner
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
@@ -434,11 +472,15 @@ mutation UpdateIdentityHolder ($updateIdentityHolderId: ID!, $input: UpdateIdent
 			isActive
 			isOpenlaneUser
 			location
+			managedBy
 			metadata
 			ownerID
 			phoneNumber
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags

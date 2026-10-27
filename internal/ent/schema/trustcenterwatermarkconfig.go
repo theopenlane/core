@@ -180,7 +180,7 @@ func (TrustCenterWatermarkConfig) Indexes() []ent.Index {
 func (TrustCenterWatermarkConfig) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaTrustCenterWatermarkConfig),
-		entfga.SettingsChecks("trust_center"),
+		entfga.SettingsChecks(TrustCenter{}.Name()),
 		entsql.Annotation{
 			Checks: map[string]string{
 				"text_or_logo_id_not_null": "(text IS NOT NULL) OR (logo_id IS NOT NULL)",

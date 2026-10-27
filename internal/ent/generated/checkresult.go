@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // CheckResult is the model entity for the CheckResult schema.
@@ -47,6 +48,8 @@ type CheckResult struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// the ID of the organization owner of the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// current status of the control
 	Status enums.CheckStatus `json:"status,omitempty"`
 	// source that set the check result
@@ -71,6 +74,8 @@ type CheckResult struct {
 type CheckResultEdges struct {
 	// integration runs that have written to this record
 	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -85,9 +90,9 @@ type CheckResultEdges struct {
 	Integration *Integration `json:"integration,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
 	namedIntegrationRuns map[string][]*IntegrationRun
 	namedBlockedGroups   map[string][]*Group
@@ -106,10 +111,21 @@ func (e CheckResultEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
 	return nil, &NotLoadedError{edge: "integration_runs"}
 }
 
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CheckResultEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
+}
+
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -118,7 +134,7 @@ func (e CheckResultEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -127,7 +143,7 @@ func (e CheckResultEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -136,7 +152,7 @@ func (e CheckResultEdges) ViewersOrErr() ([]*Group, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -145,7 +161,7 @@ func (e CheckResultEdges) ControlsOrErr() ([]*Control, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -156,7 +172,7 @@ func (e CheckResultEdges) FindingsOrErr() ([]*Finding, error) {
 func (e CheckResultEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -171,7 +187,7 @@ func (*CheckResult) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case checkresult.FieldTags:
 			values[i] = new([]byte)
-		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldUpdatedByImpersonator, checkresult.FieldDeletedBy, checkresult.FieldSourceDefinitionID, checkresult.FieldSourceDefinitionVersion, checkresult.FieldSourceInstanceID, checkresult.FieldManagedBy, checkresult.FieldIntegrationRunID, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
+		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldUpdatedByImpersonator, checkresult.FieldDeletedBy, checkresult.FieldSourceDefinitionID, checkresult.FieldSourceDefinitionVersion, checkresult.FieldSourceInstanceID, checkresult.FieldManagedBy, checkresult.FieldIntegrationRunID, checkresult.FieldOwnerID, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case checkresult.FieldCreatedAt, checkresult.FieldUpdatedAt, checkresult.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -277,6 +293,12 @@ func (_m *CheckResult) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
 			}
+		case checkresult.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				_m.OwnerID = value.String
+			}
 		case checkresult.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
@@ -337,6 +359,11 @@ func (_m *CheckResult) Value(name string) (ent.Value, error) {
 // QueryIntegrationRuns queries the "integration_runs" edge of the CheckResult entity.
 func (_m *CheckResult) QueryIntegrationRuns() *IntegrationRunQuery {
 	return NewCheckResultClient(_m.config).QueryIntegrationRuns(_m)
+}
+
+// QueryOwner queries the "owner" edge of the CheckResult entity.
+func (_m *CheckResult) QueryOwner() *OrganizationQuery {
+	return NewCheckResultClient(_m.config).QueryOwner(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the CheckResult entity.
@@ -432,6 +459,9 @@ func (_m *CheckResult) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

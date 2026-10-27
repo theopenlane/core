@@ -52,6 +52,8 @@ const (
 	FieldManagedBy = "managed_by"
 	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
@@ -176,8 +178,6 @@ const (
 	FieldLogoRemoteURL = "logo_remote_url"
 	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
 	FieldLogoFileID = "logo_file_id"
-	// FieldExternalID holds the string denoting the external_id field in the database.
-	FieldExternalID = "external_id"
 	// FieldObservedAt holds the string denoting the observed_at field in the database.
 	FieldObservedAt = "observed_at"
 	// Table holds the table name of the entityhistory in the database.
@@ -203,6 +203,7 @@ var Columns = []string{
 	FieldSourceInstanceID,
 	FieldManagedBy,
 	FieldIntegrationRunID,
+	FieldExternalID,
 	FieldOwnerID,
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
@@ -265,7 +266,6 @@ var Columns = []string{
 	FieldVendorMetadata,
 	FieldLogoRemoteURL,
 	FieldLogoFileID,
-	FieldExternalID,
 	FieldObservedAt,
 }
 
@@ -451,6 +451,11 @@ func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByIntegrationRunID orders the results by the integration_run_id field.
 func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.
@@ -726,11 +731,6 @@ func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 // ByLogoFileID orders the results by the logo_file_id field.
 func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
-}
-
-// ByExternalID orders the results by the external_id field.
-func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
 }
 
 // ByObservedAt orders the results by the observed_at field.

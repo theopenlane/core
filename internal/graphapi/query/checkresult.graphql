@@ -1,259 +1,291 @@
-mutation CreateBulkCSVCheckResult ($input: Upload!) {
-	createBulkCSVCheckResult(input: $input) {
-		checkResults {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
+mutation CreateBulkCheckResult($input: [CreateCheckResultInput!]) {
+  createBulkCheckResult(input: $input) {
+    checkResults {
+      createdAt
+      createdBy
+      details
+      externalURI
+      id
+      integrationID
+      integrationRunID
+      lastObservedAt
+      managedBy
+      ownerID
+      parentExternalID
+      source
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      status
+      tags
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+  }
 }
-mutation CreateBulkCheckResult ($input: [CreateCheckResultInput!]) {
-	createBulkCheckResult(input: $input) {
-		checkResults {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
+
+mutation CreateBulkCSVCheckResult($input: Upload!) {
+  createBulkCSVCheckResult(input: $input) {
+    checkResults {
+      createdAt
+      createdBy
+      details
+      externalURI
+      id
+      integrationID
+      integrationRunID
+      lastObservedAt
+      managedBy
+      ownerID
+      parentExternalID
+      source
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      status
+      tags
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+  }
 }
-mutation CreateCheckResult ($input: CreateCheckResultInput!) {
-	createCheckResult(input: $input) {
-		checkResult {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
+
+mutation CreateCheckResult($input: CreateCheckResultInput!) {
+  createCheckResult(input: $input) {
+    checkResult {
+      createdAt
+      createdBy
+      details
+      externalURI
+      id
+      integrationID
+      integrationRunID
+      lastObservedAt
+      managedBy
+      ownerID
+      parentExternalID
+      source
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      status
+      tags
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+  }
 }
-mutation DeleteBulkCheckResult ($ids: [ID!]!) {
-	deleteBulkCheckResult(ids: $ids) {
-		deletedIDs
-		notDeletedIDs
-		error
-	}
+
+mutation DeleteBulkCheckResult($ids: [ID!]!) {
+  deleteBulkCheckResult(ids: $ids) {
+    deletedIDs
+    notDeletedIDs
+    error
+  }
 }
-mutation DeleteCheckResult ($deleteCheckResultId: ID!) {
-	deleteCheckResult(id: $deleteCheckResultId) {
-		deletedID
-	}
+
+mutation DeleteCheckResult($deleteCheckResultId: ID!) {
+  deleteCheckResult(id: $deleteCheckResultId) {
+    deletedID
+  }
 }
-query GetAllCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [CheckResultOrder!]) {
-	checkResults(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				createdAt
-				createdBy
-				details
-				externalURI
-				id
-				integrationID
-				integrationRunID
-				lastObservedAt
-				managedBy
-				parentExternalID
-				source
-				sourceDefinitionID
-				sourceDefinitionVersion
-				sourceInstanceID
-				status
-				tags
-				updatedAt
-				updatedBy
-				updatedByImpersonator
-			}
-		}
-	}
+
+query GetAllCheckResults($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [CheckResultOrder!]) {
+  checkResults(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        details
+        externalURI
+        id
+        integrationID
+        integrationRunID
+        lastObservedAt
+        managedBy
+        ownerID
+        parentExternalID
+        source
+        sourceDefinitionID
+        sourceDefinitionVersion
+        sourceInstanceID
+        status
+        tags
+        updatedAt
+        updatedBy
+        updatedByImpersonator
+      }
+    }
+  }
 }
-query GetCheckResultByID ($checkResultId: ID!) {
-	checkResult(id: $checkResultId) {
-		createdAt
-		createdBy
-		details
-		externalURI
-		id
-		integrationID
-		integrationRunID
-		lastObservedAt
-		managedBy
-		parentExternalID
-		source
-		sourceDefinitionID
-		sourceDefinitionVersion
-		sourceInstanceID
-		status
-		tags
-		updatedAt
-		updatedBy
-		updatedByImpersonator
-	}
+
+query GetCheckResultByID($checkResultId: ID!) {
+  checkResult(id: $checkResultId) {
+    createdAt
+    createdBy
+    details
+    externalURI
+    id
+    integrationID
+    integrationRunID
+    lastObservedAt
+    managedBy
+    ownerID
+    parentExternalID
+    source
+    sourceDefinitionID
+    sourceDefinitionVersion
+    sourceInstanceID
+    status
+    tags
+    updatedAt
+    updatedBy
+    updatedByImpersonator
+  }
 }
-query GetCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [CheckResultOrder!], $where: CheckResultWhereInput) {
-	checkResults(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				createdAt
-				createdBy
-				details
-				externalURI
-				id
-				integrationID
-				integrationRunID
-				lastObservedAt
-				managedBy
-				parentExternalID
-				source
-				sourceDefinitionID
-				sourceDefinitionVersion
-				sourceInstanceID
-				status
-				tags
-				updatedAt
-				updatedBy
-				updatedByImpersonator
-			}
-		}
-	}
+
+query GetCheckResults($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [CheckResultOrder!], $where: CheckResultWhereInput) {
+  checkResults(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        details
+        externalURI
+        id
+        integrationID
+        integrationRunID
+        lastObservedAt
+        managedBy
+        ownerID
+        parentExternalID
+        source
+        sourceDefinitionID
+        sourceDefinitionVersion
+        sourceInstanceID
+        status
+        tags
+        updatedAt
+        updatedBy
+        updatedByImpersonator
+      }
+    }
+  }
 }
-mutation UpdateBulkCSVCheckResult ($input: Upload!) {
-	updateBulkCSVCheckResult(input: $input) {
-		checkResults {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-		updatedIDs
-		notUpdatedIDs
-		error
-	}
+
+mutation UpdateBulkCheckResult($ids: [ID!]!, $input: UpdateCheckResultInput!) {
+  updateBulkCheckResult(ids: $ids, input: $input) {
+    checkResults {
+      createdAt
+      createdBy
+      details
+      externalURI
+      id
+      integrationID
+      integrationRunID
+      lastObservedAt
+      managedBy
+      ownerID
+      parentExternalID
+      source
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      status
+      tags
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+    updatedIDs
+    notUpdatedIDs
+    error
+  }
 }
-mutation UpdateBulkCheckResult ($ids: [ID!]!, $input: UpdateCheckResultInput!) {
-	updateBulkCheckResult(ids: $ids, input: $input) {
-		checkResults {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-		updatedIDs
-		notUpdatedIDs
-		error
-	}
+
+mutation UpdateBulkCSVCheckResult($input: Upload!) {
+  updateBulkCSVCheckResult(input: $input) {
+    checkResults {
+      createdAt
+      createdBy
+      details
+      externalURI
+      id
+      integrationID
+      integrationRunID
+      lastObservedAt
+      managedBy
+      ownerID
+      parentExternalID
+      source
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      status
+      tags
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+    updatedIDs
+    notUpdatedIDs
+    error
+  }
 }
-mutation UpdateCheckResult ($updateCheckResultId: ID!, $input: UpdateCheckResultInput!) {
-	updateCheckResult(id: $updateCheckResultId, input: $input) {
-		checkResult {
-			createdAt
-			createdBy
-			details
-			externalURI
-			id
-			integrationID
-			integrationRunID
-			lastObservedAt
-			managedBy
-			parentExternalID
-			source
-			sourceDefinitionID
-			sourceDefinitionVersion
-			sourceInstanceID
-			status
-			tags
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
+
+mutation UpdateCheckResult($updateCheckResultId: ID!, $input: UpdateCheckResultInput!) {
+  updateCheckResult(id: $updateCheckResultId, input: $input) {
+    checkResult {
+      createdAt
+      createdBy
+      details
+      externalURI
+      id
+      integrationID
+      integrationRunID
+      lastObservedAt
+      managedBy
+      ownerID
+      parentExternalID
+      source
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      status
+      tags
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+  }
 }

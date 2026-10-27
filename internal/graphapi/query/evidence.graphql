@@ -10,9 +10,12 @@ mutation CreateBulkCSVEvidence ($input: Upload!) {
 			displayID
 			environmentID
 			environmentName
+			externalID
 			externalUUID
 			id
+			integrationRunID
 			isAutomated
+			managedBy
 			name
 			ownerID
 			renewalDate
@@ -20,6 +23,9 @@ mutation CreateBulkCSVEvidence ($input: Upload!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			updatedAt
@@ -218,9 +224,12 @@ query GetEvidenceByID ($evidenceId: ID!) {
 		displayID
 		environmentID
 		environmentName
+		externalID
 		externalUUID
 		id
+		integrationRunID
 		isAutomated
+		managedBy
 		name
 		ownerID
 		renewalDate
@@ -228,6 +237,9 @@ query GetEvidenceByID ($evidenceId: ID!) {
 		scopeID
 		scopeName
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		status
 		tags
 		updatedAt
@@ -396,9 +408,12 @@ mutation UpdateBulkEvidence ($ids: [ID!]!, $input: UpdateEvidenceInput!) {
 			displayID
 			environmentID
 			environmentName
+			externalID
 			externalUUID
 			id
+			integrationRunID
 			isAutomated
+			managedBy
 			name
 			ownerID
 			renewalDate
@@ -406,6 +421,9 @@ mutation UpdateBulkEvidence ($ids: [ID!]!, $input: UpdateEvidenceInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			updatedAt

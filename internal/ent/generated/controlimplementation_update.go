@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
@@ -142,6 +143,126 @@ func (_u *ControlImplementationUpdate) AppendTags(v []string) *ControlImplementa
 // ClearTags clears the value of the "tags" field.
 func (_u *ControlImplementationUpdate) ClearTags() *ControlImplementationUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *ControlImplementationUpdate) SetSourceDefinitionID(v string) *ControlImplementationUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *ControlImplementationUpdate) SetNillableSourceDefinitionID(v *string) *ControlImplementationUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *ControlImplementationUpdate) ClearSourceDefinitionID() *ControlImplementationUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *ControlImplementationUpdate) SetSourceDefinitionVersion(v string) *ControlImplementationUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *ControlImplementationUpdate) SetNillableSourceDefinitionVersion(v *string) *ControlImplementationUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *ControlImplementationUpdate) ClearSourceDefinitionVersion() *ControlImplementationUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *ControlImplementationUpdate) SetSourceInstanceID(v string) *ControlImplementationUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *ControlImplementationUpdate) SetNillableSourceInstanceID(v *string) *ControlImplementationUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *ControlImplementationUpdate) ClearSourceInstanceID() *ControlImplementationUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *ControlImplementationUpdate) SetManagedBy(v string) *ControlImplementationUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *ControlImplementationUpdate) SetNillableManagedBy(v *string) *ControlImplementationUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *ControlImplementationUpdate) ClearManagedBy() *ControlImplementationUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *ControlImplementationUpdate) SetIntegrationRunID(v string) *ControlImplementationUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *ControlImplementationUpdate) SetNillableIntegrationRunID(v *string) *ControlImplementationUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *ControlImplementationUpdate) ClearIntegrationRunID() *ControlImplementationUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *ControlImplementationUpdate) SetExternalID(v string) *ControlImplementationUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ControlImplementationUpdate) SetNillableExternalID(v *string) *ControlImplementationUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ControlImplementationUpdate) ClearExternalID() *ControlImplementationUpdate {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -303,6 +424,21 @@ func (_u *ControlImplementationUpdate) ClearDetailsJSON() *ControlImplementation
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *ControlImplementationUpdate) AddIntegrationRunIDs(ids ...string) *ControlImplementationUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *ControlImplementationUpdate) AddIntegrationRuns(v ...*IntegrationRun) *ControlImplementationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *ControlImplementationUpdate) AddBlockedGroupIDs(ids ...string) *ControlImplementationUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -396,6 +532,27 @@ func (_u *ControlImplementationUpdate) AddTasks(v ...*Task) *ControlImplementati
 // Mutation returns the ControlImplementationMutation object of the builder.
 func (_u *ControlImplementationUpdate) Mutation() *ControlImplementationMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *ControlImplementationUpdate) ClearIntegrationRuns() *ControlImplementationUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *ControlImplementationUpdate) RemoveIntegrationRunIDs(ids ...string) *ControlImplementationUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *ControlImplementationUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *ControlImplementationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -641,6 +798,42 @@ func (_u *ControlImplementationUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementation.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(controlimplementation.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(controlimplementation.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(controlimplementation.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(controlimplementation.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(controlimplementation.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(controlimplementation.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(controlimplementation.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(controlimplementation.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(controlimplementation.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(controlimplementation.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(controlimplementation.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(controlimplementation.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(controlimplementation.FieldSystemOwned, field.TypeBool)
 	}
@@ -696,6 +889,51 @@ func (_u *ControlImplementationUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(controlimplementation.FieldDetailsJSON, field.TypeJSON)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlimplementation.IntegrationRunsTable,
+			Columns: []string{controlimplementation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlimplementation.IntegrationRunsTable,
+			Columns: []string{controlimplementation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlimplementation.IntegrationRunsTable,
+			Columns: []string{controlimplementation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1099,6 +1337,126 @@ func (_u *ControlImplementationUpdateOne) ClearTags() *ControlImplementationUpda
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *ControlImplementationUpdateOne) SetSourceDefinitionID(v string) *ControlImplementationUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *ControlImplementationUpdateOne) SetNillableSourceDefinitionID(v *string) *ControlImplementationUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *ControlImplementationUpdateOne) ClearSourceDefinitionID() *ControlImplementationUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *ControlImplementationUpdateOne) SetSourceDefinitionVersion(v string) *ControlImplementationUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *ControlImplementationUpdateOne) SetNillableSourceDefinitionVersion(v *string) *ControlImplementationUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *ControlImplementationUpdateOne) ClearSourceDefinitionVersion() *ControlImplementationUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *ControlImplementationUpdateOne) SetSourceInstanceID(v string) *ControlImplementationUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *ControlImplementationUpdateOne) SetNillableSourceInstanceID(v *string) *ControlImplementationUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *ControlImplementationUpdateOne) ClearSourceInstanceID() *ControlImplementationUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *ControlImplementationUpdateOne) SetManagedBy(v string) *ControlImplementationUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *ControlImplementationUpdateOne) SetNillableManagedBy(v *string) *ControlImplementationUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *ControlImplementationUpdateOne) ClearManagedBy() *ControlImplementationUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *ControlImplementationUpdateOne) SetIntegrationRunID(v string) *ControlImplementationUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *ControlImplementationUpdateOne) SetNillableIntegrationRunID(v *string) *ControlImplementationUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *ControlImplementationUpdateOne) ClearIntegrationRunID() *ControlImplementationUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *ControlImplementationUpdateOne) SetExternalID(v string) *ControlImplementationUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ControlImplementationUpdateOne) SetNillableExternalID(v *string) *ControlImplementationUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ControlImplementationUpdateOne) ClearExternalID() *ControlImplementationUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ControlImplementationUpdateOne) SetInternalNotes(v string) *ControlImplementationUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -1257,6 +1615,21 @@ func (_u *ControlImplementationUpdateOne) ClearDetailsJSON() *ControlImplementat
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *ControlImplementationUpdateOne) AddIntegrationRunIDs(ids ...string) *ControlImplementationUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *ControlImplementationUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *ControlImplementationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *ControlImplementationUpdateOne) AddBlockedGroupIDs(ids ...string) *ControlImplementationUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1350,6 +1723,27 @@ func (_u *ControlImplementationUpdateOne) AddTasks(v ...*Task) *ControlImplement
 // Mutation returns the ControlImplementationMutation object of the builder.
 func (_u *ControlImplementationUpdateOne) Mutation() *ControlImplementationMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *ControlImplementationUpdateOne) ClearIntegrationRuns() *ControlImplementationUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *ControlImplementationUpdateOne) RemoveIntegrationRunIDs(ids ...string) *ControlImplementationUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *ControlImplementationUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *ControlImplementationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1625,6 +2019,42 @@ func (_u *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node *C
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementation.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(controlimplementation.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(controlimplementation.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(controlimplementation.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(controlimplementation.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(controlimplementation.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(controlimplementation.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(controlimplementation.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(controlimplementation.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(controlimplementation.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(controlimplementation.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(controlimplementation.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(controlimplementation.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(controlimplementation.FieldSystemOwned, field.TypeBool)
 	}
@@ -1680,6 +2110,51 @@ func (_u *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node *C
 	}
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(controlimplementation.FieldDetailsJSON, field.TypeJSON)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlimplementation.IntegrationRunsTable,
+			Columns: []string{controlimplementation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlimplementation.IntegrationRunsTable,
+			Columns: []string{controlimplementation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   controlimplementation.IntegrationRunsTable,
+			Columns: []string{controlimplementation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

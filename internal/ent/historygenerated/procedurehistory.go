@@ -58,6 +58,8 @@ type ProcedureHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the procedure
@@ -136,7 +138,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case procedurehistory.FieldApprovalRequired, procedurehistory.FieldSystemOwned, procedurehistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldUpdatedByImpersonator, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldSourceDefinitionID, procedurehistory.FieldSourceDefinitionVersion, procedurehistory.FieldSourceInstanceID, procedurehistory.FieldManagedBy, procedurehistory.FieldIntegrationRunID, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldManagementMode, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID, procedurehistory.FieldSummary, procedurehistory.FieldURL, procedurehistory.FieldFileID, procedurehistory.FieldExternalFileID, procedurehistory.FieldExternalContents, procedurehistory.FieldInternalNotes, procedurehistory.FieldSystemInternalID, procedurehistory.FieldProcedureKindName, procedurehistory.FieldProcedureKindID, procedurehistory.FieldEnvironmentName, procedurehistory.FieldEnvironmentID, procedurehistory.FieldScopeName, procedurehistory.FieldScopeID:
+		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldUpdatedByImpersonator, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldSourceDefinitionID, procedurehistory.FieldSourceDefinitionVersion, procedurehistory.FieldSourceInstanceID, procedurehistory.FieldManagedBy, procedurehistory.FieldIntegrationRunID, procedurehistory.FieldExternalID, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldManagementMode, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID, procedurehistory.FieldSummary, procedurehistory.FieldURL, procedurehistory.FieldFileID, procedurehistory.FieldExternalFileID, procedurehistory.FieldExternalContents, procedurehistory.FieldInternalNotes, procedurehistory.FieldSystemInternalID, procedurehistory.FieldProcedureKindName, procedurehistory.FieldProcedureKindID, procedurehistory.FieldEnvironmentName, procedurehistory.FieldEnvironmentID, procedurehistory.FieldScopeName, procedurehistory.FieldScopeID:
 			values[i] = new(sql.NullString)
 		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt, procedurehistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -271,6 +273,12 @@ func (_m *ProcedureHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case procedurehistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case procedurehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -575,6 +583,9 @@ func (_m *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

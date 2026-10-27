@@ -97,6 +97,24 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidencehistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(evidencehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(evidencehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(evidencehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(evidencehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(evidencehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(evidencehistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
@@ -262,6 +280,24 @@ func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evidenc
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidencehistory.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(evidencehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(evidencehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(evidencehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(evidencehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(evidencehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(evidencehistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -147,6 +148,126 @@ func (_u *AssessmentUpdate) AppendTags(v []string) *AssessmentUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *AssessmentUpdate) ClearTags() *AssessmentUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *AssessmentUpdate) SetSourceDefinitionID(v string) *AssessmentUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableSourceDefinitionID(v *string) *AssessmentUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *AssessmentUpdate) ClearSourceDefinitionID() *AssessmentUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *AssessmentUpdate) SetSourceDefinitionVersion(v string) *AssessmentUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableSourceDefinitionVersion(v *string) *AssessmentUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *AssessmentUpdate) ClearSourceDefinitionVersion() *AssessmentUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *AssessmentUpdate) SetSourceInstanceID(v string) *AssessmentUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableSourceInstanceID(v *string) *AssessmentUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *AssessmentUpdate) ClearSourceInstanceID() *AssessmentUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *AssessmentUpdate) SetManagedBy(v string) *AssessmentUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableManagedBy(v *string) *AssessmentUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *AssessmentUpdate) ClearManagedBy() *AssessmentUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *AssessmentUpdate) SetIntegrationRunID(v string) *AssessmentUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableIntegrationRunID(v *string) *AssessmentUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *AssessmentUpdate) ClearIntegrationRunID() *AssessmentUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *AssessmentUpdate) SetExternalID(v string) *AssessmentUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableExternalID(v *string) *AssessmentUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *AssessmentUpdate) ClearExternalID() *AssessmentUpdate {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -309,6 +430,21 @@ func (_u *AssessmentUpdate) ClearResponseDueDuration() *AssessmentUpdate {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *AssessmentUpdate) AddIntegrationRunIDs(ids ...string) *AssessmentUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssessmentUpdate) AddIntegrationRuns(v ...*IntegrationRun) *AssessmentUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *AssessmentUpdate) AddBlockedGroupIDs(ids ...string) *AssessmentUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -467,6 +603,27 @@ func (_u *AssessmentUpdate) AddPolicyAttestations(v ...*AssessmentPolicy) *Asses
 // Mutation returns the AssessmentMutation object of the builder.
 func (_u *AssessmentUpdate) Mutation() *AssessmentMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssessmentUpdate) ClearIntegrationRuns() *AssessmentUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *AssessmentUpdate) RemoveIntegrationRunIDs(ids ...string) *AssessmentUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *AssessmentUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *AssessmentUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -807,6 +964,42 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessment.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(assessment.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(assessment.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(assessment.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(assessment.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(assessment.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(assessment.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(assessment.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(assessment.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(assessment.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(assessment.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(assessment.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(assessment.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(assessment.FieldSystemOwned, field.TypeBool)
 	}
@@ -854,6 +1047,51 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.ResponseDueDurationCleared() {
 		_spec.ClearField(assessment.FieldResponseDueDuration, field.TypeInt64)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.IntegrationRunsTable,
+			Columns: []string{assessment.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.IntegrationRunsTable,
+			Columns: []string{assessment.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.IntegrationRunsTable,
+			Columns: []string{assessment.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1487,6 +1725,126 @@ func (_u *AssessmentUpdateOne) ClearTags() *AssessmentUpdateOne {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *AssessmentUpdateOne) SetSourceDefinitionID(v string) *AssessmentUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableSourceDefinitionID(v *string) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *AssessmentUpdateOne) ClearSourceDefinitionID() *AssessmentUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *AssessmentUpdateOne) SetSourceDefinitionVersion(v string) *AssessmentUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableSourceDefinitionVersion(v *string) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *AssessmentUpdateOne) ClearSourceDefinitionVersion() *AssessmentUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *AssessmentUpdateOne) SetSourceInstanceID(v string) *AssessmentUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableSourceInstanceID(v *string) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *AssessmentUpdateOne) ClearSourceInstanceID() *AssessmentUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *AssessmentUpdateOne) SetManagedBy(v string) *AssessmentUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableManagedBy(v *string) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *AssessmentUpdateOne) ClearManagedBy() *AssessmentUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *AssessmentUpdateOne) SetIntegrationRunID(v string) *AssessmentUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableIntegrationRunID(v *string) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *AssessmentUpdateOne) ClearIntegrationRunID() *AssessmentUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *AssessmentUpdateOne) SetExternalID(v string) *AssessmentUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableExternalID(v *string) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *AssessmentUpdateOne) ClearExternalID() *AssessmentUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *AssessmentUpdateOne) SetInternalNotes(v string) *AssessmentUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -1644,6 +2002,21 @@ func (_u *AssessmentUpdateOne) AddResponseDueDuration(v int64) *AssessmentUpdate
 func (_u *AssessmentUpdateOne) ClearResponseDueDuration() *AssessmentUpdateOne {
 	_u.mutation.ClearResponseDueDuration()
 	return _u
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *AssessmentUpdateOne) AddIntegrationRunIDs(ids ...string) *AssessmentUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssessmentUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *AssessmentUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -1804,6 +2177,27 @@ func (_u *AssessmentUpdateOne) AddPolicyAttestations(v ...*AssessmentPolicy) *As
 // Mutation returns the AssessmentMutation object of the builder.
 func (_u *AssessmentUpdateOne) Mutation() *AssessmentMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssessmentUpdateOne) ClearIntegrationRuns() *AssessmentUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *AssessmentUpdateOne) RemoveIntegrationRunIDs(ids ...string) *AssessmentUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *AssessmentUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *AssessmentUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -2174,6 +2568,42 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessment.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(assessment.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(assessment.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(assessment.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(assessment.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(assessment.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(assessment.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(assessment.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(assessment.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(assessment.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(assessment.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(assessment.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(assessment.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(assessment.FieldSystemOwned, field.TypeBool)
 	}
@@ -2221,6 +2651,51 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	}
 	if _u.mutation.ResponseDueDurationCleared() {
 		_spec.ClearField(assessment.FieldResponseDueDuration, field.TypeInt64)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.IntegrationRunsTable,
+			Columns: []string{assessment.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.IntegrationRunsTable,
+			Columns: []string{assessment.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessment.IntegrationRunsTable,
+			Columns: []string{assessment.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

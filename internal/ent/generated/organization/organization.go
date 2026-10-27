@@ -365,6 +365,8 @@ const (
 	EdgeVendorScoringConfigs = "vendor_scoring_configs"
 	// EdgeVendorRiskScores holds the string denoting the vendor_risk_scores edge name in mutations.
 	EdgeVendorRiskScores = "vendor_risk_scores"
+	// EdgeCheckResults holds the string denoting the check_results edge name in mutations.
+	EdgeCheckResults = "check_results"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -1454,6 +1456,13 @@ const (
 	VendorRiskScoresInverseTable = "vendor_risk_scores"
 	// VendorRiskScoresColumn is the table column denoting the vendor_risk_scores relation/edge.
 	VendorRiskScoresColumn = "owner_id"
+	// CheckResultsTable is the table that holds the check_results relation/edge.
+	CheckResultsTable = "check_results"
+	// CheckResultsInverseTable is the table name for the CheckResult entity.
+	// It exists in this package in order to avoid circular dependency with the "checkresult" package.
+	CheckResultsInverseTable = "check_results"
+	// CheckResultsColumn is the table column denoting the check_results relation/edge.
+	CheckResultsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -3816,6 +3825,20 @@ func ByVendorRiskScores(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByCheckResultsCount orders the results by check_results count.
+func ByCheckResultsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCheckResultsStep(), opts...)
+	}
+}
+
+// ByCheckResults orders the results by check_results terms.
+func ByCheckResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCheckResultsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -4926,6 +4949,13 @@ func newVendorRiskScoresStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VendorRiskScoresInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
+	)
+}
+func newCheckResultsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CheckResultsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CheckResultsTable, CheckResultsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

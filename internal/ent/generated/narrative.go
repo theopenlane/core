@@ -37,6 +37,18 @@ type Narrative struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -61,6 +73,8 @@ type Narrative struct {
 
 // NarrativeEdges holds the relations/edges for other nodes in the graph.
 type NarrativeEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -79,10 +93,11 @@ type NarrativeEdges struct {
 	Procedures []*Procedure `json:"procedures,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [9]map[string]int
 
+	namedIntegrationRuns  map[string][]*IntegrationRun
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
 	namedViewers          map[string][]*Group
@@ -92,12 +107,21 @@ type NarrativeEdges struct {
 	namedProcedures       map[string][]*Procedure
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e NarrativeEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e NarrativeEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -106,7 +130,7 @@ func (e NarrativeEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -115,7 +139,7 @@ func (e NarrativeEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -124,7 +148,7 @@ func (e NarrativeEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -133,7 +157,7 @@ func (e NarrativeEdges) ViewersOrErr() ([]*Group, error) {
 // SatisfiesOrErr returns the Satisfies value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) SatisfiesOrErr() ([]*Control, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Satisfies, nil
 	}
 	return nil, &NotLoadedError{edge: "satisfies"}
@@ -142,7 +166,7 @@ func (e NarrativeEdges) SatisfiesOrErr() ([]*Control, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -151,7 +175,7 @@ func (e NarrativeEdges) ProgramsOrErr() ([]*Program, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -160,7 +184,7 @@ func (e NarrativeEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e NarrativeEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -175,7 +199,7 @@ func (*Narrative) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case narrative.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case narrative.FieldID, narrative.FieldCreatedBy, narrative.FieldUpdatedBy, narrative.FieldUpdatedByImpersonator, narrative.FieldDeletedBy, narrative.FieldDisplayID, narrative.FieldOwnerID, narrative.FieldInternalNotes, narrative.FieldSystemInternalID, narrative.FieldName, narrative.FieldDescription, narrative.FieldDetails:
+		case narrative.FieldID, narrative.FieldCreatedBy, narrative.FieldUpdatedBy, narrative.FieldUpdatedByImpersonator, narrative.FieldDeletedBy, narrative.FieldDisplayID, narrative.FieldSourceDefinitionID, narrative.FieldSourceDefinitionVersion, narrative.FieldSourceInstanceID, narrative.FieldManagedBy, narrative.FieldIntegrationRunID, narrative.FieldExternalID, narrative.FieldOwnerID, narrative.FieldInternalNotes, narrative.FieldSystemInternalID, narrative.FieldName, narrative.FieldDescription, narrative.FieldDetails:
 			values[i] = new(sql.NullString)
 		case narrative.FieldCreatedAt, narrative.FieldUpdatedAt, narrative.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -261,6 +285,42 @@ func (_m *Narrative) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case narrative.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case narrative.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case narrative.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case narrative.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case narrative.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case narrative.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		case narrative.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -330,6 +390,11 @@ func (_m *Narrative) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Narrative) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryIntegrationRuns queries the "integration_runs" edge of the Narrative entity.
+func (_m *Narrative) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewNarrativeClient(_m.config).QueryIntegrationRuns(_m)
 }
 
 // QueryOwner queries the "owner" edge of the Narrative entity.
@@ -424,6 +489,24 @@ func (_m *Narrative) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -450,6 +533,30 @@ func (_m *Narrative) String() string {
 	builder.WriteString(_m.Details)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Narrative) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Narrative) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

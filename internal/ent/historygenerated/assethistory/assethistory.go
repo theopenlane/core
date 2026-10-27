@@ -52,6 +52,8 @@ const (
 	FieldManagedBy = "managed_by"
 	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
@@ -161,6 +163,7 @@ var Columns = []string{
 	FieldSourceInstanceID,
 	FieldManagedBy,
 	FieldIntegrationRunID,
+	FieldExternalID,
 	FieldOwnerID,
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
@@ -356,6 +359,11 @@ func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByIntegrationRunID orders the results by the integration_run_id field.
 func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

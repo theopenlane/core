@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
@@ -138,6 +139,90 @@ func (_c *EmailTemplateCreate) SetRevision(v string) *EmailTemplateCreate {
 func (_c *EmailTemplateCreate) SetNillableRevision(v *string) *EmailTemplateCreate {
 	if v != nil {
 		_c.SetRevision(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *EmailTemplateCreate) SetSourceDefinitionID(v string) *EmailTemplateCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableSourceDefinitionID(v *string) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *EmailTemplateCreate) SetSourceDefinitionVersion(v string) *EmailTemplateCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableSourceDefinitionVersion(v *string) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *EmailTemplateCreate) SetSourceInstanceID(v string) *EmailTemplateCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableSourceInstanceID(v *string) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *EmailTemplateCreate) SetManagedBy(v string) *EmailTemplateCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableManagedBy(v *string) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *EmailTemplateCreate) SetIntegrationRunID(v string) *EmailTemplateCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableIntegrationRunID(v *string) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *EmailTemplateCreate) SetExternalID(v string) *EmailTemplateCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *EmailTemplateCreate) SetNillableExternalID(v *string) *EmailTemplateCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -442,6 +527,21 @@ func (_c *EmailTemplateCreate) SetNillableID(v *string) *EmailTemplateCreate {
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *EmailTemplateCreate) AddIntegrationRunIDs(ids ...string) *EmailTemplateCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *EmailTemplateCreate) AddIntegrationRuns(v ...*IntegrationRun) *EmailTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -758,6 +858,30 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 		_spec.SetField(emailtemplate.FieldRevision, field.TypeString, value)
 		_node.Revision = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(emailtemplate.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(emailtemplate.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(emailtemplate.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(emailtemplate.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(emailtemplate.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(emailtemplate.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(emailtemplate.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -833,6 +957,22 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Defaults(); ok {
 		_spec.SetField(emailtemplate.FieldDefaults, field.TypeJSON, value)
 		_node.Defaults = value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   emailtemplate.IntegrationRunsTable,
+			Columns: []string{emailtemplate.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

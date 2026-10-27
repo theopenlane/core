@@ -188,6 +188,7 @@ type ActionPlanHistoryMutation struct {
 	source_instance_id                      *string
 	managed_by                              *string
 	integration_run_id                      *string
+	external_id                             *string
 	name                                    *string
 	status                                  *enums.DocumentStatus
 	management_mode                         *enums.DocumentManagementMode
@@ -1169,6 +1170,55 @@ func (m *ActionPlanHistoryMutation) IntegrationRunIDCleared() bool {
 func (m *ActionPlanHistoryMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, actionplanhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *ActionPlanHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *ActionPlanHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the ActionPlanHistory entity.
+// If the ActionPlanHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ActionPlanHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *ActionPlanHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[actionplanhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *ActionPlanHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[actionplanhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *ActionPlanHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, actionplanhistory.FieldExternalID)
 }
 
 // SetName sets the "name" field.
@@ -3372,7 +3422,7 @@ func (m *ActionPlanHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ActionPlanHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 60)
+	fields := make([]string, 0, 61)
 	if m.history_time != nil {
 		fields = append(fields, actionplanhistory.FieldHistoryTime)
 	}
@@ -3423,6 +3473,9 @@ func (m *ActionPlanHistoryMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, actionplanhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, actionplanhistory.FieldExternalID)
 	}
 	if m.name != nil {
 		fields = append(fields, actionplanhistory.FieldName)
@@ -3595,6 +3648,8 @@ func (m *ActionPlanHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case actionplanhistory.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case actionplanhistory.FieldExternalID:
+		return m.ExternalID()
 	case actionplanhistory.FieldName:
 		return m.Name()
 	case actionplanhistory.FieldStatus:
@@ -3724,6 +3779,8 @@ func (m *ActionPlanHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldManagedBy(ctx)
 	case actionplanhistory.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case actionplanhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case actionplanhistory.FieldName:
 		return m.OldName(ctx)
 	case actionplanhistory.FieldStatus:
@@ -3937,6 +3994,13 @@ func (m *ActionPlanHistoryMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case actionplanhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case actionplanhistory.FieldName:
 		v, ok := value.(string)
@@ -4314,6 +4378,9 @@ func (m *ActionPlanHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(actionplanhistory.FieldIntegrationRunID) {
 		fields = append(fields, actionplanhistory.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(actionplanhistory.FieldExternalID) {
+		fields = append(fields, actionplanhistory.FieldExternalID)
+	}
 	if m.FieldCleared(actionplanhistory.FieldStatus) {
 		fields = append(fields, actionplanhistory.FieldStatus)
 	}
@@ -4490,6 +4557,9 @@ func (m *ActionPlanHistoryMutation) ClearField(name string) error {
 	case actionplanhistory.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case actionplanhistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case actionplanhistory.FieldStatus:
 		m.ClearStatus()
 		return nil
@@ -4665,6 +4735,9 @@ func (m *ActionPlanHistoryMutation) ResetField(name string) error {
 		return nil
 	case actionplanhistory.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case actionplanhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case actionplanhistory.FieldName:
 		m.ResetName()
@@ -4850,37 +4923,43 @@ func (m *ActionPlanHistoryMutation) ResetEdge(name string) error {
 // AssessmentHistoryMutation represents an operation that mutates the AssessmentHistory nodes in the graph.
 type AssessmentHistoryMutation struct {
 	config
-	op                       Op
-	typ                      string
-	id                       *string
-	history_time             *time.Time
-	ref                      *string
-	operation                *history.OpType
-	created_at               *time.Time
-	updated_at               *time.Time
-	created_by               *string
-	updated_by               *string
-	updated_by_impersonator  *string
-	deleted_at               *time.Time
-	deleted_by               *string
-	tags                     *[]string
-	appendtags               []string
-	owner_id                 *string
-	system_owned             *bool
-	internal_notes           *string
-	system_internal_id       *string
-	workflow_eligible_marker *bool
-	name                     *string
-	assessment_type          *enums.AssessmentType
-	template_id              *string
-	jsonconfig               *map[string]interface{}
-	uischema                 *map[string]interface{}
-	response_due_duration    *int64
-	addresponse_due_duration *int64
-	clearedFields            map[string]struct{}
-	done                     bool
-	oldValue                 func(context.Context) (*AssessmentHistory, error)
-	predicates               []predicate.AssessmentHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	workflow_eligible_marker  *bool
+	name                      *string
+	assessment_type           *enums.AssessmentType
+	template_id               *string
+	jsonconfig                *map[string]interface{}
+	uischema                  *map[string]interface{}
+	response_due_duration     *int64
+	addresponse_due_duration  *int64
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*AssessmentHistory, error)
+	predicates                []predicate.AssessmentHistory
 }
 
 var _ ent.Mutation = (*AssessmentHistoryMutation)(nil)
@@ -5516,6 +5595,300 @@ func (m *AssessmentHistoryMutation) ResetTags() {
 	delete(m.clearedFields, assessmenthistory.FieldTags)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *AssessmentHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *AssessmentHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the AssessmentHistory entity.
+// If the AssessmentHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *AssessmentHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[assessmenthistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *AssessmentHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[assessmenthistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *AssessmentHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, assessmenthistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *AssessmentHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *AssessmentHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the AssessmentHistory entity.
+// If the AssessmentHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *AssessmentHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[assessmenthistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *AssessmentHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[assessmenthistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *AssessmentHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, assessmenthistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *AssessmentHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *AssessmentHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the AssessmentHistory entity.
+// If the AssessmentHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *AssessmentHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[assessmenthistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *AssessmentHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[assessmenthistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *AssessmentHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, assessmenthistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *AssessmentHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *AssessmentHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the AssessmentHistory entity.
+// If the AssessmentHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *AssessmentHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[assessmenthistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *AssessmentHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[assessmenthistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *AssessmentHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, assessmenthistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *AssessmentHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *AssessmentHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the AssessmentHistory entity.
+// If the AssessmentHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *AssessmentHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[assessmenthistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *AssessmentHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[assessmenthistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *AssessmentHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, assessmenthistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *AssessmentHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *AssessmentHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the AssessmentHistory entity.
+// If the AssessmentHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *AssessmentHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[assessmenthistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *AssessmentHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[assessmenthistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *AssessmentHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, assessmenthistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *AssessmentHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -6084,7 +6457,7 @@ func (m *AssessmentHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AssessmentHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 22)
+	fields := make([]string, 0, 28)
 	if m.history_time != nil {
 		fields = append(fields, assessmenthistory.FieldHistoryTime)
 	}
@@ -6117,6 +6490,24 @@ func (m *AssessmentHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, assessmenthistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, assessmenthistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, assessmenthistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, assessmenthistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, assessmenthistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, assessmenthistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, assessmenthistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, assessmenthistory.FieldOwnerID)
@@ -6181,6 +6572,18 @@ func (m *AssessmentHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedBy()
 	case assessmenthistory.FieldTags:
 		return m.Tags()
+	case assessmenthistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case assessmenthistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case assessmenthistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case assessmenthistory.FieldManagedBy:
+		return m.ManagedBy()
+	case assessmenthistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case assessmenthistory.FieldExternalID:
+		return m.ExternalID()
 	case assessmenthistory.FieldOwnerID:
 		return m.OwnerID()
 	case assessmenthistory.FieldSystemOwned:
@@ -6234,6 +6637,18 @@ func (m *AssessmentHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldDeletedBy(ctx)
 	case assessmenthistory.FieldTags:
 		return m.OldTags(ctx)
+	case assessmenthistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case assessmenthistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case assessmenthistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case assessmenthistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case assessmenthistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case assessmenthistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case assessmenthistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case assessmenthistory.FieldSystemOwned:
@@ -6341,6 +6756,48 @@ func (m *AssessmentHistoryMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case assessmenthistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case assessmenthistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case assessmenthistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case assessmenthistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case assessmenthistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case assessmenthistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case assessmenthistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -6491,6 +6948,24 @@ func (m *AssessmentHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(assessmenthistory.FieldTags) {
 		fields = append(fields, assessmenthistory.FieldTags)
 	}
+	if m.FieldCleared(assessmenthistory.FieldSourceDefinitionID) {
+		fields = append(fields, assessmenthistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(assessmenthistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, assessmenthistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(assessmenthistory.FieldSourceInstanceID) {
+		fields = append(fields, assessmenthistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(assessmenthistory.FieldManagedBy) {
+		fields = append(fields, assessmenthistory.FieldManagedBy)
+	}
+	if m.FieldCleared(assessmenthistory.FieldIntegrationRunID) {
+		fields = append(fields, assessmenthistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(assessmenthistory.FieldExternalID) {
+		fields = append(fields, assessmenthistory.FieldExternalID)
+	}
 	if m.FieldCleared(assessmenthistory.FieldOwnerID) {
 		fields = append(fields, assessmenthistory.FieldOwnerID)
 	}
@@ -6559,6 +7034,24 @@ func (m *AssessmentHistoryMutation) ClearField(name string) error {
 	case assessmenthistory.FieldTags:
 		m.ClearTags()
 		return nil
+	case assessmenthistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case assessmenthistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case assessmenthistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case assessmenthistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case assessmenthistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case assessmenthistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case assessmenthistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -6626,6 +7119,24 @@ func (m *AssessmentHistoryMutation) ResetField(name string) error {
 		return nil
 	case assessmenthistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case assessmenthistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case assessmenthistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case assessmenthistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case assessmenthistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case assessmenthistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case assessmenthistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case assessmenthistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -6715,25 +7226,31 @@ func (m *AssessmentHistoryMutation) ResetEdge(name string) error {
 // AssessmentPolicyHistoryMutation represents an operation that mutates the AssessmentPolicyHistory nodes in the graph.
 type AssessmentPolicyHistoryMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	history_time            *time.Time
-	ref                     *string
-	operation               *history.OpType
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	owner_id                *string
-	assessment_id           *string
-	internal_policy_id      *string
-	policy_revision         *string
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*AssessmentPolicyHistory, error)
-	predicates              []predicate.AssessmentPolicyHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	assessment_id             *string
+	internal_policy_id        *string
+	policy_revision           *string
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*AssessmentPolicyHistory, error)
+	predicates                []predicate.AssessmentPolicyHistory
 }
 
 var _ ent.Mutation = (*AssessmentPolicyHistoryMutation)(nil)
@@ -7206,6 +7723,300 @@ func (m *AssessmentPolicyHistoryMutation) ResetUpdatedByImpersonator() {
 	delete(m.clearedFields, assessmentpolicyhistory.FieldUpdatedByImpersonator)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *AssessmentPolicyHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *AssessmentPolicyHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the AssessmentPolicyHistory entity.
+// If the AssessmentPolicyHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *AssessmentPolicyHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[assessmentpolicyhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *AssessmentPolicyHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicyhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *AssessmentPolicyHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, assessmentpolicyhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *AssessmentPolicyHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *AssessmentPolicyHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the AssessmentPolicyHistory entity.
+// If the AssessmentPolicyHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *AssessmentPolicyHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[assessmentpolicyhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *AssessmentPolicyHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicyhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *AssessmentPolicyHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, assessmentpolicyhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *AssessmentPolicyHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *AssessmentPolicyHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the AssessmentPolicyHistory entity.
+// If the AssessmentPolicyHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *AssessmentPolicyHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[assessmentpolicyhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *AssessmentPolicyHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicyhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *AssessmentPolicyHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, assessmentpolicyhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *AssessmentPolicyHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *AssessmentPolicyHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the AssessmentPolicyHistory entity.
+// If the AssessmentPolicyHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *AssessmentPolicyHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[assessmentpolicyhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *AssessmentPolicyHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicyhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *AssessmentPolicyHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, assessmentpolicyhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *AssessmentPolicyHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *AssessmentPolicyHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the AssessmentPolicyHistory entity.
+// If the AssessmentPolicyHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *AssessmentPolicyHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[assessmentpolicyhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *AssessmentPolicyHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicyhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *AssessmentPolicyHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, assessmentpolicyhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *AssessmentPolicyHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *AssessmentPolicyHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the AssessmentPolicyHistory entity.
+// If the AssessmentPolicyHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssessmentPolicyHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *AssessmentPolicyHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[assessmentpolicyhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *AssessmentPolicyHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[assessmentpolicyhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *AssessmentPolicyHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, assessmentpolicyhistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *AssessmentPolicyHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -7410,7 +8221,7 @@ func (m *AssessmentPolicyHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AssessmentPolicyHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 18)
 	if m.history_time != nil {
 		fields = append(fields, assessmentpolicyhistory.FieldHistoryTime)
 	}
@@ -7434,6 +8245,24 @@ func (m *AssessmentPolicyHistoryMutation) Fields() []string {
 	}
 	if m.updated_by_impersonator != nil {
 		fields = append(fields, assessmentpolicyhistory.FieldUpdatedByImpersonator)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, assessmentpolicyhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, assessmentpolicyhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, assessmentpolicyhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, assessmentpolicyhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, assessmentpolicyhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, assessmentpolicyhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, assessmentpolicyhistory.FieldOwnerID)
@@ -7471,6 +8300,18 @@ func (m *AssessmentPolicyHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case assessmentpolicyhistory.FieldUpdatedByImpersonator:
 		return m.UpdatedByImpersonator()
+	case assessmentpolicyhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case assessmentpolicyhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case assessmentpolicyhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case assessmentpolicyhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case assessmentpolicyhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case assessmentpolicyhistory.FieldExternalID:
+		return m.ExternalID()
 	case assessmentpolicyhistory.FieldOwnerID:
 		return m.OwnerID()
 	case assessmentpolicyhistory.FieldAssessmentID:
@@ -7504,6 +8345,18 @@ func (m *AssessmentPolicyHistoryMutation) OldField(ctx context.Context, name str
 		return m.OldUpdatedBy(ctx)
 	case assessmentpolicyhistory.FieldUpdatedByImpersonator:
 		return m.OldUpdatedByImpersonator(ctx)
+	case assessmentpolicyhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case assessmentpolicyhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case assessmentpolicyhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case assessmentpolicyhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case assessmentpolicyhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case assessmentpolicyhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case assessmentpolicyhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case assessmentpolicyhistory.FieldAssessmentID:
@@ -7576,6 +8429,48 @@ func (m *AssessmentPolicyHistoryMutation) SetField(name string, value ent.Value)
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedByImpersonator(v)
+		return nil
+	case assessmentpolicyhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case assessmentpolicyhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case assessmentpolicyhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case assessmentpolicyhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case assessmentpolicyhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case assessmentpolicyhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case assessmentpolicyhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -7653,6 +8548,24 @@ func (m *AssessmentPolicyHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(assessmentpolicyhistory.FieldUpdatedByImpersonator) {
 		fields = append(fields, assessmentpolicyhistory.FieldUpdatedByImpersonator)
 	}
+	if m.FieldCleared(assessmentpolicyhistory.FieldSourceDefinitionID) {
+		fields = append(fields, assessmentpolicyhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(assessmentpolicyhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, assessmentpolicyhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(assessmentpolicyhistory.FieldSourceInstanceID) {
+		fields = append(fields, assessmentpolicyhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(assessmentpolicyhistory.FieldManagedBy) {
+		fields = append(fields, assessmentpolicyhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(assessmentpolicyhistory.FieldIntegrationRunID) {
+		fields = append(fields, assessmentpolicyhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(assessmentpolicyhistory.FieldExternalID) {
+		fields = append(fields, assessmentpolicyhistory.FieldExternalID)
+	}
 	if m.FieldCleared(assessmentpolicyhistory.FieldOwnerID) {
 		fields = append(fields, assessmentpolicyhistory.FieldOwnerID)
 	}
@@ -7691,6 +8604,24 @@ func (m *AssessmentPolicyHistoryMutation) ClearField(name string) error {
 	case assessmentpolicyhistory.FieldUpdatedByImpersonator:
 		m.ClearUpdatedByImpersonator()
 		return nil
+	case assessmentpolicyhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case assessmentpolicyhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case assessmentpolicyhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case assessmentpolicyhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case assessmentpolicyhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case assessmentpolicyhistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case assessmentpolicyhistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -7728,6 +8659,24 @@ func (m *AssessmentPolicyHistoryMutation) ResetField(name string) error {
 		return nil
 	case assessmentpolicyhistory.FieldUpdatedByImpersonator:
 		m.ResetUpdatedByImpersonator()
+		return nil
+	case assessmentpolicyhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case assessmentpolicyhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case assessmentpolicyhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case assessmentpolicyhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case assessmentpolicyhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case assessmentpolicyhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case assessmentpolicyhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -10512,6 +11461,7 @@ type AssetHistoryMutation struct {
 	source_instance_id                *string
 	managed_by                        *string
 	integration_run_id                *string
+	external_id                       *string
 	owner_id                          *string
 	internal_owner                    *string
 	internal_owner_user_id            *string
@@ -11439,6 +12389,55 @@ func (m *AssetHistoryMutation) IntegrationRunIDCleared() bool {
 func (m *AssetHistoryMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, assethistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *AssetHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *AssetHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the AssetHistory entity.
+// If the AssetHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssetHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *AssetHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[assethistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *AssetHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[assethistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *AssetHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, assethistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -13580,7 +14579,7 @@ func (m *AssetHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AssetHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 59)
+	fields := make([]string, 0, 60)
 	if m.history_time != nil {
 		fields = append(fields, assethistory.FieldHistoryTime)
 	}
@@ -13628,6 +14627,9 @@ func (m *AssetHistoryMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, assethistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, assethistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, assethistory.FieldOwnerID)
@@ -13798,6 +14800,8 @@ func (m *AssetHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case assethistory.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case assethistory.FieldExternalID:
+		return m.ExternalID()
 	case assethistory.FieldOwnerID:
 		return m.OwnerID()
 	case assethistory.FieldInternalOwner:
@@ -13925,6 +14929,8 @@ func (m *AssetHistoryMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldManagedBy(ctx)
 	case assethistory.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case assethistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case assethistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case assethistory.FieldInternalOwner:
@@ -14131,6 +15137,13 @@ func (m *AssetHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case assethistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case assethistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -14520,6 +15533,9 @@ func (m *AssetHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(assethistory.FieldIntegrationRunID) {
 		fields = append(fields, assethistory.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(assethistory.FieldExternalID) {
+		fields = append(fields, assethistory.FieldExternalID)
+	}
 	if m.FieldCleared(assethistory.FieldOwnerID) {
 		fields = append(fields, assethistory.FieldOwnerID)
 	}
@@ -14696,6 +15712,9 @@ func (m *AssetHistoryMutation) ClearField(name string) error {
 	case assethistory.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case assethistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case assethistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -14871,6 +15890,9 @@ func (m *AssetHistoryMutation) ResetField(name string) error {
 		return nil
 	case assethistory.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case assethistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case assethistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -15072,6 +16094,12 @@ type CampaignHistoryMutation struct {
 	display_id                        *string
 	tags                              *[]string
 	appendtags                        []string
+	source_definition_id              *string
+	source_definition_version         *string
+	source_instance_id                *string
+	managed_by                        *string
+	integration_run_id                *string
+	external_id                       *string
 	owner_id                          *string
 	internal_owner                    *string
 	internal_owner_user_id            *string
@@ -15782,6 +16810,300 @@ func (m *CampaignHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, campaignhistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *CampaignHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *CampaignHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the CampaignHistory entity.
+// If the CampaignHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *CampaignHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[campaignhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *CampaignHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[campaignhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *CampaignHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, campaignhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *CampaignHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *CampaignHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the CampaignHistory entity.
+// If the CampaignHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *CampaignHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[campaignhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *CampaignHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[campaignhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *CampaignHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, campaignhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *CampaignHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *CampaignHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the CampaignHistory entity.
+// If the CampaignHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *CampaignHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[campaignhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *CampaignHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[campaignhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *CampaignHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, campaignhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *CampaignHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *CampaignHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the CampaignHistory entity.
+// If the CampaignHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *CampaignHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[campaignhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *CampaignHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[campaignhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *CampaignHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, campaignhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *CampaignHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *CampaignHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the CampaignHistory entity.
+// If the CampaignHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *CampaignHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[campaignhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *CampaignHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[campaignhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *CampaignHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, campaignhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *CampaignHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *CampaignHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the CampaignHistory entity.
+// If the CampaignHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *CampaignHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[campaignhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *CampaignHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[campaignhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *CampaignHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, campaignhistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -17482,7 +18804,7 @@ func (m *CampaignHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CampaignHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 46)
+	fields := make([]string, 0, 52)
 	if m.history_time != nil {
 		fields = append(fields, campaignhistory.FieldHistoryTime)
 	}
@@ -17518,6 +18840,24 @@ func (m *CampaignHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, campaignhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, campaignhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, campaignhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, campaignhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, campaignhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, campaignhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, campaignhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, campaignhistory.FieldOwnerID)
@@ -17653,6 +18993,18 @@ func (m *CampaignHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case campaignhistory.FieldTags:
 		return m.Tags()
+	case campaignhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case campaignhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case campaignhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case campaignhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case campaignhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case campaignhistory.FieldExternalID:
+		return m.ExternalID()
 	case campaignhistory.FieldOwnerID:
 		return m.OwnerID()
 	case campaignhistory.FieldInternalOwner:
@@ -17754,6 +19106,18 @@ func (m *CampaignHistoryMutation) OldField(ctx context.Context, name string) (en
 		return m.OldDisplayID(ctx)
 	case campaignhistory.FieldTags:
 		return m.OldTags(ctx)
+	case campaignhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case campaignhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case campaignhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case campaignhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case campaignhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case campaignhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case campaignhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case campaignhistory.FieldInternalOwner:
@@ -17914,6 +19278,48 @@ func (m *CampaignHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case campaignhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case campaignhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case campaignhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case campaignhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case campaignhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case campaignhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case campaignhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -18249,6 +19655,24 @@ func (m *CampaignHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(campaignhistory.FieldTags) {
 		fields = append(fields, campaignhistory.FieldTags)
 	}
+	if m.FieldCleared(campaignhistory.FieldSourceDefinitionID) {
+		fields = append(fields, campaignhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(campaignhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, campaignhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(campaignhistory.FieldSourceInstanceID) {
+		fields = append(fields, campaignhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(campaignhistory.FieldManagedBy) {
+		fields = append(fields, campaignhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(campaignhistory.FieldIntegrationRunID) {
+		fields = append(fields, campaignhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(campaignhistory.FieldExternalID) {
+		fields = append(fields, campaignhistory.FieldExternalID)
+	}
 	if m.FieldCleared(campaignhistory.FieldOwnerID) {
 		fields = append(fields, campaignhistory.FieldOwnerID)
 	}
@@ -18376,6 +19800,24 @@ func (m *CampaignHistoryMutation) ClearField(name string) error {
 		return nil
 	case campaignhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case campaignhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case campaignhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case campaignhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case campaignhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case campaignhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case campaignhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case campaignhistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -18507,6 +19949,24 @@ func (m *CampaignHistoryMutation) ResetField(name string) error {
 		return nil
 	case campaignhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case campaignhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case campaignhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case campaignhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case campaignhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case campaignhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case campaignhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case campaignhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -20569,6 +22029,7 @@ type ContactHistoryMutation struct {
 	source_instance_id        *string
 	managed_by                *string
 	integration_run_id        *string
+	external_id               *string
 	owner_id                  *string
 	full_name                 *string
 	title                     *string
@@ -20577,7 +22038,6 @@ type ContactHistoryMutation struct {
 	phone_number              *string
 	address                   *string
 	status                    *enums.UserStatus
-	external_id               *string
 	integration_id            *string
 	observed_at               *models.DateTime
 	clearedFields             map[string]struct{}
@@ -21464,6 +22924,55 @@ func (m *ContactHistoryMutation) ResetIntegrationRunID() {
 	delete(m.clearedFields, contacthistory.FieldIntegrationRunID)
 }
 
+// SetExternalID sets the "external_id" field.
+func (m *ContactHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *ContactHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the ContactHistory entity.
+// If the ContactHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *ContactHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[contacthistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *ContactHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[contacthistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *ContactHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, contacthistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *ContactHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -21843,55 +23352,6 @@ func (m *ContactHistoryMutation) ResetStatus() {
 	m.status = nil
 }
 
-// SetExternalID sets the "external_id" field.
-func (m *ContactHistoryMutation) SetExternalID(s string) {
-	m.external_id = &s
-}
-
-// ExternalID returns the value of the "external_id" field in the mutation.
-func (m *ContactHistoryMutation) ExternalID() (r string, exists bool) {
-	v := m.external_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalID returns the old "external_id" field's value of the ContactHistory entity.
-// If the ContactHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ContactHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
-	}
-	return oldValue.ExternalID, nil
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (m *ContactHistoryMutation) ClearExternalID() {
-	m.external_id = nil
-	m.clearedFields[contacthistory.FieldExternalID] = struct{}{}
-}
-
-// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
-func (m *ContactHistoryMutation) ExternalIDCleared() bool {
-	_, ok := m.clearedFields[contacthistory.FieldExternalID]
-	return ok
-}
-
-// ResetExternalID resets all changes to the "external_id" field.
-func (m *ContactHistoryMutation) ResetExternalID() {
-	m.external_id = nil
-	delete(m.clearedFields, contacthistory.FieldExternalID)
-}
-
 // SetIntegrationID sets the "integration_id" field.
 func (m *ContactHistoryMutation) SetIntegrationID(s string) {
 	m.integration_id = &s
@@ -22073,6 +23533,9 @@ func (m *ContactHistoryMutation) Fields() []string {
 	if m.integration_run_id != nil {
 		fields = append(fields, contacthistory.FieldIntegrationRunID)
 	}
+	if m.external_id != nil {
+		fields = append(fields, contacthistory.FieldExternalID)
+	}
 	if m.owner_id != nil {
 		fields = append(fields, contacthistory.FieldOwnerID)
 	}
@@ -22096,9 +23559,6 @@ func (m *ContactHistoryMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, contacthistory.FieldStatus)
-	}
-	if m.external_id != nil {
-		fields = append(fields, contacthistory.FieldExternalID)
 	}
 	if m.integration_id != nil {
 		fields = append(fields, contacthistory.FieldIntegrationID)
@@ -22146,6 +23606,8 @@ func (m *ContactHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case contacthistory.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case contacthistory.FieldExternalID:
+		return m.ExternalID()
 	case contacthistory.FieldOwnerID:
 		return m.OwnerID()
 	case contacthistory.FieldFullName:
@@ -22162,8 +23624,6 @@ func (m *ContactHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Address()
 	case contacthistory.FieldStatus:
 		return m.Status()
-	case contacthistory.FieldExternalID:
-		return m.ExternalID()
 	case contacthistory.FieldIntegrationID:
 		return m.IntegrationID()
 	case contacthistory.FieldObservedAt:
@@ -22209,6 +23669,8 @@ func (m *ContactHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldManagedBy(ctx)
 	case contacthistory.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case contacthistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case contacthistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case contacthistory.FieldFullName:
@@ -22225,8 +23687,6 @@ func (m *ContactHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldAddress(ctx)
 	case contacthistory.FieldStatus:
 		return m.OldStatus(ctx)
-	case contacthistory.FieldExternalID:
-		return m.OldExternalID(ctx)
 	case contacthistory.FieldIntegrationID:
 		return m.OldIntegrationID(ctx)
 	case contacthistory.FieldObservedAt:
@@ -22352,6 +23812,13 @@ func (m *ContactHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIntegrationRunID(v)
 		return nil
+	case contacthistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
+		return nil
 	case contacthistory.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -22407,13 +23874,6 @@ func (m *ContactHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
-		return nil
-	case contacthistory.FieldExternalID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalID(v)
 		return nil
 	case contacthistory.FieldIntegrationID:
 		v, ok := value.(string)
@@ -22501,6 +23961,9 @@ func (m *ContactHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(contacthistory.FieldIntegrationRunID) {
 		fields = append(fields, contacthistory.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(contacthistory.FieldExternalID) {
+		fields = append(fields, contacthistory.FieldExternalID)
+	}
 	if m.FieldCleared(contacthistory.FieldOwnerID) {
 		fields = append(fields, contacthistory.FieldOwnerID)
 	}
@@ -22521,9 +23984,6 @@ func (m *ContactHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(contacthistory.FieldAddress) {
 		fields = append(fields, contacthistory.FieldAddress)
-	}
-	if m.FieldCleared(contacthistory.FieldExternalID) {
-		fields = append(fields, contacthistory.FieldExternalID)
 	}
 	if m.FieldCleared(contacthistory.FieldIntegrationID) {
 		fields = append(fields, contacthistory.FieldIntegrationID)
@@ -22587,6 +24047,9 @@ func (m *ContactHistoryMutation) ClearField(name string) error {
 	case contacthistory.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case contacthistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case contacthistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -22607,9 +24070,6 @@ func (m *ContactHistoryMutation) ClearField(name string) error {
 		return nil
 	case contacthistory.FieldAddress:
 		m.ClearAddress()
-		return nil
-	case contacthistory.FieldExternalID:
-		m.ClearExternalID()
 		return nil
 	case contacthistory.FieldIntegrationID:
 		m.ClearIntegrationID()
@@ -22673,6 +24133,9 @@ func (m *ContactHistoryMutation) ResetField(name string) error {
 	case contacthistory.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
 		return nil
+	case contacthistory.FieldExternalID:
+		m.ResetExternalID()
+		return nil
 	case contacthistory.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -22696,9 +24159,6 @@ func (m *ContactHistoryMutation) ResetField(name string) error {
 		return nil
 	case contacthistory.FieldStatus:
 		m.ResetStatus()
-		return nil
-	case contacthistory.FieldExternalID:
-		m.ResetExternalID()
 		return nil
 	case contacthistory.FieldIntegrationID:
 		m.ResetIntegrationID()
@@ -22777,6 +24237,12 @@ type ControlHistoryMutation struct {
 	display_id                    *string
 	tags                          *[]string
 	appendtags                    []string
+	source_definition_id          *string
+	source_definition_version     *string
+	source_instance_id            *string
+	managed_by                    *string
+	integration_run_id            *string
+	external_id                   *string
 	external_uuid                 *string
 	title                         *string
 	description                   *string
@@ -23506,6 +24972,300 @@ func (m *ControlHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, controlhistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *ControlHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *ControlHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *ControlHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[controlhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *ControlHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *ControlHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, controlhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *ControlHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *ControlHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *ControlHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[controlhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *ControlHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *ControlHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, controlhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *ControlHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *ControlHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *ControlHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[controlhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *ControlHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *ControlHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, controlhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *ControlHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *ControlHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *ControlHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[controlhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *ControlHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *ControlHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, controlhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *ControlHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *ControlHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *ControlHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[controlhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *ControlHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *ControlHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, controlhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *ControlHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *ControlHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the ControlHistory entity.
+// If the ControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *ControlHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[controlhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *ControlHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[controlhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *ControlHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, controlhistory.FieldExternalID)
 }
 
 // SetExternalUUID sets the "external_uuid" field.
@@ -25910,7 +27670,7 @@ func (m *ControlHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 57)
+	fields := make([]string, 0, 63)
 	if m.history_time != nil {
 		fields = append(fields, controlhistory.FieldHistoryTime)
 	}
@@ -25946,6 +27706,24 @@ func (m *ControlHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, controlhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, controlhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, controlhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, controlhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, controlhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, controlhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, controlhistory.FieldExternalID)
 	}
 	if m.external_uuid != nil {
 		fields = append(fields, controlhistory.FieldExternalUUID)
@@ -26114,6 +27892,18 @@ func (m *ControlHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case controlhistory.FieldTags:
 		return m.Tags()
+	case controlhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case controlhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case controlhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case controlhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case controlhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case controlhistory.FieldExternalID:
+		return m.ExternalID()
 	case controlhistory.FieldExternalUUID:
 		return m.ExternalUUID()
 	case controlhistory.FieldTitle:
@@ -26237,6 +28027,18 @@ func (m *ControlHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldDisplayID(ctx)
 	case controlhistory.FieldTags:
 		return m.OldTags(ctx)
+	case controlhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case controlhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case controlhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case controlhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case controlhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case controlhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case controlhistory.FieldExternalUUID:
 		return m.OldExternalUUID(ctx)
 	case controlhistory.FieldTitle:
@@ -26419,6 +28221,48 @@ func (m *ControlHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case controlhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case controlhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case controlhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case controlhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case controlhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case controlhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case controlhistory.FieldExternalUUID:
 		v, ok := value.(string)
@@ -26792,6 +28636,24 @@ func (m *ControlHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlhistory.FieldTags) {
 		fields = append(fields, controlhistory.FieldTags)
 	}
+	if m.FieldCleared(controlhistory.FieldSourceDefinitionID) {
+		fields = append(fields, controlhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(controlhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, controlhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(controlhistory.FieldSourceInstanceID) {
+		fields = append(fields, controlhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(controlhistory.FieldManagedBy) {
+		fields = append(fields, controlhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(controlhistory.FieldIntegrationRunID) {
+		fields = append(fields, controlhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(controlhistory.FieldExternalID) {
+		fields = append(fields, controlhistory.FieldExternalID)
+	}
 	if m.FieldCleared(controlhistory.FieldExternalUUID) {
 		fields = append(fields, controlhistory.FieldExternalUUID)
 	}
@@ -26964,6 +28826,24 @@ func (m *ControlHistoryMutation) ClearField(name string) error {
 		return nil
 	case controlhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case controlhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case controlhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case controlhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case controlhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case controlhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case controlhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case controlhistory.FieldExternalUUID:
 		m.ClearExternalUUID()
@@ -27140,6 +29020,24 @@ func (m *ControlHistoryMutation) ResetField(name string) error {
 		return nil
 	case controlhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case controlhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case controlhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case controlhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case controlhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case controlhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case controlhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case controlhistory.FieldExternalUUID:
 		m.ResetExternalUUID()
@@ -27331,36 +29229,42 @@ func (m *ControlHistoryMutation) ResetEdge(name string) error {
 // ControlImplementationHistoryMutation represents an operation that mutates the ControlImplementationHistory nodes in the graph.
 type ControlImplementationHistoryMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	history_time            *time.Time
-	ref                     *string
-	operation               *history.OpType
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	tags                    *[]string
-	appendtags              []string
-	owner_id                *string
-	system_owned            *bool
-	internal_notes          *string
-	system_internal_id      *string
-	status                  *enums.DocumentStatus
-	implementation_date     *time.Time
-	verified                *bool
-	verification_date       *time.Time
-	details                 *string
-	details_json            *[]interface{}
-	appenddetails_json      []interface{}
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*ControlImplementationHistory, error)
-	predicates              []predicate.ControlImplementationHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	status                    *enums.DocumentStatus
+	implementation_date       *time.Time
+	verified                  *bool
+	verification_date         *time.Time
+	details                   *string
+	details_json              *[]interface{}
+	appenddetails_json        []interface{}
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*ControlImplementationHistory, error)
+	predicates                []predicate.ControlImplementationHistory
 }
 
 var _ ent.Mutation = (*ControlImplementationHistoryMutation)(nil)
@@ -27996,6 +29900,300 @@ func (m *ControlImplementationHistoryMutation) ResetTags() {
 	delete(m.clearedFields, controlimplementationhistory.FieldTags)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *ControlImplementationHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *ControlImplementationHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[controlimplementationhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *ControlImplementationHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *ControlImplementationHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *ControlImplementationHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *ControlImplementationHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[controlimplementationhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *ControlImplementationHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *ControlImplementationHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *ControlImplementationHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[controlimplementationhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *ControlImplementationHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *ControlImplementationHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *ControlImplementationHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *ControlImplementationHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[controlimplementationhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *ControlImplementationHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *ControlImplementationHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *ControlImplementationHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[controlimplementationhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *ControlImplementationHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *ControlImplementationHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *ControlImplementationHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the ControlImplementationHistory entity.
+// If the ControlImplementationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlImplementationHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *ControlImplementationHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[controlimplementationhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *ControlImplementationHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[controlimplementationhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *ControlImplementationHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, controlimplementationhistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *ControlImplementationHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -28536,7 +30734,7 @@ func (m *ControlImplementationHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlImplementationHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 27)
 	if m.history_time != nil {
 		fields = append(fields, controlimplementationhistory.FieldHistoryTime)
 	}
@@ -28569,6 +30767,24 @@ func (m *ControlImplementationHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, controlimplementationhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, controlimplementationhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, controlimplementationhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, controlimplementationhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, controlimplementationhistory.FieldOwnerID)
@@ -28630,6 +30846,18 @@ func (m *ControlImplementationHistoryMutation) Field(name string) (ent.Value, bo
 		return m.DeletedBy()
 	case controlimplementationhistory.FieldTags:
 		return m.Tags()
+	case controlimplementationhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case controlimplementationhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case controlimplementationhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case controlimplementationhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case controlimplementationhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case controlimplementationhistory.FieldExternalID:
+		return m.ExternalID()
 	case controlimplementationhistory.FieldOwnerID:
 		return m.OwnerID()
 	case controlimplementationhistory.FieldSystemOwned:
@@ -28681,6 +30909,18 @@ func (m *ControlImplementationHistoryMutation) OldField(ctx context.Context, nam
 		return m.OldDeletedBy(ctx)
 	case controlimplementationhistory.FieldTags:
 		return m.OldTags(ctx)
+	case controlimplementationhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case controlimplementationhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case controlimplementationhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case controlimplementationhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case controlimplementationhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case controlimplementationhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case controlimplementationhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case controlimplementationhistory.FieldSystemOwned:
@@ -28786,6 +31026,48 @@ func (m *ControlImplementationHistoryMutation) SetField(name string, value ent.V
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case controlimplementationhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case controlimplementationhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case controlimplementationhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case controlimplementationhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case controlimplementationhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case controlimplementationhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case controlimplementationhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -28914,6 +31196,24 @@ func (m *ControlImplementationHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlimplementationhistory.FieldTags) {
 		fields = append(fields, controlimplementationhistory.FieldTags)
 	}
+	if m.FieldCleared(controlimplementationhistory.FieldSourceDefinitionID) {
+		fields = append(fields, controlimplementationhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, controlimplementationhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldSourceInstanceID) {
+		fields = append(fields, controlimplementationhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldManagedBy) {
+		fields = append(fields, controlimplementationhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldIntegrationRunID) {
+		fields = append(fields, controlimplementationhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(controlimplementationhistory.FieldExternalID) {
+		fields = append(fields, controlimplementationhistory.FieldExternalID)
+	}
 	if m.FieldCleared(controlimplementationhistory.FieldOwnerID) {
 		fields = append(fields, controlimplementationhistory.FieldOwnerID)
 	}
@@ -28985,6 +31285,24 @@ func (m *ControlImplementationHistoryMutation) ClearField(name string) error {
 	case controlimplementationhistory.FieldTags:
 		m.ClearTags()
 		return nil
+	case controlimplementationhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case controlimplementationhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case controlimplementationhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case controlimplementationhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case controlimplementationhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case controlimplementationhistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case controlimplementationhistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -29055,6 +31373,24 @@ func (m *ControlImplementationHistoryMutation) ResetField(name string) error {
 		return nil
 	case controlimplementationhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case controlimplementationhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case controlimplementationhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case controlimplementationhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case controlimplementationhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case controlimplementationhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case controlimplementationhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case controlimplementationhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -29158,6 +31494,12 @@ type ControlObjectiveHistoryMutation struct {
 	tags                       *[]string
 	appendtags                 []string
 	revision                   *string
+	source_definition_id       *string
+	source_definition_version  *string
+	source_instance_id         *string
+	managed_by                 *string
+	integration_run_id         *string
+	external_id                *string
 	owner_id                   *string
 	system_owned               *bool
 	internal_notes             *string
@@ -29895,6 +32237,300 @@ func (m *ControlObjectiveHistoryMutation) ResetRevision() {
 	delete(m.clearedFields, controlobjectivehistory.FieldRevision)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *ControlObjectiveHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the ControlObjectiveHistory entity.
+// If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlObjectiveHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *ControlObjectiveHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[controlobjectivehistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *ControlObjectiveHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *ControlObjectiveHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the ControlObjectiveHistory entity.
+// If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlObjectiveHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *ControlObjectiveHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[controlobjectivehistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *ControlObjectiveHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *ControlObjectiveHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the ControlObjectiveHistory entity.
+// If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlObjectiveHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *ControlObjectiveHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[controlobjectivehistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *ControlObjectiveHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *ControlObjectiveHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the ControlObjectiveHistory entity.
+// If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlObjectiveHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *ControlObjectiveHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[controlobjectivehistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *ControlObjectiveHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *ControlObjectiveHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the ControlObjectiveHistory entity.
+// If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlObjectiveHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *ControlObjectiveHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[controlobjectivehistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *ControlObjectiveHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *ControlObjectiveHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *ControlObjectiveHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the ControlObjectiveHistory entity.
+// If the ControlObjectiveHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ControlObjectiveHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *ControlObjectiveHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[controlobjectivehistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *ControlObjectiveHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[controlobjectivehistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *ControlObjectiveHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, controlobjectivehistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *ControlObjectiveHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -30520,7 +33156,7 @@ func (m *ControlObjectiveHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ControlObjectiveHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 25)
+	fields := make([]string, 0, 31)
 	if m.history_time != nil {
 		fields = append(fields, controlobjectivehistory.FieldHistoryTime)
 	}
@@ -30559,6 +33195,24 @@ func (m *ControlObjectiveHistoryMutation) Fields() []string {
 	}
 	if m.revision != nil {
 		fields = append(fields, controlobjectivehistory.FieldRevision)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, controlobjectivehistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, controlobjectivehistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, controlobjectivehistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, controlobjectivehistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, controlobjectivehistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, controlobjectivehistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, controlobjectivehistory.FieldOwnerID)
@@ -30630,6 +33284,18 @@ func (m *ControlObjectiveHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Tags()
 	case controlobjectivehistory.FieldRevision:
 		return m.Revision()
+	case controlobjectivehistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case controlobjectivehistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case controlobjectivehistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case controlobjectivehistory.FieldManagedBy:
+		return m.ManagedBy()
+	case controlobjectivehistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case controlobjectivehistory.FieldExternalID:
+		return m.ExternalID()
 	case controlobjectivehistory.FieldOwnerID:
 		return m.OwnerID()
 	case controlobjectivehistory.FieldSystemOwned:
@@ -30689,6 +33355,18 @@ func (m *ControlObjectiveHistoryMutation) OldField(ctx context.Context, name str
 		return m.OldTags(ctx)
 	case controlobjectivehistory.FieldRevision:
 		return m.OldRevision(ctx)
+	case controlobjectivehistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case controlobjectivehistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case controlobjectivehistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case controlobjectivehistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case controlobjectivehistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case controlobjectivehistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case controlobjectivehistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case controlobjectivehistory.FieldSystemOwned:
@@ -30812,6 +33490,48 @@ func (m *ControlObjectiveHistoryMutation) SetField(name string, value ent.Value)
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRevision(v)
+		return nil
+	case controlobjectivehistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case controlobjectivehistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case controlobjectivehistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case controlobjectivehistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case controlobjectivehistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case controlobjectivehistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case controlobjectivehistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -30957,6 +33677,24 @@ func (m *ControlObjectiveHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(controlobjectivehistory.FieldRevision) {
 		fields = append(fields, controlobjectivehistory.FieldRevision)
 	}
+	if m.FieldCleared(controlobjectivehistory.FieldSourceDefinitionID) {
+		fields = append(fields, controlobjectivehistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(controlobjectivehistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, controlobjectivehistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(controlobjectivehistory.FieldSourceInstanceID) {
+		fields = append(fields, controlobjectivehistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(controlobjectivehistory.FieldManagedBy) {
+		fields = append(fields, controlobjectivehistory.FieldManagedBy)
+	}
+	if m.FieldCleared(controlobjectivehistory.FieldIntegrationRunID) {
+		fields = append(fields, controlobjectivehistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(controlobjectivehistory.FieldExternalID) {
+		fields = append(fields, controlobjectivehistory.FieldExternalID)
+	}
 	if m.FieldCleared(controlobjectivehistory.FieldOwnerID) {
 		fields = append(fields, controlobjectivehistory.FieldOwnerID)
 	}
@@ -31033,6 +33771,24 @@ func (m *ControlObjectiveHistoryMutation) ClearField(name string) error {
 		return nil
 	case controlobjectivehistory.FieldRevision:
 		m.ClearRevision()
+		return nil
+	case controlobjectivehistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case controlobjectivehistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case controlobjectivehistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case controlobjectivehistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case controlobjectivehistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case controlobjectivehistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case controlobjectivehistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -31113,6 +33869,24 @@ func (m *ControlObjectiveHistoryMutation) ResetField(name string) error {
 		return nil
 	case controlobjectivehistory.FieldRevision:
 		m.ResetRevision()
+		return nil
+	case controlobjectivehistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case controlobjectivehistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case controlobjectivehistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case controlobjectivehistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case controlobjectivehistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case controlobjectivehistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case controlobjectivehistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -35669,49 +38443,55 @@ func (m *DocumentDataHistoryMutation) ResetEdge(name string) error {
 // EmailTemplateHistoryMutation represents an operation that mutates the EmailTemplateHistory nodes in the graph.
 type EmailTemplateHistoryMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	history_time            *time.Time
-	ref                     *string
-	operation               *history.OpType
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	revision                *string
-	owner_id                *string
-	system_owned            *bool
-	internal_notes          *string
-	system_internal_id      *string
-	key                     *string
-	name                    *string
-	description             *string
-	format                  *enums.NotificationTemplateFormat
-	locale                  *string
-	subject_template        *string
-	preheader_template      *string
-	body_template           *string
-	text_template           *string
-	jsonconfig              *map[string]interface{}
-	uischema                *map[string]interface{}
-	metadata                *map[string]interface{}
-	active                  *bool
-	version                 *int
-	addversion              *int
-	template_context        *enums.TemplateContext
-	defaults                *map[string]interface{}
-	integration_id          *string
-	workflow_definition_id  *string
-	workflow_instance_id    *string
-	trust_center_id         *string
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*EmailTemplateHistory, error)
-	predicates              []predicate.EmailTemplateHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	revision                  *string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	key                       *string
+	name                      *string
+	description               *string
+	format                    *enums.NotificationTemplateFormat
+	locale                    *string
+	subject_template          *string
+	preheader_template        *string
+	body_template             *string
+	text_template             *string
+	jsonconfig                *map[string]interface{}
+	uischema                  *map[string]interface{}
+	metadata                  *map[string]interface{}
+	active                    *bool
+	version                   *int
+	addversion                *int
+	template_context          *enums.TemplateContext
+	defaults                  *map[string]interface{}
+	integration_id            *string
+	workflow_definition_id    *string
+	workflow_instance_id      *string
+	trust_center_id           *string
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*EmailTemplateHistory, error)
+	predicates                []predicate.EmailTemplateHistory
 }
 
 var _ ent.Mutation = (*EmailTemplateHistoryMutation)(nil)
@@ -36329,6 +39109,300 @@ func (m *EmailTemplateHistoryMutation) RevisionCleared() bool {
 func (m *EmailTemplateHistoryMutation) ResetRevision() {
 	m.revision = nil
 	delete(m.clearedFields, emailtemplatehistory.FieldRevision)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *EmailTemplateHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *EmailTemplateHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the EmailTemplateHistory entity.
+// If the EmailTemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EmailTemplateHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *EmailTemplateHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[emailtemplatehistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *EmailTemplateHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[emailtemplatehistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *EmailTemplateHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, emailtemplatehistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *EmailTemplateHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *EmailTemplateHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the EmailTemplateHistory entity.
+// If the EmailTemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EmailTemplateHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *EmailTemplateHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[emailtemplatehistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *EmailTemplateHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[emailtemplatehistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *EmailTemplateHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, emailtemplatehistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *EmailTemplateHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *EmailTemplateHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the EmailTemplateHistory entity.
+// If the EmailTemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EmailTemplateHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *EmailTemplateHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[emailtemplatehistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *EmailTemplateHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[emailtemplatehistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *EmailTemplateHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, emailtemplatehistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *EmailTemplateHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *EmailTemplateHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the EmailTemplateHistory entity.
+// If the EmailTemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EmailTemplateHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *EmailTemplateHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[emailtemplatehistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *EmailTemplateHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[emailtemplatehistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *EmailTemplateHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, emailtemplatehistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *EmailTemplateHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *EmailTemplateHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the EmailTemplateHistory entity.
+// If the EmailTemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EmailTemplateHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *EmailTemplateHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[emailtemplatehistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *EmailTemplateHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[emailtemplatehistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *EmailTemplateHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, emailtemplatehistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *EmailTemplateHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *EmailTemplateHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the EmailTemplateHistory entity.
+// If the EmailTemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EmailTemplateHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *EmailTemplateHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[emailtemplatehistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *EmailTemplateHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[emailtemplatehistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *EmailTemplateHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, emailtemplatehistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -37496,7 +40570,7 @@ func (m *EmailTemplateHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EmailTemplateHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 35)
+	fields := make([]string, 0, 41)
 	if m.history_time != nil {
 		fields = append(fields, emailtemplatehistory.FieldHistoryTime)
 	}
@@ -37529,6 +40603,24 @@ func (m *EmailTemplateHistoryMutation) Fields() []string {
 	}
 	if m.revision != nil {
 		fields = append(fields, emailtemplatehistory.FieldRevision)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, emailtemplatehistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, emailtemplatehistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, emailtemplatehistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, emailtemplatehistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, emailtemplatehistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, emailtemplatehistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, emailtemplatehistory.FieldOwnerID)
@@ -37632,6 +40724,18 @@ func (m *EmailTemplateHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedBy()
 	case emailtemplatehistory.FieldRevision:
 		return m.Revision()
+	case emailtemplatehistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case emailtemplatehistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case emailtemplatehistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case emailtemplatehistory.FieldManagedBy:
+		return m.ManagedBy()
+	case emailtemplatehistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case emailtemplatehistory.FieldExternalID:
+		return m.ExternalID()
 	case emailtemplatehistory.FieldOwnerID:
 		return m.OwnerID()
 	case emailtemplatehistory.FieldSystemOwned:
@@ -37711,6 +40815,18 @@ func (m *EmailTemplateHistoryMutation) OldField(ctx context.Context, name string
 		return m.OldDeletedBy(ctx)
 	case emailtemplatehistory.FieldRevision:
 		return m.OldRevision(ctx)
+	case emailtemplatehistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case emailtemplatehistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case emailtemplatehistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case emailtemplatehistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case emailtemplatehistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case emailtemplatehistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case emailtemplatehistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case emailtemplatehistory.FieldSystemOwned:
@@ -37844,6 +40960,48 @@ func (m *EmailTemplateHistoryMutation) SetField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRevision(v)
+		return nil
+	case emailtemplatehistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case emailtemplatehistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case emailtemplatehistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case emailtemplatehistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case emailtemplatehistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case emailtemplatehistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case emailtemplatehistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -38085,6 +41243,24 @@ func (m *EmailTemplateHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(emailtemplatehistory.FieldRevision) {
 		fields = append(fields, emailtemplatehistory.FieldRevision)
 	}
+	if m.FieldCleared(emailtemplatehistory.FieldSourceDefinitionID) {
+		fields = append(fields, emailtemplatehistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(emailtemplatehistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, emailtemplatehistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(emailtemplatehistory.FieldSourceInstanceID) {
+		fields = append(fields, emailtemplatehistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(emailtemplatehistory.FieldManagedBy) {
+		fields = append(fields, emailtemplatehistory.FieldManagedBy)
+	}
+	if m.FieldCleared(emailtemplatehistory.FieldIntegrationRunID) {
+		fields = append(fields, emailtemplatehistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(emailtemplatehistory.FieldExternalID) {
+		fields = append(fields, emailtemplatehistory.FieldExternalID)
+	}
 	if m.FieldCleared(emailtemplatehistory.FieldOwnerID) {
 		fields = append(fields, emailtemplatehistory.FieldOwnerID)
 	}
@@ -38183,6 +41359,24 @@ func (m *EmailTemplateHistoryMutation) ClearField(name string) error {
 	case emailtemplatehistory.FieldRevision:
 		m.ClearRevision()
 		return nil
+	case emailtemplatehistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case emailtemplatehistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case emailtemplatehistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case emailtemplatehistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case emailtemplatehistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case emailtemplatehistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case emailtemplatehistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -38280,6 +41474,24 @@ func (m *EmailTemplateHistoryMutation) ResetField(name string) error {
 		return nil
 	case emailtemplatehistory.FieldRevision:
 		m.ResetRevision()
+		return nil
+	case emailtemplatehistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case emailtemplatehistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case emailtemplatehistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case emailtemplatehistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case emailtemplatehistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case emailtemplatehistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case emailtemplatehistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -38428,6 +41640,7 @@ type EntityHistoryMutation struct {
 	source_instance_id                        *string
 	managed_by                                *string
 	integration_run_id                        *string
+	external_id                               *string
 	owner_id                                  *string
 	internal_owner                            *string
 	internal_owner_user_id                    *string
@@ -38499,7 +41712,6 @@ type EntityHistoryMutation struct {
 	vendor_metadata                           *map[string]interface{}
 	logo_remote_url                           *string
 	logo_file_id                              *string
-	external_id                               *string
 	observed_at                               *models.DateTime
 	clearedFields                             map[string]struct{}
 	done                                      bool
@@ -39383,6 +42595,55 @@ func (m *EntityHistoryMutation) IntegrationRunIDCleared() bool {
 func (m *EntityHistoryMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, entityhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *EntityHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *EntityHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the EntityHistory entity.
+// If the EntityHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *EntityHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[entityhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *EntityHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[entityhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *EntityHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, entityhistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -42587,55 +45848,6 @@ func (m *EntityHistoryMutation) ResetLogoFileID() {
 	delete(m.clearedFields, entityhistory.FieldLogoFileID)
 }
 
-// SetExternalID sets the "external_id" field.
-func (m *EntityHistoryMutation) SetExternalID(s string) {
-	m.external_id = &s
-}
-
-// ExternalID returns the value of the "external_id" field in the mutation.
-func (m *EntityHistoryMutation) ExternalID() (r string, exists bool) {
-	v := m.external_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalID returns the old "external_id" field's value of the EntityHistory entity.
-// If the EntityHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *EntityHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
-	}
-	return oldValue.ExternalID, nil
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (m *EntityHistoryMutation) ClearExternalID() {
-	m.external_id = nil
-	m.clearedFields[entityhistory.FieldExternalID] = struct{}{}
-}
-
-// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
-func (m *EntityHistoryMutation) ExternalIDCleared() bool {
-	_, ok := m.clearedFields[entityhistory.FieldExternalID]
-	return ok
-}
-
-// ResetExternalID resets all changes to the "external_id" field.
-func (m *EntityHistoryMutation) ResetExternalID() {
-	m.external_id = nil
-	delete(m.clearedFields, entityhistory.FieldExternalID)
-}
-
 // SetObservedAt sets the "observed_at" field.
 func (m *EntityHistoryMutation) SetObservedAt(mt models.DateTime) {
 	m.observed_at = &mt
@@ -42767,6 +45979,9 @@ func (m *EntityHistoryMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, entityhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, entityhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, entityhistory.FieldOwnerID)
@@ -42954,9 +46169,6 @@ func (m *EntityHistoryMutation) Fields() []string {
 	if m.logo_file_id != nil {
 		fields = append(fields, entityhistory.FieldLogoFileID)
 	}
-	if m.external_id != nil {
-		fields = append(fields, entityhistory.FieldExternalID)
-	}
 	if m.observed_at != nil {
 		fields = append(fields, entityhistory.FieldObservedAt)
 	}
@@ -43000,6 +46212,8 @@ func (m *EntityHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case entityhistory.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case entityhistory.FieldExternalID:
+		return m.ExternalID()
 	case entityhistory.FieldOwnerID:
 		return m.OwnerID()
 	case entityhistory.FieldInternalOwner:
@@ -43124,8 +46338,6 @@ func (m *EntityHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.LogoRemoteURL()
 	case entityhistory.FieldLogoFileID:
 		return m.LogoFileID()
-	case entityhistory.FieldExternalID:
-		return m.ExternalID()
 	case entityhistory.FieldObservedAt:
 		return m.ObservedAt()
 	}
@@ -43169,6 +46381,8 @@ func (m *EntityHistoryMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldManagedBy(ctx)
 	case entityhistory.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case entityhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case entityhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case entityhistory.FieldInternalOwner:
@@ -43293,8 +46507,6 @@ func (m *EntityHistoryMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldLogoRemoteURL(ctx)
 	case entityhistory.FieldLogoFileID:
 		return m.OldLogoFileID(ctx)
-	case entityhistory.FieldExternalID:
-		return m.OldExternalID(ctx)
 	case entityhistory.FieldObservedAt:
 		return m.OldObservedAt(ctx)
 	}
@@ -43417,6 +46629,13 @@ func (m *EntityHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case entityhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case entityhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -43852,13 +47071,6 @@ func (m *EntityHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetLogoFileID(v)
 		return nil
-	case entityhistory.FieldExternalID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalID(v)
-		return nil
 	case entityhistory.FieldObservedAt:
 		v, ok := value.(models.DateTime)
 		if !ok {
@@ -43988,6 +47200,9 @@ func (m *EntityHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(entityhistory.FieldIntegrationRunID) {
 		fields = append(fields, entityhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(entityhistory.FieldExternalID) {
+		fields = append(fields, entityhistory.FieldExternalID)
 	}
 	if m.FieldCleared(entityhistory.FieldOwnerID) {
 		fields = append(fields, entityhistory.FieldOwnerID)
@@ -44175,9 +47390,6 @@ func (m *EntityHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(entityhistory.FieldLogoFileID) {
 		fields = append(fields, entityhistory.FieldLogoFileID)
 	}
-	if m.FieldCleared(entityhistory.FieldExternalID) {
-		fields = append(fields, entityhistory.FieldExternalID)
-	}
 	if m.FieldCleared(entityhistory.FieldObservedAt) {
 		fields = append(fields, entityhistory.FieldObservedAt)
 	}
@@ -44236,6 +47448,9 @@ func (m *EntityHistoryMutation) ClearField(name string) error {
 		return nil
 	case entityhistory.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
+		return nil
+	case entityhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case entityhistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -44423,9 +47638,6 @@ func (m *EntityHistoryMutation) ClearField(name string) error {
 	case entityhistory.FieldLogoFileID:
 		m.ClearLogoFileID()
 		return nil
-	case entityhistory.FieldExternalID:
-		m.ClearExternalID()
-		return nil
 	case entityhistory.FieldObservedAt:
 		m.ClearObservedAt()
 		return nil
@@ -44484,6 +47696,9 @@ func (m *EntityHistoryMutation) ResetField(name string) error {
 		return nil
 	case entityhistory.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case entityhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case entityhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -44670,9 +47885,6 @@ func (m *EntityHistoryMutation) ResetField(name string) error {
 		return nil
 	case entityhistory.FieldLogoFileID:
 		m.ResetLogoFileID()
-		return nil
-	case entityhistory.FieldExternalID:
-		m.ResetExternalID()
 		return nil
 	case entityhistory.FieldObservedAt:
 		m.ResetObservedAt()
@@ -46141,44 +49353,50 @@ func (m *EntityTypeHistoryMutation) ResetEdge(name string) error {
 // EvidenceHistoryMutation represents an operation that mutates the EvidenceHistory nodes in the graph.
 type EvidenceHistoryMutation struct {
 	config
-	op                       Op
-	typ                      string
-	id                       *string
-	history_time             *time.Time
-	ref                      *string
-	operation                *history.OpType
-	created_at               *time.Time
-	updated_at               *time.Time
-	created_by               *string
-	updated_by               *string
-	updated_by_impersonator  *string
-	deleted_at               *time.Time
-	deleted_by               *string
-	display_id               *string
-	tags                     *[]string
-	appendtags               []string
-	owner_id                 *string
-	environment_name         *string
-	environment_id           *string
-	scope_name               *string
-	scope_id                 *string
-	workflow_eligible_marker *bool
-	external_uuid            *string
-	name                     *string
-	description              *string
-	collection_procedure     *string
-	creation_date            *models.DateTime
-	renewal_date             *models.DateTime
-	source                   *string
-	is_automated             *bool
-	url                      *string
-	status                   *enums.EvidenceStatus
-	review_frequency         *enums.Frequency
-	auditor_reference_id     *string
-	clearedFields            map[string]struct{}
-	done                     bool
-	oldValue                 func(context.Context) (*EvidenceHistory, error)
-	predicates               []predicate.EvidenceHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	display_id                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	environment_name          *string
+	environment_id            *string
+	scope_name                *string
+	scope_id                  *string
+	workflow_eligible_marker  *bool
+	external_uuid             *string
+	name                      *string
+	description               *string
+	collection_procedure      *string
+	creation_date             *models.DateTime
+	renewal_date              *models.DateTime
+	source                    *string
+	is_automated              *bool
+	url                       *string
+	status                    *enums.EvidenceStatus
+	review_frequency          *enums.Frequency
+	auditor_reference_id      *string
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*EvidenceHistory, error)
+	predicates                []predicate.EvidenceHistory
 }
 
 var _ ent.Mutation = (*EvidenceHistoryMutation)(nil)
@@ -46848,6 +50066,300 @@ func (m *EvidenceHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, evidencehistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *EvidenceHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *EvidenceHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *EvidenceHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[evidencehistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *EvidenceHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, evidencehistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *EvidenceHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *EvidenceHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *EvidenceHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[evidencehistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *EvidenceHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, evidencehistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *EvidenceHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *EvidenceHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *EvidenceHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[evidencehistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *EvidenceHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, evidencehistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *EvidenceHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *EvidenceHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *EvidenceHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[evidencehistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *EvidenceHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, evidencehistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *EvidenceHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *EvidenceHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *EvidenceHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[evidencehistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *EvidenceHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, evidencehistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *EvidenceHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *EvidenceHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the EvidenceHistory entity.
+// If the EvidenceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *EvidenceHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[evidencehistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *EvidenceHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[evidencehistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *EvidenceHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, evidencehistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -47740,7 +51252,7 @@ func (m *EvidenceHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EvidenceHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 30)
+	fields := make([]string, 0, 36)
 	if m.history_time != nil {
 		fields = append(fields, evidencehistory.FieldHistoryTime)
 	}
@@ -47776,6 +51288,24 @@ func (m *EvidenceHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, evidencehistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, evidencehistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, evidencehistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, evidencehistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, evidencehistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, evidencehistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, evidencehistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, evidencehistory.FieldOwnerID)
@@ -47863,6 +51393,18 @@ func (m *EvidenceHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case evidencehistory.FieldTags:
 		return m.Tags()
+	case evidencehistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case evidencehistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case evidencehistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case evidencehistory.FieldManagedBy:
+		return m.ManagedBy()
+	case evidencehistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case evidencehistory.FieldExternalID:
+		return m.ExternalID()
 	case evidencehistory.FieldOwnerID:
 		return m.OwnerID()
 	case evidencehistory.FieldEnvironmentName:
@@ -47932,6 +51474,18 @@ func (m *EvidenceHistoryMutation) OldField(ctx context.Context, name string) (en
 		return m.OldDisplayID(ctx)
 	case evidencehistory.FieldTags:
 		return m.OldTags(ctx)
+	case evidencehistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case evidencehistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case evidencehistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case evidencehistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case evidencehistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case evidencehistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case evidencehistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case evidencehistory.FieldEnvironmentName:
@@ -48060,6 +51614,48 @@ func (m *EvidenceHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case evidencehistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case evidencehistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case evidencehistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case evidencehistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case evidencehistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case evidencehistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case evidencehistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -48244,6 +51840,24 @@ func (m *EvidenceHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(evidencehistory.FieldTags) {
 		fields = append(fields, evidencehistory.FieldTags)
 	}
+	if m.FieldCleared(evidencehistory.FieldSourceDefinitionID) {
+		fields = append(fields, evidencehistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(evidencehistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, evidencehistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(evidencehistory.FieldSourceInstanceID) {
+		fields = append(fields, evidencehistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(evidencehistory.FieldManagedBy) {
+		fields = append(fields, evidencehistory.FieldManagedBy)
+	}
+	if m.FieldCleared(evidencehistory.FieldIntegrationRunID) {
+		fields = append(fields, evidencehistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(evidencehistory.FieldExternalID) {
+		fields = append(fields, evidencehistory.FieldExternalID)
+	}
 	if m.FieldCleared(evidencehistory.FieldOwnerID) {
 		fields = append(fields, evidencehistory.FieldOwnerID)
 	}
@@ -48332,6 +51946,24 @@ func (m *EvidenceHistoryMutation) ClearField(name string) error {
 		return nil
 	case evidencehistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case evidencehistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case evidencehistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case evidencehistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case evidencehistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case evidencehistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case evidencehistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case evidencehistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -48424,6 +52056,24 @@ func (m *EvidenceHistoryMutation) ResetField(name string) error {
 		return nil
 	case evidencehistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case evidencehistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case evidencehistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case evidencehistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case evidencehistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case evidencehistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case evidencehistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case evidencehistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -53195,6 +56845,7 @@ type FindingHistoryMutation struct {
 	source_instance_id                *string
 	managed_by                        *string
 	integration_run_id                *string
+	external_id                       *string
 	owner_id                          *string
 	internal_owner                    *string
 	internal_owner_user_id            *string
@@ -53218,7 +56869,6 @@ type FindingHistoryMutation struct {
 	finding_status_name               *string
 	finding_status_id                 *string
 	workflow_eligible_marker          *bool
-	external_id                       *string
 	security_level                    *enums.SecurityLevel
 	external_owner_id                 *string
 	source                            *string
@@ -54182,6 +57832,55 @@ func (m *FindingHistoryMutation) IntegrationRunIDCleared() bool {
 func (m *FindingHistoryMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, findinghistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *FindingHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *FindingHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the FindingHistory entity.
+// If the FindingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FindingHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *FindingHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[findinghistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *FindingHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[findinghistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *FindingHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, findinghistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -55309,55 +59008,6 @@ func (m *FindingHistoryMutation) WorkflowEligibleMarkerCleared() bool {
 func (m *FindingHistoryMutation) ResetWorkflowEligibleMarker() {
 	m.workflow_eligible_marker = nil
 	delete(m.clearedFields, findinghistory.FieldWorkflowEligibleMarker)
-}
-
-// SetExternalID sets the "external_id" field.
-func (m *FindingHistoryMutation) SetExternalID(s string) {
-	m.external_id = &s
-}
-
-// ExternalID returns the value of the "external_id" field in the mutation.
-func (m *FindingHistoryMutation) ExternalID() (r string, exists bool) {
-	v := m.external_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalID returns the old "external_id" field's value of the FindingHistory entity.
-// If the FindingHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FindingHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
-	}
-	return oldValue.ExternalID, nil
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (m *FindingHistoryMutation) ClearExternalID() {
-	m.external_id = nil
-	m.clearedFields[findinghistory.FieldExternalID] = struct{}{}
-}
-
-// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
-func (m *FindingHistoryMutation) ExternalIDCleared() bool {
-	_, ok := m.clearedFields[findinghistory.FieldExternalID]
-	return ok
-}
-
-// ResetExternalID resets all changes to the "external_id" field.
-func (m *FindingHistoryMutation) ResetExternalID() {
-	m.external_id = nil
-	delete(m.clearedFields, findinghistory.FieldExternalID)
 }
 
 // SetSecurityLevel sets the "security_level" field.
@@ -57379,6 +61029,9 @@ func (m *FindingHistoryMutation) Fields() []string {
 	if m.integration_run_id != nil {
 		fields = append(fields, findinghistory.FieldIntegrationRunID)
 	}
+	if m.external_id != nil {
+		fields = append(fields, findinghistory.FieldExternalID)
+	}
 	if m.owner_id != nil {
 		fields = append(fields, findinghistory.FieldOwnerID)
 	}
@@ -57447,9 +61100,6 @@ func (m *FindingHistoryMutation) Fields() []string {
 	}
 	if m.workflow_eligible_marker != nil {
 		fields = append(fields, findinghistory.FieldWorkflowEligibleMarker)
-	}
-	if m.external_id != nil {
-		fields = append(fields, findinghistory.FieldExternalID)
 	}
 	if m.security_level != nil {
 		fields = append(fields, findinghistory.FieldSecurityLevel)
@@ -57601,6 +61251,8 @@ func (m *FindingHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case findinghistory.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case findinghistory.FieldExternalID:
+		return m.ExternalID()
 	case findinghistory.FieldOwnerID:
 		return m.OwnerID()
 	case findinghistory.FieldInternalOwner:
@@ -57647,8 +61299,6 @@ func (m *FindingHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.FindingStatusID()
 	case findinghistory.FieldWorkflowEligibleMarker:
 		return m.WorkflowEligibleMarker()
-	case findinghistory.FieldExternalID:
-		return m.ExternalID()
 	case findinghistory.FieldSecurityLevel:
 		return m.SecurityLevel()
 	case findinghistory.FieldExternalOwnerID:
@@ -57764,6 +61414,8 @@ func (m *FindingHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldManagedBy(ctx)
 	case findinghistory.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case findinghistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case findinghistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case findinghistory.FieldInternalOwner:
@@ -57810,8 +61462,6 @@ func (m *FindingHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldFindingStatusID(ctx)
 	case findinghistory.FieldWorkflowEligibleMarker:
 		return m.OldWorkflowEligibleMarker(ctx)
-	case findinghistory.FieldExternalID:
-		return m.OldExternalID(ctx)
 	case findinghistory.FieldSecurityLevel:
 		return m.OldSecurityLevel(ctx)
 	case findinghistory.FieldExternalOwnerID:
@@ -58012,6 +61662,13 @@ func (m *FindingHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIntegrationRunID(v)
 		return nil
+	case findinghistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
+		return nil
 	case findinghistory.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -58172,13 +61829,6 @@ func (m *FindingHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetWorkflowEligibleMarker(v)
-		return nil
-	case findinghistory.FieldExternalID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalID(v)
 		return nil
 	case findinghistory.FieldSecurityLevel:
 		v, ok := value.(enums.SecurityLevel)
@@ -58567,6 +62217,9 @@ func (m *FindingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(findinghistory.FieldIntegrationRunID) {
 		fields = append(fields, findinghistory.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(findinghistory.FieldExternalID) {
+		fields = append(fields, findinghistory.FieldExternalID)
+	}
 	if m.FieldCleared(findinghistory.FieldOwnerID) {
 		fields = append(fields, findinghistory.FieldOwnerID)
 	}
@@ -58635,9 +62288,6 @@ func (m *FindingHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(findinghistory.FieldWorkflowEligibleMarker) {
 		fields = append(fields, findinghistory.FieldWorkflowEligibleMarker)
-	}
-	if m.FieldCleared(findinghistory.FieldExternalID) {
-		fields = append(fields, findinghistory.FieldExternalID)
 	}
 	if m.FieldCleared(findinghistory.FieldSecurityLevel) {
 		fields = append(fields, findinghistory.FieldSecurityLevel)
@@ -58803,6 +62453,9 @@ func (m *FindingHistoryMutation) ClearField(name string) error {
 	case findinghistory.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case findinghistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case findinghistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -58871,9 +62524,6 @@ func (m *FindingHistoryMutation) ClearField(name string) error {
 		return nil
 	case findinghistory.FieldWorkflowEligibleMarker:
 		m.ClearWorkflowEligibleMarker()
-		return nil
-	case findinghistory.FieldExternalID:
-		m.ClearExternalID()
 		return nil
 	case findinghistory.FieldSecurityLevel:
 		m.ClearSecurityLevel()
@@ -59042,6 +62692,9 @@ func (m *FindingHistoryMutation) ResetField(name string) error {
 	case findinghistory.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
 		return nil
+	case findinghistory.FieldExternalID:
+		m.ResetExternalID()
+		return nil
 	case findinghistory.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -59110,9 +62763,6 @@ func (m *FindingHistoryMutation) ResetField(name string) error {
 		return nil
 	case findinghistory.FieldWorkflowEligibleMarker:
 		m.ResetWorkflowEligibleMarker()
-		return nil
-	case findinghistory.FieldExternalID:
-		m.ResetExternalID()
 		return nil
 	case findinghistory.FieldSecurityLevel:
 		m.ResetSecurityLevel()
@@ -59293,6 +62943,12 @@ type GroupHistoryMutation struct {
 	display_id                *string
 	tags                      *[]string
 	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
 	owner_id                  *string
 	name                      *string
 	description               *string
@@ -59982,6 +63638,300 @@ func (m *GroupHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, grouphistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *GroupHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *GroupHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the GroupHistory entity.
+// If the GroupHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *GroupHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[grouphistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *GroupHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[grouphistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *GroupHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, grouphistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *GroupHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *GroupHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the GroupHistory entity.
+// If the GroupHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *GroupHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[grouphistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *GroupHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[grouphistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *GroupHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, grouphistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *GroupHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *GroupHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the GroupHistory entity.
+// If the GroupHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *GroupHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[grouphistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *GroupHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[grouphistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *GroupHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, grouphistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *GroupHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *GroupHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the GroupHistory entity.
+// If the GroupHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *GroupHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[grouphistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *GroupHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[grouphistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *GroupHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, grouphistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *GroupHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *GroupHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the GroupHistory entity.
+// If the GroupHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *GroupHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[grouphistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *GroupHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[grouphistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *GroupHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, grouphistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *GroupHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *GroupHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the GroupHistory entity.
+// If the GroupHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *GroupHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *GroupHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[grouphistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *GroupHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[grouphistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *GroupHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, grouphistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -60743,7 +64693,7 @@ func (m *GroupHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *GroupHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 27)
+	fields := make([]string, 0, 33)
 	if m.history_time != nil {
 		fields = append(fields, grouphistory.FieldHistoryTime)
 	}
@@ -60779,6 +64729,24 @@ func (m *GroupHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, grouphistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, grouphistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, grouphistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, grouphistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, grouphistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, grouphistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, grouphistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, grouphistory.FieldOwnerID)
@@ -60857,6 +64825,18 @@ func (m *GroupHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case grouphistory.FieldTags:
 		return m.Tags()
+	case grouphistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case grouphistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case grouphistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case grouphistory.FieldManagedBy:
+		return m.ManagedBy()
+	case grouphistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case grouphistory.FieldExternalID:
+		return m.ExternalID()
 	case grouphistory.FieldOwnerID:
 		return m.OwnerID()
 	case grouphistory.FieldName:
@@ -60920,6 +64900,18 @@ func (m *GroupHistoryMutation) OldField(ctx context.Context, name string) (ent.V
 		return m.OldDisplayID(ctx)
 	case grouphistory.FieldTags:
 		return m.OldTags(ctx)
+	case grouphistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case grouphistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case grouphistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case grouphistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case grouphistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case grouphistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case grouphistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case grouphistory.FieldName:
@@ -61042,6 +65034,48 @@ func (m *GroupHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case grouphistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case grouphistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case grouphistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case grouphistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case grouphistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case grouphistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case grouphistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -61205,6 +65239,24 @@ func (m *GroupHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(grouphistory.FieldTags) {
 		fields = append(fields, grouphistory.FieldTags)
 	}
+	if m.FieldCleared(grouphistory.FieldSourceDefinitionID) {
+		fields = append(fields, grouphistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(grouphistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, grouphistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(grouphistory.FieldSourceInstanceID) {
+		fields = append(fields, grouphistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(grouphistory.FieldManagedBy) {
+		fields = append(fields, grouphistory.FieldManagedBy)
+	}
+	if m.FieldCleared(grouphistory.FieldIntegrationRunID) {
+		fields = append(fields, grouphistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(grouphistory.FieldExternalID) {
+		fields = append(fields, grouphistory.FieldExternalID)
+	}
 	if m.FieldCleared(grouphistory.FieldOwnerID) {
 		fields = append(fields, grouphistory.FieldOwnerID)
 	}
@@ -61284,6 +65336,24 @@ func (m *GroupHistoryMutation) ClearField(name string) error {
 		return nil
 	case grouphistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case grouphistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case grouphistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case grouphistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case grouphistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case grouphistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case grouphistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case grouphistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -61367,6 +65437,24 @@ func (m *GroupHistoryMutation) ResetField(name string) error {
 		return nil
 	case grouphistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case grouphistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case grouphistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case grouphistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case grouphistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case grouphistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case grouphistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case grouphistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -65676,6 +69764,12 @@ type IdentityHolderHistoryMutation struct {
 	display_id                        *string
 	tags                              *[]string
 	appendtags                        []string
+	source_definition_id              *string
+	source_definition_version         *string
+	source_instance_id                *string
+	managed_by                        *string
+	integration_run_id                *string
+	external_id                       *string
 	owner_id                          *string
 	internal_owner                    *string
 	internal_owner_user_id            *string
@@ -66381,6 +70475,300 @@ func (m *IdentityHolderHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, identityholderhistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *IdentityHolderHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *IdentityHolderHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the IdentityHolderHistory entity.
+// If the IdentityHolderHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IdentityHolderHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *IdentityHolderHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[identityholderhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *IdentityHolderHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[identityholderhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *IdentityHolderHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, identityholderhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *IdentityHolderHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *IdentityHolderHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the IdentityHolderHistory entity.
+// If the IdentityHolderHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IdentityHolderHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *IdentityHolderHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[identityholderhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *IdentityHolderHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[identityholderhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *IdentityHolderHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, identityholderhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *IdentityHolderHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *IdentityHolderHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the IdentityHolderHistory entity.
+// If the IdentityHolderHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IdentityHolderHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *IdentityHolderHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[identityholderhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *IdentityHolderHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[identityholderhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *IdentityHolderHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, identityholderhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *IdentityHolderHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *IdentityHolderHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the IdentityHolderHistory entity.
+// If the IdentityHolderHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IdentityHolderHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *IdentityHolderHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[identityholderhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *IdentityHolderHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[identityholderhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *IdentityHolderHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, identityholderhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *IdentityHolderHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *IdentityHolderHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the IdentityHolderHistory entity.
+// If the IdentityHolderHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IdentityHolderHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *IdentityHolderHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[identityholderhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *IdentityHolderHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[identityholderhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *IdentityHolderHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, identityholderhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *IdentityHolderHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *IdentityHolderHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the IdentityHolderHistory entity.
+// If the IdentityHolderHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IdentityHolderHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *IdentityHolderHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[identityholderhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *IdentityHolderHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[identityholderhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *IdentityHolderHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, identityholderhistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -67887,7 +72275,7 @@ func (m *IdentityHolderHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IdentityHolderHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 43)
+	fields := make([]string, 0, 49)
 	if m.history_time != nil {
 		fields = append(fields, identityholderhistory.FieldHistoryTime)
 	}
@@ -67923,6 +72311,24 @@ func (m *IdentityHolderHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, identityholderhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, identityholderhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, identityholderhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, identityholderhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, identityholderhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, identityholderhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, identityholderhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, identityholderhistory.FieldOwnerID)
@@ -68049,6 +72455,18 @@ func (m *IdentityHolderHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case identityholderhistory.FieldTags:
 		return m.Tags()
+	case identityholderhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case identityholderhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case identityholderhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case identityholderhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case identityholderhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case identityholderhistory.FieldExternalID:
+		return m.ExternalID()
 	case identityholderhistory.FieldOwnerID:
 		return m.OwnerID()
 	case identityholderhistory.FieldInternalOwner:
@@ -68144,6 +72562,18 @@ func (m *IdentityHolderHistoryMutation) OldField(ctx context.Context, name strin
 		return m.OldDisplayID(ctx)
 	case identityholderhistory.FieldTags:
 		return m.OldTags(ctx)
+	case identityholderhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case identityholderhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case identityholderhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case identityholderhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case identityholderhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case identityholderhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case identityholderhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case identityholderhistory.FieldInternalOwner:
@@ -68298,6 +72728,48 @@ func (m *IdentityHolderHistoryMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case identityholderhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case identityholderhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case identityholderhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case identityholderhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case identityholderhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case identityholderhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case identityholderhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -68573,6 +73045,24 @@ func (m *IdentityHolderHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(identityholderhistory.FieldTags) {
 		fields = append(fields, identityholderhistory.FieldTags)
 	}
+	if m.FieldCleared(identityholderhistory.FieldSourceDefinitionID) {
+		fields = append(fields, identityholderhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(identityholderhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, identityholderhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(identityholderhistory.FieldSourceInstanceID) {
+		fields = append(fields, identityholderhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(identityholderhistory.FieldManagedBy) {
+		fields = append(fields, identityholderhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(identityholderhistory.FieldIntegrationRunID) {
+		fields = append(fields, identityholderhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(identityholderhistory.FieldExternalID) {
+		fields = append(fields, identityholderhistory.FieldExternalID)
+	}
 	if m.FieldCleared(identityholderhistory.FieldOwnerID) {
 		fields = append(fields, identityholderhistory.FieldOwnerID)
 	}
@@ -68691,6 +73181,24 @@ func (m *IdentityHolderHistoryMutation) ClearField(name string) error {
 		return nil
 	case identityholderhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case identityholderhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case identityholderhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case identityholderhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case identityholderhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case identityholderhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case identityholderhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case identityholderhistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -68813,6 +73321,24 @@ func (m *IdentityHolderHistoryMutation) ResetField(name string) error {
 		return nil
 	case identityholderhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case identityholderhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case identityholderhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case identityholderhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case identityholderhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case identityholderhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case identityholderhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case identityholderhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -68984,6 +73510,7 @@ type InternalPolicyHistoryMutation struct {
 	source_instance_id                      *string
 	managed_by                              *string
 	integration_run_id                      *string
+	external_id                             *string
 	owner_id                                *string
 	system_owned                            *bool
 	internal_notes                          *string
@@ -69991,6 +74518,55 @@ func (m *InternalPolicyHistoryMutation) IntegrationRunIDCleared() bool {
 func (m *InternalPolicyHistoryMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, internalpolicyhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *InternalPolicyHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *InternalPolicyHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the InternalPolicyHistory entity.
+// If the InternalPolicyHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *InternalPolicyHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *InternalPolicyHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[internalpolicyhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *InternalPolicyHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[internalpolicyhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *InternalPolicyHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, internalpolicyhistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -71743,7 +76319,7 @@ func (m *InternalPolicyHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *InternalPolicyHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 51)
+	fields := make([]string, 0, 52)
 	if m.history_time != nil {
 		fields = append(fields, internalpolicyhistory.FieldHistoryTime)
 	}
@@ -71797,6 +76373,9 @@ func (m *InternalPolicyHistoryMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, internalpolicyhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, internalpolicyhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, internalpolicyhistory.FieldOwnerID)
@@ -71941,6 +76520,8 @@ func (m *InternalPolicyHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case internalpolicyhistory.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case internalpolicyhistory.FieldExternalID:
+		return m.ExternalID()
 	case internalpolicyhistory.FieldOwnerID:
 		return m.OwnerID()
 	case internalpolicyhistory.FieldSystemOwned:
@@ -72052,6 +76633,8 @@ func (m *InternalPolicyHistoryMutation) OldField(ctx context.Context, name strin
 		return m.OldManagedBy(ctx)
 	case internalpolicyhistory.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case internalpolicyhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case internalpolicyhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case internalpolicyhistory.FieldSystemOwned:
@@ -72252,6 +76835,13 @@ func (m *InternalPolicyHistoryMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case internalpolicyhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case internalpolicyhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -72559,6 +77149,9 @@ func (m *InternalPolicyHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(internalpolicyhistory.FieldIntegrationRunID) {
 		fields = append(fields, internalpolicyhistory.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(internalpolicyhistory.FieldExternalID) {
+		fields = append(fields, internalpolicyhistory.FieldExternalID)
+	}
 	if m.FieldCleared(internalpolicyhistory.FieldOwnerID) {
 		fields = append(fields, internalpolicyhistory.FieldOwnerID)
 	}
@@ -72713,6 +77306,9 @@ func (m *InternalPolicyHistoryMutation) ClearField(name string) error {
 		return nil
 	case internalpolicyhistory.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
+		return nil
+	case internalpolicyhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case internalpolicyhistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -72871,6 +77467,9 @@ func (m *InternalPolicyHistoryMutation) ResetField(name string) error {
 		return nil
 	case internalpolicyhistory.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case internalpolicyhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case internalpolicyhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -74197,34 +78796,40 @@ func (m *MappableDomainHistoryMutation) ResetEdge(name string) error {
 // MappedControlHistoryMutation represents an operation that mutates the MappedControlHistory nodes in the graph.
 type MappedControlHistoryMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	history_time            *time.Time
-	ref                     *string
-	operation               *history.OpType
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	tags                    *[]string
-	appendtags              []string
-	system_owned            *bool
-	internal_notes          *string
-	system_internal_id      *string
-	owner_id                *string
-	mapping_type            *enums.MappingType
-	relation                *string
-	confidence              *int
-	addconfidence           *int
-	source                  *enums.MappingSource
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*MappedControlHistory, error)
-	predicates              []predicate.MappedControlHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	owner_id                  *string
+	mapping_type              *enums.MappingType
+	relation                  *string
+	confidence                *int
+	addconfidence             *int
+	source                    *enums.MappingSource
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*MappedControlHistory, error)
+	predicates                []predicate.MappedControlHistory
 }
 
 var _ ent.Mutation = (*MappedControlHistoryMutation)(nil)
@@ -74860,6 +79465,300 @@ func (m *MappedControlHistoryMutation) ResetTags() {
 	delete(m.clearedFields, mappedcontrolhistory.FieldTags)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *MappedControlHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *MappedControlHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the MappedControlHistory entity.
+// If the MappedControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *MappedControlHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[mappedcontrolhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *MappedControlHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[mappedcontrolhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *MappedControlHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, mappedcontrolhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *MappedControlHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *MappedControlHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the MappedControlHistory entity.
+// If the MappedControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *MappedControlHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[mappedcontrolhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *MappedControlHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[mappedcontrolhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *MappedControlHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, mappedcontrolhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *MappedControlHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *MappedControlHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the MappedControlHistory entity.
+// If the MappedControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *MappedControlHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[mappedcontrolhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *MappedControlHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[mappedcontrolhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *MappedControlHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, mappedcontrolhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *MappedControlHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *MappedControlHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the MappedControlHistory entity.
+// If the MappedControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *MappedControlHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[mappedcontrolhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *MappedControlHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[mappedcontrolhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *MappedControlHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, mappedcontrolhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *MappedControlHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *MappedControlHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the MappedControlHistory entity.
+// If the MappedControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *MappedControlHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[mappedcontrolhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *MappedControlHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[mappedcontrolhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *MappedControlHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, mappedcontrolhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *MappedControlHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *MappedControlHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the MappedControlHistory entity.
+// If the MappedControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MappedControlHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *MappedControlHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[mappedcontrolhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *MappedControlHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[mappedcontrolhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *MappedControlHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, mappedcontrolhistory.FieldExternalID)
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (m *MappedControlHistoryMutation) SetSystemOwned(b bool) {
 	m.system_owned = &b
@@ -75294,7 +80193,7 @@ func (m *MappedControlHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MappedControlHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 25)
 	if m.history_time != nil {
 		fields = append(fields, mappedcontrolhistory.FieldHistoryTime)
 	}
@@ -75327,6 +80226,24 @@ func (m *MappedControlHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, mappedcontrolhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, mappedcontrolhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, mappedcontrolhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, mappedcontrolhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, mappedcontrolhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, mappedcontrolhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, mappedcontrolhistory.FieldExternalID)
 	}
 	if m.system_owned != nil {
 		fields = append(fields, mappedcontrolhistory.FieldSystemOwned)
@@ -75382,6 +80299,18 @@ func (m *MappedControlHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedBy()
 	case mappedcontrolhistory.FieldTags:
 		return m.Tags()
+	case mappedcontrolhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case mappedcontrolhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case mappedcontrolhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case mappedcontrolhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case mappedcontrolhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case mappedcontrolhistory.FieldExternalID:
+		return m.ExternalID()
 	case mappedcontrolhistory.FieldSystemOwned:
 		return m.SystemOwned()
 	case mappedcontrolhistory.FieldInternalNotes:
@@ -75429,6 +80358,18 @@ func (m *MappedControlHistoryMutation) OldField(ctx context.Context, name string
 		return m.OldDeletedBy(ctx)
 	case mappedcontrolhistory.FieldTags:
 		return m.OldTags(ctx)
+	case mappedcontrolhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case mappedcontrolhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case mappedcontrolhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case mappedcontrolhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case mappedcontrolhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case mappedcontrolhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case mappedcontrolhistory.FieldSystemOwned:
 		return m.OldSystemOwned(ctx)
 	case mappedcontrolhistory.FieldInternalNotes:
@@ -75530,6 +80471,48 @@ func (m *MappedControlHistoryMutation) SetField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case mappedcontrolhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case mappedcontrolhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case mappedcontrolhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case mappedcontrolhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case mappedcontrolhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case mappedcontrolhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case mappedcontrolhistory.FieldSystemOwned:
 		v, ok := value.(bool)
@@ -75659,6 +80642,24 @@ func (m *MappedControlHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(mappedcontrolhistory.FieldTags) {
 		fields = append(fields, mappedcontrolhistory.FieldTags)
 	}
+	if m.FieldCleared(mappedcontrolhistory.FieldSourceDefinitionID) {
+		fields = append(fields, mappedcontrolhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(mappedcontrolhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, mappedcontrolhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(mappedcontrolhistory.FieldSourceInstanceID) {
+		fields = append(fields, mappedcontrolhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(mappedcontrolhistory.FieldManagedBy) {
+		fields = append(fields, mappedcontrolhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(mappedcontrolhistory.FieldIntegrationRunID) {
+		fields = append(fields, mappedcontrolhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(mappedcontrolhistory.FieldExternalID) {
+		fields = append(fields, mappedcontrolhistory.FieldExternalID)
+	}
 	if m.FieldCleared(mappedcontrolhistory.FieldSystemOwned) {
 		fields = append(fields, mappedcontrolhistory.FieldSystemOwned)
 	}
@@ -75721,6 +80722,24 @@ func (m *MappedControlHistoryMutation) ClearField(name string) error {
 	case mappedcontrolhistory.FieldTags:
 		m.ClearTags()
 		return nil
+	case mappedcontrolhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case mappedcontrolhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case mappedcontrolhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case mappedcontrolhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case mappedcontrolhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case mappedcontrolhistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case mappedcontrolhistory.FieldSystemOwned:
 		m.ClearSystemOwned()
 		return nil
@@ -75782,6 +80801,24 @@ func (m *MappedControlHistoryMutation) ResetField(name string) error {
 		return nil
 	case mappedcontrolhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case mappedcontrolhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case mappedcontrolhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case mappedcontrolhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case mappedcontrolhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case mappedcontrolhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case mappedcontrolhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case mappedcontrolhistory.FieldSystemOwned:
 		m.ResetSystemOwned()
@@ -75862,33 +80899,39 @@ func (m *MappedControlHistoryMutation) ResetEdge(name string) error {
 // NarrativeHistoryMutation represents an operation that mutates the NarrativeHistory nodes in the graph.
 type NarrativeHistoryMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	history_time            *time.Time
-	ref                     *string
-	operation               *history.OpType
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	display_id              *string
-	tags                    *[]string
-	appendtags              []string
-	owner_id                *string
-	system_owned            *bool
-	internal_notes          *string
-	system_internal_id      *string
-	name                    *string
-	description             *string
-	details                 *string
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*NarrativeHistory, error)
-	predicates              []predicate.NarrativeHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	display_id                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	name                      *string
+	description               *string
+	details                   *string
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*NarrativeHistory, error)
+	predicates                []predicate.NarrativeHistory
 }
 
 var _ ent.Mutation = (*NarrativeHistoryMutation)(nil)
@@ -76560,6 +81603,300 @@ func (m *NarrativeHistoryMutation) ResetTags() {
 	delete(m.clearedFields, narrativehistory.FieldTags)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *NarrativeHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *NarrativeHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the NarrativeHistory entity.
+// If the NarrativeHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NarrativeHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *NarrativeHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[narrativehistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *NarrativeHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[narrativehistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *NarrativeHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, narrativehistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *NarrativeHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *NarrativeHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the NarrativeHistory entity.
+// If the NarrativeHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NarrativeHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *NarrativeHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[narrativehistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *NarrativeHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[narrativehistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *NarrativeHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, narrativehistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *NarrativeHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *NarrativeHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the NarrativeHistory entity.
+// If the NarrativeHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NarrativeHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *NarrativeHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[narrativehistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *NarrativeHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[narrativehistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *NarrativeHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, narrativehistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *NarrativeHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *NarrativeHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the NarrativeHistory entity.
+// If the NarrativeHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NarrativeHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *NarrativeHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[narrativehistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *NarrativeHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[narrativehistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *NarrativeHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, narrativehistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *NarrativeHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *NarrativeHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the NarrativeHistory entity.
+// If the NarrativeHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NarrativeHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *NarrativeHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[narrativehistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *NarrativeHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[narrativehistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *NarrativeHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, narrativehistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *NarrativeHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *NarrativeHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the NarrativeHistory entity.
+// If the NarrativeHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *NarrativeHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *NarrativeHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[narrativehistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *NarrativeHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[narrativehistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *NarrativeHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, narrativehistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *NarrativeHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -76924,7 +82261,7 @@ func (m *NarrativeHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *NarrativeHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 25)
 	if m.history_time != nil {
 		fields = append(fields, narrativehistory.FieldHistoryTime)
 	}
@@ -76960,6 +82297,24 @@ func (m *NarrativeHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, narrativehistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, narrativehistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, narrativehistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, narrativehistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, narrativehistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, narrativehistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, narrativehistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, narrativehistory.FieldOwnerID)
@@ -77014,6 +82369,18 @@ func (m *NarrativeHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case narrativehistory.FieldTags:
 		return m.Tags()
+	case narrativehistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case narrativehistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case narrativehistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case narrativehistory.FieldManagedBy:
+		return m.ManagedBy()
+	case narrativehistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case narrativehistory.FieldExternalID:
+		return m.ExternalID()
 	case narrativehistory.FieldOwnerID:
 		return m.OwnerID()
 	case narrativehistory.FieldSystemOwned:
@@ -77061,6 +82428,18 @@ func (m *NarrativeHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldDisplayID(ctx)
 	case narrativehistory.FieldTags:
 		return m.OldTags(ctx)
+	case narrativehistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case narrativehistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case narrativehistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case narrativehistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case narrativehistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case narrativehistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case narrativehistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case narrativehistory.FieldSystemOwned:
@@ -77168,6 +82547,48 @@ func (m *NarrativeHistoryMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetTags(v)
 		return nil
+	case narrativehistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case narrativehistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case narrativehistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case narrativehistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case narrativehistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case narrativehistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
+		return nil
 	case narrativehistory.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -77274,6 +82695,24 @@ func (m *NarrativeHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(narrativehistory.FieldTags) {
 		fields = append(fields, narrativehistory.FieldTags)
 	}
+	if m.FieldCleared(narrativehistory.FieldSourceDefinitionID) {
+		fields = append(fields, narrativehistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(narrativehistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, narrativehistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(narrativehistory.FieldSourceInstanceID) {
+		fields = append(fields, narrativehistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(narrativehistory.FieldManagedBy) {
+		fields = append(fields, narrativehistory.FieldManagedBy)
+	}
+	if m.FieldCleared(narrativehistory.FieldIntegrationRunID) {
+		fields = append(fields, narrativehistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(narrativehistory.FieldExternalID) {
+		fields = append(fields, narrativehistory.FieldExternalID)
+	}
 	if m.FieldCleared(narrativehistory.FieldOwnerID) {
 		fields = append(fields, narrativehistory.FieldOwnerID)
 	}
@@ -77332,6 +82771,24 @@ func (m *NarrativeHistoryMutation) ClearField(name string) error {
 		return nil
 	case narrativehistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case narrativehistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case narrativehistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case narrativehistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case narrativehistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case narrativehistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case narrativehistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case narrativehistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -77394,6 +82851,24 @@ func (m *NarrativeHistoryMutation) ResetField(name string) error {
 		return nil
 	case narrativehistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case narrativehistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case narrativehistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case narrativehistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case narrativehistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case narrativehistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case narrativehistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case narrativehistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -91123,6 +96598,12 @@ type PlatformHistoryMutation struct {
 	display_id                         *string
 	tags                               *[]string
 	appendtags                         []string
+	source_definition_id               *string
+	source_definition_version          *string
+	source_instance_id                 *string
+	managed_by                         *string
+	integration_run_id                 *string
+	external_id                        *string
 	owner_id                           *string
 	internal_owner                     *string
 	internal_owner_user_id             *string
@@ -91850,6 +97331,300 @@ func (m *PlatformHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, platformhistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *PlatformHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *PlatformHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the PlatformHistory entity.
+// If the PlatformHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *PlatformHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[platformhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *PlatformHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[platformhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *PlatformHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, platformhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *PlatformHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *PlatformHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the PlatformHistory entity.
+// If the PlatformHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *PlatformHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[platformhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *PlatformHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[platformhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *PlatformHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, platformhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *PlatformHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *PlatformHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the PlatformHistory entity.
+// If the PlatformHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *PlatformHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[platformhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *PlatformHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[platformhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *PlatformHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, platformhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *PlatformHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *PlatformHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the PlatformHistory entity.
+// If the PlatformHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *PlatformHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[platformhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *PlatformHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[platformhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *PlatformHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, platformhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *PlatformHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *PlatformHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the PlatformHistory entity.
+// If the PlatformHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *PlatformHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[platformhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *PlatformHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[platformhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *PlatformHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, platformhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *PlatformHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *PlatformHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the PlatformHistory entity.
+// If the PlatformHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *PlatformHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[platformhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *PlatformHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[platformhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *PlatformHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, platformhistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -94465,7 +100240,7 @@ func (m *PlatformHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PlatformHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 65)
+	fields := make([]string, 0, 71)
 	if m.history_time != nil {
 		fields = append(fields, platformhistory.FieldHistoryTime)
 	}
@@ -94501,6 +100276,24 @@ func (m *PlatformHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, platformhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, platformhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, platformhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, platformhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, platformhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, platformhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, platformhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, platformhistory.FieldOwnerID)
@@ -94693,6 +100486,18 @@ func (m *PlatformHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case platformhistory.FieldTags:
 		return m.Tags()
+	case platformhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case platformhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case platformhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case platformhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case platformhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case platformhistory.FieldExternalID:
+		return m.ExternalID()
 	case platformhistory.FieldOwnerID:
 		return m.OwnerID()
 	case platformhistory.FieldInternalOwner:
@@ -94832,6 +100637,18 @@ func (m *PlatformHistoryMutation) OldField(ctx context.Context, name string) (en
 		return m.OldDisplayID(ctx)
 	case platformhistory.FieldTags:
 		return m.OldTags(ctx)
+	case platformhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case platformhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case platformhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case platformhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case platformhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case platformhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case platformhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case platformhistory.FieldInternalOwner:
@@ -95030,6 +100847,48 @@ func (m *PlatformHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case platformhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case platformhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case platformhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case platformhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case platformhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case platformhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case platformhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -95474,6 +101333,24 @@ func (m *PlatformHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(platformhistory.FieldTags) {
 		fields = append(fields, platformhistory.FieldTags)
 	}
+	if m.FieldCleared(platformhistory.FieldSourceDefinitionID) {
+		fields = append(fields, platformhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(platformhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, platformhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(platformhistory.FieldSourceInstanceID) {
+		fields = append(fields, platformhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(platformhistory.FieldManagedBy) {
+		fields = append(fields, platformhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(platformhistory.FieldIntegrationRunID) {
+		fields = append(fields, platformhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(platformhistory.FieldExternalID) {
+		fields = append(fields, platformhistory.FieldExternalID)
+	}
 	if m.FieldCleared(platformhistory.FieldOwnerID) {
 		fields = append(fields, platformhistory.FieldOwnerID)
 	}
@@ -95664,6 +101541,24 @@ func (m *PlatformHistoryMutation) ClearField(name string) error {
 		return nil
 	case platformhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case platformhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case platformhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case platformhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case platformhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case platformhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case platformhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case platformhistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -95858,6 +101753,24 @@ func (m *PlatformHistoryMutation) ResetField(name string) error {
 		return nil
 	case platformhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case platformhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case platformhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case platformhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case platformhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case platformhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case platformhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case platformhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -96095,6 +102008,7 @@ type ProcedureHistoryMutation struct {
 	source_instance_id                      *string
 	managed_by                              *string
 	integration_run_id                      *string
+	external_id                             *string
 	owner_id                                *string
 	name                                    *string
 	status                                  *enums.DocumentStatus
@@ -97101,6 +103015,55 @@ func (m *ProcedureHistoryMutation) IntegrationRunIDCleared() bool {
 func (m *ProcedureHistoryMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, procedurehistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *ProcedureHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *ProcedureHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the ProcedureHistory entity.
+// If the ProcedureHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProcedureHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *ProcedureHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[procedurehistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *ProcedureHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[procedurehistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *ProcedureHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, procedurehistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -98804,7 +104767,7 @@ func (m *ProcedureHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProcedureHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 50)
+	fields := make([]string, 0, 51)
 	if m.history_time != nil {
 		fields = append(fields, procedurehistory.FieldHistoryTime)
 	}
@@ -98858,6 +104821,9 @@ func (m *ProcedureHistoryMutation) Fields() []string {
 	}
 	if m.integration_run_id != nil {
 		fields = append(fields, procedurehistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, procedurehistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, procedurehistory.FieldOwnerID)
@@ -98999,6 +104965,8 @@ func (m *ProcedureHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case procedurehistory.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case procedurehistory.FieldExternalID:
+		return m.ExternalID()
 	case procedurehistory.FieldOwnerID:
 		return m.OwnerID()
 	case procedurehistory.FieldName:
@@ -99108,6 +105076,8 @@ func (m *ProcedureHistoryMutation) OldField(ctx context.Context, name string) (e
 		return m.OldManagedBy(ctx)
 	case procedurehistory.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case procedurehistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case procedurehistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case procedurehistory.FieldName:
@@ -99306,6 +105276,13 @@ func (m *ProcedureHistoryMutation) SetField(name string, value ent.Value) error 
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetIntegrationRunID(v)
+		return nil
+	case procedurehistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case procedurehistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -99606,6 +105583,9 @@ func (m *ProcedureHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(procedurehistory.FieldIntegrationRunID) {
 		fields = append(fields, procedurehistory.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(procedurehistory.FieldExternalID) {
+		fields = append(fields, procedurehistory.FieldExternalID)
+	}
 	if m.FieldCleared(procedurehistory.FieldOwnerID) {
 		fields = append(fields, procedurehistory.FieldOwnerID)
 	}
@@ -99757,6 +105737,9 @@ func (m *ProcedureHistoryMutation) ClearField(name string) error {
 		return nil
 	case procedurehistory.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
+		return nil
+	case procedurehistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case procedurehistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -99912,6 +105895,9 @@ func (m *ProcedureHistoryMutation) ResetField(name string) error {
 		return nil
 	case procedurehistory.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
+		return nil
+	case procedurehistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case procedurehistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -100080,6 +106066,12 @@ type ProgramHistoryMutation struct {
 	display_id                    *string
 	tags                          *[]string
 	appendtags                    []string
+	source_definition_id          *string
+	source_definition_version     *string
+	source_instance_id            *string
+	managed_by                    *string
+	integration_run_id            *string
+	external_id                   *string
 	owner_id                      *string
 	program_kind_name             *string
 	program_kind_id               *string
@@ -100774,6 +106766,300 @@ func (m *ProgramHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, programhistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *ProgramHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *ProgramHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *ProgramHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[programhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *ProgramHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, programhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *ProgramHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *ProgramHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *ProgramHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[programhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *ProgramHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, programhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *ProgramHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *ProgramHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *ProgramHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[programhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *ProgramHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, programhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *ProgramHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *ProgramHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *ProgramHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[programhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *ProgramHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, programhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *ProgramHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *ProgramHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *ProgramHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[programhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *ProgramHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, programhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *ProgramHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *ProgramHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *ProgramHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[programhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *ProgramHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, programhistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -101774,7 +108060,7 @@ func (m *ProgramHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProgramHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 33)
+	fields := make([]string, 0, 39)
 	if m.history_time != nil {
 		fields = append(fields, programhistory.FieldHistoryTime)
 	}
@@ -101810,6 +108096,24 @@ func (m *ProgramHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, programhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, programhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, programhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, programhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, programhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, programhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, programhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, programhistory.FieldOwnerID)
@@ -101906,6 +108210,18 @@ func (m *ProgramHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case programhistory.FieldTags:
 		return m.Tags()
+	case programhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case programhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case programhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case programhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case programhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case programhistory.FieldExternalID:
+		return m.ExternalID()
 	case programhistory.FieldOwnerID:
 		return m.OwnerID()
 	case programhistory.FieldProgramKindName:
@@ -101981,6 +108297,18 @@ func (m *ProgramHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldDisplayID(ctx)
 	case programhistory.FieldTags:
 		return m.OldTags(ctx)
+	case programhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case programhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case programhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case programhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case programhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case programhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case programhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case programhistory.FieldProgramKindName:
@@ -102115,6 +108443,48 @@ func (m *ProgramHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case programhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case programhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case programhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case programhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case programhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case programhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case programhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -102320,6 +108690,24 @@ func (m *ProgramHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(programhistory.FieldTags) {
 		fields = append(fields, programhistory.FieldTags)
 	}
+	if m.FieldCleared(programhistory.FieldSourceDefinitionID) {
+		fields = append(fields, programhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(programhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, programhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(programhistory.FieldSourceInstanceID) {
+		fields = append(fields, programhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(programhistory.FieldManagedBy) {
+		fields = append(fields, programhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(programhistory.FieldIntegrationRunID) {
+		fields = append(fields, programhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(programhistory.FieldExternalID) {
+		fields = append(fields, programhistory.FieldExternalID)
+	}
 	if m.FieldCleared(programhistory.FieldOwnerID) {
 		fields = append(fields, programhistory.FieldOwnerID)
 	}
@@ -102408,6 +108796,24 @@ func (m *ProgramHistoryMutation) ClearField(name string) error {
 		return nil
 	case programhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case programhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case programhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case programhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case programhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case programhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case programhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case programhistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -102500,6 +108906,24 @@ func (m *ProgramHistoryMutation) ResetField(name string) error {
 		return nil
 	case programhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case programhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case programhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case programhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case programhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case programhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case programhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case programhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -103608,55 +110032,60 @@ func (m *ProgramMembershipHistoryMutation) ResetEdge(name string) error {
 // RemediationHistoryMutation represents an operation that mutates the RemediationHistory nodes in the graph.
 type RemediationHistoryMutation struct {
 	config
-	op                       Op
-	typ                      string
-	id                       *string
-	history_time             *time.Time
-	ref                      *string
-	operation                *history.OpType
-	created_at               *time.Time
-	updated_at               *time.Time
-	created_by               *string
-	updated_by               *string
-	updated_by_impersonator  *string
-	deleted_at               *time.Time
-	deleted_by               *string
-	display_id               *string
-	tags                     *[]string
-	appendtags               []string
-	owner_id                 *string
-	system_owned             *bool
-	internal_notes           *string
-	system_internal_id       *string
-	environment_name         *string
-	environment_id           *string
-	scope_name               *string
-	scope_id                 *string
-	workflow_eligible_marker *bool
-	external_id              *string
-	external_owner_id        *string
-	title                    *string
-	status                   *enums.RemediationStatus
-	state                    *string
-	intent                   *string
-	summary                  *string
-	explanation              *string
-	instructions             *string
-	owner_reference          *string
-	repository_uri           *string
-	pull_request_uri         *string
-	ticket_reference         *string
-	due_at                   *models.DateTime
-	completed_at             *models.DateTime
-	pr_generated_at          *models.DateTime
-	error                    *string
-	source                   *string
-	external_uri             *string
-	metadata                 *map[string]interface{}
-	clearedFields            map[string]struct{}
-	done                     bool
-	oldValue                 func(context.Context) (*RemediationHistory, error)
-	predicates               []predicate.RemediationHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	display_id                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	environment_name          *string
+	environment_id            *string
+	scope_name                *string
+	scope_id                  *string
+	workflow_eligible_marker  *bool
+	external_owner_id         *string
+	title                     *string
+	status                    *enums.RemediationStatus
+	state                     *string
+	intent                    *string
+	summary                   *string
+	explanation               *string
+	instructions              *string
+	owner_reference           *string
+	repository_uri            *string
+	pull_request_uri          *string
+	ticket_reference          *string
+	due_at                    *models.DateTime
+	completed_at              *models.DateTime
+	pr_generated_at           *models.DateTime
+	error                     *string
+	source                    *string
+	external_uri              *string
+	metadata                  *map[string]interface{}
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*RemediationHistory, error)
+	predicates                []predicate.RemediationHistory
 }
 
 var _ ent.Mutation = (*RemediationHistoryMutation)(nil)
@@ -104328,6 +110757,300 @@ func (m *RemediationHistoryMutation) ResetTags() {
 	delete(m.clearedFields, remediationhistory.FieldTags)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *RemediationHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *RemediationHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the RemediationHistory entity.
+// If the RemediationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RemediationHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *RemediationHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[remediationhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *RemediationHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[remediationhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *RemediationHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, remediationhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *RemediationHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *RemediationHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the RemediationHistory entity.
+// If the RemediationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RemediationHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *RemediationHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[remediationhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *RemediationHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[remediationhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *RemediationHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, remediationhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *RemediationHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *RemediationHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the RemediationHistory entity.
+// If the RemediationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RemediationHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *RemediationHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[remediationhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *RemediationHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[remediationhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *RemediationHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, remediationhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *RemediationHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *RemediationHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the RemediationHistory entity.
+// If the RemediationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RemediationHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *RemediationHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[remediationhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *RemediationHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[remediationhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *RemediationHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, remediationhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *RemediationHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *RemediationHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the RemediationHistory entity.
+// If the RemediationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RemediationHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *RemediationHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[remediationhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *RemediationHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[remediationhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *RemediationHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, remediationhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *RemediationHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *RemediationHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the RemediationHistory entity.
+// If the RemediationHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RemediationHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *RemediationHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[remediationhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *RemediationHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[remediationhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *RemediationHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, remediationhistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *RemediationHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -104767,55 +111490,6 @@ func (m *RemediationHistoryMutation) WorkflowEligibleMarkerCleared() bool {
 func (m *RemediationHistoryMutation) ResetWorkflowEligibleMarker() {
 	m.workflow_eligible_marker = nil
 	delete(m.clearedFields, remediationhistory.FieldWorkflowEligibleMarker)
-}
-
-// SetExternalID sets the "external_id" field.
-func (m *RemediationHistoryMutation) SetExternalID(s string) {
-	m.external_id = &s
-}
-
-// ExternalID returns the value of the "external_id" field in the mutation.
-func (m *RemediationHistoryMutation) ExternalID() (r string, exists bool) {
-	v := m.external_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalID returns the old "external_id" field's value of the RemediationHistory entity.
-// If the RemediationHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RemediationHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
-	}
-	return oldValue.ExternalID, nil
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (m *RemediationHistoryMutation) ClearExternalID() {
-	m.external_id = nil
-	m.clearedFields[remediationhistory.FieldExternalID] = struct{}{}
-}
-
-// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
-func (m *RemediationHistoryMutation) ExternalIDCleared() bool {
-	_, ok := m.clearedFields[remediationhistory.FieldExternalID]
-	return ok
-}
-
-// ResetExternalID resets all changes to the "external_id" field.
-func (m *RemediationHistoryMutation) ResetExternalID() {
-	m.external_id = nil
-	delete(m.clearedFields, remediationhistory.FieldExternalID)
 }
 
 // SetExternalOwnerID sets the "external_owner_id" field.
@@ -105783,7 +112457,7 @@ func (m *RemediationHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RemediationHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 41)
+	fields := make([]string, 0, 46)
 	if m.history_time != nil {
 		fields = append(fields, remediationhistory.FieldHistoryTime)
 	}
@@ -105820,6 +112494,24 @@ func (m *RemediationHistoryMutation) Fields() []string {
 	if m.tags != nil {
 		fields = append(fields, remediationhistory.FieldTags)
 	}
+	if m.source_definition_id != nil {
+		fields = append(fields, remediationhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, remediationhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, remediationhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, remediationhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, remediationhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, remediationhistory.FieldExternalID)
+	}
 	if m.owner_id != nil {
 		fields = append(fields, remediationhistory.FieldOwnerID)
 	}
@@ -105846,9 +112538,6 @@ func (m *RemediationHistoryMutation) Fields() []string {
 	}
 	if m.workflow_eligible_marker != nil {
 		fields = append(fields, remediationhistory.FieldWorkflowEligibleMarker)
-	}
-	if m.external_id != nil {
-		fields = append(fields, remediationhistory.FieldExternalID)
 	}
 	if m.external_owner_id != nil {
 		fields = append(fields, remediationhistory.FieldExternalOwnerID)
@@ -105939,6 +112628,18 @@ func (m *RemediationHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case remediationhistory.FieldTags:
 		return m.Tags()
+	case remediationhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case remediationhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case remediationhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case remediationhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case remediationhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case remediationhistory.FieldExternalID:
+		return m.ExternalID()
 	case remediationhistory.FieldOwnerID:
 		return m.OwnerID()
 	case remediationhistory.FieldSystemOwned:
@@ -105957,8 +112658,6 @@ func (m *RemediationHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ScopeID()
 	case remediationhistory.FieldWorkflowEligibleMarker:
 		return m.WorkflowEligibleMarker()
-	case remediationhistory.FieldExternalID:
-		return m.ExternalID()
 	case remediationhistory.FieldExternalOwnerID:
 		return m.ExternalOwnerID()
 	case remediationhistory.FieldTitle:
@@ -106030,6 +112729,18 @@ func (m *RemediationHistoryMutation) OldField(ctx context.Context, name string) 
 		return m.OldDisplayID(ctx)
 	case remediationhistory.FieldTags:
 		return m.OldTags(ctx)
+	case remediationhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case remediationhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case remediationhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case remediationhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case remediationhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case remediationhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case remediationhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case remediationhistory.FieldSystemOwned:
@@ -106048,8 +112759,6 @@ func (m *RemediationHistoryMutation) OldField(ctx context.Context, name string) 
 		return m.OldScopeID(ctx)
 	case remediationhistory.FieldWorkflowEligibleMarker:
 		return m.OldWorkflowEligibleMarker(ctx)
-	case remediationhistory.FieldExternalID:
-		return m.OldExternalID(ctx)
 	case remediationhistory.FieldExternalOwnerID:
 		return m.OldExternalOwnerID(ctx)
 	case remediationhistory.FieldTitle:
@@ -106181,6 +112890,48 @@ func (m *RemediationHistoryMutation) SetField(name string, value ent.Value) erro
 		}
 		m.SetTags(v)
 		return nil
+	case remediationhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case remediationhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case remediationhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case remediationhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case remediationhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case remediationhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
+		return nil
 	case remediationhistory.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -106243,13 +112994,6 @@ func (m *RemediationHistoryMutation) SetField(name string, value ent.Value) erro
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetWorkflowEligibleMarker(v)
-		return nil
-	case remediationhistory.FieldExternalID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalID(v)
 		return nil
 	case remediationhistory.FieldExternalOwnerID:
 		v, ok := value.(string)
@@ -106441,6 +113185,24 @@ func (m *RemediationHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(remediationhistory.FieldTags) {
 		fields = append(fields, remediationhistory.FieldTags)
 	}
+	if m.FieldCleared(remediationhistory.FieldSourceDefinitionID) {
+		fields = append(fields, remediationhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(remediationhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, remediationhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(remediationhistory.FieldSourceInstanceID) {
+		fields = append(fields, remediationhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(remediationhistory.FieldManagedBy) {
+		fields = append(fields, remediationhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(remediationhistory.FieldIntegrationRunID) {
+		fields = append(fields, remediationhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(remediationhistory.FieldExternalID) {
+		fields = append(fields, remediationhistory.FieldExternalID)
+	}
 	if m.FieldCleared(remediationhistory.FieldOwnerID) {
 		fields = append(fields, remediationhistory.FieldOwnerID)
 	}
@@ -106467,9 +113229,6 @@ func (m *RemediationHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(remediationhistory.FieldWorkflowEligibleMarker) {
 		fields = append(fields, remediationhistory.FieldWorkflowEligibleMarker)
-	}
-	if m.FieldCleared(remediationhistory.FieldExternalID) {
-		fields = append(fields, remediationhistory.FieldExternalID)
 	}
 	if m.FieldCleared(remediationhistory.FieldExternalOwnerID) {
 		fields = append(fields, remediationhistory.FieldExternalOwnerID)
@@ -106569,6 +113328,24 @@ func (m *RemediationHistoryMutation) ClearField(name string) error {
 	case remediationhistory.FieldTags:
 		m.ClearTags()
 		return nil
+	case remediationhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case remediationhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case remediationhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case remediationhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case remediationhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case remediationhistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case remediationhistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -106595,9 +113372,6 @@ func (m *RemediationHistoryMutation) ClearField(name string) error {
 		return nil
 	case remediationhistory.FieldWorkflowEligibleMarker:
 		m.ClearWorkflowEligibleMarker()
-		return nil
-	case remediationhistory.FieldExternalID:
-		m.ClearExternalID()
 		return nil
 	case remediationhistory.FieldExternalOwnerID:
 		m.ClearExternalOwnerID()
@@ -106700,6 +113474,24 @@ func (m *RemediationHistoryMutation) ResetField(name string) error {
 	case remediationhistory.FieldTags:
 		m.ResetTags()
 		return nil
+	case remediationhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case remediationhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case remediationhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case remediationhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case remediationhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case remediationhistory.FieldExternalID:
+		m.ResetExternalID()
+		return nil
 	case remediationhistory.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -106726,9 +113518,6 @@ func (m *RemediationHistoryMutation) ResetField(name string) error {
 		return nil
 	case remediationhistory.FieldWorkflowEligibleMarker:
 		m.ResetWorkflowEligibleMarker()
-		return nil
-	case remediationhistory.FieldExternalID:
-		m.ResetExternalID()
 		return nil
 	case remediationhistory.FieldExternalOwnerID:
 		m.ResetExternalOwnerID()
@@ -106842,52 +113631,57 @@ func (m *RemediationHistoryMutation) ResetEdge(name string) error {
 // ReviewHistoryMutation represents an operation that mutates the ReviewHistory nodes in the graph.
 type ReviewHistoryMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	history_time            *time.Time
-	ref                     *string
-	operation               *history.OpType
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	tags                    *[]string
-	appendtags              []string
-	owner_id                *string
-	system_owned            *bool
-	internal_notes          *string
-	system_internal_id      *string
-	environment_name        *string
-	environment_id          *string
-	scope_name              *string
-	scope_id                *string
-	external_id             *string
-	external_owner_id       *string
-	title                   *string
-	state                   *string
-	status                  *enums.ReviewStatus
-	category                *string
-	classification          *string
-	summary                 *string
-	details                 *string
-	reporter                *string
-	approved                *bool
-	reviewed_at             *models.DateTime
-	reported_at             *models.DateTime
-	approved_at             *models.DateTime
-	reviewer_id             *string
-	source                  *string
-	external_uri            *string
-	metadata                *map[string]interface{}
-	raw_payload             *map[string]interface{}
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*ReviewHistory, error)
-	predicates              []predicate.ReviewHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	environment_name          *string
+	environment_id            *string
+	scope_name                *string
+	scope_id                  *string
+	external_owner_id         *string
+	title                     *string
+	state                     *string
+	status                    *enums.ReviewStatus
+	category                  *string
+	classification            *string
+	summary                   *string
+	details                   *string
+	reporter                  *string
+	approved                  *bool
+	reviewed_at               *models.DateTime
+	reported_at               *models.DateTime
+	approved_at               *models.DateTime
+	reviewer_id               *string
+	source                    *string
+	external_uri              *string
+	metadata                  *map[string]interface{}
+	raw_payload               *map[string]interface{}
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*ReviewHistory, error)
+	predicates                []predicate.ReviewHistory
 }
 
 var _ ent.Mutation = (*ReviewHistoryMutation)(nil)
@@ -107523,6 +114317,300 @@ func (m *ReviewHistoryMutation) ResetTags() {
 	delete(m.clearedFields, reviewhistory.FieldTags)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *ReviewHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *ReviewHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *ReviewHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[reviewhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *ReviewHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, reviewhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *ReviewHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *ReviewHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *ReviewHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[reviewhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *ReviewHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, reviewhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *ReviewHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *ReviewHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *ReviewHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[reviewhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *ReviewHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, reviewhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *ReviewHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *ReviewHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *ReviewHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[reviewhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *ReviewHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, reviewhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *ReviewHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *ReviewHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *ReviewHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[reviewhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *ReviewHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, reviewhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *ReviewHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *ReviewHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the ReviewHistory entity.
+// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ReviewHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *ReviewHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[reviewhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *ReviewHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[reviewhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *ReviewHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, reviewhistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *ReviewHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -107913,55 +115001,6 @@ func (m *ReviewHistoryMutation) ScopeIDCleared() bool {
 func (m *ReviewHistoryMutation) ResetScopeID() {
 	m.scope_id = nil
 	delete(m.clearedFields, reviewhistory.FieldScopeID)
-}
-
-// SetExternalID sets the "external_id" field.
-func (m *ReviewHistoryMutation) SetExternalID(s string) {
-	m.external_id = &s
-}
-
-// ExternalID returns the value of the "external_id" field in the mutation.
-func (m *ReviewHistoryMutation) ExternalID() (r string, exists bool) {
-	v := m.external_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalID returns the old "external_id" field's value of the ReviewHistory entity.
-// If the ReviewHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ReviewHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
-	}
-	return oldValue.ExternalID, nil
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (m *ReviewHistoryMutation) ClearExternalID() {
-	m.external_id = nil
-	m.clearedFields[reviewhistory.FieldExternalID] = struct{}{}
-}
-
-// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
-func (m *ReviewHistoryMutation) ExternalIDCleared() bool {
-	_, ok := m.clearedFields[reviewhistory.FieldExternalID]
-	return ok
-}
-
-// ResetExternalID resets all changes to the "external_id" field.
-func (m *ReviewHistoryMutation) ResetExternalID() {
-	m.external_id = nil
-	delete(m.clearedFields, reviewhistory.FieldExternalID)
 }
 
 // SetExternalOwnerID sets the "external_owner_id" field.
@@ -108867,7 +115906,7 @@ func (m *ReviewHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ReviewHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 38)
+	fields := make([]string, 0, 43)
 	if m.history_time != nil {
 		fields = append(fields, reviewhistory.FieldHistoryTime)
 	}
@@ -108901,6 +115940,24 @@ func (m *ReviewHistoryMutation) Fields() []string {
 	if m.tags != nil {
 		fields = append(fields, reviewhistory.FieldTags)
 	}
+	if m.source_definition_id != nil {
+		fields = append(fields, reviewhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, reviewhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, reviewhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, reviewhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, reviewhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, reviewhistory.FieldExternalID)
+	}
 	if m.owner_id != nil {
 		fields = append(fields, reviewhistory.FieldOwnerID)
 	}
@@ -108924,9 +115981,6 @@ func (m *ReviewHistoryMutation) Fields() []string {
 	}
 	if m.scope_id != nil {
 		fields = append(fields, reviewhistory.FieldScopeID)
-	}
-	if m.external_id != nil {
-		fields = append(fields, reviewhistory.FieldExternalID)
 	}
 	if m.external_owner_id != nil {
 		fields = append(fields, reviewhistory.FieldExternalOwnerID)
@@ -109012,6 +116066,18 @@ func (m *ReviewHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedBy()
 	case reviewhistory.FieldTags:
 		return m.Tags()
+	case reviewhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case reviewhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case reviewhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case reviewhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case reviewhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case reviewhistory.FieldExternalID:
+		return m.ExternalID()
 	case reviewhistory.FieldOwnerID:
 		return m.OwnerID()
 	case reviewhistory.FieldSystemOwned:
@@ -109028,8 +116094,6 @@ func (m *ReviewHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ScopeName()
 	case reviewhistory.FieldScopeID:
 		return m.ScopeID()
-	case reviewhistory.FieldExternalID:
-		return m.ExternalID()
 	case reviewhistory.FieldExternalOwnerID:
 		return m.ExternalOwnerID()
 	case reviewhistory.FieldTitle:
@@ -109097,6 +116161,18 @@ func (m *ReviewHistoryMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldDeletedBy(ctx)
 	case reviewhistory.FieldTags:
 		return m.OldTags(ctx)
+	case reviewhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case reviewhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case reviewhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case reviewhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case reviewhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case reviewhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case reviewhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case reviewhistory.FieldSystemOwned:
@@ -109113,8 +116189,6 @@ func (m *ReviewHistoryMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldScopeName(ctx)
 	case reviewhistory.FieldScopeID:
 		return m.OldScopeID(ctx)
-	case reviewhistory.FieldExternalID:
-		return m.OldExternalID(ctx)
 	case reviewhistory.FieldExternalOwnerID:
 		return m.OldExternalOwnerID(ctx)
 	case reviewhistory.FieldTitle:
@@ -109237,6 +116311,48 @@ func (m *ReviewHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetTags(v)
 		return nil
+	case reviewhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case reviewhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case reviewhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case reviewhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case reviewhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case reviewhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
+		return nil
 	case reviewhistory.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -109292,13 +116408,6 @@ func (m *ReviewHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetScopeID(v)
-		return nil
-	case reviewhistory.FieldExternalID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalID(v)
 		return nil
 	case reviewhistory.FieldExternalOwnerID:
 		v, ok := value.(string)
@@ -109483,6 +116592,24 @@ func (m *ReviewHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(reviewhistory.FieldTags) {
 		fields = append(fields, reviewhistory.FieldTags)
 	}
+	if m.FieldCleared(reviewhistory.FieldSourceDefinitionID) {
+		fields = append(fields, reviewhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(reviewhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, reviewhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(reviewhistory.FieldSourceInstanceID) {
+		fields = append(fields, reviewhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(reviewhistory.FieldManagedBy) {
+		fields = append(fields, reviewhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(reviewhistory.FieldIntegrationRunID) {
+		fields = append(fields, reviewhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(reviewhistory.FieldExternalID) {
+		fields = append(fields, reviewhistory.FieldExternalID)
+	}
 	if m.FieldCleared(reviewhistory.FieldOwnerID) {
 		fields = append(fields, reviewhistory.FieldOwnerID)
 	}
@@ -109506,9 +116633,6 @@ func (m *ReviewHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(reviewhistory.FieldScopeID) {
 		fields = append(fields, reviewhistory.FieldScopeID)
-	}
-	if m.FieldCleared(reviewhistory.FieldExternalID) {
-		fields = append(fields, reviewhistory.FieldExternalID)
 	}
 	if m.FieldCleared(reviewhistory.FieldExternalOwnerID) {
 		fields = append(fields, reviewhistory.FieldExternalOwnerID)
@@ -109602,6 +116726,24 @@ func (m *ReviewHistoryMutation) ClearField(name string) error {
 	case reviewhistory.FieldTags:
 		m.ClearTags()
 		return nil
+	case reviewhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case reviewhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case reviewhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case reviewhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case reviewhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case reviewhistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case reviewhistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -109625,9 +116767,6 @@ func (m *ReviewHistoryMutation) ClearField(name string) error {
 		return nil
 	case reviewhistory.FieldScopeID:
 		m.ClearScopeID()
-		return nil
-	case reviewhistory.FieldExternalID:
-		m.ClearExternalID()
 		return nil
 	case reviewhistory.FieldExternalOwnerID:
 		m.ClearExternalOwnerID()
@@ -109721,6 +116860,24 @@ func (m *ReviewHistoryMutation) ResetField(name string) error {
 	case reviewhistory.FieldTags:
 		m.ResetTags()
 		return nil
+	case reviewhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case reviewhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case reviewhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case reviewhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case reviewhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case reviewhistory.FieldExternalID:
+		m.ResetExternalID()
+		return nil
 	case reviewhistory.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -109744,9 +116901,6 @@ func (m *ReviewHistoryMutation) ResetField(name string) error {
 		return nil
 	case reviewhistory.FieldScopeID:
 		m.ResetScopeID()
-		return nil
-	case reviewhistory.FieldExternalID:
-		m.ResetExternalID()
 		return nil
 	case reviewhistory.FieldExternalOwnerID:
 		m.ResetExternalOwnerID()
@@ -109878,6 +117032,7 @@ type RiskHistoryMutation struct {
 	source_instance_id             *string
 	managed_by                     *string
 	integration_run_id             *string
+	external_id                    *string
 	owner_id                       *string
 	stakeholder_name               *string
 	stakeholder_user_id            *string
@@ -109896,7 +117051,6 @@ type RiskHistoryMutation struct {
 	scope_name                     *string
 	scope_id                       *string
 	workflow_eligible_marker       *bool
-	external_id                    *string
 	integration_id                 *string
 	observed_at                    *models.DateTime
 	external_uuid                  *string
@@ -110846,6 +118000,55 @@ func (m *RiskHistoryMutation) ResetIntegrationRunID() {
 	delete(m.clearedFields, riskhistory.FieldIntegrationRunID)
 }
 
+// SetExternalID sets the "external_id" field.
+func (m *RiskHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *RiskHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the RiskHistory entity.
+// If the RiskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RiskHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *RiskHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[riskhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *RiskHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[riskhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *RiskHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, riskhistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *RiskHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -111726,55 +118929,6 @@ func (m *RiskHistoryMutation) WorkflowEligibleMarkerCleared() bool {
 func (m *RiskHistoryMutation) ResetWorkflowEligibleMarker() {
 	m.workflow_eligible_marker = nil
 	delete(m.clearedFields, riskhistory.FieldWorkflowEligibleMarker)
-}
-
-// SetExternalID sets the "external_id" field.
-func (m *RiskHistoryMutation) SetExternalID(s string) {
-	m.external_id = &s
-}
-
-// ExternalID returns the value of the "external_id" field in the mutation.
-func (m *RiskHistoryMutation) ExternalID() (r string, exists bool) {
-	v := m.external_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalID returns the old "external_id" field's value of the RiskHistory entity.
-// If the RiskHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RiskHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
-	}
-	return oldValue.ExternalID, nil
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (m *RiskHistoryMutation) ClearExternalID() {
-	m.external_id = nil
-	m.clearedFields[riskhistory.FieldExternalID] = struct{}{}
-}
-
-// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
-func (m *RiskHistoryMutation) ExternalIDCleared() bool {
-	_, ok := m.clearedFields[riskhistory.FieldExternalID]
-	return ok
-}
-
-// ResetExternalID resets all changes to the "external_id" field.
-func (m *RiskHistoryMutation) ResetExternalID() {
-	m.external_id = nil
-	delete(m.clearedFields, riskhistory.FieldExternalID)
 }
 
 // SetIntegrationID sets the "integration_id" field.
@@ -113116,6 +120270,9 @@ func (m *RiskHistoryMutation) Fields() []string {
 	if m.integration_run_id != nil {
 		fields = append(fields, riskhistory.FieldIntegrationRunID)
 	}
+	if m.external_id != nil {
+		fields = append(fields, riskhistory.FieldExternalID)
+	}
 	if m.owner_id != nil {
 		fields = append(fields, riskhistory.FieldOwnerID)
 	}
@@ -113169,9 +120326,6 @@ func (m *RiskHistoryMutation) Fields() []string {
 	}
 	if m.workflow_eligible_marker != nil {
 		fields = append(fields, riskhistory.FieldWorkflowEligibleMarker)
-	}
-	if m.external_id != nil {
-		fields = append(fields, riskhistory.FieldExternalID)
 	}
 	if m.integration_id != nil {
 		fields = append(fields, riskhistory.FieldIntegrationID)
@@ -113287,6 +120441,8 @@ func (m *RiskHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case riskhistory.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case riskhistory.FieldExternalID:
+		return m.ExternalID()
 	case riskhistory.FieldOwnerID:
 		return m.OwnerID()
 	case riskhistory.FieldStakeholderName:
@@ -113323,8 +120479,6 @@ func (m *RiskHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ScopeID()
 	case riskhistory.FieldWorkflowEligibleMarker:
 		return m.WorkflowEligibleMarker()
-	case riskhistory.FieldExternalID:
-		return m.ExternalID()
 	case riskhistory.FieldIntegrationID:
 		return m.IntegrationID()
 	case riskhistory.FieldObservedAt:
@@ -113416,6 +120570,8 @@ func (m *RiskHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldManagedBy(ctx)
 	case riskhistory.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case riskhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case riskhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case riskhistory.FieldStakeholderName:
@@ -113452,8 +120608,6 @@ func (m *RiskHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldScopeID(ctx)
 	case riskhistory.FieldWorkflowEligibleMarker:
 		return m.OldWorkflowEligibleMarker(ctx)
-	case riskhistory.FieldExternalID:
-		return m.OldExternalID(ctx)
 	case riskhistory.FieldIntegrationID:
 		return m.OldIntegrationID(ctx)
 	case riskhistory.FieldObservedAt:
@@ -113630,6 +120784,13 @@ func (m *RiskHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIntegrationRunID(v)
 		return nil
+	case riskhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
+		return nil
 	case riskhistory.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -113755,13 +120916,6 @@ func (m *RiskHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetWorkflowEligibleMarker(v)
-		return nil
-	case riskhistory.FieldExternalID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalID(v)
 		return nil
 	case riskhistory.FieldIntegrationID:
 		v, ok := value.(string)
@@ -114030,6 +121184,9 @@ func (m *RiskHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(riskhistory.FieldIntegrationRunID) {
 		fields = append(fields, riskhistory.FieldIntegrationRunID)
 	}
+	if m.FieldCleared(riskhistory.FieldExternalID) {
+		fields = append(fields, riskhistory.FieldExternalID)
+	}
 	if m.FieldCleared(riskhistory.FieldOwnerID) {
 		fields = append(fields, riskhistory.FieldOwnerID)
 	}
@@ -114083,9 +121240,6 @@ func (m *RiskHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(riskhistory.FieldWorkflowEligibleMarker) {
 		fields = append(fields, riskhistory.FieldWorkflowEligibleMarker)
-	}
-	if m.FieldCleared(riskhistory.FieldExternalID) {
-		fields = append(fields, riskhistory.FieldExternalID)
 	}
 	if m.FieldCleared(riskhistory.FieldIntegrationID) {
 		fields = append(fields, riskhistory.FieldIntegrationID)
@@ -114212,6 +121366,9 @@ func (m *RiskHistoryMutation) ClearField(name string) error {
 	case riskhistory.FieldIntegrationRunID:
 		m.ClearIntegrationRunID()
 		return nil
+	case riskhistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case riskhistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -114265,9 +121422,6 @@ func (m *RiskHistoryMutation) ClearField(name string) error {
 		return nil
 	case riskhistory.FieldWorkflowEligibleMarker:
 		m.ClearWorkflowEligibleMarker()
-		return nil
-	case riskhistory.FieldExternalID:
-		m.ClearExternalID()
 		return nil
 	case riskhistory.FieldIntegrationID:
 		m.ClearIntegrationID()
@@ -114397,6 +121551,9 @@ func (m *RiskHistoryMutation) ResetField(name string) error {
 	case riskhistory.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
 		return nil
+	case riskhistory.FieldExternalID:
+		m.ResetExternalID()
+		return nil
 	case riskhistory.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -114450,9 +121607,6 @@ func (m *RiskHistoryMutation) ResetField(name string) error {
 		return nil
 	case riskhistory.FieldWorkflowEligibleMarker:
 		m.ResetWorkflowEligibleMarker()
-		return nil
-	case riskhistory.FieldExternalID:
-		m.ResetExternalID()
 		return nil
 	case riskhistory.FieldIntegrationID:
 		m.ResetIntegrationID()
@@ -118379,6 +125533,12 @@ type SubcontrolHistoryMutation struct {
 	display_id                    *string
 	tags                          *[]string
 	appendtags                    []string
+	source_definition_id          *string
+	source_definition_version     *string
+	source_instance_id            *string
+	managed_by                    *string
+	integration_run_id            *string
+	external_id                   *string
 	external_uuid                 *string
 	title                         *string
 	description                   *string
@@ -119102,6 +126262,300 @@ func (m *SubcontrolHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, subcontrolhistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *SubcontrolHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *SubcontrolHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *SubcontrolHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[subcontrolhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *SubcontrolHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, subcontrolhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *SubcontrolHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *SubcontrolHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *SubcontrolHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[subcontrolhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *SubcontrolHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, subcontrolhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *SubcontrolHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *SubcontrolHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *SubcontrolHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[subcontrolhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *SubcontrolHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, subcontrolhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *SubcontrolHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *SubcontrolHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *SubcontrolHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[subcontrolhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *SubcontrolHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, subcontrolhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *SubcontrolHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *SubcontrolHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *SubcontrolHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[subcontrolhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *SubcontrolHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, subcontrolhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *SubcontrolHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *SubcontrolHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the SubcontrolHistory entity.
+// If the SubcontrolHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SubcontrolHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *SubcontrolHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[subcontrolhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *SubcontrolHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[subcontrolhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *SubcontrolHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, subcontrolhistory.FieldExternalID)
 }
 
 // SetExternalUUID sets the "external_uuid" field.
@@ -121199,7 +128653,7 @@ func (m *SubcontrolHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SubcontrolHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 51)
+	fields := make([]string, 0, 57)
 	if m.history_time != nil {
 		fields = append(fields, subcontrolhistory.FieldHistoryTime)
 	}
@@ -121235,6 +128689,24 @@ func (m *SubcontrolHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, subcontrolhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, subcontrolhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, subcontrolhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, subcontrolhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, subcontrolhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, subcontrolhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, subcontrolhistory.FieldExternalID)
 	}
 	if m.external_uuid != nil {
 		fields = append(fields, subcontrolhistory.FieldExternalUUID)
@@ -121385,6 +128857,18 @@ func (m *SubcontrolHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case subcontrolhistory.FieldTags:
 		return m.Tags()
+	case subcontrolhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case subcontrolhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case subcontrolhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case subcontrolhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case subcontrolhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case subcontrolhistory.FieldExternalID:
+		return m.ExternalID()
 	case subcontrolhistory.FieldExternalUUID:
 		return m.ExternalUUID()
 	case subcontrolhistory.FieldTitle:
@@ -121496,6 +128980,18 @@ func (m *SubcontrolHistoryMutation) OldField(ctx context.Context, name string) (
 		return m.OldDisplayID(ctx)
 	case subcontrolhistory.FieldTags:
 		return m.OldTags(ctx)
+	case subcontrolhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case subcontrolhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case subcontrolhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case subcontrolhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case subcontrolhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case subcontrolhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case subcontrolhistory.FieldExternalUUID:
 		return m.OldExternalUUID(ctx)
 	case subcontrolhistory.FieldTitle:
@@ -121666,6 +129162,48 @@ func (m *SubcontrolHistoryMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case subcontrolhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case subcontrolhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case subcontrolhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case subcontrolhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case subcontrolhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case subcontrolhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case subcontrolhistory.FieldExternalUUID:
 		v, ok := value.(string)
@@ -121997,6 +129535,24 @@ func (m *SubcontrolHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(subcontrolhistory.FieldTags) {
 		fields = append(fields, subcontrolhistory.FieldTags)
 	}
+	if m.FieldCleared(subcontrolhistory.FieldSourceDefinitionID) {
+		fields = append(fields, subcontrolhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(subcontrolhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, subcontrolhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(subcontrolhistory.FieldSourceInstanceID) {
+		fields = append(fields, subcontrolhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(subcontrolhistory.FieldManagedBy) {
+		fields = append(fields, subcontrolhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(subcontrolhistory.FieldIntegrationRunID) {
+		fields = append(fields, subcontrolhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(subcontrolhistory.FieldExternalID) {
+		fields = append(fields, subcontrolhistory.FieldExternalID)
+	}
 	if m.FieldCleared(subcontrolhistory.FieldExternalUUID) {
 		fields = append(fields, subcontrolhistory.FieldExternalUUID)
 	}
@@ -122148,6 +129704,24 @@ func (m *SubcontrolHistoryMutation) ClearField(name string) error {
 		return nil
 	case subcontrolhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case subcontrolhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case subcontrolhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case subcontrolhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case subcontrolhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case subcontrolhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case subcontrolhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case subcontrolhistory.FieldExternalUUID:
 		m.ClearExternalUUID()
@@ -122303,6 +129877,24 @@ func (m *SubcontrolHistoryMutation) ResetField(name string) error {
 		return nil
 	case subcontrolhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case subcontrolhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case subcontrolhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case subcontrolhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case subcontrolhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case subcontrolhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case subcontrolhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case subcontrolhistory.FieldExternalUUID:
 		m.ResetExternalUUID()
@@ -124104,36 +131696,42 @@ func (m *SubprocessorHistoryMutation) ResetEdge(name string) error {
 // SystemDetailHistoryMutation represents an operation that mutates the SystemDetailHistory nodes in the graph.
 type SystemDetailHistoryMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	history_time            *time.Time
-	ref                     *string
-	operation               *history.OpType
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	display_id              *string
-	tags                    *[]string
-	appendtags              []string
-	owner_id                *string
-	system_name             *string
-	version                 *string
-	description             *string
-	authorization_boundary  *string
-	sensitivity_level       *enums.SystemSensitivityLevel
-	last_reviewed           *models.DateTime
-	revision_history        *[]interface{}
-	appendrevision_history  []interface{}
-	oscal_metadata_json     *map[string]interface{}
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*SystemDetailHistory, error)
-	predicates              []predicate.SystemDetailHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	display_id                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	system_name               *string
+	version                   *string
+	description               *string
+	authorization_boundary    *string
+	sensitivity_level         *enums.SystemSensitivityLevel
+	last_reviewed             *models.DateTime
+	revision_history          *[]interface{}
+	appendrevision_history    []interface{}
+	oscal_metadata_json       *map[string]interface{}
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*SystemDetailHistory, error)
+	predicates                []predicate.SystemDetailHistory
 }
 
 var _ ent.Mutation = (*SystemDetailHistoryMutation)(nil)
@@ -124805,6 +132403,300 @@ func (m *SystemDetailHistoryMutation) ResetTags() {
 	delete(m.clearedFields, systemdetailhistory.FieldTags)
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *SystemDetailHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *SystemDetailHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the SystemDetailHistory entity.
+// If the SystemDetailHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *SystemDetailHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[systemdetailhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *SystemDetailHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[systemdetailhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *SystemDetailHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, systemdetailhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *SystemDetailHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *SystemDetailHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the SystemDetailHistory entity.
+// If the SystemDetailHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *SystemDetailHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[systemdetailhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *SystemDetailHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[systemdetailhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *SystemDetailHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, systemdetailhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *SystemDetailHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *SystemDetailHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the SystemDetailHistory entity.
+// If the SystemDetailHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *SystemDetailHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[systemdetailhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *SystemDetailHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[systemdetailhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *SystemDetailHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, systemdetailhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *SystemDetailHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *SystemDetailHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the SystemDetailHistory entity.
+// If the SystemDetailHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *SystemDetailHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[systemdetailhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *SystemDetailHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[systemdetailhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *SystemDetailHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, systemdetailhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *SystemDetailHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *SystemDetailHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the SystemDetailHistory entity.
+// If the SystemDetailHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *SystemDetailHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[systemdetailhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *SystemDetailHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[systemdetailhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *SystemDetailHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, systemdetailhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *SystemDetailHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *SystemDetailHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the SystemDetailHistory entity.
+// If the SystemDetailHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SystemDetailHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *SystemDetailHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[systemdetailhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *SystemDetailHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[systemdetailhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *SystemDetailHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, systemdetailhistory.FieldExternalID)
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (m *SystemDetailHistoryMutation) SetOwnerID(s string) {
 	m.owner_id = &s
@@ -125283,7 +133175,7 @@ func (m *SystemDetailHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SystemDetailHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 21)
+	fields := make([]string, 0, 27)
 	if m.history_time != nil {
 		fields = append(fields, systemdetailhistory.FieldHistoryTime)
 	}
@@ -125319,6 +133211,24 @@ func (m *SystemDetailHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, systemdetailhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, systemdetailhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, systemdetailhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, systemdetailhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, systemdetailhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, systemdetailhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, systemdetailhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, systemdetailhistory.FieldOwnerID)
@@ -125379,6 +133289,18 @@ func (m *SystemDetailHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case systemdetailhistory.FieldTags:
 		return m.Tags()
+	case systemdetailhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case systemdetailhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case systemdetailhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case systemdetailhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case systemdetailhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case systemdetailhistory.FieldExternalID:
+		return m.ExternalID()
 	case systemdetailhistory.FieldOwnerID:
 		return m.OwnerID()
 	case systemdetailhistory.FieldSystemName:
@@ -125430,6 +133352,18 @@ func (m *SystemDetailHistoryMutation) OldField(ctx context.Context, name string)
 		return m.OldDisplayID(ctx)
 	case systemdetailhistory.FieldTags:
 		return m.OldTags(ctx)
+	case systemdetailhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case systemdetailhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case systemdetailhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case systemdetailhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case systemdetailhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case systemdetailhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case systemdetailhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case systemdetailhistory.FieldSystemName:
@@ -125540,6 +133474,48 @@ func (m *SystemDetailHistoryMutation) SetField(name string, value ent.Value) err
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case systemdetailhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case systemdetailhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case systemdetailhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case systemdetailhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case systemdetailhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case systemdetailhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case systemdetailhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -125661,6 +133637,24 @@ func (m *SystemDetailHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(systemdetailhistory.FieldTags) {
 		fields = append(fields, systemdetailhistory.FieldTags)
 	}
+	if m.FieldCleared(systemdetailhistory.FieldSourceDefinitionID) {
+		fields = append(fields, systemdetailhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(systemdetailhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, systemdetailhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(systemdetailhistory.FieldSourceInstanceID) {
+		fields = append(fields, systemdetailhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(systemdetailhistory.FieldManagedBy) {
+		fields = append(fields, systemdetailhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(systemdetailhistory.FieldIntegrationRunID) {
+		fields = append(fields, systemdetailhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(systemdetailhistory.FieldExternalID) {
+		fields = append(fields, systemdetailhistory.FieldExternalID)
+	}
 	if m.FieldCleared(systemdetailhistory.FieldOwnerID) {
 		fields = append(fields, systemdetailhistory.FieldOwnerID)
 	}
@@ -125725,6 +133719,24 @@ func (m *SystemDetailHistoryMutation) ClearField(name string) error {
 		return nil
 	case systemdetailhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case systemdetailhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case systemdetailhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case systemdetailhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case systemdetailhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case systemdetailhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case systemdetailhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case systemdetailhistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -125793,6 +133805,24 @@ func (m *SystemDetailHistoryMutation) ResetField(name string) error {
 		return nil
 	case systemdetailhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case systemdetailhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case systemdetailhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case systemdetailhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case systemdetailhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case systemdetailhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case systemdetailhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case systemdetailhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -125892,6 +133922,12 @@ type TaskHistoryMutation struct {
 	display_id                   *string
 	tags                         *[]string
 	appendtags                   []string
+	source_definition_id         *string
+	source_definition_version    *string
+	source_instance_id           *string
+	managed_by                   *string
+	integration_run_id           *string
+	external_id                  *string
 	owner_id                     *string
 	task_kind_name               *string
 	task_kind_id                 *string
@@ -126595,6 +134631,300 @@ func (m *TaskHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, taskhistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *TaskHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *TaskHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *TaskHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[taskhistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *TaskHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *TaskHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, taskhistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *TaskHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *TaskHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *TaskHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[taskhistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *TaskHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *TaskHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, taskhistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *TaskHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *TaskHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *TaskHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[taskhistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *TaskHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *TaskHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, taskhistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *TaskHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *TaskHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *TaskHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[taskhistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *TaskHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *TaskHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, taskhistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *TaskHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *TaskHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *TaskHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[taskhistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *TaskHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *TaskHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, taskhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *TaskHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *TaskHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *TaskHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[taskhistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *TaskHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *TaskHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, taskhistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -127928,7 +136258,7 @@ func (m *TaskHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 39)
+	fields := make([]string, 0, 45)
 	if m.history_time != nil {
 		fields = append(fields, taskhistory.FieldHistoryTime)
 	}
@@ -127964,6 +136294,24 @@ func (m *TaskHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, taskhistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, taskhistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, taskhistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, taskhistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, taskhistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, taskhistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, taskhistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, taskhistory.FieldOwnerID)
@@ -128078,6 +136426,18 @@ func (m *TaskHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DisplayID()
 	case taskhistory.FieldTags:
 		return m.Tags()
+	case taskhistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case taskhistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case taskhistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case taskhistory.FieldManagedBy:
+		return m.ManagedBy()
+	case taskhistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case taskhistory.FieldExternalID:
+		return m.ExternalID()
 	case taskhistory.FieldOwnerID:
 		return m.OwnerID()
 	case taskhistory.FieldTaskKindName:
@@ -128165,6 +136525,18 @@ func (m *TaskHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDisplayID(ctx)
 	case taskhistory.FieldTags:
 		return m.OldTags(ctx)
+	case taskhistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case taskhistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case taskhistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case taskhistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case taskhistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case taskhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case taskhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case taskhistory.FieldTaskKindName:
@@ -128311,6 +136683,48 @@ func (m *TaskHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case taskhistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case taskhistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case taskhistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case taskhistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case taskhistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case taskhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case taskhistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -128573,6 +136987,24 @@ func (m *TaskHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(taskhistory.FieldTags) {
 		fields = append(fields, taskhistory.FieldTags)
 	}
+	if m.FieldCleared(taskhistory.FieldSourceDefinitionID) {
+		fields = append(fields, taskhistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(taskhistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, taskhistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(taskhistory.FieldSourceInstanceID) {
+		fields = append(fields, taskhistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(taskhistory.FieldManagedBy) {
+		fields = append(fields, taskhistory.FieldManagedBy)
+	}
+	if m.FieldCleared(taskhistory.FieldIntegrationRunID) {
+		fields = append(fields, taskhistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(taskhistory.FieldExternalID) {
+		fields = append(fields, taskhistory.FieldExternalID)
+	}
 	if m.FieldCleared(taskhistory.FieldOwnerID) {
 		fields = append(fields, taskhistory.FieldOwnerID)
 	}
@@ -128676,6 +137108,24 @@ func (m *TaskHistoryMutation) ClearField(name string) error {
 		return nil
 	case taskhistory.FieldTags:
 		m.ClearTags()
+		return nil
+	case taskhistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case taskhistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case taskhistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case taskhistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case taskhistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case taskhistory.FieldExternalID:
+		m.ClearExternalID()
 		return nil
 	case taskhistory.FieldOwnerID:
 		m.ClearOwnerID()
@@ -128783,6 +137233,24 @@ func (m *TaskHistoryMutation) ResetField(name string) error {
 		return nil
 	case taskhistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case taskhistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case taskhistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case taskhistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case taskhistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case taskhistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case taskhistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case taskhistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -128920,41 +137388,47 @@ func (m *TaskHistoryMutation) ResetEdge(name string) error {
 // TemplateHistoryMutation represents an operation that mutates the TemplateHistory nodes in the graph.
 type TemplateHistoryMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	history_time            *time.Time
-	ref                     *string
-	operation               *history.OpType
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	tags                    *[]string
-	appendtags              []string
-	owner_id                *string
-	system_owned            *bool
-	internal_notes          *string
-	system_internal_id      *string
-	environment_name        *string
-	environment_id          *string
-	scope_name              *string
-	scope_id                *string
-	name                    *string
-	template_type           *enums.DocumentType
-	description             *string
-	kind                    *enums.TemplateKind
-	jsonconfig              *map[string]interface{}
-	uischema                *map[string]interface{}
-	trust_center_id         *string
-	transform_configuration *models.TemplateProjectionConfig
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*TemplateHistory, error)
-	predicates              []predicate.TemplateHistory
+	op                        Op
+	typ                       string
+	id                        *string
+	history_time              *time.Time
+	ref                       *string
+	operation                 *history.OpType
+	created_at                *time.Time
+	updated_at                *time.Time
+	created_by                *string
+	updated_by                *string
+	updated_by_impersonator   *string
+	deleted_at                *time.Time
+	deleted_by                *string
+	tags                      *[]string
+	appendtags                []string
+	source_definition_id      *string
+	source_definition_version *string
+	source_instance_id        *string
+	managed_by                *string
+	integration_run_id        *string
+	external_id               *string
+	owner_id                  *string
+	system_owned              *bool
+	internal_notes            *string
+	system_internal_id        *string
+	environment_name          *string
+	environment_id            *string
+	scope_name                *string
+	scope_id                  *string
+	name                      *string
+	template_type             *enums.DocumentType
+	description               *string
+	kind                      *enums.TemplateKind
+	jsonconfig                *map[string]interface{}
+	uischema                  *map[string]interface{}
+	trust_center_id           *string
+	transform_configuration   *models.TemplateProjectionConfig
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*TemplateHistory, error)
+	predicates                []predicate.TemplateHistory
 }
 
 var _ ent.Mutation = (*TemplateHistoryMutation)(nil)
@@ -129588,6 +138062,300 @@ func (m *TemplateHistoryMutation) ResetTags() {
 	m.tags = nil
 	m.appendtags = nil
 	delete(m.clearedFields, templatehistory.FieldTags)
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (m *TemplateHistoryMutation) SetSourceDefinitionID(s string) {
+	m.source_definition_id = &s
+}
+
+// SourceDefinitionID returns the value of the "source_definition_id" field in the mutation.
+func (m *TemplateHistoryMutation) SourceDefinitionID() (r string, exists bool) {
+	v := m.source_definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionID returns the old "source_definition_id" field's value of the TemplateHistory entity.
+// If the TemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemplateHistoryMutation) OldSourceDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionID: %w", err)
+	}
+	return oldValue.SourceDefinitionID, nil
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (m *TemplateHistoryMutation) ClearSourceDefinitionID() {
+	m.source_definition_id = nil
+	m.clearedFields[templatehistory.FieldSourceDefinitionID] = struct{}{}
+}
+
+// SourceDefinitionIDCleared returns if the "source_definition_id" field was cleared in this mutation.
+func (m *TemplateHistoryMutation) SourceDefinitionIDCleared() bool {
+	_, ok := m.clearedFields[templatehistory.FieldSourceDefinitionID]
+	return ok
+}
+
+// ResetSourceDefinitionID resets all changes to the "source_definition_id" field.
+func (m *TemplateHistoryMutation) ResetSourceDefinitionID() {
+	m.source_definition_id = nil
+	delete(m.clearedFields, templatehistory.FieldSourceDefinitionID)
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (m *TemplateHistoryMutation) SetSourceDefinitionVersion(s string) {
+	m.source_definition_version = &s
+}
+
+// SourceDefinitionVersion returns the value of the "source_definition_version" field in the mutation.
+func (m *TemplateHistoryMutation) SourceDefinitionVersion() (r string, exists bool) {
+	v := m.source_definition_version
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceDefinitionVersion returns the old "source_definition_version" field's value of the TemplateHistory entity.
+// If the TemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemplateHistoryMutation) OldSourceDefinitionVersion(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceDefinitionVersion is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceDefinitionVersion requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceDefinitionVersion: %w", err)
+	}
+	return oldValue.SourceDefinitionVersion, nil
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (m *TemplateHistoryMutation) ClearSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	m.clearedFields[templatehistory.FieldSourceDefinitionVersion] = struct{}{}
+}
+
+// SourceDefinitionVersionCleared returns if the "source_definition_version" field was cleared in this mutation.
+func (m *TemplateHistoryMutation) SourceDefinitionVersionCleared() bool {
+	_, ok := m.clearedFields[templatehistory.FieldSourceDefinitionVersion]
+	return ok
+}
+
+// ResetSourceDefinitionVersion resets all changes to the "source_definition_version" field.
+func (m *TemplateHistoryMutation) ResetSourceDefinitionVersion() {
+	m.source_definition_version = nil
+	delete(m.clearedFields, templatehistory.FieldSourceDefinitionVersion)
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (m *TemplateHistoryMutation) SetSourceInstanceID(s string) {
+	m.source_instance_id = &s
+}
+
+// SourceInstanceID returns the value of the "source_instance_id" field in the mutation.
+func (m *TemplateHistoryMutation) SourceInstanceID() (r string, exists bool) {
+	v := m.source_instance_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceInstanceID returns the old "source_instance_id" field's value of the TemplateHistory entity.
+// If the TemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemplateHistoryMutation) OldSourceInstanceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceInstanceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceInstanceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceInstanceID: %w", err)
+	}
+	return oldValue.SourceInstanceID, nil
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (m *TemplateHistoryMutation) ClearSourceInstanceID() {
+	m.source_instance_id = nil
+	m.clearedFields[templatehistory.FieldSourceInstanceID] = struct{}{}
+}
+
+// SourceInstanceIDCleared returns if the "source_instance_id" field was cleared in this mutation.
+func (m *TemplateHistoryMutation) SourceInstanceIDCleared() bool {
+	_, ok := m.clearedFields[templatehistory.FieldSourceInstanceID]
+	return ok
+}
+
+// ResetSourceInstanceID resets all changes to the "source_instance_id" field.
+func (m *TemplateHistoryMutation) ResetSourceInstanceID() {
+	m.source_instance_id = nil
+	delete(m.clearedFields, templatehistory.FieldSourceInstanceID)
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (m *TemplateHistoryMutation) SetManagedBy(s string) {
+	m.managed_by = &s
+}
+
+// ManagedBy returns the value of the "managed_by" field in the mutation.
+func (m *TemplateHistoryMutation) ManagedBy() (r string, exists bool) {
+	v := m.managed_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManagedBy returns the old "managed_by" field's value of the TemplateHistory entity.
+// If the TemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemplateHistoryMutation) OldManagedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManagedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManagedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManagedBy: %w", err)
+	}
+	return oldValue.ManagedBy, nil
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (m *TemplateHistoryMutation) ClearManagedBy() {
+	m.managed_by = nil
+	m.clearedFields[templatehistory.FieldManagedBy] = struct{}{}
+}
+
+// ManagedByCleared returns if the "managed_by" field was cleared in this mutation.
+func (m *TemplateHistoryMutation) ManagedByCleared() bool {
+	_, ok := m.clearedFields[templatehistory.FieldManagedBy]
+	return ok
+}
+
+// ResetManagedBy resets all changes to the "managed_by" field.
+func (m *TemplateHistoryMutation) ResetManagedBy() {
+	m.managed_by = nil
+	delete(m.clearedFields, templatehistory.FieldManagedBy)
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (m *TemplateHistoryMutation) SetIntegrationRunID(s string) {
+	m.integration_run_id = &s
+}
+
+// IntegrationRunID returns the value of the "integration_run_id" field in the mutation.
+func (m *TemplateHistoryMutation) IntegrationRunID() (r string, exists bool) {
+	v := m.integration_run_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIntegrationRunID returns the old "integration_run_id" field's value of the TemplateHistory entity.
+// If the TemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemplateHistoryMutation) OldIntegrationRunID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIntegrationRunID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIntegrationRunID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIntegrationRunID: %w", err)
+	}
+	return oldValue.IntegrationRunID, nil
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (m *TemplateHistoryMutation) ClearIntegrationRunID() {
+	m.integration_run_id = nil
+	m.clearedFields[templatehistory.FieldIntegrationRunID] = struct{}{}
+}
+
+// IntegrationRunIDCleared returns if the "integration_run_id" field was cleared in this mutation.
+func (m *TemplateHistoryMutation) IntegrationRunIDCleared() bool {
+	_, ok := m.clearedFields[templatehistory.FieldIntegrationRunID]
+	return ok
+}
+
+// ResetIntegrationRunID resets all changes to the "integration_run_id" field.
+func (m *TemplateHistoryMutation) ResetIntegrationRunID() {
+	m.integration_run_id = nil
+	delete(m.clearedFields, templatehistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *TemplateHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *TemplateHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the TemplateHistory entity.
+// If the TemplateHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TemplateHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (m *TemplateHistoryMutation) ClearExternalID() {
+	m.external_id = nil
+	m.clearedFields[templatehistory.FieldExternalID] = struct{}{}
+}
+
+// ExternalIDCleared returns if the "external_id" field was cleared in this mutation.
+func (m *TemplateHistoryMutation) ExternalIDCleared() bool {
+	_, ok := m.clearedFields[templatehistory.FieldExternalID]
+	return ok
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *TemplateHistoryMutation) ResetExternalID() {
+	m.external_id = nil
+	delete(m.clearedFields, templatehistory.FieldExternalID)
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -130369,7 +139137,7 @@ func (m *TemplateHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TemplateHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 27)
+	fields := make([]string, 0, 33)
 	if m.history_time != nil {
 		fields = append(fields, templatehistory.FieldHistoryTime)
 	}
@@ -130402,6 +139170,24 @@ func (m *TemplateHistoryMutation) Fields() []string {
 	}
 	if m.tags != nil {
 		fields = append(fields, templatehistory.FieldTags)
+	}
+	if m.source_definition_id != nil {
+		fields = append(fields, templatehistory.FieldSourceDefinitionID)
+	}
+	if m.source_definition_version != nil {
+		fields = append(fields, templatehistory.FieldSourceDefinitionVersion)
+	}
+	if m.source_instance_id != nil {
+		fields = append(fields, templatehistory.FieldSourceInstanceID)
+	}
+	if m.managed_by != nil {
+		fields = append(fields, templatehistory.FieldManagedBy)
+	}
+	if m.integration_run_id != nil {
+		fields = append(fields, templatehistory.FieldIntegrationRunID)
+	}
+	if m.external_id != nil {
+		fields = append(fields, templatehistory.FieldExternalID)
 	}
 	if m.owner_id != nil {
 		fields = append(fields, templatehistory.FieldOwnerID)
@@ -130481,6 +139267,18 @@ func (m *TemplateHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DeletedBy()
 	case templatehistory.FieldTags:
 		return m.Tags()
+	case templatehistory.FieldSourceDefinitionID:
+		return m.SourceDefinitionID()
+	case templatehistory.FieldSourceDefinitionVersion:
+		return m.SourceDefinitionVersion()
+	case templatehistory.FieldSourceInstanceID:
+		return m.SourceInstanceID()
+	case templatehistory.FieldManagedBy:
+		return m.ManagedBy()
+	case templatehistory.FieldIntegrationRunID:
+		return m.IntegrationRunID()
+	case templatehistory.FieldExternalID:
+		return m.ExternalID()
 	case templatehistory.FieldOwnerID:
 		return m.OwnerID()
 	case templatehistory.FieldSystemOwned:
@@ -130544,6 +139342,18 @@ func (m *TemplateHistoryMutation) OldField(ctx context.Context, name string) (en
 		return m.OldDeletedBy(ctx)
 	case templatehistory.FieldTags:
 		return m.OldTags(ctx)
+	case templatehistory.FieldSourceDefinitionID:
+		return m.OldSourceDefinitionID(ctx)
+	case templatehistory.FieldSourceDefinitionVersion:
+		return m.OldSourceDefinitionVersion(ctx)
+	case templatehistory.FieldSourceInstanceID:
+		return m.OldSourceInstanceID(ctx)
+	case templatehistory.FieldManagedBy:
+		return m.OldManagedBy(ctx)
+	case templatehistory.FieldIntegrationRunID:
+		return m.OldIntegrationRunID(ctx)
+	case templatehistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case templatehistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case templatehistory.FieldSystemOwned:
@@ -130661,6 +139471,48 @@ func (m *TemplateHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTags(v)
+		return nil
+	case templatehistory.FieldSourceDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionID(v)
+		return nil
+	case templatehistory.FieldSourceDefinitionVersion:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceDefinitionVersion(v)
+		return nil
+	case templatehistory.FieldSourceInstanceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceInstanceID(v)
+		return nil
+	case templatehistory.FieldManagedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManagedBy(v)
+		return nil
+	case templatehistory.FieldIntegrationRunID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIntegrationRunID(v)
+		return nil
+	case templatehistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
 		return nil
 	case templatehistory.FieldOwnerID:
 		v, ok := value.(string)
@@ -130831,6 +139683,24 @@ func (m *TemplateHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(templatehistory.FieldTags) {
 		fields = append(fields, templatehistory.FieldTags)
 	}
+	if m.FieldCleared(templatehistory.FieldSourceDefinitionID) {
+		fields = append(fields, templatehistory.FieldSourceDefinitionID)
+	}
+	if m.FieldCleared(templatehistory.FieldSourceDefinitionVersion) {
+		fields = append(fields, templatehistory.FieldSourceDefinitionVersion)
+	}
+	if m.FieldCleared(templatehistory.FieldSourceInstanceID) {
+		fields = append(fields, templatehistory.FieldSourceInstanceID)
+	}
+	if m.FieldCleared(templatehistory.FieldManagedBy) {
+		fields = append(fields, templatehistory.FieldManagedBy)
+	}
+	if m.FieldCleared(templatehistory.FieldIntegrationRunID) {
+		fields = append(fields, templatehistory.FieldIntegrationRunID)
+	}
+	if m.FieldCleared(templatehistory.FieldExternalID) {
+		fields = append(fields, templatehistory.FieldExternalID)
+	}
 	if m.FieldCleared(templatehistory.FieldOwnerID) {
 		fields = append(fields, templatehistory.FieldOwnerID)
 	}
@@ -130911,6 +139781,24 @@ func (m *TemplateHistoryMutation) ClearField(name string) error {
 	case templatehistory.FieldTags:
 		m.ClearTags()
 		return nil
+	case templatehistory.FieldSourceDefinitionID:
+		m.ClearSourceDefinitionID()
+		return nil
+	case templatehistory.FieldSourceDefinitionVersion:
+		m.ClearSourceDefinitionVersion()
+		return nil
+	case templatehistory.FieldSourceInstanceID:
+		m.ClearSourceInstanceID()
+		return nil
+	case templatehistory.FieldManagedBy:
+		m.ClearManagedBy()
+		return nil
+	case templatehistory.FieldIntegrationRunID:
+		m.ClearIntegrationRunID()
+		return nil
+	case templatehistory.FieldExternalID:
+		m.ClearExternalID()
+		return nil
 	case templatehistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
@@ -130990,6 +139878,24 @@ func (m *TemplateHistoryMutation) ResetField(name string) error {
 		return nil
 	case templatehistory.FieldTags:
 		m.ResetTags()
+		return nil
+	case templatehistory.FieldSourceDefinitionID:
+		m.ResetSourceDefinitionID()
+		return nil
+	case templatehistory.FieldSourceDefinitionVersion:
+		m.ResetSourceDefinitionVersion()
+		return nil
+	case templatehistory.FieldSourceInstanceID:
+		m.ResetSourceInstanceID()
+		return nil
+	case templatehistory.FieldManagedBy:
+		m.ResetManagedBy()
+		return nil
+	case templatehistory.FieldIntegrationRunID:
+		m.ResetIntegrationRunID()
+		return nil
+	case templatehistory.FieldExternalID:
+		m.ResetExternalID()
 		return nil
 	case templatehistory.FieldOwnerID:
 		m.ResetOwnerID()
@@ -154405,6 +163311,7 @@ type VulnerabilityHistoryMutation struct {
 	source_instance_id                *string
 	managed_by                        *string
 	integration_run_id                *string
+	external_id                       *string
 	owner_id                          *string
 	internal_owner                    *string
 	internal_owner_user_id            *string
@@ -154430,7 +163337,6 @@ type VulnerabilityHistoryMutation struct {
 	workflow_eligible_marker          *bool
 	external_owner_id                 *string
 	security_level                    *enums.SecurityLevel
-	external_id                       *string
 	cve_id                            *string
 	source                            *string
 	display_name                      *string
@@ -155395,6 +164301,42 @@ func (m *VulnerabilityHistoryMutation) IntegrationRunIDCleared() bool {
 func (m *VulnerabilityHistoryMutation) ResetIntegrationRunID() {
 	m.integration_run_id = nil
 	delete(m.clearedFields, vulnerabilityhistory.FieldIntegrationRunID)
+}
+
+// SetExternalID sets the "external_id" field.
+func (m *VulnerabilityHistoryMutation) SetExternalID(s string) {
+	m.external_id = &s
+}
+
+// ExternalID returns the value of the "external_id" field in the mutation.
+func (m *VulnerabilityHistoryMutation) ExternalID() (r string, exists bool) {
+	v := m.external_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExternalID returns the old "external_id" field's value of the VulnerabilityHistory entity.
+// If the VulnerabilityHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VulnerabilityHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
+	}
+	return oldValue.ExternalID, nil
+}
+
+// ResetExternalID resets all changes to the "external_id" field.
+func (m *VulnerabilityHistoryMutation) ResetExternalID() {
+	m.external_id = nil
 }
 
 // SetOwnerID sets the "owner_id" field.
@@ -156620,42 +165562,6 @@ func (m *VulnerabilityHistoryMutation) SecurityLevelCleared() bool {
 func (m *VulnerabilityHistoryMutation) ResetSecurityLevel() {
 	m.security_level = nil
 	delete(m.clearedFields, vulnerabilityhistory.FieldSecurityLevel)
-}
-
-// SetExternalID sets the "external_id" field.
-func (m *VulnerabilityHistoryMutation) SetExternalID(s string) {
-	m.external_id = &s
-}
-
-// ExternalID returns the value of the "external_id" field in the mutation.
-func (m *VulnerabilityHistoryMutation) ExternalID() (r string, exists bool) {
-	v := m.external_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldExternalID returns the old "external_id" field's value of the VulnerabilityHistory entity.
-// If the VulnerabilityHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *VulnerabilityHistoryMutation) OldExternalID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldExternalID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldExternalID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldExternalID: %w", err)
-	}
-	return oldValue.ExternalID, nil
-}
-
-// ResetExternalID resets all changes to the "external_id" field.
-func (m *VulnerabilityHistoryMutation) ResetExternalID() {
-	m.external_id = nil
 }
 
 // SetCveID sets the "cve_id" field.
@@ -158787,6 +167693,9 @@ func (m *VulnerabilityHistoryMutation) Fields() []string {
 	if m.integration_run_id != nil {
 		fields = append(fields, vulnerabilityhistory.FieldIntegrationRunID)
 	}
+	if m.external_id != nil {
+		fields = append(fields, vulnerabilityhistory.FieldExternalID)
+	}
 	if m.owner_id != nil {
 		fields = append(fields, vulnerabilityhistory.FieldOwnerID)
 	}
@@ -158861,9 +167770,6 @@ func (m *VulnerabilityHistoryMutation) Fields() []string {
 	}
 	if m.security_level != nil {
 		fields = append(fields, vulnerabilityhistory.FieldSecurityLevel)
-	}
-	if m.external_id != nil {
-		fields = append(fields, vulnerabilityhistory.FieldExternalID)
 	}
 	if m.cve_id != nil {
 		fields = append(fields, vulnerabilityhistory.FieldCveID)
@@ -159024,6 +167930,8 @@ func (m *VulnerabilityHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ManagedBy()
 	case vulnerabilityhistory.FieldIntegrationRunID:
 		return m.IntegrationRunID()
+	case vulnerabilityhistory.FieldExternalID:
+		return m.ExternalID()
 	case vulnerabilityhistory.FieldOwnerID:
 		return m.OwnerID()
 	case vulnerabilityhistory.FieldInternalOwner:
@@ -159074,8 +167982,6 @@ func (m *VulnerabilityHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.ExternalOwnerID()
 	case vulnerabilityhistory.FieldSecurityLevel:
 		return m.SecurityLevel()
-	case vulnerabilityhistory.FieldExternalID:
-		return m.ExternalID()
 	case vulnerabilityhistory.FieldCveID:
 		return m.CveID()
 	case vulnerabilityhistory.FieldSource:
@@ -159197,6 +168103,8 @@ func (m *VulnerabilityHistoryMutation) OldField(ctx context.Context, name string
 		return m.OldManagedBy(ctx)
 	case vulnerabilityhistory.FieldIntegrationRunID:
 		return m.OldIntegrationRunID(ctx)
+	case vulnerabilityhistory.FieldExternalID:
+		return m.OldExternalID(ctx)
 	case vulnerabilityhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
 	case vulnerabilityhistory.FieldInternalOwner:
@@ -159247,8 +168155,6 @@ func (m *VulnerabilityHistoryMutation) OldField(ctx context.Context, name string
 		return m.OldExternalOwnerID(ctx)
 	case vulnerabilityhistory.FieldSecurityLevel:
 		return m.OldSecurityLevel(ctx)
-	case vulnerabilityhistory.FieldExternalID:
-		return m.OldExternalID(ctx)
 	case vulnerabilityhistory.FieldCveID:
 		return m.OldCveID(ctx)
 	case vulnerabilityhistory.FieldSource:
@@ -159455,6 +168361,13 @@ func (m *VulnerabilityHistoryMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetIntegrationRunID(v)
 		return nil
+	case vulnerabilityhistory.FieldExternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExternalID(v)
+		return nil
 	case vulnerabilityhistory.FieldOwnerID:
 		v, ok := value.(string)
 		if !ok {
@@ -159629,13 +168542,6 @@ func (m *VulnerabilityHistoryMutation) SetField(name string, value ent.Value) er
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSecurityLevel(v)
-		return nil
-	case vulnerabilityhistory.FieldExternalID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetExternalID(v)
 		return nil
 	case vulnerabilityhistory.FieldCveID:
 		v, ok := value.(string)
@@ -160532,6 +169438,9 @@ func (m *VulnerabilityHistoryMutation) ResetField(name string) error {
 	case vulnerabilityhistory.FieldIntegrationRunID:
 		m.ResetIntegrationRunID()
 		return nil
+	case vulnerabilityhistory.FieldExternalID:
+		m.ResetExternalID()
+		return nil
 	case vulnerabilityhistory.FieldOwnerID:
 		m.ResetOwnerID()
 		return nil
@@ -160606,9 +169515,6 @@ func (m *VulnerabilityHistoryMutation) ResetField(name string) error {
 		return nil
 	case vulnerabilityhistory.FieldSecurityLevel:
 		m.ResetSecurityLevel()
-		return nil
-	case vulnerabilityhistory.FieldExternalID:
-		m.ResetExternalID()
 		return nil
 	case vulnerabilityhistory.FieldCveID:
 		m.ResetCveID()

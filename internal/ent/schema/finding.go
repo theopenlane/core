@@ -52,14 +52,6 @@ func (Finding) PluralName() string {
 // Fields returns finding fields.
 func (Finding) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("external_id").
-			Comment("external identifier from the integration source for the finding").
-			Optional().
-			Annotations(
-				entx.FieldSearchable(),
-				entgql.OrderField("external_id"),
-				entx.IntegrationMappingField().LookupKey(),
-			),
 		field.Enum("security_level").
 			Comment("incoming source severity").
 			GoType(enums.SecurityLevel("")).
@@ -387,7 +379,7 @@ func (f Finding) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "FIND",
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: f},
+			newProvenanceMixin(f, withSearchableExternalID(), withoutExternalIDIndex()),
 			newObjectOwnedMixin[generated.Finding](f,
 				withParents(
 					Program{},
@@ -418,10 +410,16 @@ func (f Finding) Mixin() []ent.Mixin {
 // Indexes of the Finding
 func (Finding) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("external_id", "external_owner_id", ownerFieldName).
+		index.Fields(externalIDFieldName, "external_owner_id", ownerFieldName).
 			Unique().
 			Annotations(
 				entsql.IndexWhere("deleted_at is NULL"),
+			),
+		// null owners are distinct in the composite index so enforce uniqueness without one
+		index.Fields(externalIDFieldName, ownerFieldName).
+			Unique().
+			Annotations(
+				entsql.IndexWhere("deleted_at is NULL AND external_owner_id is NULL"),
 			),
 	}
 }
@@ -439,7 +437,10 @@ func (Finding) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaFinding),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
-		entx.IntegrationMappingSchema().StockPersist(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName, "external_owner_id").
+			LookupAlternative(externalIDFieldName),
 		entx.ConsoleRoute(entx.WithConsoleBase("exposure/findings"), entx.WithConsoleIDParam("id")),
 	}
 }

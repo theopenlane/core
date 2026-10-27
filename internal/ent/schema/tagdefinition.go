@@ -88,6 +88,7 @@ func (t TagDefinition) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(t),
 			newOrgOwnedMixin(t),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
@@ -116,6 +117,10 @@ func (TagDefinition) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("name"),
 	}
 }
 

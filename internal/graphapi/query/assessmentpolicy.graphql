@@ -4,10 +4,16 @@ mutation CreateAssessmentPolicy ($input: CreateAssessmentPolicyInput!) {
 			assessmentID
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalPolicyID
+			managedBy
 			ownerID
 			policyRevision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -20,10 +26,16 @@ mutation CreateBulkAssessmentPolicy ($input: [CreateAssessmentPolicyInput!]) {
 			assessmentID
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalPolicyID
+			managedBy
 			ownerID
 			policyRevision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -36,10 +48,16 @@ mutation CreateBulkCSVAssessmentPolicy ($input: Upload!) {
 			assessmentID
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalPolicyID
+			managedBy
 			ownerID
 			policyRevision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -70,10 +88,16 @@ query GetAllAssessmentPolicies ($first: Int, $last: Int, $after: Cursor, $before
 				assessmentID
 				createdAt
 				createdBy
+				externalID
 				id
+				integrationRunID
 				internalPolicyID
+				managedBy
 				ownerID
 				policyRevision
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				updatedAt
 				updatedBy
 				updatedByImpersonator
@@ -95,10 +119,16 @@ query GetAssessmentPolicies ($first: Int, $last: Int, $after: Cursor, $before: C
 				assessmentID
 				createdAt
 				createdBy
+				externalID
 				id
+				integrationRunID
 				internalPolicyID
+				managedBy
 				ownerID
 				policyRevision
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				updatedAt
 				updatedBy
 				updatedByImpersonator
@@ -111,10 +141,16 @@ query GetAssessmentPolicyByID ($assessmentPolicyId: ID!) {
 		assessmentID
 		createdAt
 		createdBy
+		externalID
 		id
+		integrationRunID
 		internalPolicyID
+		managedBy
 		ownerID
 		policyRevision
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		updatedAt
 		updatedBy
 		updatedByImpersonator
@@ -126,10 +162,16 @@ mutation UpdateAssessmentPolicy ($updateAssessmentPolicyId: ID!, $input: UpdateA
 			assessmentID
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalPolicyID
+			managedBy
 			ownerID
 			policyRevision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -142,10 +184,16 @@ mutation UpdateBulkAssessmentPolicy ($ids: [ID!]!, $input: UpdateAssessmentPolic
 			assessmentID
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalPolicyID
+			managedBy
 			ownerID
 			policyRevision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -159,10 +207,16 @@ mutation UpdateBulkCSVAssessmentPolicy ($input: Upload!) {
 			assessmentID
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalPolicyID
+			managedBy
 			ownerID
 			policyRevision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator

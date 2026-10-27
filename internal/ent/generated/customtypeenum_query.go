@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
@@ -36,6 +37,7 @@ type CustomTypeEnumQuery struct {
 	order                     []customtypeenum.OrderOption
 	inters                    []Interceptor
 	predicates                []predicate.CustomTypeEnum
+	withIntegrationRuns       *IntegrationRunQuery
 	withOwner                 *OrganizationQuery
 	withTasks                 *TaskQuery
 	withControls              *ControlQuery
@@ -50,6 +52,7 @@ type CustomTypeEnumQuery struct {
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*CustomTypeEnum) error
 	modifiers                 []func(*sql.Selector)
+	withNamedIntegrationRuns  map[string]*IntegrationRunQuery
 	withNamedTasks            map[string]*TaskQuery
 	withNamedControls         map[string]*ControlQuery
 	withNamedSubcontrols      map[string]*SubcontrolQuery
@@ -94,6 +97,28 @@ func (_q *CustomTypeEnumQuery) Unique(unique bool) *CustomTypeEnumQuery {
 func (_q *CustomTypeEnumQuery) Order(o ...customtypeenum.OrderOption) *CustomTypeEnumQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *CustomTypeEnumQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.IntegrationRunsTable, customtypeenum.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -530,6 +555,7 @@ func (_q *CustomTypeEnumQuery) Clone() *CustomTypeEnumQuery {
 		order:                append([]customtypeenum.OrderOption{}, _q.order...),
 		inters:               append([]Interceptor{}, _q.inters...),
 		predicates:           append([]predicate.CustomTypeEnum{}, _q.predicates...),
+		withIntegrationRuns:  _q.withIntegrationRuns.Clone(),
 		withOwner:            _q.withOwner.Clone(),
 		withTasks:            _q.withTasks.Clone(),
 		withControls:         _q.withControls.Clone(),
@@ -546,6 +572,17 @@ func (_q *CustomTypeEnumQuery) Clone() *CustomTypeEnumQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CustomTypeEnumQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *CustomTypeEnumQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -754,7 +791,8 @@ func (_q *CustomTypeEnumQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes       = []*CustomTypeEnum{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [11]bool{
+		loadedTypes = [12]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withTasks != nil,
 			_q.withControls != nil,
@@ -791,6 +829,15 @@ func (_q *CustomTypeEnumQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *CustomTypeEnum) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *CustomTypeEnum, e *IntegrationRun) {
+				n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e)
+			}); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
@@ -867,6 +914,13 @@ func (_q *CustomTypeEnumQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *CustomTypeEnum) { n.Edges.Platforms = []*Platform{} },
 			func(n *CustomTypeEnum, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *CustomTypeEnum) { n.appendNamedIntegrationRuns(name) },
+			func(n *CustomTypeEnum, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -948,6 +1002,37 @@ func (_q *CustomTypeEnumQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
+func (_q *CustomTypeEnumQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*CustomTypeEnum, init func(*CustomTypeEnum), assign func(*CustomTypeEnum, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*CustomTypeEnum)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(customtypeenum.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.custom_type_enum_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "custom_type_enum_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "custom_type_enum_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *CustomTypeEnumQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*CustomTypeEnum, init func(*CustomTypeEnum), assign func(*CustomTypeEnum, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*CustomTypeEnum)
@@ -1383,6 +1468,20 @@ func (_q *CustomTypeEnumQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *CustomTypeEnumQuery) Modify(modifiers ...func(s *sql.Selector)) *CustomTypeEnumSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *CustomTypeEnumQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *CustomTypeEnumQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"

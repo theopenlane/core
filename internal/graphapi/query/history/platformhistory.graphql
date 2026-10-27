@@ -30,14 +30,17 @@ query GetAllPlatformHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				environmentID
 				environmentName
 				estimatedMonthlyCost
+				externalID
 				externalReferenceID
 				externalUUID
 				historyTime
 				id
+				integrationRunID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
 				internalOwnerUserID
+				managedBy
 				metadata
 				name
 				operation
@@ -60,7 +63,10 @@ query GetAllPlatformHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				securityOwnerUserID
 				securityTierID
 				securityTierName
+				sourceDefinitionID
+				sourceDefinitionVersion
 				sourceIdentifier
+				sourceInstanceID
 				sourceType
 				status
 				tags
@@ -109,14 +115,17 @@ query GetPlatformHistories ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				environmentID
 				environmentName
 				estimatedMonthlyCost
+				externalID
 				externalReferenceID
 				externalUUID
 				historyTime
 				id
+				integrationRunID
 				internalOwner
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
 				internalOwnerUserID
+				managedBy
 				metadata
 				name
 				operation
@@ -139,7 +148,10 @@ query GetPlatformHistories ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				securityOwnerUserID
 				securityTierID
 				securityTierName
+				sourceDefinitionID
+				sourceDefinitionVersion
 				sourceIdentifier
+				sourceInstanceID
 				sourceType
 				status
 				tags

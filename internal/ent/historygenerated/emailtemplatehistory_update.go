@@ -97,6 +97,24 @@ func (_u *EmailTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldRevision, field.TypeString)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldOwnerID, field.TypeString)
 	}
@@ -271,6 +289,24 @@ func (_u *EmailTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 	}
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldRevision, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldOwnerID, field.TypeString)

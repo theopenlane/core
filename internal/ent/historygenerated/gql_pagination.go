@@ -464,6 +464,20 @@ var (
 			}
 		},
 	}
+	// ActionPlanHistoryOrderFieldExternalID orders ActionPlanHistory by external_id.
+	ActionPlanHistoryOrderFieldExternalID = &ActionPlanHistoryOrderField{
+		Value: func(_m *ActionPlanHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: actionplanhistory.FieldExternalID,
+		toTerm: actionplanhistory.ByExternalID,
+		toCursor: func(_m *ActionPlanHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ActionPlanHistoryOrderFieldName orders ActionPlanHistory by name.
 	ActionPlanHistoryOrderFieldName = &ActionPlanHistoryOrderField{
 		Value: func(_m *ActionPlanHistory) (ent.Value, error) {
@@ -618,6 +632,8 @@ func (f ActionPlanHistoryOrderField) String() string {
 		str = "updated_at"
 	case ActionPlanHistoryOrderFieldRevision.column:
 		str = "revision"
+	case ActionPlanHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case ActionPlanHistoryOrderFieldName.column:
 		str = "name"
 	case ActionPlanHistoryOrderFieldStatus.column:
@@ -662,6 +678,8 @@ func (f *ActionPlanHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ActionPlanHistoryOrderFieldUpdatedAt
 	case "revision":
 		*f = *ActionPlanHistoryOrderFieldRevision
+	case "external_id":
+		*f = *ActionPlanHistoryOrderFieldExternalID
 	case "name":
 		*f = *ActionPlanHistoryOrderFieldName
 	case "STATUS":
@@ -992,6 +1010,20 @@ var (
 			}
 		},
 	}
+	// AssessmentHistoryOrderFieldExternalID orders AssessmentHistory by external_id.
+	AssessmentHistoryOrderFieldExternalID = &AssessmentHistoryOrderField{
+		Value: func(_m *AssessmentHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: assessmenthistory.FieldExternalID,
+		toTerm: assessmenthistory.ByExternalID,
+		toCursor: func(_m *AssessmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// AssessmentHistoryOrderFieldName orders AssessmentHistory by name.
 	AssessmentHistoryOrderFieldName = &AssessmentHistoryOrderField{
 		Value: func(_m *AssessmentHistory) (ent.Value, error) {
@@ -1046,6 +1078,8 @@ func (f AssessmentHistoryOrderField) String() string {
 		str = "created_at"
 	case AssessmentHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssessmentHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case AssessmentHistoryOrderFieldName.column:
 		str = "name"
 	case AssessmentHistoryOrderFieldAssessmentType.column:
@@ -1074,6 +1108,8 @@ func (f *AssessmentHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssessmentHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *AssessmentHistoryOrderFieldExternalID
 	case "name":
 		*f = *AssessmentHistoryOrderFieldName
 	case "assessment_type":
@@ -1390,6 +1426,20 @@ var (
 			}
 		},
 	}
+	// AssessmentPolicyHistoryOrderFieldExternalID orders AssessmentPolicyHistory by external_id.
+	AssessmentPolicyHistoryOrderFieldExternalID = &AssessmentPolicyHistoryOrderField{
+		Value: func(_m *AssessmentPolicyHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: assessmentpolicyhistory.FieldExternalID,
+		toTerm: assessmentpolicyhistory.ByExternalID,
+		toCursor: func(_m *AssessmentPolicyHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -1402,6 +1452,8 @@ func (f AssessmentPolicyHistoryOrderField) String() string {
 		str = "created_at"
 	case AssessmentPolicyHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssessmentPolicyHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	}
 	return str
 }
@@ -1424,6 +1476,8 @@ func (f *AssessmentPolicyHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentPolicyHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssessmentPolicyHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *AssessmentPolicyHistoryOrderFieldExternalID
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentPolicyHistoryOrderField", str)
 	}
@@ -2348,6 +2402,20 @@ var (
 			}
 		},
 	}
+	// AssetHistoryOrderFieldExternalID orders AssetHistory by external_id.
+	AssetHistoryOrderFieldExternalID = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: assethistory.FieldExternalID,
+		toTerm: assethistory.ByExternalID,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// AssetHistoryOrderFieldInternalOwner orders AssetHistory by internal_owner.
 	AssetHistoryOrderFieldInternalOwner = &AssetHistoryOrderField{
 		Value: func(_m *AssetHistory) (ent.Value, error) {
@@ -2568,6 +2636,8 @@ func (f AssetHistoryOrderField) String() string {
 		str = "created_at"
 	case AssetHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssetHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case AssetHistoryOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case AssetHistoryOrderFieldAssetType.column:
@@ -2616,6 +2686,8 @@ func (f *AssetHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssetHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *AssetHistoryOrderFieldExternalID
 	case "internal_owner":
 		*f = *AssetHistoryOrderFieldInternalOwner
 	case "ASSET_TYPE":
@@ -2949,6 +3021,20 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldExternalID orders CampaignHistory by external_id.
+	CampaignHistoryOrderFieldExternalID = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: campaignhistory.FieldExternalID,
+		toTerm: campaignhistory.ByExternalID,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
 			}
 		},
 	}
@@ -3334,6 +3420,8 @@ func (f CampaignHistoryOrderField) String() string {
 		str = "created_at"
 	case CampaignHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case CampaignHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case CampaignHistoryOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case CampaignHistoryOrderFieldName.column:
@@ -3394,6 +3482,8 @@ func (f *CampaignHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CampaignHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *CampaignHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *CampaignHistoryOrderFieldExternalID
 	case "internal_owner":
 		*f = *CampaignHistoryOrderFieldInternalOwner
 	case "name":
@@ -4202,6 +4292,20 @@ var (
 			}
 		},
 	}
+	// ContactHistoryOrderFieldExternalID orders ContactHistory by external_id.
+	ContactHistoryOrderFieldExternalID = &ContactHistoryOrderField{
+		Value: func(_m *ContactHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: contacthistory.FieldExternalID,
+		toTerm: contacthistory.ByExternalID,
+		toCursor: func(_m *ContactHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ContactHistoryOrderFieldFullName orders ContactHistory by full_name.
 	ContactHistoryOrderFieldFullName = &ContactHistoryOrderField{
 		Value: func(_m *ContactHistory) (ent.Value, error) {
@@ -4272,20 +4376,6 @@ var (
 			}
 		},
 	}
-	// ContactHistoryOrderFieldExternalID orders ContactHistory by external_id.
-	ContactHistoryOrderFieldExternalID = &ContactHistoryOrderField{
-		Value: func(_m *ContactHistory) (ent.Value, error) {
-			return _m.ExternalID, nil
-		},
-		column: contacthistory.FieldExternalID,
-		toTerm: contacthistory.ByExternalID,
-		toCursor: func(_m *ContactHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ExternalID,
-			}
-		},
-	}
 	// ContactHistoryOrderFieldObservedAt orders ContactHistory by observed_at.
 	ContactHistoryOrderFieldObservedAt = &ContactHistoryOrderField{
 		Value: func(_m *ContactHistory) (ent.Value, error) {
@@ -4325,6 +4415,8 @@ func (f ContactHistoryOrderField) String() string {
 		str = "created_at"
 	case ContactHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ContactHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case ContactHistoryOrderFieldFullName.column:
 		str = "full_name"
 	case ContactHistoryOrderFieldTitle.column:
@@ -4335,8 +4427,6 @@ func (f ContactHistoryOrderField) String() string {
 		str = "email"
 	case ContactHistoryOrderFieldStatus.column:
 		str = "STATUS"
-	case ContactHistoryOrderFieldExternalID.column:
-		str = "external_id"
 	case ContactHistoryOrderFieldObservedAt.column:
 		str = "observed_at"
 	}
@@ -4361,6 +4451,8 @@ func (f *ContactHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ContactHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ContactHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *ContactHistoryOrderFieldExternalID
 	case "full_name":
 		*f = *ContactHistoryOrderFieldFullName
 	case "title":
@@ -4371,8 +4463,6 @@ func (f *ContactHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ContactHistoryOrderFieldEmail
 	case "STATUS":
 		*f = *ContactHistoryOrderFieldStatus
-	case "external_id":
-		*f = *ContactHistoryOrderFieldExternalID
 	case "observed_at":
 		*f = *ContactHistoryOrderFieldObservedAt
 	default:
@@ -4685,6 +4775,20 @@ var (
 			}
 		},
 	}
+	// ControlHistoryOrderFieldExternalID orders ControlHistory by external_id.
+	ControlHistoryOrderFieldExternalID = &ControlHistoryOrderField{
+		Value: func(_m *ControlHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: controlhistory.FieldExternalID,
+		toTerm: controlhistory.ByExternalID,
+		toCursor: func(_m *ControlHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ControlHistoryOrderFieldTitle orders ControlHistory by title.
 	ControlHistoryOrderFieldTitle = &ControlHistoryOrderField{
 		Value: func(_m *ControlHistory) (ent.Value, error) {
@@ -4808,6 +4912,8 @@ func (f ControlHistoryOrderField) String() string {
 		str = "created_at"
 	case ControlHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ControlHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case ControlHistoryOrderFieldTitle.column:
 		str = "title"
 	case ControlHistoryOrderFieldStatus.column:
@@ -4844,6 +4950,8 @@ func (f *ControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *ControlHistoryOrderFieldExternalID
 	case "title":
 		*f = *ControlHistoryOrderFieldTitle
 	case "STATUS":
@@ -5168,6 +5276,20 @@ var (
 			}
 		},
 	}
+	// ControlImplementationHistoryOrderFieldExternalID orders ControlImplementationHistory by external_id.
+	ControlImplementationHistoryOrderFieldExternalID = &ControlImplementationHistoryOrderField{
+		Value: func(_m *ControlImplementationHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: controlimplementationhistory.FieldExternalID,
+		toTerm: controlimplementationhistory.ByExternalID,
+		toCursor: func(_m *ControlImplementationHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ControlImplementationHistoryOrderFieldStatus orders ControlImplementationHistory by status.
 	ControlImplementationHistoryOrderFieldStatus = &ControlImplementationHistoryOrderField{
 		Value: func(_m *ControlImplementationHistory) (ent.Value, error) {
@@ -5236,6 +5358,8 @@ func (f ControlImplementationHistoryOrderField) String() string {
 		str = "created_at"
 	case ControlImplementationHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ControlImplementationHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case ControlImplementationHistoryOrderFieldStatus.column:
 		str = "STATUS"
 	case ControlImplementationHistoryOrderFieldImplementationDate.column:
@@ -5266,6 +5390,8 @@ func (f *ControlImplementationHistoryOrderField) UnmarshalGQL(v interface{}) err
 		*f = *ControlImplementationHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlImplementationHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *ControlImplementationHistoryOrderFieldExternalID
 	case "STATUS":
 		*f = *ControlImplementationHistoryOrderFieldStatus
 	case "implementation_date":
@@ -5598,6 +5724,20 @@ var (
 			}
 		},
 	}
+	// ControlObjectiveHistoryOrderFieldExternalID orders ControlObjectiveHistory by external_id.
+	ControlObjectiveHistoryOrderFieldExternalID = &ControlObjectiveHistoryOrderField{
+		Value: func(_m *ControlObjectiveHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: controlobjectivehistory.FieldExternalID,
+		toTerm: controlobjectivehistory.ByExternalID,
+		toCursor: func(_m *ControlObjectiveHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ControlObjectiveHistoryOrderFieldName orders ControlObjectiveHistory by name.
 	ControlObjectiveHistoryOrderFieldName = &ControlObjectiveHistoryOrderField{
 		Value: func(_m *ControlObjectiveHistory) (ent.Value, error) {
@@ -5696,6 +5836,8 @@ func (f ControlObjectiveHistoryOrderField) String() string {
 		str = "updated_at"
 	case ControlObjectiveHistoryOrderFieldRevision.column:
 		str = "revision"
+	case ControlObjectiveHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case ControlObjectiveHistoryOrderFieldName.column:
 		str = "name"
 	case ControlObjectiveHistoryOrderFieldStatus.column:
@@ -5732,6 +5874,8 @@ func (f *ControlObjectiveHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlObjectiveHistoryOrderFieldUpdatedAt
 	case "revision":
 		*f = *ControlObjectiveHistoryOrderFieldRevision
+	case "external_id":
+		*f = *ControlObjectiveHistoryOrderFieldExternalID
 	case "name":
 		*f = *ControlObjectiveHistoryOrderFieldName
 	case "status":
@@ -7118,6 +7262,20 @@ var (
 			}
 		},
 	}
+	// EmailTemplateHistoryOrderFieldExternalID orders EmailTemplateHistory by external_id.
+	EmailTemplateHistoryOrderFieldExternalID = &EmailTemplateHistoryOrderField{
+		Value: func(_m *EmailTemplateHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: emailtemplatehistory.FieldExternalID,
+		toTerm: emailtemplatehistory.ByExternalID,
+		toCursor: func(_m *EmailTemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// EmailTemplateHistoryOrderFieldKey orders EmailTemplateHistory by key.
 	EmailTemplateHistoryOrderFieldKey = &EmailTemplateHistoryOrderField{
 		Value: func(_m *EmailTemplateHistory) (ent.Value, error) {
@@ -7230,6 +7388,8 @@ func (f EmailTemplateHistoryOrderField) String() string {
 		str = "updated_at"
 	case EmailTemplateHistoryOrderFieldRevision.column:
 		str = "revision"
+	case EmailTemplateHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case EmailTemplateHistoryOrderFieldKey.column:
 		str = "KEY"
 	case EmailTemplateHistoryOrderFieldName.column:
@@ -7268,6 +7428,8 @@ func (f *EmailTemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EmailTemplateHistoryOrderFieldUpdatedAt
 	case "revision":
 		*f = *EmailTemplateHistoryOrderFieldRevision
+	case "external_id":
+		*f = *EmailTemplateHistoryOrderFieldExternalID
 	case "KEY":
 		*f = *EmailTemplateHistoryOrderFieldKey
 	case "NAME":
@@ -7589,6 +7751,20 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldExternalID orders EntityHistory by external_id.
+	EntityHistoryOrderFieldExternalID = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: entityhistory.FieldExternalID,
+		toTerm: entityhistory.ByExternalID,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
 			}
 		},
 	}
@@ -8062,20 +8238,6 @@ var (
 			}
 		},
 	}
-	// EntityHistoryOrderFieldExternalID orders EntityHistory by external_id.
-	EntityHistoryOrderFieldExternalID = &EntityHistoryOrderField{
-		Value: func(_m *EntityHistory) (ent.Value, error) {
-			return _m.ExternalID, nil
-		},
-		column: entityhistory.FieldExternalID,
-		toTerm: entityhistory.ByExternalID,
-		toCursor: func(_m *EntityHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ExternalID,
-			}
-		},
-	}
 	// EntityHistoryOrderFieldObservedAt orders EntityHistory by observed_at.
 	EntityHistoryOrderFieldObservedAt = &EntityHistoryOrderField{
 		Value: func(_m *EntityHistory) (ent.Value, error) {
@@ -8115,6 +8277,8 @@ func (f EntityHistoryOrderField) String() string {
 		str = "created_at"
 	case EntityHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case EntityHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case EntityHistoryOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case EntityHistoryOrderFieldReviewedBy.column:
@@ -8171,8 +8335,6 @@ func (f EntityHistoryOrderField) String() string {
 		str = "next_review_at"
 	case EntityHistoryOrderFieldContractRenewalAt.column:
 		str = "contract_renewal_at"
-	case EntityHistoryOrderFieldExternalID.column:
-		str = "external_id"
 	case EntityHistoryOrderFieldObservedAt.column:
 		str = "observed_at"
 	}
@@ -8197,6 +8359,8 @@ func (f *EntityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *EntityHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *EntityHistoryOrderFieldExternalID
 	case "internal_owner":
 		*f = *EntityHistoryOrderFieldInternalOwner
 	case "reviewed_by":
@@ -8253,8 +8417,6 @@ func (f *EntityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityHistoryOrderFieldNextReviewAt
 	case "contract_renewal_at":
 		*f = *EntityHistoryOrderFieldContractRenewalAt
-	case "external_id":
-		*f = *EntityHistoryOrderFieldExternalID
 	case "observed_at":
 		*f = *EntityHistoryOrderFieldObservedAt
 	default:
@@ -8929,6 +9091,20 @@ var (
 			}
 		},
 	}
+	// EvidenceHistoryOrderFieldExternalID orders EvidenceHistory by external_id.
+	EvidenceHistoryOrderFieldExternalID = &EvidenceHistoryOrderField{
+		Value: func(_m *EvidenceHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: evidencehistory.FieldExternalID,
+		toTerm: evidencehistory.ByExternalID,
+		toCursor: func(_m *EvidenceHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// EvidenceHistoryOrderFieldName orders EvidenceHistory by name.
 	EvidenceHistoryOrderFieldName = &EvidenceHistoryOrderField{
 		Value: func(_m *EvidenceHistory) (ent.Value, error) {
@@ -9037,6 +9213,8 @@ func (f EvidenceHistoryOrderField) String() string {
 		str = "created_at"
 	case EvidenceHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case EvidenceHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case EvidenceHistoryOrderFieldName.column:
 		str = "name"
 	case EvidenceHistoryOrderFieldCreationDate.column:
@@ -9069,6 +9247,8 @@ func (f *EvidenceHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EvidenceHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *EvidenceHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *EvidenceHistoryOrderFieldExternalID
 	case "name":
 		*f = *EvidenceHistoryOrderFieldName
 	case "creation_date":
@@ -10108,20 +10288,6 @@ var (
 			}
 		},
 	}
-	// FindingHistoryOrderFieldInternalOwner orders FindingHistory by internal_owner.
-	FindingHistoryOrderFieldInternalOwner = &FindingHistoryOrderField{
-		Value: func(_m *FindingHistory) (ent.Value, error) {
-			return _m.InternalOwner, nil
-		},
-		column: findinghistory.FieldInternalOwner,
-		toTerm: findinghistory.ByInternalOwner,
-		toCursor: func(_m *FindingHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.InternalOwner,
-			}
-		},
-	}
 	// FindingHistoryOrderFieldExternalID orders FindingHistory by external_id.
 	FindingHistoryOrderFieldExternalID = &FindingHistoryOrderField{
 		Value: func(_m *FindingHistory) (ent.Value, error) {
@@ -10133,6 +10299,20 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.ExternalID,
+			}
+		},
+	}
+	// FindingHistoryOrderFieldInternalOwner orders FindingHistory by internal_owner.
+	FindingHistoryOrderFieldInternalOwner = &FindingHistoryOrderField{
+		Value: func(_m *FindingHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: findinghistory.FieldInternalOwner,
+		toTerm: findinghistory.ByInternalOwner,
+		toCursor: func(_m *FindingHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
 			}
 		},
 	}
@@ -10258,10 +10438,10 @@ func (f FindingHistoryOrderField) String() string {
 		str = "created_at"
 	case FindingHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
-	case FindingHistoryOrderFieldInternalOwner.column:
-		str = "internal_owner"
 	case FindingHistoryOrderFieldExternalID.column:
 		str = "external_id"
+	case FindingHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case FindingHistoryOrderFieldSecurityLevel.column:
 		str = "security_level"
 	case FindingHistoryOrderFieldExternalOwnerID.column:
@@ -10296,10 +10476,10 @@ func (f *FindingHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *FindingHistoryOrderFieldUpdatedAt
-	case "internal_owner":
-		*f = *FindingHistoryOrderFieldInternalOwner
 	case "external_id":
 		*f = *FindingHistoryOrderFieldExternalID
+	case "internal_owner":
+		*f = *FindingHistoryOrderFieldInternalOwner
 	case "security_level":
 		*f = *FindingHistoryOrderFieldSecurityLevel
 	case "external_owner_id":
@@ -10622,6 +10802,20 @@ var (
 			}
 		},
 	}
+	// GroupHistoryOrderFieldExternalID orders GroupHistory by external_id.
+	GroupHistoryOrderFieldExternalID = &GroupHistoryOrderField{
+		Value: func(_m *GroupHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: grouphistory.FieldExternalID,
+		toTerm: grouphistory.ByExternalID,
+		toCursor: func(_m *GroupHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// GroupHistoryOrderFieldName orders GroupHistory by name.
 	GroupHistoryOrderFieldName = &GroupHistoryOrderField{
 		Value: func(_m *GroupHistory) (ent.Value, error) {
@@ -10662,6 +10856,8 @@ func (f GroupHistoryOrderField) String() string {
 		str = "created_at"
 	case GroupHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case GroupHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case GroupHistoryOrderFieldName.column:
 		str = "name"
 	case GroupHistoryOrderFieldDisplayName.column:
@@ -10688,6 +10884,8 @@ func (f *GroupHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *GroupHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *GroupHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *GroupHistoryOrderFieldExternalID
 	case "name":
 		*f = *GroupHistoryOrderFieldName
 	case "display_name":
@@ -12150,6 +12348,20 @@ var (
 			}
 		},
 	}
+	// IdentityHolderHistoryOrderFieldExternalID orders IdentityHolderHistory by external_id.
+	IdentityHolderHistoryOrderFieldExternalID = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: identityholderhistory.FieldExternalID,
+		toTerm: identityholderhistory.ByExternalID,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// IdentityHolderHistoryOrderFieldInternalOwner orders IdentityHolderHistory by internal_owner.
 	IdentityHolderHistoryOrderFieldInternalOwner = &IdentityHolderHistoryOrderField{
 		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
@@ -12412,6 +12624,8 @@ func (f IdentityHolderHistoryOrderField) String() string {
 		str = "created_at"
 	case IdentityHolderHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case IdentityHolderHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case IdentityHolderHistoryOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case IdentityHolderHistoryOrderFieldFullName.column:
@@ -12466,6 +12680,8 @@ func (f *IdentityHolderHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *IdentityHolderHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *IdentityHolderHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *IdentityHolderHistoryOrderFieldExternalID
 	case "internal_owner":
 		*f = *IdentityHolderHistoryOrderFieldInternalOwner
 	case "full_name":
@@ -12822,6 +13038,20 @@ var (
 			}
 		},
 	}
+	// InternalPolicyHistoryOrderFieldExternalID orders InternalPolicyHistory by external_id.
+	InternalPolicyHistoryOrderFieldExternalID = &InternalPolicyHistoryOrderField{
+		Value: func(_m *InternalPolicyHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: internalpolicyhistory.FieldExternalID,
+		toTerm: internalpolicyhistory.ByExternalID,
+		toCursor: func(_m *InternalPolicyHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// InternalPolicyHistoryOrderFieldName orders InternalPolicyHistory by name.
 	InternalPolicyHistoryOrderFieldName = &InternalPolicyHistoryOrderField{
 		Value: func(_m *InternalPolicyHistory) (ent.Value, error) {
@@ -12906,6 +13136,8 @@ func (f InternalPolicyHistoryOrderField) String() string {
 		str = "updated_at"
 	case InternalPolicyHistoryOrderFieldRevision.column:
 		str = "revision"
+	case InternalPolicyHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case InternalPolicyHistoryOrderFieldName.column:
 		str = "name"
 	case InternalPolicyHistoryOrderFieldStatus.column:
@@ -12940,6 +13172,8 @@ func (f *InternalPolicyHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *InternalPolicyHistoryOrderFieldUpdatedAt
 	case "revision":
 		*f = *InternalPolicyHistoryOrderFieldRevision
+	case "external_id":
+		*f = *InternalPolicyHistoryOrderFieldExternalID
 	case "name":
 		*f = *InternalPolicyHistoryOrderFieldName
 	case "STATUS":
@@ -13622,6 +13856,20 @@ var (
 			}
 		},
 	}
+	// MappedControlHistoryOrderFieldExternalID orders MappedControlHistory by external_id.
+	MappedControlHistoryOrderFieldExternalID = &MappedControlHistoryOrderField{
+		Value: func(_m *MappedControlHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: mappedcontrolhistory.FieldExternalID,
+		toTerm: mappedcontrolhistory.ByExternalID,
+		toCursor: func(_m *MappedControlHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// MappedControlHistoryOrderFieldMappingType orders MappedControlHistory by mapping_type.
 	MappedControlHistoryOrderFieldMappingType = &MappedControlHistoryOrderField{
 		Value: func(_m *MappedControlHistory) (ent.Value, error) {
@@ -13662,6 +13910,8 @@ func (f MappedControlHistoryOrderField) String() string {
 		str = "created_at"
 	case MappedControlHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case MappedControlHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case MappedControlHistoryOrderFieldMappingType.column:
 		str = "MAPPING_TYPE"
 	case MappedControlHistoryOrderFieldSource.column:
@@ -13688,6 +13938,8 @@ func (f *MappedControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *MappedControlHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *MappedControlHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *MappedControlHistoryOrderFieldExternalID
 	case "MAPPING_TYPE":
 		*f = *MappedControlHistoryOrderFieldMappingType
 	case "SOURCE":
@@ -14002,6 +14254,20 @@ var (
 			}
 		},
 	}
+	// NarrativeHistoryOrderFieldExternalID orders NarrativeHistory by external_id.
+	NarrativeHistoryOrderFieldExternalID = &NarrativeHistoryOrderField{
+		Value: func(_m *NarrativeHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: narrativehistory.FieldExternalID,
+		toTerm: narrativehistory.ByExternalID,
+		toCursor: func(_m *NarrativeHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// NarrativeHistoryOrderFieldName orders NarrativeHistory by name.
 	NarrativeHistoryOrderFieldName = &NarrativeHistoryOrderField{
 		Value: func(_m *NarrativeHistory) (ent.Value, error) {
@@ -14028,6 +14294,8 @@ func (f NarrativeHistoryOrderField) String() string {
 		str = "created_at"
 	case NarrativeHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case NarrativeHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case NarrativeHistoryOrderFieldName.column:
 		str = "name"
 	}
@@ -14052,6 +14320,8 @@ func (f *NarrativeHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *NarrativeHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *NarrativeHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *NarrativeHistoryOrderFieldExternalID
 	case "name":
 		*f = *NarrativeHistoryOrderFieldName
 	default:
@@ -16716,6 +16986,20 @@ var (
 			}
 		},
 	}
+	// PlatformHistoryOrderFieldExternalID orders PlatformHistory by external_id.
+	PlatformHistoryOrderFieldExternalID = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: platformhistory.FieldExternalID,
+		toTerm: platformhistory.ByExternalID,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// PlatformHistoryOrderFieldInternalOwner orders PlatformHistory by internal_owner.
 	PlatformHistoryOrderFieldInternalOwner = &PlatformHistoryOrderField{
 		Value: func(_m *PlatformHistory) (ent.Value, error) {
@@ -16965,6 +17249,8 @@ func (f PlatformHistoryOrderField) String() string {
 		str = "created_at"
 	case PlatformHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case PlatformHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case PlatformHistoryOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case PlatformHistoryOrderFieldBusinessOwner.column:
@@ -17019,6 +17305,8 @@ func (f *PlatformHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *PlatformHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *PlatformHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *PlatformHistoryOrderFieldExternalID
 	case "internal_owner":
 		*f = *PlatformHistoryOrderFieldInternalOwner
 	case "business_owner":
@@ -17375,6 +17663,20 @@ var (
 			}
 		},
 	}
+	// ProcedureHistoryOrderFieldExternalID orders ProcedureHistory by external_id.
+	ProcedureHistoryOrderFieldExternalID = &ProcedureHistoryOrderField{
+		Value: func(_m *ProcedureHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: procedurehistory.FieldExternalID,
+		toTerm: procedurehistory.ByExternalID,
+		toCursor: func(_m *ProcedureHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ProcedureHistoryOrderFieldName orders ProcedureHistory by name.
 	ProcedureHistoryOrderFieldName = &ProcedureHistoryOrderField{
 		Value: func(_m *ProcedureHistory) (ent.Value, error) {
@@ -17459,6 +17761,8 @@ func (f ProcedureHistoryOrderField) String() string {
 		str = "updated_at"
 	case ProcedureHistoryOrderFieldRevision.column:
 		str = "revision"
+	case ProcedureHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case ProcedureHistoryOrderFieldName.column:
 		str = "name"
 	case ProcedureHistoryOrderFieldStatus.column:
@@ -17493,6 +17797,8 @@ func (f *ProcedureHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProcedureHistoryOrderFieldUpdatedAt
 	case "revision":
 		*f = *ProcedureHistoryOrderFieldRevision
+	case "external_id":
+		*f = *ProcedureHistoryOrderFieldExternalID
 	case "name":
 		*f = *ProcedureHistoryOrderFieldName
 	case "STATUS":
@@ -17813,6 +18119,20 @@ var (
 			}
 		},
 	}
+	// ProgramHistoryOrderFieldExternalID orders ProgramHistory by external_id.
+	ProgramHistoryOrderFieldExternalID = &ProgramHistoryOrderField{
+		Value: func(_m *ProgramHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: programhistory.FieldExternalID,
+		toTerm: programhistory.ByExternalID,
+		toCursor: func(_m *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ProgramHistoryOrderFieldName orders ProgramHistory by name.
 	ProgramHistoryOrderFieldName = &ProgramHistoryOrderField{
 		Value: func(_m *ProgramHistory) (ent.Value, error) {
@@ -17951,6 +18271,8 @@ func (f ProgramHistoryOrderField) String() string {
 		str = "created_at"
 	case ProgramHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ProgramHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case ProgramHistoryOrderFieldName.column:
 		str = "name"
 	case ProgramHistoryOrderFieldStatus.column:
@@ -17991,6 +18313,8 @@ func (f *ProgramHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProgramHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ProgramHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *ProgramHistoryOrderFieldExternalID
 	case "name":
 		*f = *ProgramHistoryOrderFieldName
 	case "STATUS":
@@ -19531,6 +19855,20 @@ var (
 			}
 		},
 	}
+	// RiskHistoryOrderFieldExternalID orders RiskHistory by external_id.
+	RiskHistoryOrderFieldExternalID = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: riskhistory.FieldExternalID,
+		toTerm: riskhistory.ByExternalID,
+		toCursor: func(_m *RiskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// RiskHistoryOrderFieldStakeholderName orders RiskHistory by stakeholder_name.
 	RiskHistoryOrderFieldStakeholderName = &RiskHistoryOrderField{
 		Value: func(_m *RiskHistory) (ent.Value, error) {
@@ -19556,20 +19894,6 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.DelegateName,
-			}
-		},
-	}
-	// RiskHistoryOrderFieldExternalID orders RiskHistory by external_id.
-	RiskHistoryOrderFieldExternalID = &RiskHistoryOrderField{
-		Value: func(_m *RiskHistory) (ent.Value, error) {
-			return _m.ExternalID, nil
-		},
-		column: riskhistory.FieldExternalID,
-		toTerm: riskhistory.ByExternalID,
-		toCursor: func(_m *RiskHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ExternalID,
 			}
 		},
 	}
@@ -19860,12 +20184,12 @@ func (f RiskHistoryOrderField) String() string {
 		str = "created_at"
 	case RiskHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case RiskHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case RiskHistoryOrderFieldStakeholderName.column:
 		str = "stakeholder_name"
 	case RiskHistoryOrderFieldDelegateName.column:
 		str = "delegate_name"
-	case RiskHistoryOrderFieldExternalID.column:
-		str = "external_id"
 	case RiskHistoryOrderFieldObservedAt.column:
 		str = "observed_at"
 	case RiskHistoryOrderFieldName.column:
@@ -19918,12 +20242,12 @@ func (f *RiskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *RiskHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *RiskHistoryOrderFieldExternalID
 	case "stakeholder_name":
 		*f = *RiskHistoryOrderFieldStakeholderName
 	case "delegate_name":
 		*f = *RiskHistoryOrderFieldDelegateName
-	case "external_id":
-		*f = *RiskHistoryOrderFieldExternalID
 	case "observed_at":
 		*f = *RiskHistoryOrderFieldObservedAt
 	case "name":
@@ -21114,6 +21438,20 @@ var (
 			}
 		},
 	}
+	// SubcontrolHistoryOrderFieldExternalID orders SubcontrolHistory by external_id.
+	SubcontrolHistoryOrderFieldExternalID = &SubcontrolHistoryOrderField{
+		Value: func(_m *SubcontrolHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: subcontrolhistory.FieldExternalID,
+		toTerm: subcontrolhistory.ByExternalID,
+		toCursor: func(_m *SubcontrolHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// SubcontrolHistoryOrderFieldTitle orders SubcontrolHistory by title.
 	SubcontrolHistoryOrderFieldTitle = &SubcontrolHistoryOrderField{
 		Value: func(_m *SubcontrolHistory) (ent.Value, error) {
@@ -21237,6 +21575,8 @@ func (f SubcontrolHistoryOrderField) String() string {
 		str = "created_at"
 	case SubcontrolHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SubcontrolHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case SubcontrolHistoryOrderFieldTitle.column:
 		str = "title"
 	case SubcontrolHistoryOrderFieldStatus.column:
@@ -21273,6 +21613,8 @@ func (f *SubcontrolHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SubcontrolHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *SubcontrolHistoryOrderFieldExternalID
 	case "title":
 		*f = *SubcontrolHistoryOrderFieldTitle
 	case "STATUS":
@@ -21959,6 +22301,20 @@ var (
 			}
 		},
 	}
+	// SystemDetailHistoryOrderFieldExternalID orders SystemDetailHistory by external_id.
+	SystemDetailHistoryOrderFieldExternalID = &SystemDetailHistoryOrderField{
+		Value: func(_m *SystemDetailHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: systemdetailhistory.FieldExternalID,
+		toTerm: systemdetailhistory.ByExternalID,
+		toCursor: func(_m *SystemDetailHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// SystemDetailHistoryOrderFieldSystemName orders SystemDetailHistory by system_name.
 	SystemDetailHistoryOrderFieldSystemName = &SystemDetailHistoryOrderField{
 		Value: func(_m *SystemDetailHistory) (ent.Value, error) {
@@ -21985,6 +22341,8 @@ func (f SystemDetailHistoryOrderField) String() string {
 		str = "created_at"
 	case SystemDetailHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SystemDetailHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case SystemDetailHistoryOrderFieldSystemName.column:
 		str = "system_name"
 	}
@@ -22009,6 +22367,8 @@ func (f *SystemDetailHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SystemDetailHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SystemDetailHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *SystemDetailHistoryOrderFieldExternalID
 	case "system_name":
 		*f = *SystemDetailHistoryOrderFieldSystemName
 	default:
@@ -22321,6 +22681,20 @@ var (
 			}
 		},
 	}
+	// TaskHistoryOrderFieldExternalID orders TaskHistory by external_id.
+	TaskHistoryOrderFieldExternalID = &TaskHistoryOrderField{
+		Value: func(_m *TaskHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: taskhistory.FieldExternalID,
+		toTerm: taskhistory.ByExternalID,
+		toCursor: func(_m *TaskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// TaskHistoryOrderFieldTitle orders TaskHistory by title.
 	TaskHistoryOrderFieldTitle = &TaskHistoryOrderField{
 		Value: func(_m *TaskHistory) (ent.Value, error) {
@@ -22457,6 +22831,8 @@ func (f TaskHistoryOrderField) String() string {
 		str = "created_at"
 	case TaskHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case TaskHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case TaskHistoryOrderFieldTitle.column:
 		str = "title"
 	case TaskHistoryOrderFieldStatus.column:
@@ -22493,6 +22869,8 @@ func (f *TaskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TaskHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *TaskHistoryOrderFieldExternalID
 	case "title":
 		*f = *TaskHistoryOrderFieldTitle
 	case "STATUS":
@@ -22817,6 +23195,20 @@ var (
 			}
 		},
 	}
+	// TemplateHistoryOrderFieldExternalID orders TemplateHistory by external_id.
+	TemplateHistoryOrderFieldExternalID = &TemplateHistoryOrderField{
+		Value: func(_m *TemplateHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: templatehistory.FieldExternalID,
+		toTerm: templatehistory.ByExternalID,
+		toCursor: func(_m *TemplateHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// TemplateHistoryOrderFieldName orders TemplateHistory by name.
 	TemplateHistoryOrderFieldName = &TemplateHistoryOrderField{
 		Value: func(_m *TemplateHistory) (ent.Value, error) {
@@ -22871,6 +23263,8 @@ func (f TemplateHistoryOrderField) String() string {
 		str = "created_at"
 	case TemplateHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case TemplateHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case TemplateHistoryOrderFieldName.column:
 		str = "name"
 	case TemplateHistoryOrderFieldTemplateType.column:
@@ -22899,6 +23293,8 @@ func (f *TemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TemplateHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TemplateHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *TemplateHistoryOrderFieldExternalID
 	case "name":
 		*f = *TemplateHistoryOrderFieldName
 	case "TEMPLATE_TYPE":
@@ -27885,6 +28281,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityHistoryOrderFieldExternalID orders VulnerabilityHistory by external_id.
+	VulnerabilityHistoryOrderFieldExternalID = &VulnerabilityHistoryOrderField{
+		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: vulnerabilityhistory.FieldExternalID,
+		toTerm: vulnerabilityhistory.ByExternalID,
+		toCursor: func(_m *VulnerabilityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// VulnerabilityHistoryOrderFieldInternalOwner orders VulnerabilityHistory by internal_owner.
 	VulnerabilityHistoryOrderFieldInternalOwner = &VulnerabilityHistoryOrderField{
 		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
@@ -27924,20 +28334,6 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.SecurityLevel,
-			}
-		},
-	}
-	// VulnerabilityHistoryOrderFieldExternalID orders VulnerabilityHistory by external_id.
-	VulnerabilityHistoryOrderFieldExternalID = &VulnerabilityHistoryOrderField{
-		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
-			return _m.ExternalID, nil
-		},
-		column: vulnerabilityhistory.FieldExternalID,
-		toTerm: vulnerabilityhistory.ByExternalID,
-		toCursor: func(_m *VulnerabilityHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ExternalID,
 			}
 		},
 	}
@@ -28009,14 +28405,14 @@ func (f VulnerabilityHistoryOrderField) String() string {
 		str = "created_at"
 	case VulnerabilityHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case VulnerabilityHistoryOrderFieldExternalID.column:
+		str = "external_id"
 	case VulnerabilityHistoryOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case VulnerabilityHistoryOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case VulnerabilityHistoryOrderFieldSecurityLevel.column:
 		str = "security_level"
-	case VulnerabilityHistoryOrderFieldExternalID.column:
-		str = "external_id"
 	case VulnerabilityHistoryOrderFieldCveID.column:
 		str = "cve_id"
 	case VulnerabilityHistoryOrderFieldCategory.column:
@@ -28047,14 +28443,14 @@ func (f *VulnerabilityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *VulnerabilityHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *VulnerabilityHistoryOrderFieldExternalID
 	case "internal_owner":
 		*f = *VulnerabilityHistoryOrderFieldInternalOwner
 	case "external_owner_id":
 		*f = *VulnerabilityHistoryOrderFieldExternalOwnerID
 	case "security_level":
 		*f = *VulnerabilityHistoryOrderFieldSecurityLevel
-	case "external_id":
-		*f = *VulnerabilityHistoryOrderFieldExternalID
 	case "cve_id":
 		*f = *VulnerabilityHistoryOrderFieldCveID
 	case "category":

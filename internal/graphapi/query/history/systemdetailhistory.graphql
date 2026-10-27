@@ -14,15 +14,21 @@ query GetAllSystemDetailHistories ($first: Int, $last: Int, $after: Cursor, $bef
 				createdBy
 				description
 				displayID
+				externalID
 				historyTime
 				id
+				integrationRunID
 				lastReviewed
+				managedBy
 				operation
 				oscalMetadataJSON
 				ownerID
 				ref
 				revisionHistory
 				sensitivityLevel
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemName
 				tags
 				updatedAt
@@ -49,15 +55,21 @@ query GetSystemDetailHistories ($first: Int, $last: Int, $after: Cursor, $before
 				createdBy
 				description
 				displayID
+				externalID
 				historyTime
 				id
+				integrationRunID
 				lastReviewed
+				managedBy
 				operation
 				oscalMetadataJSON
 				ownerID
 				ref
 				revisionHistory
 				sensitivityLevel
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemName
 				tags
 				updatedAt

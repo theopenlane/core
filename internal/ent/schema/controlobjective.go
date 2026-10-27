@@ -120,6 +120,7 @@ func (c ControlObjective) Mixin() []ent.Mixin {
 		prefix:          "CLO",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(c),
 			newObjectOwnedMixin[generated.ControlObjective](c,
 				withParents(Control{}, Subcontrol{}),
 				withOrganizationOwner(),
@@ -144,6 +145,9 @@ func (c ControlObjective) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.FGACrudParent(Control{}.Name()),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }
 

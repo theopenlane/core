@@ -36,6 +36,18 @@ type ControlImplementation struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -66,6 +78,8 @@ type ControlImplementation struct {
 
 // ControlImplementationEdges holds the relations/edges for other nodes in the graph.
 type ControlImplementationEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -82,16 +96,26 @@ type ControlImplementationEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
-	namedBlockedGroups map[string][]*Group
-	namedEditors       map[string][]*Group
-	namedViewers       map[string][]*Group
-	namedControls      map[string][]*Control
-	namedSubcontrols   map[string][]*Subcontrol
-	namedTasks         map[string][]*Task
+	namedIntegrationRuns map[string][]*IntegrationRun
+	namedBlockedGroups   map[string][]*Group
+	namedEditors         map[string][]*Group
+	namedViewers         map[string][]*Group
+	namedControls        map[string][]*Control
+	namedSubcontrols     map[string][]*Subcontrol
+	namedTasks           map[string][]*Task
+}
+
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlImplementationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -99,7 +123,7 @@ type ControlImplementationEdges struct {
 func (e ControlImplementationEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -108,7 +132,7 @@ func (e ControlImplementationEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -117,7 +141,7 @@ func (e ControlImplementationEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -126,7 +150,7 @@ func (e ControlImplementationEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -135,7 +159,7 @@ func (e ControlImplementationEdges) ViewersOrErr() ([]*Group, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -144,7 +168,7 @@ func (e ControlImplementationEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -153,7 +177,7 @@ func (e ControlImplementationEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlImplementationEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -168,7 +192,7 @@ func (*ControlImplementation) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case controlimplementation.FieldSystemOwned, controlimplementation.FieldVerified:
 			values[i] = new(sql.NullBool)
-		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldUpdatedByImpersonator, controlimplementation.FieldDeletedBy, controlimplementation.FieldOwnerID, controlimplementation.FieldInternalNotes, controlimplementation.FieldSystemInternalID, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
+		case controlimplementation.FieldID, controlimplementation.FieldCreatedBy, controlimplementation.FieldUpdatedBy, controlimplementation.FieldUpdatedByImpersonator, controlimplementation.FieldDeletedBy, controlimplementation.FieldSourceDefinitionID, controlimplementation.FieldSourceDefinitionVersion, controlimplementation.FieldSourceInstanceID, controlimplementation.FieldManagedBy, controlimplementation.FieldIntegrationRunID, controlimplementation.FieldExternalID, controlimplementation.FieldOwnerID, controlimplementation.FieldInternalNotes, controlimplementation.FieldSystemInternalID, controlimplementation.FieldStatus, controlimplementation.FieldDetails:
 			values[i] = new(sql.NullString)
 		case controlimplementation.FieldCreatedAt, controlimplementation.FieldUpdatedAt, controlimplementation.FieldDeletedAt, controlimplementation.FieldImplementationDate, controlimplementation.FieldVerificationDate:
 			values[i] = new(sql.NullTime)
@@ -247,6 +271,42 @@ func (_m *ControlImplementation) assignValues(columns []string, values []any) er
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case controlimplementation.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case controlimplementation.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case controlimplementation.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case controlimplementation.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case controlimplementation.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case controlimplementation.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case controlimplementation.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -339,6 +399,11 @@ func (_m *ControlImplementation) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the ControlImplementation entity.
+func (_m *ControlImplementation) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewControlImplementationClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the ControlImplementation entity.
 func (_m *ControlImplementation) QueryOwner() *OrganizationQuery {
 	return NewControlImplementationClient(_m.config).QueryOwner(_m)
@@ -423,6 +488,24 @@ func (_m *ControlImplementation) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -458,6 +541,30 @@ func (_m *ControlImplementation) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ControlImplementation) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ControlImplementation) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

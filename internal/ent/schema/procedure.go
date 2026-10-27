@@ -147,7 +147,7 @@ func (p Procedure) Mixin() []ent.Mixin {
 		prefix:          "PRD",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: p},
+			newProvenanceMixin(p),
 			newOrgOwnedMixin(p),
 			// add group edit permissions to the procedure
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),
@@ -178,6 +178,10 @@ func (p Procedure) Annotations() []schema.Annotation {
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
 		entx.ConsoleRoute(entx.WithConsoleSuffix("view")),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("external_file_id"),
 	}
 }
 

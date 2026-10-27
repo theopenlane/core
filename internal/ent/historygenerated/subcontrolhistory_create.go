@@ -169,6 +169,90 @@ func (_c *SubcontrolHistoryCreate) SetTags(v []string) *SubcontrolHistoryCreate 
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *SubcontrolHistoryCreate) SetSourceDefinitionID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableSourceDefinitionID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *SubcontrolHistoryCreate) SetSourceDefinitionVersion(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *SubcontrolHistoryCreate) SetSourceInstanceID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableSourceInstanceID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *SubcontrolHistoryCreate) SetManagedBy(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableManagedBy(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *SubcontrolHistoryCreate) SetIntegrationRunID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableIntegrationRunID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *SubcontrolHistoryCreate) SetExternalID(v string) *SubcontrolHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableExternalID(v *string) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetExternalUUID sets the "external_uuid" field.
 func (_c *SubcontrolHistoryCreate) SetExternalUUID(v string) *SubcontrolHistoryCreate {
 	_c.mutation.SetExternalUUID(v)
@@ -836,6 +920,30 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(subcontrolhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(subcontrolhistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(subcontrolhistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(subcontrolhistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(subcontrolhistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(subcontrolhistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(subcontrolhistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.ExternalUUID(); ok {
 		_spec.SetField(subcontrolhistory.FieldExternalUUID, field.TypeString, value)

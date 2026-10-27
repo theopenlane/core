@@ -233,6 +233,20 @@ func (_c *ContactHistoryCreate) SetNillableIntegrationRunID(v *string) *ContactH
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *ContactHistoryCreate) SetExternalID(v string) *ContactHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableExternalID(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ContactHistoryCreate) SetOwnerID(v string) *ContactHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -341,20 +355,6 @@ func (_c *ContactHistoryCreate) SetStatus(v enums.UserStatus) *ContactHistoryCre
 func (_c *ContactHistoryCreate) SetNillableStatus(v *enums.UserStatus) *ContactHistoryCreate {
 	if v != nil {
 		_c.SetStatus(*v)
-	}
-	return _c
-}
-
-// SetExternalID sets the "external_id" field.
-func (_c *ContactHistoryCreate) SetExternalID(v string) *ContactHistoryCreate {
-	_c.mutation.SetExternalID(v)
-	return _c
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_c *ContactHistoryCreate) SetNillableExternalID(v *string) *ContactHistoryCreate {
-	if v != nil {
-		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -597,6 +597,10 @@ func (_c *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.CreateS
 		_spec.SetField(contacthistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(contacthistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(contacthistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -628,10 +632,6 @@ func (_c *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(contacthistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(contacthistory.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(contacthistory.FieldIntegrationID, field.TypeString, value)

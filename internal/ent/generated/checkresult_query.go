@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/logx"
@@ -32,6 +33,7 @@ type CheckResultQuery struct {
 	inters                   []Interceptor
 	predicates               []predicate.CheckResult
 	withIntegrationRuns      *IntegrationRunQuery
+	withOwner                *OrganizationQuery
 	withBlockedGroups        *GroupQuery
 	withEditors              *GroupQuery
 	withViewers              *GroupQuery
@@ -97,6 +99,28 @@ func (_q *CheckResultQuery) QueryIntegrationRuns() *IntegrationRunQuery {
 			sqlgraph.From(checkresult.Table, checkresult.FieldID, selector),
 			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, checkresult.IntegrationRunsTable, checkresult.IntegrationRunsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (_q *CheckResultQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(checkresult.Table, checkresult.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, checkresult.OwnerTable, checkresult.OwnerColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -429,6 +453,7 @@ func (_q *CheckResultQuery) Clone() *CheckResultQuery {
 		inters:              append([]Interceptor{}, _q.inters...),
 		predicates:          append([]predicate.CheckResult{}, _q.predicates...),
 		withIntegrationRuns: _q.withIntegrationRuns.Clone(),
+		withOwner:           _q.withOwner.Clone(),
 		withBlockedGroups:   _q.withBlockedGroups.Clone(),
 		withEditors:         _q.withEditors.Clone(),
 		withViewers:         _q.withViewers.Clone(),
@@ -450,6 +475,17 @@ func (_q *CheckResultQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuer
 		opt(query)
 	}
 	_q.withIntegrationRuns = query
+	return _q
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CheckResultQuery) WithOwner(opts ...func(*OrganizationQuery)) *CheckResultQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withOwner = query
 	return _q
 }
 
@@ -603,8 +639,9 @@ func (_q *CheckResultQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*CheckResult{}
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			_q.withIntegrationRuns != nil,
+			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
@@ -638,6 +675,12 @@ func (_q *CheckResultQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadIntegrationRuns(ctx, query, nodes,
 			func(n *CheckResult) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
 			func(n *CheckResult, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
+			func(n *CheckResult, e *Organization) { n.Edges.Owner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -789,6 +832,35 @@ func (_q *CheckResultQuery) loadIntegrationRuns(ctx context.Context, query *Inte
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *CheckResultQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*CheckResult, init func(*CheckResult), assign func(*CheckResult, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*CheckResult)
+	for i := range nodes {
+		fk := nodes[i].OwnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -1065,6 +1137,9 @@ func (_q *CheckResultQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != checkresult.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if _q.withOwner != nil {
+			_spec.Node.AddColumnOnce(checkresult.FieldOwnerID)
 		}
 		if _q.withIntegration != nil {
 			_spec.Node.AddColumnOnce(checkresult.FieldIntegrationID)

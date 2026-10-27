@@ -181,6 +181,7 @@ func (c *APITokenUpdateOne) SetInput(i UpdateAPITokenInput) *APITokenUpdateOne {
 type CreateActionPlanInput struct {
 	Tags                            []string                      `json:"tags,omitempty"`
 	Revision                        *string                       `json:"revision,omitempty"`
+	ExternalID                      *string                       `json:"external_id,omitempty"`
 	Name                            string                        `json:"name,omitempty"`
 	Status                          *enums.DocumentStatus         `json:"status,omitempty"`
 	ManagementMode                  *enums.DocumentManagementMode `json:"management_mode,omitempty"`
@@ -246,6 +247,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -426,6 +430,8 @@ type UpdateActionPlanInput struct {
 	AppendTags                            []string
 	ClearRevision                         bool
 	Revision                              *string `json:"revision,omitempty"`
+	ClearExternalID                       bool
+	ExternalID                            *string `json:"external_id,omitempty"`
 	Name                                  *string `json:"name,omitempty"`
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus `json:"status,omitempty"`
@@ -572,6 +578,12 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -974,6 +986,7 @@ func (c *ActionPlanUpdateOne) SetInput(i UpdateActionPlanInput) *ActionPlanUpdat
 // CreateAssessmentInput represents a mutation input for creating assessments.
 type CreateAssessmentInput struct {
 	Tags                   []string               `json:"tags,omitempty"`
+	ExternalID             *string                `json:"external_id,omitempty"`
 	InternalNotes          *string                `json:"internal_notes,omitempty"`
 	SystemInternalID       *string                `json:"system_internal_id,omitempty"`
 	WorkflowEligibleMarker *bool                  `json:"workflow_eligible_marker,omitempty"`
@@ -982,6 +995,7 @@ type CreateAssessmentInput struct {
 	Jsonconfig             map[string]interface{} `json:"jsonconfig,omitempty"`
 	Uischema               map[string]interface{} `json:"uischema,omitempty"`
 	ResponseDueDuration    *int64                 `json:"response_due_duration,omitempty"`
+	IntegrationRunIDs      []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs        []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs              []string               `json:"editor_ids,omitempty"`
@@ -998,6 +1012,9 @@ type CreateAssessmentInput struct {
 func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -1020,6 +1037,9 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.ResponseDueDuration; v != nil {
 		m.SetResponseDueDuration(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1064,6 +1084,8 @@ type UpdateAssessmentInput struct {
 	ClearTags                   bool
 	Tags                        []string `json:"tags,omitempty"`
 	AppendTags                  []string
+	ClearExternalID             bool
+	ExternalID                  *string `json:"external_id,omitempty"`
 	ClearInternalNotes          bool
 	InternalNotes               *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID       bool
@@ -1078,6 +1100,9 @@ type UpdateAssessmentInput struct {
 	Uischema                    map[string]interface{} `json:"uischema,omitempty"`
 	ClearResponseDueDuration    bool
 	ResponseDueDuration         *int64 `json:"response_due_duration,omitempty"`
+	ClearIntegrationRuns        bool
+	AddIntegrationRunIDs        []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs     []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups          bool
 	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
@@ -1116,6 +1141,12 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -1158,6 +1189,15 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.ResponseDueDuration; v != nil {
 		m.SetResponseDueDuration(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -1253,16 +1293,24 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 
 // CreateAssessmentPolicyInput represents a mutation input for creating assessmentpolicies.
 type CreateAssessmentPolicyInput struct {
-	PolicyRevision   *string `json:"policy_revision,omitempty"`
-	OwnerID          *string `json:"owner_id,omitempty"`
-	AssessmentID     string  `json:"assessment_id,omitempty"`
-	InternalPolicyID string  `json:"internal_policy_id,omitempty"`
+	ExternalID        *string  `json:"external_id,omitempty"`
+	PolicyRevision    *string  `json:"policy_revision,omitempty"`
+	IntegrationRunIDs []string `json:"integration_run_ids,omitempty"`
+	OwnerID           *string  `json:"owner_id,omitempty"`
+	AssessmentID      string   `json:"assessment_id,omitempty"`
+	InternalPolicyID  string   `json:"internal_policy_id,omitempty"`
 }
 
 // Mutate applies the CreateAssessmentPolicyInput on the AssessmentPolicyMutation builder.
 func (i *CreateAssessmentPolicyInput) Mutate(m *AssessmentPolicyMutation) {
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.PolicyRevision; v != nil {
 		m.SetPolicyRevision(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1279,12 +1327,32 @@ func (c *AssessmentPolicyCreate) SetInput(i CreateAssessmentPolicyInput) *Assess
 
 // UpdateAssessmentPolicyInput represents a mutation input for updating assessmentpolicies.
 type UpdateAssessmentPolicyInput struct {
-	ClearOwner bool
-	OwnerID    *string `json:"owner_id,omitempty"`
+	ClearExternalID         bool
+	ExternalID              *string `json:"external_id,omitempty"`
+	ClearIntegrationRuns    bool
+	AddIntegrationRunIDs    []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"remove_integration_run_ids,omitempty"`
+	ClearOwner              bool
+	OwnerID                 *string `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the UpdateAssessmentPolicyInput on the AssessmentPolicyMutation builder.
 func (i *UpdateAssessmentPolicyInput) Mutate(m *AssessmentPolicyMutation) {
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
+	}
 	if i.ClearOwner {
 		m.ClearOwner()
 	}
@@ -1396,6 +1464,7 @@ func (c *AssessmentResponseCreate) SetInput(i CreateAssessmentResponseInput) *As
 // CreateAssetInput represents a mutation input for creating assets.
 type CreateAssetInput struct {
 	Tags                          []string          `json:"tags,omitempty"`
+	ExternalID                    *string           `json:"external_id,omitempty"`
 	InternalOwner                 *string           `json:"internal_owner,omitempty"`
 	AssetSubtypeName              *string           `json:"asset_subtype_name,omitempty"`
 	AssetDataClassificationName   *string           `json:"asset_data_classification_name,omitempty"`
@@ -1463,6 +1532,9 @@ type CreateAssetInput struct {
 func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalOwner; v != nil {
 		m.SetInternalOwner(*v)
@@ -1658,6 +1730,8 @@ type UpdateAssetInput struct {
 	ClearTags                        bool
 	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
+	ClearExternalID                  bool
+	ExternalID                       *string `json:"external_id,omitempty"`
 	ClearInternalOwner               bool
 	InternalOwner                    *string `json:"internal_owner,omitempty"`
 	ClearAssetSubtypeName            bool
@@ -1807,6 +1881,12 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalOwner {
 		m.ClearInternalOwner()
@@ -2236,6 +2316,7 @@ func (c *AssetUpdateOne) SetInput(i UpdateAssetInput) *AssetUpdateOne {
 // CreateCampaignInput represents a mutation input for creating campaigns.
 type CreateCampaignInput struct {
 	Tags                          []string               `json:"tags,omitempty"`
+	ExternalID                    *string                `json:"external_id,omitempty"`
 	InternalOwner                 *string                `json:"internal_owner,omitempty"`
 	WorkflowEligibleMarker        *bool                  `json:"workflow_eligible_marker,omitempty"`
 	Name                          string                 `json:"name,omitempty"`
@@ -2260,6 +2341,7 @@ type CreateCampaignInput struct {
 	LastResentAt                  *models.DateTime       `json:"last_resent_at,omitempty"`
 	Metadata                      map[string]interface{} `json:"metadata,omitempty"`
 	EmailBrandingID               *string                `json:"email_branding_id,omitempty"`
+	IntegrationRunIDs             []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                       *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs               []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs                     []string               `json:"editor_ids,omitempty"`
@@ -2287,6 +2369,9 @@ type CreateCampaignInput struct {
 func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalOwner; v != nil {
 		m.SetInternalOwner(*v)
@@ -2357,6 +2442,9 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.EmailBrandingID; v != nil {
 		m.SetEmailBrandingID(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -2434,6 +2522,8 @@ type UpdateCampaignInput struct {
 	ClearTags                        bool
 	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
+	ClearExternalID                  bool
+	ExternalID                       *string `json:"external_id,omitempty"`
 	ClearInternalOwner               bool
 	InternalOwner                    *string `json:"internal_owner,omitempty"`
 	ClearWorkflowEligibleMarker      bool
@@ -2477,6 +2567,9 @@ type UpdateCampaignInput struct {
 	Metadata                         map[string]interface{} `json:"metadata,omitempty"`
 	ClearEmailBrandingID             bool
 	EmailBrandingID                  *string `json:"email_branding_id,omitempty"`
+	ClearIntegrationRuns             bool
+	AddIntegrationRunIDs             []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs          []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups               bool
 	AddBlockedGroupIDs               []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs            []string `json:"remove_blocked_group_ids,omitempty"`
@@ -2540,6 +2633,12 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalOwner {
 		m.ClearInternalOwner()
@@ -2669,6 +2768,15 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.EmailBrandingID; v != nil {
 		m.SetEmailBrandingID(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -3027,6 +3135,7 @@ type CreateCheckResultInput struct {
 	Details           *string            `json:"details,omitempty"`
 	ParentExternalID  *string            `json:"parent_external_id,omitempty"`
 	IntegrationRunIDs []string           `json:"integration_run_ids,omitempty"`
+	OwnerID           *string            `json:"owner_id,omitempty"`
 	BlockedGroupIDs   []string           `json:"blocked_group_ids,omitempty"`
 	EditorIDs         []string           `json:"editor_ids,omitempty"`
 	ViewerIDs         []string           `json:"viewer_ids,omitempty"`
@@ -3058,6 +3167,9 @@ func (i *CreateCheckResultInput) Mutate(m *CheckResultMutation) {
 	}
 	if v := i.IntegrationRunIDs; len(v) > 0 {
 		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
@@ -3240,6 +3352,7 @@ func (c *CheckResultUpdateOne) SetInput(i UpdateCheckResultInput) *CheckResultUp
 // CreateContactInput represents a mutation input for creating contacts.
 type CreateContactInput struct {
 	Tags              []string          `json:"tags,omitempty"`
+	ExternalID        *string           `json:"external_id,omitempty"`
 	FullName          *string           `json:"full_name,omitempty"`
 	Title             *string           `json:"title,omitempty"`
 	Company           *string           `json:"company,omitempty"`
@@ -3247,7 +3360,6 @@ type CreateContactInput struct {
 	PhoneNumber       *string           `json:"phone_number,omitempty"`
 	Address           *string           `json:"address,omitempty"`
 	Status            *enums.UserStatus `json:"status,omitempty"`
-	ExternalID        *string           `json:"external_id,omitempty"`
 	IntegrationID     *string           `json:"integration_id,omitempty"`
 	ObservedAt        *models.DateTime  `json:"observed_at,omitempty"`
 	IntegrationRunIDs []string          `json:"integration_run_ids,omitempty"`
@@ -3263,6 +3375,9 @@ type CreateContactInput struct {
 func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.FullName; v != nil {
 		m.SetFullName(*v)
@@ -3284,9 +3399,6 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if v := i.IntegrationID; v != nil {
 		m.SetIntegrationID(*v)
@@ -3328,6 +3440,8 @@ type UpdateContactInput struct {
 	ClearTags               bool
 	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
+	ClearExternalID         bool
+	ExternalID              *string `json:"external_id,omitempty"`
 	ClearFullName           bool
 	FullName                *string `json:"full_name,omitempty"`
 	ClearTitle              bool
@@ -3341,8 +3455,6 @@ type UpdateContactInput struct {
 	ClearAddress            bool
 	Address                 *string           `json:"address,omitempty"`
 	Status                  *enums.UserStatus `json:"status,omitempty"`
-	ClearExternalID         bool
-	ExternalID              *string `json:"external_id,omitempty"`
 	ClearIntegrationID      bool
 	IntegrationID           *string `json:"integration_id,omitempty"`
 	ClearObservedAt         bool
@@ -3379,6 +3491,12 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearFullName {
 		m.ClearFullName()
@@ -3418,12 +3536,6 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if i.ClearExternalID {
-		m.ClearExternalID()
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if i.ClearIntegrationID {
 		m.ClearIntegrationID()
@@ -3514,6 +3626,7 @@ func (c *ContactUpdateOne) SetInput(i UpdateContactInput) *ContactUpdateOne {
 // CreateControlInput represents a mutation input for creating controls.
 type CreateControlInput struct {
 	Tags                       []string                            `json:"tags,omitempty"`
+	ExternalID                 *string                             `json:"external_id,omitempty"`
 	ExternalUUID               *string                             `json:"external_uuid,omitempty"`
 	Title                      *string                             `json:"title,omitempty"`
 	Description                *string                             `json:"description,omitempty"`
@@ -3549,6 +3662,7 @@ type CreateControlInput struct {
 	WorkflowEligibleMarker     *bool                               `json:"workflow_eligible_marker,omitempty"`
 	RefCode                    string                              `json:"ref_code,omitempty"`
 	TrustCenterVisibility      *enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
+	IntegrationRunIDs          []string                            `json:"integration_run_ids,omitempty"`
 	EvidenceIDs                []string                            `json:"evidence_ids,omitempty"`
 	ControlObjectiveIDs        []string                            `json:"control_objective_ids,omitempty"`
 	TaskIDs                    []string                            `json:"task_ids,omitempty"`
@@ -3589,6 +3703,9 @@ type CreateControlInput struct {
 func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.ExternalUUID; v != nil {
 		m.SetExternalUUID(*v)
@@ -3692,6 +3809,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	m.SetRefCode(i.RefCode)
 	if v := i.TrustCenterVisibility; v != nil {
 		m.SetTrustCenterVisibility(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
@@ -3808,6 +3928,8 @@ type UpdateControlInput struct {
 	ClearTags                       bool
 	Tags                            []string `json:"tags,omitempty"`
 	AppendTags                      []string
+	ClearExternalID                 bool
+	ExternalID                      *string `json:"external_id,omitempty"`
 	ClearExternalUUID               bool
 	ExternalUUID                    *string `json:"external_uuid,omitempty"`
 	ClearTitle                      bool
@@ -3886,6 +4008,9 @@ type UpdateControlInput struct {
 	RefCode                         *string `json:"ref_code,omitempty"`
 	ClearTrustCenterVisibility      bool
 	TrustCenterVisibility           *enums.TrustCenterControlVisibility `json:"trust_center_visibility,omitempty"`
+	ClearIntegrationRuns            bool
+	AddIntegrationRunIDs            []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs         []string `json:"remove_integration_run_ids,omitempty"`
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string `json:"add_evidence_ids,omitempty"`
 	RemoveEvidenceIDs               []string `json:"remove_evidence_ids,omitempty"`
@@ -3990,6 +4115,12 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearExternalUUID {
 		m.ClearExternalUUID()
@@ -4224,6 +4355,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.TrustCenterVisibility; v != nil {
 		m.SetTrustCenterVisibility(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()
@@ -4518,6 +4658,7 @@ func (c *ControlUpdateOne) SetInput(i UpdateControlInput) *ControlUpdateOne {
 // CreateControlImplementationInput represents a mutation input for creating controlimplementations.
 type CreateControlImplementationInput struct {
 	Tags               []string              `json:"tags,omitempty"`
+	ExternalID         *string               `json:"external_id,omitempty"`
 	InternalNotes      *string               `json:"internal_notes,omitempty"`
 	SystemInternalID   *string               `json:"system_internal_id,omitempty"`
 	Status             *enums.DocumentStatus `json:"status,omitempty"`
@@ -4526,6 +4667,7 @@ type CreateControlImplementationInput struct {
 	VerificationDate   *time.Time            `json:"verification_date,omitempty"`
 	Details            *string               `json:"details,omitempty"`
 	DetailsJSON        []interface{}         `json:"details_json,omitempty"`
+	IntegrationRunIDs  []string              `json:"integration_run_ids,omitempty"`
 	OwnerID            *string               `json:"owner_id,omitempty"`
 	BlockedGroupIDs    []string              `json:"blocked_group_ids,omitempty"`
 	EditorIDs          []string              `json:"editor_ids,omitempty"`
@@ -4539,6 +4681,9 @@ type CreateControlImplementationInput struct {
 func (i *CreateControlImplementationInput) Mutate(m *ControlImplementationMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -4563,6 +4708,9 @@ func (i *CreateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if v := i.DetailsJSON; v != nil {
 		m.SetDetailsJSON(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -4598,6 +4746,8 @@ type UpdateControlImplementationInput struct {
 	ClearTags               bool
 	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
+	ClearExternalID         bool
+	ExternalID              *string `json:"external_id,omitempty"`
 	ClearInternalNotes      bool
 	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
@@ -4615,6 +4765,9 @@ type UpdateControlImplementationInput struct {
 	ClearDetailsJSON        bool
 	DetailsJSON             []interface{} `json:"details_json,omitempty"`
 	AppendDetailsJSON       []interface{}
+	ClearIntegrationRuns    bool
+	AddIntegrationRunIDs    []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs   []string `json:"remove_blocked_group_ids,omitempty"`
@@ -4645,6 +4798,12 @@ func (i *UpdateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -4696,6 +4855,15 @@ func (i *UpdateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if i.AppendDetailsJSON != nil {
 		m.AppendDetailsJSON(i.DetailsJSON)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -4769,6 +4937,7 @@ func (c *ControlImplementationUpdateOne) SetInput(i UpdateControlImplementationI
 type CreateControlObjectiveInput struct {
 	Tags                 []string               `json:"tags,omitempty"`
 	Revision             *string                `json:"revision,omitempty"`
+	ExternalID           *string                `json:"external_id,omitempty"`
 	InternalNotes        *string                `json:"internal_notes,omitempty"`
 	SystemInternalID     *string                `json:"system_internal_id,omitempty"`
 	Name                 string                 `json:"name,omitempty"`
@@ -4779,6 +4948,7 @@ type CreateControlObjectiveInput struct {
 	ControlObjectiveType *string                `json:"control_objective_type,omitempty"`
 	Category             *string                `json:"category,omitempty"`
 	Subcategory          *string                `json:"subcategory,omitempty"`
+	IntegrationRunIDs    []string               `json:"integration_run_ids,omitempty"`
 	OwnerID              *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs      []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs            []string               `json:"editor_ids,omitempty"`
@@ -4801,6 +4971,9 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -4829,6 +5002,9 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Subcategory; v != nil {
 		m.SetSubcategory(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -4884,6 +5060,8 @@ type UpdateControlObjectiveInput struct {
 	AppendTags                []string
 	ClearRevision             bool
 	Revision                  *string `json:"revision,omitempty"`
+	ClearExternalID           bool
+	ExternalID                *string `json:"external_id,omitempty"`
 	ClearInternalNotes        bool
 	InternalNotes             *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID     bool
@@ -4904,6 +5082,9 @@ type UpdateControlObjectiveInput struct {
 	Category                  *string `json:"category,omitempty"`
 	ClearSubcategory          bool
 	Subcategory               *string `json:"subcategory,omitempty"`
+	ClearIntegrationRuns      bool
+	AddIntegrationRunIDs      []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs   []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups        bool
 	AddBlockedGroupIDs        []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs     []string `json:"remove_blocked_group_ids,omitempty"`
@@ -4958,6 +5139,12 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -5018,6 +5205,15 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.Subcategory; v != nil {
 		m.SetSubcategory(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -5265,6 +5461,7 @@ func (c *CustomDomainUpdateOne) SetInput(i UpdateCustomDomainInput) *CustomDomai
 
 // CreateCustomTypeEnumInput represents a mutation input for creating customtypeenums.
 type CreateCustomTypeEnumInput struct {
+	ExternalID        *string  `json:"external_id,omitempty"`
 	InternalNotes     *string  `json:"internal_notes,omitempty"`
 	SystemInternalID  *string  `json:"system_internal_id,omitempty"`
 	ObjectType        string   `json:"object_type,omitempty"`
@@ -5273,6 +5470,7 @@ type CreateCustomTypeEnumInput struct {
 	Description       *string  `json:"description,omitempty"`
 	Color             *string  `json:"color,omitempty"`
 	Icon              *string  `json:"icon,omitempty"`
+	IntegrationRunIDs []string `json:"integration_run_ids,omitempty"`
 	OwnerID           *string  `json:"owner_id,omitempty"`
 	TaskIDs           []string `json:"task_ids,omitempty"`
 	ControlIDs        []string `json:"control_ids,omitempty"`
@@ -5288,6 +5486,9 @@ type CreateCustomTypeEnumInput struct {
 
 // Mutate applies the CreateCustomTypeEnumInput on the CustomTypeEnumMutation builder.
 func (i *CreateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -5307,6 +5508,9 @@ func (i *CreateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	}
 	if v := i.Icon; v != nil {
 		m.SetIcon(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -5351,6 +5555,8 @@ func (c *CustomTypeEnumCreate) SetInput(i CreateCustomTypeEnumInput) *CustomType
 
 // UpdateCustomTypeEnumInput represents a mutation input for updating customtypeenums.
 type UpdateCustomTypeEnumInput struct {
+	ClearExternalID         bool
+	ExternalID              *string `json:"external_id,omitempty"`
 	ClearInternalNotes      bool
 	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
@@ -5361,6 +5567,9 @@ type UpdateCustomTypeEnumInput struct {
 	Color                   *string `json:"color,omitempty"`
 	ClearIcon               bool
 	Icon                    *string `json:"icon,omitempty"`
+	ClearIntegrationRuns    bool
+	AddIntegrationRunIDs    []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner              bool
 	OwnerID                 *string `json:"owner_id,omitempty"`
 	ClearTasks              bool
@@ -5397,6 +5606,12 @@ type UpdateCustomTypeEnumInput struct {
 
 // Mutate applies the UpdateCustomTypeEnumInput on the CustomTypeEnumMutation builder.
 func (i *UpdateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -5426,6 +5641,15 @@ func (i *UpdateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	}
 	if v := i.Icon; v != nil {
 		m.SetIcon(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5692,10 +5916,10 @@ func (c *DNSVerificationUpdateOne) SetInput(i UpdateDNSVerificationInput) *DNSVe
 // CreateDirectoryAccountInput represents a mutation input for creating directoryaccounts.
 type CreateDirectoryAccountInput struct {
 	Tags                 []string                        `json:"tags,omitempty"`
+	ExternalID           string                          `json:"external_id,omitempty"`
 	EnvironmentName      *string                         `json:"environment_name,omitempty"`
 	ScopeName            *string                         `json:"scope_name,omitempty"`
 	DirectoryName        *string                         `json:"directory_name,omitempty"`
-	ExternalID           string                          `json:"external_id,omitempty"`
 	SecondaryKey         *string                         `json:"secondary_key,omitempty"`
 	CanonicalEmail       *string                         `json:"canonical_email,omitempty"`
 	EmailAliases         []string                        `json:"email_aliases,omitempty"`
@@ -5736,6 +5960,7 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	m.SetExternalID(i.ExternalID)
 	if v := i.EnvironmentName; v != nil {
 		m.SetEnvironmentName(*v)
 	}
@@ -5745,7 +5970,6 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.DirectoryName; v != nil {
 		m.SetDirectoryName(*v)
 	}
-	m.SetExternalID(i.ExternalID)
 	if v := i.SecondaryKey; v != nil {
 		m.SetSecondaryKey(*v)
 	}
@@ -6156,9 +6380,9 @@ func (c *DirectoryAccountUpdateOne) SetInput(i UpdateDirectoryAccountInput) *Dir
 // CreateDirectoryGroupInput represents a mutation input for creating directorygroups.
 type CreateDirectoryGroupInput struct {
 	Tags                   []string                            `json:"tags,omitempty"`
+	ExternalID             string                              `json:"external_id,omitempty"`
 	EnvironmentName        *string                             `json:"environment_name,omitempty"`
 	ScopeName              *string                             `json:"scope_name,omitempty"`
-	ExternalID             string                              `json:"external_id,omitempty"`
 	Email                  *string                             `json:"email,omitempty"`
 	DisplayName            *string                             `json:"display_name,omitempty"`
 	Description            *string                             `json:"description,omitempty"`
@@ -6187,13 +6411,13 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	m.SetExternalID(i.ExternalID)
 	if v := i.EnvironmentName; v != nil {
 		m.SetEnvironmentName(*v)
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
 	}
-	m.SetExternalID(i.ExternalID)
 	if v := i.Email; v != nil {
 		m.SetEmail(*v)
 	}
@@ -6982,6 +7206,7 @@ func (c *DocumentDataUpdateOne) SetInput(i UpdateDocumentDataInput) *DocumentDat
 // CreateEmailTemplateInput represents a mutation input for creating emailtemplates.
 type CreateEmailTemplateInput struct {
 	Revision                *string                           `json:"revision,omitempty"`
+	ExternalID              *string                           `json:"external_id,omitempty"`
 	InternalNotes           *string                           `json:"internal_notes,omitempty"`
 	SystemInternalID        *string                           `json:"system_internal_id,omitempty"`
 	Key                     string                            `json:"key,omitempty"`
@@ -7000,6 +7225,7 @@ type CreateEmailTemplateInput struct {
 	Version                 *int                              `json:"version,omitempty"`
 	TemplateContext         *enums.TemplateContext            `json:"template_context,omitempty"`
 	Defaults                map[string]interface{}            `json:"defaults,omitempty"`
+	IntegrationRunIDs       []string                          `json:"integration_run_ids,omitempty"`
 	OwnerID                 *string                           `json:"owner_id,omitempty"`
 	BlockedGroupIDs         []string                          `json:"blocked_group_ids,omitempty"`
 	EditorIDs               []string                          `json:"editor_ids,omitempty"`
@@ -7017,6 +7243,9 @@ type CreateEmailTemplateInput struct {
 func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -7068,6 +7297,9 @@ func (i *CreateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	if v := i.Defaults; v != nil {
 		m.SetDefaults(v)
 	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -7113,6 +7345,8 @@ func (c *EmailTemplateCreate) SetInput(i CreateEmailTemplateInput) *EmailTemplat
 type UpdateEmailTemplateInput struct {
 	ClearRevision                 bool
 	Revision                      *string `json:"revision,omitempty"`
+	ClearExternalID               bool
+	ExternalID                    *string `json:"external_id,omitempty"`
 	ClearInternalNotes            bool
 	InternalNotes                 *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID         bool
@@ -7144,6 +7378,9 @@ type UpdateEmailTemplateInput struct {
 	TemplateContext               *enums.TemplateContext `json:"template_context,omitempty"`
 	ClearDefaults                 bool
 	Defaults                      map[string]interface{} `json:"defaults,omitempty"`
+	ClearIntegrationRuns          bool
+	AddIntegrationRunIDs          []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs       []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups            bool
 	AddBlockedGroupIDs            []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs         []string `json:"remove_blocked_group_ids,omitempty"`
@@ -7179,6 +7416,12 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -7272,6 +7515,15 @@ func (i *UpdateEmailTemplateInput) Mutate(m *EmailTemplateMutation) {
 	}
 	if v := i.Defaults; v != nil {
 		m.SetDefaults(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -7368,6 +7620,7 @@ func (c *EmailTemplateUpdateOne) SetInput(i UpdateEmailTemplateInput) *EmailTemp
 // CreateEntityInput represents a mutation input for creating entities.
 type CreateEntityInput struct {
 	Tags                                  []string               `json:"tags,omitempty"`
+	ExternalID                            *string                `json:"external_id,omitempty"`
 	InternalOwner                         *string                `json:"internal_owner,omitempty"`
 	ReviewedBy                            *string                `json:"reviewed_by,omitempty"`
 	LastReviewedAt                        *models.DateTime       `json:"last_reviewed_at,omitempty"`
@@ -7412,7 +7665,6 @@ type CreateEntityInput struct {
 	ContractRenewalAt                     *models.DateTime       `json:"contract_renewal_at,omitempty"`
 	VendorMetadata                        map[string]interface{} `json:"vendor_metadata,omitempty"`
 	LogoRemoteURL                         *string                `json:"logo_remote_url,omitempty"`
-	ExternalID                            *string                `json:"external_id,omitempty"`
 	ObservedAt                            *models.DateTime       `json:"observed_at,omitempty"`
 	IntegrationRunIDs                     []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                               *string                `json:"owner_id,omitempty"`
@@ -7462,6 +7714,9 @@ type CreateEntityInput struct {
 func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalOwner; v != nil {
 		m.SetInternalOwner(*v)
@@ -7594,9 +7849,6 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.LogoRemoteURL; v != nil {
 		m.SetLogoRemoteURL(*v)
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
@@ -7740,6 +7992,8 @@ type UpdateEntityInput struct {
 	ClearTags                                  bool
 	Tags                                       []string `json:"tags,omitempty"`
 	AppendTags                                 []string
+	ClearExternalID                            bool
+	ExternalID                                 *string `json:"external_id,omitempty"`
 	ClearInternalOwner                         bool
 	InternalOwner                              *string `json:"internal_owner,omitempty"`
 	ClearReviewedBy                            bool
@@ -7833,8 +8087,6 @@ type UpdateEntityInput struct {
 	VendorMetadata                             map[string]interface{} `json:"vendor_metadata,omitempty"`
 	ClearLogoRemoteURL                         bool
 	LogoRemoteURL                              *string `json:"logo_remote_url,omitempty"`
-	ClearExternalID                            bool
-	ExternalID                                 *string `json:"external_id,omitempty"`
 	ClearObservedAt                            bool
 	ObservedAt                                 *models.DateTime `json:"observed_at,omitempty"`
 	ClearIntegrationRuns                       bool
@@ -7959,6 +8211,12 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalOwner {
 		m.ClearInternalOwner()
@@ -8238,12 +8496,6 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.LogoRemoteURL; v != nil {
 		m.SetLogoRemoteURL(*v)
-	}
-	if i.ClearExternalID {
-		m.ClearExternalID()
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if i.ClearObservedAt {
 		m.ClearObservedAt()
@@ -8958,6 +9210,7 @@ func (c *EventUpdateOne) SetInput(i UpdateEventInput) *EventUpdateOne {
 // CreateEvidenceInput represents a mutation input for creating evidences.
 type CreateEvidenceInput struct {
 	Tags                     []string              `json:"tags,omitempty"`
+	ExternalID               *string               `json:"external_id,omitempty"`
 	EnvironmentName          *string               `json:"environment_name,omitempty"`
 	ScopeName                *string               `json:"scope_name,omitempty"`
 	WorkflowEligibleMarker   *bool                 `json:"workflow_eligible_marker,omitempty"`
@@ -8973,6 +9226,7 @@ type CreateEvidenceInput struct {
 	Status                   *enums.EvidenceStatus `json:"status,omitempty"`
 	ReviewFrequency          *enums.Frequency      `json:"review_frequency,omitempty"`
 	AuditorReferenceID       *string               `json:"auditor_reference_id,omitempty"`
+	IntegrationRunIDs        []string              `json:"integration_run_ids,omitempty"`
 	OwnerID                  *string               `json:"owner_id,omitempty"`
 	EnvironmentID            *string               `json:"environment_id,omitempty"`
 	ScopeID                  *string               `json:"scope_id,omitempty"`
@@ -8995,6 +9249,9 @@ type CreateEvidenceInput struct {
 func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.EnvironmentName; v != nil {
 		m.SetEnvironmentName(*v)
@@ -9038,6 +9295,9 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.AuditorReferenceID; v != nil {
 		m.SetAuditorReferenceID(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -9100,6 +9360,8 @@ type UpdateEvidenceInput struct {
 	ClearTags                      bool
 	Tags                           []string `json:"tags,omitempty"`
 	AppendTags                     []string
+	ClearExternalID                bool
+	ExternalID                     *string `json:"external_id,omitempty"`
 	ClearEnvironmentName           bool
 	EnvironmentName                *string `json:"environment_name,omitempty"`
 	ClearScopeName                 bool
@@ -9128,6 +9390,9 @@ type UpdateEvidenceInput struct {
 	ReviewFrequency                *enums.Frequency `json:"review_frequency,omitempty"`
 	ClearAuditorReferenceID        bool
 	AuditorReferenceID             *string `json:"auditor_reference_id,omitempty"`
+	ClearIntegrationRuns           bool
+	AddIntegrationRunIDs           []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs        []string `json:"remove_integration_run_ids,omitempty"`
 	ClearEnvironment               bool
 	EnvironmentID                  *string `json:"environment_id,omitempty"`
 	ClearScope                     bool
@@ -9183,6 +9448,12 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearEnvironmentName {
 		m.ClearEnvironmentName()
@@ -9267,6 +9538,15 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.AuditorReferenceID; v != nil {
 		m.SetAuditorReferenceID(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -10154,6 +10434,7 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 // CreateFindingInput represents a mutation input for creating findings.
 type CreateFindingInput struct {
 	Tags                          []string               `json:"tags,omitempty"`
+	ExternalID                    *string                `json:"external_id,omitempty"`
 	InternalOwner                 *string                `json:"internal_owner,omitempty"`
 	ReviewedBy                    *string                `json:"reviewed_by,omitempty"`
 	AssignedTo                    *string                `json:"assigned_to,omitempty"`
@@ -10163,7 +10444,6 @@ type CreateFindingInput struct {
 	ScopeName                     *string                `json:"scope_name,omitempty"`
 	FindingStatusName             *string                `json:"finding_status_name,omitempty"`
 	WorkflowEligibleMarker        *bool                  `json:"workflow_eligible_marker,omitempty"`
-	ExternalID                    *string                `json:"external_id,omitempty"`
 	ExternalOwnerID               *string                `json:"external_owner_id,omitempty"`
 	Source                        *string                `json:"source,omitempty"`
 	ResourceName                  *string                `json:"resource_name,omitempty"`
@@ -10240,6 +10520,9 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.InternalOwner; v != nil {
 		m.SetInternalOwner(*v)
 	}
@@ -10266,9 +10549,6 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -10490,6 +10770,8 @@ type UpdateFindingInput struct {
 	ClearTags                        bool
 	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
+	ClearExternalID                  bool
+	ExternalID                       *string `json:"external_id,omitempty"`
 	ClearInternalOwner               bool
 	InternalOwner                    *string `json:"internal_owner,omitempty"`
 	ClearReviewedBy                  bool
@@ -10508,8 +10790,6 @@ type UpdateFindingInput struct {
 	FindingStatusName                *string `json:"finding_status_name,omitempty"`
 	ClearWorkflowEligibleMarker      bool
 	WorkflowEligibleMarker           *bool `json:"workflow_eligible_marker,omitempty"`
-	ClearExternalID                  bool
-	ExternalID                       *string `json:"external_id,omitempty"`
 	ClearExternalOwnerID             bool
 	ExternalOwnerID                  *string `json:"external_owner_id,omitempty"`
 	ClearSource                      bool
@@ -10684,6 +10964,12 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if i.ClearInternalOwner {
 		m.ClearInternalOwner()
 	}
@@ -10737,12 +11023,6 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
-	}
-	if i.ClearExternalID {
-		m.ClearExternalID()
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -11370,6 +11650,7 @@ func (c *FindingControlUpdateOne) SetInput(i UpdateFindingControlInput) *Finding
 // CreateGroupInput represents a mutation input for creating groups.
 type CreateGroupInput struct {
 	Tags                                 []string `json:"tags,omitempty"`
+	ExternalID                           *string  `json:"external_id,omitempty"`
 	Name                                 string   `json:"name,omitempty"`
 	Description                          *string  `json:"description,omitempty"`
 	LogoURL                              *string  `json:"logo_url,omitempty"`
@@ -11381,6 +11662,7 @@ type CreateGroupInput struct {
 	ScimDisplayName                      *string  `json:"scim_display_name,omitempty"`
 	ScimActive                           *bool    `json:"scim_active,omitempty"`
 	ScimGroupMailing                     *string  `json:"scim_group_mailing,omitempty"`
+	IntegrationRunIDs                    []string `json:"integration_run_ids,omitempty"`
 	OwnerID                              *string  `json:"owner_id,omitempty"`
 	ProgramEditorIDs                     []string `json:"program_editor_ids,omitempty"`
 	ProgramBlockedGroupIDs               []string `json:"program_blocked_group_ids,omitempty"`
@@ -11439,6 +11721,9 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	m.SetName(i.Name)
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
@@ -11469,6 +11754,9 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ScimGroupMailing; v != nil {
 		m.SetScimGroupMailing(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -11636,6 +11924,8 @@ type UpdateGroupInput struct {
 	ClearTags                                  bool
 	Tags                                       []string `json:"tags,omitempty"`
 	AppendTags                                 []string
+	ClearExternalID                            bool
+	ExternalID                                 *string `json:"external_id,omitempty"`
 	Name                                       *string `json:"name,omitempty"`
 	ClearDescription                           bool
 	Description                                *string `json:"description,omitempty"`
@@ -11657,6 +11947,9 @@ type UpdateGroupInput struct {
 	ScimActive                                 *bool `json:"scim_active,omitempty"`
 	ClearScimGroupMailing                      bool
 	ScimGroupMailing                           *string `json:"scim_group_mailing,omitempty"`
+	ClearIntegrationRuns                       bool
+	AddIntegrationRunIDs                       []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs                    []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner                                 bool
 	OwnerID                                    *string `json:"owner_id,omitempty"`
 	ClearProgramEditors                        bool
@@ -11820,6 +12113,12 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
@@ -11882,6 +12181,15 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ScimGroupMailing; v != nil {
 		m.SetScimGroupMailing(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -12702,6 +13010,7 @@ func (c *HushUpdateOne) SetInput(i UpdateHushInput) *HushUpdateOne {
 // CreateIdentityHolderInput represents a mutation input for creating identityholders.
 type CreateIdentityHolderInput struct {
 	Tags                          []string                  `json:"tags,omitempty"`
+	ExternalID                    *string                   `json:"external_id,omitempty"`
 	InternalOwner                 *string                   `json:"internal_owner,omitempty"`
 	EnvironmentName               *string                   `json:"environment_name,omitempty"`
 	ScopeName                     *string                   `json:"scope_name,omitempty"`
@@ -12725,6 +13034,7 @@ type CreateIdentityHolderInput struct {
 	ExternalReferenceID           *string                   `json:"external_reference_id,omitempty"`
 	Metadata                      map[string]interface{}    `json:"metadata,omitempty"`
 	AvatarRemoteURL               *string                   `json:"avatar_remote_url,omitempty"`
+	IntegrationRunIDs             []string                  `json:"integration_run_ids,omitempty"`
 	OwnerID                       *string                   `json:"owner_id,omitempty"`
 	BlockedGroupIDs               []string                  `json:"blocked_group_ids,omitempty"`
 	EditorIDs                     []string                  `json:"editor_ids,omitempty"`
@@ -12758,6 +13068,9 @@ type CreateIdentityHolderInput struct {
 func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalOwner; v != nil {
 		m.SetInternalOwner(*v)
@@ -12823,6 +13136,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.AvatarRemoteURL; v != nil {
 		m.SetAvatarRemoteURL(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -12918,6 +13234,8 @@ type UpdateIdentityHolderInput struct {
 	ClearTags                        bool
 	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
+	ClearExternalID                  bool
+	ExternalID                       *string `json:"external_id,omitempty"`
 	ClearInternalOwner               bool
 	InternalOwner                    *string `json:"internal_owner,omitempty"`
 	ClearEnvironmentName             bool
@@ -12960,6 +13278,9 @@ type UpdateIdentityHolderInput struct {
 	Metadata                         map[string]interface{} `json:"metadata,omitempty"`
 	ClearAvatarRemoteURL             bool
 	AvatarRemoteURL                  *string `json:"avatar_remote_url,omitempty"`
+	ClearIntegrationRuns             bool
+	AddIntegrationRunIDs             []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs          []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups               bool
 	AddBlockedGroupIDs               []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs            []string `json:"remove_blocked_group_ids,omitempty"`
@@ -13043,6 +13364,12 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalOwner {
 		m.ClearInternalOwner()
@@ -13169,6 +13496,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.AvatarRemoteURL; v != nil {
 		m.SetAvatarRemoteURL(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -13401,6 +13737,7 @@ func (c *IdentityHolderUpdateOne) SetInput(i UpdateIdentityHolderInput) *Identit
 type CreateInternalPolicyInput struct {
 	Tags                            []string                      `json:"tags,omitempty"`
 	Revision                        *string                       `json:"revision,omitempty"`
+	ExternalID                      *string                       `json:"external_id,omitempty"`
 	InternalNotes                   *string                       `json:"internal_notes,omitempty"`
 	SystemInternalID                *string                       `json:"system_internal_id,omitempty"`
 	Name                            string                        `json:"name,omitempty"`
@@ -13461,6 +13798,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -13628,6 +13968,8 @@ type UpdateInternalPolicyInput struct {
 	AppendTags                            []string
 	ClearRevision                         bool
 	Revision                              *string `json:"revision,omitempty"`
+	ClearExternalID                       bool
+	ExternalID                            *string `json:"external_id,omitempty"`
 	ClearInternalNotes                    bool
 	InternalNotes                         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID                 bool
@@ -13774,6 +14116,12 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -14386,12 +14734,14 @@ func (c *MappableDomainUpdateOne) SetInput(i UpdateMappableDomainInput) *Mappabl
 // CreateMappedControlInput represents a mutation input for creating mappedcontrols.
 type CreateMappedControlInput struct {
 	Tags              []string             `json:"tags,omitempty"`
+	ExternalID        *string              `json:"external_id,omitempty"`
 	InternalNotes     *string              `json:"internal_notes,omitempty"`
 	SystemInternalID  *string              `json:"system_internal_id,omitempty"`
 	MappingType       *enums.MappingType   `json:"mapping_type,omitempty"`
 	Relation          *string              `json:"relation,omitempty"`
 	Confidence        *int                 `json:"confidence,omitempty"`
 	Source            *enums.MappingSource `json:"source,omitempty"`
+	IntegrationRunIDs []string             `json:"integration_run_ids,omitempty"`
 	OwnerID           *string              `json:"owner_id,omitempty"`
 	BlockedGroupIDs   []string             `json:"blocked_group_ids,omitempty"`
 	EditorIDs         []string             `json:"editor_ids,omitempty"`
@@ -14405,6 +14755,9 @@ type CreateMappedControlInput struct {
 func (i *CreateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -14423,6 +14776,9 @@ func (i *CreateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -14458,6 +14814,8 @@ type UpdateMappedControlInput struct {
 	ClearTags               bool
 	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
+	ClearExternalID         bool
+	ExternalID              *string `json:"external_id,omitempty"`
 	ClearInternalNotes      bool
 	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
@@ -14469,6 +14827,9 @@ type UpdateMappedControlInput struct {
 	Confidence              *int `json:"confidence,omitempty"`
 	ClearSource             bool
 	Source                  *enums.MappingSource `json:"source,omitempty"`
+	ClearIntegrationRuns    bool
+	AddIntegrationRunIDs    []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner              bool
 	OwnerID                 *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups      bool
@@ -14502,6 +14863,12 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -14534,6 +14901,15 @@ func (i *UpdateMappedControlInput) Mutate(m *MappedControlMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -14612,11 +14988,13 @@ func (c *MappedControlUpdateOne) SetInput(i UpdateMappedControlInput) *MappedCon
 // CreateNarrativeInput represents a mutation input for creating narratives.
 type CreateNarrativeInput struct {
 	Tags              []string `json:"tags,omitempty"`
+	ExternalID        *string  `json:"external_id,omitempty"`
 	InternalNotes     *string  `json:"internal_notes,omitempty"`
 	SystemInternalID  *string  `json:"system_internal_id,omitempty"`
 	Name              string   `json:"name,omitempty"`
 	Description       *string  `json:"description,omitempty"`
 	Details           *string  `json:"details,omitempty"`
+	IntegrationRunIDs []string `json:"integration_run_ids,omitempty"`
 	OwnerID           *string  `json:"owner_id,omitempty"`
 	BlockedGroupIDs   []string `json:"blocked_group_ids,omitempty"`
 	EditorIDs         []string `json:"editor_ids,omitempty"`
@@ -14632,6 +15010,9 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -14644,6 +15025,9 @@ func (i *CreateNarrativeInput) Mutate(m *NarrativeMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -14682,6 +15066,8 @@ type UpdateNarrativeInput struct {
 	ClearTags               bool
 	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
+	ClearExternalID         bool
+	ExternalID              *string `json:"external_id,omitempty"`
 	ClearInternalNotes      bool
 	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
@@ -14691,6 +15077,9 @@ type UpdateNarrativeInput struct {
 	Description             *string `json:"description,omitempty"`
 	ClearDetails            bool
 	Details                 *string `json:"details,omitempty"`
+	ClearIntegrationRuns    bool
+	AddIntegrationRunIDs    []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs   []string `json:"remove_blocked_group_ids,omitempty"`
@@ -14725,6 +15114,12 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -14751,6 +15146,15 @@ func (i *UpdateNarrativeInput) Mutate(m *NarrativeMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -17920,6 +18324,7 @@ func (c *PersonalAccessTokenUpdateOne) SetInput(i UpdatePersonalAccessTokenInput
 // CreatePlatformInput represents a mutation input for creating platforms.
 type CreatePlatformInput struct {
 	Tags                           []string               `json:"tags,omitempty"`
+	ExternalID                     *string                `json:"external_id,omitempty"`
 	InternalOwner                  *string                `json:"internal_owner,omitempty"`
 	BusinessOwner                  *string                `json:"business_owner,omitempty"`
 	TechnicalOwner                 *string                `json:"technical_owner,omitempty"`
@@ -17951,6 +18356,7 @@ type CreatePlatformInput struct {
 	PurchaseDate                   *models.DateTime       `json:"purchase_date,omitempty"`
 	ExternalReferenceID            *string                `json:"external_reference_id,omitempty"`
 	Metadata                       map[string]interface{} `json:"metadata,omitempty"`
+	IntegrationRunIDs              []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                        *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs                []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs                      []string               `json:"editor_ids,omitempty"`
@@ -18006,6 +18412,9 @@ type CreatePlatformInput struct {
 func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalOwner; v != nil {
 		m.SetInternalOwner(*v)
@@ -18097,6 +18506,9 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -18258,6 +18670,8 @@ type UpdatePlatformInput struct {
 	ClearTags                           bool
 	Tags                                []string `json:"tags,omitempty"`
 	AppendTags                          []string
+	ClearExternalID                     bool
+	ExternalID                          *string `json:"external_id,omitempty"`
 	ClearInternalOwner                  bool
 	InternalOwner                       *string `json:"internal_owner,omitempty"`
 	ClearBusinessOwner                  bool
@@ -18317,6 +18731,9 @@ type UpdatePlatformInput struct {
 	ExternalReferenceID                 *string `json:"external_reference_id,omitempty"`
 	ClearMetadata                       bool
 	Metadata                            map[string]interface{} `json:"metadata,omitempty"`
+	ClearIntegrationRuns                bool
+	AddIntegrationRunIDs                []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs             []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups                  bool
 	AddBlockedGroupIDs                  []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs               []string `json:"remove_blocked_group_ids,omitempty"`
@@ -18452,6 +18869,12 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalOwner {
 		m.ClearInternalOwner()
@@ -18629,6 +19052,15 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -19017,6 +19449,7 @@ func (c *PlatformUpdateOne) SetInput(i UpdatePlatformInput) *PlatformUpdateOne {
 type CreateProcedureInput struct {
 	Tags                            []string                      `json:"tags,omitempty"`
 	Revision                        *string                       `json:"revision,omitempty"`
+	ExternalID                      *string                       `json:"external_id,omitempty"`
 	Name                            string                        `json:"name,omitempty"`
 	Status                          *enums.DocumentStatus         `json:"status,omitempty"`
 	ManagementMode                  *enums.DocumentManagementMode `json:"management_mode,omitempty"`
@@ -19069,6 +19502,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -19212,6 +19648,8 @@ type UpdateProcedureInput struct {
 	AppendTags                            []string
 	ClearRevision                         bool
 	Revision                              *string `json:"revision,omitempty"`
+	ClearExternalID                       bool
+	ExternalID                            *string `json:"external_id,omitempty"`
 	Name                                  *string `json:"name,omitempty"`
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus `json:"status,omitempty"`
@@ -19335,6 +19773,12 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.Revision; v != nil {
 		m.SetRevision(*v)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -19668,6 +20112,7 @@ func (c *ProcedureUpdateOne) SetInput(i UpdateProcedureInput) *ProcedureUpdateOn
 // CreateProgramInput represents a mutation input for creating programs.
 type CreateProgramInput struct {
 	Tags                       []string             `json:"tags,omitempty"`
+	ExternalID                 *string              `json:"external_id,omitempty"`
 	ProgramKindName            *string              `json:"program_kind_name,omitempty"`
 	ExternalUUID               *string              `json:"external_uuid,omitempty"`
 	Name                       string               `json:"name,omitempty"`
@@ -19686,6 +20131,7 @@ type CreateProgramInput struct {
 	AuditFirm                  *string              `json:"audit_firm,omitempty"`
 	Auditor                    *string              `json:"auditor,omitempty"`
 	AuditorEmail               *string              `json:"auditor_email,omitempty"`
+	IntegrationRunIDs          []string             `json:"integration_run_ids,omitempty"`
 	OwnerID                    *string              `json:"owner_id,omitempty"`
 	BlockedGroupIDs            []string             `json:"blocked_group_ids,omitempty"`
 	EditorIDs                  []string             `json:"editor_ids,omitempty"`
@@ -19715,6 +20161,9 @@ type CreateProgramInput struct {
 func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.ProgramKindName; v != nil {
 		m.SetProgramKindName(*v)
@@ -19767,6 +20216,9 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.AuditorEmail; v != nil {
 		m.SetAuditorEmail(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -19850,6 +20302,8 @@ type UpdateProgramInput struct {
 	ClearTags                       bool
 	Tags                            []string `json:"tags,omitempty"`
 	AppendTags                      []string
+	ClearExternalID                 bool
+	ExternalID                      *string `json:"external_id,omitempty"`
 	ClearProgramKindName            bool
 	ProgramKindName                 *string `json:"program_kind_name,omitempty"`
 	ClearExternalUUID               bool
@@ -19881,6 +20335,9 @@ type UpdateProgramInput struct {
 	Auditor                         *string `json:"auditor,omitempty"`
 	ClearAuditorEmail               bool
 	AuditorEmail                    *string `json:"auditor_email,omitempty"`
+	ClearIntegrationRuns            bool
+	AddIntegrationRunIDs            []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs         []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner                      bool
 	OwnerID                         *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups              bool
@@ -19959,6 +20416,12 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearProgramKindName {
 		m.ClearProgramKindName()
@@ -20052,6 +20515,15 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.AuditorEmail; v != nil {
 		m.SetAuditorEmail(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -20314,12 +20786,12 @@ func (c *ProgramMembershipUpdateOne) SetInput(i UpdateProgramMembershipInput) *P
 // CreateRemediationInput represents a mutation input for creating remediations.
 type CreateRemediationInput struct {
 	Tags                   []string                 `json:"tags,omitempty"`
+	ExternalID             *string                  `json:"external_id,omitempty"`
 	InternalNotes          *string                  `json:"internal_notes,omitempty"`
 	SystemInternalID       *string                  `json:"system_internal_id,omitempty"`
 	EnvironmentName        *string                  `json:"environment_name,omitempty"`
 	ScopeName              *string                  `json:"scope_name,omitempty"`
 	WorkflowEligibleMarker *bool                    `json:"workflow_eligible_marker,omitempty"`
-	ExternalID             *string                  `json:"external_id,omitempty"`
 	ExternalOwnerID        *string                  `json:"external_owner_id,omitempty"`
 	Title                  *string                  `json:"title,omitempty"`
 	Status                 *enums.RemediationStatus `json:"status,omitempty"`
@@ -20339,6 +20811,7 @@ type CreateRemediationInput struct {
 	Source                 *string                  `json:"source,omitempty"`
 	ExternalURI            *string                  `json:"external_uri,omitempty"`
 	Metadata               map[string]interface{}   `json:"metadata,omitempty"`
+	IntegrationRunIDs      []string                 `json:"integration_run_ids,omitempty"`
 	OwnerID                *string                  `json:"owner_id,omitempty"`
 	BlockedGroupIDs        []string                 `json:"blocked_group_ids,omitempty"`
 	EditorIDs              []string                 `json:"editor_ids,omitempty"`
@@ -20367,6 +20840,9 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -20381,9 +20857,6 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -20441,6 +20914,9 @@ func (i *CreateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -20518,6 +20994,8 @@ type UpdateRemediationInput struct {
 	ClearTags                   bool
 	Tags                        []string `json:"tags,omitempty"`
 	AppendTags                  []string
+	ClearExternalID             bool
+	ExternalID                  *string `json:"external_id,omitempty"`
 	ClearInternalNotes          bool
 	InternalNotes               *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID       bool
@@ -20528,8 +21006,6 @@ type UpdateRemediationInput struct {
 	ScopeName                   *string `json:"scope_name,omitempty"`
 	ClearWorkflowEligibleMarker bool
 	WorkflowEligibleMarker      *bool `json:"workflow_eligible_marker,omitempty"`
-	ClearExternalID             bool
-	ExternalID                  *string `json:"external_id,omitempty"`
 	ClearExternalOwnerID        bool
 	ExternalOwnerID             *string `json:"external_owner_id,omitempty"`
 	ClearTitle                  bool
@@ -20568,6 +21044,9 @@ type UpdateRemediationInput struct {
 	ExternalURI                 *string `json:"external_uri,omitempty"`
 	ClearMetadata               bool
 	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
+	ClearIntegrationRuns        bool
+	AddIntegrationRunIDs        []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs     []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups          bool
 	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
@@ -20639,6 +21118,12 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -20668,12 +21153,6 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
-	}
-	if i.ClearExternalID {
-		m.ClearExternalID()
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -20788,6 +21267,15 @@ func (i *UpdateRemediationInput) Mutate(m *RemediationMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -20980,11 +21468,11 @@ func (c *RemediationUpdateOne) SetInput(i UpdateRemediationInput) *RemediationUp
 // CreateReviewInput represents a mutation input for creating reviews.
 type CreateReviewInput struct {
 	Tags              []string               `json:"tags,omitempty"`
+	ExternalID        *string                `json:"external_id,omitempty"`
 	InternalNotes     *string                `json:"internal_notes,omitempty"`
 	SystemInternalID  *string                `json:"system_internal_id,omitempty"`
 	EnvironmentName   *string                `json:"environment_name,omitempty"`
 	ScopeName         *string                `json:"scope_name,omitempty"`
-	ExternalID        *string                `json:"external_id,omitempty"`
 	ExternalOwnerID   *string                `json:"external_owner_id,omitempty"`
 	Title             string                 `json:"title,omitempty"`
 	State             *string                `json:"state,omitempty"`
@@ -21002,6 +21490,7 @@ type CreateReviewInput struct {
 	ExternalURI       *string                `json:"external_uri,omitempty"`
 	Metadata          map[string]interface{} `json:"metadata,omitempty"`
 	RawPayload        map[string]interface{} `json:"raw_payload,omitempty"`
+	IntegrationRunIDs []string               `json:"integration_run_ids,omitempty"`
 	OwnerID           *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs   []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs         []string               `json:"editor_ids,omitempty"`
@@ -21030,6 +21519,9 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -21041,9 +21533,6 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
@@ -21093,6 +21582,9 @@ func (i *CreateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -21170,6 +21662,8 @@ type UpdateReviewInput struct {
 	ClearTags               bool
 	Tags                    []string `json:"tags,omitempty"`
 	AppendTags              []string
+	ClearExternalID         bool
+	ExternalID              *string `json:"external_id,omitempty"`
 	ClearInternalNotes      bool
 	InternalNotes           *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID   bool
@@ -21178,8 +21672,6 @@ type UpdateReviewInput struct {
 	EnvironmentName         *string `json:"environment_name,omitempty"`
 	ClearScopeName          bool
 	ScopeName               *string `json:"scope_name,omitempty"`
-	ClearExternalID         bool
-	ExternalID              *string `json:"external_id,omitempty"`
 	ClearExternalOwnerID    bool
 	ExternalOwnerID         *string `json:"external_owner_id,omitempty"`
 	Title                   *string `json:"title,omitempty"`
@@ -21213,6 +21705,9 @@ type UpdateReviewInput struct {
 	Metadata                map[string]interface{} `json:"metadata,omitempty"`
 	ClearRawPayload         bool
 	RawPayload              map[string]interface{} `json:"raw_payload,omitempty"`
+	ClearIntegrationRuns    bool
+	AddIntegrationRunIDs    []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs   []string `json:"remove_blocked_group_ids,omitempty"`
@@ -21283,6 +21778,12 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -21306,12 +21807,6 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
-	}
-	if i.ClearExternalID {
-		m.ClearExternalID()
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if i.ClearExternalOwnerID {
 		m.ClearExternalOwnerID()
@@ -21411,6 +21906,15 @@ func (i *UpdateReviewInput) Mutate(m *ReviewMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -21600,6 +22104,7 @@ func (c *ReviewUpdateOne) SetInput(i UpdateReviewInput) *ReviewUpdateOne {
 // CreateRiskInput represents a mutation input for creating risks.
 type CreateRiskInput struct {
 	Tags                        []string              `json:"tags,omitempty"`
+	ExternalID                  *string               `json:"external_id,omitempty"`
 	StakeholderName             *string               `json:"stakeholder_name,omitempty"`
 	DelegateName                *string               `json:"delegate_name,omitempty"`
 	RiskKindName                *string               `json:"risk_kind_name,omitempty"`
@@ -21607,7 +22112,6 @@ type CreateRiskInput struct {
 	EnvironmentName             *string               `json:"environment_name,omitempty"`
 	ScopeName                   *string               `json:"scope_name,omitempty"`
 	WorkflowEligibleMarker      *bool                 `json:"workflow_eligible_marker,omitempty"`
-	ExternalID                  *string               `json:"external_id,omitempty"`
 	IntegrationID               *string               `json:"integration_id,omitempty"`
 	ObservedAt                  *models.DateTime      `json:"observed_at,omitempty"`
 	ExternalUUID                *string               `json:"external_uuid,omitempty"`
@@ -21672,6 +22176,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.StakeholderName; v != nil {
 		m.SetStakeholderName(*v)
 	}
@@ -21692,9 +22199,6 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if v := i.IntegrationID; v != nil {
 		m.SetIntegrationID(*v)
@@ -21878,6 +22382,8 @@ type UpdateRiskInput struct {
 	ClearTags                      bool
 	Tags                           []string `json:"tags,omitempty"`
 	AppendTags                     []string
+	ClearExternalID                bool
+	ExternalID                     *string `json:"external_id,omitempty"`
 	ClearStakeholderName           bool
 	StakeholderName                *string `json:"stakeholder_name,omitempty"`
 	ClearDelegateName              bool
@@ -21892,8 +22398,6 @@ type UpdateRiskInput struct {
 	ScopeName                      *string `json:"scope_name,omitempty"`
 	ClearWorkflowEligibleMarker    bool
 	WorkflowEligibleMarker         *bool `json:"workflow_eligible_marker,omitempty"`
-	ClearExternalID                bool
-	ExternalID                     *string `json:"external_id,omitempty"`
 	ClearIntegrationID             bool
 	IntegrationID                  *string `json:"integration_id,omitempty"`
 	ClearObservedAt                bool
@@ -22043,6 +22547,12 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if i.ClearStakeholderName {
 		m.ClearStakeholderName()
 	}
@@ -22084,12 +22594,6 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
-	}
-	if i.ClearExternalID {
-		m.ClearExternalID()
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if i.ClearIntegrationID {
 		m.ClearIntegrationID()
@@ -22616,6 +23120,7 @@ func (c *SLADefinitionUpdateOne) SetInput(i UpdateSLADefinitionInput) *SLADefini
 // CreateScanInput represents a mutation input for creating scans.
 type CreateScanInput struct {
 	Tags                       []string               `json:"tags,omitempty"`
+	ExternalID                 *string                `json:"external_id,omitempty"`
 	InternalNotes              *string                `json:"internal_notes,omitempty"`
 	SystemInternalID           *string                `json:"system_internal_id,omitempty"`
 	ReviewedBy                 *string                `json:"reviewed_by,omitempty"`
@@ -22631,6 +23136,7 @@ type CreateScanInput struct {
 	PerformedBy                *string                `json:"performed_by,omitempty"`
 	DiscoveredVulnerabilityIds []string               `json:"discovered_vulnerability_ids,omitempty"`
 	Status                     *enums.ScanStatus      `json:"status,omitempty"`
+	IntegrationRunIDs          []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                    *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs            []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs                  []string               `json:"editor_ids,omitempty"`
@@ -22663,6 +23169,9 @@ type CreateScanInput struct {
 func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -22706,6 +23215,9 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -22798,6 +23310,8 @@ type UpdateScanInput struct {
 	ClearTags                        bool
 	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
+	ClearExternalID                  bool
+	ExternalID                       *string `json:"external_id,omitempty"`
 	ClearInternalNotes               bool
 	InternalNotes                    *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID            bool
@@ -22826,6 +23340,9 @@ type UpdateScanInput struct {
 	DiscoveredVulnerabilityIds       []string `json:"discovered_vulnerability_ids,omitempty"`
 	AppendDiscoveredVulnerabilityIds []string
 	Status                           *enums.ScanStatus `json:"status,omitempty"`
+	ClearIntegrationRuns             bool
+	AddIntegrationRunIDs             []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs          []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups               bool
 	AddBlockedGroupIDs               []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs            []string `json:"remove_blocked_group_ids,omitempty"`
@@ -22902,6 +23419,12 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -22986,6 +23509,15 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -23524,6 +24056,7 @@ func (c *StandardUpdateOne) SetInput(i UpdateStandardInput) *StandardUpdateOne {
 // CreateSubcontrolInput represents a mutation input for creating subcontrols.
 type CreateSubcontrolInput struct {
 	Tags                       []string                           `json:"tags,omitempty"`
+	ExternalID                 *string                            `json:"external_id,omitempty"`
 	ExternalUUID               *string                            `json:"external_uuid,omitempty"`
 	Title                      *string                            `json:"title,omitempty"`
 	Description                *string                            `json:"description,omitempty"`
@@ -23556,6 +24089,7 @@ type CreateSubcontrolInput struct {
 	SubcontrolKindName         *string                            `json:"subcontrol_kind_name,omitempty"`
 	WorkflowEligibleMarker     *bool                              `json:"workflow_eligible_marker,omitempty"`
 	RefCode                    string                             `json:"ref_code,omitempty"`
+	IntegrationRunIDs          []string                           `json:"integration_run_ids,omitempty"`
 	EvidenceIDs                []string                           `json:"evidence_ids,omitempty"`
 	ControlObjectiveIDs        []string                           `json:"control_objective_ids,omitempty"`
 	TaskIDs                    []string                           `json:"task_ids,omitempty"`
@@ -23588,6 +24122,9 @@ type CreateSubcontrolInput struct {
 func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.ExternalUUID; v != nil {
 		m.SetExternalUUID(*v)
@@ -23683,6 +24220,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 		m.SetWorkflowEligibleMarker(*v)
 	}
 	m.SetRefCode(i.RefCode)
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
 	}
@@ -23772,6 +24312,8 @@ type UpdateSubcontrolInput struct {
 	ClearTags                       bool
 	Tags                            []string `json:"tags,omitempty"`
 	AppendTags                      []string
+	ClearExternalID                 bool
+	ExternalID                      *string `json:"external_id,omitempty"`
 	ClearExternalUUID               bool
 	ExternalUUID                    *string `json:"external_uuid,omitempty"`
 	ClearTitle                      bool
@@ -23844,6 +24386,9 @@ type UpdateSubcontrolInput struct {
 	ClearWorkflowEligibleMarker     bool
 	WorkflowEligibleMarker          *bool   `json:"workflow_eligible_marker,omitempty"`
 	RefCode                         *string `json:"ref_code,omitempty"`
+	ClearIntegrationRuns            bool
+	AddIntegrationRunIDs            []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs         []string `json:"remove_integration_run_ids,omitempty"`
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string `json:"add_evidence_ids,omitempty"`
 	RemoveEvidenceIDs               []string `json:"remove_evidence_ids,omitempty"`
@@ -23925,6 +24470,12 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearExternalUUID {
 		m.ClearExternalUUID()
@@ -24141,6 +24692,15 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RefCode; v != nil {
 		m.SetRefCode(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearEvidence {
 		m.ClearEvidence()
@@ -24670,6 +25230,7 @@ func (c *SubscriberUpdateOne) SetInput(i UpdateSubscriberInput) *SubscriberUpdat
 // CreateSystemDetailInput represents a mutation input for creating systemdetails.
 type CreateSystemDetailInput struct {
 	Tags                  []string                      `json:"tags,omitempty"`
+	ExternalID            *string                       `json:"external_id,omitempty"`
 	SystemName            string                        `json:"system_name,omitempty"`
 	Version               *string                       `json:"version,omitempty"`
 	Description           *string                       `json:"description,omitempty"`
@@ -24678,6 +25239,7 @@ type CreateSystemDetailInput struct {
 	LastReviewed          *models.DateTime              `json:"last_reviewed,omitempty"`
 	RevisionHistory       []interface{}                 `json:"revision_history,omitempty"`
 	OscalMetadataJSON     map[string]interface{}        `json:"oscal_metadata_json,omitempty"`
+	IntegrationRunIDs     []string                      `json:"integration_run_ids,omitempty"`
 	OwnerID               *string                       `json:"owner_id,omitempty"`
 	ProgramIDs            []string                      `json:"program_ids,omitempty"`
 	PlatformIDs           []string                      `json:"platform_ids,omitempty"`
@@ -24689,6 +25251,9 @@ type CreateSystemDetailInput struct {
 func (i *CreateSystemDetailInput) Mutate(m *SystemDetailMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	m.SetSystemName(i.SystemName)
 	if v := i.Version; v != nil {
@@ -24711,6 +25276,9 @@ func (i *CreateSystemDetailInput) Mutate(m *SystemDetailMutation) {
 	}
 	if v := i.OscalMetadataJSON; v != nil {
 		m.SetOscalMetadataJSON(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -24740,6 +25308,8 @@ type UpdateSystemDetailInput struct {
 	ClearTags                  bool
 	Tags                       []string `json:"tags,omitempty"`
 	AppendTags                 []string
+	ClearExternalID            bool
+	ExternalID                 *string `json:"external_id,omitempty"`
 	SystemName                 *string `json:"system_name,omitempty"`
 	ClearVersion               bool
 	Version                    *string `json:"version,omitempty"`
@@ -24756,6 +25326,9 @@ type UpdateSystemDetailInput struct {
 	AppendRevisionHistory      []interface{}
 	ClearOscalMetadataJSON     bool
 	OscalMetadataJSON          map[string]interface{} `json:"oscal_metadata_json,omitempty"`
+	ClearIntegrationRuns       bool
+	AddIntegrationRunIDs       []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs    []string `json:"remove_integration_run_ids,omitempty"`
 	ClearPrograms              bool
 	AddProgramIDs              []string `json:"add_program_ids,omitempty"`
 	RemoveProgramIDs           []string `json:"remove_program_ids,omitempty"`
@@ -24780,6 +25353,12 @@ func (i *UpdateSystemDetailInput) Mutate(m *SystemDetailMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.SystemName; v != nil {
 		m.SetSystemName(*v)
@@ -24828,6 +25407,15 @@ func (i *UpdateSystemDetailInput) Mutate(m *SystemDetailMutation) {
 	}
 	if v := i.OscalMetadataJSON; v != nil {
 		m.SetOscalMetadataJSON(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearPrograms {
 		m.ClearPrograms()
@@ -24931,17 +25519,22 @@ func (c *TFASettingUpdateOne) SetInput(i UpdateTFASettingInput) *TFASettingUpdat
 
 // CreateTagDefinitionInput represents a mutation input for creating tagdefinitions.
 type CreateTagDefinitionInput struct {
-	InternalNotes    *string  `json:"internal_notes,omitempty"`
-	SystemInternalID *string  `json:"system_internal_id,omitempty"`
-	Name             string   `json:"name,omitempty"`
-	Aliases          []string `json:"aliases,omitempty"`
-	Description      *string  `json:"description,omitempty"`
-	Color            *string  `json:"color,omitempty"`
-	OwnerID          *string  `json:"owner_id,omitempty"`
+	ExternalID        *string  `json:"external_id,omitempty"`
+	InternalNotes     *string  `json:"internal_notes,omitempty"`
+	SystemInternalID  *string  `json:"system_internal_id,omitempty"`
+	Name              string   `json:"name,omitempty"`
+	Aliases           []string `json:"aliases,omitempty"`
+	Description       *string  `json:"description,omitempty"`
+	Color             *string  `json:"color,omitempty"`
+	IntegrationRunIDs []string `json:"integration_run_ids,omitempty"`
+	OwnerID           *string  `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the CreateTagDefinitionInput on the TagDefinitionMutation builder.
 func (i *CreateTagDefinitionInput) Mutate(m *TagDefinitionMutation) {
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -24958,6 +25551,9 @@ func (i *CreateTagDefinitionInput) Mutate(m *TagDefinitionMutation) {
 	if v := i.Color; v != nil {
 		m.SetColor(*v)
 	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -24971,23 +25567,34 @@ func (c *TagDefinitionCreate) SetInput(i CreateTagDefinitionInput) *TagDefinitio
 
 // UpdateTagDefinitionInput represents a mutation input for updating tagdefinitions.
 type UpdateTagDefinitionInput struct {
-	ClearInternalNotes    bool
-	InternalNotes         *string `json:"internal_notes,omitempty"`
-	ClearSystemInternalID bool
-	SystemInternalID      *string `json:"system_internal_id,omitempty"`
-	ClearAliases          bool
-	Aliases               []string `json:"aliases,omitempty"`
-	AppendAliases         []string
-	ClearDescription      bool
-	Description           *string `json:"description,omitempty"`
-	ClearColor            bool
-	Color                 *string `json:"color,omitempty"`
-	ClearOwner            bool
-	OwnerID               *string `json:"owner_id,omitempty"`
+	ClearExternalID         bool
+	ExternalID              *string `json:"external_id,omitempty"`
+	ClearInternalNotes      bool
+	InternalNotes           *string `json:"internal_notes,omitempty"`
+	ClearSystemInternalID   bool
+	SystemInternalID        *string `json:"system_internal_id,omitempty"`
+	ClearAliases            bool
+	Aliases                 []string `json:"aliases,omitempty"`
+	AppendAliases           []string
+	ClearDescription        bool
+	Description             *string `json:"description,omitempty"`
+	ClearColor              bool
+	Color                   *string `json:"color,omitempty"`
+	ClearIntegrationRuns    bool
+	AddIntegrationRunIDs    []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs []string `json:"remove_integration_run_ids,omitempty"`
+	ClearOwner              bool
+	OwnerID                 *string `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the UpdateTagDefinitionInput on the TagDefinitionMutation builder.
 func (i *UpdateTagDefinitionInput) Mutate(m *TagDefinitionMutation) {
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -25021,6 +25628,15 @@ func (i *UpdateTagDefinitionInput) Mutate(m *TagDefinitionMutation) {
 	if v := i.Color; v != nil {
 		m.SetColor(*v)
 	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
+	}
 	if i.ClearOwner {
 		m.ClearOwner()
 	}
@@ -25044,6 +25660,7 @@ func (c *TagDefinitionUpdateOne) SetInput(i UpdateTagDefinitionInput) *TagDefini
 // CreateTaskInput represents a mutation input for creating tasks.
 type CreateTaskInput struct {
 	Tags                     []string               `json:"tags,omitempty"`
+	ExternalID               *string                `json:"external_id,omitempty"`
 	TaskKindName             *string                `json:"task_kind_name,omitempty"`
 	EnvironmentName          *string                `json:"environment_name,omitempty"`
 	ScopeName                *string                `json:"scope_name,omitempty"`
@@ -25063,6 +25680,7 @@ type CreateTaskInput struct {
 	Source                   *string                `json:"source,omitempty"`
 	SourceKey                *string                `json:"source_key,omitempty"`
 	ExternalReferenceURL     []string               `json:"external_reference_url,omitempty"`
+	IntegrationRunIDs        []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                  *string                `json:"owner_id,omitempty"`
 	TaskKindID               *string                `json:"task_kind_id,omitempty"`
 	EnvironmentID            *string                `json:"environment_id,omitempty"`
@@ -25095,6 +25713,9 @@ type CreateTaskInput struct {
 func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.TaskKindName; v != nil {
 		m.SetTaskKindName(*v)
@@ -25150,6 +25771,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.ExternalReferenceURL; v != nil {
 		m.SetExternalReferenceURL(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -25242,6 +25866,8 @@ type UpdateTaskInput struct {
 	ClearTags                      bool
 	Tags                           []string `json:"tags,omitempty"`
 	AppendTags                     []string
+	ClearExternalID                bool
+	ExternalID                     *string `json:"external_id,omitempty"`
 	ClearTaskKindName              bool
 	TaskKindName                   *string `json:"task_kind_name,omitempty"`
 	ClearEnvironmentName           bool
@@ -25276,6 +25902,9 @@ type UpdateTaskInput struct {
 	ClearExternalReferenceURL      bool
 	ExternalReferenceURL           []string `json:"external_reference_url,omitempty"`
 	AppendExternalReferenceURL     []string
+	ClearIntegrationRuns           bool
+	AddIntegrationRunIDs           []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs        []string `json:"remove_integration_run_ids,omitempty"`
 	ClearTaskKind                  bool
 	TaskKindID                     *string `json:"task_kind_id,omitempty"`
 	ClearEnvironment               bool
@@ -25357,6 +25986,12 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearTaskKindName {
 		m.ClearTaskKindName()
@@ -25459,6 +26094,15 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if i.AppendExternalReferenceURL != nil {
 		m.AppendExternalReferenceURL(i.ExternalReferenceURL)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearTaskKind {
 		m.ClearTaskKind()
@@ -25684,6 +26328,7 @@ func (c *TaskUpdateOne) SetInput(i UpdateTaskInput) *TaskUpdateOne {
 // CreateTemplateInput represents a mutation input for creating templates.
 type CreateTemplateInput struct {
 	Tags                   []string                         `json:"tags,omitempty"`
+	ExternalID             *string                          `json:"external_id,omitempty"`
 	InternalNotes          *string                          `json:"internal_notes,omitempty"`
 	SystemInternalID       *string                          `json:"system_internal_id,omitempty"`
 	EnvironmentName        *string                          `json:"environment_name,omitempty"`
@@ -25695,6 +26340,7 @@ type CreateTemplateInput struct {
 	Jsonconfig             map[string]interface{}           `json:"jsonconfig,omitempty"`
 	Uischema               map[string]interface{}           `json:"uischema,omitempty"`
 	TransformConfiguration *models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
+	IntegrationRunIDs      []string                         `json:"integration_run_ids,omitempty"`
 	OwnerID                *string                          `json:"owner_id,omitempty"`
 	EnvironmentID          *string                          `json:"environment_id,omitempty"`
 	ScopeID                *string                          `json:"scope_id,omitempty"`
@@ -25710,6 +26356,9 @@ type CreateTemplateInput struct {
 func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -25741,6 +26390,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.TransformConfiguration; v != nil {
 		m.SetTransformConfiguration(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -25782,6 +26434,8 @@ type UpdateTemplateInput struct {
 	ClearTags                   bool
 	Tags                        []string `json:"tags,omitempty"`
 	AppendTags                  []string
+	ClearExternalID             bool
+	ExternalID                  *string `json:"external_id,omitempty"`
 	ClearInternalNotes          bool
 	InternalNotes               *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID       bool
@@ -25801,6 +26455,9 @@ type UpdateTemplateInput struct {
 	Uischema                    map[string]interface{} `json:"uischema,omitempty"`
 	ClearTransformConfiguration bool
 	TransformConfiguration      *models.TemplateProjectionConfig `json:"transform_configuration,omitempty"`
+	ClearIntegrationRuns        bool
+	AddIntegrationRunIDs        []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs     []string `json:"remove_integration_run_ids,omitempty"`
 	ClearEnvironment            bool
 	EnvironmentID               *string `json:"environment_id,omitempty"`
 	ClearScope                  bool
@@ -25834,6 +26491,12 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -25891,6 +26554,15 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.TransformConfiguration; v != nil {
 		m.SetTransformConfiguration(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -28776,6 +29448,7 @@ func (c *VendorScoringConfigUpdateOne) SetInput(i UpdateVendorScoringConfigInput
 // CreateVulnerabilityInput represents a mutation input for creating vulnerabilities.
 type CreateVulnerabilityInput struct {
 	Tags                          []string               `json:"tags,omitempty"`
+	ExternalID                    string                 `json:"external_id,omitempty"`
 	InternalOwner                 *string                `json:"internal_owner,omitempty"`
 	ReviewedBy                    *string                `json:"reviewed_by,omitempty"`
 	AssignedTo                    *string                `json:"assigned_to,omitempty"`
@@ -28786,7 +29459,6 @@ type CreateVulnerabilityInput struct {
 	VulnerabilityStatusName       *string                `json:"vulnerability_status_name,omitempty"`
 	WorkflowEligibleMarker        *bool                  `json:"workflow_eligible_marker,omitempty"`
 	ExternalOwnerID               *string                `json:"external_owner_id,omitempty"`
-	ExternalID                    string                 `json:"external_id,omitempty"`
 	CveID                         *string                `json:"cve_id,omitempty"`
 	Source                        *string                `json:"source,omitempty"`
 	DisplayName                   *string                `json:"display_name,omitempty"`
@@ -28866,6 +29538,7 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
+	m.SetExternalID(i.ExternalID)
 	if v := i.InternalOwner; v != nil {
 		m.SetInternalOwner(*v)
 	}
@@ -28896,7 +29569,6 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
 	}
-	m.SetExternalID(i.ExternalID)
 	if v := i.CveID; v != nil {
 		m.SetCveID(*v)
 	}
@@ -29126,6 +29798,7 @@ type UpdateVulnerabilityInput struct {
 	ClearTags                        bool
 	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
+	ExternalID                       *string `json:"external_id,omitempty"`
 	ClearInternalOwner               bool
 	InternalOwner                    *string `json:"internal_owner,omitempty"`
 	ClearReviewedBy                  bool
@@ -29146,7 +29819,6 @@ type UpdateVulnerabilityInput struct {
 	WorkflowEligibleMarker           *bool `json:"workflow_eligible_marker,omitempty"`
 	ClearExternalOwnerID             bool
 	ExternalOwnerID                  *string `json:"external_owner_id,omitempty"`
-	ExternalID                       *string `json:"external_id,omitempty"`
 	ClearCveID                       bool
 	CveID                            *string `json:"cve_id,omitempty"`
 	ClearSource                      bool
@@ -29325,6 +29997,9 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if i.ClearInternalOwner {
 		m.ClearInternalOwner()
 	}
@@ -29384,9 +30059,6 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ExternalOwnerID; v != nil {
 		m.SetExternalOwnerID(*v)
-	}
-	if v := i.ExternalID; v != nil {
-		m.SetExternalID(*v)
 	}
 	if i.ClearCveID {
 		m.ClearCveID()

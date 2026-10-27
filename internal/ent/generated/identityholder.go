@@ -43,6 +43,18 @@ type IdentityHolder struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the internal owner for the identity holder when no user, group, or identity holder is linked
@@ -113,6 +125,8 @@ type IdentityHolder struct {
 
 // IdentityHolderEdges holds the relations/edges for other nodes in the graph.
 type IdentityHolderEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -169,10 +183,11 @@ type IdentityHolderEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [27]bool
+	loadedTypes [28]bool
 	// totalCount holds the count of the edges above.
-	totalCount [27]map[string]int
+	totalCount [28]map[string]int
 
+	namedIntegrationRuns     map[string][]*IntegrationRun
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
 	namedViewers             map[string][]*Group
@@ -194,12 +209,21 @@ type IdentityHolderEdges struct {
 	namedInternalPolicies    map[string][]*InternalPolicy
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e IdentityHolderEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -208,7 +232,7 @@ func (e IdentityHolderEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -217,7 +241,7 @@ func (e IdentityHolderEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -226,7 +250,7 @@ func (e IdentityHolderEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -237,7 +261,7 @@ func (e IdentityHolderEdges) ViewersOrErr() ([]*Group, error) {
 func (e IdentityHolderEdges) InternalOwnerUserOrErr() (*User, error) {
 	if e.InternalOwnerUser != nil {
 		return e.InternalOwnerUser, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_user"}
@@ -248,7 +272,7 @@ func (e IdentityHolderEdges) InternalOwnerUserOrErr() (*User, error) {
 func (e IdentityHolderEdges) InternalOwnerGroupOrErr() (*Group, error) {
 	if e.InternalOwnerGroup != nil {
 		return e.InternalOwnerGroup, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_group"}
@@ -259,7 +283,7 @@ func (e IdentityHolderEdges) InternalOwnerGroupOrErr() (*Group, error) {
 func (e IdentityHolderEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, error) {
 	if e.InternalOwnerIdentityHolder != nil {
 		return e.InternalOwnerIdentityHolder, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: identityholder.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_identity_holder"}
@@ -270,7 +294,7 @@ func (e IdentityHolderEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder
 func (e IdentityHolderEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -281,7 +305,7 @@ func (e IdentityHolderEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e IdentityHolderEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -292,7 +316,7 @@ func (e IdentityHolderEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 func (e IdentityHolderEdges) EmployerOrErr() (*Entity, error) {
 	if e.Employer != nil {
 		return e.Employer, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "employer"}
@@ -301,7 +325,7 @@ func (e IdentityHolderEdges) EmployerOrErr() (*Entity, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -310,7 +334,7 @@ func (e IdentityHolderEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, 
 // AssessmentsOrErr returns the Assessments value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AssessmentsOrErr() ([]*Assessment, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Assessments, nil
 	}
 	return nil, &NotLoadedError{edge: "assessments"}
@@ -319,7 +343,7 @@ func (e IdentityHolderEdges) AssessmentsOrErr() ([]*Assessment, error) {
 // TemplatesOrErr returns the Templates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TemplatesOrErr() ([]*Template, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Templates, nil
 	}
 	return nil, &NotLoadedError{edge: "templates"}
@@ -328,7 +352,7 @@ func (e IdentityHolderEdges) TemplatesOrErr() ([]*Template, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -337,7 +361,7 @@ func (e IdentityHolderEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -346,7 +370,7 @@ func (e IdentityHolderEdges) EntitiesOrErr() ([]*Entity, error) {
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -355,7 +379,7 @@ func (e IdentityHolderEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, erro
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -364,7 +388,7 @@ func (e IdentityHolderEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -373,7 +397,7 @@ func (e IdentityHolderEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -382,7 +406,7 @@ func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -391,7 +415,7 @@ func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -400,7 +424,7 @@ func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -409,7 +433,7 @@ func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -418,7 +442,7 @@ func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -427,7 +451,7 @@ func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // AccessPlatformsOrErr returns the AccessPlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.AccessPlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "access_platforms"}
@@ -438,7 +462,7 @@ func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
 func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[25] {
+	} else if e.loadedTypes[26] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -447,7 +471,7 @@ func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -464,7 +488,7 @@ func (*IdentityHolder) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case identityholder.FieldWorkflowEligibleMarker, identityholder.FieldIsOpenlaneUser, identityholder.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldUpdatedByImpersonator, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldInternalOwnerIdentityHolderID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID, identityholder.FieldAvatarRemoteURL:
+		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldUpdatedByImpersonator, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldSourceDefinitionID, identityholder.FieldSourceDefinitionVersion, identityholder.FieldSourceInstanceID, identityholder.FieldManagedBy, identityholder.FieldIntegrationRunID, identityholder.FieldExternalID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldInternalOwnerIdentityHolderID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID, identityholder.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholder.FieldCreatedAt, identityholder.FieldUpdatedAt, identityholder.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -545,6 +569,42 @@ func (_m *IdentityHolder) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case identityholder.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case identityholder.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case identityholder.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case identityholder.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case identityholder.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case identityholder.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case identityholder.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -752,6 +812,11 @@ func (_m *IdentityHolder) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewIdentityHolderClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryOwner() *OrganizationQuery {
 	return NewIdentityHolderClient(_m.config).QueryOwner(_m)
@@ -939,6 +1004,24 @@ func (_m *IdentityHolder) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -1039,6 +1122,30 @@ func (_m *IdentityHolder) String() string {
 	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

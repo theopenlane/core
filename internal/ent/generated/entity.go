@@ -53,6 +53,8 @@ type Entity struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the internal owner for the entity when no user, group, or identity holder is linked
@@ -177,8 +179,6 @@ type Entity struct {
 	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
 	// The logo file id for the entity
 	LogoFileID *string `json:"logo_file_id,omitempty"`
-	// stable identifier assigned by the source system, used for integration ingest deduplication
-	ExternalID string `json:"external_id,omitempty"`
 	// time when this entity was last observed by the source integration
 	ObservedAt *models.DateTime `json:"observed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -757,7 +757,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore, entity.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldSourceDefinitionID, entity.FieldSourceDefinitionVersion, entity.FieldSourceInstanceID, entity.FieldManagedBy, entity.FieldIntegrationRunID, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldInternalOwnerIdentityHolderID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldReviewedByIdentityHolderID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldCatalogID, entity.FieldCatalogKey, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID, entity.FieldExternalID:
+		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldSourceDefinitionID, entity.FieldSourceDefinitionVersion, entity.FieldSourceInstanceID, entity.FieldManagedBy, entity.FieldIntegrationRunID, entity.FieldExternalID, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldInternalOwnerIdentityHolderID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldReviewedByIdentityHolderID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldCatalogID, entity.FieldCatalogKey, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -866,6 +866,12 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case entity.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case entity.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1263,12 +1269,6 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 				_m.LogoFileID = new(string)
 				*_m.LogoFileID = value.String
 			}
-		case entity.FieldExternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_id", values[i])
-			} else if value.Valid {
-				_m.ExternalID = value.String
-			}
 		case entity.FieldObservedAt:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field observed_at", values[i])
@@ -1587,6 +1587,9 @@ func (_m *Entity) String() string {
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -1792,9 +1795,6 @@ func (_m *Entity) String() string {
 		builder.WriteString("logo_file_id=")
 		builder.WriteString(*v)
 	}
-	builder.WriteString(", ")
-	builder.WriteString("external_id=")
-	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	if v := _m.ObservedAt; v != nil {
 		builder.WriteString("observed_at=")

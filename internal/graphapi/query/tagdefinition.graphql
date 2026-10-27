@@ -1,166 +1,203 @@
-mutation CreateBulkCSVTagDefinition ($input: Upload!) {
-	createBulkCSVTagDefinition(input: $input) {
-		tagDefinitions {
-			aliases
-			color
-			createdAt
-			createdBy
-			description
-			id
-			internalNotes
-			name
-			ownerID
-			slug
-			systemInternalID
-			systemOwned
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
+mutation CreateBulkCSVTagDefinition($input: Upload!) {
+  createBulkCSVTagDefinition(input: $input) {
+    tagDefinitions {
+      aliases
+      color
+      createdAt
+      createdBy
+      description
+      externalID
+      id
+      integrationRunID
+      internalNotes
+      managedBy
+      name
+      ownerID
+      slug
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      systemInternalID
+      systemOwned
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+  }
 }
-mutation CreateBulkTagDefinition ($input: [CreateTagDefinitionInput!]) {
-	createBulkTagDefinition(input: $input) {
-		tagDefinitions {
-			aliases
-			color
-			createdAt
-			createdBy
-			description
-			id
-			internalNotes
-			name
-			ownerID
-			slug
-			systemInternalID
-			systemOwned
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
+
+mutation CreateBulkTagDefinition($input: [CreateTagDefinitionInput!]) {
+  createBulkTagDefinition(input: $input) {
+    tagDefinitions {
+      aliases
+      color
+      createdAt
+      createdBy
+      description
+      externalID
+      id
+      integrationRunID
+      internalNotes
+      managedBy
+      name
+      ownerID
+      slug
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      systemInternalID
+      systemOwned
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+  }
 }
-mutation CreateTagDefinition ($input: CreateTagDefinitionInput!) {
-	createTagDefinition(input: $input) {
-		tagDefinition {
-			aliases
-			color
-			createdAt
-			createdBy
-			description
-			id
-			internalNotes
-			name
-			ownerID
-			slug
-			systemInternalID
-			systemOwned
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
+
+mutation CreateTagDefinition($input: CreateTagDefinitionInput!) {
+  createTagDefinition(input: $input) {
+    tagDefinition {
+      aliases
+      color
+      createdAt
+      createdBy
+      description
+      externalID
+      id
+      integrationRunID
+      internalNotes
+      managedBy
+      name
+      ownerID
+      slug
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      systemInternalID
+      systemOwned
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+  }
 }
-mutation DeleteTagDefinition ($deleteTagDefinitionId: ID!) {
-	deleteTagDefinition(id: $deleteTagDefinitionId) {
-		deletedID
-	}
+
+mutation DeleteTagDefinition($deleteTagDefinitionId: ID!) {
+  deleteTagDefinition(id: $deleteTagDefinitionId) {
+    deletedID
+  }
 }
+
 query GetAllTagDefinitions {
-	tagDefinitions {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				aliases
-				color
-				createdAt
-				createdBy
-				description
-				id
-				internalNotes
-				name
-				ownerID
-				slug
-				systemInternalID
-				systemOwned
-				updatedAt
-				updatedBy
-			}
-		}
-	}
+  tagDefinitions {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        aliases
+        color
+        createdAt
+        createdBy
+        description
+        id
+        internalNotes
+        name
+        ownerID
+        slug
+        systemInternalID
+        systemOwned
+        updatedAt
+        updatedBy
+      }
+    }
+  }
 }
-query GetTagDefinitionByID ($tagDefinitionId: ID!) {
-	tagDefinition(id: $tagDefinitionId) {
-		aliases
-		color
-		createdAt
-		createdBy
-		description
-		id
-		internalNotes
-		name
-		ownerID
-		slug
-		systemInternalID
-		systemOwned
-		updatedAt
-		updatedBy
-		updatedByImpersonator
-	}
+
+query GetTagDefinitionByID($tagDefinitionId: ID!) {
+  tagDefinition(id: $tagDefinitionId) {
+    aliases
+    color
+    createdAt
+    createdBy
+    description
+    externalID
+    id
+    integrationRunID
+    internalNotes
+    managedBy
+    name
+    ownerID
+    slug
+    sourceDefinitionID
+    sourceDefinitionVersion
+    sourceInstanceID
+    systemInternalID
+    systemOwned
+    updatedAt
+    updatedBy
+    updatedByImpersonator
+  }
 }
-query GetTagDefinitions ($first: Int, $last: Int, $where: TagDefinitionWhereInput) {
-	tagDefinitions(first: $first, last: $last, where: $where) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				aliases
-				color
-				createdAt
-				createdBy
-				description
-				id
-				internalNotes
-				name
-				ownerID
-				slug
-				systemInternalID
-				systemOwned
-				updatedAt
-				updatedBy
-			}
-		}
-	}
+
+query GetTagDefinitions($first: Int, $last: Int, $where: TagDefinitionWhereInput) {
+  tagDefinitions(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        aliases
+        color
+        createdAt
+        createdBy
+        description
+        id
+        internalNotes
+        name
+        ownerID
+        slug
+        systemInternalID
+        systemOwned
+        updatedAt
+        updatedBy
+      }
+    }
+  }
 }
-mutation UpdateTagDefinition ($updateTagDefinitionId: ID!, $input: UpdateTagDefinitionInput!) {
-	updateTagDefinition(id: $updateTagDefinitionId, input: $input) {
-		tagDefinition {
-			aliases
-			color
-			createdAt
-			createdBy
-			description
-			id
-			internalNotes
-			name
-			ownerID
-			slug
-			systemInternalID
-			systemOwned
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
+
+mutation UpdateTagDefinition($updateTagDefinitionId: ID!, $input: UpdateTagDefinitionInput!) {
+  updateTagDefinition(id: $updateTagDefinitionId, input: $input) {
+    tagDefinition {
+      aliases
+      color
+      createdAt
+      createdBy
+      description
+      externalID
+      id
+      integrationRunID
+      internalNotes
+      managedBy
+      name
+      ownerID
+      slug
+      sourceDefinitionID
+      sourceDefinitionVersion
+      sourceInstanceID
+      systemInternalID
+      systemOwned
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+    }
+  }
 }

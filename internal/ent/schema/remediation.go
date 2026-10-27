@@ -48,13 +48,6 @@ func (Remediation) PluralName() string {
 // Fields returns remediation fields.
 func (Remediation) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("external_id").
-			Comment("external identifier from the integration source for the remediation").
-			Optional().
-			Annotations(
-				entx.FieldSearchable(),
-				entgql.OrderField("external_id"),
-			),
 		field.String("external_owner_id").
 			Comment("external identifier from the integration source for the remediation").
 			Optional().
@@ -264,6 +257,7 @@ func (r Remediation) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "RMD",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(r, withSearchableExternalID(), withoutExternalIDIndex()),
 			newObjectOwnedMixin[generated.Remediation](r,
 				withParents(
 					ActionPlan{},
@@ -293,10 +287,16 @@ func (r Remediation) Mixin() []ent.Mixin {
 // Indexes of the Remediation
 func (Remediation) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("external_id", "external_owner_id", ownerFieldName).
+		index.Fields(externalIDFieldName, "external_owner_id", ownerFieldName).
 			Unique().
 			Annotations(
 				entsql.IndexWhere("deleted_at is NULL"),
+			),
+		// null owners are distinct in the composite index so enforce uniqueness without one
+		index.Fields(externalIDFieldName, ownerFieldName).
+			Unique().
+			Annotations(
+				entsql.IndexWhere("deleted_at is NULL AND external_owner_id is NULL"),
 			),
 	}
 }
@@ -307,6 +307,10 @@ func (Remediation) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaRemediation),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName, "external_owner_id").
+			LookupAlternative(externalIDFieldName),
 	}
 }
 

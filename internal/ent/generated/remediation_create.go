@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
@@ -151,6 +152,90 @@ func (_c *RemediationCreate) SetTags(v []string) *RemediationCreate {
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *RemediationCreate) SetSourceDefinitionID(v string) *RemediationCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *RemediationCreate) SetNillableSourceDefinitionID(v *string) *RemediationCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *RemediationCreate) SetSourceDefinitionVersion(v string) *RemediationCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *RemediationCreate) SetNillableSourceDefinitionVersion(v *string) *RemediationCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *RemediationCreate) SetSourceInstanceID(v string) *RemediationCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *RemediationCreate) SetNillableSourceInstanceID(v *string) *RemediationCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *RemediationCreate) SetManagedBy(v string) *RemediationCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *RemediationCreate) SetNillableManagedBy(v *string) *RemediationCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *RemediationCreate) SetIntegrationRunID(v string) *RemediationCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *RemediationCreate) SetNillableIntegrationRunID(v *string) *RemediationCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *RemediationCreate) SetExternalID(v string) *RemediationCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *RemediationCreate) SetNillableExternalID(v *string) *RemediationCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *RemediationCreate) SetOwnerID(v string) *RemediationCreate {
 	_c.mutation.SetOwnerID(v)
@@ -273,20 +358,6 @@ func (_c *RemediationCreate) SetWorkflowEligibleMarker(v bool) *RemediationCreat
 func (_c *RemediationCreate) SetNillableWorkflowEligibleMarker(v *bool) *RemediationCreate {
 	if v != nil {
 		_c.SetWorkflowEligibleMarker(*v)
-	}
-	return _c
-}
-
-// SetExternalID sets the "external_id" field.
-func (_c *RemediationCreate) SetExternalID(v string) *RemediationCreate {
-	_c.mutation.SetExternalID(v)
-	return _c
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_c *RemediationCreate) SetNillableExternalID(v *string) *RemediationCreate {
-	if v != nil {
-		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -561,6 +632,21 @@ func (_c *RemediationCreate) SetNillableID(v *string) *RemediationCreate {
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *RemediationCreate) AddIntegrationRunIDs(ids ...string) *RemediationCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *RemediationCreate) AddIntegrationRuns(v ...*IntegrationRun) *RemediationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1016,6 +1102,30 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 		_spec.SetField(remediation.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(remediation.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(remediation.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(remediation.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(remediation.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(remediation.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(remediation.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -1039,10 +1149,6 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(remediation.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(remediation.FieldExternalOwnerID, field.TypeString, value)
@@ -1119,6 +1225,22 @@ func (_c *RemediationCreate) createSpec() (*Remediation, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(remediation.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.IntegrationRunsTable,
+			Columns: []string{remediation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

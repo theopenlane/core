@@ -1,86 +1,112 @@
-query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [EmailTemplateHistoryOrder!]) {
-	emailTemplateHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				active
-				createdAt
-				createdBy
-				defaults
-				description
-				format
-				historyTime
-				id
-				integrationID
-				internalNotes
-				key
-				locale
-				metadata
-				name
-				operation
-				ownerID
-				ref
-				revision
-				systemInternalID
-				systemOwned
-				templateContext
-				trustCenterID
-				updatedAt
-				updatedBy
-				updatedByImpersonator
-				version
-				workflowDefinitionID
-				workflowInstanceID
-			}
-		}
-	}
+query GetAllEmailTemplateHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [EmailTemplateHistoryOrder!]) {
+  emailTemplateHistories(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        createdAt
+        createdBy
+        defaults
+        description
+        externalID
+        format
+        historyTime
+        id
+        integrationID
+        integrationRunID
+        internalNotes
+        key
+        locale
+        managedBy
+        metadata
+        name
+        operation
+        ownerID
+        ref
+        revision
+        sourceDefinitionID
+        sourceDefinitionVersion
+        sourceInstanceID
+        systemInternalID
+        systemOwned
+        templateContext
+        trustCenterID
+        updatedAt
+        updatedBy
+        updatedByImpersonator
+        version
+        workflowDefinitionID
+        workflowInstanceID
+      }
+    }
+  }
 }
-query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [EmailTemplateHistoryOrder!], $where: EmailTemplateHistoryWhereInput) {
-	emailTemplateHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				active
-				createdAt
-				createdBy
-				defaults
-				description
-				format
-				historyTime
-				id
-				integrationID
-				internalNotes
-				key
-				locale
-				metadata
-				name
-				operation
-				ownerID
-				ref
-				revision
-				systemInternalID
-				systemOwned
-				templateContext
-				trustCenterID
-				updatedAt
-				updatedBy
-				updatedByImpersonator
-				version
-				workflowDefinitionID
-				workflowInstanceID
-			}
-		}
-	}
+
+query GetEmailTemplateHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [EmailTemplateHistoryOrder!], $where: EmailTemplateHistoryWhereInput) {
+  emailTemplateHistories(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        createdAt
+        createdBy
+        defaults
+        description
+        externalID
+        format
+        historyTime
+        id
+        integrationID
+        integrationRunID
+        internalNotes
+        key
+        locale
+        managedBy
+        metadata
+        name
+        operation
+        ownerID
+        ref
+        revision
+        sourceDefinitionID
+        sourceDefinitionVersion
+        sourceInstanceID
+        systemInternalID
+        systemOwned
+        templateContext
+        trustCenterID
+        updatedAt
+        updatedBy
+        updatedByImpersonator
+        version
+        workflowDefinitionID
+        workflowInstanceID
+      }
+    }
+  }
 }
