@@ -26630,8 +26630,6 @@ type CreateTrustCenterInput struct {
 	EditorIDs                  []string                        `json:"editor_ids,omitempty"`
 	CustomDomainID             *string                         `json:"custom_domain_id,omitempty"`
 	PreviewDomainID            *string                         `json:"preview_domain_id,omitempty"`
-	SettingID                  *string                         `json:"setting_id,omitempty"`
-	PreviewSettingID           *string                         `json:"preview_setting_id,omitempty"`
 	WatermarkConfigID          *string                         `json:"watermark_config_id,omitempty"`
 	TrustCenterSubprocessorIDs []string                        `json:"trust_center_subprocessor_ids,omitempty"`
 	TrustCenterDocIDs          []string                        `json:"trust_center_doc_ids,omitempty"`
@@ -26680,12 +26678,6 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.PreviewDomainID; v != nil {
 		m.SetPreviewDomainID(*v)
-	}
-	if v := i.SettingID; v != nil {
-		m.SetSettingID(*v)
-	}
-	if v := i.PreviewSettingID; v != nil {
-		m.SetPreviewSettingID(*v)
 	}
 	if v := i.WatermarkConfigID; v != nil {
 		m.SetWatermarkConfigID(*v)
@@ -26758,10 +26750,6 @@ type UpdateTrustCenterInput struct {
 	CustomDomainID                   *string `json:"custom_domain_id,omitempty"`
 	ClearPreviewDomain               bool
 	PreviewDomainID                  *string `json:"preview_domain_id,omitempty"`
-	ClearSetting                     bool
-	SettingID                        *string `json:"setting_id,omitempty"`
-	ClearPreviewSetting              bool
-	PreviewSettingID                 *string `json:"preview_setting_id,omitempty"`
 	ClearWatermarkConfig             bool
 	WatermarkConfigID                *string `json:"watermark_config_id,omitempty"`
 	ClearTrustCenterSubprocessors    bool
@@ -26875,18 +26863,6 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.PreviewDomainID; v != nil {
 		m.SetPreviewDomainID(*v)
-	}
-	if i.ClearSetting {
-		m.ClearSetting()
-	}
-	if v := i.SettingID; v != nil {
-		m.SetSettingID(*v)
-	}
-	if i.ClearPreviewSetting {
-		m.ClearPreviewSetting()
-	}
-	if v := i.PreviewSettingID; v != nil {
-		m.SetPreviewSettingID(*v)
 	}
 	if i.ClearWatermarkConfig {
 		m.ClearWatermarkConfig()
@@ -27875,8 +27851,6 @@ func (c *TrustCenterSettingCreate) SetInput(i CreateTrustCenterSettingInput) *Tr
 
 // UpdateTrustCenterSettingInput represents a mutation input for updating trustcentersettings.
 type UpdateTrustCenterSettingInput struct {
-	ClearTrustCenterID                         bool
-	TrustCenterID                              *string `json:"trust_center_id,omitempty"`
 	ClearTitle                                 bool
 	Title                                      *string `json:"title,omitempty"`
 	ClearCompanyName                           bool
@@ -27941,12 +27915,6 @@ type UpdateTrustCenterSettingInput struct {
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
 func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
-	if i.ClearTrustCenterID {
-		m.ClearTrustCenterID()
-	}
-	if v := i.TrustCenterID; v != nil {
-		m.SetTrustCenterID(*v)
-	}
 	if i.ClearTitle {
 		m.ClearTitle()
 	}
