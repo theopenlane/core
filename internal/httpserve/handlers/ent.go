@@ -727,6 +727,26 @@ func (h *Handler) getOrganizationSettingByOrgID(ctx context.Context, orgID strin
 	return setting, nil
 }
 
+// ssoExistingUserAllowed reports whether the email is new or belongs to a user who is already a member of the org
+// the caller has not signed in yet, so the user lookup is pinned to the email and the membership lookup is scoped to the org
+func (h *Handler) ssoExistingUserAllowed(ctx context.Context, email, orgID string) (bool, error) {
+	exists, err := transaction.FromContext(ctx).User.Query().Where(user.EmailEqualFold(email)).Exist(auth.WithInternalReadContext(ctx))
+	if err != nil {
+		return false, err
+	}
+
+	if !exists {
+		return true, nil
+	}
+
+	return transaction.FromContext(ctx).OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(orgID),
+			orgmembership.HasUserWith(user.EmailEqualFold(email)),
+		).
+		Exist(auth.WithOrgInternalCaller(ctx, orgID))
+}
+
 // jitProvisionMembership adds an organization membership for a user who successfully authenticated against
 // the organization's configured identity provider, when SSO login is enforced and just-in-time provisioning
 // is enabled for the organization; existing members are left unchanged

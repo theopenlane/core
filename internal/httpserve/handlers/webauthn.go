@@ -3,8 +3,9 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"errors"
+	"fmt"
 	"net/http"
+	"strings"
 
 	echo "github.com/theopenlane/echox"
 
@@ -13,13 +14,13 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
 	provider "github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
-	entval "github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 	"github.com/theopenlane/logx"
@@ -30,7 +31,7 @@ const (
 	webauthnLogin        = "WEBAUTHN_LOGIN"
 )
 
-// BeginWebauthnRegistration is the request to begin a webauthn login
+// BeginWebauthnRegistration is the request to begin adding a passkey to the authenticated user's account
 func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	r, err := BindAndValidate[models.WebauthnRegistrationRequest](ctx)
 	if err != nil {
@@ -39,38 +40,25 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	ctxWithToken := token.NewContextWithOauthTooToken(reqCtx, r.Email)
+	caller, ok := passkeyRegistrationCaller(reqCtx)
+	if !ok {
+		return h.Unauthorized(ctx, ErrAuthenticationRequired)
+	}
 
-	// to register a new passkey, the user needs to be created + logged in first
-	// once the the passkey is added to the user's account, they can use it to login
-	// we treat this verify similar to the oauth or basic registration flow
-	// user is created first, no credential method is set / they are unable to login until the credential flow is finished
-	entUser, err := h.CheckAndCreateUser(ctxWithToken, r.Name, r.Email, enums.AuthProviderCredentials, "")
+	entUser, _, err := h.getUserByID(reqCtx, caller.SubjectID)
 	if err != nil {
-		if errors.Is(err, entval.ErrEmailNotAllowed) {
-			logx.FromContext(reqCtx).Error().Err(err).Str("email", r.Email).Msg("email not allowed")
-
-			return h.InvalidInput(ctx, err)
-		}
-
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error provisioning user")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user by id")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	// set context for remaining request based on logged in user
-	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
-
-	webAuthns, err := entUser.QueryWebauthns().All(userCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error querying user webauthn credentials")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest)
+	if !strings.EqualFold(r.Email, entUser.Email) {
+		return h.BadRequest(ctx, ErrPasskeyEmailMismatch)
 	}
 
-	var credentials = make([]webauthn.Credential, 0, len(webAuthns))
+	var credentials = make([]webauthn.Credential, 0, len(entUser.Edges.Webauthns))
 
-	for _, credential := range webAuthns {
+	for _, credential := range entUser.Edges.Webauthns {
 		credentials = append(credentials, webauthn.Credential{
 			ID:        credential.CredentialID,
 			PublicKey: credential.PublicKey,
@@ -98,12 +86,12 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 	// we have to set not just a regular session for the user but also capture the return of the webauthn session
 	setSessionMap := map[string]any{}
 	setSessionMap[sessions.WebAuthnKey] = session
-	setSessionMap[sessions.UsernameKey] = r.Name
+	setSessionMap[sessions.UsernameKey] = user.Name
 	setSessionMap[sessions.UserTypeKey] = webauthnRegistration
-	setSessionMap[sessions.EmailKey] = r.Email
+	setSessionMap[sessions.EmailKey] = user.Email
 	setSessionMap[sessions.UserIDKey] = user.ID
 
-	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(userCtx, ctx.Response().Writer, setSessionMap, user.ID)
+	sessionCtx, err := h.SessionConfig.SaveAndStoreSession(reqCtx, ctx.Response().Writer, setSessionMap, user.ID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to save session")
 
@@ -159,7 +147,12 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 
 	// ensure the user is the same as the one who started the registration
 	if userIDFromCookie != userID {
-		return h.BadRequest(ctx, err)
+		return h.BadRequest(ctx, ErrInvalidCredentials)
+	}
+
+	caller, ok := passkeyRegistrationCaller(reqCtx)
+	if !ok || caller.SubjectID != userID {
+		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
 
 	// get user from the database
@@ -219,21 +212,22 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, entUser)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest)
-	}
-
 	out := &models.WebauthnRegistrationResponse{
-		Reply:    rout.Reply{Success: true},
-		Message:  "passkey successfully created",
-		AuthData: *auth,
+		Reply:   rout.Reply{Success: true},
+		Message: "passkey successfully created",
 	}
 
 	return h.Success(ctx, out)
+}
+
+// passkeyRegistrationCaller returns the caller when it is a user signed in with their own session
+func passkeyRegistrationCaller(ctx context.Context) (*auth.Caller, bool) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller.AuthenticationType != auth.JWTAuthentication || caller.IsAnonymous() || caller.IsImpersonated() {
+		return nil, false
+	}
+
+	return caller, true
 }
 
 // BeginWebauthnLogin is the request to begin a webauthn login
@@ -361,6 +355,13 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
+	if !entUser.Edges.Setting.EmailConfirmed {
+		metrics.RecordLogin(false)
+		logx.FromContext(reqCtx).Info().Str("user_id", entUser.ID).Msg("user email not verified, unable to login")
+
+		return h.BadRequest(ctx, fmt.Errorf("%w: please check your email and verify your account", auth.ErrUnverifiedUser))
+	}
+
 	orgStatus := h.orgEnforcementsForUser(reqCtx, entUser.Email)
 	if orgStatus != nil && orgStatus.Enforced {
 		if !h.HasValidSSOSession(ctx, entUser.ID) {
@@ -369,7 +370,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 	}
 
 	// create claims for verified user
-	auth, err := h.AuthManager.GenerateUserAuthSession(reqCtx, ctx.Response().Writer, entUser)
+	authData, err := h.AuthManager.GenerateUserAuthSession(reqCtx, ctx.Response().Writer, entUser)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 		metrics.RecordLogin(false)
@@ -388,7 +389,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
 	out := &models.WebauthnLoginResponse{
 		Reply:    rout.Reply{Success: true},
 		Message:  "passkey successfully created",
-		AuthData: *auth,
+		AuthData: *authData,
 	}
 
 	metrics.RecordLogin(true)

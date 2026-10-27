@@ -105,6 +105,10 @@ var (
 	ErrMissingOIDCConfig = errors.New("missing OIDC configuration, please contact support")
 	// ErrStateMismatch is returned when the state parameter does not match the expected value
 	ErrStateMismatch = errors.New("state parameter does not match, possible CSRF attack or session expired")
+	// ErrSSOOrganizationMismatch is returned when the SSO callback organization does not match the one the login started with
+	ErrSSOOrganizationMismatch = errors.New("organization does not match the sso login request")
+	// ErrSSOEmailNotVerified is returned when the identity provider reports the user's email as unverified
+	ErrSSOEmailNotVerified = errors.New("identity provider reports the email address as unverified")
 	// ErrMissingSSOConfig is returned when the SSO configuration is missing
 	ErrNonceMissing = errors.New("missing nonce cookie, possible CSRF attack or session expired")
 	// ErrMissingReferer is returned when the referer is missing from the request
@@ -137,6 +141,8 @@ var (
 	ErrAnonymousQuestionnaireDraft = errors.New("anonymous questionnaire responses cannot be saved as drafts")
 	// ErrAuthenticationRequired indicates that the user must be authenticated to perform this action
 	ErrAuthenticationRequired = errors.New("authentication required")
+	// ErrPasskeyEmailMismatch is returned when the passkey registration email does not match the authenticated user
+	ErrPasskeyEmailMismatch = errors.New("email does not match the authenticated user")
 	// ErrNoActiveImpersonationSession indicates that there is no active impersonation session
 	ErrNoActiveImpersonationSession = errors.New("no active impersonation session")
 	// ErrInvalidSessionID indicates that the provided session ID is invalid

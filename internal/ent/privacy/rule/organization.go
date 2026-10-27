@@ -50,7 +50,7 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 			return privacy.Allow
 		}
 
-		return checkOrgAccess(ctx, relation, orgID)
+		return CheckOrgAccess(ctx, relation, orgID)
 	}
 
 	// else we need to get the object id from the mutation and get the owner id, this should only happen on deletes when using personal access tokens
@@ -58,7 +58,7 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 	if mutOk {
 		orgID, ownerOk := mut.OwnerID()
 		if ownerOk && orgID != "" {
-			return checkOrgAccess(ctx, relation, orgID)
+			return CheckOrgAccess(ctx, relation, orgID)
 		}
 	}
 
@@ -91,7 +91,7 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 	}
 
 	for _, org := range requestedOrgs {
-		if err := checkOrgAccess(ctx, relation, org.ID); err != nil && access.Deny(err) {
+		if err := CheckOrgAccess(ctx, relation, org.ID); err != nil && access.Deny(err) {
 			return err
 		}
 	}
@@ -99,9 +99,9 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 	return privacy.Allow
 }
 
-// checkOrgAccess checks if the authenticated user has access to the organization
+// CheckOrgAccess checks if the authenticated user has access to the organization
 // and logs additional context about the mutation if provided
-func checkOrgAccess(ctx context.Context, relation, organizationID string) error {
+func CheckOrgAccess(ctx context.Context, relation, organizationID string) error {
 	// skip if permission is already set to allow or if it's an internal request
 	if auth.IsInternalRequest(ctx) {
 		return nil
