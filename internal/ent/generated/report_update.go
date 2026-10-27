@@ -274,6 +274,12 @@ func (_u *ReportUpdate) SetNillableVisibility(v *enums.ReportVisibility) *Report
 	return _u
 }
 
+// ClearVisibility clears the value of the "visibility" field.
+func (_u *ReportUpdate) ClearVisibility() *ReportUpdate {
+	_u.mutation.ClearVisibility()
+	return _u
+}
+
 // SetReportOwnerID sets the "report_owner_id" field.
 func (_u *ReportUpdate) SetReportOwnerID(v string) *ReportUpdate {
 	_u.mutation.SetReportOwnerID(v)
@@ -675,6 +681,9 @@ func (_u *ReportUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(report.FieldVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.VisibilityCleared() {
+		_spec.ClearField(report.FieldVisibility, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1269,6 +1278,12 @@ func (_u *ReportUpdateOne) SetNillableVisibility(v *enums.ReportVisibility) *Rep
 	return _u
 }
 
+// ClearVisibility clears the value of the "visibility" field.
+func (_u *ReportUpdateOne) ClearVisibility() *ReportUpdateOne {
+	_u.mutation.ClearVisibility()
+	return _u
+}
+
 // SetReportOwnerID sets the "report_owner_id" field.
 func (_u *ReportUpdateOne) SetReportOwnerID(v string) *ReportUpdateOne {
 	_u.mutation.SetReportOwnerID(v)
@@ -1700,6 +1715,9 @@ func (_u *ReportUpdateOne) sqlSave(ctx context.Context) (_node *Report, err erro
 	}
 	if value, ok := _u.mutation.Visibility(); ok {
 		_spec.SetField(report.FieldVisibility, field.TypeEnum, value)
+	}
+	if _u.mutation.VisibilityCleared() {
+		_spec.ClearField(report.FieldVisibility, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

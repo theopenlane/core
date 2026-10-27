@@ -103028,7 +103028,7 @@ type CreateReport_CreateReport_Report struct {
 	UpdatedByImpersonator *string                                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 	Variables             map[string]any                                 "json:\"variables,omitempty\" graphql:\"variables\""
 	Viewers               CreateReport_CreateReport_Report_Viewers       "json:\"viewers\" graphql:\"viewers\""
-	Visibility            enums.ReportVisibility                         "json:\"visibility\" graphql:\"visibility\""
+	Visibility            *enums.ReportVisibility                        "json:\"visibility,omitempty\" graphql:\"visibility\""
 }
 
 func (t *CreateReport_CreateReport_Report) GetBlockedGroups() *CreateReport_CreateReport_Report_BlockedGroups {
@@ -103155,7 +103155,7 @@ func (t *CreateReport_CreateReport_Report) GetVisibility() *enums.ReportVisibili
 	if t == nil {
 		t = &CreateReport_CreateReport_Report{}
 	}
-	return &t.Visibility
+	return t.Visibility
 }
 
 type CreateReport_CreateReport struct {
@@ -103419,7 +103419,7 @@ type GetAllReports_Reports_Edges_Node struct {
 	UpdatedByImpersonator *string                                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 	Variables             map[string]any                                 "json:\"variables,omitempty\" graphql:\"variables\""
 	Viewers               GetAllReports_Reports_Edges_Node_Viewers       "json:\"viewers\" graphql:\"viewers\""
-	Visibility            enums.ReportVisibility                         "json:\"visibility\" graphql:\"visibility\""
+	Visibility            *enums.ReportVisibility                        "json:\"visibility,omitempty\" graphql:\"visibility\""
 }
 
 func (t *GetAllReports_Reports_Edges_Node) GetBlockedGroups() *GetAllReports_Reports_Edges_Node_BlockedGroups {
@@ -103552,7 +103552,7 @@ func (t *GetAllReports_Reports_Edges_Node) GetVisibility() *enums.ReportVisibili
 	if t == nil {
 		t = &GetAllReports_Reports_Edges_Node{}
 	}
-	return &t.Visibility
+	return t.Visibility
 }
 
 type GetAllReports_Reports_Edges struct {
@@ -103798,7 +103798,7 @@ type GetReportByID_Report struct {
 	UpdatedByImpersonator *string                            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 	Variables             map[string]any                     "json:\"variables,omitempty\" graphql:\"variables\""
 	Viewers               GetReportByID_Report_Viewers       "json:\"viewers\" graphql:\"viewers\""
-	Visibility            enums.ReportVisibility             "json:\"visibility\" graphql:\"visibility\""
+	Visibility            *enums.ReportVisibility            "json:\"visibility,omitempty\" graphql:\"visibility\""
 }
 
 func (t *GetReportByID_Report) GetBlockedGroups() *GetReportByID_Report_BlockedGroups {
@@ -103931,7 +103931,7 @@ func (t *GetReportByID_Report) GetVisibility() *enums.ReportVisibility {
 	if t == nil {
 		t = &GetReportByID_Report{}
 	}
-	return &t.Visibility
+	return t.Visibility
 }
 
 type GetReportMembersByReportID_Report_Members_Edges_Node struct {
@@ -104231,7 +104231,7 @@ type GetReports_Reports_Edges_Node struct {
 	UpdatedByImpersonator *string                                     "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 	Variables             map[string]any                              "json:\"variables,omitempty\" graphql:\"variables\""
 	Viewers               GetReports_Reports_Edges_Node_Viewers       "json:\"viewers\" graphql:\"viewers\""
-	Visibility            enums.ReportVisibility                      "json:\"visibility\" graphql:\"visibility\""
+	Visibility            *enums.ReportVisibility                     "json:\"visibility,omitempty\" graphql:\"visibility\""
 }
 
 func (t *GetReports_Reports_Edges_Node) GetBlockedGroups() *GetReports_Reports_Edges_Node_BlockedGroups {
@@ -104364,7 +104364,7 @@ func (t *GetReports_Reports_Edges_Node) GetVisibility() *enums.ReportVisibility 
 	if t == nil {
 		t = &GetReports_Reports_Edges_Node{}
 	}
-	return &t.Visibility
+	return t.Visibility
 }
 
 type GetReports_Reports_Edges struct {
@@ -104610,7 +104610,7 @@ type UpdateReport_UpdateReport_Report struct {
 	UpdatedByImpersonator *string                                        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 	Variables             map[string]any                                 "json:\"variables,omitempty\" graphql:\"variables\""
 	Viewers               UpdateReport_UpdateReport_Report_Viewers       "json:\"viewers\" graphql:\"viewers\""
-	Visibility            enums.ReportVisibility                         "json:\"visibility\" graphql:\"visibility\""
+	Visibility            *enums.ReportVisibility                        "json:\"visibility,omitempty\" graphql:\"visibility\""
 }
 
 func (t *UpdateReport_UpdateReport_Report) GetBlockedGroups() *UpdateReport_UpdateReport_Report_BlockedGroups {
@@ -104743,7 +104743,7 @@ func (t *UpdateReport_UpdateReport_Report) GetVisibility() *enums.ReportVisibili
 	if t == nil {
 		t = &UpdateReport_UpdateReport_Report{}
 	}
-	return &t.Visibility
+	return t.Visibility
 }
 
 type UpdateReport_UpdateReport struct {

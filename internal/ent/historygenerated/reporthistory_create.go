@@ -364,10 +364,6 @@ func (_c *ReportHistoryCreate) defaults() error {
 		v := reporthistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
-	if _, ok := _c.mutation.Visibility(); !ok {
-		v := reporthistory.DefaultVisibility
-		_c.mutation.SetVisibility(v)
-	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if reporthistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized reporthistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -407,9 +403,6 @@ func (_c *ReportHistoryCreate) check() error {
 		if err := reporthistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ReportHistory.status": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.Visibility(); !ok {
-		return &ValidationError{Name: "visibility", err: errors.New(`historygenerated: missing required field "ReportHistory.visibility"`)}
 	}
 	if v, ok := _c.mutation.Visibility(); ok {
 		if err := reporthistory.VisibilityValidator(v); err != nil {

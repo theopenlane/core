@@ -415,10 +415,6 @@ func (_c *ReportCreate) defaults() error {
 		v := report.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
-	if _, ok := _c.mutation.Visibility(); !ok {
-		v := report.DefaultVisibility
-		_c.mutation.SetVisibility(v)
-	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if report.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized report.DefaultID (forgotten import generated/runtime?)")
@@ -472,9 +468,6 @@ func (_c *ReportCreate) check() error {
 		if err := report.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Report.status": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.Visibility(); !ok {
-		return &ValidationError{Name: "visibility", err: errors.New(`generated: missing required field "Report.visibility"`)}
 	}
 	if v, ok := _c.mutation.Visibility(); ok {
 		if err := report.VisibilityValidator(v); err != nil {

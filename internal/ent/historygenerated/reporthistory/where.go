@@ -1313,6 +1313,16 @@ func VisibilityNotIn(vs ...enums.ReportVisibility) predicate.ReportHistory {
 	return predicate.ReportHistory(sql.FieldNotIn(FieldVisibility, v...))
 }
 
+// VisibilityIsNil applies the IsNil predicate on the "visibility" field.
+func VisibilityIsNil() predicate.ReportHistory {
+	return predicate.ReportHistory(sql.FieldIsNull(FieldVisibility))
+}
+
+// VisibilityNotNil applies the NotNil predicate on the "visibility" field.
+func VisibilityNotNil() predicate.ReportHistory {
+	return predicate.ReportHistory(sql.FieldNotNull(FieldVisibility))
+}
+
 // ReportOwnerIDEQ applies the EQ predicate on the "report_owner_id" field.
 func ReportOwnerIDEQ(v string) predicate.ReportHistory {
 	return predicate.ReportHistory(sql.FieldEQ(FieldReportOwnerID, v))

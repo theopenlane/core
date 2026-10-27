@@ -216,8 +216,6 @@ func StatusValidator(s enums.ReportStatus) error {
 	}
 }
 
-const DefaultVisibility enums.ReportVisibility = "PRIVATE"
-
 // VisibilityValidator is a validator for the "visibility" field enum values. It is called by the builders before save.
 func VisibilityValidator(v enums.ReportVisibility) error {
 	switch v.String() {

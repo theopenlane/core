@@ -6599,7 +6599,7 @@ var (
 		{Name: "query", Type: field.TypeString, Size: 2147483647},
 		{Name: "variables", Type: field.TypeJSON, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"DRAFT", "SAVED"}, Default: "DRAFT"},
-		{Name: "visibility", Type: field.TypeEnum, Enums: []string{"PRIVATE", "RESTRICTED", "ORGANIZATION"}, Default: "PRIVATE"},
+		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PRIVATE", "RESTRICTED", "ORGANIZATION"}},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "report_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "report_owner_id", Type: field.TypeString, Nullable: true},

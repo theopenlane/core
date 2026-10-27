@@ -207339,9 +207339,22 @@ func (m *ReportMutation) OldVisibility(ctx context.Context) (v enums.ReportVisib
 	return oldValue.Visibility, nil
 }
 
+// ClearVisibility clears the value of the "visibility" field.
+func (m *ReportMutation) ClearVisibility() {
+	m.visibility = nil
+	m.clearedFields[report.FieldVisibility] = struct{}{}
+}
+
+// VisibilityCleared returns if the "visibility" field was cleared in this mutation.
+func (m *ReportMutation) VisibilityCleared() bool {
+	_, ok := m.clearedFields[report.FieldVisibility]
+	return ok
+}
+
 // ResetVisibility resets all changes to the "visibility" field.
 func (m *ReportMutation) ResetVisibility() {
 	m.visibility = nil
+	delete(m.clearedFields, report.FieldVisibility)
 }
 
 // SetReportOwnerID sets the "report_owner_id" field.
@@ -208140,6 +208153,9 @@ func (m *ReportMutation) ClearedFields() []string {
 	if m.FieldCleared(report.FieldVariables) {
 		fields = append(fields, report.FieldVariables)
 	}
+	if m.FieldCleared(report.FieldVisibility) {
+		fields = append(fields, report.FieldVisibility)
+	}
 	if m.FieldCleared(report.FieldReportOwnerID) {
 		fields = append(fields, report.FieldReportOwnerID)
 	}
@@ -208195,6 +208211,9 @@ func (m *ReportMutation) ClearField(name string) error {
 		return nil
 	case report.FieldVariables:
 		m.ClearVariables()
+		return nil
+	case report.FieldVisibility:
+		m.ClearVisibility()
 		return nil
 	case report.FieldReportOwnerID:
 		m.ClearReportOwnerID()

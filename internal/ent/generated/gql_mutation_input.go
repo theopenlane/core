@@ -21105,8 +21105,9 @@ type UpdateReportInput struct {
 	Name                  *string `json:"name,omitempty"`
 	Query                 *string `json:"query,omitempty"`
 	ClearVariables        bool
-	Variables             map[string]interface{}  `json:"variables,omitempty"`
-	Status                *enums.ReportStatus     `json:"status,omitempty"`
+	Variables             map[string]interface{} `json:"variables,omitempty"`
+	Status                *enums.ReportStatus    `json:"status,omitempty"`
+	ClearVisibility       bool
 	Visibility            *enums.ReportVisibility `json:"visibility,omitempty"`
 	ClearOwner            bool
 	OwnerID               *string `json:"owner_id,omitempty"`
@@ -21156,6 +21157,9 @@ func (i *UpdateReportInput) Mutate(m *ReportMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearVisibility {
+		m.ClearVisibility()
 	}
 	if v := i.Visibility; v != nil {
 		m.SetVisibility(*v)

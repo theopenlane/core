@@ -1166,6 +1166,16 @@ func VisibilityNotIn(vs ...enums.ReportVisibility) predicate.Report {
 	return predicate.Report(sql.FieldNotIn(FieldVisibility, v...))
 }
 
+// VisibilityIsNil applies the IsNil predicate on the "visibility" field.
+func VisibilityIsNil() predicate.Report {
+	return predicate.Report(sql.FieldIsNull(FieldVisibility))
+}
+
+// VisibilityNotNil applies the NotNil predicate on the "visibility" field.
+func VisibilityNotNil() predicate.Report {
+	return predicate.Report(sql.FieldNotNull(FieldVisibility))
+}
+
 // ReportOwnerIDEQ applies the EQ predicate on the "report_owner_id" field.
 func ReportOwnerIDEQ(v string) predicate.Report {
 	return predicate.Report(sql.FieldEQ(FieldReportOwnerID, v))

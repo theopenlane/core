@@ -42551,7 +42551,7 @@ type ReportHistory implements Node {
   """
   variables: Map
   status: ReportHistoryReportStatus!
-  visibility: ReportHistoryReportVisibility!
+  visibility: ReportHistoryReportVisibility
   """
   the id of the user who is responsible for this report
   """
@@ -42848,6 +42848,8 @@ input ReportHistoryWhereInput {
   visibilityNEQ: ReportHistoryReportVisibility
   visibilityIn: [ReportHistoryReportVisibility!]
   visibilityNotIn: [ReportHistoryReportVisibility!]
+  visibilityIsNil: Boolean
+  visibilityNotNil: Boolean
   """
   report_owner_id field predicates
   """

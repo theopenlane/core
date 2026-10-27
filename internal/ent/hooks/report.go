@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	"entgo.io/ent"
@@ -114,10 +115,13 @@ func HookReportAuthz() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			// if this is being created via api or support user, there will be no "user", so
-			// automatically make it visibile org wide
-			if m.Op().Is(ent.OpCreate) && auth.IsUserlessContext(ctx) {
-				requestedVisibility = enums.ReportVisibilityOrganization
+			// "userless" requests must explicitly use organization visibility
+			if m.Op().Is(ent.OpCreate) && auth.IsUserlessContext(ctx) && requestedVisibility != enums.ReportVisibilityOrganization {
+				return nil, fmt.Errorf("%w: userless reports require organization visibility", ErrInvalidInput)
+			}
+
+			if m.Op().Is(ent.OpCreate) && !visibilityExists {
+				requestedVisibility = enums.ReportVisibilityPrivate
 				m.SetVisibility(requestedVisibility)
 			}
 

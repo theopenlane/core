@@ -181,7 +181,7 @@ func TestMutation_ChangeOwnerRole(t *testing.T) {
 			assert.NilError(t, err)
 
 			assert.Check(t, is.Equal(lo.FromPtr(resp.Report.ReportOwnerID), th.SharedViewOnlyUser.ID))
-			assert.Check(t, is.Equal(resp.Report.Visibility, tc.visibility))
+			assert.Check(t, is.Equal(lo.FromPtr(resp.Report.Visibility), tc.visibility))
 
 			members, err = suite.Client.API.GetReportMembersByReportID(th.SharedTestUser1.UserCtx, report.ID)
 			assert.NilError(t, err)

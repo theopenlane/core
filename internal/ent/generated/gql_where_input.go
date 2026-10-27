@@ -74892,10 +74892,12 @@ type ReportWhereInput struct {
 	StatusNotIn []enums.ReportStatus `json:"statusNotIn,omitempty"`
 
 	// "visibility" field predicates.
-	Visibility      *enums.ReportVisibility  `json:"visibility,omitempty"`
-	VisibilityNEQ   *enums.ReportVisibility  `json:"visibilityNEQ,omitempty"`
-	VisibilityIn    []enums.ReportVisibility `json:"visibilityIn,omitempty"`
-	VisibilityNotIn []enums.ReportVisibility `json:"visibilityNotIn,omitempty"`
+	Visibility       *enums.ReportVisibility  `json:"visibility,omitempty"`
+	VisibilityNEQ    *enums.ReportVisibility  `json:"visibilityNEQ,omitempty"`
+	VisibilityIn     []enums.ReportVisibility `json:"visibilityIn,omitempty"`
+	VisibilityNotIn  []enums.ReportVisibility `json:"visibilityNotIn,omitempty"`
+	VisibilityIsNil  bool                     `json:"visibilityIsNil,omitempty"`
+	VisibilityNotNil bool                     `json:"visibilityNotNil,omitempty"`
 
 	// "report_owner_id" field predicates.
 	ReportOwnerID             *string  `json:"reportOwnerID,omitempty"`
@@ -75412,6 +75414,12 @@ func (i *ReportWhereInput) P() (predicate.Report, error) {
 	}
 	if len(i.VisibilityNotIn) > 0 {
 		predicates = append(predicates, report.VisibilityNotIn(i.VisibilityNotIn...))
+	}
+	if i.VisibilityIsNil {
+		predicates = append(predicates, report.VisibilityIsNil())
+	}
+	if i.VisibilityNotNil {
+		predicates = append(predicates, report.VisibilityNotNil())
 	}
 	if i.ReportOwnerID != nil {
 		predicates = append(predicates, report.ReportOwnerIDEQ(*i.ReportOwnerID))

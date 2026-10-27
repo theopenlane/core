@@ -80,18 +80,53 @@ func TestMutationCreateReport(t *testing.T) {
 			expectedMembersCount: 1,
 		},
 		{
-			name: "userless report defaults to organization visibility",
+			name: "userless report requires explicit organization visibility",
 			input: testclient.CreateReportInput{
 				Name:       "tasks from api",
 				Query:      validQuery,
 				Variables:  variables,
-				Visibility: &enums.ReportVisibilityPrivate,
+				Visibility: &enums.ReportVisibilityOrganization,
 			},
 			client:             suite.Client.APIWithToken,
 			ctx:                context.Background(),
 			expectedVisibility: enums.ReportVisibilityOrganization,
-			// since this was created by an api token, we do not have a "creator" and it is available across the org
+			// since this was created by an api token, we do not have a "creator"
 			expectedMembersCount: 0,
+		},
+		{
+			name: "userless report cannot omit visibility",
+			input: testclient.CreateReportInput{
+				Name:      "tasks from api without visibility",
+				Query:     validQuery,
+				Variables: variables,
+			},
+			client:   suite.Client.APIWithToken,
+			ctx:      context.Background(),
+			hasError: true,
+		},
+		{
+			name: "userless report cannot use private visibility",
+			input: testclient.CreateReportInput{
+				Name:       "private tasks from api",
+				Query:      validQuery,
+				Variables:  variables,
+				Visibility: &enums.ReportVisibilityPrivate,
+			},
+			client:   suite.Client.APIWithToken,
+			ctx:      context.Background(),
+			hasError: true,
+		},
+		{
+			name: "userless report cannot use restricted visibility",
+			input: testclient.CreateReportInput{
+				Name:       "restricted tasks from api",
+				Query:      validQuery,
+				Variables:  variables,
+				Visibility: &enums.ReportVisibilityRestricted,
+			},
+			client:   suite.Client.APIWithToken,
+			ctx:      context.Background(),
+			hasError: true,
 		},
 		{
 			name: "invalid query cannot be stored",
@@ -139,7 +174,7 @@ func TestMutationCreateReport(t *testing.T) {
 					MustDelete(th.SharedTestUser1.UserCtx, t)
 			})
 
-			assert.Check(t, is.Equal(resp.CreateReport.Report.Visibility, tc.expectedVisibility))
+			assert.Check(t, is.Equal(lo.FromPtr(resp.CreateReport.Report.Visibility), tc.expectedVisibility))
 			assert.Check(t, is.Equal(lo.FromPtr(resp.CreateReport.Report.ReportOwnerID), tc.ownerID))
 
 			members, err := suite.Client.API.GetReportMembersByReportID(th.SharedTestUser1.UserCtx, resp.CreateReport.Report.ID)
@@ -159,8 +194,9 @@ func TestMutationDeleteReport(t *testing.T) {
 		MustNew(th.SharedTestUser1.UserCtx, t)
 
 	orgReport, err := suite.Client.APIWithToken.CreateReport(context.Background(), testclient.CreateReportInput{
-		Name:  "Ownerless report",
-		Query: report.Query,
+		Name:       "Ownerless report",
+		Query:      report.Query,
+		Visibility: &enums.ReportVisibilityOrganization,
 	})
 	assert.NilError(t, err)
 

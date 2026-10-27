@@ -27947,9 +27947,9 @@ type Report struct {
 	// the saved query to be re-executed or shared
 	Query string `json:"query"`
 	// the variables that would be needed to completely execute the query
-	Variables  map[string]any         `json:"variables,omitempty"`
-	Status     enums.ReportStatus     `json:"status"`
-	Visibility enums.ReportVisibility `json:"visibility"`
+	Variables  map[string]any          `json:"variables,omitempty"`
+	Status     enums.ReportStatus      `json:"status"`
+	Visibility *enums.ReportVisibility `json:"visibility,omitempty"`
 	// the id of the user who is responsible for this report
 	ReportOwnerID *string                     `json:"reportOwnerID,omitempty"`
 	Owner         *Organization               `json:"owner,omitempty"`
@@ -28318,10 +28318,12 @@ type ReportWhereInput struct {
 	StatusIn    []enums.ReportStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ReportStatus `json:"statusNotIn,omitempty"`
 	// visibility field predicates
-	Visibility      *enums.ReportVisibility  `json:"visibility,omitempty"`
-	VisibilityNeq   *enums.ReportVisibility  `json:"visibilityNEQ,omitempty"`
-	VisibilityIn    []enums.ReportVisibility `json:"visibilityIn,omitempty"`
-	VisibilityNotIn []enums.ReportVisibility `json:"visibilityNotIn,omitempty"`
+	Visibility       *enums.ReportVisibility  `json:"visibility,omitempty"`
+	VisibilityNeq    *enums.ReportVisibility  `json:"visibilityNEQ,omitempty"`
+	VisibilityIn     []enums.ReportVisibility `json:"visibilityIn,omitempty"`
+	VisibilityNotIn  []enums.ReportVisibility `json:"visibilityNotIn,omitempty"`
+	VisibilityIsNil  *bool                    `json:"visibilityIsNil,omitempty"`
+	VisibilityNotNil *bool                    `json:"visibilityNotNil,omitempty"`
 	// report_owner_id field predicates
 	ReportOwnerID             *string  `json:"reportOwnerID,omitempty"`
 	ReportOwnerIdneq          *string  `json:"reportOwnerIDNEQ,omitempty"`
@@ -40955,6 +40957,7 @@ type UpdateReportInput struct {
 	ClearVariables        *bool                   `json:"clearVariables,omitempty"`
 	Status                *enums.ReportStatus     `json:"status,omitempty"`
 	Visibility            *enums.ReportVisibility `json:"visibility,omitempty"`
+	ClearVisibility       *bool                   `json:"clearVisibility,omitempty"`
 	OwnerID               *string                 `json:"ownerID,omitempty"`
 	ClearOwner            *bool                   `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs    []string                `json:"addBlockedGroupIDs,omitempty"`

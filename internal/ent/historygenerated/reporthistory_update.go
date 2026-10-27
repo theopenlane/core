@@ -112,6 +112,9 @@ func (_u *ReportHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.VariablesCleared() {
 		_spec.ClearField(reporthistory.FieldVariables, field.TypeJSON)
 	}
+	if _u.mutation.VisibilityCleared() {
+		_spec.ClearField(reporthistory.FieldVisibility, field.TypeEnum)
+	}
 	if _u.mutation.ReportOwnerIDCleared() {
 		_spec.ClearField(reporthistory.FieldReportOwnerID, field.TypeString)
 	}
@@ -247,6 +250,9 @@ func (_u *ReportHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReportHis
 	}
 	if _u.mutation.VariablesCleared() {
 		_spec.ClearField(reporthistory.FieldVariables, field.TypeJSON)
+	}
+	if _u.mutation.VisibilityCleared() {
+		_spec.ClearField(reporthistory.FieldVisibility, field.TypeEnum)
 	}
 	if _u.mutation.ReportOwnerIDCleared() {
 		_spec.ClearField(reporthistory.FieldReportOwnerID, field.TypeString)

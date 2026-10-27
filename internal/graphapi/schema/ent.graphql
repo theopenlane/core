@@ -55776,7 +55776,7 @@ type Report implements Node @modules(names: ["any_module"]) {
   """
   variables: Map
   status: ReportReportStatus!
-  visibility: ReportReportVisibility!
+  visibility: ReportReportVisibility
   """
   the id of the user who is responsible for this report
   """
@@ -56355,6 +56355,8 @@ input ReportWhereInput {
   visibilityNEQ: ReportReportVisibility
   visibilityIn: [ReportReportVisibility!]
   visibilityNotIn: [ReportReportVisibility!]
+  visibilityIsNil: Boolean
+  visibilityNotNil: Boolean
   """
   report_owner_id field predicates
   """
@@ -76604,6 +76606,7 @@ input UpdateReportInput {
   clearVariables: Boolean
   status: ReportReportStatus
   visibility: ReportReportVisibility
+  clearVisibility: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]

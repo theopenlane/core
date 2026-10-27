@@ -139483,10 +139483,10 @@ func (ec *executionContext) _Report_visibility(ctx context.Context, field graphq
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v enums.ReportVisibility) graphql.Marshaler {
-			return ec.marshalNReportReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx, selections, v)
+			return ec.marshalOReportReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx, selections, v)
 		},
 		true,
-		true,
+		false,
 	)
 }
 func (ec *executionContext) fieldContext_Report_visibility(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -299044,7 +299044,7 @@ func (ec *executionContext) unmarshalInputReportWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "requestorID", "requestorIDNEQ", "requestorIDIn", "requestorIDNotIn", "requestorIDContains", "requestorIDHasPrefix", "requestorIDHasSuffix", "requestorIDIsNil", "requestorIDNotNil", "requestorIDEqualFold", "requestorIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "reportKindName", "reportKindNameNEQ", "reportKindNameIn", "reportKindNameNotIn", "reportKindNameContains", "reportKindNameHasPrefix", "reportKindNameHasSuffix", "reportKindNameIsNil", "reportKindNameNotNil", "reportKindNameEqualFold", "reportKindNameContainsFold", "reportKindID", "reportKindIDNEQ", "reportKindIDIn", "reportKindIDNotIn", "reportKindIDContains", "reportKindIDHasPrefix", "reportKindIDHasSuffix", "reportKindIDIsNil", "reportKindIDNotNil", "reportKindIDEqualFold", "reportKindIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "query", "queryNEQ", "queryIn", "queryNotIn", "queryContains", "queryHasPrefix", "queryHasSuffix", "queryEqualFold", "queryContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "visibility", "visibilityNEQ", "visibilityIn", "visibilityNotIn", "reportOwnerID", "reportOwnerIDNEQ", "reportOwnerIDIn", "reportOwnerIDNotIn", "reportOwnerIDContains", "reportOwnerIDHasPrefix", "reportOwnerIDHasSuffix", "reportOwnerIDIsNil", "reportOwnerIDNotNil", "reportOwnerIDEqualFold", "reportOwnerIDContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasReportKind", "hasReportKindWith", "hasUsers", "hasUsersWith", "hasReportOwner", "hasReportOwnerWith", "hasMembers", "hasMembersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "requestorID", "requestorIDNEQ", "requestorIDIn", "requestorIDNotIn", "requestorIDContains", "requestorIDHasPrefix", "requestorIDHasSuffix", "requestorIDIsNil", "requestorIDNotNil", "requestorIDEqualFold", "requestorIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "reportKindName", "reportKindNameNEQ", "reportKindNameIn", "reportKindNameNotIn", "reportKindNameContains", "reportKindNameHasPrefix", "reportKindNameHasSuffix", "reportKindNameIsNil", "reportKindNameNotNil", "reportKindNameEqualFold", "reportKindNameContainsFold", "reportKindID", "reportKindIDNEQ", "reportKindIDIn", "reportKindIDNotIn", "reportKindIDContains", "reportKindIDHasPrefix", "reportKindIDHasSuffix", "reportKindIDIsNil", "reportKindIDNotNil", "reportKindIDEqualFold", "reportKindIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "query", "queryNEQ", "queryIn", "queryNotIn", "queryContains", "queryHasPrefix", "queryHasSuffix", "queryEqualFold", "queryContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "visibility", "visibilityNEQ", "visibilityIn", "visibilityNotIn", "visibilityIsNil", "visibilityNotNil", "reportOwnerID", "reportOwnerIDNEQ", "reportOwnerIDIn", "reportOwnerIDNotIn", "reportOwnerIDContains", "reportOwnerIDHasPrefix", "reportOwnerIDHasSuffix", "reportOwnerIDIsNil", "reportOwnerIDNotNil", "reportOwnerIDEqualFold", "reportOwnerIDContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasReportKind", "hasReportKindWith", "hasUsers", "hasUsersWith", "hasReportOwner", "hasReportOwnerWith", "hasMembers", "hasMembersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -299996,6 +299996,20 @@ func (ec *executionContext) unmarshalInputReportWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.VisibilityNotIn = data
+		case "visibilityIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibilityIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VisibilityIsNil = data
+		case "visibilityNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibilityNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VisibilityNotNil = data
 		case "reportOwnerID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -361236,7 +361250,7 @@ func (ec *executionContext) unmarshalInputUpdateReportInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reportKindName", "clearReportKindName", "name", "query", "variables", "clearVariables", "status", "visibility", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "reportKindID", "clearReportKind", "reportOwnerID", "clearReportOwner"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reportKindName", "clearReportKindName", "name", "query", "variables", "clearVariables", "status", "visibility", "clearVisibility", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "reportKindID", "clearReportKind", "reportOwnerID", "clearReportOwner"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -361320,6 +361334,13 @@ func (ec *executionContext) unmarshalInputUpdateReportInput(ctx context.Context,
 				return it, err
 			}
 			it.Visibility = data
+		case "clearVisibility":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVisibility"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearVisibility = data
 		case "ownerID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -414692,7 +414713,7 @@ func (ec *executionContext) _Report(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "visibility":
 			out.Values[i] = ec._Report_visibility(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
+			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "reportOwnerID":
@@ -442121,6 +442142,16 @@ func (ec *executionContext) marshalOReportReportStatus2ᚖgithubᚗcomᚋtheopen
 	if v == nil {
 		return graphql.Null
 	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOReportReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx context.Context, v any) (enums.ReportVisibility, error) {
+	var res enums.ReportVisibility
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOReportReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx context.Context, sel ast.SelectionSet, v enums.ReportVisibility) graphql.Marshaler {
 	return v
 }
 

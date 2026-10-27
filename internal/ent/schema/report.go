@@ -61,7 +61,7 @@ func (Report) Fields() []ent.Field {
 			),
 		field.Enum("visibility").
 			GoType(enums.ReportVisibility("")).
-			Default(enums.ReportVisibilityPrivate.String()).
+			Optional().
 			Annotations(
 				entgql.OrderField("VISIBILITY"),
 			),

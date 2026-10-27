@@ -7720,7 +7720,7 @@ func init() {
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "variables", Label: "Variables", Type: "map[string]interface {}", Clearable: true},
-		{Name: "visibility", Label: "Visibility", Type: "enums.ReportVisibility"},
+		{Name: "visibility", Label: "Visibility", Type: "enums.ReportVisibility", Clearable: true},
 	}
 	SchemaReportMembership.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},

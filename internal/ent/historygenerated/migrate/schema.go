@@ -2056,7 +2056,7 @@ var (
 		{Name: "query", Type: field.TypeString, Size: 2147483647},
 		{Name: "variables", Type: field.TypeJSON, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"DRAFT", "SAVED"}, Default: "DRAFT"},
-		{Name: "visibility", Type: field.TypeEnum, Enums: []string{"PRIVATE", "RESTRICTED", "ORGANIZATION"}, Default: "PRIVATE"},
+		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PRIVATE", "RESTRICTED", "ORGANIZATION"}},
 		{Name: "report_owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// ReportHistoryTable holds the schema information for the "report_history" table.
