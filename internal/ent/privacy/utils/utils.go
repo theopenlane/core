@@ -5,6 +5,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -125,6 +126,15 @@ func AuthzClient(ctx context.Context, m generated.Mutation) *fgax.Client {
 	}
 
 	return nil
+}
+
+// ResolveOwnerID returns the provided owner ID or derives it from the context when empty
+func ResolveOwnerID(ctx context.Context, ownerID string) (string, error) {
+	if ownerID != "" {
+		return ownerID, nil
+	}
+
+	return auth.GetOrganizationIDFromContext(ctx)
 }
 
 // ModulesEnabled checks if the modules feature is enabled for the given client

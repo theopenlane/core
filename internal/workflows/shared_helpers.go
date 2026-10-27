@@ -52,15 +52,6 @@ func ActingUserID(ctx context.Context) string {
 	return subjectID
 }
 
-// ResolveOwnerID returns the provided owner ID or derives it from the context when empty.
-func ResolveOwnerID(ctx context.Context, ownerID string) (string, error) {
-	if ownerID != "" {
-		return ownerID, nil
-	}
-
-	return auth.GetOrganizationIDFromContext(ctx)
-}
-
 // WorkflowInstanceBuilderParams defines the inputs for creating a workflow instance + object ref.
 type WorkflowInstanceBuilderParams struct {
 	// WorkflowDefinitionID is the definition id for the instance
