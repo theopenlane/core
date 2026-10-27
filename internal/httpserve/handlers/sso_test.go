@@ -417,7 +417,7 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 
 	otherOrgAPIToken, err := suite.db.APIToken.Create().
 		SetName(ulids.New().String()).
-		Save(ctx)
+		Save(ent.NewContext(auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID), suite.db))
 	require.NoError(t, err)
 
 	testCases := []struct {

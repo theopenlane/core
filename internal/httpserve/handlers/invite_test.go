@@ -72,6 +72,15 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		errMsg   string
 	}{
 		{
+			name:     "api token cannot accept invite",
+			email:    "rocket@theopenlane.io",
+			tokenSet: true,
+			apiToken: true,
+			wantErr:  true,
+			wantCode: http.StatusUnauthorized,
+			errMsg:   handlers.ErrAuthenticationRequired.Error(),
+		},
+		{
 			name:     "happy path",
 			email:    groot,
 			tokenSet: true,
@@ -91,15 +100,6 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			wantErr:  true,
 			wantCode: http.StatusBadRequest,
 			errMsg:   "could not verify email",
-		},
-		{
-			name:     "api token cannot accept invite",
-			email:    groot,
-			tokenSet: true,
-			apiToken: true,
-			wantErr:  true,
-			wantCode: http.StatusUnauthorized,
-			errMsg:   handlers.ErrAuthenticationRequired.Error(),
 		},
 	}
 
