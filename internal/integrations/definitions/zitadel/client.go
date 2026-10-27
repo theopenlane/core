@@ -58,8 +58,10 @@ func oauthClient(ctx context.Context, req types.ConnectionRequest[OAuthCredentia
 		return Client{}, ErrClientCredentialsMissing
 	}
 
-	auth := client.PasswordAuthentication(req.Credential.ClientID, req.Credential.ClientSecret, oidc.ScopeOpenID, client.ScopeZitadelAPI())
-	if !allowPrivate {
+	var auth client.TokenSourceInitializer
+	if allowPrivate {
+		auth = client.PasswordAuthentication(req.Credential.ClientID, req.Credential.ClientSecret, oidc.ScopeOpenID, client.ScopeZitadelAPI())
+	} else {
 		auth = publicPasswordAuthentication(req.Credential.ClientID, req.Credential.ClientSecret, oidc.ScopeOpenID, client.ScopeZitadelAPI())
 	}
 

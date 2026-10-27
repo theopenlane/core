@@ -21,7 +21,7 @@ import (
 	"github.com/theopenlane/logx"
 )
 
-// historyObjectOwnerTables maps a history object owner to the parent table whose owner_id scopes it to an organization
+// historyObjectOwnerTables maps a history object owner to the parent table whose owner scopes it to an organization
 var historyObjectOwnerTables = map[string]string{
 	entityops.SchemaGroup.Snake:       group.Table,
 	entityops.SchemaProgram.Snake:     program.Table,
@@ -29,7 +29,7 @@ var historyObjectOwnerTables = map[string]string{
 }
 
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization
-// TODO (sfunk)
+// TODO (sfunk): update generated schemas to drop old orgOwned param
 func HistoryAccess(relation string, _, userOwed bool, objectOwner string) ent.Interceptor {
 	return TraverseFunc(func(ctx context.Context, q Query) error {
 		caller, ok := auth.CallerFromContext(ctx)

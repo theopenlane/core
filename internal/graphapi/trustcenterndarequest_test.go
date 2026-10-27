@@ -550,5 +550,18 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusRequested, *request.Status))
 	})
 
+	t.Run("anonymous caller without a trust center key cannot submit", func(t *testing.T) {
+		_, caller := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
+		keylessCtx := th.NewAnonTrustCenterCtxFromCaller(caller, "")
+
+		_, err := suite.Client.API.CreateTrustCenterNDARequest(keylessCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         gofakeit.Email(),
+			TrustCenterID: &trustCenter.ID,
+		})
+		assert.Assert(t, err != nil)
+	})
+
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
