@@ -3197,11 +3197,6 @@ func (r *Resolver) CreateTrustCenterFAQInput() gqlgenerated.CreateTrustCenterFAQ
 	return &createTrustCenterFAQInputResolver{r}
 }
 
-// CreateTrustCenterInput returns gqlgenerated.CreateTrustCenterInputResolver implementation.
-func (r *Resolver) CreateTrustCenterInput() gqlgenerated.CreateTrustCenterInputResolver {
-	return &createTrustCenterInputResolver{r}
-}
-
 // UpdateActionPlanInput returns gqlgenerated.UpdateActionPlanInputResolver implementation.
 func (r *Resolver) UpdateActionPlanInput() gqlgenerated.UpdateActionPlanInputResolver {
 	return &updateActionPlanInputResolver{r}
@@ -3338,7 +3333,6 @@ type (
 	createNotificationInputResolver     struct{ *Resolver }
 	createOrganizationInputResolver     struct{ *Resolver }
 	createTrustCenterFAQInputResolver   struct{ *Resolver }
-	createTrustCenterInputResolver      struct{ *Resolver }
 	updateActionPlanInputResolver       struct{ *Resolver }
 	updateControlInputResolver          struct{ *Resolver }
 	updateControlObjectiveInputResolver struct{ *Resolver }

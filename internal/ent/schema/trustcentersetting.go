@@ -51,6 +51,7 @@ func (TrustCenterSetting) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Comment("the ID of the trust center the settings belong to").
 			NotEmpty(). // validate its not empty
+			Immutable().
 			Optional(),
 		field.String("title").
 			Comment("title of the trust center").

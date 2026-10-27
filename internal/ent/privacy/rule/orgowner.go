@@ -84,7 +84,7 @@ func DenyIfNotInOrganization() privacy.MutationRule {
 		}
 
 		// ensure the object being mutated is in the organization specified in the owner_id field
-		if err := EnsureTrustCenterInOrganization(ctx, m, orgID); access.Deny(err) {
+		if err := EnsureTrustCenterInOrganization(ctx, m); access.Deny(err) {
 			return err
 		}
 
@@ -299,9 +299,9 @@ func ensureUserIsAnOrgMember(ctx context.Context, mut utils.GenericMutation, use
 
 // EnsureTrustCenterInOrganization checks if the object is in the organization
 // it will only ever return skip or deny; this is never intended to approve access
-func EnsureTrustCenterInOrganization(ctx context.Context, m ent.Mutation, orgID string) error {
-	trustCenterID := getTrustCenterIDFromMutation(ctx, m)
-	if trustCenterID == "" {
+func EnsureTrustCenterInOrganization(ctx context.Context, m ent.Mutation) error {
+	trustCenterIDs := getTrustCenterIDsFromMutation(ctx, m)
+	if len(trustCenterIDs) == 0 {
 		return privacy.Skip
 	}
 
@@ -309,19 +309,15 @@ func EnsureTrustCenterInOrganization(ctx context.Context, m ent.Mutation, orgID 
 	// center mutation, no need to check again
 	tcMutation, _ := m.(utils.TrustCenterMutation)
 
-	ownerID, err := tcMutation.Client().TrustCenter.Query().Where(
-		trustcenter.ID(trustCenterID),
-	).Select(trustcenter.FieldOwnerID).String(ctx)
-	if err != nil {
+	// the org interceptor scopes this query, so every trust center must come back for the object to be in the organization
+	inOrg, err := tcMutation.Client().TrustCenter.Query().Where(
+		trustcenter.IDIn(trustCenterIDs...),
+	).Count(ctx)
+	if err != nil || inOrg != len(trustCenterIDs) {
 		return privacy.Denyf("trustcenter: requested object not in organization")
 	}
 
-	if orgID == ownerID {
-		return privacy.Skip
-	}
-
-	// fall back to deny if the object is not in the organization
-	return privacy.Denyf("trustcenter: requested object not in organization")
+	return privacy.Skip
 }
 
 // CheckIsSystemOwned is used to check if the object is system owned, this helps with edge checks that only require
