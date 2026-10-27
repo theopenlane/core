@@ -7,8 +7,6 @@ echo "🌍 Setting up dynamic environment..."
 # Set Go environment variables
 export GOPROXY=https://proxy.golang.org,direct
 export GOSUMDB=sum.golang.org
-export GOMODCACHE=$HOME/.cache/go/pkg/mod
-export GOCACHE=$HOME/.cache/go-build
 
 # Set build-specific environment variables
 export BUILD_TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -41,8 +39,6 @@ else
 fi
 
 # Set up test environment variables
-export TEST_RESULTS_DIR="${BUILDKITE_BUILD_PATH:-/tmp}/test-results"
-export ARTIFACTS_DIR="${BUILDKITE_BUILD_PATH:-/tmp}/artifacts"
 export COVERAGE_DIR="${BUILDKITE_BUILD_PATH:-/tmp}/coverage"
 
 # Create coverage directory
@@ -57,7 +53,6 @@ export DOCKER_LAYER_CACHE_DIR="${HOME}/.cache/docker"
 mkdir -p "${DOCKER_LAYER_CACHE_DIR}" 2>/dev/null || true
 
 # Tool-specific environment variables
-export GOLANGCI_LINT_CACHE="${HOME}/.cache/golangci-lint"
 export CGO_ENABLED=0
 
 # Set resource limits for build processes
@@ -101,5 +96,5 @@ echo "🔀 Is PR: ${IS_PULL_REQUEST}"
 # Export all environment variables for debugging (only if debug mode is enabled)
 if [[ "${DEBUG_MODE}" == "true" ]]; then
     echo "🐛 Debug mode enabled - environment variables:"
-    env | grep -E "^(BUILD_|GO|DOCKER_|HELM_|DRAFT_|IS_|PR_|TEST_|ARTIFACTS_|COVERAGE_|SLACK_|GITHUB_|DEBUG_|VERBOSE_)" | sort
+    env | grep -E "^(BUILD_|GO|DOCKER_|HELM_|DRAFT_|IS_|PR_|COVERAGE_|SLACK_|GITHUB_|DEBUG_|VERBOSE_)" | sort
 fi

@@ -1,10 +1,10 @@
 #!/bin/bash
 # Disk and cache cleanup shared by the pre-command and post-command hooks
 
-# cache locations come from the pipeline env, HOME is /tmp so the fallbacks only apply outside the pipeline
-GO_BUILD_CACHE="${GOCACHE:-$HOME/.cache/go-build}"
-GO_MOD_CACHE="${GOMODCACHE:-$HOME/.cache/go/pkg/mod}"
-GOLANGCI_LINT_CACHE_DIR="${GOLANGCI_LINT_CACHE:-$HOME/.cache/golangci-lint}"
+# cache locations come only from the pipeline env
+GO_BUILD_CACHE="${GOCACHE:?GOCACHE must be set in the pipeline env}"
+GO_MOD_CACHE="${GOMODCACHE:?GOMODCACHE must be set in the pipeline env}"
+GOLANGCI_LINT_CACHE_DIR="${GOLANGCI_LINT_CACHE:?GOLANGCI_LINT_CACHE must be set in the pipeline env}"
 
 # disk usage percent a job must start under
 CACHE_CLEANUP_THRESHOLD="${CACHE_CLEANUP_THRESHOLD:-65}"

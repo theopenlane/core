@@ -16,11 +16,11 @@ This directory contains Buildkite hooks that run at different stages of the pipe
 **Purpose**: Sets up dynamic environment variables based on build context
 
 **Features**:
-- ✅ Go environment configuration (GOPROXY, GOSUMDB, cache paths)
+- ✅ Go environment configuration (GOPROXY, GOSUMDB)
 - ✅ Build metadata (timestamp, version, commit, branch)
 - ✅ CI vs non-CI context detection
 - ✅ PR-specific variables and automation flags
-- ✅ Test and artifact directory setup
+- ✅ Coverage directory setup
 - ✅ Docker environment configuration
 - ✅ Tool-specific settings (golangci-lint, security scanners)
 - ✅ Resource limits and performance tuning
@@ -66,14 +66,12 @@ This directory contains Buildkite hooks that run at different stages of the pipe
 - `PR_NUMBER` - Pull request number (if applicable)
 
 ### Tool Configuration
-- `GOPROXY`, `GOSUMDB`, `GOMODCACHE`, `GOCACHE` - Go toolchain
+- `GOPROXY`, `GOSUMDB` - Go toolchain (`GOCACHE`, `GOMODCACHE`, and `GOLANGCI_LINT_CACHE` are set in the `pipeline.yaml` env so the hosted cache volume and docker mounts use the same paths)
 - `DOCKER_BUILDKIT`, `COMPOSE_DOCKER_CLI_BUILD` - Docker optimization
 - `GOMAXPROCS` - Go runtime parallelism
 - `GOSEC_SEVERITY`, `GOSEC_CONFIDENCE` - Security scanning
 
 ### Directory Paths
-- `TEST_RESULTS_DIR` - Where to store test results
-- `ARTIFACTS_DIR` - Where to store build artifacts
 - `COVERAGE_DIR` - Where to store coverage reports
 
 ### Integration Flags
