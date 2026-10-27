@@ -35,43 +35,6 @@ const (
 	cvssVectorKey = "cvss_vector"
 )
 
-var (
-	// cvssAttackVector maps SCC attack vectors to CVSS codes
-	cvssAttackVector = map[securitycenterpb.Cvssv3_AttackVector]string{
-		securitycenterpb.Cvssv3_ATTACK_VECTOR_NETWORK:  "N",
-		securitycenterpb.Cvssv3_ATTACK_VECTOR_ADJACENT: "A",
-		securitycenterpb.Cvssv3_ATTACK_VECTOR_LOCAL:    "L",
-		securitycenterpb.Cvssv3_ATTACK_VECTOR_PHYSICAL: "P",
-	}
-	// cvssAttackComplexity maps SCC attack complexities to CVSS codes
-	cvssAttackComplexity = map[securitycenterpb.Cvssv3_AttackComplexity]string{
-		securitycenterpb.Cvssv3_ATTACK_COMPLEXITY_LOW:  "L",
-		securitycenterpb.Cvssv3_ATTACK_COMPLEXITY_HIGH: "H",
-	}
-	// cvssPrivilegesRequired maps SCC privileges required to CVSS codes
-	cvssPrivilegesRequired = map[securitycenterpb.Cvssv3_PrivilegesRequired]string{
-		securitycenterpb.Cvssv3_PRIVILEGES_REQUIRED_NONE: "N",
-		securitycenterpb.Cvssv3_PRIVILEGES_REQUIRED_LOW:  "L",
-		securitycenterpb.Cvssv3_PRIVILEGES_REQUIRED_HIGH: "H",
-	}
-	// cvssUserInteraction maps SCC user interaction to CVSS codes
-	cvssUserInteraction = map[securitycenterpb.Cvssv3_UserInteraction]string{
-		securitycenterpb.Cvssv3_USER_INTERACTION_NONE:     "N",
-		securitycenterpb.Cvssv3_USER_INTERACTION_REQUIRED: "R",
-	}
-	// cvssScope maps SCC scopes to CVSS codes
-	cvssScope = map[securitycenterpb.Cvssv3_Scope]string{
-		securitycenterpb.Cvssv3_SCOPE_UNCHANGED: "U",
-		securitycenterpb.Cvssv3_SCOPE_CHANGED:   "C",
-	}
-	// cvssImpact maps SCC confidentiality, integrity, and availability impacts to CVSS codes
-	cvssImpact = map[securitycenterpb.Cvssv3_Impact]string{
-		securitycenterpb.Cvssv3_IMPACT_HIGH: "H",
-		securitycenterpb.Cvssv3_IMPACT_LOW:  "L",
-		securitycenterpb.Cvssv3_IMPACT_NONE: "N",
-	}
-)
-
 // runFindingsCollect collects GCP SCC findings from configured sources
 func runFindingsCollect(ctx context.Context, request types.OperationRequest, c Client, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
 	sources, err := resolveSources(c.Scope)
@@ -213,14 +176,14 @@ func cvssv31Vector(cvss *securitycenterpb.Cvssv3) string {
 		key   string
 		value string
 	}{
-		{key: "AV", value: cvssAttackVector[cvss.GetAttackVector()]},
-		{key: "AC", value: cvssAttackComplexity[cvss.GetAttackComplexity()]},
-		{key: "PR", value: cvssPrivilegesRequired[cvss.GetPrivilegesRequired()]},
-		{key: "UI", value: cvssUserInteraction[cvss.GetUserInteraction()]},
-		{key: "S", value: cvssScope[cvss.GetScope()]},
-		{key: "C", value: cvssImpact[cvss.GetConfidentialityImpact()]},
-		{key: "I", value: cvssImpact[cvss.GetIntegrityImpact()]},
-		{key: "A", value: cvssImpact[cvss.GetAvailabilityImpact()]},
+		{key: "AV", value: cvssMetric(cvss.GetAttackVector().String(), "ATTACK_VECTOR_")},
+		{key: "AC", value: cvssMetric(cvss.GetAttackComplexity().String(), "ATTACK_COMPLEXITY_")},
+		{key: "PR", value: cvssMetric(cvss.GetPrivilegesRequired().String(), "PRIVILEGES_REQUIRED_")},
+		{key: "UI", value: cvssMetric(cvss.GetUserInteraction().String(), "USER_INTERACTION_")},
+		{key: "S", value: cvssMetric(cvss.GetScope().String(), "SCOPE_")},
+		{key: "C", value: cvssMetric(cvss.GetConfidentialityImpact().String(), "IMPACT_")},
+		{key: "I", value: cvssMetric(cvss.GetIntegrityImpact().String(), "IMPACT_")},
+		{key: "A", value: cvssMetric(cvss.GetAvailabilityImpact().String(), "IMPACT_")},
 	}
 
 	parts := []string{cvssv31Prefix}
@@ -234,6 +197,16 @@ func cvssv31Vector(cvss *securitycenterpb.Cvssv3) string {
 	}
 
 	return strings.Join(parts, "/")
+}
+
+// cvssMetric returns the CVSS code for an SCC metric enum, the first letter after its prefix
+func cvssMetric(enumName, prefix string) string {
+	value, ok := strings.CutPrefix(enumName, prefix)
+	if !ok || value == "" || value == "UNSPECIFIED" {
+		return ""
+	}
+
+	return value[:1]
 }
 
 // findingConsoleURL builds the SCC console deep link for a finding
