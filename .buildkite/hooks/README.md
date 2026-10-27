@@ -35,19 +35,16 @@ This directory contains Buildkite hooks that run at different stages of the pipe
 - ✅ Docker layer caching setup
 - ✅ Build tool availability checks (Go, Git)
 - ✅ Environment validation
-- ✅ Temporary directory creation
 - ✅ Disk space monitoring and emergency cleanup
 - ✅ Clear status reporting
 
 ### `post-command`
 **When**: Runs after each pipeline step command
-**Purpose**: Cleanup and artifact management
+**Purpose**: Cleanup on self-hosted runners, skipped entirely on hosted runners and never fails the job
 
 **Features**:
 - ✅ Temporary file cleanup
-- ✅ Cache pruning (Go modules, golangci-lint)
-- ✅ Build artifact archival
-- ✅ Test result collection
+- ✅ Cache pruning (Go build, golangci-lint, Go module download zips)
 - ✅ Comprehensive Docker cleanup (containers, images, volumes, networks)
 - ✅ Aggressive disk space management
 - ✅ Disk usage monitoring and reporting
@@ -140,10 +137,10 @@ The hooks include comprehensive disk space management to prevent build failures 
 ### Automatic Cleanup in Hooks
 
 #### **`pre-command` Disk Monitoring**
-- Checks disk usage before each build step
-- **>90% usage**: Triggers emergency Docker cleanup
-- **>80% usage**: Shows warning but continues
-- **<80% usage**: Normal operation
+- Checks disk usage before each build step, skipped on hosted runners
+- **>=65% usage** (`CACHE_CLEANUP_THRESHOLD`): prunes the Go build cache, then the golangci-lint cache, then Go module download zips, oldest files first, until usage is under 65%, then removes stopped containers and dangling images if still over
+- Files modified in the last 30 minutes are never removed, and a runner-wide `flock` keeps agents sharing the caches from pruning at once
+- **>=90% usage after cleanup** (`DISK_RETRY_THRESHOLD`): exits `75`, which every command step in `pipeline.yaml` retries up to twice through the `disk-full-retry` anchor
 
 #### **`post-command` Docker Cleanup**
 Runs after every build step with progressive cleanup:
