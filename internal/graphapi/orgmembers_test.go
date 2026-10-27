@@ -6,6 +6,7 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -18,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -197,6 +199,18 @@ func TestQueryOrgMembers(t *testing.T) {
 			assert.Check(t, is.Len(resp.OrgMemberships.Edges[0].Node.AdditionalRoles, 0))
 		})
 	}
+
+	ownerSeesHistory, err := suite.Client.DB.HistoryClient.OrgMembershipHistory.Query().
+		Where(orgmembershiphistory.OrganizationID(localTestOrg.Owner.OrganizationID)).
+		Exist(history.WithContext(localTestOrg.Owner.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, ownerSeesHistory)
+
+	otherOrgSeesHistory, err := suite.Client.DB.HistoryClient.OrgMembershipHistory.Query().
+		Where(orgmembershiphistory.OrganizationID(localTestOrg.Owner.OrganizationID)).
+		Exist(history.WithContext(th.SharedTestUser2.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, !otherOrgSeesHistory)
 
 	// delete created org
 	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)

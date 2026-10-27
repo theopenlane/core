@@ -130,7 +130,7 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	// filter by trust centers owned by the organization in the caller context
-	q.WhereP(trustCenterOwnedByOrgsP(caller.OrgIDs()))
+	q.WhereP(parentOwnedByOrgsP(trustcenter.Table, "trust_center_id", caller.OrgIDs()))
 
 	return nil
 }
@@ -157,16 +157,16 @@ func applyAnonTrustCenterFilter(q intercept.Query, tcID string, allowAnonAccess 
 	return nil
 }
 
-// trustCenterOwnedByOrgsP restricts trust_center_id to trust centers owned by any of the given organizations
-func trustCenterOwnedByOrgsP(orgIDs []string) func(*sql.Selector) {
+// parentOwnedByOrgsP restricts fkColumn to rows of parentTable owned by any of the given organizations
+func parentOwnedByOrgsP(parentTable, fkColumn string, orgIDs []string) func(*sql.Selector) {
 	return func(s *sql.Selector) {
-		t := sql.Table(trustcenter.Table)
+		t := sql.Table(parentTable)
 
 		s.Where(
 			sql.In(
-				s.C("trust_center_id"),
-				sql.Select(t.C(trustcenter.FieldID)).From(t).Where(
-					sql.In(t.C(trustcenter.FieldOwnerID), lo.ToAnySlice(orgIDs)...),
+				s.C(fkColumn),
+				sql.Select(t.C("id")).From(t).Where(
+					sql.In(t.C("owner_id"), lo.ToAnySlice(orgIDs)...),
 				),
 			),
 		)

@@ -14,8 +14,18 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 )
+
+// historyObjectOwnerTables maps a history object owner to the parent table whose owner_id scopes it to an organization
+var historyObjectOwnerTables = map[string]string{
+	entityops.SchemaGroup.Snake:       group.Table,
+	entityops.SchemaProgram.Snake:     program.Table,
+	entityops.SchemaTrustCenter.Snake: trustcenter.Table,
+}
 
 // HistoryAccess is a traversal interceptor that checks if the user has the required role for the organization
 func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string) ent.Interceptor {
@@ -65,18 +75,19 @@ func HistoryAccess(relation string, orgOwned, userOwed bool, objectOwner string)
 			)
 		}
 
-		return addFilter(ctx, q, orgOwned, userOwed, objectOwner, allowedOrgs)
+		return addFilter(ctx, q, userOwed, objectOwner, allowedOrgs)
 	})
 }
 
 // addFilter adds a filter to the query based on the authenticated user's organization
-func addFilter(ctx context.Context, q Query, orgOwned, userOwed bool, objectOwner string, allowedOrgs []string) error {
+func addFilter(ctx context.Context, q Query, userOwed bool, objectOwner string, allowedOrgs []string) error {
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
 
 	switch {
+	// special cases of top level owned objects of organization or user
 	case q.Type() == "OrganizationHistory":
 		q.WhereP(
 			sql.FieldIn("ref", allowedOrgs...),
@@ -97,15 +108,29 @@ func addFilter(ctx context.Context, q Query, orgOwned, userOwed bool, objectOwne
 		q.WhereP(
 			sql.FieldIn("owner_id", userID),
 		)
-	case q.Type() == "MappableDomainHistory":
-		// mappable domains are system managed and have no owning organization, so there is nothing to scope
-	case objectOwner == entityops.SchemaTrustCenter.Snake:
-		// trust centers are publicly viewable, which grants every user audit log access in fga, so limit to trust centers the caller's orgs own
-		q.WhereP(trustCenterOwnedByOrgsP(allowedOrgs))
-	case orgOwned || objectOwner == "":
-		// org owned history and history tables without an authz derived filter are scoped to the caller's orgs
+	case objectOwner != "":
+		// fga can grant audit log access beyond the caller's orgs (e.g. public trust centers), so also limit to parents the caller's orgs own
+		parentTable, ok := historyObjectOwnerTables[objectOwner]
+		if !ok {
+			return ErrUnscopedHistory
+		}
+
+		q.WhereP(parentOwnedByOrgsP(parentTable, objectOwner+"_id", allowedOrgs))
+	default:
+		// history of schemas with no organization owner, such as system managed mappable domains, is only for system admins
+		// fallback here, its better to not return data than expose
+		// cross org data
+		schema, ok := entityops.LookupSchema(strings.TrimSuffix(q.Type(), "History"))
+		if !ok || schema.OwnerField == "" {
+			if !auth.IsSystemAdminFromContext(ctx) {
+				return ErrUnscopedHistory
+			}
+
+			return nil
+		}
+
 		q.WhereP(
-			sql.FieldIn("owner_id", allowedOrgs...),
+			sql.FieldIn(schema.OwnerField, allowedOrgs...),
 		)
 	}
 

@@ -7,7 +7,10 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappabledomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/entx/history"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -55,6 +58,17 @@ func TestQueryMappableDomainByID(t *testing.T) {
 			assert.Check(t, is.Equal(tc.expectedName, resp.MappableDomain.Name))
 		})
 	}
+
+	adminSeesHistory, err := suite.Client.DB.HistoryClient.MappableDomainHistory.Query().
+		Where(mappabledomainhistory.Ref(mappableDomain.ID)).
+		Exist(history.WithContext(th.SharedSystemAdminUser.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, adminSeesHistory)
+
+	_, err = suite.Client.DB.HistoryClient.MappableDomainHistory.Query().
+		Where(mappabledomainhistory.Ref(mappableDomain.ID)).
+		Exist(history.WithContext(th.SharedTestUser1.UserCtx))
+	assert.ErrorContains(t, err, interceptors.ErrUnscopedHistory.Error())
 
 	(&th.Cleanup[*generated.MappableDomainDeleteOne]{Client: suite.Client.DB.MappableDomain, ID: mappableDomain.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
