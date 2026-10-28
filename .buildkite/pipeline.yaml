@@ -11,12 +11,12 @@ env:
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
 
   # build settings
-  BK_HOME: /var/lib/buildkite-agent
-  GOCACHE: $BK_HOME/.cache/go-build
-  GOMODCACHE: $BK_HOME/.cache/go/pkg/mod
-  GOLANGCI_LINT_CACHE: $BK_HOME/.cache/golangci-lint
-  GIT_MIRRORS_PATH: $BK_HOME/git-mirrors
   HOME: /tmp
+  GOCACHE: $HOME/.cache/go-build
+  GOMODCACHE: $HOME/.cache/go/pkg/mod
+  GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
+  # GIT_MIRRORS_PATH: $HOME/git-mirrors
+
   GIT_CONFIG_GLOBAL: $HOME/.gitconfig
   APOLLO_CONFIG_HOME: $HOME
   SONAR_USER_HOME: $HOME/.sonar
@@ -26,20 +26,29 @@ env:
   HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
-  # runner vars
-  LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-self-hosted-garage-vms}
-  SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-self-hosted-garage-vms}
-  RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
-  RUNNER_WORKLOAD_STANDARD: "standard"
+  # # runner vars
+  LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-default}
+  SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-default}
+  # RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
+  # RUNNER_WORKLOAD_STANDARD: "standard"
+agents:
+  queue: "default"
+  nsc-os: "linux"
+  nsc-arch: "amd64"
+  nsc-shape: "8x16"
+  # nsc-git-checkout: "snapshot"
+  nsc-cache-tag: "core"
+  nsc-cache-size: "100g"
+  nsc-cache-path: .cache/
 
-# cache for hosted runners
-cache:
-  name: go-cache
-  size: 100g
-  paths:
-    - $GOCACHE
-    - $GOMODCACHE
-    - $GOLANGCI_LINT_CACHE
+# # cache for hosted runners
+# cache:
+#   name: go-cache
+#   size: 100g
+#   paths:
+#     - $GOCACHE
+#     - $GOMODCACHE
+#     - $GOLANGCI_LINT_CACHE
 
 secrets:
   - GITHUB_TOKEN
@@ -65,7 +74,7 @@ steps:
         key: "generate"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         if_changed:
           - go.{mod,sum}
@@ -91,7 +100,7 @@ steps:
         key: "generate_config"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         if_changed:
           - go.{mod,sum}
@@ -117,7 +126,7 @@ steps:
         key: "draft_pr_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "generate_config"
         if: build.pull_request.id != null
         if_changed:
@@ -145,7 +154,7 @@ steps:
         key: "link_pr_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "draft_pr_automation"
         if: build.pull_request.id != null
         if_changed:
@@ -173,7 +182,7 @@ steps:
         key: "helm_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "generate_config"
         if: build.branch == "main"
         plugins:
@@ -201,7 +210,7 @@ steps:
         key: "post_merge_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "helm_automation"
         if: build.branch == "main"
         plugins:
@@ -228,7 +237,7 @@ steps:
         key: "cleanup_draft_prs"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "post_merge_automation"
         if: build.branch == "main"
         plugins:
@@ -250,7 +259,7 @@ steps:
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         plugins:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -279,7 +288,7 @@ steps:
           - go.{mod,sum}
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_graphapi"
@@ -306,7 +315,7 @@ steps:
           - go.{mod,sum}
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_handlers"
@@ -337,7 +346,7 @@ steps:
             - internal/httpserve/handlers/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         timeout_in_minutes: 30
         key: "lint_non_api"
@@ -362,7 +371,7 @@ steps:
         retry: *disk-full-retry
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         key: "go_test_graph"
         parallelism: 4
         cancel_on_build_failing: true
@@ -399,7 +408,7 @@ steps:
         retry: *disk-full-retry
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         key: "go_test_events"
         cancel_on_build_failing: true
         if_changed: # only run when event driven code changes
@@ -448,7 +457,7 @@ steps:
         retry: *disk-full-retry
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         key: "go_test_handlers"
         parallelism: 2
         cancel_on_build_failing: true
@@ -491,7 +500,7 @@ steps:
             - cli/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         key: "go_test_no_api"
         cancel_on_build_failing: true
         env:
@@ -525,7 +534,7 @@ steps:
           - "fga/**"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         key: "fga_test"
         plugins:
           - sparse-checkout#v1.10.0:
@@ -544,7 +553,7 @@ steps:
         key: "test-analytics"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
         if_changed:
@@ -594,7 +603,7 @@ steps:
         cancel_on_build_failing: true
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         if_changed:
           include:
             - "**.go"
@@ -640,7 +649,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
                 # scanner needs the git mirror at the same path for SCM blame
-                - $GIT_MIRRORS_PATH:$GIT_MIRRORS_PATH:ro
+                # - $GIT_MIRRORS_PATH:$GIT_MIRRORS_PATH:ro
               command: [".buildkite/sonar-scan.sh"]
               environment:
                 - "SONAR_TOKEN"
@@ -651,7 +660,7 @@ steps:
         key: "scan-upload"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         if_changed:
           include:
             - "**.go"
@@ -696,7 +705,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
                 # scanner needs the git mirror at the same path for SCM blame
-                - $GIT_MIRRORS_PATH:$GIT_MIRRORS_PATH:ro
+                # - $GIT_MIRRORS_PATH:$GIT_MIRRORS_PATH:ro
               command: [".buildkite/sonar-scan.sh"]
               environment:
                 - "SONAR_TOKEN"
@@ -720,7 +729,7 @@ steps:
             - cli/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         plugins:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -739,7 +748,7 @@ steps:
         key: "gobuild-cli"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         if_changed:
@@ -769,7 +778,7 @@ steps:
         artifact_paths: "bin/${APP_NAME}"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         plugins:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -789,7 +798,7 @@ steps:
         key: "gobuild-cli-release"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         plugins:
@@ -815,7 +824,7 @@ steps:
         if: build.branch !~ /^renovate\//
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         if_changed:
           - db/**
           - internal/ent/schema/**
@@ -837,7 +846,7 @@ steps:
         if_changed: "**.graphql"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         skip: "false"
         soft_fail:
           - exit_status: 1
@@ -891,7 +900,7 @@ steps:
         key: "docker-pr-build"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         if_changed:
@@ -935,7 +944,7 @@ steps:
         key: "docker-build-and-tag"
         agents:
           queue: $LARGE_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_STANDARD
+          # workload: $RUNNER_WORKLOAD_STANDARD
         cancel_on_build_failing: true
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         commands: |
@@ -970,7 +979,7 @@ steps:
         key: "apollo-publish-schema"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         skip: false
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         cancel_on_build_failing: true
@@ -995,7 +1004,7 @@ steps:
         command: "rover graph publish --schema $$GRAPHQL_HISTORY_SCHEMA_LOCATION $$GRAPHQL_HISTORY_SCHEMA_NAME"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         plugins:
           - sparse-checkout#v1.10.0:
               paths:
@@ -1016,7 +1025,7 @@ steps:
         key: "atlas_migrate"
         agents:
           queue: $SMALL_RUNNER_QUEUE
-          workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
+          # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         plugins:
           - sparse-checkout#v1.10.0:
               paths:
