@@ -49,7 +49,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.15
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.151.0
-	github.com/go-jose/go-jose/v4 v4.1.5
+	github.com/go-jose/go-jose/v4 v4.1.6
 	github.com/go-webauthn/webauthn v0.18.2
 	github.com/gocarina/gocsv v0.0.0-20260926200228-b2c6eb8fefab
 	github.com/goccy/go-yaml v1.19.2
