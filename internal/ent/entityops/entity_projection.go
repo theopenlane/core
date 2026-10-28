@@ -1718,6 +1718,32 @@ type RemediationProjection struct {
 	WorkflowEligibleMarker  bool                    `json:"workflow_eligible_marker,omitempty"`
 }
 
+// ReportProjection is the flat, CEL- and jsonschema-facing view of a Report: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.Report whose edge graph cannot be reflected
+type ReportProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string                 `json:"id,omitempty"`
+	CreatedAt             time.Time              `json:"created_at,omitempty"`
+	CreatedBy             string                 `json:"created_by,omitempty"`
+	DisplayID             string                 `json:"display_id,omitempty"`
+	Name                  string                 `json:"name,omitempty"`
+	OwnerID               string                 `json:"owner_id,omitempty"`
+	Query                 string                 `json:"query,omitempty"`
+	ReportKindID          string                 `json:"report_kind_id,omitempty"`
+	ReportKindName        string                 `json:"report_kind_name,omitempty"`
+	ReportOwnerID         string                 `json:"report_owner_id,omitempty"`
+	RequestorID           string                 `json:"requestor_id,omitempty"`
+	Status                enums.ReportStatus     `json:"status,omitempty"`
+	Tags                  []string               `json:"tags,omitempty"`
+	UpdatedAt             time.Time              `json:"updated_at,omitempty"`
+	UpdatedBy             string                 `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string                 `json:"updated_by_impersonator,omitempty"`
+	Variables             map[string]interface{} `json:"variables,omitempty"`
+	Visibility            enums.ReportVisibility `json:"visibility,omitempty"`
+}
+
 // ReviewProjection is the flat, CEL- and jsonschema-facing view of a Review: its
 // readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
 // names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike

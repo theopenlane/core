@@ -5436,8 +5436,32 @@ var (
 			Snake: "report",
 			Lower: "report",
 		},
-		ConsoleRoute: &ConsoleRoute{Base: "reports"},
-		OwnerField:   report.FieldOwnerID,
+		ProjectionType: reflect.TypeFor[ReportProjection](),
+		ConsoleRoute:   &ConsoleRoute{Base: "reports"},
+		OwnerField:     report.FieldOwnerID,
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "report", Operation: refOpQuery}
+
+			entities, err := client.Report.Query().
+				Where(report.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "report", Operation: refOpLoad, EntityID: entityID}
 
@@ -22748,6 +22772,34 @@ func init() {
 		entities, err := client.Remediation.Query().
 			Where(ownerScopeRemediation(orgID)).
 			Where(predicate.Remediation(matchKeyIn(SchemaRemediation, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaReport.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "report", Operation: refOpQuery}
+
+		if !SchemaReport.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "report"))
+		}
+
+		entities, err := client.Report.Query().
+			Where(report.OwnerID(orgID)).
+			Where(predicate.Report(matchKeyIn(SchemaReport, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)

@@ -328,7 +328,7 @@ type GroupEdges struct {
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [58]bool
 	// totalCount holds the count of the edges above.
-	totalCount [58]map[string]int
+	totalCount [57]map[string]int
 
 	namedIntegrationRuns                    map[string][]*IntegrationRun
 	namedProgramEditors                     map[string][]*Program

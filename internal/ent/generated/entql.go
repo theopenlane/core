@@ -15264,18 +15264,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"WorkflowObjectRef",
 	)
 	graph.MustAddE(
-		"integration_runs",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   review.IntegrationRunsTable,
-			Columns: []string{review.IntegrationRunsColumn},
-			Bidi:    false,
-		},
-		"Review",
-		"IntegrationRun",
-	)
-	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -15406,6 +15394,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ReportMembership",
 		"OrgMembership",
+	)
+	graph.MustAddE(
+		"integration_runs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.IntegrationRunsTable,
+			Columns: []string{review.IntegrationRunsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"IntegrationRun",
 	)
 	graph.MustAddE(
 		"owner",
