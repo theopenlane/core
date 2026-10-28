@@ -1123,6 +1123,38 @@ func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgq
 	return res, err
 }
 
+// OrganizationBrandingSettingHistories is the resolver for the organizationBrandingSettingHistories field.
+func (r *queryResolver) OrganizationBrandingSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationBrandingSettingHistoryOrder, where *historygenerated.OrganizationBrandingSettingHistoryWhereInput) (*historygenerated.OrganizationBrandingSettingHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.OrganizationBrandingSettingHistoryOrder{
+			Field:     historygenerated.OrganizationBrandingSettingHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).OrganizationBrandingSettingHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationbrandingsettinghistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithOrganizationBrandingSettingHistoryOrder(orderBy),
+		historygenerated.WithOrganizationBrandingSettingHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationbrandingsettinghistory"})
+	}
+
+	return res, err
+}
+
 // OrganizationHistories is the resolver for the organizationHistories field.
 func (r *queryResolver) OrganizationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationHistoryOrder, where *historygenerated.OrganizationHistoryWhereInput) (*historygenerated.OrganizationHistoryConnection, error) {
 	// set page limit if nothing was set

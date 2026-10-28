@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
@@ -218,7 +219,29 @@ func reconcileModules(ctx context.Context, orgSub *ent.OrgSubscription, currentM
 		return err
 	}
 
-	return reconcileBrandingForTrustCenter(allowCtx, orgSub.OwnerID)
+	if err := reconcileBrandingForTrustCenter(allowCtx, orgSub.OwnerID); err != nil {
+		return err
+	}
+
+	return reconcileBrandingForAssessment(allowCtx, orgSub.OwnerID)
+}
+
+func reconcileBrandingForAssessment(ctx context.Context, organizationID string) error {
+	tx := transaction.FromContext(ctx)
+
+	ok, err := tx.OrgModule.Query().Where(
+		orgmodule.OwnerID(organizationID),
+		orgmodule.ModuleEQ(models.CatalogBrandingAssessmentAddon),
+		orgmodule.Active(true),
+	).Exist(ctx)
+	if err != nil {
+		return err
+	}
+
+	return tx.OrganizationBrandingSetting.Update().
+		Where(organizationbrandingsetting.OrganizationID(organizationID)).
+		SetRemoveAssessmentBranding(ok).
+		Exec(ctx)
 }
 
 func reconcileBrandingForTrustCenter(ctx context.Context, ownerID string) error {
@@ -274,5 +297,9 @@ func (h *Handler) removeAllModules(ctx context.Context, subscription *stripe.Sub
 		return err
 	}
 
-	return reconcileBrandingForTrustCenter(allowCtx, orgSub.OwnerID)
+	if err := reconcileBrandingForTrustCenter(allowCtx, orgSub.OwnerID); err != nil {
+		return err
+	}
+
+	return reconcileBrandingForAssessment(allowCtx, orgSub.OwnerID)
 }

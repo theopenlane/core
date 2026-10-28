@@ -6294,6 +6294,62 @@ var (
 			},
 		},
 	}
+	// OrganizationBrandingSettingsColumns holds the columns for the "organization_branding_settings" table.
+	OrganizationBrandingSettingsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "remove_assessment_branding", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "primary_color", Type: field.TypeString, Nullable: true},
+		{Name: "secondary_color", Type: field.TypeString, Nullable: true},
+		{Name: "background_color", Type: field.TypeString, Nullable: true},
+		{Name: "text_color", Type: field.TypeString, Nullable: true},
+		{Name: "font_family", Type: field.TypeString, Nullable: true},
+		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "organization_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
+	}
+	// OrganizationBrandingSettingsTable holds the schema information for the "organization_branding_settings" table.
+	OrganizationBrandingSettingsTable = &schema.Table{
+		Name:       "organization_branding_settings",
+		Columns:    OrganizationBrandingSettingsColumns,
+		PrimaryKey: []*schema.Column{OrganizationBrandingSettingsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "organization_branding_settings_organizations_branding_setting",
+				Columns:    []*schema.Column{OrganizationBrandingSettingsColumns[16]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "organization_branding_settings_files_logo_file",
+				Columns:    []*schema.Column{OrganizationBrandingSettingsColumns[17]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "organization_branding_setting_logo_local_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{OrganizationBrandingSettingsColumns[17]},
+			},
+			{
+				Name:    "organizationbrandingsetting_organization_id",
+				Unique:  true,
+				Columns: []*schema.Column{OrganizationBrandingSettingsColumns[16]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
 	// OrganizationSettingsColumns holds the columns for the "organization_settings" table.
 	OrganizationSettingsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -16604,6 +16660,7 @@ var (
 		OrgProductsTable,
 		OrgSubscriptionsTable,
 		OrganizationsTable,
+		OrganizationBrandingSettingsTable,
 		OrganizationSettingsTable,
 		PasswordResetTokensTable,
 		PersonalAccessTokensTable,
@@ -17269,6 +17326,8 @@ func init() {
 	OrgSubscriptionsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrganizationsTable.ForeignKeys[1].RefTable = FilesTable
+	OrganizationBrandingSettingsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	OrganizationBrandingSettingsTable.ForeignKeys[1].RefTable = FilesTable
 	OrganizationSettingsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	PasswordResetTokensTable.ForeignKeys[0].RefTable = UsersTable
 	PersonalAccessTokensTable.ForeignKeys[0].RefTable = UsersTable

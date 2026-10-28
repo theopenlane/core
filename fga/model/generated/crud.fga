@@ -217,6 +217,10 @@ extend type organization
     define can_edit_organization: [service, user] or can_delete_organization or full_access
     define can_delete_organization: [service, user] or owner
 
+    define can_view_organization_branding_setting: [service, user] or can_edit_organization_branding_setting or can_view_organization or full_access
+    define can_edit_organization_branding_setting: [service, user] or can_delete_organization_branding_setting or can_edit_organization or full_access
+    define can_delete_organization_branding_setting: [service, user] or can_delete_organization or full_access
+
     define can_view_organization_setting: [service, user] or can_edit_organization_setting or can_view_organization or full_access
     define can_edit_organization_setting: [service, user] or can_delete_organization_setting or can_edit_organization or full_access
     define can_delete_organization_setting: [service, user] or can_delete_organization or full_access

@@ -60,6 +60,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -1706,6 +1707,33 @@ func (f TraverseOrganization) Traverse(ctx context.Context, q generated.Query) e
 	return fmt.Errorf("unexpected query type %T. expect *generated.OrganizationQuery", q)
 }
 
+// The OrganizationBrandingSettingFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OrganizationBrandingSettingFunc func(context.Context, *generated.OrganizationBrandingSettingQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OrganizationBrandingSettingFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.OrganizationBrandingSettingQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OrganizationBrandingSettingQuery", q)
+}
+
+// The TraverseOrganizationBrandingSetting type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOrganizationBrandingSetting func(context.Context, *generated.OrganizationBrandingSettingQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOrganizationBrandingSetting) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOrganizationBrandingSetting) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrganizationBrandingSettingQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.OrganizationBrandingSettingQuery", q)
+}
+
 // The OrganizationSettingFunc type is an adapter to allow the use of ordinary function as a Querier.
 type OrganizationSettingFunc func(context.Context, *generated.OrganizationSettingQuery) (generated.Value, error)
 
@@ -2984,6 +3012,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.OrgSubscriptionQuery, predicate.OrgSubscription, orgsubscription.OrderOption]{typ: generated.TypeOrgSubscription, tq: q}, nil
 	case *generated.OrganizationQuery:
 		return &query[*generated.OrganizationQuery, predicate.Organization, organization.OrderOption]{typ: generated.TypeOrganization, tq: q}, nil
+	case *generated.OrganizationBrandingSettingQuery:
+		return &query[*generated.OrganizationBrandingSettingQuery, predicate.OrganizationBrandingSetting, organizationbrandingsetting.OrderOption]{typ: generated.TypeOrganizationBrandingSetting, tq: q}, nil
 	case *generated.OrganizationSettingQuery:
 		return &query[*generated.OrganizationSettingQuery, predicate.OrganizationSetting, organizationsetting.OrderOption]{typ: generated.TypeOrganizationSetting, tq: q}, nil
 	case *generated.PasswordResetTokenQuery:

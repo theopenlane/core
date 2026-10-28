@@ -14,11 +14,9 @@ import (
 
 	"github.com/theopenlane/logx"
 
-	"github.com/theopenlane/core/common/models"
-
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
@@ -101,7 +99,7 @@ func setAssessmentAccessURL(ctx context.Context, assessment *generated.Assessmen
 	return nil
 }
 
-// InterceptorAssessmentBranding populates the branding field of an assessment based off the available modules
+// InterceptorAssessmentBranding populates the branding field from the org branding settings
 func InterceptorAssessmentBranding() ent.Interceptor {
 	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
 		return intercept.AssessmentFunc(func(ctx context.Context, q *generated.AssessmentQuery) (generated.Value, error) {
@@ -115,14 +113,19 @@ func InterceptorAssessmentBranding() ent.Interceptor {
 				return v, nil
 			}
 
-			ok, err = rule.HasFeature(ctx, models.CatalogBrandingAssessmentAddon.String())
+			setting, err := generated.FromContext(ctx).OrganizationBrandingSetting.Query().
+				Select(organizationbrandingsetting.FieldRemoveAssessmentBranding).
+				Only(auth.WithInternalReadContext(ctx))
+			if generated.IsNotFound(err) {
+				return v, nil
+			}
+
 			if err != nil {
-				logx.FromContext(ctx).Warn().Err(err).
-					Msg("failed to check if org has assessment branding addon")
+				return nil, err
 			}
 
 			for _, a := range assessments {
-				a.RemoveBranding = ok
+				a.RemoveBranding = setting.RemoveAssessmentBranding
 			}
 
 			return v, nil

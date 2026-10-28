@@ -419,6 +419,18 @@ func (f OrgMembershipHistoryFunc) Mutate(ctx context.Context, m historygenerated
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.OrgMembershipHistoryMutation", m)
 }
 
+// The OrganizationBrandingSettingHistoryFunc type is an adapter to allow the use of ordinary
+// function as OrganizationBrandingSettingHistory mutator.
+type OrganizationBrandingSettingHistoryFunc func(context.Context, *historygenerated.OrganizationBrandingSettingHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OrganizationBrandingSettingHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.OrganizationBrandingSettingHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.OrganizationBrandingSettingHistoryMutation", m)
+}
+
 // The OrganizationHistoryFunc type is an adapter to allow the use of ordinary
 // function as OrganizationHistory mutator.
 type OrganizationHistoryFunc func(context.Context, *historygenerated.OrganizationHistoryMutation) (historygenerated.Value, error)

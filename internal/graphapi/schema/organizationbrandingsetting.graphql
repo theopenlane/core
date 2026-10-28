@@ -1,0 +1,174 @@
+extend type Query {
+    """
+    Look up organizationBrandingSetting by ID
+    """
+     organizationBrandingSetting(
+        """
+        ID of the organizationBrandingSetting
+        """
+        id: ID!
+    ):  OrganizationBrandingSetting!
+}
+
+extend type Mutation{
+    """
+    Create a new organizationBrandingSetting
+    """
+    createOrganizationBrandingSetting(
+        """
+        values of the organizationBrandingSetting
+        """
+        input: CreateOrganizationBrandingSettingInput!
+    ): OrganizationBrandingSettingCreatePayload!
+    """
+    Create multiple new organizationBrandingSettings
+    """
+    createBulkOrganizationBrandingSetting(
+        """
+        values of the organizationBrandingSetting
+        """
+        input: [CreateOrganizationBrandingSettingInput!]
+    ): OrganizationBrandingSettingBulkCreatePayload!
+    """
+    Create multiple new organizationBrandingSettings via file upload
+    """
+    createBulkCSVOrganizationBrandingSetting(
+        """
+        csv file containing values of the organizationBrandingSetting
+        """
+        input: Upload!
+    ): OrganizationBrandingSettingBulkCreatePayload!
+    """
+    Update an existing organizationBrandingSetting
+    """
+    updateOrganizationBrandingSetting(
+        """
+        ID of the organizationBrandingSetting
+        """
+        id: ID!
+        """
+        New values for the organizationBrandingSetting
+        """
+        input: UpdateOrganizationBrandingSettingInput!
+    ): OrganizationBrandingSettingUpdatePayload!
+    """
+    Delete an existing organizationBrandingSetting
+    """
+    deleteOrganizationBrandingSetting(
+        """
+        ID of the organizationBrandingSetting
+        """
+        id: ID!
+    ): OrganizationBrandingSettingDeletePayload!
+    """
+    Delete multiple organizationBrandingSettings
+    """
+    deleteBulkOrganizationBrandingSetting(
+        """
+        IDs of the organizationBrandingSettings to delete
+        """
+        ids: [ID!]!
+    ): OrganizationBrandingSettingBulkDeletePayload!
+    """
+    Update multiple existing organizationBrandingSettings
+    """
+    updateBulkOrganizationBrandingSetting(
+        """
+        IDs of the organizationBrandingSettings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the organizationBrandingSettings with
+        """
+        input: UpdateOrganizationBrandingSettingInput!
+    ): OrganizationBrandingSettingBulkUpdatePayload!
+    """
+    Update multiple existing organizationBrandingSettings via file upload
+    """
+    updateBulkCSVOrganizationBrandingSetting(
+        """
+        csv file containing values of the organizationBrandingSetting, must include ID column
+        """
+        input: Upload!
+    ): OrganizationBrandingSettingBulkUpdatePayload!
+}
+
+"""
+Return response for createOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingCreatePayload {
+    """
+    Created organizationBrandingSetting
+    """
+    organizationBrandingSetting: OrganizationBrandingSetting!
+}
+
+"""
+Return response for updateOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingUpdatePayload {
+    """
+    Updated organizationBrandingSetting
+    """
+    organizationBrandingSetting: OrganizationBrandingSetting!
+}
+
+"""
+Return response for deleteOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingDeletePayload {
+    """
+    Deleted organizationBrandingSetting ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingBulkCreatePayload {
+    """
+    Created organizationBrandingSettings
+    """
+    organizationBrandingSettings: [OrganizationBrandingSetting!]
+}
+
+"""
+Return response for deleteBulkOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingBulkDeletePayload {
+    """
+    Deleted organizationBrandingSetting IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    IDs that were not deleted
+    """
+    notDeletedIDs: [ID!]!
+    """
+    Error message when the bulk delete did not apply to every requested ID
+    """
+    error: String
+}
+
+"""
+Return response for updateBulkOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingBulkUpdatePayload {
+    """
+    Updated organizationBrandingSettings
+    """
+    organizationBrandingSettings: [OrganizationBrandingSetting!]
+    """
+    IDs of the updated organizationBrandingSettings
+    """
+    updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
+}

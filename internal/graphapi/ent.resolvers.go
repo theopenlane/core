@@ -1665,6 +1665,40 @@ func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[
 	return res, err
 }
 
+// OrganizationBrandingSettings is the resolver for the organizationBrandingSettings field.
+func (r *queryResolver) OrganizationBrandingSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationBrandingSettingOrder, where *generated.OrganizationBrandingSettingWhereInput) (*generated.OrganizationBrandingSettingConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.OrganizationBrandingSettingOrder{
+			{
+				Field:     generated.OrganizationBrandingSettingOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).OrganizationBrandingSetting.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationbrandingsetting"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrganizationBrandingSettingOrder(orderBy),
+		generated.WithOrganizationBrandingSettingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationbrandingsetting"})
+	}
+
+	return res, err
+}
+
 // OrganizationSettings is the resolver for the organizationSettings field.
 func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationSettingOrder, where *generated.OrganizationSettingWhereInput) (*generated.OrganizationSettingConnection, error) {
 	// set page limit if nothing was set

@@ -71,6 +71,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -256,6 +257,8 @@ type Client struct {
 	OrgSubscription *OrgSubscriptionClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
+	// OrganizationBrandingSetting is the client for interacting with the OrganizationBrandingSetting builders.
+	OrganizationBrandingSetting *OrganizationBrandingSettingClient
 	// OrganizationSetting is the client for interacting with the OrganizationSetting builders.
 	OrganizationSetting *OrganizationSettingClient
 	// PasswordResetToken is the client for interacting with the PasswordResetToken builders.
@@ -419,6 +422,7 @@ func (c *Client) init() {
 	c.OrgProduct = NewOrgProductClient(c.config)
 	c.OrgSubscription = NewOrgSubscriptionClient(c.config)
 	c.Organization = NewOrganizationClient(c.config)
+	c.OrganizationBrandingSetting = NewOrganizationBrandingSettingClient(c.config)
 	c.OrganizationSetting = NewOrganizationSettingClient(c.config)
 	c.PasswordResetToken = NewPasswordResetTokenClient(c.config)
 	c.PersonalAccessToken = NewPersonalAccessTokenClient(c.config)
@@ -658,108 +662,109 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                        ctx,
-		config:                     cfg,
-		APIToken:                   NewAPITokenClient(cfg),
-		ActionPlan:                 NewActionPlanClient(cfg),
-		Assessment:                 NewAssessmentClient(cfg),
-		AssessmentPolicy:           NewAssessmentPolicyClient(cfg),
-		AssessmentResponse:         NewAssessmentResponseClient(cfg),
-		Asset:                      NewAssetClient(cfg),
-		Campaign:                   NewCampaignClient(cfg),
-		CampaignTarget:             NewCampaignTargetClient(cfg),
-		CheckResult:                NewCheckResultClient(cfg),
-		Contact:                    NewContactClient(cfg),
-		Control:                    NewControlClient(cfg),
-		ControlImplementation:      NewControlImplementationClient(cfg),
-		ControlObjective:           NewControlObjectiveClient(cfg),
-		CustomDomain:               NewCustomDomainClient(cfg),
-		CustomTypeEnum:             NewCustomTypeEnumClient(cfg),
-		DNSVerification:            NewDNSVerificationClient(cfg),
-		DirectoryAccount:           NewDirectoryAccountClient(cfg),
-		DirectoryGroup:             NewDirectoryGroupClient(cfg),
-		DirectoryMembership:        NewDirectoryMembershipClient(cfg),
-		Discussion:                 NewDiscussionClient(cfg),
-		DocumentData:               NewDocumentDataClient(cfg),
-		EmailTemplate:              NewEmailTemplateClient(cfg),
-		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
-		Entity:                     NewEntityClient(cfg),
-		EntityType:                 NewEntityTypeClient(cfg),
-		Event:                      NewEventClient(cfg),
-		Evidence:                   NewEvidenceClient(cfg),
-		Export:                     NewExportClient(cfg),
-		File:                       NewFileClient(cfg),
-		FileDownloadToken:          NewFileDownloadTokenClient(cfg),
-		Finding:                    NewFindingClient(cfg),
-		FindingControl:             NewFindingControlClient(cfg),
-		Group:                      NewGroupClient(cfg),
-		GroupMembership:            NewGroupMembershipClient(cfg),
-		GroupSetting:               NewGroupSettingClient(cfg),
-		Hush:                       NewHushClient(cfg),
-		IdentityHolder:             NewIdentityHolderClient(cfg),
-		ImpersonationEvent:         NewImpersonationEventClient(cfg),
-		Integration:                NewIntegrationClient(cfg),
-		IntegrationRun:             NewIntegrationRunClient(cfg),
-		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
-		InternalPolicy:             NewInternalPolicyClient(cfg),
-		Invite:                     NewInviteClient(cfg),
-		MappableDomain:             NewMappableDomainClient(cfg),
-		MappedControl:              NewMappedControlClient(cfg),
-		Narrative:                  NewNarrativeClient(cfg),
-		Note:                       NewNoteClient(cfg),
-		Notification:               NewNotificationClient(cfg),
-		NotificationPreference:     NewNotificationPreferenceClient(cfg),
-		NotificationTemplate:       NewNotificationTemplateClient(cfg),
-		Onboarding:                 NewOnboardingClient(cfg),
-		OrgMembership:              NewOrgMembershipClient(cfg),
-		OrgModule:                  NewOrgModuleClient(cfg),
-		OrgPrice:                   NewOrgPriceClient(cfg),
-		OrgProduct:                 NewOrgProductClient(cfg),
-		OrgSubscription:            NewOrgSubscriptionClient(cfg),
-		Organization:               NewOrganizationClient(cfg),
-		OrganizationSetting:        NewOrganizationSettingClient(cfg),
-		PasswordResetToken:         NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:        NewPersonalAccessTokenClient(cfg),
-		Platform:                   NewPlatformClient(cfg),
-		Procedure:                  NewProcedureClient(cfg),
-		Program:                    NewProgramClient(cfg),
-		ProgramMembership:          NewProgramMembershipClient(cfg),
-		Remediation:                NewRemediationClient(cfg),
-		Review:                     NewReviewClient(cfg),
-		Risk:                       NewRiskClient(cfg),
-		SLADefinition:              NewSLADefinitionClient(cfg),
-		Scan:                       NewScanClient(cfg),
-		Standard:                   NewStandardClient(cfg),
-		Subcontrol:                 NewSubcontrolClient(cfg),
-		Subprocessor:               NewSubprocessorClient(cfg),
-		Subscriber:                 NewSubscriberClient(cfg),
-		SystemDetail:               NewSystemDetailClient(cfg),
-		TFASetting:                 NewTFASettingClient(cfg),
-		TagDefinition:              NewTagDefinitionClient(cfg),
-		Task:                       NewTaskClient(cfg),
-		Template:                   NewTemplateClient(cfg),
-		TrustCenter:                NewTrustCenterClient(cfg),
-		TrustCenterCompliance:      NewTrustCenterComplianceClient(cfg),
-		TrustCenterDoc:             NewTrustCenterDocClient(cfg),
-		TrustCenterEntity:          NewTrustCenterEntityClient(cfg),
-		TrustCenterFAQ:             NewTrustCenterFAQClient(cfg),
-		TrustCenterNDARequest:      NewTrustCenterNDARequestClient(cfg),
-		TrustCenterSetting:         NewTrustCenterSettingClient(cfg),
-		TrustCenterSubprocessor:    NewTrustCenterSubprocessorClient(cfg),
-		TrustCenterWatermarkConfig: NewTrustCenterWatermarkConfigClient(cfg),
-		User:                       NewUserClient(cfg),
-		UserSetting:                NewUserSettingClient(cfg),
-		VendorRiskScore:            NewVendorRiskScoreClient(cfg),
-		VendorScoringConfig:        NewVendorScoringConfigClient(cfg),
-		Vulnerability:              NewVulnerabilityClient(cfg),
-		Webauthn:                   NewWebauthnClient(cfg),
-		WorkflowAssignment:         NewWorkflowAssignmentClient(cfg),
-		WorkflowAssignmentTarget:   NewWorkflowAssignmentTargetClient(cfg),
-		WorkflowDefinition:         NewWorkflowDefinitionClient(cfg),
-		WorkflowEvent:              NewWorkflowEventClient(cfg),
-		WorkflowInstance:           NewWorkflowInstanceClient(cfg),
-		WorkflowObjectRef:          NewWorkflowObjectRefClient(cfg),
-		WorkflowProposal:           NewWorkflowProposalClient(cfg),
+		ctx:                         ctx,
+		config:                      cfg,
+		APIToken:                    NewAPITokenClient(cfg),
+		ActionPlan:                  NewActionPlanClient(cfg),
+		Assessment:                  NewAssessmentClient(cfg),
+		AssessmentPolicy:            NewAssessmentPolicyClient(cfg),
+		AssessmentResponse:          NewAssessmentResponseClient(cfg),
+		Asset:                       NewAssetClient(cfg),
+		Campaign:                    NewCampaignClient(cfg),
+		CampaignTarget:              NewCampaignTargetClient(cfg),
+		CheckResult:                 NewCheckResultClient(cfg),
+		Contact:                     NewContactClient(cfg),
+		Control:                     NewControlClient(cfg),
+		ControlImplementation:       NewControlImplementationClient(cfg),
+		ControlObjective:            NewControlObjectiveClient(cfg),
+		CustomDomain:                NewCustomDomainClient(cfg),
+		CustomTypeEnum:              NewCustomTypeEnumClient(cfg),
+		DNSVerification:             NewDNSVerificationClient(cfg),
+		DirectoryAccount:            NewDirectoryAccountClient(cfg),
+		DirectoryGroup:              NewDirectoryGroupClient(cfg),
+		DirectoryMembership:         NewDirectoryMembershipClient(cfg),
+		Discussion:                  NewDiscussionClient(cfg),
+		DocumentData:                NewDocumentDataClient(cfg),
+		EmailTemplate:               NewEmailTemplateClient(cfg),
+		EmailVerificationToken:      NewEmailVerificationTokenClient(cfg),
+		Entity:                      NewEntityClient(cfg),
+		EntityType:                  NewEntityTypeClient(cfg),
+		Event:                       NewEventClient(cfg),
+		Evidence:                    NewEvidenceClient(cfg),
+		Export:                      NewExportClient(cfg),
+		File:                        NewFileClient(cfg),
+		FileDownloadToken:           NewFileDownloadTokenClient(cfg),
+		Finding:                     NewFindingClient(cfg),
+		FindingControl:              NewFindingControlClient(cfg),
+		Group:                       NewGroupClient(cfg),
+		GroupMembership:             NewGroupMembershipClient(cfg),
+		GroupSetting:                NewGroupSettingClient(cfg),
+		Hush:                        NewHushClient(cfg),
+		IdentityHolder:              NewIdentityHolderClient(cfg),
+		ImpersonationEvent:          NewImpersonationEventClient(cfg),
+		Integration:                 NewIntegrationClient(cfg),
+		IntegrationRun:              NewIntegrationRunClient(cfg),
+		IntegrationWebhook:          NewIntegrationWebhookClient(cfg),
+		InternalPolicy:              NewInternalPolicyClient(cfg),
+		Invite:                      NewInviteClient(cfg),
+		MappableDomain:              NewMappableDomainClient(cfg),
+		MappedControl:               NewMappedControlClient(cfg),
+		Narrative:                   NewNarrativeClient(cfg),
+		Note:                        NewNoteClient(cfg),
+		Notification:                NewNotificationClient(cfg),
+		NotificationPreference:      NewNotificationPreferenceClient(cfg),
+		NotificationTemplate:        NewNotificationTemplateClient(cfg),
+		Onboarding:                  NewOnboardingClient(cfg),
+		OrgMembership:               NewOrgMembershipClient(cfg),
+		OrgModule:                   NewOrgModuleClient(cfg),
+		OrgPrice:                    NewOrgPriceClient(cfg),
+		OrgProduct:                  NewOrgProductClient(cfg),
+		OrgSubscription:             NewOrgSubscriptionClient(cfg),
+		Organization:                NewOrganizationClient(cfg),
+		OrganizationBrandingSetting: NewOrganizationBrandingSettingClient(cfg),
+		OrganizationSetting:         NewOrganizationSettingClient(cfg),
+		PasswordResetToken:          NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:         NewPersonalAccessTokenClient(cfg),
+		Platform:                    NewPlatformClient(cfg),
+		Procedure:                   NewProcedureClient(cfg),
+		Program:                     NewProgramClient(cfg),
+		ProgramMembership:           NewProgramMembershipClient(cfg),
+		Remediation:                 NewRemediationClient(cfg),
+		Review:                      NewReviewClient(cfg),
+		Risk:                        NewRiskClient(cfg),
+		SLADefinition:               NewSLADefinitionClient(cfg),
+		Scan:                        NewScanClient(cfg),
+		Standard:                    NewStandardClient(cfg),
+		Subcontrol:                  NewSubcontrolClient(cfg),
+		Subprocessor:                NewSubprocessorClient(cfg),
+		Subscriber:                  NewSubscriberClient(cfg),
+		SystemDetail:                NewSystemDetailClient(cfg),
+		TFASetting:                  NewTFASettingClient(cfg),
+		TagDefinition:               NewTagDefinitionClient(cfg),
+		Task:                        NewTaskClient(cfg),
+		Template:                    NewTemplateClient(cfg),
+		TrustCenter:                 NewTrustCenterClient(cfg),
+		TrustCenterCompliance:       NewTrustCenterComplianceClient(cfg),
+		TrustCenterDoc:              NewTrustCenterDocClient(cfg),
+		TrustCenterEntity:           NewTrustCenterEntityClient(cfg),
+		TrustCenterFAQ:              NewTrustCenterFAQClient(cfg),
+		TrustCenterNDARequest:       NewTrustCenterNDARequestClient(cfg),
+		TrustCenterSetting:          NewTrustCenterSettingClient(cfg),
+		TrustCenterSubprocessor:     NewTrustCenterSubprocessorClient(cfg),
+		TrustCenterWatermarkConfig:  NewTrustCenterWatermarkConfigClient(cfg),
+		User:                        NewUserClient(cfg),
+		UserSetting:                 NewUserSettingClient(cfg),
+		VendorRiskScore:             NewVendorRiskScoreClient(cfg),
+		VendorScoringConfig:         NewVendorScoringConfigClient(cfg),
+		Vulnerability:               NewVulnerabilityClient(cfg),
+		Webauthn:                    NewWebauthnClient(cfg),
+		WorkflowAssignment:          NewWorkflowAssignmentClient(cfg),
+		WorkflowAssignmentTarget:    NewWorkflowAssignmentTargetClient(cfg),
+		WorkflowDefinition:          NewWorkflowDefinitionClient(cfg),
+		WorkflowEvent:               NewWorkflowEventClient(cfg),
+		WorkflowInstance:            NewWorkflowInstanceClient(cfg),
+		WorkflowObjectRef:           NewWorkflowObjectRefClient(cfg),
+		WorkflowProposal:            NewWorkflowProposalClient(cfg),
 	}, nil
 }
 
@@ -777,108 +782,109 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                        ctx,
-		config:                     cfg,
-		APIToken:                   NewAPITokenClient(cfg),
-		ActionPlan:                 NewActionPlanClient(cfg),
-		Assessment:                 NewAssessmentClient(cfg),
-		AssessmentPolicy:           NewAssessmentPolicyClient(cfg),
-		AssessmentResponse:         NewAssessmentResponseClient(cfg),
-		Asset:                      NewAssetClient(cfg),
-		Campaign:                   NewCampaignClient(cfg),
-		CampaignTarget:             NewCampaignTargetClient(cfg),
-		CheckResult:                NewCheckResultClient(cfg),
-		Contact:                    NewContactClient(cfg),
-		Control:                    NewControlClient(cfg),
-		ControlImplementation:      NewControlImplementationClient(cfg),
-		ControlObjective:           NewControlObjectiveClient(cfg),
-		CustomDomain:               NewCustomDomainClient(cfg),
-		CustomTypeEnum:             NewCustomTypeEnumClient(cfg),
-		DNSVerification:            NewDNSVerificationClient(cfg),
-		DirectoryAccount:           NewDirectoryAccountClient(cfg),
-		DirectoryGroup:             NewDirectoryGroupClient(cfg),
-		DirectoryMembership:        NewDirectoryMembershipClient(cfg),
-		Discussion:                 NewDiscussionClient(cfg),
-		DocumentData:               NewDocumentDataClient(cfg),
-		EmailTemplate:              NewEmailTemplateClient(cfg),
-		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
-		Entity:                     NewEntityClient(cfg),
-		EntityType:                 NewEntityTypeClient(cfg),
-		Event:                      NewEventClient(cfg),
-		Evidence:                   NewEvidenceClient(cfg),
-		Export:                     NewExportClient(cfg),
-		File:                       NewFileClient(cfg),
-		FileDownloadToken:          NewFileDownloadTokenClient(cfg),
-		Finding:                    NewFindingClient(cfg),
-		FindingControl:             NewFindingControlClient(cfg),
-		Group:                      NewGroupClient(cfg),
-		GroupMembership:            NewGroupMembershipClient(cfg),
-		GroupSetting:               NewGroupSettingClient(cfg),
-		Hush:                       NewHushClient(cfg),
-		IdentityHolder:             NewIdentityHolderClient(cfg),
-		ImpersonationEvent:         NewImpersonationEventClient(cfg),
-		Integration:                NewIntegrationClient(cfg),
-		IntegrationRun:             NewIntegrationRunClient(cfg),
-		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
-		InternalPolicy:             NewInternalPolicyClient(cfg),
-		Invite:                     NewInviteClient(cfg),
-		MappableDomain:             NewMappableDomainClient(cfg),
-		MappedControl:              NewMappedControlClient(cfg),
-		Narrative:                  NewNarrativeClient(cfg),
-		Note:                       NewNoteClient(cfg),
-		Notification:               NewNotificationClient(cfg),
-		NotificationPreference:     NewNotificationPreferenceClient(cfg),
-		NotificationTemplate:       NewNotificationTemplateClient(cfg),
-		Onboarding:                 NewOnboardingClient(cfg),
-		OrgMembership:              NewOrgMembershipClient(cfg),
-		OrgModule:                  NewOrgModuleClient(cfg),
-		OrgPrice:                   NewOrgPriceClient(cfg),
-		OrgProduct:                 NewOrgProductClient(cfg),
-		OrgSubscription:            NewOrgSubscriptionClient(cfg),
-		Organization:               NewOrganizationClient(cfg),
-		OrganizationSetting:        NewOrganizationSettingClient(cfg),
-		PasswordResetToken:         NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:        NewPersonalAccessTokenClient(cfg),
-		Platform:                   NewPlatformClient(cfg),
-		Procedure:                  NewProcedureClient(cfg),
-		Program:                    NewProgramClient(cfg),
-		ProgramMembership:          NewProgramMembershipClient(cfg),
-		Remediation:                NewRemediationClient(cfg),
-		Review:                     NewReviewClient(cfg),
-		Risk:                       NewRiskClient(cfg),
-		SLADefinition:              NewSLADefinitionClient(cfg),
-		Scan:                       NewScanClient(cfg),
-		Standard:                   NewStandardClient(cfg),
-		Subcontrol:                 NewSubcontrolClient(cfg),
-		Subprocessor:               NewSubprocessorClient(cfg),
-		Subscriber:                 NewSubscriberClient(cfg),
-		SystemDetail:               NewSystemDetailClient(cfg),
-		TFASetting:                 NewTFASettingClient(cfg),
-		TagDefinition:              NewTagDefinitionClient(cfg),
-		Task:                       NewTaskClient(cfg),
-		Template:                   NewTemplateClient(cfg),
-		TrustCenter:                NewTrustCenterClient(cfg),
-		TrustCenterCompliance:      NewTrustCenterComplianceClient(cfg),
-		TrustCenterDoc:             NewTrustCenterDocClient(cfg),
-		TrustCenterEntity:          NewTrustCenterEntityClient(cfg),
-		TrustCenterFAQ:             NewTrustCenterFAQClient(cfg),
-		TrustCenterNDARequest:      NewTrustCenterNDARequestClient(cfg),
-		TrustCenterSetting:         NewTrustCenterSettingClient(cfg),
-		TrustCenterSubprocessor:    NewTrustCenterSubprocessorClient(cfg),
-		TrustCenterWatermarkConfig: NewTrustCenterWatermarkConfigClient(cfg),
-		User:                       NewUserClient(cfg),
-		UserSetting:                NewUserSettingClient(cfg),
-		VendorRiskScore:            NewVendorRiskScoreClient(cfg),
-		VendorScoringConfig:        NewVendorScoringConfigClient(cfg),
-		Vulnerability:              NewVulnerabilityClient(cfg),
-		Webauthn:                   NewWebauthnClient(cfg),
-		WorkflowAssignment:         NewWorkflowAssignmentClient(cfg),
-		WorkflowAssignmentTarget:   NewWorkflowAssignmentTargetClient(cfg),
-		WorkflowDefinition:         NewWorkflowDefinitionClient(cfg),
-		WorkflowEvent:              NewWorkflowEventClient(cfg),
-		WorkflowInstance:           NewWorkflowInstanceClient(cfg),
-		WorkflowObjectRef:          NewWorkflowObjectRefClient(cfg),
-		WorkflowProposal:           NewWorkflowProposalClient(cfg),
+		ctx:                         ctx,
+		config:                      cfg,
+		APIToken:                    NewAPITokenClient(cfg),
+		ActionPlan:                  NewActionPlanClient(cfg),
+		Assessment:                  NewAssessmentClient(cfg),
+		AssessmentPolicy:            NewAssessmentPolicyClient(cfg),
+		AssessmentResponse:          NewAssessmentResponseClient(cfg),
+		Asset:                       NewAssetClient(cfg),
+		Campaign:                    NewCampaignClient(cfg),
+		CampaignTarget:              NewCampaignTargetClient(cfg),
+		CheckResult:                 NewCheckResultClient(cfg),
+		Contact:                     NewContactClient(cfg),
+		Control:                     NewControlClient(cfg),
+		ControlImplementation:       NewControlImplementationClient(cfg),
+		ControlObjective:            NewControlObjectiveClient(cfg),
+		CustomDomain:                NewCustomDomainClient(cfg),
+		CustomTypeEnum:              NewCustomTypeEnumClient(cfg),
+		DNSVerification:             NewDNSVerificationClient(cfg),
+		DirectoryAccount:            NewDirectoryAccountClient(cfg),
+		DirectoryGroup:              NewDirectoryGroupClient(cfg),
+		DirectoryMembership:         NewDirectoryMembershipClient(cfg),
+		Discussion:                  NewDiscussionClient(cfg),
+		DocumentData:                NewDocumentDataClient(cfg),
+		EmailTemplate:               NewEmailTemplateClient(cfg),
+		EmailVerificationToken:      NewEmailVerificationTokenClient(cfg),
+		Entity:                      NewEntityClient(cfg),
+		EntityType:                  NewEntityTypeClient(cfg),
+		Event:                       NewEventClient(cfg),
+		Evidence:                    NewEvidenceClient(cfg),
+		Export:                      NewExportClient(cfg),
+		File:                        NewFileClient(cfg),
+		FileDownloadToken:           NewFileDownloadTokenClient(cfg),
+		Finding:                     NewFindingClient(cfg),
+		FindingControl:              NewFindingControlClient(cfg),
+		Group:                       NewGroupClient(cfg),
+		GroupMembership:             NewGroupMembershipClient(cfg),
+		GroupSetting:                NewGroupSettingClient(cfg),
+		Hush:                        NewHushClient(cfg),
+		IdentityHolder:              NewIdentityHolderClient(cfg),
+		ImpersonationEvent:          NewImpersonationEventClient(cfg),
+		Integration:                 NewIntegrationClient(cfg),
+		IntegrationRun:              NewIntegrationRunClient(cfg),
+		IntegrationWebhook:          NewIntegrationWebhookClient(cfg),
+		InternalPolicy:              NewInternalPolicyClient(cfg),
+		Invite:                      NewInviteClient(cfg),
+		MappableDomain:              NewMappableDomainClient(cfg),
+		MappedControl:               NewMappedControlClient(cfg),
+		Narrative:                   NewNarrativeClient(cfg),
+		Note:                        NewNoteClient(cfg),
+		Notification:                NewNotificationClient(cfg),
+		NotificationPreference:      NewNotificationPreferenceClient(cfg),
+		NotificationTemplate:        NewNotificationTemplateClient(cfg),
+		Onboarding:                  NewOnboardingClient(cfg),
+		OrgMembership:               NewOrgMembershipClient(cfg),
+		OrgModule:                   NewOrgModuleClient(cfg),
+		OrgPrice:                    NewOrgPriceClient(cfg),
+		OrgProduct:                  NewOrgProductClient(cfg),
+		OrgSubscription:             NewOrgSubscriptionClient(cfg),
+		Organization:                NewOrganizationClient(cfg),
+		OrganizationBrandingSetting: NewOrganizationBrandingSettingClient(cfg),
+		OrganizationSetting:         NewOrganizationSettingClient(cfg),
+		PasswordResetToken:          NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:         NewPersonalAccessTokenClient(cfg),
+		Platform:                    NewPlatformClient(cfg),
+		Procedure:                   NewProcedureClient(cfg),
+		Program:                     NewProgramClient(cfg),
+		ProgramMembership:           NewProgramMembershipClient(cfg),
+		Remediation:                 NewRemediationClient(cfg),
+		Review:                      NewReviewClient(cfg),
+		Risk:                        NewRiskClient(cfg),
+		SLADefinition:               NewSLADefinitionClient(cfg),
+		Scan:                        NewScanClient(cfg),
+		Standard:                    NewStandardClient(cfg),
+		Subcontrol:                  NewSubcontrolClient(cfg),
+		Subprocessor:                NewSubprocessorClient(cfg),
+		Subscriber:                  NewSubscriberClient(cfg),
+		SystemDetail:                NewSystemDetailClient(cfg),
+		TFASetting:                  NewTFASettingClient(cfg),
+		TagDefinition:               NewTagDefinitionClient(cfg),
+		Task:                        NewTaskClient(cfg),
+		Template:                    NewTemplateClient(cfg),
+		TrustCenter:                 NewTrustCenterClient(cfg),
+		TrustCenterCompliance:       NewTrustCenterComplianceClient(cfg),
+		TrustCenterDoc:              NewTrustCenterDocClient(cfg),
+		TrustCenterEntity:           NewTrustCenterEntityClient(cfg),
+		TrustCenterFAQ:              NewTrustCenterFAQClient(cfg),
+		TrustCenterNDARequest:       NewTrustCenterNDARequestClient(cfg),
+		TrustCenterSetting:          NewTrustCenterSettingClient(cfg),
+		TrustCenterSubprocessor:     NewTrustCenterSubprocessorClient(cfg),
+		TrustCenterWatermarkConfig:  NewTrustCenterWatermarkConfigClient(cfg),
+		User:                        NewUserClient(cfg),
+		UserSetting:                 NewUserSettingClient(cfg),
+		VendorRiskScore:             NewVendorRiskScoreClient(cfg),
+		VendorScoringConfig:         NewVendorScoringConfigClient(cfg),
+		Vulnerability:               NewVulnerabilityClient(cfg),
+		Webauthn:                    NewWebauthnClient(cfg),
+		WorkflowAssignment:          NewWorkflowAssignmentClient(cfg),
+		WorkflowAssignmentTarget:    NewWorkflowAssignmentTargetClient(cfg),
+		WorkflowDefinition:          NewWorkflowDefinitionClient(cfg),
+		WorkflowEvent:               NewWorkflowEventClient(cfg),
+		WorkflowInstance:            NewWorkflowInstanceClient(cfg),
+		WorkflowObjectRef:           NewWorkflowObjectRefClient(cfg),
+		WorkflowProposal:            NewWorkflowProposalClient(cfg),
 	}, nil
 }
 
@@ -920,17 +926,18 @@ func (c *Client) Use(hooks ...Hook) {
 		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
 		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
 		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
-		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
-		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
-		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
-		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
-		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
-		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.VendorRiskScore,
-		c.VendorScoringConfig, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
-		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
-		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.OrgSubscription, c.Organization, c.OrganizationBrandingSetting,
+		c.OrganizationSetting, c.PasswordResetToken, c.PersonalAccessToken, c.Platform,
+		c.Procedure, c.Program, c.ProgramMembership, c.Remediation, c.Review, c.Risk,
+		c.SLADefinition, c.Scan, c.Standard, c.Subcontrol, c.Subprocessor,
+		c.Subscriber, c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task,
+		c.Template, c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc,
+		c.TrustCenterEntity, c.TrustCenterFAQ, c.TrustCenterNDARequest,
+		c.TrustCenterSetting, c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig,
+		c.User, c.UserSetting, c.VendorRiskScore, c.VendorScoringConfig,
+		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
+		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
+		c.WorkflowProposal,
 	} {
 		n.Use(hooks...)
 	}
@@ -952,17 +959,18 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
 		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
 		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
-		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
-		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
-		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
-		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
-		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
-		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.VendorRiskScore,
-		c.VendorScoringConfig, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
-		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
-		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.OrgSubscription, c.Organization, c.OrganizationBrandingSetting,
+		c.OrganizationSetting, c.PasswordResetToken, c.PersonalAccessToken, c.Platform,
+		c.Procedure, c.Program, c.ProgramMembership, c.Remediation, c.Review, c.Risk,
+		c.SLADefinition, c.Scan, c.Standard, c.Subcontrol, c.Subprocessor,
+		c.Subscriber, c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task,
+		c.Template, c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc,
+		c.TrustCenterEntity, c.TrustCenterFAQ, c.TrustCenterNDARequest,
+		c.TrustCenterSetting, c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig,
+		c.User, c.UserSetting, c.VendorRiskScore, c.VendorScoringConfig,
+		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
+		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
+		c.WorkflowProposal,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1157,6 +1165,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.OrgSubscription.mutate(ctx, m)
 	case *OrganizationMutation:
 		return c.Organization.mutate(ctx, m)
+	case *OrganizationBrandingSettingMutation:
+		return c.OrganizationBrandingSetting.mutate(ctx, m)
 	case *OrganizationSettingMutation:
 		return c.OrganizationSetting.mutate(ctx, m)
 	case *PasswordResetTokenMutation:
@@ -20323,6 +20333,22 @@ func (c *OrganizationClient) QueryPersonalAccessTokens(_m *Organization) *Person
 	return query
 }
 
+// QueryBrandingSetting queries the branding_setting edge of a Organization.
+func (c *OrganizationClient) QueryBrandingSetting(_m *Organization) *OrganizationBrandingSettingQuery {
+	query := (&OrganizationBrandingSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(organizationbrandingsetting.Table, organizationbrandingsetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, organization.BrandingSettingTable, organization.BrandingSettingColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAPITokens queries the api_tokens edge of a Organization.
 func (c *OrganizationClient) QueryAPITokens(_m *Organization) *APITokenQuery {
 	query := (&APITokenClient{config: c.config}).Query()
@@ -21627,6 +21653,173 @@ func (c *OrganizationClient) mutate(ctx context.Context, m *OrganizationMutation
 		return (&OrganizationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown Organization mutation op: %q", m.Op())
+	}
+}
+
+// OrganizationBrandingSettingClient is a client for the OrganizationBrandingSetting schema.
+type OrganizationBrandingSettingClient struct {
+	config
+}
+
+// NewOrganizationBrandingSettingClient returns a client for the OrganizationBrandingSetting from the given config.
+func NewOrganizationBrandingSettingClient(c config) *OrganizationBrandingSettingClient {
+	return &OrganizationBrandingSettingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `organizationbrandingsetting.Hooks(f(g(h())))`.
+func (c *OrganizationBrandingSettingClient) Use(hooks ...Hook) {
+	c.hooks.OrganizationBrandingSetting = append(c.hooks.OrganizationBrandingSetting, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `organizationbrandingsetting.Intercept(f(g(h())))`.
+func (c *OrganizationBrandingSettingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OrganizationBrandingSetting = append(c.inters.OrganizationBrandingSetting, interceptors...)
+}
+
+// Create returns a builder for creating a OrganizationBrandingSetting entity.
+func (c *OrganizationBrandingSettingClient) Create() *OrganizationBrandingSettingCreate {
+	mutation := newOrganizationBrandingSettingMutation(c.config, OpCreate)
+	return &OrganizationBrandingSettingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OrganizationBrandingSetting entities.
+func (c *OrganizationBrandingSettingClient) CreateBulk(builders ...*OrganizationBrandingSettingCreate) *OrganizationBrandingSettingCreateBulk {
+	return &OrganizationBrandingSettingCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OrganizationBrandingSettingClient) MapCreateBulk(slice any, setFunc func(*OrganizationBrandingSettingCreate, int)) *OrganizationBrandingSettingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OrganizationBrandingSettingCreateBulk{err: fmt.Errorf("calling to OrganizationBrandingSettingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OrganizationBrandingSettingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OrganizationBrandingSettingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OrganizationBrandingSetting.
+func (c *OrganizationBrandingSettingClient) Update() *OrganizationBrandingSettingUpdate {
+	mutation := newOrganizationBrandingSettingMutation(c.config, OpUpdate)
+	return &OrganizationBrandingSettingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OrganizationBrandingSettingClient) UpdateOne(_m *OrganizationBrandingSetting) *OrganizationBrandingSettingUpdateOne {
+	mutation := newOrganizationBrandingSettingMutation(c.config, OpUpdateOne, withOrganizationBrandingSetting(_m))
+	return &OrganizationBrandingSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OrganizationBrandingSettingClient) UpdateOneID(id string) *OrganizationBrandingSettingUpdateOne {
+	mutation := newOrganizationBrandingSettingMutation(c.config, OpUpdateOne, withOrganizationBrandingSettingID(id))
+	return &OrganizationBrandingSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OrganizationBrandingSetting.
+func (c *OrganizationBrandingSettingClient) Delete() *OrganizationBrandingSettingDelete {
+	mutation := newOrganizationBrandingSettingMutation(c.config, OpDelete)
+	return &OrganizationBrandingSettingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OrganizationBrandingSettingClient) DeleteOne(_m *OrganizationBrandingSetting) *OrganizationBrandingSettingDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OrganizationBrandingSettingClient) DeleteOneID(id string) *OrganizationBrandingSettingDeleteOne {
+	builder := c.Delete().Where(organizationbrandingsetting.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OrganizationBrandingSettingDeleteOne{builder}
+}
+
+// Query returns a query builder for OrganizationBrandingSetting.
+func (c *OrganizationBrandingSettingClient) Query() *OrganizationBrandingSettingQuery {
+	return &OrganizationBrandingSettingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOrganizationBrandingSetting},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OrganizationBrandingSetting entity by its id.
+func (c *OrganizationBrandingSettingClient) Get(ctx context.Context, id string) (*OrganizationBrandingSetting, error) {
+	return c.Query().Where(organizationbrandingsetting.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OrganizationBrandingSettingClient) GetX(ctx context.Context, id string) *OrganizationBrandingSetting {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOrganization queries the organization edge of a OrganizationBrandingSetting.
+func (c *OrganizationBrandingSettingClient) QueryOrganization(_m *OrganizationBrandingSetting) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organizationbrandingsetting.Table, organizationbrandingsetting.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, organizationbrandingsetting.OrganizationTable, organizationbrandingsetting.OrganizationColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLogoFile queries the logo_file edge of a OrganizationBrandingSetting.
+func (c *OrganizationBrandingSettingClient) QueryLogoFile(_m *OrganizationBrandingSetting) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organizationbrandingsetting.Table, organizationbrandingsetting.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, organizationbrandingsetting.LogoFileTable, organizationbrandingsetting.LogoFileColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OrganizationBrandingSettingClient) Hooks() []Hook {
+	hooks := c.hooks.OrganizationBrandingSetting
+	return append(hooks[:len(hooks):len(hooks)], organizationbrandingsetting.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *OrganizationBrandingSettingClient) Interceptors() []Interceptor {
+	inters := c.inters.OrganizationBrandingSetting
+	return append(inters[:len(inters):len(inters)], organizationbrandingsetting.Interceptors[:]...)
+}
+
+func (c *OrganizationBrandingSettingClient) mutate(ctx context.Context, m *OrganizationBrandingSettingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OrganizationBrandingSettingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OrganizationBrandingSettingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OrganizationBrandingSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OrganizationBrandingSettingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown OrganizationBrandingSetting mutation op: %q", m.Op())
 	}
 }
 
@@ -35609,16 +35802,16 @@ type (
 		MappableDomain, MappedControl, Narrative, Note, Notification,
 		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
 		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
-		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
-		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
-		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
-		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
-		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
-		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
-		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef, WorkflowProposal []ent.Hook
+		OrganizationBrandingSetting, OrganizationSetting, PasswordResetToken,
+		PersonalAccessToken, Platform, Procedure, Program, ProgramMembership,
+		Remediation, Review, Risk, SLADefinition, Scan, Standard, Subcontrol,
+		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
+		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
+		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentPolicy, AssessmentResponse, Asset,
@@ -35632,16 +35825,17 @@ type (
 		MappableDomain, MappedControl, Narrative, Note, Notification,
 		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
 		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
-		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
-		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
-		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
-		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
-		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
-		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
-		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef, WorkflowProposal []ent.Interceptor
+		OrganizationBrandingSetting, OrganizationSetting, PasswordResetToken,
+		PersonalAccessToken, Platform, Procedure, Program, ProgramMembership,
+		Remediation, Review, Risk, SLADefinition, Scan, Standard, Subcontrol,
+		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
+		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
+		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
+		WorkflowProposal []ent.Interceptor
 	}
 )
 

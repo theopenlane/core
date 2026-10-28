@@ -16418,6 +16418,7 @@ type CreateOrganizationInput struct {
 	ParentID                             *string    `json:"parent_id,omitempty"`
 	SettingID                            *string    `json:"setting_id,omitempty"`
 	PersonalAccessTokenIDs               []string   `json:"personal_access_token_ids,omitempty"`
+	BrandingSettingID                    *string    `json:"branding_setting_id,omitempty"`
 	FileIDs                              []string   `json:"file_ids,omitempty"`
 	EventIDs                             []string   `json:"event_ids,omitempty"`
 	AvatarFileID                         *string    `json:"avatar_file_id,omitempty"`
@@ -16680,6 +16681,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.PersonalAccessTokenIDs; len(v) > 0 {
 		m.AddPersonalAccessTokenIDs(v...)
+	}
+	if v := i.BrandingSettingID; v != nil {
+		m.SetBrandingSettingID(*v)
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -16949,6 +16953,8 @@ type UpdateOrganizationInput struct {
 	ClearPersonalAccessTokens                  bool
 	AddPersonalAccessTokenIDs                  []string `json:"add_personal_access_token_ids,omitempty"`
 	RemovePersonalAccessTokenIDs               []string `json:"remove_personal_access_token_ids,omitempty"`
+	ClearBrandingSetting                       bool
+	BrandingSettingID                          *string `json:"branding_setting_id,omitempty"`
 	ClearFiles                                 bool
 	AddFileIDs                                 []string `json:"add_file_ids,omitempty"`
 	RemoveFileIDs                              []string `json:"remove_file_ids,omitempty"`
@@ -17690,6 +17696,12 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemovePersonalAccessTokenIDs; len(v) > 0 {
 		m.RemovePersonalAccessTokenIDs(v...)
 	}
+	if i.ClearBrandingSetting {
+		m.ClearBrandingSetting()
+	}
+	if v := i.BrandingSettingID; v != nil {
+		m.SetBrandingSettingID(*v)
+	}
 	if i.ClearFiles {
 		m.ClearFiles()
 	}
@@ -17751,6 +17763,152 @@ func (c *OrganizationUpdate) SetInput(i UpdateOrganizationInput) *OrganizationUp
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdateOne builder.
 func (c *OrganizationUpdateOne) SetInput(i UpdateOrganizationInput) *OrganizationUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateOrganizationBrandingSettingInput represents a mutation input for creating organizationbrandingsettings.
+type CreateOrganizationBrandingSettingInput struct {
+	Tags            []string `json:"tags,omitempty"`
+	PrimaryColor    *string  `json:"primary_color,omitempty"`
+	SecondaryColor  *string  `json:"secondary_color,omitempty"`
+	BackgroundColor *string  `json:"background_color,omitempty"`
+	TextColor       *string  `json:"text_color,omitempty"`
+	FontFamily      *string  `json:"font_family,omitempty"`
+	LogoRemoteURL   *string  `json:"logo_remote_url,omitempty"`
+	OrganizationID  *string  `json:"organization_id,omitempty"`
+	LogoFileID      *string  `json:"logo_file_id,omitempty"`
+}
+
+// Mutate applies the CreateOrganizationBrandingSettingInput on the OrganizationBrandingSettingMutation builder.
+func (i *CreateOrganizationBrandingSettingInput) Mutate(m *OrganizationBrandingSettingMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.PrimaryColor; v != nil {
+		m.SetPrimaryColor(*v)
+	}
+	if v := i.SecondaryColor; v != nil {
+		m.SetSecondaryColor(*v)
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if v := i.TextColor; v != nil {
+		m.SetTextColor(*v)
+	}
+	if v := i.FontFamily; v != nil {
+		m.SetFontFamily(*v)
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateOrganizationBrandingSettingInput on the OrganizationBrandingSettingCreate builder.
+func (c *OrganizationBrandingSettingCreate) SetInput(i CreateOrganizationBrandingSettingInput) *OrganizationBrandingSettingCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateOrganizationBrandingSettingInput represents a mutation input for updating organizationbrandingsettings.
+type UpdateOrganizationBrandingSettingInput struct {
+	ClearTags            bool
+	Tags                 []string `json:"tags,omitempty"`
+	AppendTags           []string
+	ClearPrimaryColor    bool
+	PrimaryColor         *string `json:"primary_color,omitempty"`
+	ClearSecondaryColor  bool
+	SecondaryColor       *string `json:"secondary_color,omitempty"`
+	ClearBackgroundColor bool
+	BackgroundColor      *string `json:"background_color,omitempty"`
+	ClearTextColor       bool
+	TextColor            *string `json:"text_color,omitempty"`
+	ClearFontFamily      bool
+	FontFamily           *string `json:"font_family,omitempty"`
+	ClearLogoRemoteURL   bool
+	LogoRemoteURL        *string `json:"logo_remote_url,omitempty"`
+	ClearOrganization    bool
+	OrganizationID       *string `json:"organization_id,omitempty"`
+	ClearLogoFile        bool
+	LogoFileID           *string `json:"logo_file_id,omitempty"`
+}
+
+// Mutate applies the UpdateOrganizationBrandingSettingInput on the OrganizationBrandingSettingMutation builder.
+func (i *UpdateOrganizationBrandingSettingInput) Mutate(m *OrganizationBrandingSettingMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearPrimaryColor {
+		m.ClearPrimaryColor()
+	}
+	if v := i.PrimaryColor; v != nil {
+		m.SetPrimaryColor(*v)
+	}
+	if i.ClearSecondaryColor {
+		m.ClearSecondaryColor()
+	}
+	if v := i.SecondaryColor; v != nil {
+		m.SetSecondaryColor(*v)
+	}
+	if i.ClearBackgroundColor {
+		m.ClearBackgroundColor()
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if i.ClearTextColor {
+		m.ClearTextColor()
+	}
+	if v := i.TextColor; v != nil {
+		m.SetTextColor(*v)
+	}
+	if i.ClearFontFamily {
+		m.ClearFontFamily()
+	}
+	if v := i.FontFamily; v != nil {
+		m.SetFontFamily(*v)
+	}
+	if i.ClearLogoRemoteURL {
+		m.ClearLogoRemoteURL()
+	}
+	if v := i.LogoRemoteURL; v != nil {
+		m.SetLogoRemoteURL(*v)
+	}
+	if i.ClearOrganization {
+		m.ClearOrganization()
+	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
+	}
+	if i.ClearLogoFile {
+		m.ClearLogoFile()
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateOrganizationBrandingSettingInput on the OrganizationBrandingSettingUpdate builder.
+func (c *OrganizationBrandingSettingUpdate) SetInput(i UpdateOrganizationBrandingSettingInput) *OrganizationBrandingSettingUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateOrganizationBrandingSettingInput on the OrganizationBrandingSettingUpdateOne builder.
+func (c *OrganizationBrandingSettingUpdateOne) SetInput(i UpdateOrganizationBrandingSettingInput) *OrganizationBrandingSettingUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

@@ -4922,6 +4922,28 @@ var (
 			return data, nil
 		},
 	}
+	SchemaOrganizationBrandingSetting = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "OrganizationBrandingSetting",
+			Snake: "organization_branding_setting",
+			Lower: "organizationbrandingsetting",
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "organization_branding_setting", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.OrganizationBrandingSetting.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
 	SchemaOrganizationSetting = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
 			Name:  "OrganizationSetting",
@@ -8730,6 +8752,25 @@ func init() {
 		{Name: "slug_name", Label: "SlugName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "stripe_customer_id", Label: "StripeCustomerID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+	}
+	SchemaOrganizationBrandingSetting.Fields = []FieldDescriptor{
+		{Name: "background_color", Label: "BackgroundColor", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "font_family", Label: "FontFamily", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "logo_local_file_id", Label: "LogoLocalFileID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "primary_color", Label: "PrimaryColor", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "remove_assessment_branding", Label: "RemoveAssessmentBranding", Type: "bool", Clearable: true},
+		{Name: "secondary_color", Label: "SecondaryColor", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "text_color", Label: "TextColor", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -15694,6 +15735,14 @@ func init() {
 			Field:       "avatar_local_file_id",
 		},
 		{
+			Name:        "branding_setting",
+			Label:       "BrandingSetting",
+			Target:      SchemaOrganizationBrandingSetting,
+			TargetType:  "OrganizationBrandingSetting",
+			Unique:      true,
+			CreateField: "branding_setting_id",
+		},
+		{
 			Name:        "campaign_creators",
 			Label:       "CampaignCreators",
 			Target:      SchemaGroup,
@@ -16894,6 +16943,26 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "workflows_manager_ids",
 			AddField:    "add_workflows_manager_ids",
+		},
+	}
+	SchemaOrganizationBrandingSetting.Edges = []EdgeDescriptor{
+		{
+			Name:        "logo_file",
+			Label:       "LogoFile",
+			Target:      SchemaFile,
+			TargetType:  "File",
+			Unique:      true,
+			CreateField: "logo_file_id",
+			Field:       "logo_local_file_id",
+		},
+		{
+			Name:        "organization",
+			Label:       "Organization",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "organization_id",
+			Field:       "organization_id",
 		},
 	}
 	SchemaOrganizationSetting.Edges = []EdgeDescriptor{
@@ -28605,6 +28674,7 @@ var allSchemas = []*Schema{
 	SchemaOrgProduct,
 	SchemaOrgSubscription,
 	SchemaOrganization,
+	SchemaOrganizationBrandingSetting,
 	SchemaOrganizationSetting,
 	SchemaPasswordResetToken,
 	SchemaPersonalAccessToken,

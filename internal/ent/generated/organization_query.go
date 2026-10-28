@@ -59,6 +59,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -186,6 +187,7 @@ type OrganizationQuery struct {
 	withChildren                                *OrganizationQuery
 	withSetting                                 *OrganizationSettingQuery
 	withPersonalAccessTokens                    *PersonalAccessTokenQuery
+	withBrandingSetting                         *OrganizationBrandingSettingQuery
 	withAPITokens                               *APITokenQuery
 	withEmailTemplates                          *EmailTemplateQuery
 	withIntegrationWebhooks                     *IntegrationWebhookQuery
@@ -2191,6 +2193,28 @@ func (_q *OrganizationQuery) QueryPersonalAccessTokens() *PersonalAccessTokenQue
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(personalaccesstoken.Table, personalaccesstoken.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, organization.PersonalAccessTokensTable, organization.PersonalAccessTokensPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBrandingSetting chains the current query on the "branding_setting" edge.
+func (_q *OrganizationQuery) QueryBrandingSetting() *OrganizationBrandingSettingQuery {
+	query := (&OrganizationBrandingSettingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(organizationbrandingsetting.Table, organizationbrandingsetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, organization.BrandingSettingTable, organization.BrandingSettingColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -4229,6 +4253,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withChildren:                           _q.withChildren.Clone(),
 		withSetting:                            _q.withSetting.Clone(),
 		withPersonalAccessTokens:               _q.withPersonalAccessTokens.Clone(),
+		withBrandingSetting:                    _q.withBrandingSetting.Clone(),
 		withAPITokens:                          _q.withAPITokens.Clone(),
 		withEmailTemplates:                     _q.withEmailTemplates.Clone(),
 		withIntegrationWebhooks:                _q.withIntegrationWebhooks.Clone(),
@@ -5182,6 +5207,17 @@ func (_q *OrganizationQuery) WithPersonalAccessTokens(opts ...func(*PersonalAcce
 		opt(query)
 	}
 	_q.withPersonalAccessTokens = query
+	return _q
+}
+
+// WithBrandingSetting tells the query-builder to eager-load the nodes that are connected to
+// the "branding_setting" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithBrandingSetting(opts ...func(*OrganizationBrandingSettingQuery)) *OrganizationQuery {
+	query := (&OrganizationBrandingSettingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withBrandingSetting = query
 	return _q
 }
 
@@ -6149,7 +6185,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [159]bool{
+		loadedTypes = [160]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6229,6 +6265,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withChildren != nil,
 			_q.withSetting != nil,
 			_q.withPersonalAccessTokens != nil,
+			_q.withBrandingSetting != nil,
 			_q.withAPITokens != nil,
 			_q.withEmailTemplates != nil,
 			_q.withIntegrationWebhooks != nil,
@@ -6952,6 +6989,12 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization, e *PersonalAccessToken) {
 				n.Edges.PersonalAccessTokens = append(n.Edges.PersonalAccessTokens, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withBrandingSetting; query != nil {
+		if err := _q.loadBrandingSetting(ctx, query, nodes, nil,
+			func(n *Organization, e *OrganizationBrandingSetting) { n.Edges.BrandingSetting = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -11129,6 +11172,33 @@ func (_q *OrganizationQuery) loadPersonalAccessTokens(ctx context.Context, query
 		for kn := range nodes {
 			assign(kn, n)
 		}
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadBrandingSetting(ctx context.Context, query *OrganizationBrandingSettingQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrganizationBrandingSetting)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(organizationbrandingsetting.FieldOrganizationID)
+	}
+	query.Where(predicate.OrganizationBrandingSetting(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.BrandingSettingColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OrganizationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

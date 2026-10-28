@@ -42,6 +42,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationbrandingsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
@@ -1572,6 +1573,43 @@ func init() {
 	orgmembershiphistoryDescID := orgmembershiphistoryFields[8].Descriptor()
 	// orgmembershiphistory.DefaultID holds the default value on creation for the id field.
 	orgmembershiphistory.DefaultID = orgmembershiphistoryDescID.Default.(func() string)
+	organizationbrandingsettinghistory.Policy = privacy.NewPolicies(historyschema.OrganizationBrandingSettingHistory{})
+	organizationbrandingsettinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := organizationbrandingsettinghistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	organizationbrandingsettinghistoryInters := historyschema.OrganizationBrandingSettingHistory{}.Interceptors()
+	organizationbrandingsettinghistory.Interceptors[0] = organizationbrandingsettinghistoryInters[0]
+	organizationbrandingsettinghistoryFields := historyschema.OrganizationBrandingSettingHistory{}.Fields()
+	_ = organizationbrandingsettinghistoryFields
+	// organizationbrandingsettinghistoryDescHistoryTime is the schema descriptor for history_time field.
+	organizationbrandingsettinghistoryDescHistoryTime := organizationbrandingsettinghistoryFields[0].Descriptor()
+	// organizationbrandingsettinghistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	organizationbrandingsettinghistory.DefaultHistoryTime = organizationbrandingsettinghistoryDescHistoryTime.Default.(func() time.Time)
+	// organizationbrandingsettinghistoryDescCreatedAt is the schema descriptor for created_at field.
+	organizationbrandingsettinghistoryDescCreatedAt := organizationbrandingsettinghistoryFields[3].Descriptor()
+	// organizationbrandingsettinghistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	organizationbrandingsettinghistory.DefaultCreatedAt = organizationbrandingsettinghistoryDescCreatedAt.Default.(func() time.Time)
+	// organizationbrandingsettinghistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	organizationbrandingsettinghistoryDescUpdatedAt := organizationbrandingsettinghistoryFields[4].Descriptor()
+	// organizationbrandingsettinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	organizationbrandingsettinghistory.DefaultUpdatedAt = organizationbrandingsettinghistoryDescUpdatedAt.Default.(func() time.Time)
+	// organizationbrandingsettinghistoryDescTags is the schema descriptor for tags field.
+	organizationbrandingsettinghistoryDescTags := organizationbrandingsettinghistoryFields[11].Descriptor()
+	// organizationbrandingsettinghistory.DefaultTags holds the default value on creation for the tags field.
+	organizationbrandingsettinghistory.DefaultTags = organizationbrandingsettinghistoryDescTags.Default.([]string)
+	// organizationbrandingsettinghistoryDescRemoveAssessmentBranding is the schema descriptor for remove_assessment_branding field.
+	organizationbrandingsettinghistoryDescRemoveAssessmentBranding := organizationbrandingsettinghistoryFields[13].Descriptor()
+	// organizationbrandingsettinghistory.DefaultRemoveAssessmentBranding holds the default value on creation for the remove_assessment_branding field.
+	organizationbrandingsettinghistory.DefaultRemoveAssessmentBranding = organizationbrandingsettinghistoryDescRemoveAssessmentBranding.Default.(bool)
+	// organizationbrandingsettinghistoryDescID is the schema descriptor for id field.
+	organizationbrandingsettinghistoryDescID := organizationbrandingsettinghistoryFields[10].Descriptor()
+	// organizationbrandingsettinghistory.DefaultID holds the default value on creation for the id field.
+	organizationbrandingsettinghistory.DefaultID = organizationbrandingsettinghistoryDescID.Default.(func() string)
 	organizationhistory.Policy = privacy.NewPolicies(historyschema.OrganizationHistory{})
 	organizationhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
