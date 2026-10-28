@@ -118,12 +118,6 @@ func (_u *OrganizationBrandingSettingHistoryUpdate) sqlSave(ctx context.Context)
 	if _u.mutation.FontFamilyCleared() {
 		_spec.ClearField(organizationbrandingsettinghistory.FieldFontFamily, field.TypeString)
 	}
-	if _u.mutation.LogoRemoteURLCleared() {
-		_spec.ClearField(organizationbrandingsettinghistory.FieldLogoRemoteURL, field.TypeString)
-	}
-	if _u.mutation.LogoLocalFileIDCleared() {
-		_spec.ClearField(organizationbrandingsettinghistory.FieldLogoLocalFileID, field.TypeString)
-	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationbrandingsettinghistory.Label}
@@ -262,12 +256,6 @@ func (_u *OrganizationBrandingSettingHistoryUpdateOne) sqlSave(ctx context.Conte
 	}
 	if _u.mutation.FontFamilyCleared() {
 		_spec.ClearField(organizationbrandingsettinghistory.FieldFontFamily, field.TypeString)
-	}
-	if _u.mutation.LogoRemoteURLCleared() {
-		_spec.ClearField(organizationbrandingsettinghistory.FieldLogoRemoteURL, field.TypeString)
-	}
-	if _u.mutation.LogoLocalFileIDCleared() {
-		_spec.ClearField(organizationbrandingsettinghistory.FieldLogoLocalFileID, field.TypeString)
 	}
 	_node = &OrganizationBrandingSettingHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

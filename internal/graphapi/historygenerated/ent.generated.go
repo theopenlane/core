@@ -35157,52 +35157,6 @@ func (ec *executionContext) fieldContext_OrganizationBrandingSettingHistory_font
 	return graphql.NewScalarFieldContext("OrganizationBrandingSettingHistory", field, false, false, "String")
 }
 
-func (ec *executionContext) _OrganizationBrandingSettingHistory_logoRemoteURL(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrganizationBrandingSettingHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationBrandingSettingHistory_logoRemoteURL(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.LogoRemoteURL, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOString2ᚖstring(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_OrganizationBrandingSettingHistory_logoRemoteURL(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationBrandingSettingHistory", field, false, false, "String")
-}
-
-func (ec *executionContext) _OrganizationBrandingSettingHistory_logoLocalFileID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrganizationBrandingSettingHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_OrganizationBrandingSettingHistory_logoLocalFileID(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.LogoLocalFileID, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOString2ᚖstring(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_OrganizationBrandingSettingHistory_logoLocalFileID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("OrganizationBrandingSettingHistory", field, false, false, "String")
-}
-
 func (ec *executionContext) _OrganizationBrandingSettingHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrganizationBrandingSettingHistoryConnection) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -134134,7 +134088,7 @@ func (ec *executionContext) unmarshalInputOrganizationBrandingSettingHistoryWher
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDIsNil", "organizationIDNotNil", "organizationIDEqualFold", "organizationIDContainsFold", "removeAssessmentBranding", "removeAssessmentBrandingNEQ", "removeAssessmentBrandingIsNil", "removeAssessmentBrandingNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "secondaryColor", "secondaryColorNEQ", "secondaryColorIn", "secondaryColorNotIn", "secondaryColorContains", "secondaryColorHasPrefix", "secondaryColorHasSuffix", "secondaryColorIsNil", "secondaryColorNotNil", "secondaryColorEqualFold", "secondaryColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "textColor", "textColorNEQ", "textColorIn", "textColorNotIn", "textColorContains", "textColorHasPrefix", "textColorHasSuffix", "textColorIsNil", "textColorNotNil", "textColorEqualFold", "textColorContainsFold", "fontFamily", "fontFamilyNEQ", "fontFamilyIn", "fontFamilyNotIn", "fontFamilyContains", "fontFamilyHasPrefix", "fontFamilyHasSuffix", "fontFamilyIsNil", "fontFamilyNotNil", "fontFamilyEqualFold", "fontFamilyContainsFold", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoLocalFileID", "logoLocalFileIDNEQ", "logoLocalFileIDIn", "logoLocalFileIDNotIn", "logoLocalFileIDContains", "logoLocalFileIDHasPrefix", "logoLocalFileIDHasSuffix", "logoLocalFileIDIsNil", "logoLocalFileIDNotNil", "logoLocalFileIDEqualFold", "logoLocalFileIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDIsNil", "organizationIDNotNil", "organizationIDEqualFold", "organizationIDContainsFold", "removeAssessmentBranding", "removeAssessmentBrandingNEQ", "removeAssessmentBrandingIsNil", "removeAssessmentBrandingNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "secondaryColor", "secondaryColorNEQ", "secondaryColorIn", "secondaryColorNotIn", "secondaryColorContains", "secondaryColorHasPrefix", "secondaryColorHasSuffix", "secondaryColorIsNil", "secondaryColorNotNil", "secondaryColorEqualFold", "secondaryColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "textColor", "textColorNEQ", "textColorIn", "textColorNotIn", "textColorContains", "textColorHasPrefix", "textColorHasSuffix", "textColorIsNil", "textColorNotNil", "textColorEqualFold", "textColorContainsFold", "fontFamily", "fontFamilyNEQ", "fontFamilyIn", "fontFamilyNotIn", "fontFamilyContains", "fontFamilyHasPrefix", "fontFamilyHasSuffix", "fontFamilyIsNil", "fontFamilyNotNil", "fontFamilyEqualFold", "fontFamilyContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -135163,160 +135117,6 @@ func (ec *executionContext) unmarshalInputOrganizationBrandingSettingHistoryWher
 				return it, err
 			}
 			it.FontFamilyContainsFold = data
-		case "logoRemoteURL":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURL"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURL = data
-		case "logoRemoteURLNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLNEQ = data
-		case "logoRemoteURLIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLIn = data
-		case "logoRemoteURLNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLNotIn = data
-		case "logoRemoteURLContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLContains = data
-		case "logoRemoteURLHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLHasPrefix = data
-		case "logoRemoteURLHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLHasSuffix = data
-		case "logoRemoteURLIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLIsNil = data
-		case "logoRemoteURLNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLNotNil = data
-		case "logoRemoteURLEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLEqualFold = data
-		case "logoRemoteURLContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoRemoteURLContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoRemoteURLContainsFold = data
-		case "logoLocalFileID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileID = data
-		case "logoLocalFileIDNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDNEQ = data
-		case "logoLocalFileIDIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDIn = data
-		case "logoLocalFileIDNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDNotIn = data
-		case "logoLocalFileIDContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDContains = data
-		case "logoLocalFileIDHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDHasPrefix = data
-		case "logoLocalFileIDHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDHasSuffix = data
-		case "logoLocalFileIDIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDIsNil = data
-		case "logoLocalFileIDNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDNotNil = data
-		case "logoLocalFileIDEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDEqualFold = data
-		case "logoLocalFileIDContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoLocalFileIDContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LogoLocalFileIDContainsFold = data
 		}
 	}
 	return it, nil
@@ -206099,16 +205899,6 @@ func (ec *executionContext) _OrganizationBrandingSettingHistory(ctx context.Cont
 			}
 		case "fontFamily":
 			out.Values[i] = ec._OrganizationBrandingSettingHistory_fontFamily(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "logoRemoteURL":
-			out.Values[i] = ec._OrganizationBrandingSettingHistory_logoRemoteURL(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "logoLocalFileID":
-			out.Values[i] = ec._OrganizationBrandingSettingHistory_logoLocalFileID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

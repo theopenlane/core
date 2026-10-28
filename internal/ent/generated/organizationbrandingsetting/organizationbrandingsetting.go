@@ -45,14 +45,8 @@ const (
 	FieldTextColor = "text_color"
 	// FieldFontFamily holds the string denoting the font_family field in the database.
 	FieldFontFamily = "font_family"
-	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
-	FieldLogoRemoteURL = "logo_remote_url"
-	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
-	FieldLogoLocalFileID = "logo_local_file_id"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
-	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
-	EdgeLogoFile = "logo_file"
 	// Table holds the table name of the organizationbrandingsetting in the database.
 	Table = "organization_branding_settings"
 	// OrganizationTable is the table that holds the organization relation/edge.
@@ -62,13 +56,6 @@ const (
 	OrganizationInverseTable = "organizations"
 	// OrganizationColumn is the table column denoting the organization relation/edge.
 	OrganizationColumn = "organization_id"
-	// LogoFileTable is the table that holds the logo_file relation/edge.
-	LogoFileTable = "organization_branding_settings"
-	// LogoFileInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	LogoFileInverseTable = "files"
-	// LogoFileColumn is the table column denoting the logo_file relation/edge.
-	LogoFileColumn = "logo_local_file_id"
 )
 
 // Columns holds all SQL columns for organizationbrandingsetting fields.
@@ -89,8 +76,6 @@ var Columns = []string{
 	FieldBackgroundColor,
 	FieldTextColor,
 	FieldFontFamily,
-	FieldLogoRemoteURL,
-	FieldLogoLocalFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -130,8 +115,6 @@ var (
 	BackgroundColorValidator func(string) error
 	// TextColorValidator is a validator for the "text_color" field. It is called by the builders before save.
 	TextColorValidator func(string) error
-	// LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
-	LogoRemoteURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -214,27 +197,10 @@ func ByFontFamily(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFontFamily, opts...).ToFunc()
 }
 
-// ByLogoRemoteURL orders the results by the logo_remote_url field.
-func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
-}
-
-// ByLogoLocalFileID orders the results by the logo_local_file_id field.
-func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
-}
-
 // ByOrganizationField orders the results by organization field.
 func ByOrganizationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOrganizationStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// ByLogoFileField orders the results by logo_file field.
-func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newLogoFileStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOrganizationStep() *sqlgraph.Step {
@@ -242,12 +208,5 @@ func newOrganizationStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OrganizationInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2O, true, OrganizationTable, OrganizationColumn),
-	)
-}
-func newLogoFileStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(LogoFileInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
 	)
 }

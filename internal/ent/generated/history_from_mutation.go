@@ -15564,14 +15564,6 @@ func (m *OrganizationBrandingSettingMutation) CreateHistoryFromCreate(ctx contex
 		create = create.SetFontFamily(fontFamily)
 	}
 
-	if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
-		create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
-	}
-
-	if logoLocalFileID, exists := m.LogoLocalFileID(); exists {
-		create = create.SetNillableLogoLocalFileID(&logoLocalFileID)
-	}
-
 	_, err := create.Save(ctx)
 
 	return err
@@ -15696,18 +15688,6 @@ func (m *OrganizationBrandingSettingMutation) CreateHistoryFromUpdate(ctx contex
 			create = create.SetFontFamily(organizationbrandingsetting.FontFamily)
 		}
 
-		if logoRemoteURL, exists := m.LogoRemoteURL(); exists {
-			create = create.SetNillableLogoRemoteURL(&logoRemoteURL)
-		} else {
-			create = create.SetNillableLogoRemoteURL(organizationbrandingsetting.LogoRemoteURL)
-		}
-
-		if logoLocalFileID, exists := m.LogoLocalFileID(); exists {
-			create = create.SetNillableLogoLocalFileID(&logoLocalFileID)
-		} else {
-			create = create.SetNillableLogoLocalFileID(organizationbrandingsetting.LogoLocalFileID)
-		}
-
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15761,8 +15741,6 @@ func (m *OrganizationBrandingSettingMutation) CreateHistoryFromDelete(ctx contex
 			SetBackgroundColor(organizationbrandingsetting.BackgroundColor).
 			SetTextColor(organizationbrandingsetting.TextColor).
 			SetFontFamily(organizationbrandingsetting.FontFamily).
-			SetNillableLogoRemoteURL(organizationbrandingsetting.LogoRemoteURL).
-			SetNillableLogoLocalFileID(organizationbrandingsetting.LogoLocalFileID).
 			Save(ctx)
 		if err != nil {
 			return err

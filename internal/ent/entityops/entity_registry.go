@@ -8763,8 +8763,6 @@ func init() {
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "font_family", Label: "FontFamily", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "logo_local_file_id", Label: "LogoLocalFileID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "primary_color", Label: "PrimaryColor", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "remove_assessment_branding", Label: "RemoveAssessmentBranding", Type: "bool", Clearable: true},
@@ -16946,15 +16944,6 @@ func init() {
 		},
 	}
 	SchemaOrganizationBrandingSetting.Edges = []EdgeDescriptor{
-		{
-			Name:        "logo_file",
-			Label:       "LogoFile",
-			Target:      SchemaFile,
-			TargetType:  "File",
-			Unique:      true,
-			CreateField: "logo_file_id",
-			Field:       "logo_local_file_id",
-		},
 		{
 			Name:        "organization",
 			Label:       "Organization",

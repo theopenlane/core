@@ -58236,21 +58236,6 @@ func (_q *OrganizationBrandingSettingQuery) collectField(ctx context.Context, on
 				selectedFields = append(selectedFields, organizationbrandingsetting.FieldOrganizationID)
 				fieldSeen[organizationbrandingsetting.FieldOrganizationID] = struct{}{}
 			}
-
-		case "logoFile":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&FileClient{config: _q.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
-				return err
-			}
-			_q.withLogoFile = query
-			if _, ok := fieldSeen[organizationbrandingsetting.FieldLogoLocalFileID]; !ok {
-				selectedFields = append(selectedFields, organizationbrandingsetting.FieldLogoLocalFileID)
-				fieldSeen[organizationbrandingsetting.FieldLogoLocalFileID] = struct{}{}
-			}
 		case "createdAt":
 			if _, ok := fieldSeen[organizationbrandingsetting.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, organizationbrandingsetting.FieldCreatedAt)
@@ -58315,16 +58300,6 @@ func (_q *OrganizationBrandingSettingQuery) collectField(ctx context.Context, on
 			if _, ok := fieldSeen[organizationbrandingsetting.FieldFontFamily]; !ok {
 				selectedFields = append(selectedFields, organizationbrandingsetting.FieldFontFamily)
 				fieldSeen[organizationbrandingsetting.FieldFontFamily] = struct{}{}
-			}
-		case "logoRemoteURL":
-			if _, ok := fieldSeen[organizationbrandingsetting.FieldLogoRemoteURL]; !ok {
-				selectedFields = append(selectedFields, organizationbrandingsetting.FieldLogoRemoteURL)
-				fieldSeen[organizationbrandingsetting.FieldLogoRemoteURL] = struct{}{}
-			}
-		case "logoLocalFileID":
-			if _, ok := fieldSeen[organizationbrandingsetting.FieldLogoLocalFileID]; !ok {
-				selectedFields = append(selectedFields, organizationbrandingsetting.FieldLogoLocalFileID)
-				fieldSeen[organizationbrandingsetting.FieldLogoLocalFileID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

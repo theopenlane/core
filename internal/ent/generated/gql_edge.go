@@ -11824,14 +11824,6 @@ func (_m *OrganizationBrandingSetting) Organization(ctx context.Context) (*Organ
 	return result, MaskNotFound(err)
 }
 
-func (_m *OrganizationBrandingSetting) LogoFile(ctx context.Context) (*File, error) {
-	result, err := _m.Edges.LogoFileOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryLogoFile().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (_m *OrganizationSetting) Organization(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OrganizationOrErr()
 	if IsNotLoaded(err) {

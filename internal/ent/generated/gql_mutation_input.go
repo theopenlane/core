@@ -17775,9 +17775,7 @@ type CreateOrganizationBrandingSettingInput struct {
 	BackgroundColor *string  `json:"background_color,omitempty"`
 	TextColor       *string  `json:"text_color,omitempty"`
 	FontFamily      *string  `json:"font_family,omitempty"`
-	LogoRemoteURL   *string  `json:"logo_remote_url,omitempty"`
 	OrganizationID  *string  `json:"organization_id,omitempty"`
-	LogoFileID      *string  `json:"logo_file_id,omitempty"`
 }
 
 // Mutate applies the CreateOrganizationBrandingSettingInput on the OrganizationBrandingSettingMutation builder.
@@ -17800,14 +17798,8 @@ func (i *CreateOrganizationBrandingSettingInput) Mutate(m *OrganizationBrandingS
 	if v := i.FontFamily; v != nil {
 		m.SetFontFamily(*v)
 	}
-	if v := i.LogoRemoteURL; v != nil {
-		m.SetLogoRemoteURL(*v)
-	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
-	}
-	if v := i.LogoFileID; v != nil {
-		m.SetLogoFileID(*v)
 	}
 }
 
@@ -17832,12 +17824,8 @@ type UpdateOrganizationBrandingSettingInput struct {
 	TextColor            *string `json:"text_color,omitempty"`
 	ClearFontFamily      bool
 	FontFamily           *string `json:"font_family,omitempty"`
-	ClearLogoRemoteURL   bool
-	LogoRemoteURL        *string `json:"logo_remote_url,omitempty"`
 	ClearOrganization    bool
 	OrganizationID       *string `json:"organization_id,omitempty"`
-	ClearLogoFile        bool
-	LogoFileID           *string `json:"logo_file_id,omitempty"`
 }
 
 // Mutate applies the UpdateOrganizationBrandingSettingInput on the OrganizationBrandingSettingMutation builder.
@@ -17881,23 +17869,11 @@ func (i *UpdateOrganizationBrandingSettingInput) Mutate(m *OrganizationBrandingS
 	if v := i.FontFamily; v != nil {
 		m.SetFontFamily(*v)
 	}
-	if i.ClearLogoRemoteURL {
-		m.ClearLogoRemoteURL()
-	}
-	if v := i.LogoRemoteURL; v != nil {
-		m.SetLogoRemoteURL(*v)
-	}
 	if i.ClearOrganization {
 		m.ClearOrganization()
 	}
 	if v := i.OrganizationID; v != nil {
 		m.SetOrganizationID(*v)
-	}
-	if i.ClearLogoFile {
-		m.ClearLogoFile()
-	}
-	if v := i.LogoFileID; v != nil {
-		m.SetLogoFileID(*v)
 	}
 }
 

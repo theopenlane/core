@@ -1748,8 +1748,6 @@ var (
 		{Name: "background_color", Type: field.TypeString, Nullable: true},
 		{Name: "text_color", Type: field.TypeString, Nullable: true},
 		{Name: "font_family", Type: field.TypeString, Nullable: true},
-		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
-		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// OrganizationBrandingSettingHistoryTable holds the schema information for the "organization_branding_setting_history" table.
 	OrganizationBrandingSettingHistoryTable = &schema.Table{

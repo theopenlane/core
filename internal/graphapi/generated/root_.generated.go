@@ -4760,9 +4760,6 @@ type ComplexityRoot struct {
 		CreatedBy                func(childComplexity int) int
 		FontFamily               func(childComplexity int) int
 		ID                       func(childComplexity int) int
-		LogoFile                 func(childComplexity int) int
-		LogoLocalFileID          func(childComplexity int) int
-		LogoRemoteURL            func(childComplexity int) int
 		Organization             func(childComplexity int) int
 		OrganizationID           func(childComplexity int) int
 		PrimaryColor             func(childComplexity int) int
@@ -34794,24 +34791,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationBrandingSetting.ID(childComplexity), true
-	case "OrganizationBrandingSetting.logoFile":
-		if e.ComplexityRoot.OrganizationBrandingSetting.LogoFile == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationBrandingSetting.LogoFile(childComplexity), true
-	case "OrganizationBrandingSetting.logoLocalFileID":
-		if e.ComplexityRoot.OrganizationBrandingSetting.LogoLocalFileID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationBrandingSetting.LogoLocalFileID(childComplexity), true
-	case "OrganizationBrandingSetting.logoRemoteURL":
-		if e.ComplexityRoot.OrganizationBrandingSetting.LogoRemoteURL == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationBrandingSetting.LogoRemoteURL(childComplexity), true
 	case "OrganizationBrandingSetting.organization":
 		if e.ComplexityRoot.OrganizationBrandingSetting.Organization == nil {
 			break
@@ -73626,12 +73605,7 @@ input CreateOrganizationBrandingSettingInput {
   the font family of the Organization
   """
   fontFamily: String
-  """
-  the logo URL of the Organization
-  """
-  logoRemoteURL: String
   organizationID: ID
-  logoFileID: ID
 }
 """
 CreateOrganizationInput is used for create Organization object.
@@ -105170,16 +105144,7 @@ type OrganizationBrandingSetting implements Node {
   the font family of the Organization
   """
   fontFamily: String
-  """
-  the logo URL of the Organization
-  """
-  logoRemoteURL: String
-  """
-  the local logo file id of the Organization, takes precedence over the logo remote URL
-  """
-  logoLocalFileID: ID
   organization: Organization
-  logoFile: File
 }
 """
 A connection to a list of items.
@@ -105402,43 +105367,10 @@ input OrganizationBrandingSettingWhereInput {
   fontFamilyEqualFold: String
   fontFamilyContainsFold: String
   """
-  logo_remote_url field predicates
-  """
-  logoRemoteURL: String
-  logoRemoteURLNEQ: String
-  logoRemoteURLIn: [String!]
-  logoRemoteURLNotIn: [String!]
-  logoRemoteURLContains: String
-  logoRemoteURLHasPrefix: String
-  logoRemoteURLHasSuffix: String
-  logoRemoteURLIsNil: Boolean
-  logoRemoteURLNotNil: Boolean
-  logoRemoteURLEqualFold: String
-  logoRemoteURLContainsFold: String
-  """
-  logo_local_file_id field predicates
-  """
-  logoLocalFileID: ID
-  logoLocalFileIDNEQ: ID
-  logoLocalFileIDIn: [ID!]
-  logoLocalFileIDNotIn: [ID!]
-  logoLocalFileIDContains: ID
-  logoLocalFileIDHasPrefix: ID
-  logoLocalFileIDHasSuffix: ID
-  logoLocalFileIDIsNil: Boolean
-  logoLocalFileIDNotNil: Boolean
-  logoLocalFileIDEqualFold: ID
-  logoLocalFileIDContainsFold: ID
-  """
   organization edge predicates
   """
   hasOrganization: Boolean
   hasOrganizationWith: [OrganizationWhereInput!]
-  """
-  logo_file edge predicates
-  """
-  hasLogoFile: Boolean
-  hasLogoFileWith: [FileWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -136542,15 +136474,8 @@ input UpdateOrganizationBrandingSettingInput {
   """
   fontFamily: String
   clearFontFamily: Boolean
-  """
-  the logo URL of the Organization
-  """
-  logoRemoteURL: String
-  clearLogoRemoteURL: Boolean
   organizationID: ID
   clearOrganization: Boolean
-  logoFileID: ID
-  clearLogoFile: Boolean
 }
 """
 UpdateOrganizationInput is used for update Organization object.
@@ -168853,14 +168778,8 @@ func (ec *executionContext) childFields_OrganizationBrandingSetting(ctx context.
 		return ec.fieldContext_OrganizationBrandingSetting_textColor(ctx, field)
 	case "fontFamily":
 		return ec.fieldContext_OrganizationBrandingSetting_fontFamily(ctx, field)
-	case "logoRemoteURL":
-		return ec.fieldContext_OrganizationBrandingSetting_logoRemoteURL(ctx, field)
-	case "logoLocalFileID":
-		return ec.fieldContext_OrganizationBrandingSetting_logoLocalFileID(ctx, field)
 	case "organization":
 		return ec.fieldContext_OrganizationBrandingSetting_organization(ctx, field)
-	case "logoFile":
-		return ec.fieldContext_OrganizationBrandingSetting_logoFile(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSetting", field.Name)
 }

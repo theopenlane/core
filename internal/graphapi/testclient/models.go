@@ -8889,11 +8889,8 @@ type CreateOrganizationBrandingSettingInput struct {
 	// the text color of the Organization
 	TextColor *string `json:"textColor,omitempty"`
 	// the font family of the Organization
-	FontFamily *string `json:"fontFamily,omitempty"`
-	// the logo URL of the Organization
-	LogoRemoteURL  *string `json:"logoRemoteURL,omitempty"`
+	FontFamily     *string `json:"fontFamily,omitempty"`
 	OrganizationID *string `json:"organizationID,omitempty"`
-	LogoFileID     *string `json:"logoFileID,omitempty"`
 }
 
 // CreateOrganizationInput is used for create Organization object.
@@ -25027,13 +25024,8 @@ type OrganizationBrandingSetting struct {
 	// the text color of the Organization
 	TextColor *string `json:"textColor,omitempty"`
 	// the font family of the Organization
-	FontFamily *string `json:"fontFamily,omitempty"`
-	// the logo URL of the Organization
-	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
-	// the local logo file id of the Organization, takes precedence over the logo remote URL
-	LogoLocalFileID *string       `json:"logoLocalFileID,omitempty"`
-	Organization    *Organization `json:"organization,omitempty"`
-	LogoFile        *File         `json:"logoFile,omitempty"`
+	FontFamily   *string       `json:"fontFamily,omitempty"`
+	Organization *Organization `json:"organization,omitempty"`
 }
 
 func (OrganizationBrandingSetting) IsNode() {}
@@ -25252,36 +25244,9 @@ type OrganizationBrandingSettingWhereInput struct {
 	FontFamilyNotNil       *bool    `json:"fontFamilyNotNil,omitempty"`
 	FontFamilyEqualFold    *string  `json:"fontFamilyEqualFold,omitempty"`
 	FontFamilyContainsFold *string  `json:"fontFamilyContainsFold,omitempty"`
-	// logo_remote_url field predicates
-	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
-	LogoRemoteURLNeq          *string  `json:"logoRemoteURLNEQ,omitempty"`
-	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
-	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
-	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
-	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
-	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
-	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
-	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
-	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
-	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
-	// logo_local_file_id field predicates
-	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
-	LogoLocalFileIdneq          *string  `json:"logoLocalFileIDNEQ,omitempty"`
-	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
-	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
-	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
-	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
-	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
-	LogoLocalFileIDIsNil        *bool    `json:"logoLocalFileIDIsNil,omitempty"`
-	LogoLocalFileIDNotNil       *bool    `json:"logoLocalFileIDNotNil,omitempty"`
-	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
-	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
-	// logo_file edge predicates
-	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
-	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -41918,15 +41883,10 @@ type UpdateOrganizationBrandingSettingInput struct {
 	TextColor      *string `json:"textColor,omitempty"`
 	ClearTextColor *bool   `json:"clearTextColor,omitempty"`
 	// the font family of the Organization
-	FontFamily      *string `json:"fontFamily,omitempty"`
-	ClearFontFamily *bool   `json:"clearFontFamily,omitempty"`
-	// the logo URL of the Organization
-	LogoRemoteURL      *string `json:"logoRemoteURL,omitempty"`
-	ClearLogoRemoteURL *bool   `json:"clearLogoRemoteURL,omitempty"`
-	OrganizationID     *string `json:"organizationID,omitempty"`
-	ClearOrganization  *bool   `json:"clearOrganization,omitempty"`
-	LogoFileID         *string `json:"logoFileID,omitempty"`
-	ClearLogoFile      *bool   `json:"clearLogoFile,omitempty"`
+	FontFamily        *string `json:"fontFamily,omitempty"`
+	ClearFontFamily   *bool   `json:"clearFontFamily,omitempty"`
+	OrganizationID    *string `json:"organizationID,omitempty"`
+	ClearOrganization *bool   `json:"clearOrganization,omitempty"`
 }
 
 // UpdateOrganizationInput is used for update Organization object.

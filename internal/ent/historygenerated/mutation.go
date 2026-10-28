@@ -91625,8 +91625,6 @@ type OrganizationBrandingSettingHistoryMutation struct {
 	background_color           *string
 	text_color                 *string
 	font_family                *string
-	logo_remote_url            *string
-	logo_local_file_id         *string
 	clearedFields              map[string]struct{}
 	done                       bool
 	oldValue                   func(context.Context) (*OrganizationBrandingSettingHistory, error)
@@ -92609,104 +92607,6 @@ func (m *OrganizationBrandingSettingHistoryMutation) ResetFontFamily() {
 	delete(m.clearedFields, organizationbrandingsettinghistory.FieldFontFamily)
 }
 
-// SetLogoRemoteURL sets the "logo_remote_url" field.
-func (m *OrganizationBrandingSettingHistoryMutation) SetLogoRemoteURL(s string) {
-	m.logo_remote_url = &s
-}
-
-// LogoRemoteURL returns the value of the "logo_remote_url" field in the mutation.
-func (m *OrganizationBrandingSettingHistoryMutation) LogoRemoteURL() (r string, exists bool) {
-	v := m.logo_remote_url
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLogoRemoteURL returns the old "logo_remote_url" field's value of the OrganizationBrandingSettingHistory entity.
-// If the OrganizationBrandingSettingHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationBrandingSettingHistoryMutation) OldLogoRemoteURL(ctx context.Context) (v *string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLogoRemoteURL is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLogoRemoteURL requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLogoRemoteURL: %w", err)
-	}
-	return oldValue.LogoRemoteURL, nil
-}
-
-// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (m *OrganizationBrandingSettingHistoryMutation) ClearLogoRemoteURL() {
-	m.logo_remote_url = nil
-	m.clearedFields[organizationbrandingsettinghistory.FieldLogoRemoteURL] = struct{}{}
-}
-
-// LogoRemoteURLCleared returns if the "logo_remote_url" field was cleared in this mutation.
-func (m *OrganizationBrandingSettingHistoryMutation) LogoRemoteURLCleared() bool {
-	_, ok := m.clearedFields[organizationbrandingsettinghistory.FieldLogoRemoteURL]
-	return ok
-}
-
-// ResetLogoRemoteURL resets all changes to the "logo_remote_url" field.
-func (m *OrganizationBrandingSettingHistoryMutation) ResetLogoRemoteURL() {
-	m.logo_remote_url = nil
-	delete(m.clearedFields, organizationbrandingsettinghistory.FieldLogoRemoteURL)
-}
-
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (m *OrganizationBrandingSettingHistoryMutation) SetLogoLocalFileID(s string) {
-	m.logo_local_file_id = &s
-}
-
-// LogoLocalFileID returns the value of the "logo_local_file_id" field in the mutation.
-func (m *OrganizationBrandingSettingHistoryMutation) LogoLocalFileID() (r string, exists bool) {
-	v := m.logo_local_file_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLogoLocalFileID returns the old "logo_local_file_id" field's value of the OrganizationBrandingSettingHistory entity.
-// If the OrganizationBrandingSettingHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationBrandingSettingHistoryMutation) OldLogoLocalFileID(ctx context.Context) (v *string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLogoLocalFileID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLogoLocalFileID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLogoLocalFileID: %w", err)
-	}
-	return oldValue.LogoLocalFileID, nil
-}
-
-// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (m *OrganizationBrandingSettingHistoryMutation) ClearLogoLocalFileID() {
-	m.logo_local_file_id = nil
-	m.clearedFields[organizationbrandingsettinghistory.FieldLogoLocalFileID] = struct{}{}
-}
-
-// LogoLocalFileIDCleared returns if the "logo_local_file_id" field was cleared in this mutation.
-func (m *OrganizationBrandingSettingHistoryMutation) LogoLocalFileIDCleared() bool {
-	_, ok := m.clearedFields[organizationbrandingsettinghistory.FieldLogoLocalFileID]
-	return ok
-}
-
-// ResetLogoLocalFileID resets all changes to the "logo_local_file_id" field.
-func (m *OrganizationBrandingSettingHistoryMutation) ResetLogoLocalFileID() {
-	m.logo_local_file_id = nil
-	delete(m.clearedFields, organizationbrandingsettinghistory.FieldLogoLocalFileID)
-}
-
 // Where appends a list predicates to the OrganizationBrandingSettingHistoryMutation builder.
 func (m *OrganizationBrandingSettingHistoryMutation) Where(ps ...predicate.OrganizationBrandingSettingHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -92741,7 +92641,7 @@ func (m *OrganizationBrandingSettingHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationBrandingSettingHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 18)
 	if m.history_time != nil {
 		fields = append(fields, organizationbrandingsettinghistory.FieldHistoryTime)
 	}
@@ -92796,12 +92696,6 @@ func (m *OrganizationBrandingSettingHistoryMutation) Fields() []string {
 	if m.font_family != nil {
 		fields = append(fields, organizationbrandingsettinghistory.FieldFontFamily)
 	}
-	if m.logo_remote_url != nil {
-		fields = append(fields, organizationbrandingsettinghistory.FieldLogoRemoteURL)
-	}
-	if m.logo_local_file_id != nil {
-		fields = append(fields, organizationbrandingsettinghistory.FieldLogoLocalFileID)
-	}
 	return fields
 }
 
@@ -92846,10 +92740,6 @@ func (m *OrganizationBrandingSettingHistoryMutation) Field(name string) (ent.Val
 		return m.TextColor()
 	case organizationbrandingsettinghistory.FieldFontFamily:
 		return m.FontFamily()
-	case organizationbrandingsettinghistory.FieldLogoRemoteURL:
-		return m.LogoRemoteURL()
-	case organizationbrandingsettinghistory.FieldLogoLocalFileID:
-		return m.LogoLocalFileID()
 	}
 	return nil, false
 }
@@ -92895,10 +92785,6 @@ func (m *OrganizationBrandingSettingHistoryMutation) OldField(ctx context.Contex
 		return m.OldTextColor(ctx)
 	case organizationbrandingsettinghistory.FieldFontFamily:
 		return m.OldFontFamily(ctx)
-	case organizationbrandingsettinghistory.FieldLogoRemoteURL:
-		return m.OldLogoRemoteURL(ctx)
-	case organizationbrandingsettinghistory.FieldLogoLocalFileID:
-		return m.OldLogoLocalFileID(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrganizationBrandingSettingHistory field %s", name)
 }
@@ -93034,20 +92920,6 @@ func (m *OrganizationBrandingSettingHistoryMutation) SetField(name string, value
 		}
 		m.SetFontFamily(v)
 		return nil
-	case organizationbrandingsettinghistory.FieldLogoRemoteURL:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLogoRemoteURL(v)
-		return nil
-	case organizationbrandingsettinghistory.FieldLogoLocalFileID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLogoLocalFileID(v)
-		return nil
 	}
 	return fmt.Errorf("unknown OrganizationBrandingSettingHistory field %s", name)
 }
@@ -93126,12 +92998,6 @@ func (m *OrganizationBrandingSettingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationbrandingsettinghistory.FieldFontFamily) {
 		fields = append(fields, organizationbrandingsettinghistory.FieldFontFamily)
 	}
-	if m.FieldCleared(organizationbrandingsettinghistory.FieldLogoRemoteURL) {
-		fields = append(fields, organizationbrandingsettinghistory.FieldLogoRemoteURL)
-	}
-	if m.FieldCleared(organizationbrandingsettinghistory.FieldLogoLocalFileID) {
-		fields = append(fields, organizationbrandingsettinghistory.FieldLogoLocalFileID)
-	}
 	return fields
 }
 
@@ -93194,12 +93060,6 @@ func (m *OrganizationBrandingSettingHistoryMutation) ClearField(name string) err
 	case organizationbrandingsettinghistory.FieldFontFamily:
 		m.ClearFontFamily()
 		return nil
-	case organizationbrandingsettinghistory.FieldLogoRemoteURL:
-		m.ClearLogoRemoteURL()
-		return nil
-	case organizationbrandingsettinghistory.FieldLogoLocalFileID:
-		m.ClearLogoLocalFileID()
-		return nil
 	}
 	return fmt.Errorf("unknown OrganizationBrandingSettingHistory nullable field %s", name)
 }
@@ -93261,12 +93121,6 @@ func (m *OrganizationBrandingSettingHistoryMutation) ResetField(name string) err
 		return nil
 	case organizationbrandingsettinghistory.FieldFontFamily:
 		m.ResetFontFamily()
-		return nil
-	case organizationbrandingsettinghistory.FieldLogoRemoteURL:
-		m.ResetLogoRemoteURL()
-		return nil
-	case organizationbrandingsettinghistory.FieldLogoLocalFileID:
-		m.ResetLogoLocalFileID()
 		return nil
 	}
 	return fmt.Errorf("unknown OrganizationBrandingSettingHistory field %s", name)

@@ -259,34 +259,6 @@ func (_c *OrganizationBrandingSettingHistoryCreate) SetNillableFontFamily(v *str
 	return _c
 }
 
-// SetLogoRemoteURL sets the "logo_remote_url" field.
-func (_c *OrganizationBrandingSettingHistoryCreate) SetLogoRemoteURL(v string) *OrganizationBrandingSettingHistoryCreate {
-	_c.mutation.SetLogoRemoteURL(v)
-	return _c
-}
-
-// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (_c *OrganizationBrandingSettingHistoryCreate) SetNillableLogoRemoteURL(v *string) *OrganizationBrandingSettingHistoryCreate {
-	if v != nil {
-		_c.SetLogoRemoteURL(*v)
-	}
-	return _c
-}
-
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_c *OrganizationBrandingSettingHistoryCreate) SetLogoLocalFileID(v string) *OrganizationBrandingSettingHistoryCreate {
-	_c.mutation.SetLogoLocalFileID(v)
-	return _c
-}
-
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_c *OrganizationBrandingSettingHistoryCreate) SetNillableLogoLocalFileID(v *string) *OrganizationBrandingSettingHistoryCreate {
-	if v != nil {
-		_c.SetLogoLocalFileID(*v)
-	}
-	return _c
-}
-
 // SetID sets the "id" field.
 func (_c *OrganizationBrandingSettingHistoryCreate) SetID(v string) *OrganizationBrandingSettingHistoryCreate {
 	_c.mutation.SetID(v)
@@ -496,14 +468,6 @@ func (_c *OrganizationBrandingSettingHistoryCreate) createSpec() (*OrganizationB
 	if value, ok := _c.mutation.FontFamily(); ok {
 		_spec.SetField(organizationbrandingsettinghistory.FieldFontFamily, field.TypeString, value)
 		_node.FontFamily = value
-	}
-	if value, ok := _c.mutation.LogoRemoteURL(); ok {
-		_spec.SetField(organizationbrandingsettinghistory.FieldLogoRemoteURL, field.TypeString, value)
-		_node.LogoRemoteURL = &value
-	}
-	if value, ok := _c.mutation.LogoLocalFileID(); ok {
-		_spec.SetField(organizationbrandingsettinghistory.FieldLogoLocalFileID, field.TypeString, value)
-		_node.LogoLocalFileID = &value
 	}
 	return _node, _spec
 }

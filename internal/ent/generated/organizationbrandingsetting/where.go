@@ -135,16 +135,6 @@ func FontFamily(v string) predicate.OrganizationBrandingSetting {
 	return predicate.OrganizationBrandingSetting(sql.FieldEQ(FieldFontFamily, v))
 }
 
-// LogoRemoteURL applies equality check predicate on the "logo_remote_url" field. It's identical to LogoRemoteURLEQ.
-func LogoRemoteURL(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldEQ(FieldLogoRemoteURL, v))
-}
-
-// LogoLocalFileID applies equality check predicate on the "logo_local_file_id" field. It's identical to LogoLocalFileIDEQ.
-func LogoLocalFileID(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldEQ(FieldLogoLocalFileID, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.OrganizationBrandingSetting {
 	return predicate.OrganizationBrandingSetting(sql.FieldEQ(FieldCreatedAt, v))
@@ -1075,156 +1065,6 @@ func FontFamilyContainsFold(v string) predicate.OrganizationBrandingSetting {
 	return predicate.OrganizationBrandingSetting(sql.FieldContainsFold(FieldFontFamily, v))
 }
 
-// LogoRemoteURLEQ applies the EQ predicate on the "logo_remote_url" field.
-func LogoRemoteURLEQ(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldEQ(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLNEQ applies the NEQ predicate on the "logo_remote_url" field.
-func LogoRemoteURLNEQ(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldNEQ(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLIn applies the In predicate on the "logo_remote_url" field.
-func LogoRemoteURLIn(vs ...string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldIn(FieldLogoRemoteURL, vs...))
-}
-
-// LogoRemoteURLNotIn applies the NotIn predicate on the "logo_remote_url" field.
-func LogoRemoteURLNotIn(vs ...string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldNotIn(FieldLogoRemoteURL, vs...))
-}
-
-// LogoRemoteURLGT applies the GT predicate on the "logo_remote_url" field.
-func LogoRemoteURLGT(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldGT(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLGTE applies the GTE predicate on the "logo_remote_url" field.
-func LogoRemoteURLGTE(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldGTE(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLLT applies the LT predicate on the "logo_remote_url" field.
-func LogoRemoteURLLT(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldLT(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLLTE applies the LTE predicate on the "logo_remote_url" field.
-func LogoRemoteURLLTE(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldLTE(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLContains applies the Contains predicate on the "logo_remote_url" field.
-func LogoRemoteURLContains(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldContains(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLHasPrefix applies the HasPrefix predicate on the "logo_remote_url" field.
-func LogoRemoteURLHasPrefix(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldHasPrefix(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLHasSuffix applies the HasSuffix predicate on the "logo_remote_url" field.
-func LogoRemoteURLHasSuffix(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldHasSuffix(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLIsNil applies the IsNil predicate on the "logo_remote_url" field.
-func LogoRemoteURLIsNil() predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldIsNull(FieldLogoRemoteURL))
-}
-
-// LogoRemoteURLNotNil applies the NotNil predicate on the "logo_remote_url" field.
-func LogoRemoteURLNotNil() predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldNotNull(FieldLogoRemoteURL))
-}
-
-// LogoRemoteURLEqualFold applies the EqualFold predicate on the "logo_remote_url" field.
-func LogoRemoteURLEqualFold(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldEqualFold(FieldLogoRemoteURL, v))
-}
-
-// LogoRemoteURLContainsFold applies the ContainsFold predicate on the "logo_remote_url" field.
-func LogoRemoteURLContainsFold(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldContainsFold(FieldLogoRemoteURL, v))
-}
-
-// LogoLocalFileIDEQ applies the EQ predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDEQ(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldEQ(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDNEQ applies the NEQ predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDNEQ(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldNEQ(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDIn applies the In predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDIn(vs ...string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldIn(FieldLogoLocalFileID, vs...))
-}
-
-// LogoLocalFileIDNotIn applies the NotIn predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDNotIn(vs ...string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldNotIn(FieldLogoLocalFileID, vs...))
-}
-
-// LogoLocalFileIDGT applies the GT predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDGT(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldGT(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDGTE applies the GTE predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDGTE(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldGTE(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDLT applies the LT predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDLT(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldLT(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDLTE applies the LTE predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDLTE(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldLTE(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDContains applies the Contains predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDContains(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldContains(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDHasPrefix applies the HasPrefix predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDHasPrefix(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldHasPrefix(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDHasSuffix applies the HasSuffix predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDHasSuffix(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldHasSuffix(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDIsNil applies the IsNil predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDIsNil() predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldIsNull(FieldLogoLocalFileID))
-}
-
-// LogoLocalFileIDNotNil applies the NotNil predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDNotNil() predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldNotNull(FieldLogoLocalFileID))
-}
-
-// LogoLocalFileIDEqualFold applies the EqualFold predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDEqualFold(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldEqualFold(FieldLogoLocalFileID, v))
-}
-
-// LogoLocalFileIDContainsFold applies the ContainsFold predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDContainsFold(v string) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(sql.FieldContainsFold(FieldLogoLocalFileID, v))
-}
-
 // HasOrganization applies the HasEdge predicate on the "organization" edge.
 func HasOrganization() predicate.OrganizationBrandingSetting {
 	return predicate.OrganizationBrandingSetting(func(s *sql.Selector) {
@@ -1240,29 +1080,6 @@ func HasOrganization() predicate.OrganizationBrandingSetting {
 func HasOrganizationWith(preds ...predicate.Organization) predicate.OrganizationBrandingSetting {
 	return predicate.OrganizationBrandingSetting(func(s *sql.Selector) {
 		step := newOrganizationStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasLogoFile applies the HasEdge predicate on the "logo_file" edge.
-func HasLogoFile() predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasLogoFileWith applies the HasEdge predicate on the "logo_file" edge with a given conditions (other predicates).
-func HasLogoFileWith(preds ...predicate.File) predicate.OrganizationBrandingSetting {
-	return predicate.OrganizationBrandingSetting(func(s *sql.Selector) {
-		step := newLogoFileStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

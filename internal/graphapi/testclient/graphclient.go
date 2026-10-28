@@ -87782,8 +87782,6 @@ type GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node 
 	CreatedBy                *string                                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	FontFamily               *string                                                                                  "json:\"fontFamily,omitempty\" graphql:\"fontFamily\""
 	ID                       string                                                                                   "json:\"id\" graphql:\"id\""
-	LogoLocalFileID          *string                                                                                  "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL            *string                                                                                  "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
 	Organization             *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
 	OrganizationID           *string                                                                                  "json:\"organizationID,omitempty\" graphql:\"organizationID\""
 	PrimaryColor             *string                                                                                  "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
@@ -87825,18 +87823,6 @@ func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_N
 		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetLogoLocalFileID() *string {
-	if t == nil {
-		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
-	}
-	return t.LogoLocalFileID
-}
-func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetLogoRemoteURL() *string {
-	if t == nil {
-		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
-	}
-	return t.LogoRemoteURL
 }
 func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetOrganization() *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization {
 	if t == nil {
@@ -87945,8 +87931,6 @@ type GetOrganizationBrandingSettingByID_OrganizationBrandingSetting struct {
 	CreatedBy                *string                                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	FontFamily               *string                                                                      "json:\"fontFamily,omitempty\" graphql:\"fontFamily\""
 	ID                       string                                                                       "json:\"id\" graphql:\"id\""
-	LogoLocalFileID          *string                                                                      "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL            *string                                                                      "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
 	Organization             *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
 	OrganizationID           *string                                                                      "json:\"organizationID,omitempty\" graphql:\"organizationID\""
 	PrimaryColor             *string                                                                      "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
@@ -87988,18 +87972,6 @@ func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetID()
 		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
 	}
 	return t.ID
-}
-func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetLogoLocalFileID() *string {
-	if t == nil {
-		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
-	}
-	return t.LogoLocalFileID
-}
-func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetLogoRemoteURL() *string {
-	if t == nil {
-		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
-	}
-	return t.LogoRemoteURL
 }
 func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetOrganization() *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting_Organization {
 	if t == nil {
@@ -88086,8 +88058,6 @@ type GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node str
 	CreatedBy                *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	FontFamily               *string                                                                               "json:\"fontFamily,omitempty\" graphql:\"fontFamily\""
 	ID                       string                                                                                "json:\"id\" graphql:\"id\""
-	LogoLocalFileID          *string                                                                               "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL            *string                                                                               "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
 	Organization             *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
 	OrganizationID           *string                                                                               "json:\"organizationID,omitempty\" graphql:\"organizationID\""
 	PrimaryColor             *string                                                                               "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
@@ -88129,18 +88099,6 @@ func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node
 		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
 	}
 	return t.ID
-}
-func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetLogoLocalFileID() *string {
-	if t == nil {
-		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
-	}
-	return t.LogoLocalFileID
-}
-func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetLogoRemoteURL() *string {
-	if t == nil {
-		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
-	}
-	return t.LogoRemoteURL
 }
 func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetOrganization() *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization {
 	if t == nil {
@@ -88249,8 +88207,6 @@ type UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_Organiz
 	CreatedBy                *string                                                                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	FontFamily               *string                                                                                                       "json:\"fontFamily,omitempty\" graphql:\"fontFamily\""
 	ID                       string                                                                                                        "json:\"id\" graphql:\"id\""
-	LogoLocalFileID          *string                                                                                                       "json:\"logoLocalFileID,omitempty\" graphql:\"logoLocalFileID\""
-	LogoRemoteURL            *string                                                                                                       "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
 	Organization             *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
 	OrganizationID           *string                                                                                                       "json:\"organizationID,omitempty\" graphql:\"organizationID\""
 	PrimaryColor             *string                                                                                                       "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
@@ -88292,18 +88248,6 @@ func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_Org
 		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
 	}
 	return t.ID
-}
-func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetLogoLocalFileID() *string {
-	if t == nil {
-		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
-	}
-	return t.LogoLocalFileID
-}
-func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetLogoRemoteURL() *string {
-	if t == nil {
-		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
-	}
-	return t.LogoRemoteURL
 }
 func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetOrganization() *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting_Organization {
 	if t == nil {
@@ -203629,8 +203573,6 @@ const GetAllOrganizationBrandingSettingsDocument = `query GetAllOrganizationBran
 				createdBy
 				fontFamily
 				id
-				logoLocalFileID
-				logoRemoteURL
 				organizationID
 				primaryColor
 				removeAssessmentBranding
@@ -203672,8 +203614,6 @@ const GetOrganizationBrandingSettingByIDDocument = `query GetOrganizationBrandin
 		createdBy
 		fontFamily
 		id
-		logoLocalFileID
-		logoRemoteURL
 		organizationID
 		primaryColor
 		removeAssessmentBranding
@@ -203717,8 +203657,6 @@ const GetOrganizationBrandingSettingsDocument = `query GetOrganizationBrandingSe
 				createdBy
 				fontFamily
 				id
-				logoLocalFileID
-				logoRemoteURL
 				organizationID
 				primaryColor
 				removeAssessmentBranding
@@ -203763,8 +203701,6 @@ const UpdateOrganizationBrandingSettingDocument = `mutation UpdateOrganizationBr
 			createdBy
 			fontFamily
 			id
-			logoLocalFileID
-			logoRemoteURL
 			organizationID
 			primaryColor
 			removeAssessmentBranding

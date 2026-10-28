@@ -15,8 +15,6 @@ query GetAllOrganizationBrandingSettingHistories ($first: Int, $last: Int, $afte
 				fontFamily
 				historyTime
 				id
-				logoLocalFileID
-				logoRemoteURL
 				operation
 				organizationID
 				primaryColor
@@ -49,8 +47,6 @@ query GetOrganizationBrandingSettingHistories ($first: Int, $last: Int, $after: 
 				fontFamily
 				historyTime
 				id
-				logoLocalFileID
-				logoRemoteURL
 				operation
 				organizationID
 				primaryColor

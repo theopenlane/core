@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
@@ -69,19 +68,6 @@ func (OrganizationBrandingSetting) Fields() []ent.Field {
 		field.String("font_family").
 			Comment("the font family of the Organization").
 			Optional(),
-		field.String("logo_remote_url").
-			Comment("the logo URL of the Organization").
-			MaxLen(urlMaxLen).
-			Validate(validator.ValidateURL()).
-			Optional().
-			Nillable(),
-		field.String("logo_local_file_id").
-			Comment("the local logo file id of the Organization, takes precedence over the logo remote URL").
-			Optional().
-			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
-			).
-			Nillable(),
 	}
 }
 
@@ -96,15 +82,6 @@ func (b OrganizationBrandingSetting) Edges() []ent.Edge {
 			edgeSchema: Organization{},
 			field:      "organization_id",
 			ref:        "branding_setting",
-		}),
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: b,
-			name:       "logo_file",
-			t:          File.Type,
-			field:      "logo_local_file_id",
-			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(File{}.Name()),
-			},
 		}),
 	}
 }

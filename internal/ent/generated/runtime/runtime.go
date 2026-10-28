@@ -5363,24 +5363,6 @@ func init() {
 	organizationbrandingsettingDescTextColor := organizationbrandingsettingFields[5].Descriptor()
 	// organizationbrandingsetting.TextColorValidator is a validator for the "text_color" field. It is called by the builders before save.
 	organizationbrandingsetting.TextColorValidator = organizationbrandingsettingDescTextColor.Validators[0].(func(string) error)
-	// organizationbrandingsettingDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
-	organizationbrandingsettingDescLogoRemoteURL := organizationbrandingsettingFields[7].Descriptor()
-	// organizationbrandingsetting.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
-	organizationbrandingsetting.LogoRemoteURLValidator = func() func(string) error {
-		validators := organizationbrandingsettingDescLogoRemoteURL.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(logo_remote_url string) error {
-			for _, fn := range fns {
-				if err := fn(logo_remote_url); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
 	// organizationbrandingsettingDescID is the schema descriptor for id field.
 	organizationbrandingsettingDescID := organizationbrandingsettingMixinFields4[0].Descriptor()
 	// organizationbrandingsetting.DefaultID holds the default value on creation for the id field.

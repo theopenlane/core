@@ -67212,42 +67212,12 @@ type OrganizationBrandingSettingWhereInput struct {
 	FontFamilyEqualFold    *string  `json:"fontFamilyEqualFold,omitempty"`
 	FontFamilyContainsFold *string  `json:"fontFamilyContainsFold,omitempty"`
 
-	// "logo_remote_url" field predicates.
-	LogoRemoteURL             *string  `json:"logoRemoteURL,omitempty"`
-	LogoRemoteURLNEQ          *string  `json:"logoRemoteURLNEQ,omitempty"`
-	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
-	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
-	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
-	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
-	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
-	LogoRemoteURLIsNil        bool     `json:"logoRemoteURLIsNil,omitempty"`
-	LogoRemoteURLNotNil       bool     `json:"logoRemoteURLNotNil,omitempty"`
-	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
-	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
-
-	// "logo_local_file_id" field predicates.
-	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
-	LogoLocalFileIDNEQ          *string  `json:"logoLocalFileIDNEQ,omitempty"`
-	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
-	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
-	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
-	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
-	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
-	LogoLocalFileIDIsNil        bool     `json:"logoLocalFileIDIsNil,omitempty"`
-	LogoLocalFileIDNotNil       bool     `json:"logoLocalFileIDNotNil,omitempty"`
-	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
-	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
-
 	// "tags" JSON-string-array predicates.
 	TagsHas *string `json:"tagsHas,omitempty"`
 
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
-
-	// "logo_file" edge predicates.
-	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
-	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -67690,72 +67660,6 @@ func (i *OrganizationBrandingSettingWhereInput) P() (predicate.OrganizationBrand
 	if i.FontFamilyContainsFold != nil {
 		predicates = append(predicates, organizationbrandingsetting.FontFamilyContainsFold(*i.FontFamilyContainsFold))
 	}
-	if i.LogoRemoteURL != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLEQ(*i.LogoRemoteURL))
-	}
-	if i.LogoRemoteURLNEQ != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLNEQ(*i.LogoRemoteURLNEQ))
-	}
-	if len(i.LogoRemoteURLIn) > 0 {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLIn(i.LogoRemoteURLIn...))
-	}
-	if len(i.LogoRemoteURLNotIn) > 0 {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLNotIn(i.LogoRemoteURLNotIn...))
-	}
-	if i.LogoRemoteURLContains != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLContains(*i.LogoRemoteURLContains))
-	}
-	if i.LogoRemoteURLHasPrefix != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLHasPrefix(*i.LogoRemoteURLHasPrefix))
-	}
-	if i.LogoRemoteURLHasSuffix != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLHasSuffix(*i.LogoRemoteURLHasSuffix))
-	}
-	if i.LogoRemoteURLIsNil {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLIsNil())
-	}
-	if i.LogoRemoteURLNotNil {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLNotNil())
-	}
-	if i.LogoRemoteURLEqualFold != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLEqualFold(*i.LogoRemoteURLEqualFold))
-	}
-	if i.LogoRemoteURLContainsFold != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoRemoteURLContainsFold(*i.LogoRemoteURLContainsFold))
-	}
-	if i.LogoLocalFileID != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDEQ(*i.LogoLocalFileID))
-	}
-	if i.LogoLocalFileIDNEQ != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDNEQ(*i.LogoLocalFileIDNEQ))
-	}
-	if len(i.LogoLocalFileIDIn) > 0 {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDIn(i.LogoLocalFileIDIn...))
-	}
-	if len(i.LogoLocalFileIDNotIn) > 0 {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDNotIn(i.LogoLocalFileIDNotIn...))
-	}
-	if i.LogoLocalFileIDContains != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDContains(*i.LogoLocalFileIDContains))
-	}
-	if i.LogoLocalFileIDHasPrefix != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDHasPrefix(*i.LogoLocalFileIDHasPrefix))
-	}
-	if i.LogoLocalFileIDHasSuffix != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDHasSuffix(*i.LogoLocalFileIDHasSuffix))
-	}
-	if i.LogoLocalFileIDIsNil {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDIsNil())
-	}
-	if i.LogoLocalFileIDNotNil {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDNotNil())
-	}
-	if i.LogoLocalFileIDEqualFold != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDEqualFold(*i.LogoLocalFileIDEqualFold))
-	}
-	if i.LogoLocalFileIDContainsFold != nil {
-		predicates = append(predicates, organizationbrandingsetting.LogoLocalFileIDContainsFold(*i.LogoLocalFileIDContainsFold))
-	}
 
 	if i.TagsHas != nil {
 		v := *i.TagsHas
@@ -67782,25 +67686,6 @@ func (i *OrganizationBrandingSettingWhereInput) P() (predicate.OrganizationBrand
 			with = append(with, p)
 		}
 		predicates = append(predicates, organizationbrandingsetting.HasOrganizationWith(with...))
-	}
-	if i.HasLogoFile != nil {
-		p := organizationbrandingsetting.HasLogoFile()
-		if !*i.HasLogoFile {
-			p = organizationbrandingsetting.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasLogoFileWith) > 0 {
-		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
-		with = append(with, file.DeletedAtIsNil())
-		for _, w := range i.HasLogoFileWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasLogoFileWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, organizationbrandingsetting.HasLogoFileWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

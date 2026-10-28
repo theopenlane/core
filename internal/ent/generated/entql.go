@@ -2381,8 +2381,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationbrandingsetting.FieldBackgroundColor:          {Type: field.TypeString, Column: organizationbrandingsetting.FieldBackgroundColor},
 			organizationbrandingsetting.FieldTextColor:                {Type: field.TypeString, Column: organizationbrandingsetting.FieldTextColor},
 			organizationbrandingsetting.FieldFontFamily:               {Type: field.TypeString, Column: organizationbrandingsetting.FieldFontFamily},
-			organizationbrandingsetting.FieldLogoRemoteURL:            {Type: field.TypeString, Column: organizationbrandingsetting.FieldLogoRemoteURL},
-			organizationbrandingsetting.FieldLogoLocalFileID:          {Type: field.TypeString, Column: organizationbrandingsetting.FieldLogoLocalFileID},
 		},
 	}
 	graph.Nodes[58] = &sqlgraph.Node{
@@ -13654,18 +13652,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"OrganizationBrandingSetting",
 		"Organization",
-	)
-	graph.MustAddE(
-		"logo_file",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   organizationbrandingsetting.LogoFileTable,
-			Columns: []string{organizationbrandingsetting.LogoFileColumn},
-			Bidi:    false,
-		},
-		"OrganizationBrandingSetting",
-		"File",
 	)
 	graph.MustAddE(
 		"organization",
@@ -40802,16 +40788,6 @@ func (f *OrganizationBrandingSettingFilter) WhereFontFamily(p entql.StringP) {
 	f.Where(p.Field(organizationbrandingsetting.FieldFontFamily))
 }
 
-// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
-func (f *OrganizationBrandingSettingFilter) WhereLogoRemoteURL(p entql.StringP) {
-	f.Where(p.Field(organizationbrandingsetting.FieldLogoRemoteURL))
-}
-
-// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
-func (f *OrganizationBrandingSettingFilter) WhereLogoLocalFileID(p entql.StringP) {
-	f.Where(p.Field(organizationbrandingsetting.FieldLogoLocalFileID))
-}
-
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
 func (f *OrganizationBrandingSettingFilter) WhereHasOrganization() {
 	f.Where(entql.HasEdge("organization"))
@@ -40820,20 +40796,6 @@ func (f *OrganizationBrandingSettingFilter) WhereHasOrganization() {
 // WhereHasOrganizationWith applies a predicate to check if query has an edge organization with a given conditions (other predicates).
 func (f *OrganizationBrandingSettingFilter) WhereHasOrganizationWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("organization", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
-func (f *OrganizationBrandingSettingFilter) WhereHasLogoFile() {
-	f.Where(entql.HasEdge("logo_file"))
-}
-
-// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
-func (f *OrganizationBrandingSettingFilter) WhereHasLogoFileWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

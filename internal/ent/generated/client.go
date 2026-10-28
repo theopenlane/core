@@ -21780,22 +21780,6 @@ func (c *OrganizationBrandingSettingClient) QueryOrganization(_m *OrganizationBr
 	return query
 }
 
-// QueryLogoFile queries the logo_file edge of a OrganizationBrandingSetting.
-func (c *OrganizationBrandingSettingClient) QueryLogoFile(_m *OrganizationBrandingSetting) *FileQuery {
-	query := (&FileClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organizationbrandingsetting.Table, organizationbrandingsetting.FieldID, id),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, organizationbrandingsetting.LogoFileTable, organizationbrandingsetting.LogoFileColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // Hooks returns the client hooks.
 func (c *OrganizationBrandingSettingClient) Hooks() []Hook {
 	hooks := c.hooks.OrganizationBrandingSetting

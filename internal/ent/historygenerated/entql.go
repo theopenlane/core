@@ -1692,8 +1692,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationbrandingsettinghistory.FieldBackgroundColor:          {Type: field.TypeString, Column: organizationbrandingsettinghistory.FieldBackgroundColor},
 			organizationbrandingsettinghistory.FieldTextColor:                {Type: field.TypeString, Column: organizationbrandingsettinghistory.FieldTextColor},
 			organizationbrandingsettinghistory.FieldFontFamily:               {Type: field.TypeString, Column: organizationbrandingsettinghistory.FieldFontFamily},
-			organizationbrandingsettinghistory.FieldLogoRemoteURL:            {Type: field.TypeString, Column: organizationbrandingsettinghistory.FieldLogoRemoteURL},
-			organizationbrandingsettinghistory.FieldLogoLocalFileID:          {Type: field.TypeString, Column: organizationbrandingsettinghistory.FieldLogoLocalFileID},
 		},
 	}
 	graph.Nodes[35] = &sqlgraph.Node{
@@ -10360,16 +10358,6 @@ func (f *OrganizationBrandingSettingHistoryFilter) WhereTextColor(p entql.String
 // WhereFontFamily applies the entql string predicate on the font_family field.
 func (f *OrganizationBrandingSettingHistoryFilter) WhereFontFamily(p entql.StringP) {
 	f.Where(p.Field(organizationbrandingsettinghistory.FieldFontFamily))
-}
-
-// WhereLogoRemoteURL applies the entql string predicate on the logo_remote_url field.
-func (f *OrganizationBrandingSettingHistoryFilter) WhereLogoRemoteURL(p entql.StringP) {
-	f.Where(p.Field(organizationbrandingsettinghistory.FieldLogoRemoteURL))
-}
-
-// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
-func (f *OrganizationBrandingSettingHistoryFilter) WhereLogoLocalFileID(p entql.StringP) {
-	f.Where(p.Field(organizationbrandingsettinghistory.FieldLogoLocalFileID))
 }
 
 // addPredicate implements the predicateAdder interface.

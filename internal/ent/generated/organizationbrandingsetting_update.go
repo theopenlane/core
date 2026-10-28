@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -282,68 +281,9 @@ func (_u *OrganizationBrandingSettingUpdate) ClearFontFamily() *OrganizationBran
 	return _u
 }
 
-// SetLogoRemoteURL sets the "logo_remote_url" field.
-func (_u *OrganizationBrandingSettingUpdate) SetLogoRemoteURL(v string) *OrganizationBrandingSettingUpdate {
-	_u.mutation.SetLogoRemoteURL(v)
-	return _u
-}
-
-// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (_u *OrganizationBrandingSettingUpdate) SetNillableLogoRemoteURL(v *string) *OrganizationBrandingSettingUpdate {
-	if v != nil {
-		_u.SetLogoRemoteURL(*v)
-	}
-	return _u
-}
-
-// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (_u *OrganizationBrandingSettingUpdate) ClearLogoRemoteURL() *OrganizationBrandingSettingUpdate {
-	_u.mutation.ClearLogoRemoteURL()
-	return _u
-}
-
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_u *OrganizationBrandingSettingUpdate) SetLogoLocalFileID(v string) *OrganizationBrandingSettingUpdate {
-	_u.mutation.SetLogoLocalFileID(v)
-	return _u
-}
-
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_u *OrganizationBrandingSettingUpdate) SetNillableLogoLocalFileID(v *string) *OrganizationBrandingSettingUpdate {
-	if v != nil {
-		_u.SetLogoLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (_u *OrganizationBrandingSettingUpdate) ClearLogoLocalFileID() *OrganizationBrandingSettingUpdate {
-	_u.mutation.ClearLogoLocalFileID()
-	return _u
-}
-
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (_u *OrganizationBrandingSettingUpdate) SetOrganization(v *Organization) *OrganizationBrandingSettingUpdate {
 	return _u.SetOrganizationID(v.ID)
-}
-
-// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (_u *OrganizationBrandingSettingUpdate) SetLogoFileID(id string) *OrganizationBrandingSettingUpdate {
-	_u.mutation.SetLogoFileID(id)
-	return _u
-}
-
-// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (_u *OrganizationBrandingSettingUpdate) SetNillableLogoFileID(id *string) *OrganizationBrandingSettingUpdate {
-	if id != nil {
-		_u = _u.SetLogoFileID(*id)
-	}
-	return _u
-}
-
-// SetLogoFile sets the "logo_file" edge to the File entity.
-func (_u *OrganizationBrandingSettingUpdate) SetLogoFile(v *File) *OrganizationBrandingSettingUpdate {
-	return _u.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the OrganizationBrandingSettingMutation object of the builder.
@@ -354,12 +294,6 @@ func (_u *OrganizationBrandingSettingUpdate) Mutation() *OrganizationBrandingSet
 // ClearOrganization clears the "organization" edge to the Organization entity.
 func (_u *OrganizationBrandingSettingUpdate) ClearOrganization() *OrganizationBrandingSettingUpdate {
 	_u.mutation.ClearOrganization()
-	return _u
-}
-
-// ClearLogoFile clears the "logo_file" edge to the File entity.
-func (_u *OrganizationBrandingSettingUpdate) ClearLogoFile() *OrganizationBrandingSettingUpdate {
-	_u.mutation.ClearLogoFile()
 	return _u
 }
 
@@ -425,11 +359,6 @@ func (_u *OrganizationBrandingSettingUpdate) check() error {
 	if v, ok := _u.mutation.TextColor(); ok {
 		if err := organizationbrandingsetting.TextColorValidator(v); err != nil {
 			return &ValidationError{Name: "text_color", err: fmt.Errorf(`generated: validator failed for field "OrganizationBrandingSetting.text_color": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.LogoRemoteURL(); ok {
-		if err := organizationbrandingsetting.LogoRemoteURLValidator(v); err != nil {
-			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationBrandingSetting.logo_remote_url": %w`, err)}
 		}
 	}
 	return nil
@@ -536,12 +465,6 @@ func (_u *OrganizationBrandingSettingUpdate) sqlSave(ctx context.Context) (_node
 	if _u.mutation.FontFamilyCleared() {
 		_spec.ClearField(organizationbrandingsetting.FieldFontFamily, field.TypeString)
 	}
-	if value, ok := _u.mutation.LogoRemoteURL(); ok {
-		_spec.SetField(organizationbrandingsetting.FieldLogoRemoteURL, field.TypeString, value)
-	}
-	if _u.mutation.LogoRemoteURLCleared() {
-		_spec.ClearField(organizationbrandingsetting.FieldLogoRemoteURL, field.TypeString)
-	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -564,35 +487,6 @@ func (_u *OrganizationBrandingSettingUpdate) sqlSave(ctx context.Context) (_node
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.LogoFileCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   organizationbrandingsetting.LogoFileTable,
-			Columns: []string{organizationbrandingsetting.LogoFileColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   organizationbrandingsetting.LogoFileTable,
-			Columns: []string{organizationbrandingsetting.LogoFileColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -872,68 +766,9 @@ func (_u *OrganizationBrandingSettingUpdateOne) ClearFontFamily() *OrganizationB
 	return _u
 }
 
-// SetLogoRemoteURL sets the "logo_remote_url" field.
-func (_u *OrganizationBrandingSettingUpdateOne) SetLogoRemoteURL(v string) *OrganizationBrandingSettingUpdateOne {
-	_u.mutation.SetLogoRemoteURL(v)
-	return _u
-}
-
-// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (_u *OrganizationBrandingSettingUpdateOne) SetNillableLogoRemoteURL(v *string) *OrganizationBrandingSettingUpdateOne {
-	if v != nil {
-		_u.SetLogoRemoteURL(*v)
-	}
-	return _u
-}
-
-// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (_u *OrganizationBrandingSettingUpdateOne) ClearLogoRemoteURL() *OrganizationBrandingSettingUpdateOne {
-	_u.mutation.ClearLogoRemoteURL()
-	return _u
-}
-
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_u *OrganizationBrandingSettingUpdateOne) SetLogoLocalFileID(v string) *OrganizationBrandingSettingUpdateOne {
-	_u.mutation.SetLogoLocalFileID(v)
-	return _u
-}
-
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_u *OrganizationBrandingSettingUpdateOne) SetNillableLogoLocalFileID(v *string) *OrganizationBrandingSettingUpdateOne {
-	if v != nil {
-		_u.SetLogoLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (_u *OrganizationBrandingSettingUpdateOne) ClearLogoLocalFileID() *OrganizationBrandingSettingUpdateOne {
-	_u.mutation.ClearLogoLocalFileID()
-	return _u
-}
-
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (_u *OrganizationBrandingSettingUpdateOne) SetOrganization(v *Organization) *OrganizationBrandingSettingUpdateOne {
 	return _u.SetOrganizationID(v.ID)
-}
-
-// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (_u *OrganizationBrandingSettingUpdateOne) SetLogoFileID(id string) *OrganizationBrandingSettingUpdateOne {
-	_u.mutation.SetLogoFileID(id)
-	return _u
-}
-
-// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (_u *OrganizationBrandingSettingUpdateOne) SetNillableLogoFileID(id *string) *OrganizationBrandingSettingUpdateOne {
-	if id != nil {
-		_u = _u.SetLogoFileID(*id)
-	}
-	return _u
-}
-
-// SetLogoFile sets the "logo_file" edge to the File entity.
-func (_u *OrganizationBrandingSettingUpdateOne) SetLogoFile(v *File) *OrganizationBrandingSettingUpdateOne {
-	return _u.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the OrganizationBrandingSettingMutation object of the builder.
@@ -944,12 +779,6 @@ func (_u *OrganizationBrandingSettingUpdateOne) Mutation() *OrganizationBranding
 // ClearOrganization clears the "organization" edge to the Organization entity.
 func (_u *OrganizationBrandingSettingUpdateOne) ClearOrganization() *OrganizationBrandingSettingUpdateOne {
 	_u.mutation.ClearOrganization()
-	return _u
-}
-
-// ClearLogoFile clears the "logo_file" edge to the File entity.
-func (_u *OrganizationBrandingSettingUpdateOne) ClearLogoFile() *OrganizationBrandingSettingUpdateOne {
-	_u.mutation.ClearLogoFile()
 	return _u
 }
 
@@ -1028,11 +857,6 @@ func (_u *OrganizationBrandingSettingUpdateOne) check() error {
 	if v, ok := _u.mutation.TextColor(); ok {
 		if err := organizationbrandingsetting.TextColorValidator(v); err != nil {
 			return &ValidationError{Name: "text_color", err: fmt.Errorf(`generated: validator failed for field "OrganizationBrandingSetting.text_color": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.LogoRemoteURL(); ok {
-		if err := organizationbrandingsetting.LogoRemoteURLValidator(v); err != nil {
-			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationBrandingSetting.logo_remote_url": %w`, err)}
 		}
 	}
 	return nil
@@ -1156,12 +980,6 @@ func (_u *OrganizationBrandingSettingUpdateOne) sqlSave(ctx context.Context) (_n
 	if _u.mutation.FontFamilyCleared() {
 		_spec.ClearField(organizationbrandingsetting.FieldFontFamily, field.TypeString)
 	}
-	if value, ok := _u.mutation.LogoRemoteURL(); ok {
-		_spec.SetField(organizationbrandingsetting.FieldLogoRemoteURL, field.TypeString, value)
-	}
-	if _u.mutation.LogoRemoteURLCleared() {
-		_spec.ClearField(organizationbrandingsetting.FieldLogoRemoteURL, field.TypeString)
-	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -1184,35 +1002,6 @@ func (_u *OrganizationBrandingSettingUpdateOne) sqlSave(ctx context.Context) (_n
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.LogoFileCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   organizationbrandingsetting.LogoFileTable,
-			Columns: []string{organizationbrandingsetting.LogoFileColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   organizationbrandingsetting.LogoFileTable,
-			Columns: []string{organizationbrandingsetting.LogoFileColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

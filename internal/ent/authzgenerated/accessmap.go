@@ -4044,11 +4044,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
-}, "logo_file": {
-	ObjectType:          "file",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
-	HasSystemOwnedField: true,
 },
 }, "organization_setting": {"organization": {
 	ObjectType:          "organization",

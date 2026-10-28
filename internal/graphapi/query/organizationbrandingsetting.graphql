@@ -7,8 +7,6 @@ query GetAllOrganizationBrandingSettings {
 				createdBy
 				fontFamily
 				id
-				logoLocalFileID
-				logoRemoteURL
 				organizationID
 				primaryColor
 				removeAssessmentBranding
@@ -33,8 +31,6 @@ query GetOrganizationBrandingSettingByID ($organizationBrandingSettingId: ID!) {
 		createdBy
 		fontFamily
 		id
-		logoLocalFileID
-		logoRemoteURL
 		organizationID
 		primaryColor
 		removeAssessmentBranding
@@ -59,8 +55,6 @@ query GetOrganizationBrandingSettings ($where: OrganizationBrandingSettingWhereI
 				createdBy
 				fontFamily
 				id
-				logoLocalFileID
-				logoRemoteURL
 				organizationID
 				primaryColor
 				removeAssessmentBranding
@@ -86,8 +80,6 @@ mutation UpdateOrganizationBrandingSetting ($updateOrganizationBrandingSettingId
 			createdBy
 			fontFamily
 			id
-			logoLocalFileID
-			logoRemoteURL
 			organizationID
 			primaryColor
 			removeAssessmentBranding

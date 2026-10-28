@@ -56,12 +56,8 @@ type OrganizationBrandingSettingHistory struct {
 	// the text color of the Organization
 	TextColor string `json:"text_color,omitempty"`
 	// the font family of the Organization
-	FontFamily string `json:"font_family,omitempty"`
-	// the logo URL of the Organization
-	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
-	// the local logo file id of the Organization, takes precedence over the logo remote URL
-	LogoLocalFileID *string `json:"logo_local_file_id,omitempty"`
-	selectValues    sql.SelectValues
+	FontFamily   string `json:"font_family,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -75,7 +71,7 @@ func (*OrganizationBrandingSettingHistory) scanValues(columns []string) ([]any, 
 			values[i] = new(history.OpType)
 		case organizationbrandingsettinghistory.FieldRemoveAssessmentBranding:
 			values[i] = new(sql.NullBool)
-		case organizationbrandingsettinghistory.FieldID, organizationbrandingsettinghistory.FieldRef, organizationbrandingsettinghistory.FieldCreatedBy, organizationbrandingsettinghistory.FieldUpdatedBy, organizationbrandingsettinghistory.FieldUpdatedByImpersonator, organizationbrandingsettinghistory.FieldDeletedBy, organizationbrandingsettinghistory.FieldOrganizationID, organizationbrandingsettinghistory.FieldPrimaryColor, organizationbrandingsettinghistory.FieldSecondaryColor, organizationbrandingsettinghistory.FieldBackgroundColor, organizationbrandingsettinghistory.FieldTextColor, organizationbrandingsettinghistory.FieldFontFamily, organizationbrandingsettinghistory.FieldLogoRemoteURL, organizationbrandingsettinghistory.FieldLogoLocalFileID:
+		case organizationbrandingsettinghistory.FieldID, organizationbrandingsettinghistory.FieldRef, organizationbrandingsettinghistory.FieldCreatedBy, organizationbrandingsettinghistory.FieldUpdatedBy, organizationbrandingsettinghistory.FieldUpdatedByImpersonator, organizationbrandingsettinghistory.FieldDeletedBy, organizationbrandingsettinghistory.FieldOrganizationID, organizationbrandingsettinghistory.FieldPrimaryColor, organizationbrandingsettinghistory.FieldSecondaryColor, organizationbrandingsettinghistory.FieldBackgroundColor, organizationbrandingsettinghistory.FieldTextColor, organizationbrandingsettinghistory.FieldFontFamily:
 			values[i] = new(sql.NullString)
 		case organizationbrandingsettinghistory.FieldHistoryTime, organizationbrandingsettinghistory.FieldCreatedAt, organizationbrandingsettinghistory.FieldUpdatedAt, organizationbrandingsettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -211,20 +207,6 @@ func (_m *OrganizationBrandingSettingHistory) assignValues(columns []string, val
 			} else if value.Valid {
 				_m.FontFamily = value.String
 			}
-		case organizationbrandingsettinghistory.FieldLogoRemoteURL:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field logo_remote_url", values[i])
-			} else if value.Valid {
-				_m.LogoRemoteURL = new(string)
-				*_m.LogoRemoteURL = value.String
-			}
-		case organizationbrandingsettinghistory.FieldLogoLocalFileID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
-			} else if value.Valid {
-				_m.LogoLocalFileID = new(string)
-				*_m.LogoLocalFileID = value.String
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -316,16 +298,6 @@ func (_m *OrganizationBrandingSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("font_family=")
 	builder.WriteString(_m.FontFamily)
-	builder.WriteString(", ")
-	if v := _m.LogoRemoteURL; v != nil {
-		builder.WriteString("logo_remote_url=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.LogoLocalFileID; v != nil {
-		builder.WriteString("logo_local_file_id=")
-		builder.WriteString(*v)
-	}
 	builder.WriteByte(')')
 	return builder.String()
 }

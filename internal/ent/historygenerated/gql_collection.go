@@ -8376,16 +8376,6 @@ func (_q *OrganizationBrandingSettingHistoryQuery) collectField(ctx context.Cont
 				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldFontFamily)
 				fieldSeen[organizationbrandingsettinghistory.FieldFontFamily] = struct{}{}
 			}
-		case "logoRemoteURL":
-			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldLogoRemoteURL]; !ok {
-				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldLogoRemoteURL)
-				fieldSeen[organizationbrandingsettinghistory.FieldLogoRemoteURL] = struct{}{}
-			}
-		case "logoLocalFileID":
-			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldLogoLocalFileID]; !ok {
-				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldLogoLocalFileID)
-				fieldSeen[organizationbrandingsettinghistory.FieldLogoLocalFileID] = struct{}{}
-			}
 		case "id":
 		case "__typename":
 		default:

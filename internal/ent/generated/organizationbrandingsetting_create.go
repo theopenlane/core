@@ -9,7 +9,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 )
@@ -223,34 +222,6 @@ func (_c *OrganizationBrandingSettingCreate) SetNillableFontFamily(v *string) *O
 	return _c
 }
 
-// SetLogoRemoteURL sets the "logo_remote_url" field.
-func (_c *OrganizationBrandingSettingCreate) SetLogoRemoteURL(v string) *OrganizationBrandingSettingCreate {
-	_c.mutation.SetLogoRemoteURL(v)
-	return _c
-}
-
-// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (_c *OrganizationBrandingSettingCreate) SetNillableLogoRemoteURL(v *string) *OrganizationBrandingSettingCreate {
-	if v != nil {
-		_c.SetLogoRemoteURL(*v)
-	}
-	return _c
-}
-
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_c *OrganizationBrandingSettingCreate) SetLogoLocalFileID(v string) *OrganizationBrandingSettingCreate {
-	_c.mutation.SetLogoLocalFileID(v)
-	return _c
-}
-
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_c *OrganizationBrandingSettingCreate) SetNillableLogoLocalFileID(v *string) *OrganizationBrandingSettingCreate {
-	if v != nil {
-		_c.SetLogoLocalFileID(*v)
-	}
-	return _c
-}
-
 // SetID sets the "id" field.
 func (_c *OrganizationBrandingSettingCreate) SetID(v string) *OrganizationBrandingSettingCreate {
 	_c.mutation.SetID(v)
@@ -268,25 +239,6 @@ func (_c *OrganizationBrandingSettingCreate) SetNillableID(v *string) *Organizat
 // SetOrganization sets the "organization" edge to the Organization entity.
 func (_c *OrganizationBrandingSettingCreate) SetOrganization(v *Organization) *OrganizationBrandingSettingCreate {
 	return _c.SetOrganizationID(v.ID)
-}
-
-// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (_c *OrganizationBrandingSettingCreate) SetLogoFileID(id string) *OrganizationBrandingSettingCreate {
-	_c.mutation.SetLogoFileID(id)
-	return _c
-}
-
-// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (_c *OrganizationBrandingSettingCreate) SetNillableLogoFileID(id *string) *OrganizationBrandingSettingCreate {
-	if id != nil {
-		_c = _c.SetLogoFileID(*id)
-	}
-	return _c
-}
-
-// SetLogoFile sets the "logo_file" edge to the File entity.
-func (_c *OrganizationBrandingSettingCreate) SetLogoFile(v *File) *OrganizationBrandingSettingCreate {
-	return _c.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the OrganizationBrandingSettingMutation object of the builder.
@@ -380,11 +332,6 @@ func (_c *OrganizationBrandingSettingCreate) check() error {
 			return &ValidationError{Name: "text_color", err: fmt.Errorf(`generated: validator failed for field "OrganizationBrandingSetting.text_color": %w`, err)}
 		}
 	}
-	if v, ok := _c.mutation.LogoRemoteURL(); ok {
-		if err := organizationbrandingsetting.LogoRemoteURLValidator(v); err != nil {
-			return &ValidationError{Name: "logo_remote_url", err: fmt.Errorf(`generated: validator failed for field "OrganizationBrandingSetting.logo_remote_url": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -476,10 +423,6 @@ func (_c *OrganizationBrandingSettingCreate) createSpec() (*OrganizationBranding
 		_spec.SetField(organizationbrandingsetting.FieldFontFamily, field.TypeString, value)
 		_node.FontFamily = value
 	}
-	if value, ok := _c.mutation.LogoRemoteURL(); ok {
-		_spec.SetField(organizationbrandingsetting.FieldLogoRemoteURL, field.TypeString, value)
-		_node.LogoRemoteURL = &value
-	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2O,
@@ -495,23 +438,6 @@ func (_c *OrganizationBrandingSettingCreate) createSpec() (*OrganizationBranding
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OrganizationID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.LogoFileIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   organizationbrandingsetting.LogoFileTable,
-			Columns: []string{organizationbrandingsetting.LogoFileColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.LogoLocalFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

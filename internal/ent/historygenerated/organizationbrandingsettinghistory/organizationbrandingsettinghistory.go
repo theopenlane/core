@@ -55,10 +55,6 @@ const (
 	FieldTextColor = "text_color"
 	// FieldFontFamily holds the string denoting the font_family field in the database.
 	FieldFontFamily = "font_family"
-	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
-	FieldLogoRemoteURL = "logo_remote_url"
-	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
-	FieldLogoLocalFileID = "logo_local_file_id"
 	// Table holds the table name of the organizationbrandingsettinghistory in the database.
 	Table = "organization_branding_setting_history"
 )
@@ -84,8 +80,6 @@ var Columns = []string{
 	FieldBackgroundColor,
 	FieldTextColor,
 	FieldFontFamily,
-	FieldLogoRemoteURL,
-	FieldLogoLocalFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -222,16 +216,6 @@ func ByTextColor(opts ...sql.OrderTermOption) OrderOption {
 // ByFontFamily orders the results by the font_family field.
 func ByFontFamily(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFontFamily, opts...).ToFunc()
-}
-
-// ByLogoRemoteURL orders the results by the logo_remote_url field.
-func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
-}
-
-// ByLogoLocalFileID orders the results by the logo_local_file_id field.
-func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
 }
 
 var (

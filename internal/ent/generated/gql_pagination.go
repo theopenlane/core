@@ -46271,7 +46271,6 @@ func (_q *OrganizationBrandingSettingQuery) clonePage() *OrganizationBrandingSet
 	}
 	c := _q.Clone()
 	c.withOrganization = _q.withOrganization.clonePage()
-	c.withLogoFile = _q.withLogoFile.clonePage()
 	c.loadTotal = _q.loadTotal
 	return c
 }

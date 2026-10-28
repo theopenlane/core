@@ -18868,14 +18868,6 @@ type OrganizationBrandingSettingHistory implements Node {
 	the font family of the Organization
 	"""
 	fontFamily: String
-	"""
-	the logo URL of the Organization
-	"""
-	logoRemoteURL: String
-	"""
-	the local logo file id of the Organization, takes precedence over the logo remote URL
-	"""
-	logoLocalFileID: String
 }
 """
 A connection to a list of items.
@@ -19135,34 +19127,6 @@ input OrganizationBrandingSettingHistoryWhereInput {
 	fontFamilyNotNil: Boolean
 	fontFamilyEqualFold: String
 	fontFamilyContainsFold: String
-	"""
-	logo_remote_url field predicates
-	"""
-	logoRemoteURL: String
-	logoRemoteURLNEQ: String
-	logoRemoteURLIn: [String!]
-	logoRemoteURLNotIn: [String!]
-	logoRemoteURLContains: String
-	logoRemoteURLHasPrefix: String
-	logoRemoteURLHasSuffix: String
-	logoRemoteURLIsNil: Boolean
-	logoRemoteURLNotNil: Boolean
-	logoRemoteURLEqualFold: String
-	logoRemoteURLContainsFold: String
-	"""
-	logo_local_file_id field predicates
-	"""
-	logoLocalFileID: String
-	logoLocalFileIDNEQ: String
-	logoLocalFileIDIn: [String!]
-	logoLocalFileIDNotIn: [String!]
-	logoLocalFileIDContains: String
-	logoLocalFileIDHasPrefix: String
-	logoLocalFileIDHasSuffix: String
-	logoLocalFileIDIsNil: Boolean
-	logoLocalFileIDNotNil: Boolean
-	logoLocalFileIDEqualFold: String
-	logoLocalFileIDContainsFold: String
 }
 type OrganizationHistory implements Node {
 	id: ID!

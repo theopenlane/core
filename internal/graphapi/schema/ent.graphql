@@ -15372,12 +15372,7 @@ input CreateOrganizationBrandingSettingInput {
   the font family of the Organization
   """
   fontFamily: String
-  """
-  the logo URL of the Organization
-  """
-  logoRemoteURL: String
   organizationID: ID
-  logoFileID: ID
 }
 """
 CreateOrganizationInput is used for create Organization object.
@@ -46916,16 +46911,7 @@ type OrganizationBrandingSetting implements Node {
   the font family of the Organization
   """
   fontFamily: String
-  """
-  the logo URL of the Organization
-  """
-  logoRemoteURL: String
-  """
-  the local logo file id of the Organization, takes precedence over the logo remote URL
-  """
-  logoLocalFileID: ID
   organization: Organization
-  logoFile: File
 }
 """
 A connection to a list of items.
@@ -47148,43 +47134,10 @@ input OrganizationBrandingSettingWhereInput {
   fontFamilyEqualFold: String
   fontFamilyContainsFold: String
   """
-  logo_remote_url field predicates
-  """
-  logoRemoteURL: String
-  logoRemoteURLNEQ: String
-  logoRemoteURLIn: [String!]
-  logoRemoteURLNotIn: [String!]
-  logoRemoteURLContains: String
-  logoRemoteURLHasPrefix: String
-  logoRemoteURLHasSuffix: String
-  logoRemoteURLIsNil: Boolean
-  logoRemoteURLNotNil: Boolean
-  logoRemoteURLEqualFold: String
-  logoRemoteURLContainsFold: String
-  """
-  logo_local_file_id field predicates
-  """
-  logoLocalFileID: ID
-  logoLocalFileIDNEQ: ID
-  logoLocalFileIDIn: [ID!]
-  logoLocalFileIDNotIn: [ID!]
-  logoLocalFileIDContains: ID
-  logoLocalFileIDHasPrefix: ID
-  logoLocalFileIDHasSuffix: ID
-  logoLocalFileIDIsNil: Boolean
-  logoLocalFileIDNotNil: Boolean
-  logoLocalFileIDEqualFold: ID
-  logoLocalFileIDContainsFold: ID
-  """
   organization edge predicates
   """
   hasOrganization: Boolean
   hasOrganizationWith: [OrganizationWhereInput!]
-  """
-  logo_file edge predicates
-  """
-  hasLogoFile: Boolean
-  hasLogoFileWith: [FileWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -78288,15 +78241,8 @@ input UpdateOrganizationBrandingSettingInput {
   """
   fontFamily: String
   clearFontFamily: Boolean
-  """
-  the logo URL of the Organization
-  """
-  logoRemoteURL: String
-  clearLogoRemoteURL: Boolean
   organizationID: ID
   clearOrganization: Boolean
-  logoFileID: ID
-  clearLogoFile: Boolean
 }
 """
 UpdateOrganizationInput is used for update Organization object.

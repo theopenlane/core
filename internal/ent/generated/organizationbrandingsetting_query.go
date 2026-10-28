@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -28,7 +27,6 @@ type OrganizationBrandingSettingQuery struct {
 	inters           []Interceptor
 	predicates       []predicate.OrganizationBrandingSetting
 	withOrganization *OrganizationQuery
-	withLogoFile     *FileQuery
 	loadTotal        []func(context.Context, []*OrganizationBrandingSetting) error
 	modifiers        []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -82,28 +80,6 @@ func (_q *OrganizationBrandingSettingQuery) QueryOrganization() *OrganizationQue
 			sqlgraph.From(organizationbrandingsetting.Table, organizationbrandingsetting.FieldID, selector),
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, organizationbrandingsetting.OrganizationTable, organizationbrandingsetting.OrganizationColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryLogoFile chains the current query on the "logo_file" edge.
-func (_q *OrganizationBrandingSettingQuery) QueryLogoFile() *FileQuery {
-	query := (&FileClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organizationbrandingsetting.Table, organizationbrandingsetting.FieldID, selector),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, organizationbrandingsetting.LogoFileTable, organizationbrandingsetting.LogoFileColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -304,7 +280,6 @@ func (_q *OrganizationBrandingSettingQuery) Clone() *OrganizationBrandingSetting
 		inters:           append([]Interceptor{}, _q.inters...),
 		predicates:       append([]predicate.OrganizationBrandingSetting{}, _q.predicates...),
 		withOrganization: _q.withOrganization.Clone(),
-		withLogoFile:     _q.withLogoFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -320,17 +295,6 @@ func (_q *OrganizationBrandingSettingQuery) WithOrganization(opts ...func(*Organ
 		opt(query)
 	}
 	_q.withOrganization = query
-	return _q
-}
-
-// WithLogoFile tells the query-builder to eager-load the nodes that are connected to
-// the "logo_file" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationBrandingSettingQuery) WithLogoFile(opts ...func(*FileQuery)) *OrganizationBrandingSettingQuery {
-	query := (&FileClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withLogoFile = query
 	return _q
 }
 
@@ -418,9 +382,8 @@ func (_q *OrganizationBrandingSettingQuery) sqlAll(ctx context.Context, hooks ..
 	var (
 		nodes       = []*OrganizationBrandingSetting{}
 		_spec       = _q.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [1]bool{
 			_q.withOrganization != nil,
-			_q.withLogoFile != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -447,12 +410,6 @@ func (_q *OrganizationBrandingSettingQuery) sqlAll(ctx context.Context, hooks ..
 	if query := _q.withOrganization; query != nil {
 		if err := _q.loadOrganization(ctx, query, nodes, nil,
 			func(n *OrganizationBrandingSetting, e *Organization) { n.Edges.Organization = e }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withLogoFile; query != nil {
-		if err := _q.loadLogoFile(ctx, query, nodes, nil,
-			func(n *OrganizationBrandingSetting, e *File) { n.Edges.LogoFile = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -493,38 +450,6 @@ func (_q *OrganizationBrandingSettingQuery) loadOrganization(ctx context.Context
 	}
 	return nil
 }
-func (_q *OrganizationBrandingSettingQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes []*OrganizationBrandingSetting, init func(*OrganizationBrandingSetting), assign func(*OrganizationBrandingSetting, *File)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*OrganizationBrandingSetting)
-	for i := range nodes {
-		if nodes[i].LogoLocalFileID == nil {
-			continue
-		}
-		fk := *nodes[i].LogoLocalFileID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(file.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "logo_local_file_id" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
 
 func (_q *OrganizationBrandingSettingQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -556,9 +481,6 @@ func (_q *OrganizationBrandingSettingQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOrganization != nil {
 			_spec.Node.AddColumnOnce(organizationbrandingsetting.FieldOrganizationID)
-		}
-		if _q.withLogoFile != nil {
-			_spec.Node.AddColumnOnce(organizationbrandingsetting.FieldLogoLocalFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

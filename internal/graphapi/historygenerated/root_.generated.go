@@ -1621,8 +1621,6 @@ type ComplexityRoot struct {
 		FontFamily               func(childComplexity int) int
 		HistoryTime              func(childComplexity int) int
 		ID                       func(childComplexity int) int
-		LogoLocalFileID          func(childComplexity int) int
-		LogoRemoteURL            func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		OrganizationID           func(childComplexity int) int
 		PrimaryColor             func(childComplexity int) int
@@ -10982,18 +10980,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationBrandingSettingHistory.ID(childComplexity), true
-	case "OrganizationBrandingSettingHistory.logoLocalFileID":
-		if e.ComplexityRoot.OrganizationBrandingSettingHistory.LogoLocalFileID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationBrandingSettingHistory.LogoLocalFileID(childComplexity), true
-	case "OrganizationBrandingSettingHistory.logoRemoteURL":
-		if e.ComplexityRoot.OrganizationBrandingSettingHistory.LogoRemoteURL == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationBrandingSettingHistory.LogoRemoteURL(childComplexity), true
 	case "OrganizationBrandingSettingHistory.operation":
 		if e.ComplexityRoot.OrganizationBrandingSettingHistory.Operation == nil {
 			break
@@ -38171,14 +38157,6 @@ type OrganizationBrandingSettingHistory implements Node {
   the font family of the Organization
   """
   fontFamily: String
-  """
-  the logo URL of the Organization
-  """
-  logoRemoteURL: String
-  """
-  the local logo file id of the Organization, takes precedence over the logo remote URL
-  """
-  logoLocalFileID: String
 }
 """
 A connection to a list of items.
@@ -38438,34 +38416,6 @@ input OrganizationBrandingSettingHistoryWhereInput {
   fontFamilyNotNil: Boolean
   fontFamilyEqualFold: String
   fontFamilyContainsFold: String
-  """
-  logo_remote_url field predicates
-  """
-  logoRemoteURL: String
-  logoRemoteURLNEQ: String
-  logoRemoteURLIn: [String!]
-  logoRemoteURLNotIn: [String!]
-  logoRemoteURLContains: String
-  logoRemoteURLHasPrefix: String
-  logoRemoteURLHasSuffix: String
-  logoRemoteURLIsNil: Boolean
-  logoRemoteURLNotNil: Boolean
-  logoRemoteURLEqualFold: String
-  logoRemoteURLContainsFold: String
-  """
-  logo_local_file_id field predicates
-  """
-  logoLocalFileID: String
-  logoLocalFileIDNEQ: String
-  logoLocalFileIDIn: [String!]
-  logoLocalFileIDNotIn: [String!]
-  logoLocalFileIDContains: String
-  logoLocalFileIDHasPrefix: String
-  logoLocalFileIDHasSuffix: String
-  logoLocalFileIDIsNil: Boolean
-  logoLocalFileIDNotNil: Boolean
-  logoLocalFileIDEqualFold: String
-  logoLocalFileIDContainsFold: String
 }
 type OrganizationHistory implements Node {
   id: ID!
@@ -60872,10 +60822,6 @@ func (ec *executionContext) childFields_OrganizationBrandingSettingHistory(ctx c
 		return ec.fieldContext_OrganizationBrandingSettingHistory_textColor(ctx, field)
 	case "fontFamily":
 		return ec.fieldContext_OrganizationBrandingSettingHistory_fontFamily(ctx, field)
-	case "logoRemoteURL":
-		return ec.fieldContext_OrganizationBrandingSettingHistory_logoRemoteURL(ctx, field)
-	case "logoLocalFileID":
-		return ec.fieldContext_OrganizationBrandingSettingHistory_logoLocalFileID(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSettingHistory", field.Name)
 }
