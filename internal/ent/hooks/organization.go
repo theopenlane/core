@@ -168,7 +168,7 @@ func postOrgCreateMutation(ctx context.Context, v *generated.Organization, m *ge
 		return ctx, err
 	}
 
-	if err := createDefaultBrandingSettings(ctx, v.ID); err != nil {
+	if err := createDefaultBrandingSettings(ctx, v.ID, m); err != nil {
 		return ctx, err
 	}
 
@@ -267,8 +267,8 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 	return nil
 }
 
-func createDefaultBrandingSettings(ctx context.Context, orgID string) error {
-	err := generated.FromContext(ctx).OrganizationBrandingSetting.Create().
+func createDefaultBrandingSettings(ctx context.Context, orgID string, m *generated.OrganizationMutation) error {
+	err := m.Client().OrganizationBrandingSetting.Create().
 		SetOrganizationID(orgID).
 		Exec(ctx)
 	if err != nil {
