@@ -2,9 +2,11 @@ package gcpscc
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
+	"net/url"
 	"strings"
 	"time"
 
@@ -25,6 +27,12 @@ const (
 	findingsPageSize = 100
 	// findingsMaxPageSize is the maximum number of findings that can be requested per API page
 	findingsMaxPageSize = 1000
+	// findingConsoleURLBase is the SCC console page for a single finding, followed by the escaped finding name
+	findingConsoleURLBase = "https://console.cloud.google.com/security/command-center/findingsv2;name="
+	// cvssv31Prefix is the version prefix for CVSS v3.1 vector strings
+	cvssv31Prefix = "CVSS:3.1"
+	// cvssVectorKey is the payload key holding the CVSS vector built from the SCC cvssv3 metrics
+	cvssVectorKey = "cvss_vector"
 )
 
 // runFindingsCollect collects GCP SCC findings from configured sources
@@ -65,6 +73,8 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, c C
 			if finding == nil {
 				continue
 			}
+
+			finding.ExternalUri = findingConsoleURL(finding, result.GetResource())
 
 			envelope, err := buildFindingEnvelope(sourceName, finding, marshaler)
 			if err != nil {
@@ -136,7 +146,89 @@ func buildFindingEnvelope(sourceName string, finding *securitycenterpb.Finding, 
 		return types.MappingEnvelope{}, ErrFindingEncode
 	}
 
+	rawPayload, err = withCVSSVector(rawPayload, cvssv31Vector(finding.GetVulnerability().GetCve().GetCvssv3()))
+	if err != nil {
+		return types.MappingEnvelope{}, ErrFindingEncode
+	}
+
 	return providerkit.RawEnvelope(resolveFindingResource(sourceName, finding), rawPayload), nil
+}
+
+// withCVSSVector adds the CVSS vector string to a serialized finding payload
+func withCVSSVector(rawPayload []byte, vector string) ([]byte, error) {
+	if vector == "" {
+		return rawPayload, nil
+	}
+
+	var payload map[string]any
+	if err := json.Unmarshal(rawPayload, &payload); err != nil {
+		return nil, err
+	}
+
+	payload[cvssVectorKey] = vector
+
+	return json.Marshal(payload)
+}
+
+// cvssv31Vector builds a CVSS v3.1 vector string from the SCC cvssv3 metrics, empty when any metric is unspecified
+func cvssv31Vector(cvss *securitycenterpb.Cvssv3) string {
+	metrics := []struct {
+		key   string
+		value string
+	}{
+		{key: "AV", value: cvssMetric(cvss.GetAttackVector().String(), "ATTACK_VECTOR_")},
+		{key: "AC", value: cvssMetric(cvss.GetAttackComplexity().String(), "ATTACK_COMPLEXITY_")},
+		{key: "PR", value: cvssMetric(cvss.GetPrivilegesRequired().String(), "PRIVILEGES_REQUIRED_")},
+		{key: "UI", value: cvssMetric(cvss.GetUserInteraction().String(), "USER_INTERACTION_")},
+		{key: "S", value: cvssMetric(cvss.GetScope().String(), "SCOPE_")},
+		{key: "C", value: cvssMetric(cvss.GetConfidentialityImpact().String(), "IMPACT_")},
+		{key: "I", value: cvssMetric(cvss.GetIntegrityImpact().String(), "IMPACT_")},
+		{key: "A", value: cvssMetric(cvss.GetAvailabilityImpact().String(), "IMPACT_")},
+	}
+
+	parts := []string{cvssv31Prefix}
+
+	for _, metric := range metrics {
+		if metric.value == "" {
+			return ""
+		}
+
+		parts = append(parts, metric.key+":"+metric.value)
+	}
+
+	return strings.Join(parts, "/")
+}
+
+// cvssMetric returns the CVSS code for an SCC metric enum, the first letter after its prefix
+func cvssMetric(enumName, prefix string) string {
+	value, ok := strings.CutPrefix(enumName, prefix)
+	if !ok || value == "" || value == "UNSPECIFIED" {
+		return ""
+	}
+
+	return value[:1]
+}
+
+// findingConsoleURL builds the SCC console deep link for a finding
+func findingConsoleURL(finding *securitycenterpb.Finding, resource *securitycenterpb.ListFindingsResponse_ListFindingsResult_Resource) string {
+	name := finding.GetName()
+	if name == "" {
+		return finding.GetExternalUri()
+	}
+
+	consoleURL := findingConsoleURLBase + url.PathEscape(name)
+
+	if project := resource.GetGcpMetadata().GetProjectDisplayName(); project != "" {
+		return consoleURL + "?" + url.Values{"project": {project}}.Encode()
+	}
+
+	if rest, ok := strings.CutPrefix(name, organizationParentPrefix); ok {
+		orgID, _, _ := strings.Cut(rest, "/")
+
+		return consoleURL + "?" + url.Values{"organizationId": {orgID}}.Encode()
+	}
+
+	return consoleURL
 }
 
 // resolveFindingResource chooses the resource identifier used for ingest
