@@ -46,28 +46,23 @@ if [[ -z "${BUILDKITE_BUILD_ID:-}" ]]; then
   echo "⚠️  Not running in Buildkite environment"
 fi
 
-# Create temporary directories for build artifacts
-mkdir -p "${BUILDKITE_BUILD_PATH:-/tmp}/artifacts"
-mkdir -p "${BUILDKITE_BUILD_PATH:-/tmp}/test-results"
-
 # Check disk space before starting build
 echo "📊 Checking disk space..."
-if disk_usage=$(disk_usage_percent); then
+if is_hosted_runner; then
+  echo "☁️  Hosted runner, skipping disk cleanup"
+elif disk_usage=$(disk_usage_percent); then
   echo "📊 Current disk usage: ${disk_usage}%"
 
-  if [[ $disk_usage -gt 75 ]]; then
-    echo "🚨 CRITICAL: Disk usage is ${disk_usage}% - build may fail due to lack of space!"
-    echo "🧹 Running emergency go and docker cleanup..."
+  if [[ $disk_usage -ge $CACHE_CLEANUP_THRESHOLD ]]; then
+    echo "🧹 Disk usage is at or over ${CACHE_CLEANUP_THRESHOLD}%, pruning caches oldest first..."
 
-    clear_build_caches
-
-    # Emergency cleanup - remove stopped containers and dangling images only
-    prune_docker_unused
-
-    # Check if cleanup helped
+    free_disk_to_threshold
     report_disk_after "$disk_usage"
-  elif [[ $disk_usage -gt 70 ]]; then
-    echo "⚠️  WARNING: Disk usage is ${disk_usage}% - cleanup recommended"
+
+    if disk_usage=$(disk_usage_percent) && [[ $disk_usage -ge $DISK_RETRY_THRESHOLD ]]; then
+      echo "🚨 Disk usage is still ${disk_usage}% after cleanup, exiting ${DISK_RETRY_EXIT_CODE} so the pipeline retries the job"
+      exit "$DISK_RETRY_EXIT_CODE"
+    fi
   fi
 else
   echo "⚠️  Could not determine disk usage, skipping disk space check"

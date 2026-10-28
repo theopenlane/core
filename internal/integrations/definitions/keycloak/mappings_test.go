@@ -14,7 +14,7 @@ import (
 func testMappings(t *testing.T) []types.MappingRegistration {
 	t.Helper()
 
-	def, err := Builder()()
+	def, err := Builder(false)()
 	assert.NilError(t, err)
 
 	return def.Mappings

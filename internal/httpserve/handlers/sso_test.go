@@ -403,39 +403,105 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 
 	suite.db.UserSetting.Update().Where(usersetting.UserID(ssoUser.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
 
-	req := httptest.NewRequest(http.MethodGet, "/v1/sso/login?organization_id="+org.ID, nil)
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req)
+	ownPAT, err := suite.db.PersonalAccessToken.Create().
+		SetName(ulids.New().String()).
+		AddOrganizationIDs(org.ID).
+		Save(testUserCtx)
+	require.NoError(t, err)
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	otherUserPAT, err := suite.db.PersonalAccessToken.Create().
+		SetName(ulids.New().String()).
+		AddOrganizationIDs(testUser1.OrganizationID).
+		Save(ctx)
+	require.NoError(t, err)
 
-	cookies := rec.Result().Cookies()
-	var state, nonce *http.Cookie
-	for _, c := range cookies {
-		switch c.Name {
-		case "state":
-			state = c
-		case "nonce":
-			nonce = c
-		}
+	otherOrgAPIToken, err := suite.db.APIToken.Create().
+		SetName(ulids.New().String()).
+		Save(ent.NewContext(auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID), suite.db))
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name         string
+		tokenID      string
+		tokenType    string
+		expectedCode int
+	}{
+		{
+			name:         "no token",
+			expectedCode: http.StatusOK,
+		},
+		{
+			name:         "own personal access token is authorized",
+			tokenID:      ownPAT.ID,
+			tokenType:    "personal",
+			expectedCode: http.StatusOK,
+		},
+		{
+			name:         "another user's personal access token is rejected",
+			tokenID:      otherUserPAT.ID,
+			tokenType:    "personal",
+			expectedCode: http.StatusInternalServerError,
+		},
+		{
+			name:         "another organization's api token is rejected",
+			tokenID:      otherOrgAPIToken.ID,
+			tokenType:    "api",
+			expectedCode: http.StatusInternalServerError,
+		},
 	}
 
-	assert.NotNil(t, state)
-	assert.NotNil(t, nonce)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			req := httptest.NewRequest(http.MethodGet, "/v1/sso/login?organization_id="+org.ID, nil)
+			rec := httptest.NewRecorder()
+			suite.e.ServeHTTP(rec, req)
 
-	oidc.nonce = nonce.Value
+			assert.Equal(t, http.StatusOK, rec.Code)
 
-	// Set cookies as a single Cookie header instead of AddCookie
-	cookieHeader := "state=" + state.Value + "; nonce=" + nonce.Value + "; organization_id=" + org.ID
-	cbReq := httptest.NewRequest(http.MethodGet, "/v1/sso/callback?code=code123&state="+url.QueryEscape(state.Value)+"&organization_id="+org.ID, nil)
-	cbReq.Header.Set("Cookie", cookieHeader)
-	cbRec := httptest.NewRecorder()
+			cookies := rec.Result().Cookies()
+			var state, nonce *http.Cookie
+			for _, c := range cookies {
+				switch c.Name {
+				case "state":
+					state = c
+				case "nonce":
+					nonce = c
+				}
+			}
 
-	suite.e.ServeHTTP(cbRec, cbReq)
-	assert.Equal(t, http.StatusOK, cbRec.Code)
-	var out models.LoginResponse
-	assert.NoError(t, json.NewDecoder(cbRec.Body).Decode(&out))
-	assert.True(t, out.Success)
+			require.NotNil(t, state)
+			require.NotNil(t, nonce)
+
+			oidc.nonce = nonce.Value
+
+			// Set cookies as a single Cookie header instead of AddCookie
+			cookieHeader := "state=" + state.Value + "; nonce=" + nonce.Value + "; organization_id=" + org.ID
+			if tc.tokenID != "" {
+				cookieHeader += "; token_id=" + tc.tokenID + "; token_type=" + tc.tokenType
+			}
+
+			cbReq := httptest.NewRequest(http.MethodGet, "/v1/sso/callback?code=code123&state="+url.QueryEscape(state.Value)+"&organization_id="+org.ID, nil)
+			cbReq.Header.Set("Cookie", cookieHeader)
+			cbRec := httptest.NewRecorder()
+
+			suite.e.ServeHTTP(cbRec, cbReq)
+			assert.Equal(t, tc.expectedCode, cbRec.Code)
+
+			if tc.expectedCode != http.StatusOK {
+				return
+			}
+
+			var out models.LoginResponse
+			assert.NoError(t, json.NewDecoder(cbRec.Body).Decode(&out))
+			assert.True(t, out.Success)
+
+			if tc.tokenID != "" {
+				pat, err := suite.db.PersonalAccessToken.Get(testUserCtx, tc.tokenID)
+				require.NoError(t, err)
+				assert.Contains(t, pat.SSOAuthorizations, org.ID)
+			}
+		})
+	}
 }
 
 // TestSSOCallbackJITProvisioning verifies that when SSO login is enforced and just-in-time provisioning is

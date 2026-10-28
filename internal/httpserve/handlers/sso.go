@@ -278,7 +278,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 
 		userCtx = auth.WithCaller(userCtx, ssoCaller)
 
-		aErr := h.authorizeTokenSSO(auth.WithInternalOperationContext(userCtx), tokenType.Value, tokenID.Value, orgCookie.Value)
+		aErr := h.authorizeTokenSSO(auth.WithInternalOperationContext(userCtx), tokenType.Value, tokenID.Value, orgCookie.Value, ssoCaller.SubjectID)
 		if aErr != nil {
 			logx.FromContext(reqCtx).Error().Err(aErr).Msg("unable to authorize token for SSO")
 
@@ -453,12 +453,17 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 }
 
 // authorizeTokenSSO updates the SSO authorization timestamp for a token type (API or Personal Access Token)
-func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, orgID string) error {
+func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, orgID, userID string) error {
 	switch tokenType {
 	case "api":
 		apiToken, err := transaction.FromContext(ctx).APIToken.Get(ctx, tokenID)
 		if err != nil {
 			return err
+		}
+
+		// an api token can only be authorized for the organization that owns it
+		if apiToken.OwnerID != orgID {
+			return generated.ErrPermissionDenied
 		}
 
 		auths := apiToken.SSOAuthorizations
@@ -477,6 +482,11 @@ func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, org
 		pat, err := transaction.FromContext(ctx).PersonalAccessToken.Get(ctx, tokenID)
 		if err != nil {
 			return err
+		}
+
+		// a personal access token can only be authorized by the user who owns it
+		if pat.OwnerID != userID {
+			return generated.ErrPermissionDenied
 		}
 
 		auths := pat.SSOAuthorizations

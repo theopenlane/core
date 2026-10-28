@@ -15644,10 +15644,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetAllowSupportAccess(allowSupportAccess)
 	}
 
-	if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
-		create = create.SetComplianceWebhookToken(complianceWebhookToken)
-	}
-
 	if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
 		create = create.SetPaymentMethodAdded(paymentMethodAdded)
 	}
@@ -15900,12 +15896,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetAllowSupportAccess(organizationsetting.AllowSupportAccess)
 		}
 
-		if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
-			create = create.SetComplianceWebhookToken(complianceWebhookToken)
-		} else {
-			create = create.SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken)
-		}
-
 		if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
 			create = create.SetPaymentMethodAdded(paymentMethodAdded)
 		} else {
@@ -15991,7 +15981,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
 			SetSSOExemptDomains(organizationsetting.SSOExemptDomains).
 			SetAllowSupportAccess(organizationsetting.AllowSupportAccess).
-			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).
 			SetNillablePendingDeletionAt(organizationsetting.PendingDeletionAt).
 			Save(ctx)

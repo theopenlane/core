@@ -19,6 +19,8 @@ import (
 var (
 	// ErrIntegrationsNotEnabled is returned when the integrations runtime is not configured on this server
 	ErrIntegrationsNotEnabled = errors.New("integrations are not enabled")
+	// ErrCredentialRequiresAuthFlow is returned when credentials are posted for a connection that is configured through its auth flow
+	ErrCredentialRequiresAuthFlow = errors.New("this connection must be configured through its authorization flow")
 	// ErrHandlerSourceUnavailable is returned when the handlers package source cannot be loaded for response analysis
 	ErrHandlerSourceUnavailable = errors.New("handlers package source unavailable for response analysis")
 	// ErrHandlerDeclarationNotFound is returned when a route handler cannot be resolved to a declaration in the handlers package source

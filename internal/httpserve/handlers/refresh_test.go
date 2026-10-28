@@ -80,7 +80,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 		OrgID:  testUser1.OrganizationID,
 	}
 
-	_, refresh, err := tm.CreateTokenPair(claims)
+	access, refresh, err := tm.CreateTokenPair(claims)
 	require.NoError(t, err)
 
 	// Ensure refresh token is valid by waiting until its NotBefore time instead of a fixed sleep.
@@ -108,6 +108,11 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 			refresh:            "",
 			expectedStatus:     http.StatusBadRequest,
 			expectedErrMessage: "refresh_token is required",
+		},
+		{
+			name:           "access token cannot be used as a refresh token",
+			refresh:        access,
+			expectedStatus: http.StatusBadRequest,
 		},
 	}
 

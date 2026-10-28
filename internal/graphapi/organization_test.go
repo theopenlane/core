@@ -16,11 +16,14 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -625,6 +628,19 @@ func TestMutationUpdateOrganization(t *testing.T) {
 	om := (&th.OrgMemberBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 	memberUserCtx := auth.NewTestContextWithOrgID(om.UserID, org.ID)
 
+	otherOrgUser := suite.UserBuilder(context.Background(), t)
+
+	otherOrg, err := suite.Client.DB.Organization.Get(otherOrgUser.UserCtx, otherOrgUser.OrganizationID)
+	assert.NilError(t, err)
+
+	otherSetting, err := otherOrg.QuerySetting().Only(otherOrgUser.UserCtx)
+	assert.NilError(t, err)
+
+	ownerMembershipID, err := suite.Client.DB.OrgMembership.Query().
+		Where(orgmembership.UserID(orgUser.ID), orgmembership.OrganizationID(org.ID)).
+		OnlyID(ent.NewContext(reqCtx, suite.Client.DB))
+	assert.NilError(t, err)
+
 	// avatar file setup
 	avatarFile := th.UploadFile(t, th.LogoFilePath)
 	invalidAvatarFile := th.UploadFile(t, th.TxtFilePath)
@@ -819,6 +835,29 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			},
 		},
 		{
+			name:  "update setting, another org's setting id",
+			orgID: org.ID,
+			updateInput: testclient.UpdateOrganizationInput{
+				SettingID: &otherSetting.ID,
+			},
+			client:   suite.Client.API,
+			ctx:      reqCtx,
+			errorMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:  "update settings, another org's setting id",
+			orgID: org.ID,
+			updateInput: testclient.UpdateOrganizationInput{
+				SettingID: &otherSetting.ID,
+				UpdateOrgSettings: &testclient.UpdateOrganizationSettingInput{
+					Domains: []string{"other.theopenlane.io"},
+				},
+			},
+			client:   suite.Client.API,
+			ctx:      reqCtx,
+			errorMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
 			name:       "update avatar, invalid file",
 			orgID:      org.ID,
 			avatarFile: invalidAvatarFile,
@@ -855,6 +894,16 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			client:   suite.Client.API,
 			ctx:      th.SharedTestUser2.UserCtx,
 			errorMsg: th.NotFoundErrorMsg,
+		},
+		{
+			name:  "remove members, admin cannot remove owner",
+			orgID: org.ID,
+			updateInput: testclient.UpdateOrganizationInput{
+				RemoveOrgMembers: []string{ownerMembershipID},
+			},
+			client:   suite.Client.API,
+			ctx:      auth.NewTestContextWithOrgID(user1.ID, org.ID),
+			errorMsg: hooks.ErrOrgOwnerCannotBeDeleted.Error(),
 		},
 	}
 
@@ -904,6 +953,27 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			}
 		})
 	}
+
+	otherSettingAfter, err := suite.Client.DB.OrganizationSetting.Get(otherOrgUser.UserCtx, otherSetting.ID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(otherOrgUser.OrganizationID, otherSettingAfter.OrganizationID))
+	assert.Check(t, is.DeepEqual(otherSetting.Domains, otherSettingAfter.Domains))
+
+	_, err = suite.Client.API.UpdateOrganization(reqCtx, org.ID, testclient.UpdateOrganizationInput{RemoveOrgMembers: []string{om.ID}}, nil, nil)
+	assert.NilError(t, err)
+
+	memberExists, err := suite.Client.DB.OrgMembership.Query().Where(orgmembership.ID(om.ID)).Exist(ent.NewContext(reqCtx, suite.Client.DB))
+	assert.NilError(t, err)
+	assert.Check(t, !memberExists)
+
+	memberCanView, err := suite.Client.DB.Authz.CheckOrgAccess(context.Background(), fgax.AccessCheck{
+		SubjectID:   om.UserID,
+		SubjectType: auth.UserSubjectType,
+		ObjectID:    org.ID,
+		Relation:    fgax.CanView,
+	})
+	assert.NilError(t, err)
+	assert.Check(t, !memberCanView)
 
 	(&th.Cleanup[*generated.OrganizationDeleteOne]{Client: suite.Client.DB.Organization, ID: org.ID}).MustDelete(reqCtx, t)
 	(&th.Cleanup[*generated.UserDeleteOne]{Client: suite.Client.DB.User, ID: user1.ID}).MustDelete(reqCtx, t)

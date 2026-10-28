@@ -113,7 +113,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByKey() {
 	s.Require().Len(msgs, 1)
 	s.Equal([]string{"recipient@example.com"}, msgs[0].To)
 	s.Equal("Hello Workflow", msgs[0].Subject)
-	s.Equal("sender@example.com", msgs[0].From)
+	s.Equal("test@example.com", msgs[0].From)
 }
 
 // TestExecuteSendEmail_ByID verifies that a send_email action resolves an email template
@@ -286,7 +286,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WorkflowDefinitionWithSen
 	s.Require().Len(msgs, 1)
 	s.Equal([]string{"e2e@example.com"}, msgs[0].To)
 	s.Equal("E2E Subject", msgs[0].Subject)
-	s.Equal("noreply@example.com", msgs[0].From)
+	s.Equal("test@example.com", msgs[0].From)
 	s.Contains(msgs[0].Text, "E2E body text")
 }
 
@@ -556,7 +556,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 	s.Require().Len(msgs, 1)
 	s.Equal([]string{"async@example.com"}, msgs[0].To)
 	s.Equal("Async Subject", msgs[0].Subject)
-	s.Equal("noreply@example.com", msgs[0].From)
+	s.Equal("test@example.com", msgs[0].From)
 	s.Contains(msgs[0].Text, "Async body text")
 }
 

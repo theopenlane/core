@@ -40,7 +40,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	caller, ok := passkeyRegistrationCaller(reqCtx)
+	caller, ok := auth.InteractiveUserCallerFromContext(reqCtx)
 	if !ok {
 		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
@@ -150,7 +150,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
-	caller, ok := passkeyRegistrationCaller(reqCtx)
+	caller, ok := auth.InteractiveUserCallerFromContext(reqCtx)
 	if !ok || caller.SubjectID != userID {
 		return h.Unauthorized(ctx, ErrAuthenticationRequired)
 	}
@@ -218,16 +218,6 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
 	}
 
 	return h.Success(ctx, out)
-}
-
-// passkeyRegistrationCaller returns the caller when it is a user signed in with their own session
-func passkeyRegistrationCaller(ctx context.Context) (*auth.Caller, bool) {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller.AuthenticationType != auth.JWTAuthentication || caller.IsAnonymous() || caller.IsImpersonated() {
-		return nil, false
-	}
-
-	return caller, true
 }
 
 // BeginWebauthnLogin is the request to begin a webauthn login

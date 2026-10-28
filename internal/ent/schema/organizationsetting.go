@@ -11,7 +11,6 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -110,7 +109,11 @@ func (OrganizationSetting) Fields() []ent.Field {
 		field.String("identity_provider_client_secret").
 			Comment("client secret for SSO integration").
 			Nillable().
-			Optional(),
+			Optional().
+			Sensitive().
+			Annotations(
+				entgql.Skip(entgql.SkipType | entgql.SkipWhereInput | entgql.SkipOrderField),
+			),
 		field.String("identity_provider_metadata_endpoint").
 			Comment("metadata URL for the SSO provider").
 			Optional(),
@@ -158,14 +161,6 @@ func (OrganizationSetting) Fields() []ent.Field {
 			Comment("allow Openlane support to access this organization without a directory account").
 			Default(false).
 			Optional(),
-		field.String("compliance_webhook_token").
-			Comment("unique token used to receive compliance webhook events").
-			Unique().
-			Optional().
-			DefaultFunc(func() string {
-				token := keygen.PrefixedSecret("tola_wsec")
-				return token
-			}),
 		field.Bool("payment_method_added").
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput | entgql.SkipOrderField),
