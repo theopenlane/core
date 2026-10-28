@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/iam/auth"
@@ -192,7 +193,7 @@ func sendInvalidationNotifications(ctx context.Context, client *generated.Client
 		return nil
 	}
 
-	ownerID, err := workflows.ResolveOwnerID(ctx, instance.OwnerID)
+	ownerID, err := utils.ResolveOwnerID(ctx, instance.OwnerID)
 	if err != nil {
 		log.Ctx(ctx).Warn().Err(err).Str("instance_id", instance.ID).Msg("failed to resolve owner for invalidation notification")
 		return ErrFailedToResolveInvalidationNotificationOwner

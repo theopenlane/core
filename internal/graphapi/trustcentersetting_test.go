@@ -262,8 +262,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			name:      "not authorized - different org user",
 			settingID: trustCenter.Edges.Setting.ID,
 			input: testclient.UpdateTrustCenterSettingInput{
-				TrustCenterID: &tcOrg.TrustCenter.ID,
-				Title:         lo.ToPtr("Unauthorized"),
+				Title: lo.ToPtr("Unauthorized"),
 			},
 			client:      suite.Client.API,
 			ctx:         tcOrg2.Owner.UserCtx,

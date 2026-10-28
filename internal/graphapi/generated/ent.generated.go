@@ -415,9 +415,6 @@ type CreateOrganizationInputResolver interface {
 type CreateTrustCenterFAQInputResolver interface {
 	CreateNote(ctx context.Context, obj *generated.CreateTrustCenterFAQInput, data *generated.CreateNoteInput) error
 }
-type CreateTrustCenterInputResolver interface {
-	CreateTrustCenterSetting(ctx context.Context, obj *generated.CreateTrustCenterInput, data *generated.CreateTrustCenterSettingInput) error
-}
 type UpdateActionPlanInputResolver interface {
 	RevisionBump(ctx context.Context, obj *generated.UpdateActionPlanInput, data *models.VersionBump) error
 }
@@ -228370,7 +228367,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "pirschDomainID", "pirschIdentificationCode", "pirschAccessLink", "previewStatus", "subprocessorURL", "ownerID", "blockedGroupIDs", "editorIDs", "customDomainID", "previewDomainID", "settingID", "previewSettingID", "watermarkConfigID", "trustCenterSubprocessorIDs", "trustCenterDocIDs", "trustCenterComplianceIDs", "templateIDs", "postIDs", "trustCenterEntityIDs", "trustCenterNdaRequestIDs", "trustCenterFaqIDs", "subscriberIDs", "emailTemplateIDs", "campaignIDs", "createTrustCenterSetting"}
+	fieldsInOrder := [...]string{"tags", "pirschDomainID", "pirschIdentificationCode", "pirschAccessLink", "previewStatus", "subprocessorURL", "ownerID", "blockedGroupIDs", "editorIDs", "customDomainID", "previewDomainID", "watermarkConfigID", "trustCenterSubprocessorIDs", "trustCenterDocIDs", "trustCenterComplianceIDs", "templateIDs", "postIDs", "trustCenterEntityIDs", "trustCenterNdaRequestIDs", "trustCenterFaqIDs", "subscriberIDs", "emailTemplateIDs", "campaignIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -228454,20 +228451,6 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterInput(ctx context.Con
 				return it, err
 			}
 			it.PreviewDomainID = data
-		case "settingID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("settingID"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SettingID = data
-		case "previewSettingID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("previewSettingID"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.PreviewSettingID = data
 		case "watermarkConfigID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("watermarkConfigID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -228552,15 +228535,6 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterInput(ctx context.Con
 				return it, err
 			}
 			it.CampaignIDs = data
-		case "createTrustCenterSetting":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createTrustCenterSetting"))
-			data, err := ec.unmarshalOCreateTrustCenterSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSettingInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			if err = ec.Resolvers.CreateTrustCenterInput().CreateTrustCenterSetting(ctx, &it, data); err != nil {
-				return it, err
-			}
 		}
 	}
 	return it, nil
@@ -383842,7 +383816,7 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "pirschDomainID", "clearPirschDomainID", "pirschIdentificationCode", "clearPirschIdentificationCode", "pirschAccessLink", "clearPirschAccessLink", "previewStatus", "clearPreviewStatus", "subprocessorURL", "clearSubprocessorURL", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "customDomainID", "clearCustomDomain", "previewDomainID", "clearPreviewDomain", "settingID", "clearSetting", "previewSettingID", "clearPreviewSetting", "watermarkConfigID", "clearWatermarkConfig", "addTrustCenterSubprocessorIDs", "removeTrustCenterSubprocessorIDs", "clearTrustCenterSubprocessors", "addTrustCenterDocIDs", "removeTrustCenterDocIDs", "clearTrustCenterDocs", "addTrustCenterComplianceIDs", "removeTrustCenterComplianceIDs", "clearTrustCenterCompliances", "addTemplateIDs", "removeTemplateIDs", "clearTemplates", "addPostIDs", "removePostIDs", "clearPosts", "addTrustCenterEntityIDs", "removeTrustCenterEntityIDs", "clearTrustCenterEntities", "addTrustCenterNdaRequestIDs", "removeTrustCenterNdaRequestIDs", "clearTrustCenterNdaRequests", "addTrustCenterFaqIDs", "removeTrustCenterFaqIDs", "clearTrustCenterFaqs", "addSubscriberIDs", "removeSubscriberIDs", "clearSubscribers", "addEmailTemplateIDs", "removeEmailTemplateIDs", "clearEmailTemplates", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addPost", "deletePost", "updateTrustCenterSetting"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "pirschDomainID", "clearPirschDomainID", "pirschIdentificationCode", "clearPirschIdentificationCode", "pirschAccessLink", "clearPirschAccessLink", "previewStatus", "clearPreviewStatus", "subprocessorURL", "clearSubprocessorURL", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "customDomainID", "clearCustomDomain", "previewDomainID", "clearPreviewDomain", "watermarkConfigID", "clearWatermarkConfig", "addTrustCenterSubprocessorIDs", "removeTrustCenterSubprocessorIDs", "clearTrustCenterSubprocessors", "addTrustCenterDocIDs", "removeTrustCenterDocIDs", "clearTrustCenterDocs", "addTrustCenterComplianceIDs", "removeTrustCenterComplianceIDs", "clearTrustCenterCompliances", "addTemplateIDs", "removeTemplateIDs", "clearTemplates", "addPostIDs", "removePostIDs", "clearPosts", "addTrustCenterEntityIDs", "removeTrustCenterEntityIDs", "clearTrustCenterEntities", "addTrustCenterNdaRequestIDs", "removeTrustCenterNdaRequestIDs", "clearTrustCenterNdaRequests", "addTrustCenterFaqIDs", "removeTrustCenterFaqIDs", "clearTrustCenterFaqs", "addSubscriberIDs", "removeSubscriberIDs", "clearSubscribers", "addEmailTemplateIDs", "removeEmailTemplateIDs", "clearEmailTemplates", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addPost", "deletePost", "updateTrustCenterSetting"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -384024,34 +383998,6 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterInput(ctx context.Con
 				return it, err
 			}
 			it.ClearPreviewDomain = data
-		case "settingID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("settingID"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SettingID = data
-		case "clearSetting":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSetting"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSetting = data
-		case "previewSettingID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("previewSettingID"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.PreviewSettingID = data
-		case "clearPreviewSetting":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearPreviewSetting"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearPreviewSetting = data
 		case "watermarkConfigID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("watermarkConfigID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -384618,27 +384564,13 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterSettingInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"trustCenterID", "clearTrustCenterID", "title", "clearTitle", "companyName", "clearCompanyName", "companyDescription", "clearCompanyDescription", "overview", "clearOverview", "logoRemoteURL", "clearLogoRemoteURL", "faviconRemoteURL", "clearFaviconRemoteURL", "themeMode", "clearThemeMode", "primaryColor", "clearPrimaryColor", "font", "clearFont", "foregroundColor", "clearForegroundColor", "backgroundColor", "clearBackgroundColor", "accentColor", "clearAccentColor", "secondaryBackgroundColor", "clearSecondaryBackgroundColor", "secondaryForegroundColor", "clearSecondaryForegroundColor", "companyDomain", "clearCompanyDomain", "securityContact", "clearSecurityContact", "ndaApprovalRequired", "clearNdaApprovalRequired", "allowSubscribers", "clearAllowSubscribers", "notifySubscribersOnSubprocessorChange", "clearNotifySubscribersOnSubprocessorChange", "statusPageURL", "clearStatusPageURL", "noindexDefaultDomain", "clearNoindexDefaultDomain", "enableAutoApproval", "clearEnableAutoApproval", "autoApprovalRules", "clearAutoApprovalRules", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "logoFileID", "clearLogoFile", "faviconFileID", "clearFaviconFile", "heroImageFileID", "clearHeroImageFile", "ndaApproverGroupID", "clearNdaApproverGroup"}
+	fieldsInOrder := [...]string{"title", "clearTitle", "companyName", "clearCompanyName", "companyDescription", "clearCompanyDescription", "overview", "clearOverview", "logoRemoteURL", "clearLogoRemoteURL", "faviconRemoteURL", "clearFaviconRemoteURL", "themeMode", "clearThemeMode", "primaryColor", "clearPrimaryColor", "font", "clearFont", "foregroundColor", "clearForegroundColor", "backgroundColor", "clearBackgroundColor", "accentColor", "clearAccentColor", "secondaryBackgroundColor", "clearSecondaryBackgroundColor", "secondaryForegroundColor", "clearSecondaryForegroundColor", "companyDomain", "clearCompanyDomain", "securityContact", "clearSecurityContact", "ndaApprovalRequired", "clearNdaApprovalRequired", "allowSubscribers", "clearAllowSubscribers", "notifySubscribersOnSubprocessorChange", "clearNotifySubscribersOnSubprocessorChange", "statusPageURL", "clearStatusPageURL", "noindexDefaultDomain", "clearNoindexDefaultDomain", "enableAutoApproval", "clearEnableAutoApproval", "autoApprovalRules", "clearAutoApprovalRules", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "logoFileID", "clearLogoFile", "faviconFileID", "clearFaviconFile", "heroImageFileID", "clearHeroImageFile", "ndaApproverGroupID", "clearNdaApproverGroup"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "trustCenterID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trustCenterID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.TrustCenterID = data
-		case "clearTrustCenterID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearTrustCenterID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearTrustCenterID = data
 		case "title":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -450037,14 +449969,6 @@ func (ec *executionContext) unmarshalOCreateTrustCenterNDARequestInput2ᚕᚖgit
 		}
 	}
 	return res, nil
-}
-
-func (ec *executionContext) unmarshalOCreateTrustCenterSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSettingInput(ctx context.Context, v any) (*generated.CreateTrustCenterSettingInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputCreateTrustCenterSettingInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInputᚄ(ctx context.Context, v any) ([]*generated.CreateTrustCenterSubprocessorInput, error) {

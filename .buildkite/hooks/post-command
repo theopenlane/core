@@ -2,7 +2,16 @@
 
 set -euo pipefail
 
+# cleanup must never fail the job, so any error is logged and the hook still exits 0
+trap 'status=$?; if [[ $status -ne 0 ]]; then echo "⚠️  Post-command cleanup failed with exit status ${status}, ignoring"; fi; exit 0' EXIT
+
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/cleanup.sh"
+
+# hosted runners start each job on a fresh instance, so there is nothing to clean up
+if is_hosted_runner; then
+    echo "☁️  Hosted runner, skipping post-command cleanup"
+    exit 0
+fi
 
 echo "🧹 Running post-command cleanup..."
 
@@ -20,30 +29,6 @@ fi
 
 # Prune the go build, go module, and golangci-lint caches
 prune_build_caches
-
-# Archive build artifacts if they exist
-if [[ -d "${BUILDKITE_BUILD_PATH:-/tmp}/artifacts" ]]; then
-    artifact_count=$(find "${BUILDKITE_BUILD_PATH:-/tmp}/artifacts" -type f | wc -l)
-    if [[ $artifact_count -gt 0 ]]; then
-        echo "📁 Found $artifact_count build artifacts"
-        # Upload artifacts if buildkite-agent is available
-        if command -v buildkite-agent >/dev/null 2>&1; then
-            buildkite-agent artifact upload "${BUILDKITE_BUILD_PATH:-/tmp}/artifacts/*" || true
-        fi
-    fi
-fi
-
-# Archive test results if they exist
-if [[ -d "${BUILDKITE_BUILD_PATH:-/tmp}/test-results" ]]; then
-    test_file_count=$(find "${BUILDKITE_BUILD_PATH:-/tmp}/test-results" -type f | wc -l)
-    if [[ $test_file_count -gt 0 ]]; then
-        echo "📋 Found $test_file_count test result files"
-        # Upload test results if buildkite-agent is available
-        if command -v buildkite-agent >/dev/null 2>&1; then
-            buildkite-agent artifact upload "${BUILDKITE_BUILD_PATH:-/tmp}/test-results/*" || true
-        fi
-    fi
-fi
 
 # Docker cleanup
 if command -v docker >/dev/null 2>&1; then

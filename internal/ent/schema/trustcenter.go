@@ -138,6 +138,8 @@ func (t TrustCenter) Edges() []ent.Edge {
 			t:          TrustCenterSetting.Type,
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
+				// settings are created by the trust center hook, never attached by id
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			},
 			cascadeDelete: "TrustCenterID",
 		}),
@@ -147,6 +149,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			t:          TrustCenterSetting.Type,
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			},
 			cascadeDelete: "TrustCenterID",
 		}),

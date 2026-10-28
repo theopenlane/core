@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/iam/auth"
@@ -107,7 +108,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Fallback to loading from proposal if instance context doesn't have proposed changes
 	if len(proposedChanges) == 0 && instance.WorkflowProposalID != "" {
-		orgID, err := workflows.ResolveOwnerID(ctx, instance.OwnerID)
+		orgID, err := utils.ResolveOwnerID(ctx, instance.OwnerID)
 		if err != nil {
 			return nil, err
 		}
