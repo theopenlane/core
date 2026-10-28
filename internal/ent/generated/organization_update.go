@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
@@ -2746,6 +2747,21 @@ func (_u *OrganizationUpdate) AddVendorRiskScores(v ...*VendorRiskScore) *Organi
 		ids[i] = v[i].ID
 	}
 	return _u.AddVendorRiskScoreIDs(ids...)
+}
+
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *OrganizationUpdate) AddCheckResultIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *OrganizationUpdate) AddCheckResults(v ...*CheckResult) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -6075,6 +6091,27 @@ func (_u *OrganizationUpdate) RemoveVendorRiskScores(v ...*VendorRiskScore) *Org
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveVendorRiskScoreIDs(ids...)
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *OrganizationUpdate) ClearCheckResults() *OrganizationUpdate {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *OrganizationUpdate) RemoveCheckResultIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *OrganizationUpdate) RemoveCheckResults(v ...*CheckResult) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -13405,6 +13442,51 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CheckResultsTable,
+			Columns: []string{organization.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CheckResultsTable,
+			Columns: []string{organization.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CheckResultsTable,
+			Columns: []string{organization.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -16107,6 +16189,21 @@ func (_u *OrganizationUpdateOne) AddVendorRiskScores(v ...*VendorRiskScore) *Org
 		ids[i] = v[i].ID
 	}
 	return _u.AddVendorRiskScoreIDs(ids...)
+}
+
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *OrganizationUpdateOne) AddCheckResultIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *OrganizationUpdateOne) AddCheckResults(v ...*CheckResult) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -19436,6 +19533,27 @@ func (_u *OrganizationUpdateOne) RemoveVendorRiskScores(v ...*VendorRiskScore) *
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveVendorRiskScoreIDs(ids...)
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *OrganizationUpdateOne) ClearCheckResults() *OrganizationUpdateOne {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveCheckResultIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *OrganizationUpdateOne) RemoveCheckResults(v ...*CheckResult) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -26789,6 +26907,51 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CheckResultsTable,
+			Columns: []string{organization.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CheckResultsTable,
+			Columns: []string{organization.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CheckResultsTable,
+			Columns: []string{organization.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

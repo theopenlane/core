@@ -62,14 +62,6 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Annotations(
 				entx.IntegrationMappingField().SystemControlled(),
 			),
-		field.String("external_id").
-			Comment("stable identifier from the directory system").
-			NotEmpty().
-			Immutable().
-			Annotations(
-				entx.IntegrationMappingField().LookupKey(),
-				entgql.OrderField("external_id"),
-			),
 		field.String("email").
 			Comment("primary group email address, when applicable").
 			Optional().
@@ -174,7 +166,7 @@ func (g DirectoryGroup) Mixin() []ent.Mixin {
 		prefix:            "DRG",
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: g},
+			newProvenanceMixin(g, withRequiredExternalID(), withImmutableExternalID(), withoutExternalIDIndex()),
 			newOrgOwnedMixin(g),
 			newCustomEnumMixin(g, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(g, withEnumFieldName("scope"), withGlobalEnum()),
@@ -221,7 +213,7 @@ func (g DirectoryGroup) Edges() []ent.Edge {
 // Indexes of the DirectoryGroup
 func (DirectoryGroup) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("platform_id", "external_id"),
+		index.Fields("platform_id", externalIDFieldName),
 		index.Fields("integration_id", "email"),
 		index.Fields("platform_id", "email"),
 		index.Fields(ownerFieldName, "email"),

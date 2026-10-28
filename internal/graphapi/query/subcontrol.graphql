@@ -18,12 +18,15 @@ mutation CreateBulkCSVSubcontrol ($input: Upload!) {
 			displayID
 			evidenceRequests
 			exampleEvidence
+			externalID
 			externalUUID
 			id
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -34,6 +37,9 @@ mutation CreateBulkCSVSubcontrol ($input: Upload!) {
 			references
 			responsiblePartyID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			status
 			subcategory
@@ -79,12 +85,15 @@ mutation CreateBulkSubcontrol ($input: [CreateSubcontrolInput!]) {
 			displayID
 			evidenceRequests
 			exampleEvidence
+			externalID
 			externalUUID
 			id
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -95,6 +104,9 @@ mutation CreateBulkSubcontrol ($input: [CreateSubcontrolInput!]) {
 			references
 			responsiblePartyID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			status
 			subcategory
@@ -140,12 +152,15 @@ mutation CreateSubcontrol ($input: CreateSubcontrolInput!) {
 			displayID
 			evidenceRequests
 			exampleEvidence
+			externalID
 			externalUUID
 			id
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -156,6 +171,9 @@ mutation CreateSubcontrol ($input: CreateSubcontrolInput!) {
 			references
 			responsiblePartyID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			status
 			subcategory
@@ -252,12 +270,15 @@ query GetSubcontrolByID ($subcontrolId: ID!) {
 		displayID
 		evidenceRequests
 		exampleEvidence
+		externalID
 		externalUUID
 		id
 		implementationDescription
 		implementationGuidance
 		implementationStatus
+		integrationRunID
 		internalNotes
+		managedBy
 		mappedCategories
 		ownerID
 		publicRepresentation
@@ -268,6 +289,9 @@ query GetSubcontrolByID ($subcontrolId: ID!) {
 		references
 		responsiblePartyID
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceName
 		status
 		subcategory
@@ -365,12 +389,15 @@ mutation UpdateSubcontrol ($updateSubcontrolId: ID!, $input: UpdateSubcontrolInp
 			displayID
 			evidenceRequests
 			exampleEvidence
+			externalID
 			externalUUID
 			id
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -381,6 +408,9 @@ mutation UpdateSubcontrol ($updateSubcontrolId: ID!, $input: UpdateSubcontrolInp
 			references
 			responsiblePartyID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			status
 			subcategory

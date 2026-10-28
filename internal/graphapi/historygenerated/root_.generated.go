@@ -57,6 +57,7 @@ type ComplexityRoot struct {
 		DueDate                         func(childComplexity int) int
 		ExternalContents                func(childComplexity int) int
 		ExternalFileID                  func(childComplexity int) int
+		ExternalID                      func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
@@ -110,27 +111,33 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentHistory struct {
-		AssessmentType         func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		HistoryTime            func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		InternalNotes          func(childComplexity int) int
-		Jsonconfig             func(childComplexity int) int
-		Name                   func(childComplexity int) int
-		Operation              func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		Ref                    func(childComplexity int) int
-		ResponseDueDuration    func(childComplexity int) int
-		SystemInternalID       func(childComplexity int) int
-		SystemOwned            func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		TemplateID             func(childComplexity int) int
-		Uischema               func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		UpdatedByImpersonator  func(childComplexity int) int
-		WorkflowEligibleMarker func(childComplexity int) int
+		AssessmentType          func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		Jsonconfig              func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		ResponseDueDuration     func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		TemplateID              func(childComplexity int) int
+		Uischema                func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		WorkflowEligibleMarker  func(childComplexity int) int
 	}
 
 	AssessmentHistoryConnection struct {
@@ -145,19 +152,25 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentPolicyHistory struct {
-		AssessmentID          func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		InternalPolicyID      func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		PolicyRevision        func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		AssessmentID            func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		InternalPolicyID        func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		PolicyRevision          func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 	}
 
 	AssessmentPolicyHistoryConnection struct {
@@ -241,6 +254,7 @@ type ComplexityRoot struct {
 		EnvironmentID                 func(childComplexity int) int
 		EnvironmentName               func(childComplexity int) int
 		EstimatedMonthlyCost          func(childComplexity int) int
+		ExternalID                    func(childComplexity int) int
 		HistoryTime                   func(childComplexity int) int
 		ID                            func(childComplexity int) int
 		Identifier                    func(childComplexity int) int
@@ -302,9 +316,11 @@ type ComplexityRoot struct {
 		EmailBrandingID               func(childComplexity int) int
 		EmailTemplateID               func(childComplexity int) int
 		EntityID                      func(childComplexity int) int
+		ExternalID                    func(childComplexity int) int
 		HistoryTime                   func(childComplexity int) int
 		ID                            func(childComplexity int) int
 		IntegrationID                 func(childComplexity int) int
+		IntegrationRunID              func(childComplexity int) int
 		InternalOwner                 func(childComplexity int) int
 		InternalOwnerGroupID          func(childComplexity int) int
 		InternalOwnerIdentityHolderID func(childComplexity int) int
@@ -314,6 +330,7 @@ type ComplexityRoot struct {
 		LastResentAt                  func(childComplexity int) int
 		LastRunAt                     func(childComplexity int) int
 		LaunchedAt                    func(childComplexity int) int
+		ManagedBy                     func(childComplexity int) int
 		Metadata                      func(childComplexity int) int
 		Name                          func(childComplexity int) int
 		NextRunAt                     func(childComplexity int) int
@@ -328,6 +345,9 @@ type ComplexityRoot struct {
 		Ref                           func(childComplexity int) int
 		ResendCount                   func(childComplexity int) int
 		ScheduledAt                   func(childComplexity int) int
+		SourceDefinitionID            func(childComplexity int) int
+		SourceDefinitionVersion       func(childComplexity int) int
+		SourceInstanceID              func(childComplexity int) int
 		Status                        func(childComplexity int) int
 		Tags                          func(childComplexity int) int
 		TemplateID                    func(childComplexity int) int
@@ -446,14 +466,17 @@ type ComplexityRoot struct {
 		EnvironmentName            func(childComplexity int) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
+		ExternalID                 func(childComplexity int) int
 		ExternalUUID               func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationDescription  func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		ImplementationStatus       func(childComplexity int) int
+		IntegrationRunID           func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
 		IsTrustCenterControl       func(childComplexity int) int
+		ManagedBy                  func(childComplexity int) int
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
@@ -468,6 +491,9 @@ type ComplexityRoot struct {
 		ScopeID                    func(childComplexity int) int
 		ScopeName                  func(childComplexity int) int
 		Source                     func(childComplexity int) int
+		SourceDefinitionID         func(childComplexity int) int
+		SourceDefinitionVersion    func(childComplexity int) int
+		SourceInstanceID           func(childComplexity int) int
 		SourceName                 func(childComplexity int) int
 		StandardID                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
@@ -496,26 +522,32 @@ type ComplexityRoot struct {
 	}
 
 	ControlImplementationHistory struct {
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Details               func(childComplexity int) int
-		DetailsJSON           func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		ImplementationDate    func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		Status                func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		VerificationDate      func(childComplexity int) int
-		Verified              func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Details                 func(childComplexity int) int
+		DetailsJSON             func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		ImplementationDate      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		VerificationDate        func(childComplexity int) int
+		Verified                func(childComplexity int) int
 	}
 
 	ControlImplementationHistoryConnection struct {
@@ -530,30 +562,36 @@ type ComplexityRoot struct {
 	}
 
 	ControlObjectiveHistory struct {
-		Category              func(childComplexity int) int
-		ControlObjectiveType  func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		DesiredOutcome        func(childComplexity int) int
-		DesiredOutcomeJSON    func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Name                  func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		Revision              func(childComplexity int) int
-		Source                func(childComplexity int) int
-		Status                func(childComplexity int) int
-		Subcategory           func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		Category                func(childComplexity int) int
+		ControlObjectiveType    func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		DesiredOutcome          func(childComplexity int) int
+		DesiredOutcomeJSON      func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		Revision                func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Subcategory             func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 	}
 
 	ControlObjectiveHistoryConnection struct {
@@ -659,34 +697,40 @@ type ComplexityRoot struct {
 	}
 
 	EmailTemplateHistory struct {
-		Active                func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Defaults              func(childComplexity int) int
-		Description           func(childComplexity int) int
-		Format                func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		IntegrationID         func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Key                   func(childComplexity int) int
-		Locale                func(childComplexity int) int
-		Metadata              func(childComplexity int) int
-		Name                  func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		Revision              func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		TemplateContext       func(childComplexity int) int
-		TrustCenterID         func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		Version               func(childComplexity int) int
-		WorkflowDefinitionID  func(childComplexity int) int
-		WorkflowInstanceID    func(childComplexity int) int
+		Active                  func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Defaults                func(childComplexity int) int
+		Description             func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		Format                  func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationID           func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		Key                     func(childComplexity int) int
+		Locale                  func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		Revision                func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		TemplateContext         func(childComplexity int) int
+		TrustCenterID           func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		Version                 func(childComplexity int) int
+		WorkflowDefinitionID    func(childComplexity int) int
+		WorkflowInstanceID      func(childComplexity int) int
 	}
 
 	EmailTemplateHistoryConnection struct {
@@ -823,35 +867,41 @@ type ComplexityRoot struct {
 	}
 
 	EvidenceHistory struct {
-		AuditorReferenceID     func(childComplexity int) int
-		CollectionProcedure    func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		CreationDate           func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		EnvironmentID          func(childComplexity int) int
-		EnvironmentName        func(childComplexity int) int
-		ExternalUUID           func(childComplexity int) int
-		HistoryTime            func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		IsAutomated            func(childComplexity int) int
-		Name                   func(childComplexity int) int
-		Operation              func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		Ref                    func(childComplexity int) int
-		RenewalDate            func(childComplexity int) int
-		ReviewFrequency        func(childComplexity int) int
-		ScopeID                func(childComplexity int) int
-		ScopeName              func(childComplexity int) int
-		Source                 func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		URL                    func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		UpdatedByImpersonator  func(childComplexity int) int
-		WorkflowEligibleMarker func(childComplexity int) int
+		AuditorReferenceID      func(childComplexity int) int
+		CollectionProcedure     func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		CreationDate            func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		ExternalUUID            func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IsAutomated             func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		RenewalDate             func(childComplexity int) int
+		ReviewFrequency         func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		URL                     func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		WorkflowEligibleMarker  func(childComplexity int) int
 	}
 
 	EvidenceHistoryConnection struct {
@@ -1039,32 +1089,38 @@ type ComplexityRoot struct {
 	}
 
 	GroupHistory struct {
-		AvatarLocalFileID     func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Description           func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		DisplayName           func(childComplexity int) int
-		GravatarLogoURL       func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		IsManaged             func(childComplexity int) int
-		LogoURL               func(childComplexity int) int
-		Name                  func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OscalContactUuids     func(childComplexity int) int
-		OscalPartyUUID        func(childComplexity int) int
-		OscalRole             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		ScimActive            func(childComplexity int) int
-		ScimDisplayName       func(childComplexity int) int
-		ScimExternalID        func(childComplexity int) int
-		ScimGroupMailing      func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		AvatarLocalFileID       func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		DisplayName             func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		GravatarLogoURL         func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IsManaged               func(childComplexity int) int
+		LogoURL                 func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OscalContactUuids       func(childComplexity int) int
+		OscalPartyUUID          func(childComplexity int) int
+		OscalRole               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		ScimActive              func(childComplexity int) int
+		ScimDisplayName         func(childComplexity int) int
+		ScimExternalID          func(childComplexity int) int
+		ScimGroupMailing        func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 	}
 
 	GroupHistoryConnection struct {
@@ -1135,7 +1191,6 @@ type ComplexityRoot struct {
 	HushHistory struct {
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
-		CredentialSet         func(childComplexity int) int
 		Description           func(childComplexity int) int
 		ExpiresAt             func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
@@ -1180,12 +1235,14 @@ type ComplexityRoot struct {
 		EndDate                       func(childComplexity int) int
 		EnvironmentID                 func(childComplexity int) int
 		EnvironmentName               func(childComplexity int) int
+		ExternalID                    func(childComplexity int) int
 		ExternalReferenceID           func(childComplexity int) int
 		ExternalUserID                func(childComplexity int) int
 		FullName                      func(childComplexity int) int
 		HistoryTime                   func(childComplexity int) int
 		ID                            func(childComplexity int) int
 		IdentityHolderType            func(childComplexity int) int
+		IntegrationRunID              func(childComplexity int) int
 		InternalOwner                 func(childComplexity int) int
 		InternalOwnerGroupID          func(childComplexity int) int
 		InternalOwnerIdentityHolderID func(childComplexity int) int
@@ -1193,6 +1250,7 @@ type ComplexityRoot struct {
 		IsActive                      func(childComplexity int) int
 		IsOpenlaneUser                func(childComplexity int) int
 		Location                      func(childComplexity int) int
+		ManagedBy                     func(childComplexity int) int
 		Metadata                      func(childComplexity int) int
 		Operation                     func(childComplexity int) int
 		OwnerID                       func(childComplexity int) int
@@ -1200,6 +1258,9 @@ type ComplexityRoot struct {
 		Ref                           func(childComplexity int) int
 		ScopeID                       func(childComplexity int) int
 		ScopeName                     func(childComplexity int) int
+		SourceDefinitionID            func(childComplexity int) int
+		SourceDefinitionVersion       func(childComplexity int) int
+		SourceInstanceID              func(childComplexity int) int
 		StartDate                     func(childComplexity int) int
 		Status                        func(childComplexity int) int
 		Tags                          func(childComplexity int) int
@@ -1240,6 +1301,7 @@ type ComplexityRoot struct {
 		EnvironmentName                 func(childComplexity int) int
 		ExternalContents                func(childComplexity int) int
 		ExternalFileID                  func(childComplexity int) int
+		ExternalID                      func(childComplexity int) int
 		ExternalUUID                    func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
@@ -1314,24 +1376,30 @@ type ComplexityRoot struct {
 	}
 
 	MappedControlHistory struct {
-		Confidence            func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		MappingType           func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		Relation              func(childComplexity int) int
-		Source                func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		Confidence              func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		MappingType             func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		Relation                func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 	}
 
 	MappedControlHistoryConnection struct {
@@ -1346,24 +1414,30 @@ type ComplexityRoot struct {
 	}
 
 	NarrativeHistory struct {
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Description           func(childComplexity int) int
-		Details               func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Name                  func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Description             func(childComplexity int) int
+		Details                 func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 	}
 
 	NarrativeHistoryConnection struct {
@@ -1582,7 +1656,6 @@ type ComplexityRoot struct {
 		BillingEmail                     func(childComplexity int) int
 		BillingNotificationsEnabled      func(childComplexity int) int
 		BillingPhone                     func(childComplexity int) int
-		ComplianceWebhookToken           func(childComplexity int) int
 		CreatedAt                        func(childComplexity int) int
 		CreatedBy                        func(childComplexity int) int
 		Domains                          func(childComplexity int) int
@@ -1592,7 +1665,6 @@ type ComplexityRoot struct {
 		IdentityProvider                 func(childComplexity int) int
 		IdentityProviderAuthTested       func(childComplexity int) int
 		IdentityProviderClientID         func(childComplexity int) int
-		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderJitProvisioning  func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
@@ -1656,14 +1728,17 @@ type ComplexityRoot struct {
 		EnvironmentID                  func(childComplexity int) int
 		EnvironmentName                func(childComplexity int) int
 		EstimatedMonthlyCost           func(childComplexity int) int
+		ExternalID                     func(childComplexity int) int
 		ExternalReferenceID            func(childComplexity int) int
 		ExternalUUID                   func(childComplexity int) int
 		HistoryTime                    func(childComplexity int) int
 		ID                             func(childComplexity int) int
+		IntegrationRunID               func(childComplexity int) int
 		InternalOwner                  func(childComplexity int) int
 		InternalOwnerGroupID           func(childComplexity int) int
 		InternalOwnerIdentityHolderID  func(childComplexity int) int
 		InternalOwnerUserID            func(childComplexity int) int
+		ManagedBy                      func(childComplexity int) int
 		Metadata                       func(childComplexity int) int
 		Name                           func(childComplexity int) int
 		Operation                      func(childComplexity int) int
@@ -1686,7 +1761,10 @@ type ComplexityRoot struct {
 		SecurityOwnerUserID            func(childComplexity int) int
 		SecurityTierID                 func(childComplexity int) int
 		SecurityTierName               func(childComplexity int) int
+		SourceDefinitionID             func(childComplexity int) int
+		SourceDefinitionVersion        func(childComplexity int) int
 		SourceIdentifier               func(childComplexity int) int
+		SourceInstanceID               func(childComplexity int) int
 		SourceType                     func(childComplexity int) int
 		Status                         func(childComplexity int) int
 		Tags                           func(childComplexity int) int
@@ -1729,6 +1807,7 @@ type ComplexityRoot struct {
 		EnvironmentName                 func(childComplexity int) int
 		ExternalContents                func(childComplexity int) int
 		ExternalFileID                  func(childComplexity int) int
+		ExternalID                      func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
@@ -1787,12 +1866,15 @@ type ComplexityRoot struct {
 		Description                func(childComplexity int) int
 		DisplayID                  func(childComplexity int) int
 		EndDate                    func(childComplexity int) int
+		ExternalID                 func(childComplexity int) int
 		ExternalUUID               func(childComplexity int) int
 		FieldworkEndDate           func(childComplexity int) int
 		FieldworkStartDate         func(childComplexity int) int
 		FrameworkName              func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		IntegrationRunID           func(childComplexity int) int
+		ManagedBy                  func(childComplexity int) int
 		Name                       func(childComplexity int) int
 		ObservationPeriodEndDate   func(childComplexity int) int
 		ObservationPeriodStartDate func(childComplexity int) int
@@ -1802,6 +1884,9 @@ type ComplexityRoot struct {
 		ProgramKindName            func(childComplexity int) int
 		ProgramOwnerID             func(childComplexity int) int
 		Ref                        func(childComplexity int) int
+		SourceDefinitionID         func(childComplexity int) int
+		SourceDefinitionVersion    func(childComplexity int) int
+		SourceInstanceID           func(childComplexity int) int
 		StartDate                  func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Tags                       func(childComplexity int) int
@@ -1922,46 +2007,51 @@ type ComplexityRoot struct {
 	}
 
 	RemediationHistory struct {
-		CompletedAt            func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		DueAt                  func(childComplexity int) int
-		EnvironmentID          func(childComplexity int) int
-		EnvironmentName        func(childComplexity int) int
-		Error                  func(childComplexity int) int
-		Explanation            func(childComplexity int) int
-		ExternalID             func(childComplexity int) int
-		ExternalOwnerID        func(childComplexity int) int
-		ExternalURI            func(childComplexity int) int
-		HistoryTime            func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		Instructions           func(childComplexity int) int
-		Intent                 func(childComplexity int) int
-		InternalNotes          func(childComplexity int) int
-		Metadata               func(childComplexity int) int
-		Operation              func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		OwnerReference         func(childComplexity int) int
-		PrGeneratedAt          func(childComplexity int) int
-		PullRequestURI         func(childComplexity int) int
-		Ref                    func(childComplexity int) int
-		RepositoryURI          func(childComplexity int) int
-		ScopeID                func(childComplexity int) int
-		ScopeName              func(childComplexity int) int
-		Source                 func(childComplexity int) int
-		State                  func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		Summary                func(childComplexity int) int
-		SystemInternalID       func(childComplexity int) int
-		SystemOwned            func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		TicketReference        func(childComplexity int) int
-		Title                  func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		UpdatedByImpersonator  func(childComplexity int) int
-		WorkflowEligibleMarker func(childComplexity int) int
+		CompletedAt             func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		DueAt                   func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		Error                   func(childComplexity int) int
+		Explanation             func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		ExternalOwnerID         func(childComplexity int) int
+		ExternalURI             func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		Instructions            func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		Intent                  func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		OwnerReference          func(childComplexity int) int
+		PrGeneratedAt           func(childComplexity int) int
+		PullRequestURI          func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		RepositoryURI           func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		State                   func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Summary                 func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		TicketReference         func(childComplexity int) int
+		Title                   func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		WorkflowEligibleMarker  func(childComplexity int) int
 	}
 
 	RemediationHistoryConnection struct {
@@ -2037,43 +2127,48 @@ type ComplexityRoot struct {
 	}
 
 	ReviewHistory struct {
-		Approved              func(childComplexity int) int
-		ApprovedAt            func(childComplexity int) int
-		Category              func(childComplexity int) int
-		Classification        func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Details               func(childComplexity int) int
-		EnvironmentID         func(childComplexity int) int
-		EnvironmentName       func(childComplexity int) int
-		ExternalID            func(childComplexity int) int
-		ExternalOwnerID       func(childComplexity int) int
-		ExternalURI           func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Metadata              func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		RawPayload            func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		ReportedAt            func(childComplexity int) int
-		Reporter              func(childComplexity int) int
-		ReviewedAt            func(childComplexity int) int
-		ReviewerID            func(childComplexity int) int
-		ScopeID               func(childComplexity int) int
-		ScopeName             func(childComplexity int) int
-		Source                func(childComplexity int) int
-		State                 func(childComplexity int) int
-		Status                func(childComplexity int) int
-		Summary               func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		Title                 func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		Approved                func(childComplexity int) int
+		ApprovedAt              func(childComplexity int) int
+		Category                func(childComplexity int) int
+		Classification          func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Details                 func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		ExternalOwnerID         func(childComplexity int) int
+		ExternalURI             func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		RawPayload              func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		ReportedAt              func(childComplexity int) int
+		Reporter                func(childComplexity int) int
+		ReviewedAt              func(childComplexity int) int
+		ReviewerID              func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		State                   func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		Summary                 func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		Title                   func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 	}
 
 	ReviewHistoryConnection struct {
@@ -2249,13 +2344,16 @@ type ComplexityRoot struct {
 		DisplayID                  func(childComplexity int) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
+		ExternalID                 func(childComplexity int) int
 		ExternalUUID               func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationDescription  func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		ImplementationStatus       func(childComplexity int) int
+		IntegrationRunID           func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
+		ManagedBy                  func(childComplexity int) int
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
@@ -2268,6 +2366,9 @@ type ComplexityRoot struct {
 		References                 func(childComplexity int) int
 		ResponsiblePartyID         func(childComplexity int) int
 		Source                     func(childComplexity int) int
+		SourceDefinitionID         func(childComplexity int) int
+		SourceDefinitionVersion    func(childComplexity int) int
+		SourceInstanceID           func(childComplexity int) int
 		SourceName                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
 		Subcategory                func(childComplexity int) int
@@ -2328,26 +2429,32 @@ type ComplexityRoot struct {
 	}
 
 	SystemDetailHistory struct {
-		AuthorizationBoundary func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Description           func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		LastReviewed          func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OscalMetadataJSON     func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		RevisionHistory       func(childComplexity int) int
-		SensitivityLevel      func(childComplexity int) int
-		SystemName            func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		Version               func(childComplexity int) int
+		AuthorizationBoundary   func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Description             func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		LastReviewed            func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OscalMetadataJSON       func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		RevisionHistory         func(childComplexity int) int
+		SensitivityLevel        func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SystemName              func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		Version                 func(childComplexity int) int
 	}
 
 	SystemDetailHistoryConnection struct {
@@ -2362,44 +2469,50 @@ type ComplexityRoot struct {
 	}
 
 	TaskHistory struct {
-		AssigneeID             func(childComplexity int) int
-		AssignerID             func(childComplexity int) int
-		Completed              func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		Details                func(childComplexity int) int
-		DetailsJSON            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		Due                    func(childComplexity int) int
-		EnvironmentID          func(childComplexity int) int
-		EnvironmentName        func(childComplexity int) int
-		ExternalReferenceURL   func(childComplexity int) int
-		ExternalUUID           func(childComplexity int) int
-		HistoryTime            func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		IdempotencyKey         func(childComplexity int) int
-		IsSuggested            func(childComplexity int) int
-		IsTemplate             func(childComplexity int) int
-		Metadata               func(childComplexity int) int
-		Operation              func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		ParentTaskID           func(childComplexity int) int
-		Priority               func(childComplexity int) int
-		Ref                    func(childComplexity int) int
-		ScopeID                func(childComplexity int) int
-		ScopeName              func(childComplexity int) int
-		Source                 func(childComplexity int) int
-		SourceKey              func(childComplexity int) int
-		Status                 func(childComplexity int) int
-		SystemGenerated        func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		TaskKindID             func(childComplexity int) int
-		TaskKindName           func(childComplexity int) int
-		Title                  func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		UpdatedByImpersonator  func(childComplexity int) int
-		WorkflowEligibleMarker func(childComplexity int) int
+		AssigneeID              func(childComplexity int) int
+		AssignerID              func(childComplexity int) int
+		Completed               func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Details                 func(childComplexity int) int
+		DetailsJSON             func(childComplexity int) int
+		DisplayID               func(childComplexity int) int
+		Due                     func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		ExternalReferenceURL    func(childComplexity int) int
+		ExternalUUID            func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IdempotencyKey          func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IsSuggested             func(childComplexity int) int
+		IsTemplate              func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Metadata                func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		ParentTaskID            func(childComplexity int) int
+		Priority                func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		Source                  func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SourceKey               func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		SystemGenerated         func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		TaskKindID              func(childComplexity int) int
+		TaskKindName            func(childComplexity int) int
+		Title                   func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		WorkflowEligibleMarker  func(childComplexity int) int
 	}
 
 	TaskHistoryConnection struct {
@@ -2414,32 +2527,38 @@ type ComplexityRoot struct {
 	}
 
 	TemplateHistory struct {
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		Description            func(childComplexity int) int
-		EnvironmentID          func(childComplexity int) int
-		EnvironmentName        func(childComplexity int) int
-		HistoryTime            func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		InternalNotes          func(childComplexity int) int
-		Jsonconfig             func(childComplexity int) int
-		Kind                   func(childComplexity int) int
-		Name                   func(childComplexity int) int
-		Operation              func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		Ref                    func(childComplexity int) int
-		ScopeID                func(childComplexity int) int
-		ScopeName              func(childComplexity int) int
-		SystemInternalID       func(childComplexity int) int
-		SystemOwned            func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		TemplateType           func(childComplexity int) int
-		TransformConfiguration func(childComplexity int) int
-		TrustCenterID          func(childComplexity int) int
-		Uischema               func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		UpdatedByImpersonator  func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		Description             func(childComplexity int) int
+		EnvironmentID           func(childComplexity int) int
+		EnvironmentName         func(childComplexity int) int
+		ExternalID              func(childComplexity int) int
+		HistoryTime             func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		InternalNotes           func(childComplexity int) int
+		Jsonconfig              func(childComplexity int) int
+		Kind                    func(childComplexity int) int
+		ManagedBy               func(childComplexity int) int
+		Name                    func(childComplexity int) int
+		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		Ref                     func(childComplexity int) int
+		ScopeID                 func(childComplexity int) int
+		ScopeName               func(childComplexity int) int
+		SourceDefinitionID      func(childComplexity int) int
+		SourceDefinitionVersion func(childComplexity int) int
+		SourceInstanceID        func(childComplexity int) int
+		SystemInternalID        func(childComplexity int) int
+		SystemOwned             func(childComplexity int) int
+		Tags                    func(childComplexity int) int
+		TemplateType            func(childComplexity int) int
+		TransformConfiguration  func(childComplexity int) int
+		TrustCenterID           func(childComplexity int) int
+		Uischema                func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
 	}
 
 	TemplateHistoryConnection struct {
@@ -3242,6 +3361,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlanHistory.ExternalFileID(childComplexity), true
+	case "ActionPlanHistory.externalID":
+		if e.ComplexityRoot.ActionPlanHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.ExternalID(childComplexity), true
 	case "ActionPlanHistory.fileID":
 		if e.ComplexityRoot.ActionPlanHistory.FileID == nil {
 			break
@@ -3527,6 +3652,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistory.CreatedBy(childComplexity), true
+	case "AssessmentHistory.externalID":
+		if e.ComplexityRoot.AssessmentHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.ExternalID(childComplexity), true
 	case "AssessmentHistory.historyTime":
 		if e.ComplexityRoot.AssessmentHistory.HistoryTime == nil {
 			break
@@ -3539,6 +3670,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistory.ID(childComplexity), true
+	case "AssessmentHistory.integrationRunID":
+		if e.ComplexityRoot.AssessmentHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.IntegrationRunID(childComplexity), true
 	case "AssessmentHistory.internalNotes":
 		if e.ComplexityRoot.AssessmentHistory.InternalNotes == nil {
 			break
@@ -3551,6 +3688,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistory.Jsonconfig(childComplexity), true
+	case "AssessmentHistory.managedBy":
+		if e.ComplexityRoot.AssessmentHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.ManagedBy(childComplexity), true
 	case "AssessmentHistory.name":
 		if e.ComplexityRoot.AssessmentHistory.Name == nil {
 			break
@@ -3581,6 +3724,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentHistory.ResponseDueDuration(childComplexity), true
+	case "AssessmentHistory.sourceDefinitionID":
+		if e.ComplexityRoot.AssessmentHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.SourceDefinitionID(childComplexity), true
+	case "AssessmentHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.AssessmentHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.SourceDefinitionVersion(childComplexity), true
+	case "AssessmentHistory.sourceInstanceID":
+		if e.ComplexityRoot.AssessmentHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentHistory.SourceInstanceID(childComplexity), true
 	case "AssessmentHistory.systemInternalID":
 		if e.ComplexityRoot.AssessmentHistory.SystemInternalID == nil {
 			break
@@ -3686,6 +3847,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentPolicyHistory.CreatedBy(childComplexity), true
+	case "AssessmentPolicyHistory.externalID":
+		if e.ComplexityRoot.AssessmentPolicyHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.ExternalID(childComplexity), true
 	case "AssessmentPolicyHistory.historyTime":
 		if e.ComplexityRoot.AssessmentPolicyHistory.HistoryTime == nil {
 			break
@@ -3698,12 +3865,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentPolicyHistory.ID(childComplexity), true
+	case "AssessmentPolicyHistory.integrationRunID":
+		if e.ComplexityRoot.AssessmentPolicyHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.IntegrationRunID(childComplexity), true
 	case "AssessmentPolicyHistory.internalPolicyID":
 		if e.ComplexityRoot.AssessmentPolicyHistory.InternalPolicyID == nil {
 			break
 		}
 
 		return e.ComplexityRoot.AssessmentPolicyHistory.InternalPolicyID(childComplexity), true
+	case "AssessmentPolicyHistory.managedBy":
+		if e.ComplexityRoot.AssessmentPolicyHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.ManagedBy(childComplexity), true
 	case "AssessmentPolicyHistory.operation":
 		if e.ComplexityRoot.AssessmentPolicyHistory.Operation == nil {
 			break
@@ -3728,6 +3907,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentPolicyHistory.Ref(childComplexity), true
+	case "AssessmentPolicyHistory.sourceDefinitionID":
+		if e.ComplexityRoot.AssessmentPolicyHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.SourceDefinitionID(childComplexity), true
+	case "AssessmentPolicyHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.AssessmentPolicyHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.SourceDefinitionVersion(childComplexity), true
+	case "AssessmentPolicyHistory.sourceInstanceID":
+		if e.ComplexityRoot.AssessmentPolicyHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentPolicyHistory.SourceInstanceID(childComplexity), true
 	case "AssessmentPolicyHistory.updatedAt":
 		if e.ComplexityRoot.AssessmentPolicyHistory.UpdatedAt == nil {
 			break
@@ -4142,6 +4339,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssetHistory.EstimatedMonthlyCost(childComplexity), true
+	case "AssetHistory.externalID":
+		if e.ComplexityRoot.AssetHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetHistory.ExternalID(childComplexity), true
 	case "AssetHistory.historyTime":
 		if e.ComplexityRoot.AssetHistory.HistoryTime == nil {
 			break
@@ -4457,6 +4660,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.EntityID(childComplexity), true
+	case "CampaignHistory.externalID":
+		if e.ComplexityRoot.CampaignHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.ExternalID(childComplexity), true
 	case "CampaignHistory.historyTime":
 		if e.ComplexityRoot.CampaignHistory.HistoryTime == nil {
 			break
@@ -4475,6 +4684,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.IntegrationID(childComplexity), true
+	case "CampaignHistory.integrationRunID":
+		if e.ComplexityRoot.CampaignHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.IntegrationRunID(childComplexity), true
 	case "CampaignHistory.internalOwner":
 		if e.ComplexityRoot.CampaignHistory.InternalOwner == nil {
 			break
@@ -4529,6 +4744,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.LaunchedAt(childComplexity), true
+	case "CampaignHistory.managedBy":
+		if e.ComplexityRoot.CampaignHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.ManagedBy(childComplexity), true
 	case "CampaignHistory.metadata":
 		if e.ComplexityRoot.CampaignHistory.Metadata == nil {
 			break
@@ -4613,6 +4834,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignHistory.ScheduledAt(childComplexity), true
+	case "CampaignHistory.sourceDefinitionID":
+		if e.ComplexityRoot.CampaignHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.SourceDefinitionID(childComplexity), true
+	case "CampaignHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.CampaignHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.SourceDefinitionVersion(childComplexity), true
+	case "CampaignHistory.sourceInstanceID":
+		if e.ComplexityRoot.CampaignHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignHistory.SourceInstanceID(childComplexity), true
 	case "CampaignHistory.status":
 		if e.ComplexityRoot.CampaignHistory.Status == nil {
 			break
@@ -5168,6 +5407,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlHistory.ExampleEvidence(childComplexity), true
+	case "ControlHistory.externalID":
+		if e.ComplexityRoot.ControlHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.ExternalID(childComplexity), true
 	case "ControlHistory.externalUUID":
 		if e.ComplexityRoot.ControlHistory.ExternalUUID == nil {
 			break
@@ -5204,6 +5449,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlHistory.ImplementationStatus(childComplexity), true
+	case "ControlHistory.integrationRunID":
+		if e.ComplexityRoot.ControlHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.IntegrationRunID(childComplexity), true
 	case "ControlHistory.internalNotes":
 		if e.ComplexityRoot.ControlHistory.InternalNotes == nil {
 			break
@@ -5216,6 +5467,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlHistory.IsTrustCenterControl(childComplexity), true
+	case "ControlHistory.managedBy":
+		if e.ComplexityRoot.ControlHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.ManagedBy(childComplexity), true
 	case "ControlHistory.mappedCategories":
 		if e.ComplexityRoot.ControlHistory.MappedCategories == nil {
 			break
@@ -5300,6 +5557,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlHistory.Source(childComplexity), true
+	case "ControlHistory.sourceDefinitionID":
+		if e.ComplexityRoot.ControlHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.SourceDefinitionID(childComplexity), true
+	case "ControlHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.ControlHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.SourceDefinitionVersion(childComplexity), true
+	case "ControlHistory.sourceInstanceID":
+		if e.ComplexityRoot.ControlHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlHistory.SourceInstanceID(childComplexity), true
 	case "ControlHistory.sourceName":
 		if e.ComplexityRoot.ControlHistory.SourceName == nil {
 			break
@@ -5441,6 +5716,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementationHistory.DetailsJSON(childComplexity), true
+	case "ControlImplementationHistory.externalID":
+		if e.ComplexityRoot.ControlImplementationHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.ExternalID(childComplexity), true
 	case "ControlImplementationHistory.historyTime":
 		if e.ComplexityRoot.ControlImplementationHistory.HistoryTime == nil {
 			break
@@ -5459,12 +5740,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementationHistory.ImplementationDate(childComplexity), true
+	case "ControlImplementationHistory.integrationRunID":
+		if e.ComplexityRoot.ControlImplementationHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.IntegrationRunID(childComplexity), true
 	case "ControlImplementationHistory.internalNotes":
 		if e.ComplexityRoot.ControlImplementationHistory.InternalNotes == nil {
 			break
 		}
 
 		return e.ComplexityRoot.ControlImplementationHistory.InternalNotes(childComplexity), true
+	case "ControlImplementationHistory.managedBy":
+		if e.ComplexityRoot.ControlImplementationHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.ManagedBy(childComplexity), true
 	case "ControlImplementationHistory.operation":
 		if e.ComplexityRoot.ControlImplementationHistory.Operation == nil {
 			break
@@ -5483,6 +5776,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementationHistory.Ref(childComplexity), true
+	case "ControlImplementationHistory.sourceDefinitionID":
+		if e.ComplexityRoot.ControlImplementationHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.SourceDefinitionID(childComplexity), true
+	case "ControlImplementationHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.ControlImplementationHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.SourceDefinitionVersion(childComplexity), true
+	case "ControlImplementationHistory.sourceInstanceID":
+		if e.ComplexityRoot.ControlImplementationHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationHistory.SourceInstanceID(childComplexity), true
 	case "ControlImplementationHistory.status":
 		if e.ComplexityRoot.ControlImplementationHistory.Status == nil {
 			break
@@ -5612,6 +5923,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlObjectiveHistory.DisplayID(childComplexity), true
+	case "ControlObjectiveHistory.externalID":
+		if e.ComplexityRoot.ControlObjectiveHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveHistory.ExternalID(childComplexity), true
 	case "ControlObjectiveHistory.historyTime":
 		if e.ComplexityRoot.ControlObjectiveHistory.HistoryTime == nil {
 			break
@@ -5624,12 +5941,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlObjectiveHistory.ID(childComplexity), true
+	case "ControlObjectiveHistory.integrationRunID":
+		if e.ComplexityRoot.ControlObjectiveHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveHistory.IntegrationRunID(childComplexity), true
 	case "ControlObjectiveHistory.internalNotes":
 		if e.ComplexityRoot.ControlObjectiveHistory.InternalNotes == nil {
 			break
 		}
 
 		return e.ComplexityRoot.ControlObjectiveHistory.InternalNotes(childComplexity), true
+	case "ControlObjectiveHistory.managedBy":
+		if e.ComplexityRoot.ControlObjectiveHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveHistory.ManagedBy(childComplexity), true
 	case "ControlObjectiveHistory.name":
 		if e.ComplexityRoot.ControlObjectiveHistory.Name == nil {
 			break
@@ -5666,6 +5995,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlObjectiveHistory.Source(childComplexity), true
+	case "ControlObjectiveHistory.sourceDefinitionID":
+		if e.ComplexityRoot.ControlObjectiveHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveHistory.SourceDefinitionID(childComplexity), true
+	case "ControlObjectiveHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.ControlObjectiveHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveHistory.SourceDefinitionVersion(childComplexity), true
+	case "ControlObjectiveHistory.sourceInstanceID":
+		if e.ComplexityRoot.ControlObjectiveHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveHistory.SourceInstanceID(childComplexity), true
 	case "ControlObjectiveHistory.status":
 		if e.ComplexityRoot.ControlObjectiveHistory.Status == nil {
 			break
@@ -6170,6 +6517,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.Description(childComplexity), true
+	case "EmailTemplateHistory.externalID":
+		if e.ComplexityRoot.EmailTemplateHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.ExternalID(childComplexity), true
 	case "EmailTemplateHistory.format":
 		if e.ComplexityRoot.EmailTemplateHistory.Format == nil {
 			break
@@ -6194,6 +6547,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.IntegrationID(childComplexity), true
+	case "EmailTemplateHistory.integrationRunID":
+		if e.ComplexityRoot.EmailTemplateHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.IntegrationRunID(childComplexity), true
 	case "EmailTemplateHistory.internalNotes":
 		if e.ComplexityRoot.EmailTemplateHistory.InternalNotes == nil {
 			break
@@ -6212,6 +6571,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.Locale(childComplexity), true
+	case "EmailTemplateHistory.managedBy":
+		if e.ComplexityRoot.EmailTemplateHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.ManagedBy(childComplexity), true
 	case "EmailTemplateHistory.metadata":
 		if e.ComplexityRoot.EmailTemplateHistory.Metadata == nil {
 			break
@@ -6248,6 +6613,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateHistory.Revision(childComplexity), true
+	case "EmailTemplateHistory.sourceDefinitionID":
+		if e.ComplexityRoot.EmailTemplateHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.SourceDefinitionID(childComplexity), true
+	case "EmailTemplateHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.EmailTemplateHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.SourceDefinitionVersion(childComplexity), true
+	case "EmailTemplateHistory.sourceInstanceID":
+		if e.ComplexityRoot.EmailTemplateHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateHistory.SourceInstanceID(childComplexity), true
 	case "EmailTemplateHistory.systemInternalID":
 		if e.ComplexityRoot.EmailTemplateHistory.SystemInternalID == nil {
 			break
@@ -7025,6 +7408,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.EnvironmentName(childComplexity), true
+	case "EvidenceHistory.externalID":
+		if e.ComplexityRoot.EvidenceHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.ExternalID(childComplexity), true
 	case "EvidenceHistory.externalUUID":
 		if e.ComplexityRoot.EvidenceHistory.ExternalUUID == nil {
 			break
@@ -7043,12 +7432,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.ID(childComplexity), true
+	case "EvidenceHistory.integrationRunID":
+		if e.ComplexityRoot.EvidenceHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.IntegrationRunID(childComplexity), true
 	case "EvidenceHistory.isAutomated":
 		if e.ComplexityRoot.EvidenceHistory.IsAutomated == nil {
 			break
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.IsAutomated(childComplexity), true
+	case "EvidenceHistory.managedBy":
+		if e.ComplexityRoot.EvidenceHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.ManagedBy(childComplexity), true
 	case "EvidenceHistory.name":
 		if e.ComplexityRoot.EvidenceHistory.Name == nil {
 			break
@@ -7103,6 +7504,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EvidenceHistory.Source(childComplexity), true
+	case "EvidenceHistory.sourceDefinitionID":
+		if e.ComplexityRoot.EvidenceHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.SourceDefinitionID(childComplexity), true
+	case "EvidenceHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.EvidenceHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.SourceDefinitionVersion(childComplexity), true
+	case "EvidenceHistory.sourceInstanceID":
+		if e.ComplexityRoot.EvidenceHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.SourceInstanceID(childComplexity), true
 	case "EvidenceHistory.status":
 		if e.ComplexityRoot.EvidenceHistory.Status == nil {
 			break
@@ -8099,6 +8518,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupHistory.DisplayName(childComplexity), true
+	case "GroupHistory.externalID":
+		if e.ComplexityRoot.GroupHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.ExternalID(childComplexity), true
 	case "GroupHistory.gravatarLogoURL":
 		if e.ComplexityRoot.GroupHistory.GravatarLogoURL == nil {
 			break
@@ -8117,6 +8542,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupHistory.ID(childComplexity), true
+	case "GroupHistory.integrationRunID":
+		if e.ComplexityRoot.GroupHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.IntegrationRunID(childComplexity), true
 	case "GroupHistory.isManaged":
 		if e.ComplexityRoot.GroupHistory.IsManaged == nil {
 			break
@@ -8129,6 +8560,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupHistory.LogoURL(childComplexity), true
+	case "GroupHistory.managedBy":
+		if e.ComplexityRoot.GroupHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.ManagedBy(childComplexity), true
 	case "GroupHistory.name":
 		if e.ComplexityRoot.GroupHistory.Name == nil {
 			break
@@ -8195,6 +8632,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.GroupHistory.ScimGroupMailing(childComplexity), true
+	case "GroupHistory.sourceDefinitionID":
+		if e.ComplexityRoot.GroupHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.SourceDefinitionID(childComplexity), true
+	case "GroupHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.GroupHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.SourceDefinitionVersion(childComplexity), true
+	case "GroupHistory.sourceInstanceID":
+		if e.ComplexityRoot.GroupHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupHistory.SourceInstanceID(childComplexity), true
 	case "GroupHistory.tags":
 		if e.ComplexityRoot.GroupHistory.Tags == nil {
 			break
@@ -8486,12 +8941,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.HushHistory.CreatedBy(childComplexity), true
-	case "HushHistory.credentialSet":
-		if e.ComplexityRoot.HushHistory.CredentialSet == nil {
-			break
-		}
-
-		return e.ComplexityRoot.HushHistory.CredentialSet(childComplexity), true
 	case "HushHistory.description":
 		if e.ComplexityRoot.HushHistory.Description == nil {
 			break
@@ -8705,6 +9154,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistory.EnvironmentName(childComplexity), true
+	case "IdentityHolderHistory.externalID":
+		if e.ComplexityRoot.IdentityHolderHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.ExternalID(childComplexity), true
 	case "IdentityHolderHistory.externalReferenceID":
 		if e.ComplexityRoot.IdentityHolderHistory.ExternalReferenceID == nil {
 			break
@@ -8741,6 +9196,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistory.IdentityHolderType(childComplexity), true
+	case "IdentityHolderHistory.integrationRunID":
+		if e.ComplexityRoot.IdentityHolderHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.IntegrationRunID(childComplexity), true
 	case "IdentityHolderHistory.internalOwner":
 		if e.ComplexityRoot.IdentityHolderHistory.InternalOwner == nil {
 			break
@@ -8783,6 +9244,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistory.Location(childComplexity), true
+	case "IdentityHolderHistory.managedBy":
+		if e.ComplexityRoot.IdentityHolderHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.ManagedBy(childComplexity), true
 	case "IdentityHolderHistory.metadata":
 		if e.ComplexityRoot.IdentityHolderHistory.Metadata == nil {
 			break
@@ -8825,6 +9292,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolderHistory.ScopeName(childComplexity), true
+	case "IdentityHolderHistory.sourceDefinitionID":
+		if e.ComplexityRoot.IdentityHolderHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.SourceDefinitionID(childComplexity), true
+	case "IdentityHolderHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.IdentityHolderHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.SourceDefinitionVersion(childComplexity), true
+	case "IdentityHolderHistory.sourceInstanceID":
+		if e.ComplexityRoot.IdentityHolderHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderHistory.SourceInstanceID(childComplexity), true
 	case "IdentityHolderHistory.startDate":
 		if e.ComplexityRoot.IdentityHolderHistory.StartDate == nil {
 			break
@@ -9014,6 +9499,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicyHistory.ExternalFileID(childComplexity), true
+	case "InternalPolicyHistory.externalID":
+		if e.ComplexityRoot.InternalPolicyHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyHistory.ExternalID(childComplexity), true
 	case "InternalPolicyHistory.externalUUID":
 		if e.ComplexityRoot.InternalPolicyHistory.ExternalUUID == nil {
 			break
@@ -9374,6 +9865,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappedControlHistory.CreatedBy(childComplexity), true
+	case "MappedControlHistory.externalID":
+		if e.ComplexityRoot.MappedControlHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlHistory.ExternalID(childComplexity), true
 	case "MappedControlHistory.historyTime":
 		if e.ComplexityRoot.MappedControlHistory.HistoryTime == nil {
 			break
@@ -9386,12 +9883,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappedControlHistory.ID(childComplexity), true
+	case "MappedControlHistory.integrationRunID":
+		if e.ComplexityRoot.MappedControlHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlHistory.IntegrationRunID(childComplexity), true
 	case "MappedControlHistory.internalNotes":
 		if e.ComplexityRoot.MappedControlHistory.InternalNotes == nil {
 			break
 		}
 
 		return e.ComplexityRoot.MappedControlHistory.InternalNotes(childComplexity), true
+	case "MappedControlHistory.managedBy":
+		if e.ComplexityRoot.MappedControlHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlHistory.ManagedBy(childComplexity), true
 	case "MappedControlHistory.mappingType":
 		if e.ComplexityRoot.MappedControlHistory.MappingType == nil {
 			break
@@ -9428,6 +9937,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.MappedControlHistory.Source(childComplexity), true
+	case "MappedControlHistory.sourceDefinitionID":
+		if e.ComplexityRoot.MappedControlHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlHistory.SourceDefinitionID(childComplexity), true
+	case "MappedControlHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.MappedControlHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlHistory.SourceDefinitionVersion(childComplexity), true
+	case "MappedControlHistory.sourceInstanceID":
+		if e.ComplexityRoot.MappedControlHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlHistory.SourceInstanceID(childComplexity), true
 	case "MappedControlHistory.systemInternalID":
 		if e.ComplexityRoot.MappedControlHistory.SystemInternalID == nil {
 			break
@@ -9527,6 +10054,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NarrativeHistory.DisplayID(childComplexity), true
+	case "NarrativeHistory.externalID":
+		if e.ComplexityRoot.NarrativeHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeHistory.ExternalID(childComplexity), true
 	case "NarrativeHistory.historyTime":
 		if e.ComplexityRoot.NarrativeHistory.HistoryTime == nil {
 			break
@@ -9539,12 +10072,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NarrativeHistory.ID(childComplexity), true
+	case "NarrativeHistory.integrationRunID":
+		if e.ComplexityRoot.NarrativeHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeHistory.IntegrationRunID(childComplexity), true
 	case "NarrativeHistory.internalNotes":
 		if e.ComplexityRoot.NarrativeHistory.InternalNotes == nil {
 			break
 		}
 
 		return e.ComplexityRoot.NarrativeHistory.InternalNotes(childComplexity), true
+	case "NarrativeHistory.managedBy":
+		if e.ComplexityRoot.NarrativeHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeHistory.ManagedBy(childComplexity), true
 	case "NarrativeHistory.name":
 		if e.ComplexityRoot.NarrativeHistory.Name == nil {
 			break
@@ -9569,6 +10114,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.NarrativeHistory.Ref(childComplexity), true
+	case "NarrativeHistory.sourceDefinitionID":
+		if e.ComplexityRoot.NarrativeHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeHistory.SourceDefinitionID(childComplexity), true
+	case "NarrativeHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.NarrativeHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeHistory.SourceDefinitionVersion(childComplexity), true
+	case "NarrativeHistory.sourceInstanceID":
+		if e.ComplexityRoot.NarrativeHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeHistory.SourceInstanceID(childComplexity), true
 	case "NarrativeHistory.systemInternalID":
 		if e.ComplexityRoot.NarrativeHistory.SystemInternalID == nil {
 			break
@@ -10607,12 +11170,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.BillingPhone(childComplexity), true
-	case "OrganizationSettingHistory.complianceWebhookToken":
-		if e.ComplexityRoot.OrganizationSettingHistory.ComplianceWebhookToken == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingHistory.ComplianceWebhookToken(childComplexity), true
 	case "OrganizationSettingHistory.createdAt":
 		if e.ComplexityRoot.OrganizationSettingHistory.CreatedAt == nil {
 			break
@@ -10667,12 +11224,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientID(childComplexity), true
-	case "OrganizationSettingHistory.identityProviderClientSecret":
-		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientSecret == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientSecret(childComplexity), true
 	case "OrganizationSettingHistory.identityProviderEntityID":
 		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderEntityID == nil {
 			break
@@ -10983,6 +11534,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.PlatformHistory.EstimatedMonthlyCost(childComplexity), true
+	case "PlatformHistory.externalID":
+		if e.ComplexityRoot.PlatformHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PlatformHistory.ExternalID(childComplexity), true
 	case "PlatformHistory.externalReferenceID":
 		if e.ComplexityRoot.PlatformHistory.ExternalReferenceID == nil {
 			break
@@ -11007,6 +11564,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.PlatformHistory.ID(childComplexity), true
+	case "PlatformHistory.integrationRunID":
+		if e.ComplexityRoot.PlatformHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PlatformHistory.IntegrationRunID(childComplexity), true
 	case "PlatformHistory.internalOwner":
 		if e.ComplexityRoot.PlatformHistory.InternalOwner == nil {
 			break
@@ -11031,6 +11594,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.PlatformHistory.InternalOwnerUserID(childComplexity), true
+	case "PlatformHistory.managedBy":
+		if e.ComplexityRoot.PlatformHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PlatformHistory.ManagedBy(childComplexity), true
 	case "PlatformHistory.metadata":
 		if e.ComplexityRoot.PlatformHistory.Metadata == nil {
 			break
@@ -11163,12 +11732,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.PlatformHistory.SecurityTierName(childComplexity), true
+	case "PlatformHistory.sourceDefinitionID":
+		if e.ComplexityRoot.PlatformHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PlatformHistory.SourceDefinitionID(childComplexity), true
+	case "PlatformHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.PlatformHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PlatformHistory.SourceDefinitionVersion(childComplexity), true
 	case "PlatformHistory.sourceIdentifier":
 		if e.ComplexityRoot.PlatformHistory.SourceIdentifier == nil {
 			break
 		}
 
 		return e.ComplexityRoot.PlatformHistory.SourceIdentifier(childComplexity), true
+	case "PlatformHistory.sourceInstanceID":
+		if e.ComplexityRoot.PlatformHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PlatformHistory.SourceInstanceID(childComplexity), true
 	case "PlatformHistory.sourceType":
 		if e.ComplexityRoot.PlatformHistory.SourceType == nil {
 			break
@@ -11370,6 +11957,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProcedureHistory.ExternalFileID(childComplexity), true
+	case "ProcedureHistory.externalID":
+		if e.ComplexityRoot.ProcedureHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureHistory.ExternalID(childComplexity), true
 	case "ProcedureHistory.fileID":
 		if e.ComplexityRoot.ProcedureHistory.FileID == nil {
 			break
@@ -11667,6 +12260,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramHistory.EndDate(childComplexity), true
+	case "ProgramHistory.externalID":
+		if e.ComplexityRoot.ProgramHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.ExternalID(childComplexity), true
 	case "ProgramHistory.externalUUID":
 		if e.ComplexityRoot.ProgramHistory.ExternalUUID == nil {
 			break
@@ -11703,6 +12302,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramHistory.ID(childComplexity), true
+	case "ProgramHistory.integrationRunID":
+		if e.ComplexityRoot.ProgramHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.IntegrationRunID(childComplexity), true
+	case "ProgramHistory.managedBy":
+		if e.ComplexityRoot.ProgramHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.ManagedBy(childComplexity), true
 	case "ProgramHistory.name":
 		if e.ComplexityRoot.ProgramHistory.Name == nil {
 			break
@@ -11757,6 +12368,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramHistory.Ref(childComplexity), true
+	case "ProgramHistory.sourceDefinitionID":
+		if e.ComplexityRoot.ProgramHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.SourceDefinitionID(childComplexity), true
+	case "ProgramHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.ProgramHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.SourceDefinitionVersion(childComplexity), true
+	case "ProgramHistory.sourceInstanceID":
+		if e.ComplexityRoot.ProgramHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.SourceInstanceID(childComplexity), true
 	case "ProgramHistory.startDate":
 		if e.ComplexityRoot.ProgramHistory.StartDate == nil {
 			break
@@ -12804,6 +13433,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RemediationHistory.Instructions(childComplexity), true
+	case "RemediationHistory.integrationRunID":
+		if e.ComplexityRoot.RemediationHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.IntegrationRunID(childComplexity), true
 	case "RemediationHistory.intent":
 		if e.ComplexityRoot.RemediationHistory.Intent == nil {
 			break
@@ -12816,6 +13451,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RemediationHistory.InternalNotes(childComplexity), true
+	case "RemediationHistory.managedBy":
+		if e.ComplexityRoot.RemediationHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.ManagedBy(childComplexity), true
 	case "RemediationHistory.metadata":
 		if e.ComplexityRoot.RemediationHistory.Metadata == nil {
 			break
@@ -12882,6 +13523,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RemediationHistory.Source(childComplexity), true
+	case "RemediationHistory.sourceDefinitionID":
+		if e.ComplexityRoot.RemediationHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.SourceDefinitionID(childComplexity), true
+	case "RemediationHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.RemediationHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.SourceDefinitionVersion(childComplexity), true
+	case "RemediationHistory.sourceInstanceID":
+		if e.ComplexityRoot.RemediationHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationHistory.SourceInstanceID(childComplexity), true
 	case "RemediationHistory.state":
 		if e.ComplexityRoot.RemediationHistory.State == nil {
 			break
@@ -13335,12 +13994,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewHistory.ID(childComplexity), true
+	case "ReviewHistory.integrationRunID":
+		if e.ComplexityRoot.ReviewHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.IntegrationRunID(childComplexity), true
 	case "ReviewHistory.internalNotes":
 		if e.ComplexityRoot.ReviewHistory.InternalNotes == nil {
 			break
 		}
 
 		return e.ComplexityRoot.ReviewHistory.InternalNotes(childComplexity), true
+	case "ReviewHistory.managedBy":
+		if e.ComplexityRoot.ReviewHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.ManagedBy(childComplexity), true
 	case "ReviewHistory.metadata":
 		if e.ComplexityRoot.ReviewHistory.Metadata == nil {
 			break
@@ -13413,6 +14084,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ReviewHistory.Source(childComplexity), true
+	case "ReviewHistory.sourceDefinitionID":
+		if e.ComplexityRoot.ReviewHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.SourceDefinitionID(childComplexity), true
+	case "ReviewHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.ReviewHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.SourceDefinitionVersion(childComplexity), true
+	case "ReviewHistory.sourceInstanceID":
+		if e.ComplexityRoot.ReviewHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewHistory.SourceInstanceID(childComplexity), true
 	case "ReviewHistory.state":
 		if e.ComplexityRoot.ReviewHistory.State == nil {
 			break
@@ -14319,6 +15008,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.ExampleEvidence(childComplexity), true
+	case "SubcontrolHistory.externalID":
+		if e.ComplexityRoot.SubcontrolHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.ExternalID(childComplexity), true
 	case "SubcontrolHistory.externalUUID":
 		if e.ComplexityRoot.SubcontrolHistory.ExternalUUID == nil {
 			break
@@ -14355,12 +15050,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.ImplementationStatus(childComplexity), true
+	case "SubcontrolHistory.integrationRunID":
+		if e.ComplexityRoot.SubcontrolHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.IntegrationRunID(childComplexity), true
 	case "SubcontrolHistory.internalNotes":
 		if e.ComplexityRoot.SubcontrolHistory.InternalNotes == nil {
 			break
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.InternalNotes(childComplexity), true
+	case "SubcontrolHistory.managedBy":
+		if e.ComplexityRoot.SubcontrolHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.ManagedBy(childComplexity), true
 	case "SubcontrolHistory.mappedCategories":
 		if e.ComplexityRoot.SubcontrolHistory.MappedCategories == nil {
 			break
@@ -14433,6 +15140,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubcontrolHistory.Source(childComplexity), true
+	case "SubcontrolHistory.sourceDefinitionID":
+		if e.ComplexityRoot.SubcontrolHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.SourceDefinitionID(childComplexity), true
+	case "SubcontrolHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.SubcontrolHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.SourceDefinitionVersion(childComplexity), true
+	case "SubcontrolHistory.sourceInstanceID":
+		if e.ComplexityRoot.SubcontrolHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolHistory.SourceInstanceID(childComplexity), true
 	case "SubcontrolHistory.sourceName":
 		if e.ComplexityRoot.SubcontrolHistory.SourceName == nil {
 			break
@@ -14721,6 +15446,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetailHistory.DisplayID(childComplexity), true
+	case "SystemDetailHistory.externalID":
+		if e.ComplexityRoot.SystemDetailHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.ExternalID(childComplexity), true
 	case "SystemDetailHistory.historyTime":
 		if e.ComplexityRoot.SystemDetailHistory.HistoryTime == nil {
 			break
@@ -14733,12 +15464,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetailHistory.ID(childComplexity), true
+	case "SystemDetailHistory.integrationRunID":
+		if e.ComplexityRoot.SystemDetailHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.IntegrationRunID(childComplexity), true
 	case "SystemDetailHistory.lastReviewed":
 		if e.ComplexityRoot.SystemDetailHistory.LastReviewed == nil {
 			break
 		}
 
 		return e.ComplexityRoot.SystemDetailHistory.LastReviewed(childComplexity), true
+	case "SystemDetailHistory.managedBy":
+		if e.ComplexityRoot.SystemDetailHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.ManagedBy(childComplexity), true
 	case "SystemDetailHistory.operation":
 		if e.ComplexityRoot.SystemDetailHistory.Operation == nil {
 			break
@@ -14775,6 +15518,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SystemDetailHistory.SensitivityLevel(childComplexity), true
+	case "SystemDetailHistory.sourceDefinitionID":
+		if e.ComplexityRoot.SystemDetailHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.SourceDefinitionID(childComplexity), true
+	case "SystemDetailHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.SystemDetailHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.SourceDefinitionVersion(childComplexity), true
+	case "SystemDetailHistory.sourceInstanceID":
+		if e.ComplexityRoot.SystemDetailHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailHistory.SourceInstanceID(childComplexity), true
 	case "SystemDetailHistory.systemName":
 		if e.ComplexityRoot.SystemDetailHistory.SystemName == nil {
 			break
@@ -14910,6 +15671,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.EnvironmentName(childComplexity), true
+	case "TaskHistory.externalID":
+		if e.ComplexityRoot.TaskHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.ExternalID(childComplexity), true
 	case "TaskHistory.externalReferenceURL":
 		if e.ComplexityRoot.TaskHistory.ExternalReferenceURL == nil {
 			break
@@ -14940,6 +15707,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.IdempotencyKey(childComplexity), true
+	case "TaskHistory.integrationRunID":
+		if e.ComplexityRoot.TaskHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.IntegrationRunID(childComplexity), true
 	case "TaskHistory.isSuggested":
 		if e.ComplexityRoot.TaskHistory.IsSuggested == nil {
 			break
@@ -14952,6 +15725,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.IsTemplate(childComplexity), true
+	case "TaskHistory.managedBy":
+		if e.ComplexityRoot.TaskHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.ManagedBy(childComplexity), true
 	case "TaskHistory.metadata":
 		if e.ComplexityRoot.TaskHistory.Metadata == nil {
 			break
@@ -15006,6 +15785,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.Source(childComplexity), true
+	case "TaskHistory.sourceDefinitionID":
+		if e.ComplexityRoot.TaskHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.SourceDefinitionID(childComplexity), true
+	case "TaskHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.TaskHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.SourceDefinitionVersion(childComplexity), true
+	case "TaskHistory.sourceInstanceID":
+		if e.ComplexityRoot.TaskHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.SourceInstanceID(childComplexity), true
 	case "TaskHistory.sourceKey":
 		if e.ComplexityRoot.TaskHistory.SourceKey == nil {
 			break
@@ -15135,6 +15932,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateHistory.EnvironmentName(childComplexity), true
+	case "TemplateHistory.externalID":
+		if e.ComplexityRoot.TemplateHistory.ExternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.ExternalID(childComplexity), true
 	case "TemplateHistory.historyTime":
 		if e.ComplexityRoot.TemplateHistory.HistoryTime == nil {
 			break
@@ -15147,6 +15950,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateHistory.ID(childComplexity), true
+	case "TemplateHistory.integrationRunID":
+		if e.ComplexityRoot.TemplateHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.IntegrationRunID(childComplexity), true
 	case "TemplateHistory.internalNotes":
 		if e.ComplexityRoot.TemplateHistory.InternalNotes == nil {
 			break
@@ -15165,6 +15974,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateHistory.Kind(childComplexity), true
+	case "TemplateHistory.managedBy":
+		if e.ComplexityRoot.TemplateHistory.ManagedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.ManagedBy(childComplexity), true
 	case "TemplateHistory.name":
 		if e.ComplexityRoot.TemplateHistory.Name == nil {
 			break
@@ -15201,6 +16016,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TemplateHistory.ScopeName(childComplexity), true
+	case "TemplateHistory.sourceDefinitionID":
+		if e.ComplexityRoot.TemplateHistory.SourceDefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.SourceDefinitionID(childComplexity), true
+	case "TemplateHistory.sourceDefinitionVersion":
+		if e.ComplexityRoot.TemplateHistory.SourceDefinitionVersion == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.SourceDefinitionVersion(childComplexity), true
+	case "TemplateHistory.sourceInstanceID":
+		if e.ComplexityRoot.TemplateHistory.SourceInstanceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateHistory.SourceInstanceID(childComplexity), true
 	case "TemplateHistory.systemInternalID":
 		if e.ComplexityRoot.TemplateHistory.SystemInternalID == nil {
 			break
@@ -18782,6 +19615,10 @@ type ActionPlanHistory implements Node {
   """
   integrationRunID: String
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the name of the action_plan
   """
   name: String!
@@ -19041,6 +19878,7 @@ enum ActionPlanHistoryOrderField {
   created_at
   updated_at
   revision
+  external_id
   name
   STATUS
   MANAGEMENT_MODE
@@ -19253,6 +20091,20 @@ input ActionPlanHistoryWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   name field predicates
   """
@@ -19659,6 +20511,30 @@ type AssessmentHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -19765,6 +20641,7 @@ enum AssessmentHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   name
   assessment_type
   response_due_duration
@@ -19877,6 +20754,90 @@ input AssessmentHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -19992,6 +20953,30 @@ type AssessmentPolicyHistory implements Node {
   """
   updatedByImpersonator: String
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -20066,6 +21051,7 @@ enum AssessmentPolicyHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
 }
 """
 AssessmentPolicyHistoryWhereInput is used for filtering AssessmentPolicyHistory objects.
@@ -20175,6 +21161,90 @@ input AssessmentPolicyHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -20796,6 +21866,10 @@ type AssetHistory implements Node {
   """
   integrationRunID: String
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -21033,6 +22107,7 @@ enum AssetHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   internal_owner
   ASSET_TYPE
   name
@@ -21234,6 +22309,20 @@ input AssetHistoryWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -21792,6 +22881,30 @@ type CampaignHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -22019,6 +23132,7 @@ enum CampaignHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   internal_owner
   name
   CAMPAIGN_TYPE
@@ -22159,6 +23273,90 @@ input CampaignHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -22952,6 +24150,10 @@ type ContactHistory implements Node {
   """
   integrationRunID: String
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -22983,10 +24185,6 @@ type ContactHistory implements Node {
   status of the contact
   """
   status: ContactHistoryUserStatus!
-  """
-  stable identifier assigned by the source system, used for integration ingest deduplication
-  """
-  externalID: String
   """
   integration that sourced this contact, when populated via integration ingest
   """
@@ -23054,12 +24252,12 @@ enum ContactHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   full_name
   title
   company
   email
   STATUS
-  external_id
   observed_at
 }
 """
@@ -23252,6 +24450,20 @@ input ContactHistoryWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -23357,20 +24569,6 @@ input ContactHistoryWhereInput {
   statusIn: [ContactHistoryUserStatus!]
   statusNotIn: [ContactHistoryUserStatus!]
   """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   integration_id field predicates
   """
   integrationID: String
@@ -23416,6 +24614,30 @@ type ControlHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
   """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
@@ -23687,6 +24909,7 @@ enum ControlHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   title
   STATUS
   SOURCE
@@ -23822,6 +25045,90 @@ input ControlHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   external_uuid field predicates
   """
@@ -24274,6 +25581,30 @@ type ControlImplementationHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -24383,6 +25714,7 @@ enum ControlImplementationHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   STATUS
   implementation_date
   verified
@@ -24496,6 +25828,90 @@ input ControlImplementationHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -24622,6 +26038,30 @@ type ControlObjectiveHistory implements Node {
   """
   revision: String
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -24746,6 +26186,7 @@ enum ControlObjectiveHistoryOrderField {
   created_at
   updated_at
   revision
+  external_id
   name
   status
   SOURCE
@@ -24887,6 +26328,90 @@ input ControlObjectiveHistoryWhereInput {
   revisionNotNil: Boolean
   revisionEqualFold: String
   revisionContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -25930,6 +27455,30 @@ type EmailTemplateHistory implements Node {
   """
   revision: String
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -26070,6 +27619,7 @@ enum EmailTemplateHistoryOrderField {
   created_at
   updated_at
   revision
+  external_id
   KEY
   NAME
   FORMAT
@@ -26208,6 +27758,90 @@ input EmailTemplateHistoryWhereInput {
   revisionNotNil: Boolean
   revisionEqualFold: String
   revisionContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -26490,6 +28124,10 @@ type EntityHistory implements Node {
   """
   integrationRunID: String
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -26738,10 +28376,6 @@ type EntityHistory implements Node {
   """
   logoFileID: String
   """
-  stable identifier assigned by the source system, used for integration ingest deduplication
-  """
-  externalID: String
-  """
   time when this entity was last observed by the source integration
   """
   observedAt: DateTime
@@ -26830,6 +28464,7 @@ enum EntityHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   internal_owner
   reviewed_by
   last_reviewed_at
@@ -26858,7 +28493,6 @@ enum EntityHistoryOrderField {
   REVIEW_FREQUENCY
   next_review_at
   contract_renewal_at
-  external_id
   observed_at
 }
 """
@@ -27048,6 +28682,20 @@ input EntityHistoryWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -27714,20 +29362,6 @@ input EntityHistoryWhereInput {
   logoFileIDEqualFold: String
   logoFileIDContainsFold: String
   """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
-  """
   observed_at field predicates
   """
   observedAt: DateTime
@@ -28028,6 +29662,30 @@ type EvidenceHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -28184,6 +29842,7 @@ enum EvidenceHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   name
   creation_date
   renewal_date
@@ -28310,6 +29969,90 @@ input EvidenceHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -29521,6 +31264,10 @@ type FindingHistory implements Node {
   """
   integrationRunID: String
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -29612,10 +31359,6 @@ type FindingHistory implements Node {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
-  """
-  external identifier from the integration source for the finding
-  """
-  externalID: String
   """
   incoming source severity
   """
@@ -29819,8 +31562,8 @@ enum FindingHistoryOrderField {
   history_time
   created_at
   updated_at
-  internal_owner
   external_id
+  internal_owner
   security_level
   external_owner_id
   category
@@ -30028,6 +31771,20 @@ input FindingHistoryWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -30336,20 +32093,6 @@ input FindingHistoryWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
   """
   security_level field predicates
   """
@@ -30720,6 +32463,30 @@ type GroupHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -30838,6 +32605,7 @@ enum GroupHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   name
   display_name
 }
@@ -30961,6 +32729,90 @@ input GroupHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -31628,10 +33480,6 @@ type HushHistory implements Node {
   """
   secretName: String
   """
-  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-  """
-  credentialSet: CredentialSet
-  """
   additional metadata about the credential
   """
   metadata: Map
@@ -31944,6 +33792,30 @@ type IdentityHolderHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -32137,6 +34009,7 @@ enum IdentityHolderHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   internal_owner
   full_name
   email
@@ -32285,6 +34158,90 @@ input IdentityHolderHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -32689,6 +34646,10 @@ type InternalPolicyHistory implements Node {
   """
   integrationRunID: String
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -32908,6 +34869,7 @@ enum InternalPolicyHistoryOrderField {
   created_at
   updated_at
   revision
+  external_id
   name
   STATUS
   MANAGEMENT_MODE
@@ -33118,6 +35080,20 @@ input InternalPolicyHistoryWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -33668,6 +35644,30 @@ type MappedControlHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -33776,6 +35776,7 @@ enum MappedControlHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   MAPPING_TYPE
   SOURCE
 }
@@ -33887,6 +35888,90 @@ input MappedControlHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   system_owned field predicates
   """
@@ -34000,6 +36085,30 @@ type NarrativeHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -34086,6 +36195,7 @@ enum NarrativeHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   name
 }
 """
@@ -34208,6 +36318,90 @@ input NarrativeHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -36470,10 +38664,6 @@ type OrganizationSettingHistory implements Node {
   """
   identityProviderClientID: String
   """
-  client secret for SSO integration
-  """
-  identityProviderClientSecret: String
-  """
   metadata URL for the SSO provider
   """
   identityProviderMetadataEndpoint: String
@@ -36525,10 +38715,6 @@ type OrganizationSettingHistory implements Node {
   allow Openlane support to access this organization without a directory account
   """
   allowSupportAccess: Boolean
-  """
-  unique token used to receive compliance webhook events
-  """
-  complianceWebhookToken: String
   """
   whether or not a payment method has been added to the account
   """
@@ -36841,20 +39027,6 @@ input OrganizationSettingHistoryWhereInput {
   identityProviderClientIDEqualFold: String
   identityProviderClientIDContainsFold: String
   """
-  identity_provider_client_secret field predicates
-  """
-  identityProviderClientSecret: String
-  identityProviderClientSecretNEQ: String
-  identityProviderClientSecretIn: [String!]
-  identityProviderClientSecretNotIn: [String!]
-  identityProviderClientSecretContains: String
-  identityProviderClientSecretHasPrefix: String
-  identityProviderClientSecretHasSuffix: String
-  identityProviderClientSecretIsNil: Boolean
-  identityProviderClientSecretNotNil: Boolean
-  identityProviderClientSecretEqualFold: String
-  identityProviderClientSecretContainsFold: String
-  """
   identity_provider_metadata_endpoint field predicates
   """
   identityProviderMetadataEndpoint: String
@@ -36968,20 +39140,6 @@ input OrganizationSettingHistoryWhereInput {
   allowSupportAccessIsNil: Boolean
   allowSupportAccessNotNil: Boolean
   """
-  compliance_webhook_token field predicates
-  """
-  complianceWebhookToken: String
-  complianceWebhookTokenNEQ: String
-  complianceWebhookTokenIn: [String!]
-  complianceWebhookTokenNotIn: [String!]
-  complianceWebhookTokenContains: String
-  complianceWebhookTokenHasPrefix: String
-  complianceWebhookTokenHasSuffix: String
-  complianceWebhookTokenIsNil: Boolean
-  complianceWebhookTokenNotNil: Boolean
-  complianceWebhookTokenEqualFold: String
-  complianceWebhookTokenContainsFold: String
-  """
   payment_method_added field predicates
   """
   paymentMethodAdded: Boolean
@@ -37040,6 +39198,30 @@ type PlatformHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
   """
   the ID of the organization owner of the object
   """
@@ -37311,6 +39493,7 @@ enum PlatformHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   internal_owner
   business_owner
   technical_owner
@@ -37465,6 +39648,90 @@ input PlatformHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -38163,6 +40430,10 @@ type ProcedureHistory implements Node {
   """
   integrationRunID: String
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -38378,6 +40649,7 @@ enum ProcedureHistoryOrderField {
   created_at
   updated_at
   revision
+  external_id
   name
   STATUS
   MANAGEMENT_MODE
@@ -38588,6 +40860,20 @@ input ProcedureHistoryWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -38905,6 +41191,30 @@ type ProgramHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -39047,6 +41357,7 @@ enum ProgramHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   name
   STATUS
   framework
@@ -39188,6 +41499,90 @@ input ProgramHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -41829,6 +44224,30 @@ type RemediationHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -41864,10 +44283,6 @@ type RemediationHistory implements Node {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
-  """
-  external identifier from the integration source for the remediation
-  """
-  externalID: String
   """
   external identifier from the integration source for the remediation
   """
@@ -42140,6 +44555,90 @@ input RemediationHistoryWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -42251,20 +44750,6 @@ input RemediationHistoryWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
   """
   external_owner_id field predicates
   """
@@ -43108,6 +45593,30 @@ type ReviewHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -43139,10 +45648,6 @@ type ReviewHistory implements Node {
   the scope of the review
   """
   scopeID: String
-  """
-  external identifier from the integration source for the review
-  """
-  externalID: String
   """
   external identifier from the integration source for the review
   """
@@ -43398,6 +45903,90 @@ input ReviewHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -43502,20 +46091,6 @@ input ReviewHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
   """
   external_owner_id field predicates
   """
@@ -43757,6 +46332,10 @@ type RiskHistory implements Node {
   """
   integrationRunID: String
   """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -43828,10 +46407,6 @@ type RiskHistory implements Node {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
-  """
-  stable identifier assigned by the source system, used for integration ingest deduplication
-  """
-  externalID: String
   """
   integration that surfaced this risk, when sourced via integration ingest
   """
@@ -43996,9 +46571,9 @@ enum RiskHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   stakeholder_name
   delegate_name
-  external_id
   observed_at
   name
   STATUS
@@ -44247,6 +46822,20 @@ input RiskHistoryWhereInput {
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
   """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -44491,20 +47080,6 @@ input RiskHistoryWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDIsNil: Boolean
-  externalIDNotNil: Boolean
-  externalIDEqualFold: String
-  externalIDContainsFold: String
   """
   integration_id field predicates
   """
@@ -45519,6 +48094,30 @@ type SubcontrolHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
@@ -45765,6 +48364,7 @@ enum SubcontrolHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   title
   STATUS
   SOURCE
@@ -45893,6 +48493,90 @@ input SubcontrolHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   external_uuid field predicates
   """
@@ -46597,6 +49281,30 @@ type SystemDetailHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -46691,6 +49399,7 @@ enum SystemDetailHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   system_name
 }
 """
@@ -46823,6 +49532,90 @@ input SystemDetailHistoryWhereInput {
   displayIDEqualFold: String
   displayIDContainsFold: String
   """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: String
@@ -46931,6 +49724,30 @@ type TaskHistory implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
   """
   the ID of the organization owner of the object
   """
@@ -47098,6 +49915,7 @@ enum TaskHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   title
   STATUS
   due
@@ -47236,6 +50054,90 @@ input TaskHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -47535,6 +50437,30 @@ type TemplateHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
+  identifier of the record in an external system
+  """
+  externalID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -47664,6 +50590,7 @@ enum TemplateHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   name
   TEMPLATE_TYPE
   KIND
@@ -47784,6 +50711,90 @@ input TemplateHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -52676,6 +55687,10 @@ type VulnerabilityHistory implements Node {
   """
   integrationRunID: String
   """
+  identifier of the record in an external system
+  """
+  externalID: String!
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -52775,10 +55790,6 @@ type VulnerabilityHistory implements Node {
   security level of the vulnerability
   """
   securityLevel: VulnerabilityHistorySecurityLevel
-  """
-  external identifier from the integration source for the vulnerability
-  """
-  externalID: String!
   """
   CVE identifier for the vulnerability when applicable
   """
@@ -52994,10 +56005,10 @@ enum VulnerabilityHistoryOrderField {
   history_time
   created_at
   updated_at
+  external_id
   internal_owner
   external_owner_id
   security_level
-  external_id
   cve_id
   category
   severity
@@ -53203,6 +56214,18 @@ input VulnerabilityHistoryWhereInput {
   integrationRunIDNotNil: Boolean
   integrationRunIDEqualFold: String
   integrationRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDEqualFold: String
+  externalIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -53534,18 +56557,6 @@ input VulnerabilityHistoryWhereInput {
   securityLevelNotIn: [VulnerabilityHistorySecurityLevel!]
   securityLevelIsNil: Boolean
   securityLevelNotNil: Boolean
-  """
-  external_id field predicates
-  """
-  externalID: String
-  externalIDNEQ: String
-  externalIDIn: [String!]
-  externalIDNotIn: [String!]
-  externalIDContains: String
-  externalIDHasPrefix: String
-  externalIDHasSuffix: String
-  externalIDEqualFold: String
-  externalIDContainsFold: String
   """
   cve_id field predicates
   """
@@ -55141,6 +58152,8 @@ func (ec *executionContext) childFields_ActionPlanHistory(ctx context.Context, f
 		return ec.fieldContext_ActionPlanHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ActionPlanHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ActionPlanHistory_externalID(ctx, field)
 	case "name":
 		return ec.fieldContext_ActionPlanHistory_name(ctx, field)
 	case "status":
@@ -55275,6 +58288,18 @@ func (ec *executionContext) childFields_AssessmentHistory(ctx context.Context, f
 		return ec.fieldContext_AssessmentHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_AssessmentHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_AssessmentHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_AssessmentHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_AssessmentHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_AssessmentHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_AssessmentHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_AssessmentHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_AssessmentHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -55343,6 +58368,18 @@ func (ec *executionContext) childFields_AssessmentPolicyHistory(ctx context.Cont
 		return ec.fieldContext_AssessmentPolicyHistory_updatedBy(ctx, field)
 	case "updatedByImpersonator":
 		return ec.fieldContext_AssessmentPolicyHistory_updatedByImpersonator(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_AssessmentPolicyHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_AssessmentPolicyHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_AssessmentPolicyHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_AssessmentPolicyHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_AssessmentPolicyHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_AssessmentPolicyHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_AssessmentPolicyHistory_ownerID(ctx, field)
 	case "assessmentID":
@@ -55503,6 +58540,8 @@ func (ec *executionContext) childFields_AssetHistory(ctx context.Context, field 
 		return ec.fieldContext_AssetHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_AssetHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_AssetHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_AssetHistory_ownerID(ctx, field)
 	case "internalOwner":
@@ -55639,6 +58678,18 @@ func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, fie
 		return ec.fieldContext_CampaignHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_CampaignHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_CampaignHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_CampaignHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_CampaignHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_CampaignHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_CampaignHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_CampaignHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_CampaignHistory_ownerID(ctx, field)
 	case "internalOwner":
@@ -55837,6 +58888,8 @@ func (ec *executionContext) childFields_ContactHistory(ctx context.Context, fiel
 		return ec.fieldContext_ContactHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ContactHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ContactHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ContactHistory_ownerID(ctx, field)
 	case "fullName":
@@ -55853,8 +58906,6 @@ func (ec *executionContext) childFields_ContactHistory(ctx context.Context, fiel
 		return ec.fieldContext_ContactHistory_address(ctx, field)
 	case "status":
 		return ec.fieldContext_ContactHistory_status(ctx, field)
-	case "externalID":
-		return ec.fieldContext_ContactHistory_externalID(ctx, field)
 	case "integrationID":
 		return ec.fieldContext_ContactHistory_integrationID(ctx, field)
 	case "observedAt":
@@ -55909,6 +58960,18 @@ func (ec *executionContext) childFields_ControlHistory(ctx context.Context, fiel
 		return ec.fieldContext_ControlHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_ControlHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_ControlHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_ControlHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_ControlHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_ControlHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_ControlHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ControlHistory_externalID(ctx, field)
 	case "externalUUID":
 		return ec.fieldContext_ControlHistory_externalUUID(ctx, field)
 	case "title":
@@ -56047,6 +59110,18 @@ func (ec *executionContext) childFields_ControlImplementationHistory(ctx context
 		return ec.fieldContext_ControlImplementationHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_ControlImplementationHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_ControlImplementationHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_ControlImplementationHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_ControlImplementationHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_ControlImplementationHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_ControlImplementationHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ControlImplementationHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ControlImplementationHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -56119,6 +59194,18 @@ func (ec *executionContext) childFields_ControlObjectiveHistory(ctx context.Cont
 		return ec.fieldContext_ControlObjectiveHistory_tags(ctx, field)
 	case "revision":
 		return ec.fieldContext_ControlObjectiveHistory_revision(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_ControlObjectiveHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_ControlObjectiveHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_ControlObjectiveHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_ControlObjectiveHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_ControlObjectiveHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ControlObjectiveHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ControlObjectiveHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -56373,6 +59460,18 @@ func (ec *executionContext) childFields_EmailTemplateHistory(ctx context.Context
 		return ec.fieldContext_EmailTemplateHistory_updatedByImpersonator(ctx, field)
 	case "revision":
 		return ec.fieldContext_EmailTemplateHistory_revision(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_EmailTemplateHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_EmailTemplateHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_EmailTemplateHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_EmailTemplateHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_EmailTemplateHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_EmailTemplateHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_EmailTemplateHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -56467,6 +59566,8 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_EntityHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_EntityHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_EntityHistory_ownerID(ctx, field)
 	case "internalOwner":
@@ -56591,8 +59692,6 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_logoRemoteURL(ctx, field)
 	case "logoFileID":
 		return ec.fieldContext_EntityHistory_logoFileID(ctx, field)
-	case "externalID":
-		return ec.fieldContext_EntityHistory_externalID(ctx, field)
 	case "observedAt":
 		return ec.fieldContext_EntityHistory_observedAt(ctx, field)
 	}
@@ -56703,6 +59802,18 @@ func (ec *executionContext) childFields_EvidenceHistory(ctx context.Context, fie
 		return ec.fieldContext_EvidenceHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_EvidenceHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_EvidenceHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_EvidenceHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_EvidenceHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_EvidenceHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_EvidenceHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_EvidenceHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_EvidenceHistory_ownerID(ctx, field)
 	case "environmentName":
@@ -56965,6 +60076,8 @@ func (ec *executionContext) childFields_FindingHistory(ctx context.Context, fiel
 		return ec.fieldContext_FindingHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_FindingHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_FindingHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_FindingHistory_ownerID(ctx, field)
 	case "internalOwner":
@@ -57011,8 +60124,6 @@ func (ec *executionContext) childFields_FindingHistory(ctx context.Context, fiel
 		return ec.fieldContext_FindingHistory_findingStatusID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_FindingHistory_workflowEligibleMarker(ctx, field)
-	case "externalID":
-		return ec.fieldContext_FindingHistory_externalID(ctx, field)
 	case "securityLevel":
 		return ec.fieldContext_FindingHistory_securityLevel(ctx, field)
 	case "externalOwnerID":
@@ -57135,6 +60246,18 @@ func (ec *executionContext) childFields_GroupHistory(ctx context.Context, field 
 		return ec.fieldContext_GroupHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_GroupHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_GroupHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_GroupHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_GroupHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_GroupHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_GroupHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_GroupHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_GroupHistory_ownerID(ctx, field)
 	case "name":
@@ -57335,8 +60458,6 @@ func (ec *executionContext) childFields_HushHistory(ctx context.Context, field g
 		return ec.fieldContext_HushHistory_kind(ctx, field)
 	case "secretName":
 		return ec.fieldContext_HushHistory_secretName(ctx, field)
-	case "credentialSet":
-		return ec.fieldContext_HushHistory_credentialSet(ctx, field)
 	case "metadata":
 		return ec.fieldContext_HushHistory_metadata(ctx, field)
 	case "lastUsedAt":
@@ -57393,6 +60514,18 @@ func (ec *executionContext) childFields_IdentityHolderHistory(ctx context.Contex
 		return ec.fieldContext_IdentityHolderHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_IdentityHolderHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_IdentityHolderHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_IdentityHolderHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_IdentityHolderHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_IdentityHolderHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_IdentityHolderHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_IdentityHolderHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_IdentityHolderHistory_ownerID(ctx, field)
 	case "internalOwner":
@@ -57517,6 +60650,8 @@ func (ec *executionContext) childFields_InternalPolicyHistory(ctx context.Contex
 		return ec.fieldContext_InternalPolicyHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_InternalPolicyHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_InternalPolicyHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_InternalPolicyHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -57683,6 +60818,18 @@ func (ec *executionContext) childFields_MappedControlHistory(ctx context.Context
 		return ec.fieldContext_MappedControlHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_MappedControlHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_MappedControlHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_MappedControlHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_MappedControlHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_MappedControlHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_MappedControlHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_MappedControlHistory_externalID(ctx, field)
 	case "systemOwned":
 		return ec.fieldContext_MappedControlHistory_systemOwned(ctx, field)
 	case "internalNotes":
@@ -57749,6 +60896,18 @@ func (ec *executionContext) childFields_NarrativeHistory(ctx context.Context, fi
 		return ec.fieldContext_NarrativeHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_NarrativeHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_NarrativeHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_NarrativeHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_NarrativeHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_NarrativeHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_NarrativeHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_NarrativeHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_NarrativeHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -58229,8 +61388,6 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_identityProvider(ctx, field)
 	case "identityProviderClientID":
 		return ec.fieldContext_OrganizationSettingHistory_identityProviderClientID(ctx, field)
-	case "identityProviderClientSecret":
-		return ec.fieldContext_OrganizationSettingHistory_identityProviderClientSecret(ctx, field)
 	case "identityProviderMetadataEndpoint":
 		return ec.fieldContext_OrganizationSettingHistory_identityProviderMetadataEndpoint(ctx, field)
 	case "identityProviderAuthTested":
@@ -58257,8 +61414,6 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_ssoExemptDomains(ctx, field)
 	case "allowSupportAccess":
 		return ec.fieldContext_OrganizationSettingHistory_allowSupportAccess(ctx, field)
-	case "complianceWebhookToken":
-		return ec.fieldContext_OrganizationSettingHistory_complianceWebhookToken(ctx, field)
 	case "paymentMethodAdded":
 		return ec.fieldContext_OrganizationSettingHistory_paymentMethodAdded(ctx, field)
 	case "pendingDeletionAt":
@@ -58327,6 +61482,18 @@ func (ec *executionContext) childFields_PlatformHistory(ctx context.Context, fie
 		return ec.fieldContext_PlatformHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_PlatformHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_PlatformHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_PlatformHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_PlatformHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_PlatformHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_PlatformHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_PlatformHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_PlatformHistory_ownerID(ctx, field)
 	case "internalOwner":
@@ -58495,6 +61662,8 @@ func (ec *executionContext) childFields_ProcedureHistory(ctx context.Context, fi
 		return ec.fieldContext_ProcedureHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_ProcedureHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ProcedureHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ProcedureHistory_ownerID(ctx, field)
 	case "name":
@@ -58609,6 +61778,18 @@ func (ec *executionContext) childFields_ProgramHistory(ctx context.Context, fiel
 		return ec.fieldContext_ProgramHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_ProgramHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_ProgramHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_ProgramHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_ProgramHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_ProgramHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_ProgramHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ProgramHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ProgramHistory_ownerID(ctx, field)
 	case "programKindName":
@@ -58753,6 +61934,18 @@ func (ec *executionContext) childFields_RemediationHistory(ctx context.Context, 
 		return ec.fieldContext_RemediationHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_RemediationHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_RemediationHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_RemediationHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_RemediationHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_RemediationHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_RemediationHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_RemediationHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_RemediationHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -58771,8 +61964,6 @@ func (ec *executionContext) childFields_RemediationHistory(ctx context.Context, 
 		return ec.fieldContext_RemediationHistory_scopeID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_RemediationHistory_workflowEligibleMarker(ctx, field)
-	case "externalID":
-		return ec.fieldContext_RemediationHistory_externalID(ctx, field)
 	case "externalOwnerID":
 		return ec.fieldContext_RemediationHistory_externalOwnerID(ctx, field)
 	case "title":
@@ -58981,6 +62172,18 @@ func (ec *executionContext) childFields_ReviewHistory(ctx context.Context, field
 		return ec.fieldContext_ReviewHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_ReviewHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_ReviewHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_ReviewHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_ReviewHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_ReviewHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_ReviewHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_ReviewHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ReviewHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -58997,8 +62200,6 @@ func (ec *executionContext) childFields_ReviewHistory(ctx context.Context, field
 		return ec.fieldContext_ReviewHistory_scopeName(ctx, field)
 	case "scopeID":
 		return ec.fieldContext_ReviewHistory_scopeID(ctx, field)
-	case "externalID":
-		return ec.fieldContext_ReviewHistory_externalID(ctx, field)
 	case "externalOwnerID":
 		return ec.fieldContext_ReviewHistory_externalOwnerID(ctx, field)
 	case "title":
@@ -59095,6 +62296,8 @@ func (ec *executionContext) childFields_RiskHistory(ctx context.Context, field g
 		return ec.fieldContext_RiskHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_RiskHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_RiskHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_RiskHistory_ownerID(ctx, field)
 	case "stakeholderName":
@@ -59131,8 +62334,6 @@ func (ec *executionContext) childFields_RiskHistory(ctx context.Context, field g
 		return ec.fieldContext_RiskHistory_scopeID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_RiskHistory_workflowEligibleMarker(ctx, field)
-	case "externalID":
-		return ec.fieldContext_RiskHistory_externalID(ctx, field)
 	case "integrationID":
 		return ec.fieldContext_RiskHistory_integrationID(ctx, field)
 	case "observedAt":
@@ -59373,6 +62574,18 @@ func (ec *executionContext) childFields_SubcontrolHistory(ctx context.Context, f
 		return ec.fieldContext_SubcontrolHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_SubcontrolHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_SubcontrolHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_SubcontrolHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_SubcontrolHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_SubcontrolHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_SubcontrolHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_SubcontrolHistory_externalID(ctx, field)
 	case "externalUUID":
 		return ec.fieldContext_SubcontrolHistory_externalUUID(ctx, field)
 	case "title":
@@ -59565,6 +62778,18 @@ func (ec *executionContext) childFields_SystemDetailHistory(ctx context.Context,
 		return ec.fieldContext_SystemDetailHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_SystemDetailHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_SystemDetailHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_SystemDetailHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_SystemDetailHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_SystemDetailHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_SystemDetailHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_SystemDetailHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_SystemDetailHistory_ownerID(ctx, field)
 	case "systemName":
@@ -59633,6 +62858,18 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_displayID(ctx, field)
 	case "tags":
 		return ec.fieldContext_TaskHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_TaskHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_TaskHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_TaskHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_TaskHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_TaskHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_TaskHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_TaskHistory_ownerID(ctx, field)
 	case "taskKindName":
@@ -59735,6 +62972,18 @@ func (ec *executionContext) childFields_TemplateHistory(ctx context.Context, fie
 		return ec.fieldContext_TemplateHistory_updatedByImpersonator(ctx, field)
 	case "tags":
 		return ec.fieldContext_TemplateHistory_tags(ctx, field)
+	case "sourceDefinitionID":
+		return ec.fieldContext_TemplateHistory_sourceDefinitionID(ctx, field)
+	case "sourceDefinitionVersion":
+		return ec.fieldContext_TemplateHistory_sourceDefinitionVersion(ctx, field)
+	case "sourceInstanceID":
+		return ec.fieldContext_TemplateHistory_sourceInstanceID(ctx, field)
+	case "managedBy":
+		return ec.fieldContext_TemplateHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_TemplateHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_TemplateHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_TemplateHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -60717,6 +63966,8 @@ func (ec *executionContext) childFields_VulnerabilityHistory(ctx context.Context
 		return ec.fieldContext_VulnerabilityHistory_managedBy(ctx, field)
 	case "integrationRunID":
 		return ec.fieldContext_VulnerabilityHistory_integrationRunID(ctx, field)
+	case "externalID":
+		return ec.fieldContext_VulnerabilityHistory_externalID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_VulnerabilityHistory_ownerID(ctx, field)
 	case "internalOwner":
@@ -60767,8 +64018,6 @@ func (ec *executionContext) childFields_VulnerabilityHistory(ctx context.Context
 		return ec.fieldContext_VulnerabilityHistory_externalOwnerID(ctx, field)
 	case "securityLevel":
 		return ec.fieldContext_VulnerabilityHistory_securityLevel(ctx, field)
-	case "externalID":
-		return ec.fieldContext_VulnerabilityHistory_externalID(ctx, field)
 	case "cveID":
 		return ec.fieldContext_VulnerabilityHistory_cveID(ctx, field)
 	case "source":

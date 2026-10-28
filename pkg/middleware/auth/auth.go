@@ -407,7 +407,15 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		return nil, "", rout.ErrInvalidCredentials
 	}
 
+	var role *auth.OrganizationRoleType
+
 	for _, org := range orgs {
+		// the owner must still be a member, a token keeps no access to orgs its owner never joined or has left
+		orgRole := getOrgRoleFunc(ctx, dbClient, pat.OwnerID, org.ID)
+		if orgRole == nil {
+			continue
+		}
+
 		// honor the owner's SSO exemption: an exempt owner (owner role, per-user, or per-domain) is not
 		// required to SSO-authorize their personal access token for the organization, mirroring how the
 		// same owner skips the SSO redirect in the browser login flows
@@ -428,6 +436,11 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		}
 
 		orgIDs = append(orgIDs, org.ID)
+		role = orgRole
+	}
+
+	if len(orgIDs) == 0 {
+		return nil, "", rout.ErrInvalidCredentials
 	}
 
 	systemAdmin, err := isSystemAdminFunc(ctx, dbClient, pat.OwnerID, auth.UserSubjectType)
@@ -444,12 +457,7 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		Capabilities:       auth.CapabilitiesForSystemAdmin(systemAdmin),
 	}
 
-	var role *auth.OrganizationRoleType
 	if len(orgIDs) == 1 {
-		role = getOrgRoleFunc(ctx, dbClient, pat.OwnerID, orgIDs[0])
-	}
-
-	if role != nil {
 		caller.OrganizationRole = *role
 	}
 

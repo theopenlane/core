@@ -308,13 +308,6 @@ func (Entity) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Nillable(),
-		field.String("external_id").
-			Comment("stable identifier assigned by the source system, used for integration ingest deduplication").
-			Optional().
-			Annotations(
-				entgql.OrderField("external_id"),
-				entx.IntegrationMappingField().LookupKey(),
-			),
 		field.Time("observed_at").
 			Comment("time when this entity was last observed by the source integration").
 			GoType(models.DateTime{}).
@@ -330,7 +323,7 @@ func (Entity) Fields() []ent.Field {
 func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: e},
+			newProvenanceMixin(e, withoutExternalIDIndex()),
 			newObjectOwnedMixin[generated.Entity](e,
 				withParents(TrustCenterEntity{}, Platform{}, SystemDetail{}),
 				withOrganizationOwner(),
@@ -434,7 +427,7 @@ func (Entity) Indexes() []ent.Index {
 		// names should be unique, but ignore deleted names
 		index.Fields("name", ownerFieldName).Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields("reviewed_by_user_id"),
-		index.Fields("external_id", ownerFieldName).Annotations(entsql.IndexWhere("deleted_at is NULL AND external_id IS NOT NULL")),
+		index.Fields(externalIDFieldName, ownerFieldName).Annotations(entsql.IndexWhere("deleted_at is NULL AND external_id IS NOT NULL")),
 	}
 }
 

@@ -76,8 +76,9 @@ func (Hush) Fields() []ent.Field {
 		field.JSON("credential_set", models.CredentialSet{}).
 			Comment("a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.").
 			Optional().
+			Sensitive().
 			Annotations(
-				entgql.Skip(entgql.SkipWhereInput),
+				entgql.Skip(entgql.SkipAll),
 			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the credential").

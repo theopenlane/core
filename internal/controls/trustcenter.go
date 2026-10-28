@@ -2,13 +2,14 @@ package controls
 
 import (
 	"context"
+	"errors"
 
-	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/logx"
 )
 
@@ -42,23 +43,17 @@ func getTrustCenterControls(ctx context.Context, client *generated.Client) ([]*g
 	}
 
 	// ensure we get the public, system owned standard
-	stdWhereFilter := StandardFilter(trustCenterStandardFilter)
-	stdWhereFilter = append(stdWhereFilter, standard.IsPublic(true))
-	stdWhereFilter = append(stdWhereFilter, standard.SystemOwned(true))
+	std, err := findStandard(ctx, client, trustCenterStandardFilter, standard.IsPublic(true), standard.SystemOwned(true))
+	if err != nil {
+		var notFound common.NotFoundError
+		if errors.As(err, &notFound) {
+			logx.FromContext(ctx).Error().Msg("trust center standard not found")
 
-	stds, err := client.Standard.Query().
-		Where(stdWhereFilter...).
-		Select(standard.FieldID, standard.FieldIsPublic).
-		Order(standard.OrderOption(standard.ByVersion(sql.OrderDesc()))).
-		All(ctx)
-	if err != nil || stds == nil || len(stds) == 0 {
-		logx.FromContext(ctx).Error().Err(err).Msgf("error getting standard with ID")
+			return nil, nil
+		}
 
 		return nil, err
 	}
-
-	// get the first standard, this will be the most recent revision if multiple revisions exist
-	std := stds[0]
 
 	// if we get the standard back, all controls should be accessible so we can run as an internal read to skip checks
 	internalCtx := auth.WithInternalReadContext(ctx)
@@ -101,7 +96,7 @@ func CloneTrustCenterControls(ctx context.Context, m *generated.TrustCenterMutat
 	}
 
 	// trust center controls do no have subcontrols so we can ignore the returned subcontrols to create
-	_, _, err = CloneControls(ctx, m.Client(), controls, WithOrgID(orgID))
+	_, _, err = CloneControls(ctx, m.Client(), controls, WithOrgID(orgID), WithPool(m.Client().Pool))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error cloning trust center controls")
 

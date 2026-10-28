@@ -239,6 +239,20 @@ func (_c *RiskHistoryCreate) SetNillableIntegrationRunID(v *string) *RiskHistory
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *RiskHistoryCreate) SetExternalID(v string) *RiskHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableExternalID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *RiskHistoryCreate) SetOwnerID(v string) *RiskHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -487,20 +501,6 @@ func (_c *RiskHistoryCreate) SetWorkflowEligibleMarker(v bool) *RiskHistoryCreat
 func (_c *RiskHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *RiskHistoryCreate {
 	if v != nil {
 		_c.SetWorkflowEligibleMarker(*v)
-	}
-	return _c
-}
-
-// SetExternalID sets the "external_id" field.
-func (_c *RiskHistoryCreate) SetExternalID(v string) *RiskHistoryCreate {
-	_c.mutation.SetExternalID(v)
-	return _c
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_c *RiskHistoryCreate) SetNillableExternalID(v *string) *RiskHistoryCreate {
-	if v != nil {
-		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -1062,6 +1062,10 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 		_spec.SetField(riskhistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(riskhistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(riskhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -1133,10 +1137,6 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(riskhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(riskhistory.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(riskhistory.FieldIntegrationID, field.TypeString, value)

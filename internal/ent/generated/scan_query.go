@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -43,6 +44,7 @@ type ScanQuery struct {
 	order                        []scan.OrderOption
 	inters                       []Interceptor
 	predicates                   []predicate.Scan
+	withIntegrationRuns          *IntegrationRunQuery
 	withOwner                    *OrganizationQuery
 	withBlockedGroups            *GroupQuery
 	withEditors                  *GroupQuery
@@ -72,6 +74,7 @@ type ScanQuery struct {
 	withFKs                      bool
 	loadTotal                    []func(context.Context, []*Scan) error
 	modifiers                    []func(*sql.Selector)
+	withNamedIntegrationRuns     map[string]*IntegrationRunQuery
 	withNamedBlockedGroups       map[string]*GroupQuery
 	withNamedEditors             map[string]*GroupQuery
 	withNamedAssets              map[string]*AssetQuery
@@ -120,6 +123,28 @@ func (_q *ScanQuery) Unique(unique bool) *ScanQuery {
 func (_q *ScanQuery) Order(o ...scan.OrderOption) *ScanQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *ScanQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scan.IntegrationRunsTable, scan.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -886,6 +911,7 @@ func (_q *ScanQuery) Clone() *ScanQuery {
 		order:                        append([]scan.OrderOption{}, _q.order...),
 		inters:                       append([]Interceptor{}, _q.inters...),
 		predicates:                   append([]predicate.Scan{}, _q.predicates...),
+		withIntegrationRuns:          _q.withIntegrationRuns.Clone(),
 		withOwner:                    _q.withOwner.Clone(),
 		withBlockedGroups:            _q.withBlockedGroups.Clone(),
 		withEditors:                  _q.withEditors.Clone(),
@@ -917,6 +943,17 @@ func (_q *ScanQuery) Clone() *ScanQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *ScanQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -1290,7 +1327,8 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		nodes       = []*Scan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [27]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1342,6 +1380,13 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Scan) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Scan, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
@@ -1513,6 +1558,13 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Scan) { n.appendNamedIntegrationRuns(name) },
+			func(n *Scan, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Scan) { n.appendNamedBlockedGroups(name) },
@@ -1619,6 +1671,37 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 	return nodes, nil
 }
 
+func (_q *ScanQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Scan)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scan.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scan_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scan_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scan_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *ScanQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Scan)
@@ -2950,6 +3033,20 @@ func (_q *ScanQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *ScanQuery) Modify(modifiers ...func(s *sql.Selector)) *ScanSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *ScanQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"

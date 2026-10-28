@@ -54,6 +54,8 @@ const (
 	FieldManagedBy = "managed_by"
 	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
@@ -100,8 +102,6 @@ const (
 	FieldFindingStatusID = "finding_status_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
-	// FieldExternalID holds the string denoting the external_id field in the database.
-	FieldExternalID = "external_id"
 	// FieldSecurityLevel holds the string denoting the security_level field in the database.
 	FieldSecurityLevel = "security_level"
 	// FieldExternalOwnerID holds the string denoting the external_owner_id field in the database.
@@ -198,6 +198,7 @@ var Columns = []string{
 	FieldSourceInstanceID,
 	FieldManagedBy,
 	FieldIntegrationRunID,
+	FieldExternalID,
 	FieldOwnerID,
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
@@ -221,7 +222,6 @@ var Columns = []string{
 	FieldFindingStatusName,
 	FieldFindingStatusID,
 	FieldWorkflowEligibleMarker,
-	FieldExternalID,
 	FieldSecurityLevel,
 	FieldExternalOwnerID,
 	FieldSource,
@@ -415,6 +415,11 @@ func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
 }
 
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -528,11 +533,6 @@ func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
 func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
-}
-
-// ByExternalID orders the results by the external_id field.
-func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
 }
 
 // BySecurityLevel orders the results by the security_level field.

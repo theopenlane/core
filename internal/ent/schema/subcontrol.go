@@ -167,6 +167,7 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "SCL",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(s),
 			// add the common overlap between control and subcontrol
 			ControlMixin{
 				SchemaType: s,
@@ -242,6 +243,11 @@ func (Subcontrol) Annotations() []schema.Annotation {
 		entx.FGACrudParent(Control{}.Name()),
 		// list queries use SQL blocked group filtering via newParentBlockedGroupsInterceptor
 		SkipFGAOverfetch{Enabled: true},
+		// match the unique index on ref_code within the parent control
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("control_id", "ref_code"),
 	}
 }
 

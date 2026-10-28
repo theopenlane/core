@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
@@ -34,6 +35,7 @@ type TemplateQuery struct {
 	order                    []template.OrderOption
 	inters                   []Interceptor
 	predicates               []predicate.Template
+	withIntegrationRuns      *IntegrationRunQuery
 	withOwner                *OrganizationQuery
 	withEnvironment          *CustomTypeEnumQuery
 	withScope                *CustomTypeEnumQuery
@@ -45,6 +47,7 @@ type TemplateQuery struct {
 	withIdentityHolders      *IdentityHolderQuery
 	loadTotal                []func(context.Context, []*Template) error
 	modifiers                []func(*sql.Selector)
+	withNamedIntegrationRuns map[string]*IntegrationRunQuery
 	withNamedDocuments       map[string]*DocumentDataQuery
 	withNamedFiles           map[string]*FileQuery
 	withNamedAssessments     map[string]*AssessmentQuery
@@ -84,6 +87,28 @@ func (_q *TemplateQuery) Unique(unique bool) *TemplateQuery {
 func (_q *TemplateQuery) Order(o ...template.OrderOption) *TemplateQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *TemplateQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, template.IntegrationRunsTable, template.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -476,6 +501,7 @@ func (_q *TemplateQuery) Clone() *TemplateQuery {
 		order:               append([]template.OrderOption{}, _q.order...),
 		inters:              append([]Interceptor{}, _q.inters...),
 		predicates:          append([]predicate.Template{}, _q.predicates...),
+		withIntegrationRuns: _q.withIntegrationRuns.Clone(),
 		withOwner:           _q.withOwner.Clone(),
 		withEnvironment:     _q.withEnvironment.Clone(),
 		withScope:           _q.withScope.Clone(),
@@ -490,6 +516,17 @@ func (_q *TemplateQuery) Clone() *TemplateQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *TemplateQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -675,7 +712,8 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	var (
 		nodes       = []*Template{}
 		_spec       = _q.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -707,6 +745,13 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Template) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Template, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
@@ -767,6 +812,13 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Template) { n.appendNamedIntegrationRuns(name) },
+			func(n *Template, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedDocuments {
 		if err := _q.loadDocuments(ctx, query, nodes,
 			func(n *Template) { n.appendNamedDocuments(name) },
@@ -810,6 +862,37 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	return nodes, nil
 }
 
+func (_q *TemplateQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Template, init func(*Template), assign func(*Template, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Template)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(template.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.template_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "template_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "template_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *TemplateQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Template, init func(*Template), assign func(*Template, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Template)
@@ -1243,6 +1326,20 @@ func (_q *TemplateQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *TemplateQuery) Modify(modifiers ...func(s *sql.Selector)) *TemplateSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *TemplateQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedDocuments tells the query-builder to eager-load the nodes that are connected to the "documents"

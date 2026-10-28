@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/lib/cleanup.sh"
+
 OPENLANE_BUILDKITE_JOB_PRIORITY=0
 if [[ -n "${BUILDKITE_TAG:-}" ]]; then
   OPENLANE_BUILDKITE_JOB_PRIORITY=100
@@ -26,9 +28,7 @@ export OPENLANE_BUILDKITE_JOB_PRIORITY
 echo "🔧 Setting up build environment..."
 
 # Create cache directories (tools may not be available yet)
-mkdir -p $HOME/.cache/go-build 2>/dev/null || true
-mkdir -p $HOME/.cache/golangci-lint 2>/dev/null || true
-mkdir -p $HOME/.cache/go/pkg/mod 2>/dev/null || true
+ensure_cache_dirs
 
 # Docker layer caching setup (Docker handled via plugins)
 export DOCKER_BUILDKIT=1
@@ -46,46 +46,23 @@ if [[ -z "${BUILDKITE_BUILD_ID:-}" ]]; then
   echo "⚠️  Not running in Buildkite environment"
 fi
 
-# Create temporary directories for build artifacts
-mkdir -p "${BUILDKITE_BUILD_PATH:-/tmp}/artifacts"
-mkdir -p "${BUILDKITE_BUILD_PATH:-/tmp}/test-results"
-
 # Check disk space before starting build
 echo "📊 Checking disk space..."
-if disk_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$disk_usage" ]] && [[ "$disk_usage" =~ ^[0-9]+$ ]]; then
+if is_hosted_runner; then
+  echo "☁️  Hosted runner, skipping disk cleanup"
+elif disk_usage=$(disk_usage_percent); then
   echo "📊 Current disk usage: ${disk_usage}%"
 
-  if [[ $disk_usage -gt 80 ]]; then
-    echo "🚨 CRITICAL: Disk usage is ${disk_usage}% - build may fail due to lack of space!"
-    echo "🧹 Running emergency go and docker cleanup..."
+  if [[ $disk_usage -ge $CACHE_CLEANUP_THRESHOLD ]]; then
+    echo "🧹 Disk usage is at or over ${CACHE_CLEANUP_THRESHOLD}%, pruning caches oldest first..."
 
-    if command -v go >/dev/null 2>&1; then
-      echo "🧹 Running Go build cache cleanup..."
-      go clean -cache >/dev/null 2>&1 || true
+    free_disk_to_threshold
+    report_disk_after "$disk_usage"
+
+    if disk_usage=$(disk_usage_percent) && [[ $disk_usage -ge $DISK_RETRY_THRESHOLD ]]; then
+      echo "🚨 Disk usage is still ${disk_usage}% after cleanup, exiting ${DISK_RETRY_EXIT_CODE} so the pipeline retries the job"
+      exit "$DISK_RETRY_EXIT_CODE"
     fi
-
-    if command -v docker >/dev/null 2>&1; then
-      # Emergency cleanup - remove stopped containers and dangling images only
-      echo "🧹 Emergency cleanup..."
-      docker container prune -f >/dev/null 2>&1 || true
-      docker image prune -f >/dev/null 2>&1 || true
-
-      # Check if cleanup helped
-      if new_usage=$(df -h . 2>/dev/null | tail -1 | awk '{print $5}' 2>/dev/null | sed 's/%//' 2>/dev/null) && [[ -n "$new_usage" ]] && [[ "$new_usage" =~ ^[0-9]+$ ]]; then
-        echo "📊 Disk usage after emergency cleanup: ${new_usage}%"
-
-        if [[ $new_usage -gt 85 ]]; then
-          echo "❌ Disk usage still critically high after cleanup"
-          echo "⚠️  Build may fail due to insufficient disk space"
-        else
-          echo "✅ Emergency cleanup successful"
-        fi
-      else
-        echo "⚠️  Could not determine disk usage after cleanup"
-      fi
-    fi
-  elif [[ $disk_usage -gt 70 ]]; then
-    echo "⚠️  WARNING: Disk usage is ${disk_usage}% - cleanup recommended"
   fi
 else
   echo "⚠️  Could not determine disk usage, skipping disk space check"

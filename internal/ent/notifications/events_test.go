@@ -50,6 +50,8 @@ func TestConsoleObjectPaths(t *testing.T) {
 	assert.Equal(t, "policies/pol-1/view", entityops.ConsoleObjectPath(generated.TypeInternalPolicy, "pol-1"))
 	assert.Equal(t, "exposure/risks/risk-1", entityops.ConsoleObjectPath(generated.TypeRisk, "risk-1"))
 	assert.Equal(t, "evidence?id=ev-1", entityops.ConsoleObjectPath(generated.TypeEvidence, "ev-1"))
+	assert.Equal(t, "exposure/vulnerabilities?id=vul-1", entityops.ConsoleObjectPath(generated.TypeVulnerability, "vul-1"))
+	assert.Equal(t, "exposure/findings?id=find-1", entityops.ConsoleObjectPath(generated.TypeFinding, "find-1"))
 	assert.Equal(t, "trust-center/NDAs", entityops.ConsoleLanding(generated.TypeTrustCenterNDARequest))
 	assert.Empty(t, entityops.ConsoleObjectPath(generated.TypeNote, "note-1"))
 }
@@ -66,6 +68,24 @@ func TestNoteParent(t *testing.T) {
 	assert.Equal(t, generated.TypeTask, parentType)
 	assert.Equal(t, "task-1", parentID)
 	assert.Equal(t, "Task One", parentName)
+
+	noteEntity.Edges.Task = nil
+	noteEntity.Edges.Vulnerability = &generated.Vulnerability{ID: "vul-1", DisplayID: "VUL-000001", CveID: "CVE-2026-0001"}
+	parentType, parentID, parentName = noteParent(noteEntity)
+	assert.Equal(t, generated.TypeVulnerability, parentType)
+	assert.Equal(t, "vul-1", parentID)
+	assert.Equal(t, "CVE-2026-0001", parentName)
+
+	noteEntity.Edges.Vulnerability = nil
+	noteEntity.Edges.Finding = &generated.Finding{ID: "find-1", DisplayID: "FIND-000001", DisplayName: "Open S3 bucket"}
+	parentType, parentID, parentName = noteParent(noteEntity)
+	assert.Equal(t, generated.TypeFinding, parentType)
+	assert.Equal(t, "find-1", parentID)
+	assert.Equal(t, "Open S3 bucket", parentName)
+
+	noteEntity.Edges.Finding = &generated.Finding{ID: "find-2", DisplayID: "FIND-000002"}
+	_, _, parentName = noteParent(noteEntity)
+	assert.Equal(t, "FIND-000002", parentName)
 }
 
 func TestIsExportNotificationAllowsSupportUser(t *testing.T) {

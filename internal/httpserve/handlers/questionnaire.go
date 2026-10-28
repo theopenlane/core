@@ -160,6 +160,10 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 
 		internalCtx = auth.ActiveAssessmentIDKey.Set(internalCtx, assessmentID)
 	} else {
+		// anonymous callers without an assessment in their token, such as trust center visitors, and userless callers cannot submit
+		if caller.IsAnonymous() || auth.IsUserlessContext(reqCtx) {
+			return h.Unauthorized(ctx, ErrUnauthorized)
+		}
 
 		// for regular/normal authenticated users, we expect the assessment id to be passed
 		// in the request by the client.

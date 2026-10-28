@@ -127,6 +127,90 @@ func (_c *AssessmentPolicyHistoryCreate) SetNillableUpdatedByImpersonator(v *str
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *AssessmentPolicyHistoryCreate) SetSourceDefinitionID(v string) *AssessmentPolicyHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *AssessmentPolicyHistoryCreate) SetNillableSourceDefinitionID(v *string) *AssessmentPolicyHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *AssessmentPolicyHistoryCreate) SetSourceDefinitionVersion(v string) *AssessmentPolicyHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *AssessmentPolicyHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *AssessmentPolicyHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *AssessmentPolicyHistoryCreate) SetSourceInstanceID(v string) *AssessmentPolicyHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *AssessmentPolicyHistoryCreate) SetNillableSourceInstanceID(v *string) *AssessmentPolicyHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *AssessmentPolicyHistoryCreate) SetManagedBy(v string) *AssessmentPolicyHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *AssessmentPolicyHistoryCreate) SetNillableManagedBy(v *string) *AssessmentPolicyHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *AssessmentPolicyHistoryCreate) SetIntegrationRunID(v string) *AssessmentPolicyHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *AssessmentPolicyHistoryCreate) SetNillableIntegrationRunID(v *string) *AssessmentPolicyHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *AssessmentPolicyHistoryCreate) SetExternalID(v string) *AssessmentPolicyHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *AssessmentPolicyHistoryCreate) SetNillableExternalID(v *string) *AssessmentPolicyHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *AssessmentPolicyHistoryCreate) SetOwnerID(v string) *AssessmentPolicyHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -334,6 +418,30 @@ func (_c *AssessmentPolicyHistoryCreate) createSpec() (*AssessmentPolicyHistory,
 	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
 		_spec.SetField(assessmentpolicyhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 		_node.UpdatedByImpersonator = &value
+	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(assessmentpolicyhistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(assessmentpolicyhistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(assessmentpolicyhistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(assessmentpolicyhistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(assessmentpolicyhistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(assessmentpolicyhistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(assessmentpolicyhistory.FieldOwnerID, field.TypeString, value)

@@ -190,6 +190,7 @@ func (s Platform) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "PLT",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(s),
 			newObjectOwnedMixin[generated.Platform](s,
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
@@ -378,6 +379,10 @@ func (Platform) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("system-implementation"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("name"),
 	}
 }
 

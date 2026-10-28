@@ -19,6 +19,8 @@ import (
 var (
 	// ErrIntegrationsNotEnabled is returned when the integrations runtime is not configured on this server
 	ErrIntegrationsNotEnabled = errors.New("integrations are not enabled")
+	// ErrCredentialRequiresAuthFlow is returned when credentials are posted for a connection that is configured through its auth flow
+	ErrCredentialRequiresAuthFlow = errors.New("this connection must be configured through its authorization flow")
 	// ErrHandlerSourceUnavailable is returned when the handlers package source cannot be loaded for response analysis
 	ErrHandlerSourceUnavailable = errors.New("handlers package source unavailable for response analysis")
 	// ErrHandlerDeclarationNotFound is returned when a route handler cannot be resolved to a declaration in the handlers package source
@@ -105,6 +107,10 @@ var (
 	ErrMissingOIDCConfig = errors.New("missing OIDC configuration, please contact support")
 	// ErrStateMismatch is returned when the state parameter does not match the expected value
 	ErrStateMismatch = errors.New("state parameter does not match, possible CSRF attack or session expired")
+	// ErrSSOOrganizationMismatch is returned when the SSO callback organization does not match the one the login started with
+	ErrSSOOrganizationMismatch = errors.New("organization does not match the sso login request")
+	// ErrSSOEmailNotVerified is returned when the identity provider reports the user's email as unverified
+	ErrSSOEmailNotVerified = errors.New("identity provider reports the email address as unverified")
 	// ErrMissingSSOConfig is returned when the SSO configuration is missing
 	ErrNonceMissing = errors.New("missing nonce cookie, possible CSRF attack or session expired")
 	// ErrMissingReferer is returned when the referer is missing from the request
@@ -137,6 +143,8 @@ var (
 	ErrAnonymousQuestionnaireDraft = errors.New("anonymous questionnaire responses cannot be saved as drafts")
 	// ErrAuthenticationRequired indicates that the user must be authenticated to perform this action
 	ErrAuthenticationRequired = errors.New("authentication required")
+	// ErrPasskeyEmailMismatch is returned when the passkey registration email does not match the authenticated user
+	ErrPasskeyEmailMismatch = errors.New("email does not match the authenticated user")
 	// ErrNoActiveImpersonationSession indicates that there is no active impersonation session
 	ErrNoActiveImpersonationSession = errors.New("no active impersonation session")
 	// ErrInvalidSessionID indicates that the provided session ID is invalid

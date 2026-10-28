@@ -103,6 +103,23 @@ func TestQueryGroup(t *testing.T) {
 		})
 	}
 
+	settingID := privateGroupWithSetting.Group.Setting.ID
+
+	_, err = suite.Client.API.GetGroupSettingByID(th.SharedTestUser2.UserCtx, settingID)
+	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+
+	otherOrgSettings, err := suite.Client.API.GetAllGroupSettings(th.SharedTestUser2.UserCtx)
+	assert.NilError(t, err)
+
+	for _, edge := range otherOrgSettings.GroupSettings.Edges {
+		assert.Check(t, edge.Node.ID != settingID)
+	}
+
+	_, err = suite.Client.API.UpdateGroupSetting(th.SharedTestUser2.UserCtx, settingID, testclient.UpdateGroupSettingInput{
+		Visibility: &enums.VisibilityPublic,
+	})
+	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+
 	// delete created group
 	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{group1.ID, privateGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }

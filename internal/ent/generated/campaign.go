@@ -48,6 +48,18 @@ type Campaign struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the internal owner for the campaign when no user, group, or identity holder is linked
@@ -124,6 +136,8 @@ type Campaign struct {
 
 // CampaignEdges holds the relations/edges for other nodes in the graph.
 type CampaignEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -168,10 +182,11 @@ type CampaignEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [22]bool
 	// totalCount holds the count of the edges above.
-	totalCount [21]map[string]int
+	totalCount [22]map[string]int
 
+	namedIntegrationRuns     map[string][]*IntegrationRun
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
 	namedViewers             map[string][]*Group
@@ -185,12 +200,21 @@ type CampaignEdges struct {
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e CampaignEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CampaignEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -199,7 +223,7 @@ func (e CampaignEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -208,7 +232,7 @@ func (e CampaignEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -217,7 +241,7 @@ func (e CampaignEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -228,7 +252,7 @@ func (e CampaignEdges) ViewersOrErr() ([]*Group, error) {
 func (e CampaignEdges) InternalOwnerUserOrErr() (*User, error) {
 	if e.InternalOwnerUser != nil {
 		return e.InternalOwnerUser, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_user"}
@@ -239,7 +263,7 @@ func (e CampaignEdges) InternalOwnerUserOrErr() (*User, error) {
 func (e CampaignEdges) InternalOwnerGroupOrErr() (*Group, error) {
 	if e.InternalOwnerGroup != nil {
 		return e.InternalOwnerGroup, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_group"}
@@ -250,7 +274,7 @@ func (e CampaignEdges) InternalOwnerGroupOrErr() (*Group, error) {
 func (e CampaignEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, error) {
 	if e.InternalOwnerIdentityHolder != nil {
 		return e.InternalOwnerIdentityHolder, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: identityholder.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_identity_holder"}
@@ -261,7 +285,7 @@ func (e CampaignEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, erro
 func (e CampaignEdges) AssessmentOrErr() (*Assessment, error) {
 	if e.Assessment != nil {
 		return e.Assessment, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: assessment.Label}
 	}
 	return nil, &NotLoadedError{edge: "assessment"}
@@ -272,7 +296,7 @@ func (e CampaignEdges) AssessmentOrErr() (*Assessment, error) {
 func (e CampaignEdges) TemplateOrErr() (*Template, error) {
 	if e.Template != nil {
 		return e.Template, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: template.Label}
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -283,7 +307,7 @@ func (e CampaignEdges) TemplateOrErr() (*Template, error) {
 func (e CampaignEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -294,7 +318,7 @@ func (e CampaignEdges) IntegrationOrErr() (*Integration, error) {
 func (e CampaignEdges) EmailTemplateOrErr() (*EmailTemplate, error) {
 	if e.EmailTemplate != nil {
 		return e.EmailTemplate, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: emailtemplate.Label}
 	}
 	return nil, &NotLoadedError{edge: "email_template"}
@@ -305,7 +329,7 @@ func (e CampaignEdges) EmailTemplateOrErr() (*EmailTemplate, error) {
 func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 	if e.Entity != nil {
 		return e.Entity, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -316,7 +340,7 @@ func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 func (e CampaignEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[12] {
+	} else if e.loadedTypes[13] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -325,7 +349,7 @@ func (e CampaignEdges) TrustCenterOrErr() (*TrustCenter, error) {
 // CampaignTargetsOrErr returns the CampaignTargets value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.CampaignTargets, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_targets"}
@@ -334,7 +358,7 @@ func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -343,7 +367,7 @@ func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error)
 // ContactsOrErr returns the Contacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Contacts, nil
 	}
 	return nil, &NotLoadedError{edge: "contacts"}
@@ -352,7 +376,7 @@ func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -361,7 +385,7 @@ func (e CampaignEdges) UsersOrErr() ([]*User, error) {
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -370,7 +394,7 @@ func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -379,7 +403,7 @@ func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -388,7 +412,7 @@ func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -409,7 +433,7 @@ func (*Campaign) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case campaign.FieldRecurrenceInterval, campaign.FieldRecipientCount, campaign.FieldResendCount:
 			values[i] = new(sql.NullInt64)
-		case campaign.FieldID, campaign.FieldCreatedBy, campaign.FieldUpdatedBy, campaign.FieldUpdatedByImpersonator, campaign.FieldDeletedBy, campaign.FieldDisplayID, campaign.FieldOwnerID, campaign.FieldInternalOwner, campaign.FieldInternalOwnerUserID, campaign.FieldInternalOwnerGroupID, campaign.FieldInternalOwnerIdentityHolderID, campaign.FieldName, campaign.FieldDescription, campaign.FieldCampaignType, campaign.FieldStatus, campaign.FieldRecurrenceFrequency, campaign.FieldRecurrenceTimezone, campaign.FieldEntityID, campaign.FieldTemplateID, campaign.FieldAssessmentID, campaign.FieldEmailTemplateID, campaign.FieldIntegrationID, campaign.FieldEmailBrandingID, campaign.FieldTrustCenterID:
+		case campaign.FieldID, campaign.FieldCreatedBy, campaign.FieldUpdatedBy, campaign.FieldUpdatedByImpersonator, campaign.FieldDeletedBy, campaign.FieldDisplayID, campaign.FieldSourceDefinitionID, campaign.FieldSourceDefinitionVersion, campaign.FieldSourceInstanceID, campaign.FieldManagedBy, campaign.FieldIntegrationRunID, campaign.FieldExternalID, campaign.FieldOwnerID, campaign.FieldInternalOwner, campaign.FieldInternalOwnerUserID, campaign.FieldInternalOwnerGroupID, campaign.FieldInternalOwnerIdentityHolderID, campaign.FieldName, campaign.FieldDescription, campaign.FieldCampaignType, campaign.FieldStatus, campaign.FieldRecurrenceFrequency, campaign.FieldRecurrenceTimezone, campaign.FieldEntityID, campaign.FieldTemplateID, campaign.FieldAssessmentID, campaign.FieldEmailTemplateID, campaign.FieldIntegrationID, campaign.FieldEmailBrandingID, campaign.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case campaign.FieldCreatedAt, campaign.FieldUpdatedAt, campaign.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -490,6 +514,42 @@ func (_m *Campaign) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case campaign.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case campaign.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case campaign.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case campaign.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case campaign.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case campaign.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case campaign.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -720,6 +780,11 @@ func (_m *Campaign) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the Campaign entity.
+func (_m *Campaign) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewCampaignClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the Campaign entity.
 func (_m *Campaign) QueryOwner() *OrganizationQuery {
 	return NewCampaignClient(_m.config).QueryOwner(_m)
@@ -877,6 +942,24 @@ func (_m *Campaign) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -1000,6 +1083,30 @@ func (_m *Campaign) String() string {
 	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Campaign) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Campaign) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

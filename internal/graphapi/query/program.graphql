@@ -12,11 +12,14 @@ mutation CreateBulkCSVProgram ($input: Upload!) {
 			description
 			displayID
 			endDate
+			externalID
 			externalUUID
 			fieldworkEndDate
 			fieldworkStartDate
 			frameworkName
 			id
+			integrationRunID
+			managedBy
 			name
 			observationPeriodEndDate
 			observationPeriodStartDate
@@ -24,6 +27,9 @@ mutation CreateBulkCSVProgram ($input: Upload!) {
 			programKindID
 			programKindName
 			programOwnerID
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -47,11 +53,14 @@ mutation CreateBulkProgram ($input: [CreateProgramInput!]) {
 			description
 			displayID
 			endDate
+			externalID
 			externalUUID
 			fieldworkEndDate
 			fieldworkStartDate
 			frameworkName
 			id
+			integrationRunID
+			managedBy
 			name
 			observationPeriodEndDate
 			observationPeriodStartDate
@@ -59,6 +68,9 @@ mutation CreateBulkProgram ($input: [CreateProgramInput!]) {
 			programKindID
 			programKindName
 			programOwnerID
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -175,11 +187,14 @@ mutation CreateProgram ($input: CreateProgramInput!) {
 			description
 			displayID
 			endDate
+			externalID
 			externalUUID
 			fieldworkEndDate
 			fieldworkStartDate
 			frameworkName
 			id
+			integrationRunID
+			managedBy
 			name
 			observationPeriodEndDate
 			observationPeriodStartDate
@@ -187,6 +202,9 @@ mutation CreateProgram ($input: CreateProgramInput!) {
 			programKindID
 			programKindName
 			programOwnerID
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags
@@ -395,11 +413,14 @@ query GetProgramByID ($programId: ID!) {
 		description
 		displayID
 		endDate
+		externalID
 		externalUUID
 		fieldworkEndDate
 		fieldworkStartDate
 		frameworkName
 		id
+		integrationRunID
+		managedBy
 		name
 		observationPeriodEndDate
 		observationPeriodStartDate
@@ -407,6 +428,9 @@ query GetProgramByID ($programId: ID!) {
 		programKindID
 		programKindName
 		programOwnerID
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		startDate
 		status
 		tags
@@ -597,11 +621,14 @@ mutation UpdateProgram ($updateProgramId: ID!, $input: UpdateProgramInput!) {
 			description
 			displayID
 			endDate
+			externalID
 			externalUUID
 			fieldworkEndDate
 			fieldworkStartDate
 			frameworkName
 			id
+			integrationRunID
+			managedBy
 			name
 			observationPeriodEndDate
 			observationPeriodStartDate
@@ -609,6 +636,9 @@ mutation UpdateProgram ($updateProgramId: ID!, $input: UpdateProgramInput!) {
 			programKindID
 			programKindName
 			programOwnerID
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			startDate
 			status
 			tags

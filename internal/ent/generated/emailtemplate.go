@@ -40,6 +40,18 @@ type EmailTemplate struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision string `json:"revision,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -96,6 +108,8 @@ type EmailTemplate struct {
 
 // EmailTemplateEdges holds the relations/edges for other nodes in the graph.
 type EmailTemplateEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -120,10 +134,11 @@ type EmailTemplateEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [11]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [11]map[string]int
+	totalCount [12]map[string]int
 
+	namedIntegrationRuns       map[string][]*IntegrationRun
 	namedBlockedGroups         map[string][]*Group
 	namedEditors               map[string][]*Group
 	namedViewers               map[string][]*Group
@@ -132,12 +147,21 @@ type EmailTemplateEdges struct {
 	namedFiles                 map[string][]*File
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e EmailTemplateEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e EmailTemplateEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -146,7 +170,7 @@ func (e EmailTemplateEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -155,7 +179,7 @@ func (e EmailTemplateEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -164,7 +188,7 @@ func (e EmailTemplateEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -175,7 +199,7 @@ func (e EmailTemplateEdges) ViewersOrErr() ([]*Group, error) {
 func (e EmailTemplateEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -186,7 +210,7 @@ func (e EmailTemplateEdges) IntegrationOrErr() (*Integration, error) {
 func (e EmailTemplateEdges) WorkflowDefinitionOrErr() (*WorkflowDefinition, error) {
 	if e.WorkflowDefinition != nil {
 		return e.WorkflowDefinition, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: workflowdefinition.Label}
 	}
 	return nil, &NotLoadedError{edge: "workflow_definition"}
@@ -197,7 +221,7 @@ func (e EmailTemplateEdges) WorkflowDefinitionOrErr() (*WorkflowDefinition, erro
 func (e EmailTemplateEdges) WorkflowInstanceOrErr() (*WorkflowInstance, error) {
 	if e.WorkflowInstance != nil {
 		return e.WorkflowInstance, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: workflowinstance.Label}
 	}
 	return nil, &NotLoadedError{edge: "workflow_instance"}
@@ -208,7 +232,7 @@ func (e EmailTemplateEdges) WorkflowInstanceOrErr() (*WorkflowInstance, error) {
 func (e EmailTemplateEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -217,7 +241,7 @@ func (e EmailTemplateEdges) TrustCenterOrErr() (*TrustCenter, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -226,7 +250,7 @@ func (e EmailTemplateEdges) CampaignsOrErr() ([]*Campaign, error) {
 // NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.NotificationTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "notification_templates"}
@@ -235,7 +259,7 @@ func (e EmailTemplateEdges) NotificationTemplatesOrErr() ([]*NotificationTemplat
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EmailTemplateEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -252,7 +276,7 @@ func (*EmailTemplate) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case emailtemplate.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldUpdatedByImpersonator, emailtemplate.FieldDeletedBy, emailtemplate.FieldRevision, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldTemplateContext, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID, emailtemplate.FieldTrustCenterID:
+		case emailtemplate.FieldID, emailtemplate.FieldCreatedBy, emailtemplate.FieldUpdatedBy, emailtemplate.FieldUpdatedByImpersonator, emailtemplate.FieldDeletedBy, emailtemplate.FieldRevision, emailtemplate.FieldSourceDefinitionID, emailtemplate.FieldSourceDefinitionVersion, emailtemplate.FieldSourceInstanceID, emailtemplate.FieldManagedBy, emailtemplate.FieldIntegrationRunID, emailtemplate.FieldExternalID, emailtemplate.FieldOwnerID, emailtemplate.FieldInternalNotes, emailtemplate.FieldSystemInternalID, emailtemplate.FieldKey, emailtemplate.FieldName, emailtemplate.FieldDescription, emailtemplate.FieldFormat, emailtemplate.FieldLocale, emailtemplate.FieldSubjectTemplate, emailtemplate.FieldPreheaderTemplate, emailtemplate.FieldBodyTemplate, emailtemplate.FieldTextTemplate, emailtemplate.FieldTemplateContext, emailtemplate.FieldIntegrationID, emailtemplate.FieldWorkflowDefinitionID, emailtemplate.FieldWorkflowInstanceID, emailtemplate.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case emailtemplate.FieldCreatedAt, emailtemplate.FieldUpdatedAt, emailtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -325,6 +349,42 @@ func (_m *EmailTemplate) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
 				_m.Revision = value.String
+			}
+		case emailtemplate.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case emailtemplate.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case emailtemplate.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case emailtemplate.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case emailtemplate.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case emailtemplate.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case emailtemplate.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -493,6 +553,11 @@ func (_m *EmailTemplate) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the EmailTemplate entity.
+func (_m *EmailTemplate) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewEmailTemplateClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the EmailTemplate entity.
 func (_m *EmailTemplate) QueryOwner() *OrganizationQuery {
 	return NewEmailTemplateClient(_m.config).QueryOwner(_m)
@@ -597,6 +662,24 @@ func (_m *EmailTemplate) String() string {
 	builder.WriteString("revision=")
 	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -674,6 +757,30 @@ func (_m *EmailTemplate) String() string {
 	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *EmailTemplate) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *EmailTemplate) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

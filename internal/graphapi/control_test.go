@@ -711,6 +711,8 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 
 	programAnotherOrg := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
+	riskOnlyUser := suite.UserBuilder(context.Background(), t, models.CatalogRiskManagementAddon)
+
 	publicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 	publicStandard2 := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
@@ -913,6 +915,15 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser2.UserCtx,
 			expectedErr:      th.NotAuthorizedErrorMsg,
+		},
+		{
+			name: "org without control modules cannot clone controls from standard",
+			request: testclient.CloneControlInput{
+				StandardID: &publicStandard.ID,
+			},
+			client:      suite.Client.API,
+			ctx:         riskOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 	}
 
@@ -1803,7 +1814,7 @@ func TestMutationUpdateControl(t *testing.T) {
 			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
-			name:      "not authorized, adding editor group permision to system owned control",
+			name:      "not authorized, adding editor group permission to system owned control",
 			controlID: systemControl.ID,
 			request: testclient.UpdateControlInput{
 				AddEditorIDs: []string{groupMember.GroupID},

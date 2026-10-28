@@ -6,16 +6,22 @@ mutation CreateBulkCSVEmailTemplate ($input: Upload!) {
 			createdBy
 			defaults
 			description
+			externalID
 			format
 			id
 			integrationID
+			integrationRunID
 			internalNotes
 			key
 			locale
+			managedBy
 			metadata
 			name
 			ownerID
 			revision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			templateContext
@@ -37,16 +43,22 @@ mutation CreateBulkEmailTemplate ($input: [CreateEmailTemplateInput!]) {
 			createdBy
 			defaults
 			description
+			externalID
 			format
 			id
 			integrationID
+			integrationRunID
 			internalNotes
 			key
 			locale
+			managedBy
 			metadata
 			name
 			ownerID
 			revision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			templateContext
@@ -68,16 +80,22 @@ mutation CreateEmailTemplate ($input: CreateEmailTemplateInput!) {
 			createdBy
 			defaults
 			description
+			externalID
 			format
 			id
 			integrationID
+			integrationRunID
 			internalNotes
 			key
 			locale
+			managedBy
 			metadata
 			name
 			ownerID
 			revision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			templateContext
@@ -119,16 +137,22 @@ query GetAllEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				createdBy
 				defaults
 				description
+				externalID
 				format
 				id
 				integrationID
+				integrationRunID
 				internalNotes
 				key
 				locale
+				managedBy
 				metadata
 				name
 				ownerID
 				revision
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemInternalID
 				systemOwned
 				templateContext
@@ -150,16 +174,22 @@ query GetEmailTemplateByID ($emailTemplateId: ID!) {
 		createdBy
 		defaults
 		description
+		externalID
 		format
 		id
 		integrationID
+		integrationRunID
 		internalNotes
 		key
 		locale
+		managedBy
 		metadata
 		name
 		ownerID
 		revision
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		systemInternalID
 		systemOwned
 		templateContext
@@ -188,16 +218,22 @@ query GetEmailTemplates ($first: Int, $last: Int, $after: Cursor, $before: Curso
 				createdBy
 				defaults
 				description
+				externalID
 				format
 				id
 				integrationID
+				integrationRunID
 				internalNotes
 				key
 				locale
+				managedBy
 				metadata
 				name
 				ownerID
 				revision
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemInternalID
 				systemOwned
 				templateContext
@@ -223,16 +259,22 @@ mutation UpdateBulkCSVEmailTemplate ($input: Upload!) {
 			createdBy
 			defaults
 			description
+			externalID
 			format
 			id
 			integrationID
+			integrationRunID
 			internalNotes
 			key
 			locale
+			managedBy
 			metadata
 			name
 			ownerID
 			revision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			templateContext
@@ -257,16 +299,22 @@ mutation UpdateBulkEmailTemplate ($ids: [ID!]!, $input: UpdateEmailTemplateInput
 			createdBy
 			defaults
 			description
+			externalID
 			format
 			id
 			integrationID
+			integrationRunID
 			internalNotes
 			key
 			locale
+			managedBy
 			metadata
 			name
 			ownerID
 			revision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			templateContext
@@ -291,16 +339,22 @@ mutation UpdateEmailTemplate ($updateEmailTemplateId: ID!, $input: UpdateEmailTe
 			createdBy
 			defaults
 			description
+			externalID
 			format
 			id
 			integrationID
+			integrationRunID
 			internalNotes
 			key
 			locale
+			managedBy
 			metadata
 			name
 			ownerID
 			revision
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			templateContext

@@ -259,6 +259,26 @@ func (_u *AssetUpdate) ClearIntegrationRunID() *AssetUpdate {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *AssetUpdate) SetExternalID(v string) *AssetUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableExternalID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *AssetUpdate) ClearExternalID() *AssetUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetInternalOwner sets the "internal_owner" field.
 func (_u *AssetUpdate) SetInternalOwner(v string) *AssetUpdate {
 	_u.mutation.SetInternalOwner(v)
@@ -2060,6 +2080,12 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(asset.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(asset.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(asset.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(asset.FieldInternalOwner, field.TypeString, value)
 	}
@@ -3691,6 +3717,26 @@ func (_u *AssetUpdateOne) SetNillableIntegrationRunID(v *string) *AssetUpdateOne
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *AssetUpdateOne) ClearIntegrationRunID() *AssetUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *AssetUpdateOne) SetExternalID(v string) *AssetUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableExternalID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *AssetUpdateOne) ClearExternalID() *AssetUpdateOne {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -5524,6 +5570,12 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(asset.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(asset.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(asset.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(asset.FieldInternalOwner, field.TypeString, value)

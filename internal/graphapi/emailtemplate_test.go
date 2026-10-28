@@ -37,6 +37,11 @@ func TestPreviewEmailTemplateGate(t *testing.T) {
 	// internal system emails are not previewable
 	_, err = suite.Client.API.PreviewEmailTemplate(tcOrg.Owner.UserCtx, emaildef.SubprocessorNotificationOp.Name(), map[string]any{})
 	assert.ErrorContains(t, err, "not a customer-selectable")
+
+	anonCtx := th.CreateAnonymousTrustCenterContext(tcOrg.TrustCenter.ID, tcOrg.OrganizationID)
+
+	_, err = suite.Client.API.PreviewEmailTemplate(anonCtx, emaildef.BrandedMessageOp.Name(), map[string]any{})
+	assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 }
 
 func validEmailTemplateDefaults() map[string]any {

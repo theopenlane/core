@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
@@ -2330,6 +2331,26 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 		if vendorriskscoreCount, err := FromContext(ctx).VendorRiskScore.Delete().Where(vendorriskscore.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", vendorriskscoreCount).Msg("error deleting vendorriskscore")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).CheckResult.Query().Where(checkresult.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying checkresult ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := CheckResultEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up checkresult edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).CheckResult.Query().Where((checkresult.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if checkresultCount, err := FromContext(ctx).CheckResult.Delete().Where(checkresult.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", checkresultCount).Msg("error deleting checkresult")
 			return err
 		}
 	}

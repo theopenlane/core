@@ -109,8 +109,9 @@ func subpathURL(rawURL, path string) (string, bool) {
 
 // scanRequester lazily builds the shared prober with the scanner User-Agent set,
 // constructed once so probes reuse pooled connections
+// scan targets are customer-supplied, so every dial including redirect hops must reach a public address
 var scanRequester = sync.OnceValues(func() (*httpsling.Requester, error) {
-	return urlx.NewRequester(httpsling.Header(httpsling.HeaderUserAgent, userAgent))
+	return urlx.NewPublicRequester(httpsling.Header(httpsling.HeaderUserAgent, userAgent))
 })
 
 // urlReachable reports whether rawURL is worth fetching, returning the final URL after any

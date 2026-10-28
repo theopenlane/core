@@ -8,7 +8,9 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/usersettinghistory"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -83,6 +85,18 @@ func TestQueryUserSetting(t *testing.T) {
 			assert.Equal(t, tc.expected.Status, resp.UserSetting.Status)
 		})
 	}
+
+	ownerSeesHistory, err := suite.Client.DB.HistoryClient.UserSettingHistory.Query().
+		Where(usersettinghistory.Ref(user1Setting.ID)).
+		Exist(history.WithContext(reqCtx))
+	assert.NilError(t, err)
+	assert.Check(t, ownerSeesHistory)
+
+	otherUserSeesHistory, err := suite.Client.DB.HistoryClient.UserSettingHistory.Query().
+		Where(usersettinghistory.Ref(user1Setting.ID)).
+		Exist(history.WithContext(th.SharedTestUser2.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, !otherUserSeesHistory)
 
 	(&th.Cleanup[*generated.UserDeleteOne]{Client: suite.Client.DB.User, ID: user2.ID}).MustDelete(reqCtx, t)
 }

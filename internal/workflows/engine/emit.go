@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -206,7 +207,7 @@ func persistWorkflowEvent(ctx context.Context, client *generated.Client, instanc
 		SetWorkflowInstanceID(instance.ID).
 		SetEventType(eventType).
 		SetPayload(payload)
-	ownerID, ownerErr := workflows.ResolveOwnerID(ctx, instance.OwnerID)
+	ownerID, ownerErr := utils.ResolveOwnerID(ctx, instance.OwnerID)
 	if ownerErr != nil {
 		return ownerErr
 	}

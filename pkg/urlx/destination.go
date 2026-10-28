@@ -1,6 +1,7 @@
 package urlx
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"net/http"
@@ -96,14 +97,33 @@ func ValidatePublicURL(rawURL string) (*url.URL, error) {
 func PublicOnly() httpclient.Option {
 	return httpclient.TransportOption(func(t *http.Transport) error {
 		t.Proxy = nil
-		t.DialContext = (&net.Dialer{
-			Timeout:   publicDialTimeout,
-			KeepAlive: publicDialKeepAlive,
-			Control:   publicOnlyControl,
-		}).DialContext
+		t.DialContext = PublicDialContext
 
 		return nil
 	})
+}
+
+// PublicDialContext dials address only when it resolves to a public destination, for clients that take a dialer rather than an http.Transport
+func PublicDialContext(ctx context.Context, network, address string) (net.Conn, error) {
+	return (&net.Dialer{
+		Timeout:   publicDialTimeout,
+		KeepAlive: publicDialKeepAlive,
+		Control:   publicOnlyControl,
+	}).DialContext(ctx, network, address)
+}
+
+// NewCustomerHTTPClient returns a client for requests to a customer-supplied URL, rejecting non-public
+// destinations unless allowPrivate is set, which is only for local development
+func NewCustomerHTTPClient(rawURL string, allowPrivate bool, opts ...httpclient.Option) (*http.Client, error) {
+	if !allowPrivate {
+		if _, err := ValidatePublicURL(rawURL); err != nil {
+			return nil, err
+		}
+
+		opts = append(opts, PublicOnly())
+	}
+
+	return NewHTTPClient(opts...)
 }
 
 func publicOnlyControl(_ string, address string, _ syscall.RawConn) error {

@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,12 +17,16 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
@@ -355,6 +360,72 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationNoActiveOrgUnauthorize
 	suite.e.ServeHTTP(rec, req.WithContext(noOrgCtx))
 
 	require.Equal(t, http.StatusUnauthorized, rec.Code)
+}
+
+func (suite *HandlerTestSuite) TestRunIntegrationOperationAnonymousTokenUnauthorized() {
+	t := suite.T()
+
+	suite.registerAuthenticatedTestHandler(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
+
+	restore := suite.withDefinitionRuntime(t, []registry.Builder{
+		operationTestDefinitionBuilder(operationTestInlineDefinitionID, true),
+		operationTestDefinitionBuilder(operationTestDefinitionID, false),
+	})
+	defer restore()
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	inlineIntegrationID := suite.createOperationTestIntegration(t, owner.UserCtx, owner.OrganizationID, operationTestInlineDefinitionID)
+	queuedIntegrationID := suite.createOperationTestIntegration(t, owner.UserCtx, owner.OrganizationID, operationTestDefinitionID)
+
+	questionnaireToken, err := urlx.GenerateAnonTokenURL(reqCtx, suite.h.DBClient.TokenManager, nil, url.URL{}, urlx.AnonTokenRequest{
+		Prefix:    authmanager.AnonQuestionnaireJWTPrefix,
+		SubjectID: ulids.New().String(),
+		OrgID:     owner.OrganizationID,
+		Email:     "respondent@example.com",
+		Duration:  suite.h.DBClient.TokenManager.Config().AssessmentAccessDuration,
+		ExtraClaims: func(c *tokens.Claims) {
+			c.AssessmentID = ulids.New().String()
+		},
+	})
+	require.NoError(t, err)
+
+	trustCenterSession, err := suite.h.AuthManager.GenerateAnonymousTrustCenterSession(reqCtx, httptest.NewRecorder(), owner.OrganizationID, ulids.New().String())
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name          string
+		accessToken   string
+		definitionID  string
+		integrationID string
+	}{
+		{name: "questionnaire token inline operation", accessToken: questionnaireToken.AccessToken, definitionID: operationTestInlineDefinitionID, integrationID: inlineIntegrationID},
+		{name: "questionnaire token queued operation", accessToken: questionnaireToken.AccessToken, definitionID: operationTestDefinitionID, integrationID: queuedIntegrationID},
+		{name: "trust center token inline operation", accessToken: trustCenterSession.AccessToken, definitionID: operationTestInlineDefinitionID, integrationID: inlineIntegrationID},
+		{name: "trust center token queued operation", accessToken: trustCenterSession.AccessToken, definitionID: operationTestDefinitionID, integrationID: queuedIntegrationID},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
+				IntegrationID: tc.integrationID,
+				Body: handlers.RunIntegrationOperationBody{
+					Operation: opTestRepoSyncOperation.Name(),
+				},
+			})
+			require.NoError(t, err)
+
+			req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+tc.definitionID+"/operations?integration_id="+tc.integrationID, bytes.NewReader(body))
+			req.Header.Set("Content-Type", "application/json")
+			req.Header.Set("Authorization", "Bearer "+tc.accessToken)
+
+			rec := httptest.NewRecorder()
+			suite.e.ServeHTTP(rec, req)
+
+			require.Equal(t, http.StatusUnauthorized, rec.Code)
+		})
+	}
 }
 
 func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemDefinitionNotInvocable() {

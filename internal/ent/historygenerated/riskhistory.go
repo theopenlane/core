@@ -57,6 +57,8 @@ type RiskHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the stakeholder for the risk when no user, group, or identity holder is linked
@@ -93,8 +95,6 @@ type RiskHistory struct {
 	ScopeID string `json:"scope_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
-	// stable identifier assigned by the source system, used for integration ingest deduplication
-	ExternalID string `json:"external_id,omitempty"`
 	// integration that surfaced this risk, when sourced via integration ingest
 	IntegrationID string `json:"integration_id,omitempty"`
 	// time when this risk was last observed by the source integration
@@ -161,7 +161,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case riskhistory.FieldScore, riskhistory.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldSourceDefinitionID, riskhistory.FieldSourceDefinitionVersion, riskhistory.FieldSourceInstanceID, riskhistory.FieldManagedBy, riskhistory.FieldIntegrationRunID, riskhistory.FieldOwnerID, riskhistory.FieldStakeholderName, riskhistory.FieldStakeholderUserID, riskhistory.FieldStakeholderGroupID, riskhistory.FieldStakeholderIdentityHolderID, riskhistory.FieldDelegateName, riskhistory.FieldDelegateUserID, riskhistory.FieldDelegateGroupID, riskhistory.FieldDelegateIdentityHolderID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldExternalID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldSourceDefinitionID, riskhistory.FieldSourceDefinitionVersion, riskhistory.FieldSourceInstanceID, riskhistory.FieldManagedBy, riskhistory.FieldIntegrationRunID, riskhistory.FieldExternalID, riskhistory.FieldOwnerID, riskhistory.FieldStakeholderName, riskhistory.FieldStakeholderUserID, riskhistory.FieldStakeholderGroupID, riskhistory.FieldStakeholderIdentityHolderID, riskhistory.FieldDelegateName, riskhistory.FieldDelegateUserID, riskhistory.FieldDelegateGroupID, riskhistory.FieldDelegateIdentityHolderID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -291,6 +291,12 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
 			}
+		case riskhistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		case riskhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -398,12 +404,6 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
 				_m.WorkflowEligibleMarker = value.Bool
-			}
-		case riskhistory.FieldExternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_id", values[i])
-			} else if value.Valid {
-				_m.ExternalID = value.String
 			}
 		case riskhistory.FieldIntegrationID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -650,6 +650,9 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -703,9 +706,6 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
-	builder.WriteString(", ")
-	builder.WriteString("external_id=")
-	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("integration_id=")
 	builder.WriteString(_m.IntegrationID)

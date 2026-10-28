@@ -170,6 +170,90 @@ func (_c *EmailTemplateHistoryCreate) SetNillableRevision(v *string) *EmailTempl
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *EmailTemplateHistoryCreate) SetSourceDefinitionID(v string) *EmailTemplateHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableSourceDefinitionID(v *string) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *EmailTemplateHistoryCreate) SetSourceDefinitionVersion(v string) *EmailTemplateHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *EmailTemplateHistoryCreate) SetSourceInstanceID(v string) *EmailTemplateHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableSourceInstanceID(v *string) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *EmailTemplateHistoryCreate) SetManagedBy(v string) *EmailTemplateHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableManagedBy(v *string) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *EmailTemplateHistoryCreate) SetIntegrationRunID(v string) *EmailTemplateHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableIntegrationRunID(v *string) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *EmailTemplateHistoryCreate) SetExternalID(v string) *EmailTemplateHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *EmailTemplateHistoryCreate) SetNillableExternalID(v *string) *EmailTemplateHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *EmailTemplateHistoryCreate) SetOwnerID(v string) *EmailTemplateHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -680,6 +764,30 @@ func (_c *EmailTemplateHistoryCreate) createSpec() (*EmailTemplateHistory, *sqlg
 	if value, ok := _c.mutation.Revision(); ok {
 		_spec.SetField(emailtemplatehistory.FieldRevision, field.TypeString, value)
 		_node.Revision = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(emailtemplatehistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(emailtemplatehistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(emailtemplatehistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(emailtemplatehistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(emailtemplatehistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(emailtemplatehistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(emailtemplatehistory.FieldOwnerID, field.TypeString, value)

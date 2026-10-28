@@ -47,6 +47,18 @@ type RemediationHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -65,8 +77,6 @@ type RemediationHistory struct {
 	ScopeID string `json:"scope_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
-	// external identifier from the integration source for the remediation
-	ExternalID string `json:"external_id,omitempty"`
 	// external identifier from the integration source for the remediation
 	ExternalOwnerID string `json:"external_owner_id,omitempty"`
 	// title or short description of the remediation effort
@@ -121,7 +131,7 @@ func (*RemediationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case remediationhistory.FieldSystemOwned, remediationhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldUpdatedByImpersonator, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldEnvironmentName, remediationhistory.FieldEnvironmentID, remediationhistory.FieldScopeName, remediationhistory.FieldScopeID, remediationhistory.FieldExternalID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldStatus, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
+		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldUpdatedByImpersonator, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldSourceDefinitionID, remediationhistory.FieldSourceDefinitionVersion, remediationhistory.FieldSourceInstanceID, remediationhistory.FieldManagedBy, remediationhistory.FieldIntegrationRunID, remediationhistory.FieldExternalID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldEnvironmentName, remediationhistory.FieldEnvironmentID, remediationhistory.FieldScopeName, remediationhistory.FieldScopeID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldStatus, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case remediationhistory.FieldHistoryTime, remediationhistory.FieldCreatedAt, remediationhistory.FieldUpdatedAt, remediationhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -221,6 +231,42 @@ func (_m *RemediationHistory) assignValues(columns []string, values []any) error
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case remediationhistory.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case remediationhistory.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case remediationhistory.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case remediationhistory.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case remediationhistory.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case remediationhistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		case remediationhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -276,12 +322,6 @@ func (_m *RemediationHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
 				_m.WorkflowEligibleMarker = value.Bool
-			}
-		case remediationhistory.FieldExternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_id", values[i])
-			} else if value.Valid {
-				_m.ExternalID = value.String
 			}
 		case remediationhistory.FieldExternalOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -476,6 +516,24 @@ func (_m *RemediationHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -506,9 +564,6 @@ func (_m *RemediationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
-	builder.WriteString(", ")
-	builder.WriteString("external_id=")
-	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("external_owner_id=")
 	builder.WriteString(_m.ExternalOwnerID)

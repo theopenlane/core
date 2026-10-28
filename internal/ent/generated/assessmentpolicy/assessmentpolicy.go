@@ -25,6 +25,18 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldUpdatedByImpersonator holds the string denoting the updated_by_impersonator field in the database.
 	FieldUpdatedByImpersonator = "updated_by_impersonator"
+	// FieldSourceDefinitionID holds the string denoting the source_definition_id field in the database.
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion holds the string denoting the source_definition_version field in the database.
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID holds the string denoting the source_instance_id field in the database.
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldManagedBy holds the string denoting the managed_by field in the database.
+	FieldManagedBy = "managed_by"
+	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
+	FieldIntegrationRunID = "integration_run_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldAssessmentID holds the string denoting the assessment_id field in the database.
@@ -33,6 +45,8 @@ const (
 	FieldInternalPolicyID = "internal_policy_id"
 	// FieldPolicyRevision holds the string denoting the policy_revision field in the database.
 	FieldPolicyRevision = "policy_revision"
+	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
+	EdgeIntegrationRuns = "integration_runs"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeAssessment holds the string denoting the assessment edge name in mutations.
@@ -41,6 +55,13 @@ const (
 	EdgeInternalPolicy = "internal_policy"
 	// Table holds the table name of the assessmentpolicy in the database.
 	Table = "assessment_policies"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge.
+	IntegrationRunsTable = "integration_runs"
+	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
+	IntegrationRunsInverseTable = "integration_runs"
+	// IntegrationRunsColumn is the table column denoting the integration_runs relation/edge.
+	IntegrationRunsColumn = "assessment_policy_integration_runs"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "assessment_policies"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -72,6 +93,12 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedBy,
 	FieldUpdatedByImpersonator,
+	FieldSourceDefinitionID,
+	FieldSourceDefinitionVersion,
+	FieldSourceInstanceID,
+	FieldManagedBy,
+	FieldIntegrationRunID,
+	FieldExternalID,
 	FieldOwnerID,
 	FieldAssessmentID,
 	FieldInternalPolicyID,
@@ -142,6 +169,36 @@ func ByUpdatedByImpersonator(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedByImpersonator, opts...).ToFunc()
 }
 
+// BySourceDefinitionID orders the results by the source_definition_id field.
+func BySourceDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionID, opts...).ToFunc()
+}
+
+// BySourceDefinitionVersion orders the results by the source_definition_version field.
+func BySourceDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionVersion, opts...).ToFunc()
+}
+
+// BySourceInstanceID orders the results by the source_instance_id field.
+func BySourceInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceInstanceID, opts...).ToFunc()
+}
+
+// ByManagedBy orders the results by the managed_by field.
+func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagedBy, opts...).ToFunc()
+}
+
+// ByIntegrationRunID orders the results by the integration_run_id field.
+func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -160,6 +217,20 @@ func ByInternalPolicyID(opts ...sql.OrderTermOption) OrderOption {
 // ByPolicyRevision orders the results by the policy_revision field.
 func ByPolicyRevision(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPolicyRevision, opts...).ToFunc()
+}
+
+// ByIntegrationRunsCount orders the results by integration_runs count.
+func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRunsStep(), opts...)
+	}
+}
+
+// ByIntegrationRuns orders the results by integration_runs terms.
+func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
 }
 
 // ByOwnerField orders the results by owner field.
@@ -181,6 +252,13 @@ func ByInternalPolicyField(field string, opts ...sql.OrderTermOption) OrderOptio
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyStep(), sql.OrderByField(field, opts...))
 	}
+}
+func newIntegrationRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRunsTable, IntegrationRunsColumn),
+	)
 }
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

@@ -2,10 +2,12 @@ package rule
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/gertd/go-pluralize"
+	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -22,13 +24,20 @@ func AllowIfTrustCenterEditor() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
 		logx.FromContext(ctx).Debug().Msg("checking write access for trust center")
 
-		trustCenterID := getTrustCenterIDFromMutation(ctx, m)
+		trustCenterIDs := getTrustCenterIDsFromMutation(ctx, m)
 
-		if trustCenterID == "" {
+		if len(trustCenterIDs) == 0 {
 			return privacy.Skipf("trust center ID not found in mutation")
 		}
 
-		return checkTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID)
+		// the caller must be able to edit every trust center the object belongs to or is moved to
+		for _, trustCenterID := range trustCenterIDs {
+			if err := checkTrustCenterAccess(ctx, fgax.CanEdit, trustCenterID); !errors.Is(err, privacy.Allow) {
+				return err
+			}
+		}
+
+		return privacy.Allow
 	})
 }
 
@@ -45,22 +54,28 @@ func AllowIfTrustCenterAnonRequest() privacy.MutationRule {
 	})
 }
 
-// getTrustCenterIDFromMutation extracts the trust center ID from the mutation
-// if available, otherwise tries to query it from the database.
-func getTrustCenterIDFromMutation(ctx context.Context, m ent.Mutation) string {
+// getTrustCenterIDsFromMutation returns the stored trust center ID for existing objects plus the
+// trust center ID set by the mutation, so a mutation cannot name a trust center the object does not belong to
+func getTrustCenterIDsFromMutation(ctx context.Context, m ent.Mutation) []string {
 	tcMutation, ok := m.(utils.TrustCenterMutation)
 	if !ok {
 		logx.FromContext(ctx).Warn().Str("mutation", m.Type()).Str("rule", "AllowIfTrustCenterEditor").Msg("mutation does not implement trustCenterMutation interface")
 
-		return ""
+		return nil
 	}
 
-	// check if the user has edit access to the trust center
-	id, exists := tcMutation.TrustCenterID()
-	if exists {
-		return id
+	newID, _ := tcMutation.TrustCenterID()
+
+	storedID := ""
+	if !m.Op().Is(ent.OpCreate) {
+		storedID = getStoredTrustCenterID(ctx, tcMutation, m.Type())
 	}
 
+	return lo.Uniq(lo.Compact([]string{storedID, newID}))
+}
+
+// getStoredTrustCenterID returns the trust center ID currently stored on the object, querying the database when the old value is unavailable
+func getStoredTrustCenterID(ctx context.Context, tcMutation utils.TrustCenterMutation, objectType string) string {
 	// try to get the old trust center id if available (for updates), this does not work for delete
 	id, err := tcMutation.OldTrustCenterID(ctx)
 	if err == nil {
@@ -72,7 +87,6 @@ func getTrustCenterIDFromMutation(ctx context.Context, m ent.Mutation) string {
 		return ""
 	}
 
-	objectType := m.Type()
 	pluralObjectType := pluralize.NewClient().Plural(objectType)
 	tableName := strcase.SnakeCase(pluralObjectType)
 

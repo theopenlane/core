@@ -44,6 +44,18 @@ type AssessmentHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -82,7 +94,7 @@ func (*AssessmentHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case assessmenthistory.FieldResponseDueDuration:
 			values[i] = new(sql.NullInt64)
-		case assessmenthistory.FieldID, assessmenthistory.FieldRef, assessmenthistory.FieldCreatedBy, assessmenthistory.FieldUpdatedBy, assessmenthistory.FieldUpdatedByImpersonator, assessmenthistory.FieldDeletedBy, assessmenthistory.FieldOwnerID, assessmenthistory.FieldInternalNotes, assessmenthistory.FieldSystemInternalID, assessmenthistory.FieldName, assessmenthistory.FieldAssessmentType, assessmenthistory.FieldTemplateID:
+		case assessmenthistory.FieldID, assessmenthistory.FieldRef, assessmenthistory.FieldCreatedBy, assessmenthistory.FieldUpdatedBy, assessmenthistory.FieldUpdatedByImpersonator, assessmenthistory.FieldDeletedBy, assessmenthistory.FieldSourceDefinitionID, assessmenthistory.FieldSourceDefinitionVersion, assessmenthistory.FieldSourceInstanceID, assessmenthistory.FieldManagedBy, assessmenthistory.FieldIntegrationRunID, assessmenthistory.FieldExternalID, assessmenthistory.FieldOwnerID, assessmenthistory.FieldInternalNotes, assessmenthistory.FieldSystemInternalID, assessmenthistory.FieldName, assessmenthistory.FieldAssessmentType, assessmenthistory.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case assessmenthistory.FieldHistoryTime, assessmenthistory.FieldCreatedAt, assessmenthistory.FieldUpdatedAt, assessmenthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -175,6 +187,42 @@ func (_m *AssessmentHistory) assignValues(columns []string, values []any) error 
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case assessmenthistory.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case assessmenthistory.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case assessmenthistory.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case assessmenthistory.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case assessmenthistory.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case assessmenthistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case assessmenthistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -318,6 +366,24 @@ func (_m *AssessmentHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

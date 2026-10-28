@@ -21,13 +21,16 @@ mutation CreateBulkCSVControl ($input: Upload!) {
 			environmentName
 			evidenceRequests
 			exampleEvidence
+			externalID
 			externalUUID
 			id
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -40,6 +43,9 @@ mutation CreateBulkCSVControl ($input: Upload!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status
@@ -80,13 +86,16 @@ mutation CreateBulkControl ($input: [CreateControlInput!]) {
 			environmentName
 			evidenceRequests
 			exampleEvidence
+			externalID
 			externalUUID
 			id
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -99,6 +108,9 @@ mutation CreateBulkControl ($input: [CreateControlInput!]) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status
@@ -139,13 +151,16 @@ mutation CreateControl ($input: CreateControlInput!) {
 			environmentName
 			evidenceRequests
 			exampleEvidence
+			externalID
 			externalUUID
 			id
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -158,6 +173,9 @@ mutation CreateControl ($input: CreateControlInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status
@@ -352,13 +370,16 @@ query GetControlByID ($controlId: ID!) {
 		environmentName
 		evidenceRequests
 		exampleEvidence
+		externalID
 		externalUUID
 		id
 		implementationDescription
 		implementationGuidance
 		implementationStatus
+		integrationRunID
 		internalNotes
 		isTrustCenterControl
+		managedBy
 		mappedCategories
 		ownerID
 		publicRepresentation
@@ -371,6 +392,9 @@ query GetControlByID ($controlId: ID!) {
 		scopeID
 		scopeName
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceName
 		standardID
 		status
@@ -484,13 +508,16 @@ query GetControls ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				environmentName
 				evidenceRequests
 				exampleEvidence
+				externalID
 				externalUUID
 				id
 				implementationDescription
 				implementationGuidance
 				implementationStatus
+				integrationRunID
 				internalNotes
 				isTrustCenterControl
+				managedBy
 				mappedCategories
 				ownerID
 				publicRepresentation
@@ -503,6 +530,9 @@ query GetControls ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				scopeID
 				scopeName
 				source
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				sourceName
 				standardID
 				status
@@ -638,13 +668,16 @@ mutation UpdateBulkControl ($ids: [ID!]!, $input: UpdateControlInput!) {
 			environmentName
 			evidenceRequests
 			exampleEvidence
+			externalID
 			externalUUID
 			id
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -657,6 +690,9 @@ mutation UpdateBulkControl ($ids: [ID!]!, $input: UpdateControlInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status
@@ -742,13 +778,16 @@ mutation UpdateControl ($updateControlId: ID!, $input: UpdateControlInput!) {
 			environmentName
 			evidenceRequests
 			exampleEvidence
+			externalID
 			externalUUID
 			id
 			implementationDescription
 			implementationGuidance
 			implementationStatus
+			integrationRunID
 			internalNotes
 			isTrustCenterControl
+			managedBy
 			mappedCategories
 			ownerID
 			publicRepresentation
@@ -761,6 +800,9 @@ mutation UpdateControl ($updateControlId: ID!, $input: UpdateControlInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceName
 			standardID
 			status

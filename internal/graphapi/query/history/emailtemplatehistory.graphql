@@ -14,19 +14,25 @@ query GetAllEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $be
 				createdBy
 				defaults
 				description
+				externalID
 				format
 				historyTime
 				id
 				integrationID
+				integrationRunID
 				internalNotes
 				key
 				locale
+				managedBy
 				metadata
 				name
 				operation
 				ownerID
 				ref
 				revision
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemInternalID
 				systemOwned
 				templateContext
@@ -57,19 +63,25 @@ query GetEmailTemplateHistories ($first: Int, $last: Int, $after: Cursor, $befor
 				createdBy
 				defaults
 				description
+				externalID
 				format
 				historyTime
 				id
 				integrationID
+				integrationRunID
 				internalNotes
 				key
 				locale
+				managedBy
 				metadata
 				name
 				operation
 				ownerID
 				ref
 				revision
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				systemInternalID
 				systemOwned
 				templateContext

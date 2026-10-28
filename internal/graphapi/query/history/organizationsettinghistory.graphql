@@ -16,7 +16,6 @@ query GetAllOrganizationSettingHistories {
 				billingEmail
 				billingNotificationsEnabled
 				billingPhone
-				complianceWebhookToken
 				createdAt
 				createdBy
 				domains
@@ -26,7 +25,6 @@ query GetAllOrganizationSettingHistories {
 				identityProvider
 				identityProviderAuthTested
 				identityProviderClientID
-				identityProviderClientSecret
 				identityProviderEntityID
 				identityProviderLoginEnforced
 				identityProviderMetadataEndpoint
@@ -65,7 +63,6 @@ query GetOrganizationSettingHistories ($first: Int, $last: Int, $where: Organiza
 				billingEmail
 				billingNotificationsEnabled
 				billingPhone
-				complianceWebhookToken
 				createdAt
 				createdBy
 				domains
@@ -75,7 +72,6 @@ query GetOrganizationSettingHistories ($first: Int, $last: Int, $where: Organiza
 				identityProvider
 				identityProviderAuthTested
 				identityProviderClientID
-				identityProviderClientSecret
 				identityProviderEntityID
 				identityProviderLoginEnforced
 				identityProviderMetadataEndpoint

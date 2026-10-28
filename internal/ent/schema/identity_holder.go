@@ -225,6 +225,7 @@ func (p IdentityHolder) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "IDH",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(p),
 			newObjectOwnedMixin[generated.IdentityHolder](p,
 				withParents(Platform{}),
 				withOrganizationOwner(),
@@ -320,6 +321,11 @@ func (IdentityHolder) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaIdentityHolder),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("external_reference_id").
+			LookupAlternative("email"),
 	}
 }
 

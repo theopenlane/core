@@ -153,6 +153,13 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrNonceMissing)
 	}
 
+	// the organization whose identity provider authenticates the user is the only one the session can be issued for
+	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
+	if err != nil || orgCookie.Value != in.OrganizationID {
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, ErrSSOOrganizationMismatch)
+	}
+
 	// attach nonce to context for OIDC token validation
 	nonceCtx := ssoNonceContextKey.Set(reqCtx, nonce(nonceCookie.Value))
 	// exchange the code for OIDC tokens
@@ -160,6 +167,28 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	if err != nil {
 		metrics.RecordLogin(false)
 		return h.BadRequest(ctx, err)
+	}
+
+	// some providers (e.g. Entra ID) omit email_verified, so only an explicit false is rejected
+	if _, ok := tokens.IDTokenClaims.Claims["email_verified"]; ok && !bool(tokens.IDTokenClaims.EmailVerified) {
+		metrics.RecordLogin(false)
+		return h.BadRequest(ctx, ErrSSOEmailNotVerified)
+	}
+
+	// an existing user can only be signed in by the identity provider of an organization they already belong to
+	allowed, err := h.ssoExistingUserAllowed(reqCtx, tokens.IDTokenClaims.Email, in.OrganizationID)
+	if err != nil {
+		metrics.RecordLogin(false)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to check sso user organization membership")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest)
+	}
+
+	if !allowed {
+		metrics.RecordLogin(false)
+		logx.FromContext(reqCtx).Warn().Str("email", tokens.IDTokenClaims.Email).Str("organization_id", in.OrganizationID).Msg("existing user is not a member of the sso organization")
+
+		return h.Forbidden(ctx, ErrSSONoOrganizationAccess)
 	}
 
 	// attach the OIDC email to the context for user provisioning
@@ -194,12 +223,6 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 
 	// set the context for the authenticated user
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
-
-	orgCookie, err := sessions.GetCookie(ctx.Request(), "organization_id")
-	if err != nil {
-		metrics.RecordLogin(false)
-		return h.BadRequest(ctx, err)
-	}
 
 	// just-in-time provision the user into the organization when SSO is enforced and the org opts in,
 	// so a directory-authenticated user gains access instead of falling back to their personal org
@@ -255,7 +278,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 
 		userCtx = auth.WithCaller(userCtx, ssoCaller)
 
-		aErr := h.authorizeTokenSSO(auth.WithInternalOperationContext(userCtx), tokenType.Value, tokenID.Value, orgCookie.Value)
+		aErr := h.authorizeTokenSSO(auth.WithInternalOperationContext(userCtx), tokenType.Value, tokenID.Value, orgCookie.Value, ssoCaller.SubjectID)
 		if aErr != nil {
 			logx.FromContext(reqCtx).Error().Err(aErr).Msg("unable to authorize token for SSO")
 
@@ -430,12 +453,17 @@ func (h *Handler) orgEnforcementsForUser(ctx context.Context, email string) *api
 }
 
 // authorizeTokenSSO updates the SSO authorization timestamp for a token type (API or Personal Access Token)
-func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, orgID string) error {
+func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, orgID, userID string) error {
 	switch tokenType {
 	case "api":
 		apiToken, err := transaction.FromContext(ctx).APIToken.Get(ctx, tokenID)
 		if err != nil {
 			return err
+		}
+
+		// an api token can only be authorized for the organization that owns it
+		if apiToken.OwnerID != orgID {
+			return generated.ErrPermissionDenied
 		}
 
 		auths := apiToken.SSOAuthorizations
@@ -454,6 +482,11 @@ func (h *Handler) authorizeTokenSSO(ctx context.Context, tokenType, tokenID, org
 		pat, err := transaction.FromContext(ctx).PersonalAccessToken.Get(ctx, tokenID)
 		if err != nil {
 			return err
+		}
+
+		// a personal access token can only be authorized by the user who owns it
+		if pat.OwnerID != userID {
+			return generated.ErrPermissionDenied
 		}
 
 		auths := pat.SSOAuthorizations

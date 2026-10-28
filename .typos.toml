@@ -1,6 +1,6 @@
 [files]
 extend-exclude = [
-"go.mod",
+  "go.mod",
   "go.sum",
   "db",
   "internal/ent/generated/**",
@@ -29,6 +29,7 @@ extend-exclude = [
   "plans.yaml",
   "internal/integrations/**/**/examples/*.json",
   "internal/httpserve/specs/**",
+  "fga/model/generated/version.fga",
 ]
 ignore-hidden = true
 ignore-files = true

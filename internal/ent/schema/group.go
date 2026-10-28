@@ -211,6 +211,7 @@ func (g Group) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "GRP",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(g, withoutExternalIDIndex()),
 			newOrgOwnedMixin(g),
 			// Add the reverse edges for m:m relationships permissions based on the groups
 			newGroupPermissionsEdgesMixin(
@@ -226,6 +227,10 @@ func (Group) Indexes() []ent.Index {
 	return []ent.Index{
 		// We have an organization with many groups, and we want to set the group name to be unique under each organization
 		index.Fields("name").
+			Edges("owner").
+			Unique().
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields(externalIDFieldName).
 			Edges("owner").
 			Unique().
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
@@ -260,6 +265,10 @@ func (g Group) Annotations() []schema.Annotation {
 			),
 			oscalgen.WithOSCALAssembly("responsible-party"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("name"),
 	}
 }
 

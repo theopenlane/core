@@ -201,6 +201,16 @@ var directOrgMembershipDeleteFields = map[string]bool{
 	"leaveOrganization":       true,
 }
 
+// isDirectOrgMembershipDelete reports whether the mutation removes an individual member, updateOrganization
+// removes members one at a time through removeOrgMembers and is only treated as a member delete for those deletes
+func isDirectOrgMembershipDelete(field string, op ent.Op) bool {
+	if field == "updateOrganization" {
+		return op.Is(ent.OpDeleteOne)
+	}
+
+	return directOrgMembershipDeleteFields[field]
+}
+
 // HookOrgMembersDelete is a hook that runs during the delete operation of an org membership
 func HookOrgMembersDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -208,7 +218,7 @@ func HookOrgMembersDelete() ent.Hook {
 			// we only want to do this on direct org membership delete operations
 			// deleteOrganization will be handled by the organization hook
 			rootFieldCtx := graphql.GetRootFieldContext(ctx)
-			if rootFieldCtx == nil || !directOrgMembershipDeleteFields[rootFieldCtx.Object] {
+			if rootFieldCtx == nil || !isDirectOrgMembershipDelete(rootFieldCtx.Object, m.Op()) {
 				logx.FromContext(ctx).Debug().Msg("skipping org membership delete hook")
 
 				return next.Mutate(ctx, m)

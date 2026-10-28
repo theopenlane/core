@@ -107,9 +107,13 @@ func AllowIfTokenHasMutationScope() privacy.MutationRuleFunc {
 func CheckSubjectScope(ctx context.Context, objectType string, relation string, op *ent.Op) error {
 	ctx = logx.WithFields(ctx, map[string]any{"scope": relation, "object_type": objectType})
 
-	// allow api token access to api tokens
+	// api tokens can view api tokens, but only users can create, update, or delete them
 	if auth.IsAPITokenAuthentication(ctx) && objectType == generated.TypeAPIToken {
-		return privacy.Allow
+		if relation == fgax.CanView && op == nil {
+			return privacy.Allow
+		}
+
+		return generated.ErrPermissionDenied
 	}
 
 	// allow organizations, as they are needed for for requests

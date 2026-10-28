@@ -76,6 +76,19 @@ mutation CreateTrustCenterCompliance ($input: CreateTrustCenterComplianceInput!)
 		}
 	}
 }
+mutation CreateTrustCenterComplianceWithStandardDocs ($input: CreateTrustCenterComplianceInput!) {
+	createTrustCenterCompliance(input: $input) {
+		trustCenterCompliance {
+			id
+			standard {
+				id
+				trustCenterDocs {
+					totalCount
+				}
+			}
+		}
+	}
+}
 mutation DeleteTrustCenterCompliance ($deleteTrustCenterComplianceId: ID!) {
 	deleteTrustCenterCompliance(id: $deleteTrustCenterComplianceId) {
 		deletedID

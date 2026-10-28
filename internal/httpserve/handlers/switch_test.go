@@ -1,10 +1,12 @@
 package handlers_test
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -204,4 +206,58 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 	assert.True(t, out.Success)
 	assert.False(t, out.NeedsTFA)       // Should not require TFA setup
 	assert.NotEmpty(t, out.AccessToken) // Should have new auth data
+}
+
+func (suite *HandlerTestSuite) TestSwitchHandlerRequiresInteractiveUser() {
+	t := suite.T()
+
+	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
+
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
+
+	testCases := []struct {
+		name   string
+		caller *auth.Caller
+	}{
+		{
+			name: "api token cannot switch",
+			caller: &auth.Caller{
+				SubjectID:          ulids.New().String(),
+				OrganizationID:     user.OrganizationID,
+				AuthenticationType: auth.APITokenAuthentication,
+			},
+		},
+		{
+			name: "personal access token cannot switch",
+			caller: &auth.Caller{
+				SubjectID:          user.ID,
+				OrganizationIDs:    []string{user.OrganizationID},
+				AuthenticationType: auth.PATAuthentication,
+			},
+		},
+		{
+			name: "impersonation session cannot switch",
+			caller: &auth.Caller{
+				SubjectID:          user.ID,
+				OrganizationID:     user.OrganizationID,
+				AuthenticationType: auth.JWTAuthentication,
+				Impersonation:      &auth.ImpersonationContext{ImpersonatorID: ulids.New().String(), TargetUserID: user.ID},
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			body, err := json.Marshal(models.SwitchOrganizationRequest{TargetOrganizationID: user.PersonalOrgID})
+			require.NoError(t, err)
+
+			req := httptest.NewRequest(http.MethodPost, "/switch", strings.NewReader(string(body)))
+			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+			rec := httptest.NewRecorder()
+			suite.e.ServeHTTP(rec, req.WithContext(auth.WithCaller(context.Background(), tc.caller)))
+
+			assert.Equal(t, http.StatusUnauthorized, rec.Code)
+		})
+	}
 }

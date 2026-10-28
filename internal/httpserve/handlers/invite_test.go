@@ -14,12 +14,14 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
@@ -64,9 +66,20 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		name     string
 		email    string
 		tokenSet bool
+		apiToken bool
 		wantErr  bool
+		wantCode int
 		errMsg   string
 	}{
+		{
+			name:     "api token cannot accept invite",
+			email:    "rocket@theopenlane.io",
+			tokenSet: true,
+			apiToken: true,
+			wantErr:  true,
+			wantCode: http.StatusUnauthorized,
+			errMsg:   handlers.ErrAuthenticationRequired.Error(),
+		},
 		{
 			name:     "happy path",
 			email:    groot,
@@ -77,6 +90,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			email:    groot,
 			tokenSet: false,
 			wantErr:  true,
+			wantCode: http.StatusBadRequest,
 			errMsg:   "token is required",
 		},
 		{
@@ -84,6 +98,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			email:    "drax@theopenlane.io",
 			tokenSet: true,
 			wantErr:  true,
+			wantCode: http.StatusBadRequest,
 			errMsg:   "could not verify email",
 		},
 	}
@@ -109,8 +124,17 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			// Set writer for tests that write on the response
 			recorder := httptest.NewRecorder()
 
+			reqCtx := recipientCtx
+			if tc.apiToken {
+				reqCtx = auth.WithCaller(recipientCtx, &auth.Caller{
+					SubjectID:          ulids.New().String(),
+					OrganizationID:     userSetting.Edges.DefaultOrg.ID,
+					AuthenticationType: auth.APITokenAuthentication,
+				})
+			}
+
 			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req.WithContext(recipientCtx))
+			suite.e.ServeHTTP(recorder, req.WithContext(reqCtx))
 
 			res := recorder.Result()
 			defer res.Body.Close()
@@ -123,7 +147,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			}
 
 			if tc.wantErr {
-				assert.Equal(t, http.StatusBadRequest, recorder.Code)
+				assert.Equal(t, tc.wantCode, recorder.Code)
 
 				assert.Equal(t, tc.errMsg, out.Error)
 

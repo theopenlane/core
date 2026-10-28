@@ -12,6 +12,9 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	entfinding "github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
@@ -641,4 +644,300 @@ func TestQueryNote(t *testing.T) {
 
 	// clean up
 	(&th.Cleanup[*generated.TaskDeleteOne]{Client: suite.Client.DB.Task, ID: task.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+}
+
+const ownerCommentText = "comment from the owner"
+
+func TestMutationCommentsForVulnerability(t *testing.T) {
+	vuln := createVulnerability(t, th.SharedTestUser1.UserCtx, "Commentable Vulnerability")
+
+	testCases := []struct {
+		name        string
+		client      *testclient.TestClient
+		ctx         context.Context
+		comment     string
+		expectedErr string
+	}{
+		{
+			name:    "org owner can comment",
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
+			comment: ownerCommentText,
+		},
+		{
+			name:    "view only user can comment",
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
+			comment: "comment from a view only user",
+		},
+		{
+			name:    "pat can comment",
+			client:  suite.Client.APIWithPAT,
+			ctx:     context.Background(),
+			comment: "comment from a pat",
+		},
+		{
+			name:    "api token can comment",
+			client:  suite.Client.APIWithToken,
+			ctx:     context.Background(),
+			comment: "comment from an api token",
+		},
+		{
+			name:        "user in another org cannot comment",
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			comment:     "comment from another org",
+			expectedErr: th.NotAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateVulnerability(tc.ctx, vuln.ID, testclient.UpdateVulnerabilityInput{
+				AddComment: &testclient.CreateNoteInput{Text: tc.comment},
+			})
+
+			expectedCount := 1
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				expectedCount = 0
+			} else {
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(vuln.ID, resp.UpdateVulnerability.Vulnerability.ID))
+			}
+
+			count, err := suite.Client.DB.Note.Query().
+				Where(note.HasVulnerabilityWith(vulnerability.ID(vuln.ID)), note.Text(tc.comment)).
+				Count(th.SharedTestUser1.UserCtx)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(expectedCount, count))
+		})
+	}
+
+	viewerDenied := []struct {
+		name  string
+		input testclient.UpdateVulnerabilityInput
+	}{
+		{name: "set a field", input: testclient.UpdateVulnerabilityInput{DisplayName: lo.ToPtr("renamed by viewer")}},
+		{name: "clear a field", input: testclient.UpdateVulnerabilityInput{ClearDisplayName: lo.ToPtr(true)}},
+		{name: "clear all comments", input: testclient.UpdateVulnerabilityInput{ClearComments: lo.ToPtr(true)}},
+		{name: "add a comment while clearing a field", input: testclient.UpdateVulnerabilityInput{
+			AddComment:       &testclient.CreateNoteInput{Text: "sneaky comment"},
+			ClearDisplayName: lo.ToPtr(true),
+		}},
+	}
+
+	for _, tc := range viewerDenied {
+		t.Run("view only user cannot "+tc.name, func(t *testing.T) {
+			_, err := suite.Client.API.UpdateVulnerability(th.SharedViewOnlyUser.UserCtx, vuln.ID, tc.input)
+			assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+		})
+	}
+
+	t.Run("view only user cannot delete the vulnerability", func(t *testing.T) {
+		_, err := suite.Client.API.DeleteVulnerability(th.SharedViewOnlyUser.UserCtx, vuln.ID)
+		assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+	})
+
+	unchanged, err := suite.Client.DB.Vulnerability.Query().Where(vulnerability.ID(vuln.ID)).WithComments().Only(th.SharedTestUser1.UserCtx)
+	assert.NilError(t, err)
+	assert.Check(t, unchanged.DisplayName != "")
+	assert.Check(t, is.Len(unchanged.Edges.Comments, 4))
+
+	ownerComment, err := suite.Client.DB.Note.Query().
+		Where(note.HasVulnerabilityWith(vulnerability.ID(vuln.ID)), note.Text(ownerCommentText)).
+		Only(th.SharedTestUser1.UserCtx)
+	assert.NilError(t, err)
+
+	t.Run("view only user cannot detach another user's comment", func(t *testing.T) {
+		_, err := suite.Client.API.UpdateVulnerability(th.SharedViewOnlyUser.UserCtx, vuln.ID, testclient.UpdateVulnerabilityInput{
+			RemoveCommentIDs: []string{ownerComment.ID},
+		})
+		assert.Check(t, err != nil)
+
+		stillAttached, err := suite.Client.DB.Note.Query().Where(note.ID(ownerComment.ID), note.HasVulnerability()).Exist(th.SharedTestUser1.UserCtx)
+		assert.NilError(t, err)
+		assert.Check(t, stillAttached)
+	})
+
+	t.Run("owner can update their comment", func(t *testing.T) {
+		resp, err := suite.Client.API.UpdateVulnerabilityComment(th.SharedTestUser1.UserCtx, ownerComment.ID, testclient.UpdateNoteInput{
+			Text: lo.ToPtr("edited comment from the owner"),
+		}, nil)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(vuln.ID, resp.UpdateVulnerabilityComment.Vulnerability.ID))
+
+		edited := lo.Filter(resp.UpdateVulnerabilityComment.Vulnerability.Comments.Edges, func(e *testclient.UpdateVulnerabilityComment_UpdateVulnerabilityComment_Vulnerability_Comments_Edges, _ int) bool {
+			return e.Node.ID == ownerComment.ID
+		})
+		assert.Assert(t, is.Len(edited, 1))
+		assert.Check(t, is.Equal("edited comment from the owner", edited[0].Node.Text))
+	})
+
+	t.Run("user in another org cannot update the comment", func(t *testing.T) {
+		_, err := suite.Client.API.UpdateVulnerabilityComment(th.SharedTestUser2.UserCtx, ownerComment.ID, testclient.UpdateNoteInput{
+			Text: lo.ToPtr("hijacked"),
+		}, nil)
+		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+	})
+
+	t.Run("owner can delete the comment", func(t *testing.T) {
+		_, err := suite.Client.API.UpdateVulnerability(th.SharedTestUser1.UserCtx, vuln.ID, testclient.UpdateVulnerabilityInput{
+			DeleteComment: &ownerComment.ID,
+		})
+		assert.NilError(t, err)
+
+		exists, err := suite.Client.DB.Note.Query().Where(note.ID(ownerComment.ID)).Exist(th.SharedTestUser1.UserCtx)
+		assert.NilError(t, err)
+		assert.Check(t, !exists)
+	})
+
+	(&th.Cleanup[*generated.VulnerabilityDeleteOne]{Client: suite.Client.DB.Vulnerability, ID: vuln.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+}
+
+func TestMutationCommentsForFinding(t *testing.T) {
+	finding := createFinding(t, th.SharedTestUser1.UserCtx, "Commentable Finding")
+
+	testCases := []struct {
+		name        string
+		client      *testclient.TestClient
+		ctx         context.Context
+		comment     string
+		expectedErr string
+	}{
+		{
+			name:    "org owner can comment",
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
+			comment: ownerCommentText,
+		},
+		{
+			name:    "view only user can comment",
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
+			comment: "comment from a view only user",
+		},
+		{
+			name:    "pat can comment",
+			client:  suite.Client.APIWithPAT,
+			ctx:     context.Background(),
+			comment: "comment from a pat",
+		},
+		{
+			name:    "api token can comment",
+			client:  suite.Client.APIWithToken,
+			ctx:     context.Background(),
+			comment: "comment from an api token",
+		},
+		{
+			name:        "user in another org cannot comment",
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			comment:     "comment from another org",
+			expectedErr: th.NotAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateFinding(tc.ctx, finding.ID, testclient.UpdateFindingInput{
+				AddComment: &testclient.CreateNoteInput{Text: tc.comment},
+			})
+
+			expectedCount := 1
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				expectedCount = 0
+			} else {
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(finding.ID, resp.UpdateFinding.Finding.ID))
+			}
+
+			count, err := suite.Client.DB.Note.Query().
+				Where(note.HasFindingWith(entfinding.ID(finding.ID)), note.Text(tc.comment)).
+				Count(th.SharedTestUser1.UserCtx)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(expectedCount, count))
+		})
+	}
+
+	viewerDenied := []struct {
+		name  string
+		input testclient.UpdateFindingInput
+	}{
+		{name: "set a field", input: testclient.UpdateFindingInput{DisplayName: lo.ToPtr("renamed by viewer")}},
+		{name: "clear a field", input: testclient.UpdateFindingInput{ClearDisplayName: lo.ToPtr(true)}},
+		{name: "clear all comments", input: testclient.UpdateFindingInput{ClearComments: lo.ToPtr(true)}},
+		{name: "add a comment while clearing a field", input: testclient.UpdateFindingInput{
+			AddComment:       &testclient.CreateNoteInput{Text: "sneaky comment"},
+			ClearDisplayName: lo.ToPtr(true),
+		}},
+	}
+
+	for _, tc := range viewerDenied {
+		t.Run("view only user cannot "+tc.name, func(t *testing.T) {
+			_, err := suite.Client.API.UpdateFinding(th.SharedViewOnlyUser.UserCtx, finding.ID, tc.input)
+			assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+		})
+	}
+
+	t.Run("view only user cannot delete the finding", func(t *testing.T) {
+		_, err := suite.Client.API.DeleteFinding(th.SharedViewOnlyUser.UserCtx, finding.ID)
+		assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+	})
+
+	unchanged, err := suite.Client.DB.Finding.Query().Where(entfinding.ID(finding.ID)).WithComments().Only(th.SharedTestUser1.UserCtx)
+	assert.NilError(t, err)
+	assert.Check(t, unchanged.DisplayName != "")
+	assert.Check(t, is.Len(unchanged.Edges.Comments, 4))
+
+	ownerComment, err := suite.Client.DB.Note.Query().
+		Where(note.HasFindingWith(entfinding.ID(finding.ID)), note.Text(ownerCommentText)).
+		Only(th.SharedTestUser1.UserCtx)
+	assert.NilError(t, err)
+
+	t.Run("view only user cannot detach another user's comment", func(t *testing.T) {
+		_, err := suite.Client.API.UpdateFinding(th.SharedViewOnlyUser.UserCtx, finding.ID, testclient.UpdateFindingInput{
+			RemoveCommentIDs: []string{ownerComment.ID},
+		})
+		assert.Check(t, err != nil)
+
+		stillAttached, err := suite.Client.DB.Note.Query().Where(note.ID(ownerComment.ID), note.HasFinding()).Exist(th.SharedTestUser1.UserCtx)
+		assert.NilError(t, err)
+		assert.Check(t, stillAttached)
+	})
+
+	t.Run("owner can update their comment", func(t *testing.T) {
+		resp, err := suite.Client.API.UpdateFindingComment(th.SharedTestUser1.UserCtx, ownerComment.ID, testclient.UpdateNoteInput{
+			Text: lo.ToPtr("edited comment from the owner"),
+		}, nil)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(finding.ID, resp.UpdateFindingComment.Finding.ID))
+
+		edited := lo.Filter(resp.UpdateFindingComment.Finding.Comments.Edges, func(e *testclient.UpdateFindingComment_UpdateFindingComment_Finding_Comments_Edges, _ int) bool {
+			return e.Node.ID == ownerComment.ID
+		})
+		assert.Assert(t, is.Len(edited, 1))
+		assert.Check(t, is.Equal("edited comment from the owner", edited[0].Node.Text))
+	})
+
+	t.Run("user in another org cannot update the comment", func(t *testing.T) {
+		_, err := suite.Client.API.UpdateFindingComment(th.SharedTestUser2.UserCtx, ownerComment.ID, testclient.UpdateNoteInput{
+			Text: lo.ToPtr("hijacked"),
+		}, nil)
+		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+	})
+
+	t.Run("owner can delete the comment", func(t *testing.T) {
+		_, err := suite.Client.API.UpdateFinding(th.SharedTestUser1.UserCtx, finding.ID, testclient.UpdateFindingInput{
+			DeleteComment: &ownerComment.ID,
+		})
+		assert.NilError(t, err)
+
+		exists, err := suite.Client.DB.Note.Query().Where(note.ID(ownerComment.ID)).Exist(th.SharedTestUser1.UserCtx)
+		assert.NilError(t, err)
+		assert.Check(t, !exists)
+	})
+
+	(&th.Cleanup[*generated.FindingDeleteOne]{Client: suite.Client.DB.Finding, ID: finding.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }

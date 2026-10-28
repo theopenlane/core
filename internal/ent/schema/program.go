@@ -193,6 +193,7 @@ func (p Program) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "PRG",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(p),
 			// all programs must be associated to an organization
 			newOrgOwnedMixin(p),
 			// add group permissions to the program
@@ -322,6 +323,10 @@ func (p Program) Annotations() []schema.Annotation {
 			),
 			oscalgen.WithOSCALAssembly("implementation-scope"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("external_uuid"),
 	}
 }
 

@@ -106,6 +106,7 @@ func (s SystemDetail) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "SDT",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(s),
 			newObjectOwnedMixin[generated.SystemDetail](s,
 				withParents(Program{}, Platform{}),
 				withOrganizationOwner(),
@@ -137,6 +138,10 @@ func (SystemDetail) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("system-characteristics"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("system_name"),
 	}
 }
 

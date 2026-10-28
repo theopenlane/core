@@ -136,7 +136,7 @@ func (TrustCenterCompliance) Indexes() []ent.Index {
 // Annotations of the TrustCenterCompliance
 func (TrustCenterCompliance) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.SettingsChecks("trust_center"),
+		entfga.SettingsChecks(TrustCenter{}.Name()),
 	}
 }
 

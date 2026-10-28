@@ -281,16 +281,6 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			ctx:    localTestUser.Owner.UserCtx,
 		},
 		{
-			name: "happy path with settings for different organization",
-			request: testclient.CreateTrustCenterInput{
-				CreateTrustCenterSetting: &testclient.CreateTrustCenterSettingInput{
-					Title: lo.ToPtr(gofakeit.Name()),
-				},
-			},
-			client: suite.Client.API,
-			ctx:    localTestUser.Owner.UserCtx,
-		},
-		{
 			name:        "not authorized",
 			request:     testclient.CreateTrustCenterInput{},
 			client:      suite.Client.API,
@@ -336,13 +326,7 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			require.NotNil(t, resp.CreateTrustCenter.TrustCenter.Slug)
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)
 			setting := resp.CreateTrustCenter.TrustCenter.GetSetting()
-			if tc.request.CreateTrustCenterSetting != nil && tc.request.CreateTrustCenterSetting.Title != nil {
-				assert.Assert(t, setting != nil)
-				assert.Assert(t, setting.Title != nil)
-				assert.Equal(t, *tc.request.CreateTrustCenterSetting.Title, *setting.Title)
-			} else {
-				assert.Equal(t, fmt.Sprintf("%s Trust Center", org.Name), *setting.Title)
-			}
+			assert.Equal(t, fmt.Sprintf("%s Trust Center", org.Name), *setting.Title)
 
 			// ensure trust center preview settings object is created
 			assert.Assert(t, resp.CreateTrustCenter.TrustCenter.PreviewSetting != nil)

@@ -22,12 +22,13 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 )
 
 func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -173,7 +174,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -252,7 +253,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -366,8 +367,8 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -520,8 +521,8 @@ func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 func (suite *HandlerTestSuite) TestAnonymousQuestionnaireRejectsDraft() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -598,8 +599,8 @@ func (suite *HandlerTestSuite) TestAnonymousQuestionnaireRejectsDraft() {
 func (suite *HandlerTestSuite) TestIdentifiedQuestionnaireAllowsDraft() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -743,7 +744,7 @@ func (suite *HandlerTestSuite) TestIdentifiedQuestionnaireAllowsDraft() {
 func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -938,7 +939,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
@@ -1279,6 +1280,62 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireCaller() {
 			documentDataIDs = append(documentDataIDs, updatedResponse.DocumentDataID)
 		}
 	})
+
+	rejectedCallers := []struct {
+		name   string
+		caller *auth.Caller
+	}{
+		{
+			name: "anonymous trust center caller cannot submit",
+			caller: &auth.Caller{
+				SubjectID:        "anon_trustcenter_" + ulids.New().String(),
+				OrganizationID:   testUser1.OrganizationID,
+				OrganizationRole: auth.AnonymousRole,
+				Capabilities:     auth.CapTrustCenterAnonymous,
+			},
+		},
+		{
+			name: "api token cannot submit",
+			caller: &auth.Caller{
+				SubjectID:          ulids.New().String(),
+				OrganizationID:     testUser1.OrganizationID,
+				OrganizationIDs:    []string{testUser1.OrganizationID},
+				AuthenticationType: auth.APITokenAuthentication,
+			},
+		},
+		{
+			name: "support access caller cannot submit",
+			caller: &auth.Caller{
+				SubjectID:          ulids.New().String(),
+				OrganizationID:     testUser1.OrganizationID,
+				OrganizationIDs:    []string{testUser1.OrganizationID},
+				AuthenticationType: auth.JWTAuthentication,
+				Capabilities:       auth.CapOrgSupport,
+			},
+		},
+	}
+
+	for _, rc := range rejectedCallers {
+		t.Run(rc.name, func(t *testing.T) {
+			before, err := suite.db.AssessmentResponse.Query().Where(assessmentresponse.AssessmentIDEQ(assessment.ID)).Count(testUser1.UserCtx)
+			require.NoError(t, err)
+
+			bodyBytes, err := json.Marshal(submissionData)
+			require.NoError(t, err)
+
+			req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+			req.Header.Set("Content-Type", "application/json")
+
+			recorder := httptest.NewRecorder()
+			suite.e.ServeHTTP(recorder, req.WithContext(auth.WithCaller(context.Background(), rc.caller)))
+
+			assert.Equal(t, http.StatusUnauthorized, recorder.Code)
+
+			after, err := suite.db.AssessmentResponse.Query().Where(assessmentresponse.AssessmentIDEQ(assessment.ID)).Count(testUser1.UserCtx)
+			require.NoError(t, err)
+			assert.Equal(t, before, after)
+		})
+	}
 
 	for _, docID := range documentDataIDs {
 		err := suite.db.DocumentData.DeleteOneID(docID).Exec(testUser1.UserCtx)

@@ -44,6 +44,18 @@ type EmailTemplateHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision string `json:"revision,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -108,7 +120,7 @@ func (*EmailTemplateHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case emailtemplatehistory.FieldVersion:
 			values[i] = new(sql.NullInt64)
-		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldUpdatedByImpersonator, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldRevision, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldTemplateContext, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID, emailtemplatehistory.FieldTrustCenterID:
+		case emailtemplatehistory.FieldID, emailtemplatehistory.FieldRef, emailtemplatehistory.FieldCreatedBy, emailtemplatehistory.FieldUpdatedBy, emailtemplatehistory.FieldUpdatedByImpersonator, emailtemplatehistory.FieldDeletedBy, emailtemplatehistory.FieldRevision, emailtemplatehistory.FieldSourceDefinitionID, emailtemplatehistory.FieldSourceDefinitionVersion, emailtemplatehistory.FieldSourceInstanceID, emailtemplatehistory.FieldManagedBy, emailtemplatehistory.FieldIntegrationRunID, emailtemplatehistory.FieldExternalID, emailtemplatehistory.FieldOwnerID, emailtemplatehistory.FieldInternalNotes, emailtemplatehistory.FieldSystemInternalID, emailtemplatehistory.FieldKey, emailtemplatehistory.FieldName, emailtemplatehistory.FieldDescription, emailtemplatehistory.FieldFormat, emailtemplatehistory.FieldLocale, emailtemplatehistory.FieldSubjectTemplate, emailtemplatehistory.FieldPreheaderTemplate, emailtemplatehistory.FieldBodyTemplate, emailtemplatehistory.FieldTextTemplate, emailtemplatehistory.FieldTemplateContext, emailtemplatehistory.FieldIntegrationID, emailtemplatehistory.FieldWorkflowDefinitionID, emailtemplatehistory.FieldWorkflowInstanceID, emailtemplatehistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case emailtemplatehistory.FieldHistoryTime, emailtemplatehistory.FieldCreatedAt, emailtemplatehistory.FieldUpdatedAt, emailtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -199,6 +211,42 @@ func (_m *EmailTemplateHistory) assignValues(columns []string, values []any) err
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
 				_m.Revision = value.String
+			}
+		case emailtemplatehistory.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case emailtemplatehistory.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case emailtemplatehistory.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case emailtemplatehistory.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case emailtemplatehistory.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case emailtemplatehistory.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case emailtemplatehistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -424,6 +472,24 @@ func (_m *EmailTemplateHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
 	builder.WriteString(_m.Revision)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

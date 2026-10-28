@@ -150,7 +150,7 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 	return mixinConfig{
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: a},
+			newProvenanceMixin(a),
 			NewDocumentMixin(a),
 			newObjectOwnedMixin[generated.ActionPlan](a,
 				withParents(Program{}, Control{}, Review{}),
@@ -183,6 +183,10 @@ func (a ActionPlan) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaActionPlan),
 		entfga.SelfAccessChecks(),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName).
+			LookupAlternative("external_file_id"),
 	}
 }
 

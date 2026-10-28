@@ -12,12 +12,15 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 			due
 			environmentID
 			environmentName
+			externalID
 			externalReferenceURL
 			externalUUID
 			id
 			idempotencyKey
+			integrationRunID
 			isSuggested
 			isTemplate
+			managedBy
 			metadata
 			ownerID
 			parentTaskID
@@ -25,6 +28,9 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceKey
 			status
 			systemGenerated
@@ -76,12 +82,15 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 			due
 			environmentID
 			environmentName
+			externalID
 			externalReferenceURL
 			externalUUID
 			id
 			idempotencyKey
+			integrationRunID
 			isSuggested
 			isTemplate
+			managedBy
 			metadata
 			ownerID
 			parentTaskID
@@ -89,6 +98,9 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceKey
 			status
 			systemGenerated
@@ -140,12 +152,15 @@ mutation CreateTask ($input: CreateTaskInput!) {
 			due
 			environmentID
 			environmentName
+			externalID
 			externalReferenceURL
 			externalUUID
 			id
 			idempotencyKey
+			integrationRunID
 			isSuggested
 			isTemplate
+			managedBy
 			metadata
 			ownerID
 			parentTaskID
@@ -153,6 +168,9 @@ mutation CreateTask ($input: CreateTaskInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceKey
 			status
 			systemGenerated
@@ -217,12 +235,15 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				due
 				environmentID
 				environmentName
+				externalID
 				externalReferenceURL
 				externalUUID
 				id
 				idempotencyKey
+				integrationRunID
 				isSuggested
 				isTemplate
+				managedBy
 				metadata
 				ownerID
 				parentTaskID
@@ -230,6 +251,9 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				scopeID
 				scopeName
 				source
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				sourceKey
 				status
 				systemGenerated
@@ -295,12 +319,15 @@ query GetTaskByID ($taskId: ID!) {
 		due
 		environmentID
 		environmentName
+		externalID
 		externalReferenceURL
 		externalUUID
 		id
 		idempotencyKey
+		integrationRunID
 		isSuggested
 		isTemplate
+		managedBy
 		metadata
 		ownerID
 		parentTaskID
@@ -308,6 +335,9 @@ query GetTaskByID ($taskId: ID!) {
 		scopeID
 		scopeName
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceKey
 		status
 		systemGenerated
@@ -380,12 +410,15 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				due
 				environmentID
 				environmentName
+				externalID
 				externalReferenceURL
 				externalUUID
 				id
 				idempotencyKey
+				integrationRunID
 				isSuggested
 				isTemplate
+				managedBy
 				metadata
 				ownerID
 				parentTaskID
@@ -393,6 +426,9 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				scopeID
 				scopeName
 				source
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				sourceKey
 				status
 				systemGenerated
@@ -455,12 +491,15 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 			due
 			environmentID
 			environmentName
+			externalID
 			externalReferenceURL
 			externalUUID
 			id
 			idempotencyKey
+			integrationRunID
 			isSuggested
 			isTemplate
+			managedBy
 			metadata
 			ownerID
 			parentTaskID
@@ -468,6 +507,9 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceKey
 			status
 			systemGenerated
@@ -522,12 +564,15 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 			due
 			environmentID
 			environmentName
+			externalID
 			externalReferenceURL
 			externalUUID
 			id
 			idempotencyKey
+			integrationRunID
 			isSuggested
 			isTemplate
+			managedBy
 			metadata
 			ownerID
 			parentTaskID
@@ -535,6 +580,9 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceKey
 			status
 			systemGenerated

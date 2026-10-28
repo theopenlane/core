@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
+	"net/http"
 	"strings"
 
 	echo "github.com/theopenlane/echox"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/providers/github"
 	"github.com/theopenlane/iam/providers/google"
 
@@ -17,6 +19,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/v2/internal/ent/validator"
+	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 	"github.com/theopenlane/logx"
 )
 
@@ -53,6 +56,12 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
+	// apply the same sso enforcement as the password and passkey logins before anything is minted
+	orgStatus := h.orgEnforcementsForUser(auth.WithInternalReadContext(reqCtx), user.Email)
+	if orgStatus != nil && orgStatus.Enforced {
+		return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgStatus.OrganizationID))
+	}
+
 	// set user to verified
 	if !user.Edges.Setting.EmailConfirmed {
 		if err := h.setEmailConfirmed(ctxWithToken, user); err != nil {
@@ -62,8 +71,8 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 		}
 	}
 
-	// create claims for verified user
-	auth, err := h.AuthManager.GenerateOauthAuthSession(reqCtx, ctx.Response().Writer, user, *in)
+	// create claims for verified user, with the user as the caller so the org access check runs
+	authData, err := h.AuthManager.GenerateOauthAuthSession(setAuthenticatedContext(ctxWithToken, user), ctx.Response().Writer, user, *in)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
@@ -74,7 +83,7 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 		Reply:      rout.Reply{Success: true},
 		TFAEnabled: user.Edges.Setting.IsTfaEnabled,
 		Message:    "success",
-		AuthData:   *auth,
+		AuthData:   *authData,
 	}
 
 	// Return the access token

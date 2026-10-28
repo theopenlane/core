@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
@@ -2761,6 +2762,21 @@ func (_c *OrganizationCreate) AddVendorRiskScores(v ...*VendorRiskScore) *Organi
 		ids[i] = v[i].ID
 	}
 	return _c.AddVendorRiskScoreIDs(ids...)
+}
+
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_c *OrganizationCreate) AddCheckResultIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddCheckResultIDs(ids...)
+	return _c
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_c *OrganizationCreate) AddCheckResults(v ...*CheckResult) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCheckResultIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -5547,6 +5563,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.CheckResultsTable,
+			Columns: []string{organization.CheckResultsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -30,6 +31,7 @@ type MappedControlQuery struct {
 	order                    []mappedcontrol.OrderOption
 	inters                   []Interceptor
 	predicates               []predicate.MappedControl
+	withIntegrationRuns      *IntegrationRunQuery
 	withOwner                *OrganizationQuery
 	withBlockedGroups        *GroupQuery
 	withEditors              *GroupQuery
@@ -39,6 +41,7 @@ type MappedControlQuery struct {
 	withToSubcontrols        *SubcontrolQuery
 	loadTotal                []func(context.Context, []*MappedControl) error
 	modifiers                []func(*sql.Selector)
+	withNamedIntegrationRuns map[string]*IntegrationRunQuery
 	withNamedBlockedGroups   map[string]*GroupQuery
 	withNamedEditors         map[string]*GroupQuery
 	withNamedFromControls    map[string]*ControlQuery
@@ -79,6 +82,28 @@ func (_q *MappedControlQuery) Unique(unique bool) *MappedControlQuery {
 func (_q *MappedControlQuery) Order(o ...mappedcontrol.OrderOption) *MappedControlQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *MappedControlQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(mappedcontrol.Table, mappedcontrol.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, mappedcontrol.IntegrationRunsTable, mappedcontrol.IntegrationRunsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -427,6 +452,7 @@ func (_q *MappedControlQuery) Clone() *MappedControlQuery {
 		order:               append([]mappedcontrol.OrderOption{}, _q.order...),
 		inters:              append([]Interceptor{}, _q.inters...),
 		predicates:          append([]predicate.MappedControl{}, _q.predicates...),
+		withIntegrationRuns: _q.withIntegrationRuns.Clone(),
 		withOwner:           _q.withOwner.Clone(),
 		withBlockedGroups:   _q.withBlockedGroups.Clone(),
 		withEditors:         _q.withEditors.Clone(),
@@ -439,6 +465,17 @@ func (_q *MappedControlQuery) Clone() *MappedControlQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *MappedControlQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *MappedControlQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -602,7 +639,8 @@ func (_q *MappedControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	var (
 		nodes       = []*MappedControl{}
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -632,6 +670,15 @@ func (_q *MappedControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *MappedControl) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *MappedControl, e *IntegrationRun) {
+				n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e)
+			}); err != nil {
+			return nil, err
+		}
 	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
@@ -678,6 +725,13 @@ func (_q *MappedControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		if err := _q.loadToSubcontrols(ctx, query, nodes,
 			func(n *MappedControl) { n.Edges.ToSubcontrols = []*Subcontrol{} },
 			func(n *MappedControl, e *Subcontrol) { n.Edges.ToSubcontrols = append(n.Edges.ToSubcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *MappedControl) { n.appendNamedIntegrationRuns(name) },
+			func(n *MappedControl, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -731,6 +785,37 @@ func (_q *MappedControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
+func (_q *MappedControlQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *IntegrationRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*MappedControl)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(mappedcontrol.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.mapped_control_integration_runs
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "mapped_control_integration_runs" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "mapped_control_integration_runs" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *MappedControlQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*MappedControl, init func(*MappedControl), assign func(*MappedControl, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*MappedControl)
@@ -1222,6 +1307,20 @@ func (_q *MappedControlQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *MappedControlQuery) Modify(modifiers ...func(s *sql.Selector)) *MappedControlSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *MappedControlQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *MappedControlQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"

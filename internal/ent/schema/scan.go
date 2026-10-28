@@ -128,6 +128,7 @@ func (Scan) Fields() []ent.Field {
 func (s Scan) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(s),
 			newObjectOwnedMixin[generated.Scan](s,
 				withParents(
 					Control{},
@@ -223,5 +224,8 @@ func (Scan) Annotations() []schema.Annotation {
 		history.Annotations{
 			Exclude: true,
 		},
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }

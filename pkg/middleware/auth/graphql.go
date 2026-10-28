@@ -1,8 +1,6 @@
 package auth
 
 import (
-	"net/http"
-
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 )
@@ -13,16 +11,5 @@ import (
 // This prevents questionnaires and other non-user JWTs from
 // access the API data with the JWT
 func BlockNonTrustCenterAnonymous() echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			caller, ok := auth.CallerFromContext(c.Request().Context())
-			if ok && caller.IsAnonymous() {
-				if !caller.Has(auth.CapTrustCenterAnonymous) {
-					return echo.NewHTTPError(http.StatusUnauthorized, ErrAnonymousAccessNotAllowed.Error())
-				}
-			}
-
-			return next(c)
-		}
-	}
+	return BlockAnonymous(auth.CapTrustCenterAnonymous)
 }
