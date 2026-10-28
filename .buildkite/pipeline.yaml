@@ -11,7 +11,7 @@ env:
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
 
   # build settings
-  HOME: /tmp
+  HOME: /Volumes
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
@@ -37,9 +37,9 @@ agents:
   nsc-arch: "amd64"
   nsc-shape: "8x16"
   # nsc-git-checkout: "snapshot"
-  nsc-cache-tag: "core"
-  nsc-cache-size: "100g"
-  nsc-cache-path: .cache/
+  # nsc-cache-tag: "core"
+  # nsc-cache-size: "100g"
+  # nsc-cache-path: /Volumes/.cache/
 
 # # cache for hosted runners
 # cache:
