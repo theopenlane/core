@@ -159,15 +159,11 @@ func (e *WorkflowEngine) resolveTargetUserEmails(ctx context.Context, userIDs []
 // dispatchSendEmail marshals a SendEmailRequest and routes through either the
 // template's linked integration or the runtime email definition
 func (e *WorkflowEngine) dispatchSendEmail(ctx context.Context, instance *generated.WorkflowInstance, action models.WorkflowAction, obj *wfworkflows.Object, emailTpl *generated.EmailTemplate, ownerID, recipient string, params wfworkflows.SendEmailActionParams) error {
-	configBytes, err := json.Marshal(emaildef.SendEmailRequest{
+	request := emaildef.SendEmailRequest{
 		TemplateID: emailTpl.ID,
 		OwnerID:    ownerID,
 		To:         recipient,
-		From:       params.From,
 		ReplyTo:    params.ReplyTo,
-	})
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrMarshalPayload, err)
 	}
 
 	linkedID := emailTpl.IntegrationID
@@ -176,6 +172,16 @@ func (e *WorkflowEngine) dispatchSendEmail(ctx context.Context, instance *genera
 	})
 	if resolveErr != nil {
 		return resolveErr
+	}
+
+	// the sender override only applies to the organization's own email integration, the platform sender always uses its own address
+	if resolvedID != "" {
+		request.From = params.From
+	}
+
+	configBytes, err := json.Marshal(request)
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrMarshalPayload, err)
 	}
 
 	if resolvedID != "" {

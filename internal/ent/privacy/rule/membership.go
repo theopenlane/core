@@ -128,7 +128,13 @@ func DenyOrgMemberRoleAboveCeiling() privacy.OrgMembershipMutationRuleFunc {
 	return privacy.OrgMembershipMutationRuleFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) error {
 		orgID, ok := m.OrganizationID()
 		if !ok || orgID == "" {
-			return privacy.Skip
+			// HookOrgMembers fills in the caller's org when none is set, so check against that same org
+			ctxOrgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
+				return privacy.Skip
+			}
+
+			orgID = ctxOrgID
 		}
 
 		role, ok := m.Role()

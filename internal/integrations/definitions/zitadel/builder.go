@@ -6,8 +6,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// Builder returns the Zitadel definition builder
-func Builder() registry.Builder {
+// Builder returns the Zitadel definition builder, devMode allows non-public instances for local development
+func Builder(devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			ID:           definitionID.ID(),
@@ -25,14 +25,14 @@ func Builder() registry.Builder {
 				patConnection.
 					Name("Zitadel Personal Access Token").
 					Description("Configure Zitadel access using a Personal Access Token from your instance.").
-					Provides(patClient).
+					Provides(patClientBuilder(devMode)).
 					Verified(verify[CredentialSchema]).
 					Disconnects("Removes the stored Personal Access Token from Openlane. If the token is no longer needed, revoke it in your Zitadel admin console under Personal Access Tokens.", nil),
 				oauthConnection.
 					Name("Zitadel OAuth (Client Credentials)").
 					Description("Configure Zitadel access using a service user Client ID and Client Secret.").
 					Recommended().
-					Provides(oauthClient).
+					Provides(oauthClientBuilder(devMode)).
 					Verified(verify[OAuthCredentialSchema]).
 					Disconnects("Removes the stored Client ID and Client Secret from Openlane. If the service user is no longer needed, delete it in your Zitadel admin console.", nil),
 			},

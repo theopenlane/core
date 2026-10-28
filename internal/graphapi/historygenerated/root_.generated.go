@@ -1191,7 +1191,6 @@ type ComplexityRoot struct {
 	HushHistory struct {
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
-		CredentialSet         func(childComplexity int) int
 		Description           func(childComplexity int) int
 		ExpiresAt             func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
@@ -1657,7 +1656,6 @@ type ComplexityRoot struct {
 		BillingEmail                     func(childComplexity int) int
 		BillingNotificationsEnabled      func(childComplexity int) int
 		BillingPhone                     func(childComplexity int) int
-		ComplianceWebhookToken           func(childComplexity int) int
 		CreatedAt                        func(childComplexity int) int
 		CreatedBy                        func(childComplexity int) int
 		Domains                          func(childComplexity int) int
@@ -1667,7 +1665,6 @@ type ComplexityRoot struct {
 		IdentityProvider                 func(childComplexity int) int
 		IdentityProviderAuthTested       func(childComplexity int) int
 		IdentityProviderClientID         func(childComplexity int) int
-		IdentityProviderClientSecret     func(childComplexity int) int
 		IdentityProviderEntityID         func(childComplexity int) int
 		IdentityProviderJitProvisioning  func(childComplexity int) int
 		IdentityProviderLoginEnforced    func(childComplexity int) int
@@ -8881,12 +8878,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.HushHistory.CreatedBy(childComplexity), true
-	case "HushHistory.credentialSet":
-		if e.ComplexityRoot.HushHistory.CredentialSet == nil {
-			break
-		}
-
-		return e.ComplexityRoot.HushHistory.CredentialSet(childComplexity), true
 	case "HushHistory.description":
 		if e.ComplexityRoot.HushHistory.Description == nil {
 			break
@@ -11116,12 +11107,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.BillingPhone(childComplexity), true
-	case "OrganizationSettingHistory.complianceWebhookToken":
-		if e.ComplexityRoot.OrganizationSettingHistory.ComplianceWebhookToken == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingHistory.ComplianceWebhookToken(childComplexity), true
 	case "OrganizationSettingHistory.createdAt":
 		if e.ComplexityRoot.OrganizationSettingHistory.CreatedAt == nil {
 			break
@@ -11176,12 +11161,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientID(childComplexity), true
-	case "OrganizationSettingHistory.identityProviderClientSecret":
-		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientSecret == nil {
-			break
-		}
-
-		return e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderClientSecret(childComplexity), true
 	case "OrganizationSettingHistory.identityProviderEntityID":
 		if e.ComplexityRoot.OrganizationSettingHistory.IdentityProviderEntityID == nil {
 			break
@@ -33148,10 +33127,6 @@ type HushHistory implements Node {
   """
   secretName: String
   """
-  a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-  """
-  credentialSet: CredentialSet
-  """
   additional metadata about the credential
   """
   metadata: Map
@@ -38336,10 +38311,6 @@ type OrganizationSettingHistory implements Node {
   """
   identityProviderClientID: String
   """
-  client secret for SSO integration
-  """
-  identityProviderClientSecret: String
-  """
   metadata URL for the SSO provider
   """
   identityProviderMetadataEndpoint: String
@@ -38391,10 +38362,6 @@ type OrganizationSettingHistory implements Node {
   allow Openlane support to access this organization without a directory account
   """
   allowSupportAccess: Boolean
-  """
-  unique token used to receive compliance webhook events
-  """
-  complianceWebhookToken: String
   """
   whether or not a payment method has been added to the account
   """
@@ -38707,20 +38674,6 @@ input OrganizationSettingHistoryWhereInput {
   identityProviderClientIDEqualFold: String
   identityProviderClientIDContainsFold: String
   """
-  identity_provider_client_secret field predicates
-  """
-  identityProviderClientSecret: String
-  identityProviderClientSecretNEQ: String
-  identityProviderClientSecretIn: [String!]
-  identityProviderClientSecretNotIn: [String!]
-  identityProviderClientSecretContains: String
-  identityProviderClientSecretHasPrefix: String
-  identityProviderClientSecretHasSuffix: String
-  identityProviderClientSecretIsNil: Boolean
-  identityProviderClientSecretNotNil: Boolean
-  identityProviderClientSecretEqualFold: String
-  identityProviderClientSecretContainsFold: String
-  """
   identity_provider_metadata_endpoint field predicates
   """
   identityProviderMetadataEndpoint: String
@@ -38833,20 +38786,6 @@ input OrganizationSettingHistoryWhereInput {
   allowSupportAccessNEQ: Boolean
   allowSupportAccessIsNil: Boolean
   allowSupportAccessNotNil: Boolean
-  """
-  compliance_webhook_token field predicates
-  """
-  complianceWebhookToken: String
-  complianceWebhookTokenNEQ: String
-  complianceWebhookTokenIn: [String!]
-  complianceWebhookTokenNotIn: [String!]
-  complianceWebhookTokenContains: String
-  complianceWebhookTokenHasPrefix: String
-  complianceWebhookTokenHasSuffix: String
-  complianceWebhookTokenIsNil: Boolean
-  complianceWebhookTokenNotNil: Boolean
-  complianceWebhookTokenEqualFold: String
-  complianceWebhookTokenContainsFold: String
   """
   payment_method_added field predicates
   """
@@ -59515,8 +59454,6 @@ func (ec *executionContext) childFields_HushHistory(ctx context.Context, field g
 		return ec.fieldContext_HushHistory_kind(ctx, field)
 	case "secretName":
 		return ec.fieldContext_HushHistory_secretName(ctx, field)
-	case "credentialSet":
-		return ec.fieldContext_HushHistory_credentialSet(ctx, field)
 	case "metadata":
 		return ec.fieldContext_HushHistory_metadata(ctx, field)
 	case "lastUsedAt":
@@ -60447,8 +60384,6 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_identityProvider(ctx, field)
 	case "identityProviderClientID":
 		return ec.fieldContext_OrganizationSettingHistory_identityProviderClientID(ctx, field)
-	case "identityProviderClientSecret":
-		return ec.fieldContext_OrganizationSettingHistory_identityProviderClientSecret(ctx, field)
 	case "identityProviderMetadataEndpoint":
 		return ec.fieldContext_OrganizationSettingHistory_identityProviderMetadataEndpoint(ctx, field)
 	case "identityProviderAuthTested":
@@ -60475,8 +60410,6 @@ func (ec *executionContext) childFields_OrganizationSettingHistory(ctx context.C
 		return ec.fieldContext_OrganizationSettingHistory_ssoExemptDomains(ctx, field)
 	case "allowSupportAccess":
 		return ec.fieldContext_OrganizationSettingHistory_allowSupportAccess(ctx, field)
-	case "complianceWebhookToken":
-		return ec.fieldContext_OrganizationSettingHistory_complianceWebhookToken(ctx, field)
 	case "paymentMethodAdded":
 		return ec.fieldContext_OrganizationSettingHistory_paymentMethodAdded(ctx, field)
 	case "pendingDeletionAt":

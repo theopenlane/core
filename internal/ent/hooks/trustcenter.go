@@ -64,112 +64,59 @@ func HookTrustCenter() ent.Hook {
 
 			id := trustCenter.ID
 
-			// create trust center settings automatically unless setting IDs were provided
-			settingIDs := m.SettingIDs()
-			previewSettingIDs := m.PreviewSettingIDs()
+			// create trust center settings automatically
+			setting, err := m.Client().TrustCenterSetting.Create().
+				SetTrustCenterID(id).
+				SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
+				SetOverview(defaultOverview).
+				SetEnvironment(enums.TrustCenterEnvironmentLive).
+				Save(auth.WithInternalOperationContext(ctx))
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create live trust center setting")
 
-			if len(settingIDs) > 0 || len(previewSettingIDs) > 0 {
-				for _, settingID := range append(settingIDs, previewSettingIDs...) {
-					if settingID == "" {
-						continue
-					}
+				return nil, err
+			}
 
-					if err := m.Client().TrustCenterSetting.UpdateOneID(settingID).
-						SetTrustCenterID(id).
-						Exec(auth.WithInternalOperationContext(ctx)); err != nil {
-						return nil, err
-					}
+			if err := m.Client().TrustCenter.UpdateOne(trustCenter).SetSettingID(setting.ID).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to set live setting ID on trust center")
+
+				return nil, err
+			}
+
+			trustCenter.Edges.Setting = setting
+
+			if trustCenter.PreviewDomainID != "" {
+				// delete the old preview if it exists
+				if err = enqueueJob(ctx, m.Job,
+					jobspec.DeletePreviewDomainArgs{
+						CustomDomainID:           trustCenter.PreviewDomainID,
+						TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+					}, nil,
+				); err != nil {
+					return nil, err
 				}
 			}
 
-			createLive, createPreview := false, false
-			switch {
-			case len(settingIDs) == 0 && len(previewSettingIDs) == 0:
-				createLive, createPreview = true, true
-			case len(settingIDs) > 1 || len(previewSettingIDs) > 1:
-				logx.FromContext(ctx).Debug().Msg("trust center setting IDs provided, skipping default setting creation")
-			case len(settingIDs) == 1 && len(previewSettingIDs) == 0:
-				setting, err := m.Client().TrustCenterSetting.Get(ctx, settingIDs[0])
-				if err != nil {
-					return nil, err
-				}
+			// create preview settings with same values but environment set to "preview"
+			previewSetting, err := m.Client().TrustCenterSetting.Create().
+				SetTrustCenterID(id).
+				SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
+				SetOverview(defaultOverview).
+				SetEnvironment(enums.TrustCenterEnvironmentPreview).
+				Save(auth.WithInternalOperationContext(ctx))
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create preview trust center setting")
 
-				switch setting.Environment {
-				case enums.TrustCenterEnvironmentLive:
-					createPreview = true
-				case enums.TrustCenterEnvironmentPreview:
-					createLive = true
-				}
-			case len(settingIDs) == 0 && len(previewSettingIDs) == 1:
-				setting, err := m.Client().TrustCenterSetting.Get(ctx, previewSettingIDs[0])
-				if err != nil {
-					return nil, err
-				}
-
-				switch setting.Environment {
-				case enums.TrustCenterEnvironmentLive:
-					createPreview = true
-				case enums.TrustCenterEnvironmentPreview:
-					createLive = true
-				}
+				return nil, err
 			}
 
-			if createLive {
-				setting, err := m.Client().TrustCenterSetting.Create().
-					SetTrustCenterID(id).
-					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
-					SetOverview(defaultOverview).
-					SetEnvironment(enums.TrustCenterEnvironmentLive).
-					Save(auth.WithInternalOperationContext(ctx))
-				if err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to create live trust center setting")
+			if err := m.Client().TrustCenter.UpdateOne(trustCenter).SetPreviewSettingID(previewSetting.ID).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to set preview setting ID on trust center")
 
-					return nil, err
-				}
-
-				if err := m.Client().TrustCenter.UpdateOne(trustCenter).SetSettingID(setting.ID).Exec(ctx); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to set live setting ID on trust center")
-
-					return nil, err
-				}
-
-				trustCenter.Edges.Setting = setting
+				return nil, err
 			}
 
-			if createPreview {
-				if trustCenter.PreviewDomainID != "" {
-					// delete the old preview if it exists
-					if err = enqueueJob(ctx, m.Job,
-						jobspec.DeletePreviewDomainArgs{
-							CustomDomainID:           trustCenter.PreviewDomainID,
-							TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
-						}, nil,
-					); err != nil {
-						return nil, err
-					}
-				}
-
-				// create preview settings with same values but environment set to "preview"
-				previewSetting, err := m.Client().TrustCenterSetting.Create().
-					SetTrustCenterID(id).
-					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
-					SetOverview(defaultOverview).
-					SetEnvironment(enums.TrustCenterEnvironmentPreview).
-					Save(auth.WithInternalOperationContext(ctx))
-				if err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to create preview trust center setting")
-
-					return nil, err
-				}
-
-				if err := m.Client().TrustCenter.UpdateOne(trustCenter).SetPreviewSettingID(previewSetting.ID).Exec(ctx); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to set preview setting ID on trust center")
-
-					return nil, err
-				}
-
-				trustCenter.Edges.PreviewSetting = previewSetting
-			}
+			trustCenter.Edges.PreviewSetting = previewSetting
 
 			// create trust center controls by cloning the controls from the trust center standard
 			if err := controls.CloneTrustCenterControls(ctx, m); err != nil {

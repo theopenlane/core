@@ -5408,12 +5408,8 @@ func init() {
 	organizationsettingDescAllowSupportAccess := organizationsettingFields[26].Descriptor()
 	// organizationsetting.DefaultAllowSupportAccess holds the default value on creation for the allow_support_access field.
 	organizationsetting.DefaultAllowSupportAccess = organizationsettingDescAllowSupportAccess.Default.(bool)
-	// organizationsettingDescComplianceWebhookToken is the schema descriptor for compliance_webhook_token field.
-	organizationsettingDescComplianceWebhookToken := organizationsettingFields[27].Descriptor()
-	// organizationsetting.DefaultComplianceWebhookToken holds the default value on creation for the compliance_webhook_token field.
-	organizationsetting.DefaultComplianceWebhookToken = organizationsettingDescComplianceWebhookToken.Default.(func() string)
 	// organizationsettingDescPaymentMethodAdded is the schema descriptor for payment_method_added field.
-	organizationsettingDescPaymentMethodAdded := organizationsettingFields[28].Descriptor()
+	organizationsettingDescPaymentMethodAdded := organizationsettingFields[27].Descriptor()
 	// organizationsetting.DefaultPaymentMethodAdded holds the default value on creation for the payment_method_added field.
 	organizationsetting.DefaultPaymentMethodAdded = organizationsettingDescPaymentMethodAdded.Default.(bool)
 	// organizationsettingDescID is the schema descriptor for id field.

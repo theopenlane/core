@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"slices"
+
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -27,6 +29,13 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 	claims, err := h.TokenManager.Verify(req.RefreshToken)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying token")
+
+		return h.BadRequest(ctx, ErrUnableToVerifyToken)
+	}
+
+	// only refresh tokens carry the refresh audience, access and impersonation tokens cannot be exchanged for a new pair
+	if !slices.Contains(claims.Audience, h.TokenManager.RefreshAudience()) {
+		logx.FromContext(reqCtx).Info().Str("userID", claims.Subject).Msg("token presented for refresh is not a refresh token")
 
 		return h.BadRequest(ctx, ErrUnableToVerifyToken)
 	}

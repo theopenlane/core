@@ -8,8 +8,10 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
 	"github.com/theopenlane/core/v2/pkg/middleware/cors"
 	"github.com/theopenlane/core/v2/pkg/middleware/impersonation"
 	"github.com/theopenlane/core/v2/pkg/middleware/mime"
@@ -84,12 +86,16 @@ var (
 	mw = []echo.MiddlewareFunc{}
 	// authMW is the middleware that is used on authenticated routes, it includes the transaction middleware, the auth middleware, and any additional middleware after the auth middleware
 	authMW = []echo.MiddlewareFunc{}
+	// questionnaireMW is authMW that also accepts anonymous questionnaire respondents
+	questionnaireMW = []echo.MiddlewareFunc{}
 )
 
 // Middleware Semantic Names for better readability
 var (
 	// authenticatedEndpoint for endpoints requiring authentication
 	authenticatedEndpoint = &authMW
+	// questionnaireEndpoint for authenticated endpoints that also serve anonymous questionnaire respondents
+	questionnaireEndpoint = &questionnaireMW
 	// publicEndpoint for standard public endpoints
 	publicEndpoint = &mw
 	// unauthenticatedEndpoint for basic endpoints with minimal middleware
@@ -349,6 +355,7 @@ func RegisterRoutes(router *Router) error {
 	baseMW = baseMiddleware(router)
 	// Middleware for authenticated endpoints
 	authMW = authMiddleware(router)
+	questionnaireMW = authMiddleware(router, auth.CapQuestionnaireAnonymous)
 	// Default middleware for other routes which includes additional middleware
 	mw = defaultMiddleware(router)
 
@@ -473,12 +480,14 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 // authMiddleware returns the middleware for the router that is used on authenticated routes
 // it includes the transaction middleware, the auth middleware, and any additional middleware
 // after the auth middleware
-func authMiddleware(router *Router) []echo.MiddlewareFunc {
+func authMiddleware(router *Router, allowedAnonymous ...auth.Capability) []echo.MiddlewareFunc {
 	mw := baseMW
 	// add the impersonation middleware to identify and validate impersonated requests
 	mw = append(mw, impersonationMiddleware(router))
 	// add the auth middleware
 	mw = append(mw, router.Handler.AuthMiddleware...)
+	// reject anonymous callers unless the route accepts their capability
+	mw = append(mw, authmw.BlockAnonymous(allowedAnonymous...))
 	// add system admin user context middleware (after auth, so we know if user is system admin)
 	mw = append(mw, impersonation.SystemAdminUserContextMiddleware())
 	// append any additional middleware after the auth middleware (includes csrf)

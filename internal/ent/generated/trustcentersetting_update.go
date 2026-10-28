@@ -125,26 +125,6 @@ func (_u *TrustCenterSettingUpdate) ClearDeletedBy() *TrustCenterSettingUpdate {
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterSettingUpdate) SetTrustCenterID(v string) *TrustCenterSettingUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterSettingUpdate) SetNillableTrustCenterID(v *string) *TrustCenterSettingUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterSettingUpdate) ClearTrustCenterID() *TrustCenterSettingUpdate {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
 // SetTitle sets the "title" field.
 func (_u *TrustCenterSettingUpdate) SetTitle(v string) *TrustCenterSettingUpdate {
 	_u.mutation.SetTitle(v)
@@ -932,11 +912,6 @@ func (_u *TrustCenterSettingUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterSettingUpdate) check() error {
-	if v, ok := _u.mutation.TrustCenterID(); ok {
-		if err := trustcentersetting.TrustCenterIDValidator(v); err != nil {
-			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.trust_center_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Title(); ok {
 		if err := trustcentersetting.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.title": %w`, err)}
@@ -1068,9 +1043,6 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcentersetting.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersetting.FieldTrustCenterID, field.TypeString)
@@ -1545,26 +1517,6 @@ func (_u *TrustCenterSettingUpdateOne) SetNillableDeletedBy(v *string) *TrustCen
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *TrustCenterSettingUpdateOne) ClearDeletedBy() *TrustCenterSettingUpdateOne {
 	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterSettingUpdateOne) SetTrustCenterID(v string) *TrustCenterSettingUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterSettingUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterSettingUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterSettingUpdateOne) ClearTrustCenterID() *TrustCenterSettingUpdateOne {
-	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -2368,11 +2320,6 @@ func (_u *TrustCenterSettingUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterSettingUpdateOne) check() error {
-	if v, ok := _u.mutation.TrustCenterID(); ok {
-		if err := trustcentersetting.TrustCenterIDValidator(v); err != nil {
-			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.trust_center_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Title(); ok {
 		if err := trustcentersetting.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.title": %w`, err)}
@@ -2521,9 +2468,6 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcentersetting.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersetting.FieldTrustCenterID, field.TypeString)

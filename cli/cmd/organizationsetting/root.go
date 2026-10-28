@@ -102,14 +102,12 @@ func tableOutput(out []graphclient.OrganizationSetting) {
 		"IdentityProviderEntityID",
 		"IdentityProviderLoginEnforced",
 		"OidcDiscoveryEndpoint",
-		"ComplianceWebhookToken",
-		"IdentityProviderClientSecret",
 		"IdentityProviderClientID",
 		"IdentityProviderMetadataEndpoint",
 	)
 
 	for _, i := range out {
-		var billingContact, billingEmail, billingPhone, geoLocation, taxIdentifier, identityProvider, identityProviderEntityID, oidcDiscoveryEndpoint, complianceWebhookToken, identityProviderClientSecret, identityProviderClientID, identityProviderMetadataEndpoint string
+		var billingContact, billingEmail, billingPhone, geoLocation, taxIdentifier, identityProvider, identityProviderEntityID, oidcDiscoveryEndpoint, identityProviderClientID, identityProviderMetadataEndpoint string
 		if i.BillingContact != nil {
 			billingContact = *i.BillingContact
 		}
@@ -133,12 +131,6 @@ func tableOutput(out []graphclient.OrganizationSetting) {
 		}
 		if i.OidcDiscoveryEndpoint != nil {
 			oidcDiscoveryEndpoint = *i.OidcDiscoveryEndpoint
-		}
-		if i.ComplianceWebhookToken != nil {
-			complianceWebhookToken = *i.ComplianceWebhookToken
-		}
-		if i.IdentityProviderClientSecret != nil {
-			identityProviderClientSecret = *i.IdentityProviderClientSecret
 		}
 		if i.IdentityProviderClientID != nil {
 			identityProviderClientID = *i.IdentityProviderClientID
@@ -173,8 +165,6 @@ func tableOutput(out []graphclient.OrganizationSetting) {
 			identityProviderEntityID,
 			i.IdentityProviderLoginEnforced,
 			oidcDiscoveryEndpoint,
-			complianceWebhookToken,
-			identityProviderClientSecret,
 			identityProviderClientID,
 			identityProviderMetadataEndpoint,
 		)

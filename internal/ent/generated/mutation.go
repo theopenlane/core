@@ -183685,7 +183685,6 @@ type OrganizationSettingMutation struct {
 	sso_exempt_domains                  *[]string
 	appendsso_exempt_domains            []string
 	allow_support_access                *bool
-	compliance_webhook_token            *string
 	payment_method_added                *bool
 	pending_deletion_at                 *models.DateTime
 	clearedFields                       map[string]struct{}
@@ -185546,55 +185545,6 @@ func (m *OrganizationSettingMutation) ResetAllowSupportAccess() {
 	delete(m.clearedFields, organizationsetting.FieldAllowSupportAccess)
 }
 
-// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (m *OrganizationSettingMutation) SetComplianceWebhookToken(s string) {
-	m.compliance_webhook_token = &s
-}
-
-// ComplianceWebhookToken returns the value of the "compliance_webhook_token" field in the mutation.
-func (m *OrganizationSettingMutation) ComplianceWebhookToken() (r string, exists bool) {
-	v := m.compliance_webhook_token
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldComplianceWebhookToken returns the old "compliance_webhook_token" field's value of the OrganizationSetting entity.
-// If the OrganizationSetting object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OrganizationSettingMutation) OldComplianceWebhookToken(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldComplianceWebhookToken is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldComplianceWebhookToken requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldComplianceWebhookToken: %w", err)
-	}
-	return oldValue.ComplianceWebhookToken, nil
-}
-
-// ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
-func (m *OrganizationSettingMutation) ClearComplianceWebhookToken() {
-	m.compliance_webhook_token = nil
-	m.clearedFields[organizationsetting.FieldComplianceWebhookToken] = struct{}{}
-}
-
-// ComplianceWebhookTokenCleared returns if the "compliance_webhook_token" field was cleared in this mutation.
-func (m *OrganizationSettingMutation) ComplianceWebhookTokenCleared() bool {
-	_, ok := m.clearedFields[organizationsetting.FieldComplianceWebhookToken]
-	return ok
-}
-
-// ResetComplianceWebhookToken resets all changes to the "compliance_webhook_token" field.
-func (m *OrganizationSettingMutation) ResetComplianceWebhookToken() {
-	m.compliance_webhook_token = nil
-	delete(m.clearedFields, organizationsetting.FieldComplianceWebhookToken)
-}
-
 // SetPaymentMethodAdded sets the "payment_method_added" field.
 func (m *OrganizationSettingMutation) SetPaymentMethodAdded(b bool) {
 	m.payment_method_added = &b
@@ -185795,7 +185745,7 @@ func (m *OrganizationSettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrganizationSettingMutation) Fields() []string {
-	fields := make([]string, 0, 38)
+	fields := make([]string, 0, 37)
 	if m.created_at != nil {
 		fields = append(fields, organizationsetting.FieldCreatedAt)
 	}
@@ -185901,9 +185851,6 @@ func (m *OrganizationSettingMutation) Fields() []string {
 	if m.allow_support_access != nil {
 		fields = append(fields, organizationsetting.FieldAllowSupportAccess)
 	}
-	if m.compliance_webhook_token != nil {
-		fields = append(fields, organizationsetting.FieldComplianceWebhookToken)
-	}
 	if m.payment_method_added != nil {
 		fields = append(fields, organizationsetting.FieldPaymentMethodAdded)
 	}
@@ -185988,8 +185935,6 @@ func (m *OrganizationSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.SSOExemptDomains()
 	case organizationsetting.FieldAllowSupportAccess:
 		return m.AllowSupportAccess()
-	case organizationsetting.FieldComplianceWebhookToken:
-		return m.ComplianceWebhookToken()
 	case organizationsetting.FieldPaymentMethodAdded:
 		return m.PaymentMethodAdded()
 	case organizationsetting.FieldPendingDeletionAt:
@@ -186073,8 +186018,6 @@ func (m *OrganizationSettingMutation) OldField(ctx context.Context, name string)
 		return m.OldSSOExemptDomains(ctx)
 	case organizationsetting.FieldAllowSupportAccess:
 		return m.OldAllowSupportAccess(ctx)
-	case organizationsetting.FieldComplianceWebhookToken:
-		return m.OldComplianceWebhookToken(ctx)
 	case organizationsetting.FieldPaymentMethodAdded:
 		return m.OldPaymentMethodAdded(ctx)
 	case organizationsetting.FieldPendingDeletionAt:
@@ -186333,13 +186276,6 @@ func (m *OrganizationSettingMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetAllowSupportAccess(v)
 		return nil
-	case organizationsetting.FieldComplianceWebhookToken:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetComplianceWebhookToken(v)
-		return nil
 	case organizationsetting.FieldPaymentMethodAdded:
 		v, ok := value.(bool)
 		if !ok {
@@ -186477,9 +186413,6 @@ func (m *OrganizationSettingMutation) ClearedFields() []string {
 	if m.FieldCleared(organizationsetting.FieldAllowSupportAccess) {
 		fields = append(fields, organizationsetting.FieldAllowSupportAccess)
 	}
-	if m.FieldCleared(organizationsetting.FieldComplianceWebhookToken) {
-		fields = append(fields, organizationsetting.FieldComplianceWebhookToken)
-	}
 	if m.FieldCleared(organizationsetting.FieldPendingDeletionAt) {
 		fields = append(fields, organizationsetting.FieldPendingDeletionAt)
 	}
@@ -186589,9 +186522,6 @@ func (m *OrganizationSettingMutation) ClearField(name string) error {
 		return nil
 	case organizationsetting.FieldAllowSupportAccess:
 		m.ClearAllowSupportAccess()
-		return nil
-	case organizationsetting.FieldComplianceWebhookToken:
-		m.ClearComplianceWebhookToken()
 		return nil
 	case organizationsetting.FieldPendingDeletionAt:
 		m.ClearPendingDeletionAt()
@@ -186708,9 +186638,6 @@ func (m *OrganizationSettingMutation) ResetField(name string) error {
 		return nil
 	case organizationsetting.FieldAllowSupportAccess:
 		m.ResetAllowSupportAccess()
-		return nil
-	case organizationsetting.FieldComplianceWebhookToken:
-		m.ResetComplianceWebhookToken()
 		return nil
 	case organizationsetting.FieldPaymentMethodAdded:
 		m.ResetPaymentMethodAdded()

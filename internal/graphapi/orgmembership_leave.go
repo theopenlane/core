@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	privacyutils "github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 )
@@ -19,7 +20,7 @@ func leaveOrganization(ctx context.Context, organizationID string) (*model.OrgMe
 		return nil, rout.ErrPermissionDenied
 	}
 
-	isMember, err := common.CheckCallerOrgMembership(ctx, withTransactionalMutation(ctx).Authz, organizationID)
+	isMember, err := privacyutils.CheckCallerOrgMembership(ctx, withTransactionalMutation(ctx).Authz, organizationID)
 	if err != nil {
 		return nil, err
 	}

@@ -6155,11 +6155,6 @@ func (_q *HushHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, hushhistory.FieldSecretName)
 				fieldSeen[hushhistory.FieldSecretName] = struct{}{}
 			}
-		case "credentialSet":
-			if _, ok := fieldSeen[hushhistory.FieldCredentialSet]; !ok {
-				selectedFields = append(selectedFields, hushhistory.FieldCredentialSet)
-				fieldSeen[hushhistory.FieldCredentialSet] = struct{}{}
-			}
 		case "metadata":
 			if _, ok := fieldSeen[hushhistory.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, hushhistory.FieldMetadata)
@@ -8584,11 +8579,6 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderClientID)
 				fieldSeen[organizationsettinghistory.FieldIdentityProviderClientID] = struct{}{}
 			}
-		case "identityProviderClientSecret":
-			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderClientSecret]; !ok {
-				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderClientSecret)
-				fieldSeen[organizationsettinghistory.FieldIdentityProviderClientSecret] = struct{}{}
-			}
 		case "identityProviderMetadataEndpoint":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldIdentityProviderMetadataEndpoint]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldIdentityProviderMetadataEndpoint)
@@ -8653,11 +8643,6 @@ func (_q *OrganizationSettingHistoryQuery) collectField(ctx context.Context, one
 			if _, ok := fieldSeen[organizationsettinghistory.FieldAllowSupportAccess]; !ok {
 				selectedFields = append(selectedFields, organizationsettinghistory.FieldAllowSupportAccess)
 				fieldSeen[organizationsettinghistory.FieldAllowSupportAccess] = struct{}{}
-			}
-		case "complianceWebhookToken":
-			if _, ok := fieldSeen[organizationsettinghistory.FieldComplianceWebhookToken]; !ok {
-				selectedFields = append(selectedFields, organizationsettinghistory.FieldComplianceWebhookToken)
-				fieldSeen[organizationsettinghistory.FieldComplianceWebhookToken] = struct{}{}
 			}
 		case "paymentMethodAdded":
 			if _, ok := fieldSeen[organizationsettinghistory.FieldPaymentMethodAdded]; !ok {

@@ -6,6 +6,7 @@ import (
 	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (
@@ -15,8 +16,15 @@ const (
 	oktaRequestTimeout = 30
 )
 
+// clientBuilder returns the Okta client constructor, allowPrivate permits non-public org urls for local development
+func clientBuilder(allowPrivate bool) func(context.Context, types.ConnectionRequest[CredentialSchema]) (*oktagosdk.APIClient, error) {
+	return func(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*oktagosdk.APIClient, error) {
+		return buildClient(req, allowPrivate)
+	}
+}
+
 // buildClient constructs the Okta API client for one installation
-func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema]) (*oktagosdk.APIClient, error) {
+func buildClient(req types.ConnectionRequest[CredentialSchema], allowPrivate bool) (*oktagosdk.APIClient, error) {
 	cred := req.Credential
 
 	switch {
@@ -26,7 +34,12 @@ func buildClient(_ context.Context, req types.ConnectionRequest[CredentialSchema
 		return nil, ErrOrgURLMissing
 	}
 
-	cfg, err := oktagosdk.NewConfiguration(oktagosdk.WithOrgUrl(cred.OrgURL), oktagosdk.WithToken(cred.APIToken), oktagosdk.WithRateLimitMaxRetries(oktaRateLimitMaxRetries), oktagosdk.WithRequestTimeout(oktaRequestTimeout))
+	httpClient, err := urlx.NewCustomerHTTPClient(cred.OrgURL, allowPrivate)
+	if err != nil {
+		return nil, err
+	}
+
+	cfg, err := oktagosdk.NewConfiguration(oktagosdk.WithOrgUrl(cred.OrgURL), oktagosdk.WithToken(cred.APIToken), oktagosdk.WithRateLimitMaxRetries(oktaRateLimitMaxRetries), oktagosdk.WithRequestTimeout(oktaRequestTimeout), oktagosdk.WithHttpClientPtr(httpClient))
 	if err != nil {
 		return nil, ErrClientConfigInvalid
 	}

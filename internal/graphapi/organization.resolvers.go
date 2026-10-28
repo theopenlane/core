@@ -57,6 +57,13 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, in
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
 	}
 
+	// the setting edge can only point at the organization's own setting
+	if input.SettingID != nil {
+		if _, err := orgSettingID(ctx, id, input.SettingID); err != nil {
+			return nil, err
+		}
+	}
+
 	// setup update request
 	req := res.Update().SetInput(input).AppendTags(input.AppendTags)
 

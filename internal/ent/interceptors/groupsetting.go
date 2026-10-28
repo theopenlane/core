@@ -6,7 +6,6 @@ import (
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/iam/auth"
-	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupsetting"
@@ -25,9 +24,8 @@ func InterceptorGroupSetting() ent.Interceptor {
 			return nil
 		}
 
-		// skip if we are creating an object, no need to filter
-		opCtx := graphql.GetOperationContext(ctx)
-		if opCtx.Operation.Operation == ast.Mutation {
+		// system admins and trusted internal callers that bypass org scoping read group settings across all organizations
+		if auth.HasCrossOrgCapabilities(ctx) {
 			return nil
 		}
 

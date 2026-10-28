@@ -29,7 +29,18 @@ func NewHTTPClient(opts ...httpclient.Option) (*http.Client, error) {
 // NewRequester returns an httpsling.Requester backed by NewHTTPClient so callers
 // never fall back to http.DefaultClient, with opts applied after the defaults
 func NewRequester(opts ...httpsling.Option) (*httpsling.Requester, error) {
-	client, err := NewHTTPClient()
+	return newRequester(nil, opts...)
+}
+
+// NewPublicRequester returns a requester like NewRequester whose client only reaches public destinations,
+// for requests to customer-supplied hosts
+func NewPublicRequester(opts ...httpsling.Option) (*httpsling.Requester, error) {
+	return newRequester([]httpclient.Option{PublicOnly()}, opts...)
+}
+
+// newRequester builds a requester on NewHTTPClient with the given client options
+func newRequester(clientOpts []httpclient.Option, opts ...httpsling.Option) (*httpsling.Requester, error) {
+	client, err := NewHTTPClient(clientOpts...)
 	if err != nil {
 		return nil, err
 	}

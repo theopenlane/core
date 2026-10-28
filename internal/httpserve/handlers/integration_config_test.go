@@ -475,6 +475,33 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
+func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsCredentialsForAuthFlowConnection() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
+
+	reqCtx := echocontext.NewTestEchoContext().Request().Context()
+	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
+
+	rec := sendIntegrationConfigRequest(t, suite, testUser.UserCtx, testAuthDefinitionID, handlers.ConfigureIntegrationRequest{
+		DefinitionID:  testAuthDefinitionID,
+		CredentialRef: testAuthCredentialRef,
+		Body:          json.RawMessage(mustMarshalJSON(t, map[string]any{"access_token": "forged", "refresh_token": "forged"})),
+	})
+
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Contains(t, rec.Body.String(), handlers.ErrCredentialRequiresAuthFlow.Error())
+
+	exists, err := suite.db.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(testUser.OrganizationID),
+			integration.DefinitionIDEQ(testAuthDefinitionID),
+		).
+		Exist(testUser.UserCtx)
+	assert.NoError(t, err)
+	assert.False(t, exists)
+}
+
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectPayload() {
 	t := suite.T()
 

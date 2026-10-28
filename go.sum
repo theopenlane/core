@@ -15,8 +15,8 @@ cloud.google.com/go/compute/metadata v0.10.0 h1:pyKMUQSwchgkIBBJGdILqQbs/BNJXqwS
 cloud.google.com/go/compute/metadata v0.10.0/go.mod h1:rGFHRrIif570kSibjFTMbt6/4/tzgJWFGI/HVol4GIk=
 cloud.google.com/go/iam v1.14.0 h1:YRIB1/4xxwJ+NfI6RQr1WaOoHHeV0MizJEj940nBXJA=
 cloud.google.com/go/iam v1.14.0/go.mod h1:JTPZfbHdGXJrOYREtkRoFzCDGaBdbA7ILLKO/DDuav0=
-cloud.google.com/go/kms v1.26.0 h1:cK9mN2cf+9V63D3H1f6koxTatWy39aTI/hCjz1I+adU=
-cloud.google.com/go/kms v1.26.0/go.mod h1:pHKOdFJm63hxBsiPkYtowZPltu9dW0MWvBa6IA4HM58=
+cloud.google.com/go/kms v1.32.0 h1:s+rEluaaZKhLVjrIWG7uNBsnWbiitElzNzFGyp6+nIg=
+cloud.google.com/go/kms v1.32.0/go.mod h1:CSGvW6GnMQbY+1nOHcIzhMtHSbExXlOmCKjWtYVjcpA=
 cloud.google.com/go/logging v1.20.0 h1:l7yzCB8/JSY5PHT9RsaqdT1jaBGbM6KlSJDX210HlXM=
 cloud.google.com/go/logging v1.20.0/go.mod h1:ALUaJQZM691Eeujy9kFx0xREq3AMPuGd+pTRZuTYv+w=
 cloud.google.com/go/longrunning v1.3.0 h1:lZ6c8SJJBmILp/Wnr3vGnBLa0q+cYfSHRCcUfVI2hpI=
@@ -301,8 +301,8 @@ github.com/getkin/kin-openapi v0.151.0 h1:p8NIstL53h620DnlO9R4pR4QRkEzJ3jbw9flb4
 github.com/getkin/kin-openapi v0.151.0/go.mod h1:1+BHDzstro+P5CKtPy1X4PfofnFgmRe6uvMy9+r9fKY=
 github.com/go-chi/chi/v5 v5.5.0 h1:xdKQ1dJmVJsmgahrXSKhUx8NyVPzpwdlyrrQFpMPJgg=
 github.com/go-chi/chi/v5 v5.5.0/go.mod h1:d1IG7GtKPSjPyBP365PH8sAGVHk3qfB/IhjFNRH1wWM=
-github.com/go-jose/go-jose/v4 v4.1.5 h1:RjgjO2LOtWOJKUC5wpwY9LR3B3vwVAz6JS2YHfYU6eA=
-github.com/go-jose/go-jose/v4 v4.1.5/go.mod h1:x4oUasVrzR7071A4TnHLGSPpNOm2a21K9Kf04k1rs08=
+github.com/go-jose/go-jose/v4 v4.1.6 h1:sNRkftxFJxwsILiQukqp5z83QBSmntVwmgRY7AqBDO4=
+github.com/go-jose/go-jose/v4 v4.1.6/go.mod h1:x4oUasVrzR7071A4TnHLGSPpNOm2a21K9Kf04k1rs08=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
 github.com/go-logr/logr v1.4.4 h1:tG4xh9yMsRCAiodLVTxyrkzSZ9+o0L1Kg/+cPVcbP/8=
 github.com/go-logr/logr v1.4.4/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
@@ -826,8 +826,8 @@ github.com/theopenlane/gqlgen-plugins v0.18.4 h1:433KyDIW5y72aqMqkMAiIq0R7Y4OJ7l
 github.com/theopenlane/gqlgen-plugins v0.18.4/go.mod h1:AhBPUZSil2tXQOejR1co98DQznofub4PXFeK/7SXsxA=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.40.1 h1:Y/Fz+G+QGflTWlft/wKxaV55QlzEPfbsTaHVqBntStM=
-github.com/theopenlane/iam v0.40.1/go.mod h1:Exh45ci1TIHH1wMZcb/3ij4F36/61ultSiWjq6ol92I=
+github.com/theopenlane/iam v0.40.2 h1:EZVlGDKTugGuE0hXYC8X/U1Vpgn80Zx3D4RGUFsii+0=
+github.com/theopenlane/iam v0.40.2/go.mod h1:Exh45ci1TIHH1wMZcb/3ij4F36/61ultSiWjq6ol92I=
 github.com/theopenlane/logx v0.1.1 h1:V9pYUKuWdsi3ejcZ83f29h8KJbVqnZqmKhThsWU5+pE=
 github.com/theopenlane/logx v0.1.1/go.mod h1:xhSn1p6b0XUcXKv7q6NC+I5neBAgrT9G2YDJ93WrzgA=
 github.com/theopenlane/newman v0.6.0 h1:9NyEZ5IQHt4174fIoVO9Ze2sUkK7Qddt9GH/AWU9zDU=

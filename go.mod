@@ -49,7 +49,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.15
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.151.0
-	github.com/go-jose/go-jose/v4 v4.1.5
+	github.com/go-jose/go-jose/v4 v4.1.6
 	github.com/go-webauthn/webauthn v0.18.2
 	github.com/gocarina/gocsv v0.0.0-20260926200228-b2c6eb8fefab
 	github.com/goccy/go-yaml v1.19.2
@@ -121,7 +121,7 @@ require (
 	github.com/theopenlane/go-client v0.14.1
 	github.com/theopenlane/gqlgen-plugins v0.18.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.40.1
+	github.com/theopenlane/iam v0.40.2
 	github.com/theopenlane/logx v0.1.1
 	github.com/theopenlane/newman v0.6.0
 	github.com/theopenlane/riverboat v0.14.6
@@ -143,6 +143,7 @@ require (
 	golang.org/x/text v0.43.0
 	golang.org/x/tools v0.52.0
 	google.golang.org/api v0.309.0
+	google.golang.org/grpc v1.84.0
 	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
@@ -155,6 +156,7 @@ require (
 	cloud.google.com/go/auth/oauth2adapt v0.3.0 // indirect
 	cloud.google.com/go/compute/metadata v0.10.0 // indirect
 	cloud.google.com/go/iam v1.14.0 // indirect
+	cloud.google.com/go/kms v1.32.0 // indirect
 	cloud.google.com/go/longrunning v1.3.0 // indirect
 	cloud.google.com/go/monitoring v1.30.0 // indirect
 	cloud.google.com/go/pubsub/v2 v2.6.2 // indirect
@@ -419,6 +421,5 @@ require (
 	google.golang.org/genproto v0.0.0-20261012220534-4341edf3f941 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20261019180522-ce908d29299b // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20261026165753-2ffab32bce7e // indirect
-	google.golang.org/grpc v1.84.0 // indirect
 	gotest.tools/gotestsum v1.13.0 // indirect
 )

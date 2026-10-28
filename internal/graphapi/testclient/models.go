@@ -8400,8 +8400,6 @@ type CreateHushInput struct {
 	SecretName *string `json:"secretName,omitempty"`
 	// the secret value
 	SecretValue *string `json:"secretValue,omitempty"`
-	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	CredentialSet *models.CredentialSet `json:"credentialSet,omitempty"`
 	// additional metadata about the credential
 	Metadata   map[string]any `json:"metadata,omitempty"`
 	LastUsedAt *time.Time     `json:"lastUsedAt,omitempty"`
@@ -9032,11 +9030,9 @@ type CreateOrganizationSettingInput struct {
 	// email domains whose existing members skip the SSO redirect even when SSO is enforced; TFA enforcement still applies
 	SsoExemptDomains []string `json:"ssoExemptDomains,omitempty"`
 	// allow Openlane support to access this organization without a directory account
-	AllowSupportAccess *bool `json:"allowSupportAccess,omitempty"`
-	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken *string  `json:"complianceWebhookToken,omitempty"`
-	OrganizationID         *string  `json:"organizationID,omitempty"`
-	FileIDs                []string `json:"fileIDs,omitempty"`
+	AllowSupportAccess *bool    `json:"allowSupportAccess,omitempty"`
+	OrganizationID     *string  `json:"organizationID,omitempty"`
+	FileIDs            []string `json:"fileIDs,omitempty"`
 }
 
 // CreatePersonalAccessTokenInput is used for create PersonalAccessToken object.
@@ -10130,27 +10126,24 @@ type CreateTrustCenterInput struct {
 	// preview status of the trust center
 	PreviewStatus *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
 	// External URL for the trust center subprocessors
-	SubprocessorURL            *string                        `json:"subprocessorURL,omitempty"`
-	OwnerID                    *string                        `json:"ownerID,omitempty"`
-	BlockedGroupIDs            []string                       `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                  []string                       `json:"editorIDs,omitempty"`
-	CustomDomainID             *string                        `json:"customDomainID,omitempty"`
-	PreviewDomainID            *string                        `json:"previewDomainID,omitempty"`
-	SettingID                  *string                        `json:"settingID,omitempty"`
-	PreviewSettingID           *string                        `json:"previewSettingID,omitempty"`
-	WatermarkConfigID          *string                        `json:"watermarkConfigID,omitempty"`
-	TrustCenterSubprocessorIDs []string                       `json:"trustCenterSubprocessorIDs,omitempty"`
-	TrustCenterDocIDs          []string                       `json:"trustCenterDocIDs,omitempty"`
-	TrustCenterComplianceIDs   []string                       `json:"trustCenterComplianceIDs,omitempty"`
-	TemplateIDs                []string                       `json:"templateIDs,omitempty"`
-	PostIDs                    []string                       `json:"postIDs,omitempty"`
-	TrustCenterEntityIDs       []string                       `json:"trustCenterEntityIDs,omitempty"`
-	TrustCenterNdaRequestIDs   []string                       `json:"trustCenterNdaRequestIDs,omitempty"`
-	TrustCenterFaqIDs          []string                       `json:"trustCenterFaqIDs,omitempty"`
-	SubscriberIDs              []string                       `json:"subscriberIDs,omitempty"`
-	EmailTemplateIDs           []string                       `json:"emailTemplateIDs,omitempty"`
-	CampaignIDs                []string                       `json:"campaignIDs,omitempty"`
-	CreateTrustCenterSetting   *CreateTrustCenterSettingInput `json:"createTrustCenterSetting,omitempty"`
+	SubprocessorURL            *string  `json:"subprocessorURL,omitempty"`
+	OwnerID                    *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs            []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                  []string `json:"editorIDs,omitempty"`
+	CustomDomainID             *string  `json:"customDomainID,omitempty"`
+	PreviewDomainID            *string  `json:"previewDomainID,omitempty"`
+	WatermarkConfigID          *string  `json:"watermarkConfigID,omitempty"`
+	TrustCenterSubprocessorIDs []string `json:"trustCenterSubprocessorIDs,omitempty"`
+	TrustCenterDocIDs          []string `json:"trustCenterDocIDs,omitempty"`
+	TrustCenterComplianceIDs   []string `json:"trustCenterComplianceIDs,omitempty"`
+	TemplateIDs                []string `json:"templateIDs,omitempty"`
+	PostIDs                    []string `json:"postIDs,omitempty"`
+	TrustCenterEntityIDs       []string `json:"trustCenterEntityIDs,omitempty"`
+	TrustCenterNdaRequestIDs   []string `json:"trustCenterNdaRequestIDs,omitempty"`
+	TrustCenterFaqIDs          []string `json:"trustCenterFaqIDs,omitempty"`
+	SubscriberIDs              []string `json:"subscriberIDs,omitempty"`
+	EmailTemplateIDs           []string `json:"emailTemplateIDs,omitempty"`
+	CampaignIDs                []string `json:"campaignIDs,omitempty"`
 }
 
 type CreateTrustCenterNDAInput struct {
@@ -19404,8 +19397,6 @@ type Hush struct {
 	Kind *string `json:"kind,omitempty"`
 	// the generic name of a secret associated with the organization
 	SecretName *string `json:"secretName,omitempty"`
-	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	CredentialSet *models.CredentialSet `json:"credentialSet,omitempty"`
 	// additional metadata about the credential
 	Metadata   map[string]any `json:"metadata,omitempty"`
 	LastUsedAt *time.Time     `json:"lastUsedAt,omitempty"`
@@ -25067,8 +25058,6 @@ type OrganizationSetting struct {
 	IdentityProvider *enums.SSOProvider `json:"identityProvider,omitempty"`
 	// client ID for SSO integration
 	IdentityProviderClientID *string `json:"identityProviderClientID,omitempty"`
-	// client secret for SSO integration
-	IdentityProviderClientSecret *string `json:"identityProviderClientSecret,omitempty"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint *string `json:"identityProviderMetadataEndpoint,omitempty"`
 	// has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
@@ -25095,8 +25084,6 @@ type OrganizationSetting struct {
 	SsoExemptDomains []string `json:"ssoExemptDomains,omitempty"`
 	// allow Openlane support to access this organization without a directory account
 	AllowSupportAccess *bool `json:"allowSupportAccess,omitempty"`
-	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken *string `json:"complianceWebhookToken,omitempty"`
 	// whether or not a payment method has been added to the account
 	PaymentMethodAdded bool `json:"paymentMethodAdded"`
 	// when will this organization be deleted? usually this is after org has not added a payment method after n period
@@ -25338,18 +25325,6 @@ type OrganizationSettingWhereInput struct {
 	IdentityProviderClientIDNotNil       *bool    `json:"identityProviderClientIDNotNil,omitempty"`
 	IdentityProviderClientIDEqualFold    *string  `json:"identityProviderClientIDEqualFold,omitempty"`
 	IdentityProviderClientIDContainsFold *string  `json:"identityProviderClientIDContainsFold,omitempty"`
-	// identity_provider_client_secret field predicates
-	IdentityProviderClientSecret             *string  `json:"identityProviderClientSecret,omitempty"`
-	IdentityProviderClientSecretNeq          *string  `json:"identityProviderClientSecretNEQ,omitempty"`
-	IdentityProviderClientSecretIn           []string `json:"identityProviderClientSecretIn,omitempty"`
-	IdentityProviderClientSecretNotIn        []string `json:"identityProviderClientSecretNotIn,omitempty"`
-	IdentityProviderClientSecretContains     *string  `json:"identityProviderClientSecretContains,omitempty"`
-	IdentityProviderClientSecretHasPrefix    *string  `json:"identityProviderClientSecretHasPrefix,omitempty"`
-	IdentityProviderClientSecretHasSuffix    *string  `json:"identityProviderClientSecretHasSuffix,omitempty"`
-	IdentityProviderClientSecretIsNil        *bool    `json:"identityProviderClientSecretIsNil,omitempty"`
-	IdentityProviderClientSecretNotNil       *bool    `json:"identityProviderClientSecretNotNil,omitempty"`
-	IdentityProviderClientSecretEqualFold    *string  `json:"identityProviderClientSecretEqualFold,omitempty"`
-	IdentityProviderClientSecretContainsFold *string  `json:"identityProviderClientSecretContainsFold,omitempty"`
 	// identity_provider_metadata_endpoint field predicates
 	IdentityProviderMetadataEndpoint             *string  `json:"identityProviderMetadataEndpoint,omitempty"`
 	IdentityProviderMetadataEndpointNeq          *string  `json:"identityProviderMetadataEndpointNEQ,omitempty"`
@@ -25441,18 +25416,6 @@ type OrganizationSettingWhereInput struct {
 	AllowSupportAccessNeq    *bool `json:"allowSupportAccessNEQ,omitempty"`
 	AllowSupportAccessIsNil  *bool `json:"allowSupportAccessIsNil,omitempty"`
 	AllowSupportAccessNotNil *bool `json:"allowSupportAccessNotNil,omitempty"`
-	// compliance_webhook_token field predicates
-	ComplianceWebhookToken             *string  `json:"complianceWebhookToken,omitempty"`
-	ComplianceWebhookTokenNeq          *string  `json:"complianceWebhookTokenNEQ,omitempty"`
-	ComplianceWebhookTokenIn           []string `json:"complianceWebhookTokenIn,omitempty"`
-	ComplianceWebhookTokenNotIn        []string `json:"complianceWebhookTokenNotIn,omitempty"`
-	ComplianceWebhookTokenContains     *string  `json:"complianceWebhookTokenContains,omitempty"`
-	ComplianceWebhookTokenHasPrefix    *string  `json:"complianceWebhookTokenHasPrefix,omitempty"`
-	ComplianceWebhookTokenHasSuffix    *string  `json:"complianceWebhookTokenHasSuffix,omitempty"`
-	ComplianceWebhookTokenIsNil        *bool    `json:"complianceWebhookTokenIsNil,omitempty"`
-	ComplianceWebhookTokenNotNil       *bool    `json:"complianceWebhookTokenNotNil,omitempty"`
-	ComplianceWebhookTokenEqualFold    *string  `json:"complianceWebhookTokenEqualFold,omitempty"`
-	ComplianceWebhookTokenContainsFold *string  `json:"complianceWebhookTokenContainsFold,omitempty"`
 	// payment_method_added field predicates
 	PaymentMethodAdded    *bool `json:"paymentMethodAdded,omitempty"`
 	PaymentMethodAddedNeq *bool `json:"paymentMethodAddedNEQ,omitempty"`
@@ -40918,9 +40881,6 @@ type UpdateHushInput struct {
 	// the kind of secret, such as sshkey, certificate, api token, etc.
 	Kind      *string `json:"kind,omitempty"`
 	ClearKind *bool   `json:"clearKind,omitempty"`
-	// a credential set, typically where you have multiple tokens or keys that compose one credential such as when accessing s3 and using access key ID, secret key, etc.
-	CredentialSet      *models.CredentialSet `json:"credentialSet,omitempty"`
-	ClearCredentialSet *bool                 `json:"clearCredentialSet,omitempty"`
 	// additional metadata about the credential
 	Metadata        map[string]any `json:"metadata,omitempty"`
 	ClearMetadata   *bool          `json:"clearMetadata,omitempty"`
@@ -41980,9 +41940,6 @@ type UpdateOrganizationSettingInput struct {
 	// allow Openlane support to access this organization without a directory account
 	AllowSupportAccess      *bool `json:"allowSupportAccess,omitempty"`
 	ClearAllowSupportAccess *bool `json:"clearAllowSupportAccess,omitempty"`
-	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken      *string `json:"complianceWebhookToken,omitempty"`
-	ClearComplianceWebhookToken *bool   `json:"clearComplianceWebhookToken,omitempty"`
 	// when will this organization be deleted? usually this is after org has not added a payment method after n period
 	PendingDeletionAt      *models.DateTime `json:"pendingDeletionAt,omitempty"`
 	ClearPendingDeletionAt *bool            `json:"clearPendingDeletionAt,omitempty"`
@@ -43905,10 +43862,6 @@ type UpdateTrustCenterInput struct {
 	ClearCustomDomain                *bool    `json:"clearCustomDomain,omitempty"`
 	PreviewDomainID                  *string  `json:"previewDomainID,omitempty"`
 	ClearPreviewDomain               *bool    `json:"clearPreviewDomain,omitempty"`
-	SettingID                        *string  `json:"settingID,omitempty"`
-	ClearSetting                     *bool    `json:"clearSetting,omitempty"`
-	PreviewSettingID                 *string  `json:"previewSettingID,omitempty"`
-	ClearPreviewSetting              *bool    `json:"clearPreviewSetting,omitempty"`
 	WatermarkConfigID                *string  `json:"watermarkConfigID,omitempty"`
 	ClearWatermarkConfig             *bool    `json:"clearWatermarkConfig,omitempty"`
 	AddTrustCenterSubprocessorIDs    []string `json:"addTrustCenterSubprocessorIDs,omitempty"`
@@ -44002,9 +43955,6 @@ type UpdateTrustCenterNDARequestInput struct {
 // UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
 // Input was generated by ent.
 type UpdateTrustCenterSettingInput struct {
-	// the ID of the trust center the settings belong to
-	TrustCenterID      *string `json:"trustCenterID,omitempty"`
-	ClearTrustCenterID *bool   `json:"clearTrustCenterID,omitempty"`
 	// title of the trust center
 	Title      *string `json:"title,omitempty"`
 	ClearTitle *bool   `json:"clearTitle,omitempty"`

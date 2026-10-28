@@ -39,6 +39,13 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 
+	// auth-managed connections only take credentials from their auth flow callback, never from a posted body
+	if payload.HasCredentialBody() {
+		if connection, ok := def.Connection(payload.CredentialRef); ok && connection.Auth != nil {
+			return h.BadRequest(ctx, ErrCredentialRequiresAuthFlow)
+		}
+	}
+
 	installationRec, isNewInstallation, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, payload.IntegrationID, def, payload.UserInput, payload.OperationConfig)
 	if err != nil {
 		// do not log payload, it can contain secrets

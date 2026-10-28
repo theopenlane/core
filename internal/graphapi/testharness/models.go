@@ -860,8 +860,11 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 	}
 
 	if pat.OrganizationIDs == nil {
-		// default to adding the test users organization ID
-		pat.OrganizationIDs = []string{SharedTestUser1.OrganizationID}
+		// default to adding the caller's organization ID
+		orgID, err := auth.GetOrganizationIDFromContext(ctx)
+		RequireNoError(t, err)
+
+		pat.OrganizationIDs = []string{orgID}
 	}
 
 	request := pat.Client.DB.PersonalAccessToken.Create().
