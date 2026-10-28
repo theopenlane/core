@@ -10,8 +10,8 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
-
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
@@ -118,5 +118,12 @@ func (OrganizationBrandingSetting) Annotations() []schema.Annotation {
 		entfga.SettingsChecks(Organization{}.Name()),
 		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
 		entx.FGACrudParent(Organization{}.Name()),
+	}
+}
+
+// Interceptors of the OrganizationBrandingSetting
+func (o OrganizationBrandingSetting) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorOrganizationBrandingSetting(),
 	}
 }

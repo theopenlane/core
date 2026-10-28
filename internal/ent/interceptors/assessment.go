@@ -18,6 +18,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+
+	// "github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
+	// "github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
@@ -114,13 +117,15 @@ func InterceptorAssessmentBranding() ent.Interceptor {
 				return v, nil
 			}
 
-			setting, err := utils.EntClientFromContext(ctx).OrganizationBrandingSetting.Query().
-				Select(organizationbrandingsetting.FieldRemoveAssessmentBranding).
-				Only(auth.WithInternalReadContext(ctx))
-			if generated.IsNotFound(err) {
-				return v, nil
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
+				return nil, err
 			}
 
+			setting, err := utils.EntClientFromContext(ctx).OrganizationBrandingSetting.Query().
+				Where(organizationbrandingsetting.OrganizationID(orgID)).
+				Select(organizationbrandingsetting.FieldRemoveAssessmentBranding).
+				Only(ctx)
 			if err != nil {
 				return nil, err
 			}
