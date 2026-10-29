@@ -1941,6 +1941,8 @@ func TestMutationUpdateControl(t *testing.T) {
 	kind := (&th.CustomTypeEnumBuilder{Client: suite.Client, Name: "Detective", ObjectType: "control"}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 	kindCustom := (&th.CustomTypeEnumBuilder{Client: suite.Client, Name: "Custom Control Kind", ObjectType: "control"}).MustNew(th.SharedTestUser1.UserCtx, t)
 
+	systemControl := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.UpdateControlInput
@@ -2230,6 +2232,7 @@ func TestMutationUpdateControl(t *testing.T) {
 	(&th.Cleanup[*generated.ControlImplementationDeleteOne]{Client: suite.Client.DB.ControlImplementation, ID: controlImplementation.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{ownerGroup.ID, delegateGroup.ID, groupMember.GroupID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: controlAnotherOrg.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: systemControl.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 	(&th.Cleanup[*generated.CustomTypeEnumDeleteOne]{Client: suite.Client.DB.CustomTypeEnum, IDs: []string{kind.ID}}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 	(&th.Cleanup[*generated.CustomTypeEnumDeleteOne]{Client: suite.Client.DB.CustomTypeEnum, IDs: []string{kindCustom.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
