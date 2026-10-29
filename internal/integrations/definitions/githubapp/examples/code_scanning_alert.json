@@ -1,0 +1,72 @@
+{
+  "assignees": [],
+  "created_at": "2026-10-27T10:43:53Z",
+  "dismissal_approved_by": null,
+  "dismissed_by": {
+    "avatar_url": "https://avatars.githubusercontent.com/u/147884153?v=4",
+    "events_url": "https://api.github.com/users/randomuser/events{/privacy}",
+    "followers_url": "https://api.github.com/users/randomuser/followers",
+    "following_url": "https://api.github.com/users/randomuser/following{/other_user}",
+    "gists_url": "https://api.github.com/users/randomuser/gists{/gist_id}",
+    "gravatar_id": "",
+    "html_url": "https://github.com/randomuser",
+    "id": 147884153,
+    "login": "randomuser",
+    "node_id": "U_kgDOCNCIeQ",
+    "organizations_url": "https://api.github.com/users/randomuser/orgs",
+    "received_events_url": "https://api.github.com/users/randomuser/received_events",
+    "repos_url": "https://api.github.com/users/randomuser/repos",
+    "site_admin": false,
+    "starred_url": "https://api.github.com/users/randomuser/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/randomuser/subscriptions",
+    "type": "User",
+    "url": "https://api.github.com/users/randomuser",
+    "user_view_type": "public"
+  },
+  "dismissed_reason": "used in tests",
+  "fixed_at": null,
+  "html_url": "https://github.com/theopenlane/iam/security/code-scanning/35",
+  "instances_url": "https://api.github.com/repos/theopenlane/iam/code-scanning/alerts/35/instances",
+  "most_recent_instance": {
+    "analysis_key": "(default)",
+    "category": "",
+    "classifications": [
+      "test"
+    ],
+    "commit_sha": "aa2f37c27f1fbee536ed7afa7fe2fb180d5b89de",
+    "environment": "{}",
+    "location": {
+      "end_column": 28,
+      "end_line": 1,
+      "path": "tokens/testdata/01GE6191AQTGMCJ9BN0QC3CCVG.pem",
+      "start_column": 1,
+      "start_line": 1
+    },
+    "message": {
+      "text": "<!--SONAR_ISSUE_KEY:6c43d39fd9b1cecd0ab2-->Make sure this private key gets revoked, changed, and removed from the code. <p>See more on <a href=\"https://sonarcloud.io/project/issues?id=test-project-6871fc784441&issues=6c43d39fd9b1cecd0ab2&open=6c43d39fd9b1cecd0ab2\">SonarQube Cloud</a></p>"
+    },
+    "ref": "refs/heads/main",
+    "state": "dismissed"
+  },
+  "number": 35,
+  "rule": {
+    "description": "Cryptographic private keys should not be disclosed",
+    "full_description": "Cryptographic private keys should not be disclosed",
+    "help": "Revoke leaked secrets.",
+    "id": "secrets:S6706",
+    "name": "secrets:S6706",
+    "security_severity_level": "high",
+    "severity": "warning",
+    "tags": [
+      "cwe",
+      "secret"
+    ]
+  },
+  "state": "dismissed",
+  "tool": {
+    "guid": null,
+    "name": "SonarCloud",
+    "version": null
+  },
+  "url": "https://api.github.com/repos/theopenlane/iam/code-scanning/alerts/35"
+}

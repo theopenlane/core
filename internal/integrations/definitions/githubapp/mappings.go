@@ -112,7 +112,6 @@ var (
 		entityops.FindingFields.ExternalOwnerID.Expr("resource"),
 		entityops.FindingFields.Category.Expr(strconv.Quote(githubAlertTypeCodeScanning)),
 		entityops.FindingFields.FindingStatusName.Expr(`'state' in payload ? payload.state : ""`),
-		entityops.FindingFields.State.Expr(`'state' in payload ? payload.state : ""`),
 		entityops.FindingFields.ExternalURI.Expr(`'html_url' in payload ? payload.html_url : ""`),
 		entityops.FindingFields.SourceUpdatedAt.Expr(`'updated_at' in payload ? payload.updated_at : null`),
 		entityops.FindingFields.ReportedAt.Expr(`'created_at' in payload ? payload.created_at : null`),
