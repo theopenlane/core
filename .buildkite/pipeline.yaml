@@ -27,8 +27,8 @@ env:
   HELM_CHART_PATH: charts/openlane
 
   # # runner vars
-  LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-default}
-  SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-default}
+  LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-self-hosted-garage-vms}
+  SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-self-hosted-garage-vms}
   # RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
   # RUNNER_WORKLOAD_STANDARD: "standard"
 agents:
