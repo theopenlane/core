@@ -258,7 +258,7 @@ extend type organization
     define can_edit_report: [service, user, group#member] or can_delete_report or full_access
     define can_delete_report: [service, user, group#member] or full_access
     define report_creator: [group#member]
-    define can_create_report: can_edit or can_edit_report or report_creator
+    define can_create_report: can_edit or can_edit_report or report_creator or member
 
     define can_view_report_membership: [service, user] or can_edit_report_membership or can_view_report or full_access
     define can_edit_report_membership: [service, user] or can_delete_report_membership or can_edit_report or full_access

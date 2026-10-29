@@ -11804,7 +11804,7 @@ func (_m *Organization) Users(
 		WithUserFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[88][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[82][alias]
 	if nodes, err := _m.NamedUsers(alias); err == nil || hasTotalCount {
 		pager, err := newUserPager(opts, last != nil)
 		if err != nil {
@@ -11825,7 +11825,7 @@ func (_m *Organization) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[89][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[83][alias]
 	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {
@@ -11846,7 +11846,7 @@ func (_m *Organization) Events(
 		WithEventFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[90][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[84][alias]
 	if nodes, err := _m.NamedEvents(alias); err == nil || hasTotalCount {
 		pager, err := newEventPager(opts, last != nil)
 		if err != nil {
@@ -11887,7 +11887,7 @@ func (_m *Organization) Invites(
 		WithInviteFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[101][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[87][alias]
 	if nodes, err := _m.NamedInvites(alias); err == nil || hasTotalCount {
 		pager, err := newInvitePager(opts, last != nil)
 		if err != nil {
@@ -11908,7 +11908,7 @@ func (_m *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[162][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[88][alias]
 	if nodes, err := _m.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {

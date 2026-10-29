@@ -395,7 +395,7 @@ type OrganizationEdges struct {
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [163]bool
 	// totalCount holds the count of the edges above.
-	totalCount [163]map[string]int
+	totalCount [89]map[string]int
 
 	namedActionPlanCreators                 map[string][]*Group
 	namedAPITokenCreators                   map[string][]*Group

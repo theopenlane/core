@@ -46,7 +46,7 @@ func HookReportMembers() ent.Hook {
 				return nil, err
 			}
 
-			// if at least one repo in a bulk update has a private visibility, we still
+			// if at least one report in a bulk update has a private visibility, we still
 			// want to block it getting members
 			exists, err := m.Client().ReportMembership.Query().
 				Where(

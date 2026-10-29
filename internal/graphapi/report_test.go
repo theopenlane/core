@@ -185,6 +185,34 @@ func TestMutationCreateReport(t *testing.T) {
 	}
 }
 
+func TestMutationReport_Member(t *testing.T) {
+
+	org := suite.SeedFreshMinimalOrgUsers(t, false)
+
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t)
+	})
+
+	input := testclient.CreateReportInput{
+		Name: "report created by a member",
+		Query: `query ReportTasks {
+  tasks(first: 10) {
+    edges {
+      node {
+        id
+        title
+      }
+    }
+  }
+}`,
+	}
+
+	resp, err := suite.Client.API.CreateReport(org.Member.UserCtx, input)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(resp.CreateReport.Report.Query, input.Query))
+	assert.Check(t, is.Equal(lo.FromPtr(resp.CreateReport.Report.Visibility), enums.ReportVisibilityPrivate))
+}
+
 func TestMutationDeleteReport(t *testing.T) {
 
 	report := (&th.ReportBuilder{Client: suite.Client, Visibility: enums.ReportVisibilityOrganization}).
