@@ -19,7 +19,10 @@ func backfillOrgBrandingSettings(ctx context.Context, deps backfillDeps) error {
 	for {
 		orgs, err := deps.Client.Organization.Query().
 			Order(organization.ByID()).
-			Where(organization.IDGT(lastKnownID)).
+			Where(
+				organization.IDGT(lastKnownID),
+				organization.Not(organization.HasBrandingSetting()),
+			).
 			Limit(batchSize).
 			All(ctx)
 
@@ -52,11 +55,11 @@ func backfillOrgBrandingSettings(ctx context.Context, deps backfillDeps) error {
 
 				return err
 			}
-
-			lastKnownID = org.ID
 		}
+
+		lastKnownID = orgs[len(orgs)-1].ID
 	}
 
-	logx.FromContext(ctx).Info().Msg("bacfkill: created org branding settings for all orgs")
+	logx.FromContext(ctx).Info().Msg("backfill: created org branding settings for all orgs")
 	return nil
 }
