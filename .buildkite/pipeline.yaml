@@ -34,7 +34,7 @@ env:
 agents:
   nsc-os: "linux"
   nsc-arch: "amd64"
-  nsc-shape: "8x16"
+  nsc-shape: "16x32"
   # nsc-git-checkout: "snapshot"
   # nsc-cache-tag: "core"
   # nsc-cache-size: "100g"
@@ -125,6 +125,9 @@ steps:
         key: "draft_pr_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
+          
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "generate_config"
         if: build.pull_request.id != null
@@ -153,6 +156,8 @@ steps:
         key: "link_pr_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "draft_pr_automation"
         if: build.pull_request.id != null
@@ -181,6 +186,8 @@ steps:
         key: "helm_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "generate_config"
         if: build.branch == "main"
@@ -209,6 +216,8 @@ steps:
         key: "post_merge_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "helm_automation"
         if: build.branch == "main"
@@ -236,6 +245,8 @@ steps:
         key: "cleanup_draft_prs"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         depends_on: "post_merge_automation"
         if: build.branch == "main"
@@ -533,6 +544,8 @@ steps:
           - "fga/**"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         key: "fga_test"
         plugins:
@@ -552,6 +565,8 @@ steps:
         key: "test-analytics"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
@@ -602,6 +617,8 @@ steps:
         cancel_on_build_failing: true
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         if_changed:
           include:
@@ -659,6 +676,8 @@ steps:
         key: "scan-upload"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         if_changed:
           include:
@@ -823,6 +842,8 @@ steps:
         if: build.branch !~ /^renovate\//
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         if_changed:
           - db/**
@@ -845,6 +866,8 @@ steps:
         if_changed: "**.graphql"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         skip: "false"
         soft_fail:
@@ -978,6 +1001,8 @@ steps:
         key: "apollo-publish-schema"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         skip: false
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
@@ -1003,6 +1028,8 @@ steps:
         command: "rover graph publish --schema $$GRAPHQL_HISTORY_SCHEMA_LOCATION $$GRAPHQL_HISTORY_SCHEMA_NAME"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         plugins:
           - sparse-checkout#v1.10.0:
@@ -1024,6 +1051,8 @@ steps:
         key: "atlas_migrate"
         agents:
           queue: $SMALL_RUNNER_QUEUE
+          tags: 
+            - nsc-shape: "4x8"
           # workload: $RUNNER_WORKLOAD_LIGHTWEIGHT
         plugins:
           - sparse-checkout#v1.10.0:
