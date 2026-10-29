@@ -173,6 +173,20 @@ type MatchCandidate struct {
 	Value string
 }
 
+// SourceFilter selects the rows written from one source definition and instance, scoped to the caller's organization
+// by the schema's organization interceptor and hook
+type SourceFilter struct {
+	// DefinitionID is the integration definition the rows were written by
+	DefinitionID string
+	// InstanceID is the source instance the rows were written from
+	InstanceID string
+	// NotUpdatedAfter skips rows updated after this time when set, keeping rows changed since they were written
+	NotUpdatedAfter *time.Time
+}
+
+// RowCleanup runs after a row is deleted, for cleanup the delete hooks do not cover
+type RowCleanup func(ctx context.Context, id string) error
+
 // Schema is the runtime representation of a registered entity schema. It carries the schema
 // identity and its operation closures. Load, Fields, and Edges are universal; the remaining
 // closures are emitted only for schemas whose capabilities can reach them and are nil otherwise
@@ -215,6 +229,9 @@ type Schema struct {
 	MarkRemoved func(ctx context.Context, client *generated.Client, ids []string, at time.Time, runID string) error
 	// FillProvenance fills missing provenance on rows linked to the installation and reports rows written
 	FillProvenance func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error)
+	// DeleteBySource deletes the caller's rows matching the source filter, then runs cleanup for each deleted id when set,
+	// and returns the deleted ids, emitted only for owned schemas carrying source provenance
+	DeleteBySource func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error)
 	// Load loads a single entity by ID and returns its JSON representation
 	Load func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error)
 	// LoadObject loads the native generated Ent object for consumers that require its interfaces;
@@ -385,7 +402,7 @@ func (s *Schema) handleIngest(ctx context.Context, client *generated.Client, res
 		return err
 	}
 
-	payload = StampProvenance(payload, s, integration, integration.DefinitionID, request.RunID)
+	payload = StampProvenance(payload, s, ProvenanceSource{Integration: integration, DefinitionID: integration.DefinitionID, RunID: request.RunID})
 
 	payload, err = s.Ingest.prepare(ctx, integration, payload)
 	if err != nil {
@@ -763,22 +780,44 @@ const (
 	FieldIntegrationRunID = "integration_run_id"
 )
 
+// ProvenanceSource identifies the writer whose provenance StampProvenance stamps onto an ingest payload
+type ProvenanceSource struct {
+	// Integration is the writing installation, nil for runtime ingest
+	Integration *generated.Integration
+	// DefinitionID is the definition runtime ingest runs under, used when Integration is nil
+	DefinitionID string
+	// OwnerID is the organization runtime ingest writes for, empty to write system-owned rows
+	OwnerID string
+	// SourceInstanceID is the external instance runtime ingest records came from
+	SourceInstanceID string
+	// RunID is the integration run writing the record
+	RunID string
+}
+
 // StampProvenance writes the schema's trusted integration-derived provenance columns and ownership
 // edges onto an ingest payload from the writing installation, overriding anything the mapping
 // emitted for them; it is the sole writer of provenance columns for both the synchronous and the
 // durable ingest paths, so a queued record persists with the same provenance a batched one does;
-// a nil installation stamps only the run id and the definition id, which is how runtime ingest writes system-owned rows
-func StampProvenance(payload json.RawMessage, schema *Schema, integration *generated.Integration, definitionID, runID string) json.RawMessage {
+// a nil installation stamps the run id, definition id, and the runtime owner and source instance when set,
+// and runtime ingest with no owner writes system-owned rows
+func StampProvenance(payload json.RawMessage, schema *Schema, source ProvenanceSource) json.RawMessage {
 	type provenanceValue struct {
 		field string
 		value string
 	}
 
+	integration := source.Integration
+	runID := source.RunID
+
 	values := []provenanceValue{provenanceValue{FieldIntegrationRunID, runID}}
 
 	switch {
 	case integration == nil:
-		values = append(values, provenanceValue{FieldSourceDefinitionID, definitionID})
+		values = append(values,
+			provenanceValue{FieldSourceDefinitionID, source.DefinitionID},
+			provenanceValue{schema.OwnerField, source.OwnerID},
+			provenanceValue{FieldSourceInstanceID, source.SourceInstanceID},
+		)
 	default:
 		values = append(values,
 			provenanceValue{schema.OwnerField, integration.OwnerID},
@@ -27226,6 +27265,1302 @@ func init() {
 		}
 
 		return nil
+	}
+	SchemaActionPlan.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "action_plan", Operation: refOpDelete}
+
+		query := client.ActionPlan.Query().
+			Where(
+				actionplan.SourceDefinitionID(filter.DefinitionID),
+				actionplan.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(actionplan.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.ActionPlan.Delete().Where(actionplan.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaAssessment.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "assessment", Operation: refOpDelete}
+
+		query := client.Assessment.Query().
+			Where(
+				assessment.SourceDefinitionID(filter.DefinitionID),
+				assessment.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(assessment.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Assessment.Delete().Where(assessment.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaAssessmentPolicy.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "assessment_policy", Operation: refOpDelete}
+
+		query := client.AssessmentPolicy.Query().
+			Where(
+				assessmentpolicy.SourceDefinitionID(filter.DefinitionID),
+				assessmentpolicy.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(assessmentpolicy.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.AssessmentPolicy.Delete().Where(assessmentpolicy.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaAsset.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "asset", Operation: refOpDelete}
+
+		query := client.Asset.Query().
+			Where(
+				asset.SourceDefinitionID(filter.DefinitionID),
+				asset.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(asset.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Asset.Delete().Where(asset.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaCampaign.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "campaign", Operation: refOpDelete}
+
+		query := client.Campaign.Query().
+			Where(
+				campaign.SourceDefinitionID(filter.DefinitionID),
+				campaign.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(campaign.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Campaign.Delete().Where(campaign.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaCheckResult.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "check_result", Operation: refOpDelete}
+
+		query := client.CheckResult.Query().
+			Where(
+				checkresult.SourceDefinitionID(filter.DefinitionID),
+				checkresult.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(checkresult.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.CheckResult.Delete().Where(checkresult.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaContact.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "contact", Operation: refOpDelete}
+
+		query := client.Contact.Query().
+			Where(
+				contact.SourceDefinitionID(filter.DefinitionID),
+				contact.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(contact.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Contact.Delete().Where(contact.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaControl.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "control", Operation: refOpDelete}
+
+		query := client.Control.Query().
+			Where(
+				control.SourceDefinitionID(filter.DefinitionID),
+				control.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(control.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Control.Delete().Where(control.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaControlImplementation.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "control_implementation", Operation: refOpDelete}
+
+		query := client.ControlImplementation.Query().
+			Where(
+				controlimplementation.SourceDefinitionID(filter.DefinitionID),
+				controlimplementation.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(controlimplementation.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.ControlImplementation.Delete().Where(controlimplementation.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaControlObjective.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "control_objective", Operation: refOpDelete}
+
+		query := client.ControlObjective.Query().
+			Where(
+				controlobjective.SourceDefinitionID(filter.DefinitionID),
+				controlobjective.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(controlobjective.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.ControlObjective.Delete().Where(controlobjective.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaCustomTypeEnum.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "custom_type_enum", Operation: refOpDelete}
+
+		query := client.CustomTypeEnum.Query().
+			Where(
+				customtypeenum.SourceDefinitionID(filter.DefinitionID),
+				customtypeenum.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(customtypeenum.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.CustomTypeEnum.Delete().Where(customtypeenum.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaDirectoryAccount.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpDelete}
+
+		query := client.DirectoryAccount.Query().
+			Where(
+				directoryaccount.SourceDefinitionID(filter.DefinitionID),
+				directoryaccount.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(directoryaccount.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.DirectoryAccount.Delete().Where(directoryaccount.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaDirectoryGroup.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpDelete}
+
+		query := client.DirectoryGroup.Query().
+			Where(
+				directorygroup.SourceDefinitionID(filter.DefinitionID),
+				directorygroup.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(directorygroup.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.DirectoryGroup.Delete().Where(directorygroup.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaDirectoryMembership.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpDelete}
+
+		query := client.DirectoryMembership.Query().
+			Where(
+				directorymembership.SourceDefinitionID(filter.DefinitionID),
+				directorymembership.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(directorymembership.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.DirectoryMembership.Delete().Where(directorymembership.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaEmailTemplate.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "email_template", Operation: refOpDelete}
+
+		query := client.EmailTemplate.Query().
+			Where(
+				emailtemplate.SourceDefinitionID(filter.DefinitionID),
+				emailtemplate.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(emailtemplate.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.EmailTemplate.Delete().Where(emailtemplate.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaEntity.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpDelete}
+
+		query := client.Entity.Query().
+			Where(
+				entity.SourceDefinitionID(filter.DefinitionID),
+				entity.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(entity.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Entity.Delete().Where(entity.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaEvidence.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "evidence", Operation: refOpDelete}
+
+		query := client.Evidence.Query().
+			Where(
+				evidence.SourceDefinitionID(filter.DefinitionID),
+				evidence.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(evidence.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Evidence.Delete().Where(evidence.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaFinding.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "finding", Operation: refOpDelete}
+
+		query := client.Finding.Query().
+			Where(
+				finding.SourceDefinitionID(filter.DefinitionID),
+				finding.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(finding.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Finding.Delete().Where(finding.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaGroup.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "group", Operation: refOpDelete}
+
+		query := client.Group.Query().
+			Where(
+				group.SourceDefinitionID(filter.DefinitionID),
+				group.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(group.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Group.Delete().Where(group.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaIdentityHolder.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "identity_holder", Operation: refOpDelete}
+
+		query := client.IdentityHolder.Query().
+			Where(
+				identityholder.SourceDefinitionID(filter.DefinitionID),
+				identityholder.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(identityholder.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.IdentityHolder.Delete().Where(identityholder.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaInternalPolicy.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "internal_policy", Operation: refOpDelete}
+
+		query := client.InternalPolicy.Query().
+			Where(
+				internalpolicy.SourceDefinitionID(filter.DefinitionID),
+				internalpolicy.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(internalpolicy.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.InternalPolicy.Delete().Where(internalpolicy.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaMappedControl.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "mapped_control", Operation: refOpDelete}
+
+		query := client.MappedControl.Query().
+			Where(
+				mappedcontrol.SourceDefinitionID(filter.DefinitionID),
+				mappedcontrol.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(mappedcontrol.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.MappedControl.Delete().Where(mappedcontrol.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaNarrative.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "narrative", Operation: refOpDelete}
+
+		query := client.Narrative.Query().
+			Where(
+				narrative.SourceDefinitionID(filter.DefinitionID),
+				narrative.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(narrative.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Narrative.Delete().Where(narrative.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaPlatform.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "platform", Operation: refOpDelete}
+
+		query := client.Platform.Query().
+			Where(
+				platform.SourceDefinitionID(filter.DefinitionID),
+				platform.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(platform.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Platform.Delete().Where(platform.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaProcedure.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "procedure", Operation: refOpDelete}
+
+		query := client.Procedure.Query().
+			Where(
+				procedure.SourceDefinitionID(filter.DefinitionID),
+				procedure.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(procedure.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Procedure.Delete().Where(procedure.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaProgram.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "program", Operation: refOpDelete}
+
+		query := client.Program.Query().
+			Where(
+				program.SourceDefinitionID(filter.DefinitionID),
+				program.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(program.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Program.Delete().Where(program.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaRemediation.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "remediation", Operation: refOpDelete}
+
+		query := client.Remediation.Query().
+			Where(
+				remediation.SourceDefinitionID(filter.DefinitionID),
+				remediation.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(remediation.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Remediation.Delete().Where(remediation.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaReview.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "review", Operation: refOpDelete}
+
+		query := client.Review.Query().
+			Where(
+				review.SourceDefinitionID(filter.DefinitionID),
+				review.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(review.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Review.Delete().Where(review.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaRisk.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "risk", Operation: refOpDelete}
+
+		query := client.Risk.Query().
+			Where(
+				risk.SourceDefinitionID(filter.DefinitionID),
+				risk.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(risk.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Risk.Delete().Where(risk.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaScan.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "scan", Operation: refOpDelete}
+
+		query := client.Scan.Query().
+			Where(
+				scan.SourceDefinitionID(filter.DefinitionID),
+				scan.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(scan.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Scan.Delete().Where(scan.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaSubcontrol.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "subcontrol", Operation: refOpDelete}
+
+		query := client.Subcontrol.Query().
+			Where(
+				subcontrol.SourceDefinitionID(filter.DefinitionID),
+				subcontrol.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(subcontrol.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Subcontrol.Delete().Where(subcontrol.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaSystemDetail.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "system_detail", Operation: refOpDelete}
+
+		query := client.SystemDetail.Query().
+			Where(
+				systemdetail.SourceDefinitionID(filter.DefinitionID),
+				systemdetail.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(systemdetail.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.SystemDetail.Delete().Where(systemdetail.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaTagDefinition.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "tag_definition", Operation: refOpDelete}
+
+		query := client.TagDefinition.Query().
+			Where(
+				tagdefinition.SourceDefinitionID(filter.DefinitionID),
+				tagdefinition.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(tagdefinition.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.TagDefinition.Delete().Where(tagdefinition.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaTask.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "task", Operation: refOpDelete}
+
+		query := client.Task.Query().
+			Where(
+				task.SourceDefinitionID(filter.DefinitionID),
+				task.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(task.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Task.Delete().Where(task.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaTemplate.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "template", Operation: refOpDelete}
+
+		query := client.Template.Query().
+			Where(
+				template.SourceDefinitionID(filter.DefinitionID),
+				template.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(template.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Template.Delete().Where(template.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaVulnerability.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "vulnerability", Operation: refOpDelete}
+
+		query := client.Vulnerability.Query().
+			Where(
+				vulnerability.SourceDefinitionID(filter.DefinitionID),
+				vulnerability.SourceInstanceID(filter.InstanceID),
+			)
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(vulnerability.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Vulnerability.Delete().Where(vulnerability.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
 	}
 	SchemaActionPlan.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
 		ref := SchemaRef{Schema: "action_plan", Operation: refOpUpdate}

@@ -208,13 +208,13 @@ func (ic IngestContext) definitionID() string {
 	}
 }
 
-// ownerID returns the owning organization, empty on the runtime path so rows persist system-owned
+// ownerID returns the owning organization, from the installation or the runtime owner, empty for system-owned rows
 func (ic IngestContext) ownerID() string {
 	switch {
 	case ic.Integration != nil:
 		return ic.Integration.OwnerID
 	default:
-		return ""
+		return ic.OwnerID
 	}
 }
 
@@ -367,7 +367,7 @@ func (run *payloadRun) resolveSetSchema(name string) (*entityops.Schema, error) 
 
 	sourceSchema, ok := lookupIngestSchema(name)
 	if ok {
-		if _, systemOwnable := sourceSchema.FieldByName(fieldSystemOwned); run.ic.Integration == nil && !systemOwnable {
+		if _, systemOwnable := sourceSchema.FieldByName(fieldSystemOwned); run.ic.ownerID() == "" && !systemOwnable {
 			return nil, ErrIngestSchemaNotSystemOwned
 		}
 
@@ -411,7 +411,13 @@ func (run *payloadRun) prepare(ctx context.Context, payloadSet types.IngestPaylo
 		}
 
 		record.schema = sourceSchema
-		record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, run.ic.Integration, run.definition.ID, run.batch.Options.RunID)
+		record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, entityops.ProvenanceSource{
+			Integration:      run.ic.Integration,
+			DefinitionID:     run.definition.ID,
+			OwnerID:          run.ic.OwnerID,
+			SourceInstanceID: payloadSet.SourceInstanceID,
+			RunID:            run.batch.Options.RunID,
+		})
 
 		prepared = append(prepared, preparedIngestRecord{resource: envelope.Resource, record: record, links: mapping.Links})
 	}

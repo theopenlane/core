@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/logx"
@@ -96,17 +97,12 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 		body += "; updated trust center branding"
 	}
 
-	_, err = s.services.DB().Notification.Create().
-		SetOwnerID(organizationID).
-		SetNotificationType(enums.NotificationTypeOrganization).
-		SetObjectType("scan.import.completed").
-		SetTitle("Domain scan import completed").
-		SetBody(body).
-		SetData(data).
-		SetTopic(enums.NotificationTopicImportComplete).
-		Save(ctx)
-
-	return err
+	return operations.NotifyOutcome(ctx, s.services.DB(), organizationID, operations.Outcome{
+		ObjectType: "scan.import.completed",
+		Title:      "Domain scan import completed",
+		Body:       body,
+		Data:       data,
+	})
 }
 
 // importDomainScanReview creates every accepted object in order: vendors and assets first (so

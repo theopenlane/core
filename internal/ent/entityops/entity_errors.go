@@ -25,6 +25,8 @@ var (
 	ErrUpdateFailed = errors.New("entityops: update failed")
 	// ErrQueryFailed indicates an entity query failed
 	ErrQueryFailed = errors.New("entityops: query failed")
+	// ErrDeleteFailed indicates an entity delete or its cleanup failed
+	ErrDeleteFailed = errors.New("entityops: delete failed")
 	// ErrLoadFailed indicates an entity load failed
 	ErrLoadFailed = errors.New("entityops: load failed")
 	// ErrLinkFailed indicates an edge link operation failed
@@ -108,6 +110,8 @@ const (
 	refOpEmit = "emit"
 	// refOpUpsert identifies catalog-driven upsert operations
 	refOpUpsert = "upsert"
+	// refOpDelete identifies entity delete operations
+	refOpDelete = "delete"
 )
 
 // --- Log field keys ---
