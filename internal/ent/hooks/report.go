@@ -55,7 +55,7 @@ func isQueryValid(query string, variables map[string]any) error {
 func HookValidateReportQuery() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ReportFunc(func(ctx context.Context, m *generated.ReportMutation) (generated.Value, error) {
-			query, ok := m.Query()
+			query, queryExists := m.Query()
 			variables, variablesExist := m.Variables()
 
 			isUpdateOp := m.Op().Is(ent.OpUpdateOne)
@@ -63,14 +63,14 @@ func HookValidateReportQuery() ent.Hook {
 			// if nothing changed in an update operation, we want to return early
 			// validation should only kick in if it is a new creation or either the query/variable
 			// has changed
-			if isUpdateOp && !ok && !variablesExist && !m.VariablesCleared() {
+			if isUpdateOp && !queryExists && !variablesExist && !m.VariablesCleared() {
 				return next.Mutate(ctx, m)
 			}
 
 			if isUpdateOp {
 				var err error
 
-				if !ok {
+				if !queryExists {
 					query, err = m.OldQuery(ctx)
 					if err != nil {
 						logx.FromContext(ctx).Error().Err(err).Msg("failed to get old report query")
