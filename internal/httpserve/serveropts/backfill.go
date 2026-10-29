@@ -59,6 +59,15 @@ type backfillRoutine struct {
 // backfillRoutines are the registered backfill routines
 var backfillRoutines = []backfillRoutine{
 	{
+		// example registration
+		// Name:    "backfill-x",
+		// Version: "v1",
+		// Enabled: true,
+		// Run: func(ctx context.Context, deps backfillDeps) error {
+		// 	return backfillX(ctx, deps.Client)
+		// },
+	},
+	{
 		Name:    "backfill-org-branding-setting",
 		Version: "v1",
 		Enabled: true,
