@@ -162,6 +162,15 @@ func (o Organization) Edges() []ent.Edge {
 			},
 		}),
 		defaultEdgeToWithPagination(o, PersonalAccessToken{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema:    o,
+			name:          "branding_setting",
+			t:             OrganizationBrandingSetting.Type,
+			cascadeDelete: "Organization",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
 		hiddenOwnerEdge(o, APIToken{}),
 		hiddenOwnerEdge(o, EmailTemplate{}),
 		hiddenOwnerEdge(o, IntegrationWebhook{}),

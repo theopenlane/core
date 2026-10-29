@@ -58,6 +58,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
@@ -57555,6 +57556,17 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				*wq = *query
 			})
 
+		case "brandingSetting":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationBrandingSettingClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationbrandingsettingImplementors)...); err != nil {
+				return err
+			}
+			_q.withBrandingSetting = query
+
 		case "users":
 			var (
 				alias = field.Alias
@@ -57603,10 +57615,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[79] == nil {
-								nodes[i].Edges.totalCount[79] = make(map[string]int)
+							if nodes[i].Edges.totalCount[80] == nil {
+								nodes[i].Edges.totalCount[80] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[79][alias] = n
+							nodes[i].Edges.totalCount[80][alias] = n
 						}
 						return nil
 					})
@@ -57614,10 +57626,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Users)
-							if nodes[i].Edges.totalCount[79] == nil {
-								nodes[i].Edges.totalCount[79] = make(map[string]int)
+							if nodes[i].Edges.totalCount[80] == nil {
+								nodes[i].Edges.totalCount[80] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[79][alias] = n
+							nodes[i].Edges.totalCount[80][alias] = n
 						}
 						return nil
 					})
@@ -57697,10 +57709,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[80] == nil {
-								nodes[i].Edges.totalCount[80] = make(map[string]int)
+							if nodes[i].Edges.totalCount[81] == nil {
+								nodes[i].Edges.totalCount[81] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[80][alias] = n
+							nodes[i].Edges.totalCount[81][alias] = n
 						}
 						return nil
 					})
@@ -57708,10 +57720,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
-							if nodes[i].Edges.totalCount[80] == nil {
-								nodes[i].Edges.totalCount[80] = make(map[string]int)
+							if nodes[i].Edges.totalCount[81] == nil {
+								nodes[i].Edges.totalCount[81] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[80][alias] = n
+							nodes[i].Edges.totalCount[81][alias] = n
 						}
 						return nil
 					})
@@ -57791,10 +57803,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[81] == nil {
-								nodes[i].Edges.totalCount[81] = make(map[string]int)
+							if nodes[i].Edges.totalCount[82] == nil {
+								nodes[i].Edges.totalCount[82] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[81][alias] = n
+							nodes[i].Edges.totalCount[82][alias] = n
 						}
 						return nil
 					})
@@ -57802,10 +57814,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Events)
-							if nodes[i].Edges.totalCount[81] == nil {
-								nodes[i].Edges.totalCount[81] = make(map[string]int)
+							if nodes[i].Edges.totalCount[82] == nil {
+								nodes[i].Edges.totalCount[82] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[81][alias] = n
+							nodes[i].Edges.totalCount[82][alias] = n
 						}
 						return nil
 					})
@@ -57909,10 +57921,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[84] == nil {
-								nodes[i].Edges.totalCount[84] = make(map[string]int)
+							if nodes[i].Edges.totalCount[85] == nil {
+								nodes[i].Edges.totalCount[85] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[84][alias] = n
+							nodes[i].Edges.totalCount[85][alias] = n
 						}
 						return nil
 					})
@@ -57920,10 +57932,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Invites)
-							if nodes[i].Edges.totalCount[84] == nil {
-								nodes[i].Edges.totalCount[84] = make(map[string]int)
+							if nodes[i].Edges.totalCount[85] == nil {
+								nodes[i].Edges.totalCount[85] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[84][alias] = n
+							nodes[i].Edges.totalCount[85][alias] = n
 						}
 						return nil
 					})
@@ -57999,10 +58011,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[85] == nil {
-								nodes[i].Edges.totalCount[85] = make(map[string]int)
+							if nodes[i].Edges.totalCount[86] == nil {
+								nodes[i].Edges.totalCount[86] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[85][alias] = n
+							nodes[i].Edges.totalCount[86][alias] = n
 						}
 						return nil
 					})
@@ -58010,10 +58022,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[85] == nil {
-								nodes[i].Edges.totalCount[85] = make(map[string]int)
+							if nodes[i].Edges.totalCount[86] == nil {
+								nodes[i].Edges.totalCount[86] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[85][alias] = n
+							nodes[i].Edges.totalCount[86][alias] = n
 						}
 						return nil
 					})
@@ -58184,6 +58196,176 @@ func newOrganizationPaginateArgs(rv map[string]any) *organizationPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*OrganizationWhereInput); ok {
 		args.opts = append(args.opts, WithOrganizationFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *OrganizationBrandingSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationBrandingSettingQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *OrganizationBrandingSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(organizationbrandingsetting.Columns))
+		selectedFields = []string{organizationbrandingsetting.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "organization":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOrganization = query
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldOrganizationID)
+				fieldSeen[organizationbrandingsetting.FieldOrganizationID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldCreatedAt)
+				fieldSeen[organizationbrandingsetting.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldUpdatedAt)
+				fieldSeen[organizationbrandingsetting.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldCreatedBy)
+				fieldSeen[organizationbrandingsetting.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldUpdatedBy)
+				fieldSeen[organizationbrandingsetting.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldUpdatedByImpersonator)
+				fieldSeen[organizationbrandingsetting.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldTags]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldTags)
+				fieldSeen[organizationbrandingsetting.FieldTags] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldOrganizationID)
+				fieldSeen[organizationbrandingsetting.FieldOrganizationID] = struct{}{}
+			}
+		case "removeAssessmentBranding":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldRemoveAssessmentBranding]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldRemoveAssessmentBranding)
+				fieldSeen[organizationbrandingsetting.FieldRemoveAssessmentBranding] = struct{}{}
+			}
+		case "primaryColor":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldPrimaryColor]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldPrimaryColor)
+				fieldSeen[organizationbrandingsetting.FieldPrimaryColor] = struct{}{}
+			}
+		case "secondaryColor":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldSecondaryColor]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldSecondaryColor)
+				fieldSeen[organizationbrandingsetting.FieldSecondaryColor] = struct{}{}
+			}
+		case "backgroundColor":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldBackgroundColor]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldBackgroundColor)
+				fieldSeen[organizationbrandingsetting.FieldBackgroundColor] = struct{}{}
+			}
+		case "textColor":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldTextColor]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldTextColor)
+				fieldSeen[organizationbrandingsetting.FieldTextColor] = struct{}{}
+			}
+		case "fontFamily":
+			if _, ok := fieldSeen[organizationbrandingsetting.FieldFontFamily]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsetting.FieldFontFamily)
+				fieldSeen[organizationbrandingsetting.FieldFontFamily] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type organizationbrandingsettingPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []OrganizationBrandingSettingPaginateOption
+}
+
+func newOrganizationBrandingSettingPaginateArgs(rv map[string]any) *organizationbrandingsettingPaginateArgs {
+	args := &organizationbrandingsettingPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*OrganizationBrandingSettingOrder:
+			args.opts = append(args.opts, WithOrganizationBrandingSettingOrder(v))
+		case []any:
+			var orders []*OrganizationBrandingSettingOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &OrganizationBrandingSettingOrder{Field: &OrganizationBrandingSettingOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithOrganizationBrandingSettingOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*OrganizationBrandingSettingWhereInput); ok {
+		args.opts = append(args.opts, WithOrganizationBrandingSettingFilter(v.Filter))
 	}
 	return args
 }

@@ -12,12 +12,16 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
-	"github.com/theopenlane/logx"
 )
 
 // InterceptorAssessmentAccessURL populates the anonymous questionnaire access URL for system-owned assessments.
@@ -95,4 +99,40 @@ func setAssessmentAccessURL(ctx context.Context, assessment *generated.Assessmen
 	assessment.AccessURL = result.URL
 
 	return nil
+}
+
+// InterceptorAssessmentBranding populates the branding field from the org branding settings
+func InterceptorAssessmentBranding() ent.Interceptor {
+	return ent.InterceptFunc(func(next ent.Querier) ent.Querier {
+		return intercept.AssessmentFunc(func(ctx context.Context, q *generated.AssessmentQuery) (generated.Value, error) {
+			v, err := next.Query(ctx, q)
+			if err != nil {
+				return nil, err
+			}
+
+			assessments, ok := v.([]*generated.Assessment)
+			if !ok {
+				return v, nil
+			}
+
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			setting, err := utils.EntClientFromContext(ctx).OrganizationBrandingSetting.Query().
+				Where(organizationbrandingsetting.OrganizationID(orgID)).
+				Select(organizationbrandingsetting.FieldRemoveAssessmentBranding).
+				Only(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			for _, a := range assessments {
+				a.RemoveBranding = setting.RemoveAssessmentBranding
+			}
+
+			return v, nil
+		})
+	})
 }

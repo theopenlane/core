@@ -110,6 +110,9 @@ type NotificationTemplateHistory func(*sql.Selector)
 // OrgMembershipHistory is the predicate function for orgmembershiphistory builders.
 type OrgMembershipHistory func(*sql.Selector)
 
+// OrganizationBrandingSettingHistory is the predicate function for organizationbrandingsettinghistory builders.
+type OrganizationBrandingSettingHistory func(*sql.Selector)
+
 // OrganizationHistory is the predicate function for organizationhistory builders.
 type OrganizationHistory func(*sql.Selector)
 

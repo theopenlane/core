@@ -405,6 +405,10 @@ type TestGraphClient interface {
 	GetOrganizations(ctx context.Context, where *OrganizationWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetOrganizations, error)
 	TransferOrganizationOwnership(ctx context.Context, newOwnerEmail string, interceptors ...clientv2.RequestInterceptor) (*TransferOrganizationOwnership, error)
 	UpdateOrganization(ctx context.Context, updateOrganizationID string, input UpdateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *FileMetadataInput, interceptors ...clientv2.RequestInterceptor) (*UpdateOrganization, error)
+	GetAllOrganizationBrandingSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllOrganizationBrandingSettings, error)
+	GetOrganizationBrandingSettingByID(ctx context.Context, organizationBrandingSettingID string, interceptors ...clientv2.RequestInterceptor) (*GetOrganizationBrandingSettingByID, error)
+	GetOrganizationBrandingSettings(ctx context.Context, where OrganizationBrandingSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetOrganizationBrandingSettings, error)
+	UpdateOrganizationBrandingSetting(ctx context.Context, updateOrganizationBrandingSettingID string, input UpdateOrganizationBrandingSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateOrganizationBrandingSetting, error)
 	GetAllOrganizationSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllOrganizationSettings, error)
 	GetOrganizationSettingByID(ctx context.Context, organizationSettingID string, interceptors ...clientv2.RequestInterceptor) (*GetOrganizationSettingByID, error)
 	GetOrganizationSettings(ctx context.Context, where OrganizationSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetOrganizationSettings, error)
@@ -87752,6 +87756,569 @@ func (t *UpdateOrganization_UpdateOrganization) GetOrganization() *UpdateOrganiz
 		t = &UpdateOrganization_UpdateOrganization{}
 	}
 	return &t.Organization
+}
+
+type GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization struct {
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
+}
+
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization) GetDisplayName() string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization{}
+	}
+	return t.DisplayName
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization) GetID() string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization{}
+	}
+	return t.ID
+}
+
+type GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node struct {
+	BackgroundColor          *string                                                                                  "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	CreatedAt                *time.Time                                                                               "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                *string                                                                                  "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FontFamily               *string                                                                                  "json:\"fontFamily,omitempty\" graphql:\"fontFamily\""
+	ID                       string                                                                                   "json:\"id\" graphql:\"id\""
+	Organization             *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	OrganizationID           *string                                                                                  "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	PrimaryColor             *string                                                                                  "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	RemoveAssessmentBranding *bool                                                                                    "json:\"removeAssessmentBranding,omitempty\" graphql:\"removeAssessmentBranding\""
+	SecondaryColor           *string                                                                                  "json:\"secondaryColor,omitempty\" graphql:\"secondaryColor\""
+	Tags                     []string                                                                                 "json:\"tags,omitempty\" graphql:\"tags\""
+	TextColor                *string                                                                                  "json:\"textColor,omitempty\" graphql:\"textColor\""
+	UpdatedAt                *time.Time                                                                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                *string                                                                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator    *string                                                                                  "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.BackgroundColor
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetFontFamily() *string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.FontFamily
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetOrganization() *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.Organization
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetOrganizationID() *string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.OrganizationID
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetPrimaryColor() *string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.PrimaryColor
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetRemoveAssessmentBranding() *bool {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.RemoveAssessmentBranding
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetSecondaryColor() *string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.SecondaryColor
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetTextColor() *string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.TextColor
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges struct {
+	Node *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges) GetNode() *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllOrganizationBrandingSettings_OrganizationBrandingSettings struct {
+	Edges []*GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings) GetEdges() []*GetAllOrganizationBrandingSettings_OrganizationBrandingSettings_Edges {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings_OrganizationBrandingSettings{}
+	}
+	return t.Edges
+}
+
+type GetOrganizationBrandingSettingByID_OrganizationBrandingSetting_Organization struct {
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
+}
+
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting_Organization) GetDisplayName() string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting_Organization{}
+	}
+	return t.DisplayName
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting_Organization) GetID() string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting_Organization{}
+	}
+	return t.ID
+}
+
+type GetOrganizationBrandingSettingByID_OrganizationBrandingSetting struct {
+	BackgroundColor          *string                                                                      "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	CreatedAt                *time.Time                                                                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                *string                                                                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FontFamily               *string                                                                      "json:\"fontFamily,omitempty\" graphql:\"fontFamily\""
+	ID                       string                                                                       "json:\"id\" graphql:\"id\""
+	Organization             *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	OrganizationID           *string                                                                      "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	PrimaryColor             *string                                                                      "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	RemoveAssessmentBranding *bool                                                                        "json:\"removeAssessmentBranding,omitempty\" graphql:\"removeAssessmentBranding\""
+	SecondaryColor           *string                                                                      "json:\"secondaryColor,omitempty\" graphql:\"secondaryColor\""
+	Tags                     []string                                                                     "json:\"tags,omitempty\" graphql:\"tags\""
+	TextColor                *string                                                                      "json:\"textColor,omitempty\" graphql:\"textColor\""
+	UpdatedAt                *time.Time                                                                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                *string                                                                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator    *string                                                                      "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.BackgroundColor
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.CreatedAt
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.CreatedBy
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetFontFamily() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.FontFamily
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetID() string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.ID
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetOrganization() *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting_Organization {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.Organization
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetOrganizationID() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.OrganizationID
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetPrimaryColor() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.PrimaryColor
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetRemoveAssessmentBranding() *bool {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.RemoveAssessmentBranding
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetSecondaryColor() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.SecondaryColor
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetTags() []string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.Tags
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetTextColor() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.TextColor
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID_OrganizationBrandingSetting{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization struct {
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
+}
+
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization) GetDisplayName() string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization{}
+	}
+	return t.DisplayName
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization) GetID() string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization{}
+	}
+	return t.ID
+}
+
+type GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node struct {
+	BackgroundColor          *string                                                                               "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	CreatedAt                *time.Time                                                                            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                *string                                                                               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FontFamily               *string                                                                               "json:\"fontFamily,omitempty\" graphql:\"fontFamily\""
+	ID                       string                                                                                "json:\"id\" graphql:\"id\""
+	Organization             *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	OrganizationID           *string                                                                               "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	PrimaryColor             *string                                                                               "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	RemoveAssessmentBranding *bool                                                                                 "json:\"removeAssessmentBranding,omitempty\" graphql:\"removeAssessmentBranding\""
+	SecondaryColor           *string                                                                               "json:\"secondaryColor,omitempty\" graphql:\"secondaryColor\""
+	Tags                     []string                                                                              "json:\"tags,omitempty\" graphql:\"tags\""
+	TextColor                *string                                                                               "json:\"textColor,omitempty\" graphql:\"textColor\""
+	UpdatedAt                *time.Time                                                                            "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                *string                                                                               "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator    *string                                                                               "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetBackgroundColor() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.BackgroundColor
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetFontFamily() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.FontFamily
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetOrganization() *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node_Organization {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.Organization
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetOrganizationID() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.OrganizationID
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetPrimaryColor() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.PrimaryColor
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetRemoveAssessmentBranding() *bool {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.RemoveAssessmentBranding
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetSecondaryColor() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.SecondaryColor
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetTextColor() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.TextColor
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges struct {
+	Node *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges) GetNode() *GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges_Node {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges{}
+	}
+	return t.Node
+}
+
+type GetOrganizationBrandingSettings_OrganizationBrandingSettings struct {
+	Edges []*GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetOrganizationBrandingSettings_OrganizationBrandingSettings) GetEdges() []*GetOrganizationBrandingSettings_OrganizationBrandingSettings_Edges {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings_OrganizationBrandingSettings{}
+	}
+	return t.Edges
+}
+
+type UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting_Organization struct {
+	DisplayName string "json:\"displayName\" graphql:\"displayName\""
+	ID          string "json:\"id\" graphql:\"id\""
+}
+
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting_Organization) GetDisplayName() string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting_Organization{}
+	}
+	return t.DisplayName
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting_Organization) GetID() string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting_Organization{}
+	}
+	return t.ID
+}
+
+type UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting struct {
+	BackgroundColor          *string                                                                                                       "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
+	CreatedAt                *time.Time                                                                                                    "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                *string                                                                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	FontFamily               *string                                                                                                       "json:\"fontFamily,omitempty\" graphql:\"fontFamily\""
+	ID                       string                                                                                                        "json:\"id\" graphql:\"id\""
+	Organization             *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting_Organization "json:\"organization,omitempty\" graphql:\"organization\""
+	OrganizationID           *string                                                                                                       "json:\"organizationID,omitempty\" graphql:\"organizationID\""
+	PrimaryColor             *string                                                                                                       "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	RemoveAssessmentBranding *bool                                                                                                         "json:\"removeAssessmentBranding,omitempty\" graphql:\"removeAssessmentBranding\""
+	SecondaryColor           *string                                                                                                       "json:\"secondaryColor,omitempty\" graphql:\"secondaryColor\""
+	Tags                     []string                                                                                                      "json:\"tags,omitempty\" graphql:\"tags\""
+	TextColor                *string                                                                                                       "json:\"textColor,omitempty\" graphql:\"textColor\""
+	UpdatedAt                *time.Time                                                                                                    "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                *string                                                                                                       "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator    *string                                                                                                       "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetBackgroundColor() *string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.BackgroundColor
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetFontFamily() *string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.FontFamily
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetID() string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.ID
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetOrganization() *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting_Organization {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.Organization
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetOrganizationID() *string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.OrganizationID
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetPrimaryColor() *string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.PrimaryColor
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetRemoveAssessmentBranding() *bool {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.RemoveAssessmentBranding
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetSecondaryColor() *string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.SecondaryColor
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetTags() []string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.Tags
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetTextColor() *string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.TextColor
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting struct {
+	OrganizationBrandingSetting UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting "json:\"organizationBrandingSetting\" graphql:\"organizationBrandingSetting\""
+}
+
+func (t *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting) GetOrganizationBrandingSetting() *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting_OrganizationBrandingSetting {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting{}
+	}
+	return &t.OrganizationBrandingSetting
 }
 
 type GetAllOrganizationSettings_OrganizationSettings_Edges_Node_Organization struct {
@@ -176869,6 +177436,50 @@ func (t *UpdateOrganization) GetUpdateOrganization() *UpdateOrganization_UpdateO
 	return &t.UpdateOrganization
 }
 
+type GetAllOrganizationBrandingSettings struct {
+	OrganizationBrandingSettings GetAllOrganizationBrandingSettings_OrganizationBrandingSettings "json:\"organizationBrandingSettings\" graphql:\"organizationBrandingSettings\""
+}
+
+func (t *GetAllOrganizationBrandingSettings) GetOrganizationBrandingSettings() *GetAllOrganizationBrandingSettings_OrganizationBrandingSettings {
+	if t == nil {
+		t = &GetAllOrganizationBrandingSettings{}
+	}
+	return &t.OrganizationBrandingSettings
+}
+
+type GetOrganizationBrandingSettingByID struct {
+	OrganizationBrandingSetting GetOrganizationBrandingSettingByID_OrganizationBrandingSetting "json:\"organizationBrandingSetting\" graphql:\"organizationBrandingSetting\""
+}
+
+func (t *GetOrganizationBrandingSettingByID) GetOrganizationBrandingSetting() *GetOrganizationBrandingSettingByID_OrganizationBrandingSetting {
+	if t == nil {
+		t = &GetOrganizationBrandingSettingByID{}
+	}
+	return &t.OrganizationBrandingSetting
+}
+
+type GetOrganizationBrandingSettings struct {
+	OrganizationBrandingSettings GetOrganizationBrandingSettings_OrganizationBrandingSettings "json:\"organizationBrandingSettings\" graphql:\"organizationBrandingSettings\""
+}
+
+func (t *GetOrganizationBrandingSettings) GetOrganizationBrandingSettings() *GetOrganizationBrandingSettings_OrganizationBrandingSettings {
+	if t == nil {
+		t = &GetOrganizationBrandingSettings{}
+	}
+	return &t.OrganizationBrandingSettings
+}
+
+type UpdateOrganizationBrandingSetting struct {
+	UpdateOrganizationBrandingSetting UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting "json:\"updateOrganizationBrandingSetting\" graphql:\"updateOrganizationBrandingSetting\""
+}
+
+func (t *UpdateOrganizationBrandingSetting) GetUpdateOrganizationBrandingSetting() *UpdateOrganizationBrandingSetting_UpdateOrganizationBrandingSetting {
+	if t == nil {
+		t = &UpdateOrganizationBrandingSetting{}
+	}
+	return &t.UpdateOrganizationBrandingSetting
+}
+
 type GetAllOrganizationSettings struct {
 	OrganizationSettings GetAllOrganizationSettings_OrganizationSettings "json:\"organizationSettings\" graphql:\"organizationSettings\""
 }
@@ -202953,6 +203564,179 @@ func (c *Client) UpdateOrganization(ctx context.Context, updateOrganizationID st
 	return &res, nil
 }
 
+const GetAllOrganizationBrandingSettingsDocument = `query GetAllOrganizationBrandingSettings {
+	organizationBrandingSettings {
+		edges {
+			node {
+				backgroundColor
+				createdAt
+				createdBy
+				fontFamily
+				id
+				organizationID
+				primaryColor
+				removeAssessmentBranding
+				secondaryColor
+				tags
+				textColor
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				organization {
+					id
+					displayName
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllOrganizationBrandingSettings(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllOrganizationBrandingSettings, error) {
+	vars := map[string]any{}
+
+	var res GetAllOrganizationBrandingSettings
+	if err := c.Client.Post(ctx, "GetAllOrganizationBrandingSettings", GetAllOrganizationBrandingSettingsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetOrganizationBrandingSettingByIDDocument = `query GetOrganizationBrandingSettingByID ($organizationBrandingSettingId: ID!) {
+	organizationBrandingSetting(id: $organizationBrandingSettingId) {
+		backgroundColor
+		createdAt
+		createdBy
+		fontFamily
+		id
+		organizationID
+		primaryColor
+		removeAssessmentBranding
+		secondaryColor
+		tags
+		textColor
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		organization {
+			id
+			displayName
+		}
+	}
+}
+`
+
+func (c *Client) GetOrganizationBrandingSettingByID(ctx context.Context, organizationBrandingSettingID string, interceptors ...clientv2.RequestInterceptor) (*GetOrganizationBrandingSettingByID, error) {
+	vars := map[string]any{
+		"organizationBrandingSettingId": organizationBrandingSettingID,
+	}
+
+	var res GetOrganizationBrandingSettingByID
+	if err := c.Client.Post(ctx, "GetOrganizationBrandingSettingByID", GetOrganizationBrandingSettingByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetOrganizationBrandingSettingsDocument = `query GetOrganizationBrandingSettings ($where: OrganizationBrandingSettingWhereInput!) {
+	organizationBrandingSettings(where: $where) {
+		edges {
+			node {
+				backgroundColor
+				createdAt
+				createdBy
+				fontFamily
+				id
+				organizationID
+				primaryColor
+				removeAssessmentBranding
+				secondaryColor
+				tags
+				textColor
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				organization {
+					id
+					displayName
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetOrganizationBrandingSettings(ctx context.Context, where OrganizationBrandingSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetOrganizationBrandingSettings, error) {
+	vars := map[string]any{
+		"where": where,
+	}
+
+	var res GetOrganizationBrandingSettings
+	if err := c.Client.Post(ctx, "GetOrganizationBrandingSettings", GetOrganizationBrandingSettingsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateOrganizationBrandingSettingDocument = `mutation UpdateOrganizationBrandingSetting ($updateOrganizationBrandingSettingId: ID!, $input: UpdateOrganizationBrandingSettingInput!) {
+	updateOrganizationBrandingSetting(id: $updateOrganizationBrandingSettingId, input: $input) {
+		organizationBrandingSetting {
+			backgroundColor
+			createdAt
+			createdBy
+			fontFamily
+			id
+			organizationID
+			primaryColor
+			removeAssessmentBranding
+			secondaryColor
+			tags
+			textColor
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			organization {
+				id
+				displayName
+			}
+		}
+	}
+}
+`
+
+func (c *Client) UpdateOrganizationBrandingSetting(ctx context.Context, updateOrganizationBrandingSettingID string, input UpdateOrganizationBrandingSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateOrganizationBrandingSetting, error) {
+	vars := map[string]any{
+		"updateOrganizationBrandingSettingId": updateOrganizationBrandingSettingID,
+		"input":                               input,
+	}
+
+	var res UpdateOrganizationBrandingSetting
+	if err := c.Client.Post(ctx, "UpdateOrganizationBrandingSetting", UpdateOrganizationBrandingSettingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const GetAllOrganizationSettingsDocument = `query GetAllOrganizationSettings {
 	organizationSettings {
 		edges {
@@ -224703,6 +225487,10 @@ var DocumentOperationNames = map[string]string{
 	GetOrganizationsDocument:                            "GetOrganizations",
 	TransferOrganizationOwnershipDocument:               "TransferOrganizationOwnership",
 	UpdateOrganizationDocument:                          "UpdateOrganization",
+	GetAllOrganizationBrandingSettingsDocument:          "GetAllOrganizationBrandingSettings",
+	GetOrganizationBrandingSettingByIDDocument:          "GetOrganizationBrandingSettingByID",
+	GetOrganizationBrandingSettingsDocument:             "GetOrganizationBrandingSettings",
+	UpdateOrganizationBrandingSettingDocument:           "UpdateOrganizationBrandingSetting",
 	GetAllOrganizationSettingsDocument:                  "GetAllOrganizationSettings",
 	GetOrganizationSettingByIDDocument:                  "GetOrganizationSettingByID",
 	GetOrganizationSettingsDocument:                     "GetOrganizationSettings",

@@ -693,6 +693,18 @@ func (f OrganizationFunc) Mutate(ctx context.Context, m generated.Mutation) (gen
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.OrganizationMutation", m)
 }
 
+// The OrganizationBrandingSettingFunc type is an adapter to allow the use of ordinary
+// function as OrganizationBrandingSetting mutator.
+type OrganizationBrandingSettingFunc func(context.Context, *generated.OrganizationBrandingSettingMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OrganizationBrandingSettingFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.OrganizationBrandingSettingMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.OrganizationBrandingSettingMutation", m)
+}
+
 // The OrganizationSettingFunc type is an adapter to allow the use of ordinary
 // function as OrganizationSetting mutator.
 type OrganizationSettingFunc func(context.Context, *generated.OrganizationSettingMutation) (generated.Value, error)

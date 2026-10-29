@@ -126,6 +126,8 @@ type Tx struct {
 	OrgSubscription *OrgSubscriptionClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
+	// OrganizationBrandingSetting is the client for interacting with the OrganizationBrandingSetting builders.
+	OrganizationBrandingSetting *OrganizationBrandingSettingClient
 	// OrganizationSetting is the client for interacting with the OrganizationSetting builders.
 	OrganizationSetting *OrganizationSettingClient
 	// PasswordResetToken is the client for interacting with the PasswordResetToken builders.
@@ -400,6 +402,7 @@ func (tx *Tx) init() {
 	tx.OrgProduct = NewOrgProductClient(tx.config)
 	tx.OrgSubscription = NewOrgSubscriptionClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)
+	tx.OrganizationBrandingSetting = NewOrganizationBrandingSettingClient(tx.config)
 	tx.OrganizationSetting = NewOrganizationSettingClient(tx.config)
 	tx.PasswordResetToken = NewPasswordResetTokenClient(tx.config)
 	tx.PersonalAccessToken = NewPersonalAccessTokenClient(tx.config)

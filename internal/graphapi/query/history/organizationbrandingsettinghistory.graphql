@@ -1,0 +1,64 @@
+query GetAllOrganizationBrandingSettingHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [OrganizationBrandingSettingHistoryOrder!]) {
+	organizationBrandingSettingHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				backgroundColor
+				createdAt
+				createdBy
+				fontFamily
+				historyTime
+				id
+				operation
+				organizationID
+				primaryColor
+				ref
+				removeAssessmentBranding
+				secondaryColor
+				tags
+				textColor
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}
+query GetOrganizationBrandingSettingHistories ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [OrganizationBrandingSettingHistoryOrder!], $where: OrganizationBrandingSettingHistoryWhereInput) {
+	organizationBrandingSettingHistories(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				backgroundColor
+				createdAt
+				createdBy
+				fontFamily
+				historyTime
+				id
+				operation
+				organizationID
+				primaryColor
+				ref
+				removeAssessmentBranding
+				secondaryColor
+				tags
+				textColor
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}

@@ -1479,6 +1479,30 @@ func (f OrganizationMutationRuleFunc) EvalMutation(ctx context.Context, m genera
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrganizationMutation", m)
 }
 
+// The OrganizationBrandingSettingQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OrganizationBrandingSettingQueryRuleFunc func(context.Context, *generated.OrganizationBrandingSettingQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OrganizationBrandingSettingQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrganizationBrandingSettingQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OrganizationBrandingSettingQuery", q)
+}
+
+// The OrganizationBrandingSettingMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OrganizationBrandingSettingMutationRuleFunc func(context.Context, *generated.OrganizationBrandingSettingMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OrganizationBrandingSettingMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OrganizationBrandingSettingMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrganizationBrandingSettingMutation", m)
+}
+
 // The OrganizationSettingQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type OrganizationSettingQueryRuleFunc func(context.Context, *generated.OrganizationSettingQuery) error
@@ -2660,6 +2684,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.OrganizationQuery:
 		return q.Filter(), nil
+	case *generated.OrganizationBrandingSettingQuery:
+		return q.Filter(), nil
 	case *generated.OrganizationSettingQuery:
 		return q.Filter(), nil
 	case *generated.PasswordResetTokenQuery:
@@ -2866,6 +2892,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.OrgSubscriptionMutation:
 		return m.Filter(), nil
 	case *generated.OrganizationMutation:
+		return m.Filter(), nil
+	case *generated.OrganizationBrandingSettingMutation:
 		return m.Filter(), nil
 	case *generated.OrganizationSettingMutation:
 		return m.Filter(), nil

@@ -1,0 +1,98 @@
+query GetAllOrganizationBrandingSettings {
+	organizationBrandingSettings {
+		edges {
+			node {
+				backgroundColor
+				createdAt
+				createdBy
+				fontFamily
+				id
+				organizationID
+				primaryColor
+				removeAssessmentBranding
+				secondaryColor
+				tags
+				textColor
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				organization {
+					id
+					displayName
+				}
+			}
+		}
+	}
+}
+query GetOrganizationBrandingSettingByID ($organizationBrandingSettingId: ID!) {
+	organizationBrandingSetting(id: $organizationBrandingSettingId) {
+		backgroundColor
+		createdAt
+		createdBy
+		fontFamily
+		id
+		organizationID
+		primaryColor
+		removeAssessmentBranding
+		secondaryColor
+		tags
+		textColor
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		organization {
+			id
+			displayName
+		}
+	}
+}
+query GetOrganizationBrandingSettings ($where: OrganizationBrandingSettingWhereInput!) {
+	organizationBrandingSettings(where: $where) {
+		edges {
+			node {
+				backgroundColor
+				createdAt
+				createdBy
+				fontFamily
+				id
+				organizationID
+				primaryColor
+				removeAssessmentBranding
+				secondaryColor
+				tags
+				textColor
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				organization {
+					id
+					displayName
+				}
+			}
+		}
+	}
+}
+mutation UpdateOrganizationBrandingSetting ($updateOrganizationBrandingSettingId: ID!, $input: UpdateOrganizationBrandingSettingInput!) {
+	updateOrganizationBrandingSetting(id: $updateOrganizationBrandingSettingId, input: $input) {
+		organizationBrandingSetting {
+			backgroundColor
+			createdAt
+			createdBy
+			fontFamily
+			id
+			organizationID
+			primaryColor
+			removeAssessmentBranding
+			secondaryColor
+			tags
+			textColor
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			organization {
+				id
+				displayName
+			}
+		}
+	}
+}

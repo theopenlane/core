@@ -6,6 +6,7 @@ package models
 const (
 	CatalogAssessmentCustomDomainAddon   OrgModule = "assessment_custom_domain_addon"
 	CatalogBaseModule                    OrgModule = "base_module"
+	CatalogBrandingAssessmentAddon       OrgModule = "branding_assessment_addon"
 	CatalogBrandingTrustcenterAddon      OrgModule = "branding_trustcenter_addon"
 	CatalogComplianceModule              OrgModule = "compliance_module"
 	CatalogDomainScanningAddon           OrgModule = "domain_scanning_addon"
@@ -23,13 +24,14 @@ const (
 const CatalogAnyModule OrgModule = "any_module"
 
 // AllOrgModules contains every module and addon in the catalog
-var AllOrgModules = []OrgModule{CatalogAssessmentCustomDomainAddon, CatalogBaseModule, CatalogBrandingTrustcenterAddon, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule, CatalogWorkflowAddon}
+var AllOrgModules = []OrgModule{CatalogAssessmentCustomDomainAddon, CatalogBaseModule, CatalogBrandingAssessmentAddon, CatalogBrandingTrustcenterAddon, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule, CatalogWorkflowAddon}
 
 // OrgModuleByConstName maps the name of each module constant to the module it holds
 var OrgModuleByConstName = map[string]OrgModule{
 	"CatalogAnyModule":                     CatalogAnyModule,
 	"CatalogAssessmentCustomDomainAddon":   CatalogAssessmentCustomDomainAddon,
 	"CatalogBaseModule":                    CatalogBaseModule,
+	"CatalogBrandingAssessmentAddon":       CatalogBrandingAssessmentAddon,
 	"CatalogBrandingTrustcenterAddon":      CatalogBrandingTrustcenterAddon,
 	"CatalogComplianceModule":              CatalogComplianceModule,
 	"CatalogDomainScanningAddon":           CatalogDomainScanningAddon,

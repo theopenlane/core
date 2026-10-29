@@ -1,5 +1,5 @@
-version: v0.0.17
-sha: e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2
+version: v0.0.18
+sha: 9c67c9d7716b4a449bc73e093f71b932d06bffc6b760a0615607ebd32f284adf
 modules:
   base_module:
     display_name: Base Module
@@ -140,6 +140,25 @@ addons:
         price_id: price_1UQvl2JIzM4Pa2Zcy9JuYGrz
     audience: private
     product_id: prod_VRKVWuKkT9FOGT
+  branding_assessment_addon:
+    display_name: Assessment Branding
+    lookup_key: branding_assessment_addon
+    description: Assessment Branding
+    marketing_description: Customization option to remove the Openlane branding on your assessments
+    billing:
+      prices:
+      - interval: month
+        unit_amount: 2500
+        nickname: price_assessment_branding_monthly
+        lookup_key: price_branding_assessment_monthly
+        price_id: price_1UUviHJIzM4Pa2ZcrMIuRkBA
+      - interval: year
+        unit_amount: 27000
+        nickname: price_assessment_branding_annually
+        lookup_key: price_branding_assessment_yearly
+        price_id: price_1UUviIJIzM4Pa2ZctSKiPEBP
+    audience: public
+    product_id: prod_VVxdpnZhQfO5lM
   branding_trustcenter_addon:
     display_name: Trustcenter Branding
     lookup_key: branding_trustcenter_addon

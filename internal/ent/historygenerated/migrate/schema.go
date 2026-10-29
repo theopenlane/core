@@ -1727,6 +1727,41 @@ var (
 			},
 		},
 	}
+	// OrganizationBrandingSettingHistoryColumns holds the columns for the "organization_branding_setting_history" table.
+	OrganizationBrandingSettingHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "organization_id", Type: field.TypeString, Nullable: true},
+		{Name: "remove_assessment_branding", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "primary_color", Type: field.TypeString, Nullable: true},
+		{Name: "secondary_color", Type: field.TypeString, Nullable: true},
+		{Name: "background_color", Type: field.TypeString, Nullable: true},
+		{Name: "text_color", Type: field.TypeString, Nullable: true},
+		{Name: "font_family", Type: field.TypeString, Nullable: true},
+	}
+	// OrganizationBrandingSettingHistoryTable holds the schema information for the "organization_branding_setting_history" table.
+	OrganizationBrandingSettingHistoryTable = &schema.Table{
+		Name:       "organization_branding_setting_history",
+		Columns:    OrganizationBrandingSettingHistoryColumns,
+		PrimaryKey: []*schema.Column{OrganizationBrandingSettingHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "organizationbrandingsettinghistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{OrganizationBrandingSettingHistoryColumns[1]},
+			},
+		},
+	}
 	// OrganizationHistoryColumns holds the columns for the "organization_history" table.
 	OrganizationHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3372,6 +3407,7 @@ var (
 		NotificationPreferenceHistoryTable,
 		NotificationTemplateHistoryTable,
 		OrgMembershipHistoryTable,
+		OrganizationBrandingSettingHistoryTable,
 		OrganizationHistoryTable,
 		OrganizationSettingHistoryTable,
 		PlatformHistoryTable,
@@ -3510,6 +3546,9 @@ func init() {
 	}
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
+	}
+	OrganizationBrandingSettingHistoryTable.Annotation = &entsql.Annotation{
+		Table: "organization_branding_setting_history",
 	}
 	OrganizationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_history",

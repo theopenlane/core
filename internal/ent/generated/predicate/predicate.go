@@ -177,6 +177,9 @@ type OrgSubscription func(*sql.Selector)
 // Organization is the predicate function for organization builders.
 type Organization func(*sql.Selector)
 
+// OrganizationBrandingSetting is the predicate function for organizationbrandingsetting builders.
+type OrganizationBrandingSetting func(*sql.Selector)
+
 // OrganizationSetting is the predicate function for organizationsetting builders.
 type OrganizationSetting func(*sql.Selector)
 

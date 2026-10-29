@@ -78,6 +78,8 @@ type Assessment struct {
 
 	// AccessURL is the anonymous questionnaire access URL for system-owned assessments
 	AccessURL string `json:"accessURL,omitempty"`
+	// RemoveBranding determines whether to hide the Openlane branding on the assessment page
+	RemoveBranding bool `json:"removeBranding,omitempty"`
 }
 
 // AssessmentEdges holds the relations/edges for other nodes in the graph.
