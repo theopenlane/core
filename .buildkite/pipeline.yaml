@@ -32,7 +32,7 @@ env:
   # RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
   # RUNNER_WORKLOAD_STANDARD: "standard"
 agents:
-  queue: "default"
+  queue: "self-hosted-garage-vms"
   nsc-os: "linux"
   nsc-arch: "amd64"
   nsc-shape: "8x16"
