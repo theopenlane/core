@@ -461,6 +461,8 @@ components:
                 jsonconfig:
                     additionalProperties: {}
                     type: object
+                remove_branding:
+                    type: boolean
                 saved_data:
                     additionalProperties: {}
                     type: object

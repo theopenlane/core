@@ -59,6 +59,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -425,6 +426,7 @@ func init() {
 	assessment.Interceptors[1] = assessmentMixinInters8[0]
 	assessment.Interceptors[2] = assessmentMixinInters8[1]
 	assessment.Interceptors[3] = assessmentInters[0]
+	assessment.Interceptors[4] = assessmentInters[1]
 	assessmentMixinFields0 := assessmentMixin[0].Fields()
 	_ = assessmentMixinFields0
 	assessmentMixinFields4 := assessmentMixin[4].Fields()
@@ -5303,6 +5305,78 @@ func init() {
 	organizationDescID := organizationMixinFields4[0].Descriptor()
 	// organization.DefaultID holds the default value on creation for the id field.
 	organization.DefaultID = organizationDescID.Default.(func() string)
+	organizationbrandingsettingMixin := schema.OrganizationBrandingSetting{}.Mixin()
+	organizationbrandingsetting.Policy = privacy.NewPolicies(schema.OrganizationBrandingSetting{})
+	organizationbrandingsetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := organizationbrandingsetting.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	organizationbrandingsettingMixinHooks0 := organizationbrandingsettingMixin[0].Hooks()
+	organizationbrandingsettingMixinHooks1 := organizationbrandingsettingMixin[1].Hooks()
+	organizationbrandingsettingMixinHooks3 := organizationbrandingsettingMixin[3].Hooks()
+	organizationbrandingsettingMixinHooks5 := organizationbrandingsettingMixin[5].Hooks()
+
+	organizationbrandingsetting.Hooks[1] = organizationbrandingsettingMixinHooks0[0]
+
+	organizationbrandingsetting.Hooks[2] = organizationbrandingsettingMixinHooks1[0]
+
+	organizationbrandingsetting.Hooks[3] = organizationbrandingsettingMixinHooks3[0]
+
+	organizationbrandingsetting.Hooks[4] = organizationbrandingsettingMixinHooks5[0]
+	organizationbrandingsettingMixinInters3 := organizationbrandingsettingMixin[3].Interceptors()
+	organizationbrandingsettingInters := schema.OrganizationBrandingSetting{}.Interceptors()
+	organizationbrandingsetting.Interceptors[0] = organizationbrandingsettingMixinInters3[0]
+	organizationbrandingsetting.Interceptors[1] = organizationbrandingsettingInters[0]
+	organizationbrandingsettingMixinFields0 := organizationbrandingsettingMixin[0].Fields()
+	_ = organizationbrandingsettingMixinFields0
+	organizationbrandingsettingMixinFields4 := organizationbrandingsettingMixin[4].Fields()
+	_ = organizationbrandingsettingMixinFields4
+	organizationbrandingsettingMixinFields5 := organizationbrandingsettingMixin[5].Fields()
+	_ = organizationbrandingsettingMixinFields5
+	organizationbrandingsettingFields := schema.OrganizationBrandingSetting{}.Fields()
+	_ = organizationbrandingsettingFields
+	// organizationbrandingsettingDescCreatedAt is the schema descriptor for created_at field.
+	organizationbrandingsettingDescCreatedAt := organizationbrandingsettingMixinFields0[0].Descriptor()
+	// organizationbrandingsetting.DefaultCreatedAt holds the default value on creation for the created_at field.
+	organizationbrandingsetting.DefaultCreatedAt = organizationbrandingsettingDescCreatedAt.Default.(func() time.Time)
+	// organizationbrandingsettingDescUpdatedAt is the schema descriptor for updated_at field.
+	organizationbrandingsettingDescUpdatedAt := organizationbrandingsettingMixinFields0[1].Descriptor()
+	// organizationbrandingsetting.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	organizationbrandingsetting.DefaultUpdatedAt = organizationbrandingsettingDescUpdatedAt.Default.(func() time.Time)
+	// organizationbrandingsetting.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	organizationbrandingsetting.UpdateDefaultUpdatedAt = organizationbrandingsettingDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// organizationbrandingsettingDescTags is the schema descriptor for tags field.
+	organizationbrandingsettingDescTags := organizationbrandingsettingMixinFields5[0].Descriptor()
+	// organizationbrandingsetting.DefaultTags holds the default value on creation for the tags field.
+	organizationbrandingsetting.DefaultTags = organizationbrandingsettingDescTags.Default.([]string)
+	// organizationbrandingsettingDescRemoveAssessmentBranding is the schema descriptor for remove_assessment_branding field.
+	organizationbrandingsettingDescRemoveAssessmentBranding := organizationbrandingsettingFields[1].Descriptor()
+	// organizationbrandingsetting.DefaultRemoveAssessmentBranding holds the default value on creation for the remove_assessment_branding field.
+	organizationbrandingsetting.DefaultRemoveAssessmentBranding = organizationbrandingsettingDescRemoveAssessmentBranding.Default.(bool)
+	// organizationbrandingsettingDescPrimaryColor is the schema descriptor for primary_color field.
+	organizationbrandingsettingDescPrimaryColor := organizationbrandingsettingFields[2].Descriptor()
+	// organizationbrandingsetting.PrimaryColorValidator is a validator for the "primary_color" field. It is called by the builders before save.
+	organizationbrandingsetting.PrimaryColorValidator = organizationbrandingsettingDescPrimaryColor.Validators[0].(func(string) error)
+	// organizationbrandingsettingDescSecondaryColor is the schema descriptor for secondary_color field.
+	organizationbrandingsettingDescSecondaryColor := organizationbrandingsettingFields[3].Descriptor()
+	// organizationbrandingsetting.SecondaryColorValidator is a validator for the "secondary_color" field. It is called by the builders before save.
+	organizationbrandingsetting.SecondaryColorValidator = organizationbrandingsettingDescSecondaryColor.Validators[0].(func(string) error)
+	// organizationbrandingsettingDescBackgroundColor is the schema descriptor for background_color field.
+	organizationbrandingsettingDescBackgroundColor := organizationbrandingsettingFields[4].Descriptor()
+	// organizationbrandingsetting.BackgroundColorValidator is a validator for the "background_color" field. It is called by the builders before save.
+	organizationbrandingsetting.BackgroundColorValidator = organizationbrandingsettingDescBackgroundColor.Validators[0].(func(string) error)
+	// organizationbrandingsettingDescTextColor is the schema descriptor for text_color field.
+	organizationbrandingsettingDescTextColor := organizationbrandingsettingFields[5].Descriptor()
+	// organizationbrandingsetting.TextColorValidator is a validator for the "text_color" field. It is called by the builders before save.
+	organizationbrandingsetting.TextColorValidator = organizationbrandingsettingDescTextColor.Validators[0].(func(string) error)
+	// organizationbrandingsettingDescID is the schema descriptor for id field.
+	organizationbrandingsettingDescID := organizationbrandingsettingMixinFields4[0].Descriptor()
+	// organizationbrandingsetting.DefaultID holds the default value on creation for the id field.
+	organizationbrandingsetting.DefaultID = organizationbrandingsettingDescID.Default.(func() string)
 	organizationsettingMixin := schema.OrganizationSetting{}.Mixin()
 	organizationsetting.Policy = privacy.NewPolicies(schema.OrganizationSetting{})
 	organizationsetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {

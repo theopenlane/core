@@ -3123,6 +3123,29 @@ func HasPersonalAccessTokensWith(preds ...predicate.PersonalAccessToken) predica
 	})
 }
 
+// HasBrandingSetting applies the HasEdge predicate on the "branding_setting" edge.
+func HasBrandingSetting() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, BrandingSettingTable, BrandingSettingColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBrandingSettingWith applies the HasEdge predicate on the "branding_setting" edge with a given conditions (other predicates).
+func HasBrandingSettingWith(preds ...predicate.OrganizationBrandingSetting) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newBrandingSettingStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasAPITokens applies the HasEdge predicate on the "api_tokens" edge.
 func HasAPITokens() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

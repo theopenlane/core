@@ -1505,6 +1505,11 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		Rules: []CSVReferenceRule{
 		},
 	},
+	"OrganizationBrandingSetting": {
+		SchemaName: "OrganizationBrandingSetting",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"OrganizationSetting": {
 		SchemaName: "OrganizationSetting",
 		Rules: []CSVReferenceRule{
@@ -3181,6 +3186,24 @@ type OrganizationCSVUpdateInput struct {
 
 // CSVInputWrapper marks OrganizationCSVUpdateInput for CSV header preprocessing.
 func (OrganizationCSVUpdateInput) CSVInputWrapper() {}
+
+// OrganizationBrandingSettingCSVInput wraps CreateOrganizationBrandingSettingInput with CSV reference columns.
+type OrganizationBrandingSettingCSVInput struct {
+	Input generated.CreateOrganizationBrandingSettingInput
+}
+
+// CSVInputWrapper marks OrganizationBrandingSettingCSVInput for CSV header preprocessing.
+func (OrganizationBrandingSettingCSVInput) CSVInputWrapper() {}
+
+// OrganizationBrandingSettingCSVUpdateInput wraps UpdateOrganizationBrandingSettingInput with CSV reference columns for bulk updates.
+type OrganizationBrandingSettingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateOrganizationBrandingSettingInput
+}
+
+// CSVInputWrapper marks OrganizationBrandingSettingCSVUpdateInput for CSV header preprocessing.
+func (OrganizationBrandingSettingCSVUpdateInput) CSVInputWrapper() {}
 
 // OrganizationSettingCSVInput wraps CreateOrganizationSettingInput with CSV reference columns.
 type OrganizationSettingCSVInput struct {

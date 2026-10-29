@@ -44,6 +44,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationbrandingsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
@@ -256,6 +257,11 @@ var orgmembershiphistoryImplementors = []string{"OrgMembershipHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*OrgMembershipHistory) IsNode() {}
+
+var organizationbrandingsettinghistoryImplementors = []string{"OrganizationBrandingSettingHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*OrganizationBrandingSettingHistory) IsNode() {}
 
 var organizationhistoryImplementors = []string{"OrganizationHistory", "Node"}
 
@@ -792,6 +798,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(orgmembershiphistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, orgmembershiphistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case organizationbrandingsettinghistory.Table:
+		query := c.OrganizationBrandingSettingHistory.Query().
+			Where(organizationbrandingsettinghistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, organizationbrandingsettinghistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1716,6 +1731,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.OrgMembershipHistory.Query().
 			Where(orgmembershiphistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, orgmembershiphistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case organizationbrandingsettinghistory.Table:
+		query := c.OrganizationBrandingSettingHistory.Query().
+			Where(organizationbrandingsettinghistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, organizationbrandingsettinghistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

@@ -58,6 +58,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -1558,6 +1559,25 @@ func (_u *OrganizationUpdate) AddPersonalAccessTokens(v ...*PersonalAccessToken)
 		ids[i] = v[i].ID
 	}
 	return _u.AddPersonalAccessTokenIDs(ids...)
+}
+
+// SetBrandingSettingID sets the "branding_setting" edge to the OrganizationBrandingSetting entity by ID.
+func (_u *OrganizationUpdate) SetBrandingSettingID(id string) *OrganizationUpdate {
+	_u.mutation.SetBrandingSettingID(id)
+	return _u
+}
+
+// SetNillableBrandingSettingID sets the "branding_setting" edge to the OrganizationBrandingSetting entity by ID if the given value is not nil.
+func (_u *OrganizationUpdate) SetNillableBrandingSettingID(id *string) *OrganizationUpdate {
+	if id != nil {
+		_u = _u.SetBrandingSettingID(*id)
+	}
+	return _u
+}
+
+// SetBrandingSetting sets the "branding_setting" edge to the OrganizationBrandingSetting entity.
+func (_u *OrganizationUpdate) SetBrandingSetting(v *OrganizationBrandingSetting) *OrganizationUpdate {
+	return _u.SetBrandingSettingID(v.ID)
 }
 
 // AddAPITokenIDs adds the "api_tokens" edge to the APIToken entity by IDs.
@@ -4447,6 +4467,12 @@ func (_u *OrganizationUpdate) RemovePersonalAccessTokens(v ...*PersonalAccessTok
 		ids[i] = v[i].ID
 	}
 	return _u.RemovePersonalAccessTokenIDs(ids...)
+}
+
+// ClearBrandingSetting clears the "branding_setting" edge to the OrganizationBrandingSetting entity.
+func (_u *OrganizationUpdate) ClearBrandingSetting() *OrganizationUpdate {
+	_u.mutation.ClearBrandingSetting()
+	return _u
 }
 
 // ClearAPITokens clears all "api_tokens" edges to the APIToken entity.
@@ -9882,6 +9908,35 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.BrandingSettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.BrandingSettingTable,
+			Columns: []string{organization.BrandingSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationbrandingsetting.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BrandingSettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.BrandingSettingTable,
+			Columns: []string{organization.BrandingSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationbrandingsetting.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.APITokensCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -15002,6 +15057,25 @@ func (_u *OrganizationUpdateOne) AddPersonalAccessTokens(v ...*PersonalAccessTok
 	return _u.AddPersonalAccessTokenIDs(ids...)
 }
 
+// SetBrandingSettingID sets the "branding_setting" edge to the OrganizationBrandingSetting entity by ID.
+func (_u *OrganizationUpdateOne) SetBrandingSettingID(id string) *OrganizationUpdateOne {
+	_u.mutation.SetBrandingSettingID(id)
+	return _u
+}
+
+// SetNillableBrandingSettingID sets the "branding_setting" edge to the OrganizationBrandingSetting entity by ID if the given value is not nil.
+func (_u *OrganizationUpdateOne) SetNillableBrandingSettingID(id *string) *OrganizationUpdateOne {
+	if id != nil {
+		_u = _u.SetBrandingSettingID(*id)
+	}
+	return _u
+}
+
+// SetBrandingSetting sets the "branding_setting" edge to the OrganizationBrandingSetting entity.
+func (_u *OrganizationUpdateOne) SetBrandingSetting(v *OrganizationBrandingSetting) *OrganizationUpdateOne {
+	return _u.SetBrandingSettingID(v.ID)
+}
+
 // AddAPITokenIDs adds the "api_tokens" edge to the APIToken entity by IDs.
 func (_u *OrganizationUpdateOne) AddAPITokenIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddAPITokenIDs(ids...)
@@ -17889,6 +17963,12 @@ func (_u *OrganizationUpdateOne) RemovePersonalAccessTokens(v ...*PersonalAccess
 		ids[i] = v[i].ID
 	}
 	return _u.RemovePersonalAccessTokenIDs(ids...)
+}
+
+// ClearBrandingSetting clears the "branding_setting" edge to the OrganizationBrandingSetting entity.
+func (_u *OrganizationUpdateOne) ClearBrandingSetting() *OrganizationUpdateOne {
+	_u.mutation.ClearBrandingSetting()
+	return _u
 }
 
 // ClearAPITokens clears all "api_tokens" edges to the APIToken entity.
@@ -23347,6 +23427,35 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.BrandingSettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.BrandingSettingTable,
+			Columns: []string{organization.BrandingSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationbrandingsetting.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BrandingSettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.BrandingSettingTable,
+			Columns: []string{organization.BrandingSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationbrandingsetting.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

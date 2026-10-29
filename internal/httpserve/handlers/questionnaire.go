@@ -11,11 +11,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
-	"github.com/theopenlane/logx"
 )
 
 // GetQuestionnaire retrieves questionnaire template configuration for authenticated anonymous users
@@ -106,8 +107,9 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 	}
 
 	response := models.GetQuestionnaireResponse{
-		Jsonconfig: assessment.Jsonconfig,
-		UISchema:   assessment.Uischema,
+		Jsonconfig:     assessment.Jsonconfig,
+		UISchema:       assessment.Uischema,
+		RemoveBranding: assessment.RemoveBranding,
 	}
 
 	if assessment.Edges.Template != nil {

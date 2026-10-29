@@ -42,6 +42,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationbrandingsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
@@ -8272,6 +8273,170 @@ func newOrgMembershipHistoryPaginateArgs(rv map[string]any) *orgmembershiphistor
 	}
 	if v, ok := rv[whereField].(*OrgMembershipHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithOrgMembershipHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *OrganizationBrandingSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*OrganizationBrandingSettingHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *OrganizationBrandingSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(organizationbrandingsettinghistory.Columns))
+		selectedFields = []string{organizationbrandingsettinghistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldHistoryTime)
+				fieldSeen[organizationbrandingsettinghistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldRef)
+				fieldSeen[organizationbrandingsettinghistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldOperation)
+				fieldSeen[organizationbrandingsettinghistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldCreatedAt)
+				fieldSeen[organizationbrandingsettinghistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldUpdatedAt)
+				fieldSeen[organizationbrandingsettinghistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldCreatedBy)
+				fieldSeen[organizationbrandingsettinghistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldUpdatedBy)
+				fieldSeen[organizationbrandingsettinghistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldUpdatedByImpersonator)
+				fieldSeen[organizationbrandingsettinghistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldTags)
+				fieldSeen[organizationbrandingsettinghistory.FieldTags] = struct{}{}
+			}
+		case "organizationID":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldOrganizationID]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldOrganizationID)
+				fieldSeen[organizationbrandingsettinghistory.FieldOrganizationID] = struct{}{}
+			}
+		case "removeAssessmentBranding":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldRemoveAssessmentBranding]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldRemoveAssessmentBranding)
+				fieldSeen[organizationbrandingsettinghistory.FieldRemoveAssessmentBranding] = struct{}{}
+			}
+		case "primaryColor":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldPrimaryColor]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldPrimaryColor)
+				fieldSeen[organizationbrandingsettinghistory.FieldPrimaryColor] = struct{}{}
+			}
+		case "secondaryColor":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldSecondaryColor]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldSecondaryColor)
+				fieldSeen[organizationbrandingsettinghistory.FieldSecondaryColor] = struct{}{}
+			}
+		case "backgroundColor":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldBackgroundColor]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldBackgroundColor)
+				fieldSeen[organizationbrandingsettinghistory.FieldBackgroundColor] = struct{}{}
+			}
+		case "textColor":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldTextColor]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldTextColor)
+				fieldSeen[organizationbrandingsettinghistory.FieldTextColor] = struct{}{}
+			}
+		case "fontFamily":
+			if _, ok := fieldSeen[organizationbrandingsettinghistory.FieldFontFamily]; !ok {
+				selectedFields = append(selectedFields, organizationbrandingsettinghistory.FieldFontFamily)
+				fieldSeen[organizationbrandingsettinghistory.FieldFontFamily] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type organizationbrandingsettinghistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []OrganizationBrandingSettingHistoryPaginateOption
+}
+
+func newOrganizationBrandingSettingHistoryPaginateArgs(rv map[string]any) *organizationbrandingsettinghistoryPaginateArgs {
+	args := &organizationbrandingsettinghistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &OrganizationBrandingSettingHistoryOrder{Field: &OrganizationBrandingSettingHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithOrganizationBrandingSettingHistoryOrder(order))
+			}
+		case *OrganizationBrandingSettingHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithOrganizationBrandingSettingHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*OrganizationBrandingSettingHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithOrganizationBrandingSettingHistoryFilter(v.Filter))
 	}
 	return args
 }

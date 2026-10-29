@@ -82,6 +82,8 @@ type Tx struct {
 	NotificationTemplateHistory *NotificationTemplateHistoryClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
+	// OrganizationBrandingSettingHistory is the client for interacting with the OrganizationBrandingSettingHistory builders.
+	OrganizationBrandingSettingHistory *OrganizationBrandingSettingHistoryClient
 	// OrganizationHistory is the client for interacting with the OrganizationHistory builders.
 	OrganizationHistory *OrganizationHistoryClient
 	// OrganizationSettingHistory is the client for interacting with the OrganizationSettingHistory builders.
@@ -317,6 +319,7 @@ func (tx *Tx) init() {
 	tx.NotificationPreferenceHistory = NewNotificationPreferenceHistoryClient(tx.config)
 	tx.NotificationTemplateHistory = NewNotificationTemplateHistoryClient(tx.config)
 	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
+	tx.OrganizationBrandingSettingHistory = NewOrganizationBrandingSettingHistoryClient(tx.config)
 	tx.OrganizationHistory = NewOrganizationHistoryClient(tx.config)
 	tx.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(tx.config)
 	tx.PlatformHistory = NewPlatformHistoryClient(tx.config)

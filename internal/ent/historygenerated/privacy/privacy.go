@@ -929,6 +929,30 @@ func (f OrgMembershipHistoryMutationRuleFunc) EvalMutation(ctx context.Context, 
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.OrgMembershipHistoryMutation", m)
 }
 
+// The OrganizationBrandingSettingHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OrganizationBrandingSettingHistoryQueryRuleFunc func(context.Context, *historygenerated.OrganizationBrandingSettingHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OrganizationBrandingSettingHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.OrganizationBrandingSettingHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.OrganizationBrandingSettingHistoryQuery", q)
+}
+
+// The OrganizationBrandingSettingHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OrganizationBrandingSettingHistoryMutationRuleFunc func(context.Context, *historygenerated.OrganizationBrandingSettingHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OrganizationBrandingSettingHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.OrganizationBrandingSettingHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.OrganizationBrandingSettingHistoryMutation", m)
+}
+
 // The OrganizationHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type OrganizationHistoryQueryRuleFunc func(context.Context, *historygenerated.OrganizationHistoryQuery) error
@@ -1872,6 +1896,8 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.OrgMembershipHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.OrganizationBrandingSettingHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.OrganizationHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.OrganizationSettingHistoryQuery:
@@ -2016,6 +2042,8 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.NotificationTemplateHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.OrgMembershipHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.OrganizationBrandingSettingHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.OrganizationHistoryMutation:
 		return m.Filter(), nil

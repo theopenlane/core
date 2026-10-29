@@ -57,6 +57,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
@@ -359,6 +360,11 @@ var organizationImplementors = []string{"Organization", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Organization) IsNode() {}
+
+var organizationbrandingsettingImplementors = []string{"OrganizationBrandingSetting", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*OrganizationBrandingSetting) IsNode() {}
 
 var organizationsettingImplementors = []string{"OrganizationSetting", "Node"}
 
@@ -1084,6 +1090,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(organization.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, organizationImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case organizationbrandingsetting.Table:
+		query := c.OrganizationBrandingSetting.Query().
+			Where(organizationbrandingsetting.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, organizationbrandingsettingImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2345,6 +2360,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Organization.Query().
 			Where(organization.IDIn(ids...))
 		query, err := query.CollectFields(ctx, organizationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case organizationbrandingsetting.Table:
+		query := c.OrganizationBrandingSetting.Query().
+			Where(organizationbrandingsetting.IDIn(ids...))
+		query, err := query.CollectFields(ctx, organizationbrandingsettingImplementors...)
 		if err != nil {
 			return nil, err
 		}

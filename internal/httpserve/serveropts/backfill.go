@@ -8,10 +8,11 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/logx"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/logx"
 )
 
 // backfillBypassCaps are the capabilities backfill routines run with
@@ -65,6 +66,12 @@ var backfillRoutines = []backfillRoutine{
 		// Run: func(ctx context.Context, deps backfillDeps) error {
 		// 	return backfillX(ctx, deps.Client)
 		// },
+	},
+	{
+		Name:    "backfill-org-branding-setting",
+		Version: "v1",
+		Enabled: true,
+		Run:     backfillOrgBrandingSettings,
 	},
 }
 

@@ -115,6 +115,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*OrganizationMutation]() {
 		c.Organization.Use(hook)
 	}
+	for _, hook := range history.Hooks[*OrganizationBrandingSettingMutation]() {
+		c.OrganizationBrandingSetting.Use(hook)
+	}
 	for _, hook := range history.Hooks[*OrganizationSettingMutation]() {
 		c.OrganizationSetting.Use(hook)
 	}

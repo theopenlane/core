@@ -213,6 +213,8 @@ const (
 	EdgeSetting = "setting"
 	// EdgePersonalAccessTokens holds the string denoting the personal_access_tokens edge name in mutations.
 	EdgePersonalAccessTokens = "personal_access_tokens"
+	// EdgeBrandingSetting holds the string denoting the branding_setting edge name in mutations.
+	EdgeBrandingSetting = "branding_setting"
 	// EdgeAPITokens holds the string denoting the api_tokens edge name in mutations.
 	EdgeAPITokens = "api_tokens"
 	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
@@ -936,6 +938,13 @@ const (
 	// PersonalAccessTokensInverseTable is the table name for the PersonalAccessToken entity.
 	// It exists in this package in order to avoid circular dependency with the "personalaccesstoken" package.
 	PersonalAccessTokensInverseTable = "personal_access_tokens"
+	// BrandingSettingTable is the table that holds the branding_setting relation/edge.
+	BrandingSettingTable = "organization_branding_settings"
+	// BrandingSettingInverseTable is the table name for the OrganizationBrandingSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "organizationbrandingsetting" package.
+	BrandingSettingInverseTable = "organization_branding_settings"
+	// BrandingSettingColumn is the table column denoting the branding_setting relation/edge.
+	BrandingSettingColumn = "organization_id"
 	// APITokensTable is the table that holds the api_tokens relation/edge.
 	APITokensTable = "api_tokens"
 	// APITokensInverseTable is the table name for the APIToken entity.
@@ -2795,6 +2804,13 @@ func ByPersonalAccessTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 	}
 }
 
+// ByBrandingSettingField orders the results by branding_setting field.
+func ByBrandingSettingField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBrandingSettingStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByAPITokensCount orders the results by api_tokens count.
 func ByAPITokensCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -4486,6 +4502,13 @@ func newPersonalAccessTokensStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PersonalAccessTokensInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, PersonalAccessTokensTable, PersonalAccessTokensPrimaryKey...),
+	)
+}
+func newBrandingSettingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BrandingSettingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, BrandingSettingTable, BrandingSettingColumn),
 	)
 }
 func newAPITokensStep() *sqlgraph.Step {

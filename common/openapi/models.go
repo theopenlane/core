@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
+
 	fgamodel "github.com/theopenlane/core/v2/fga/model"
 
 	"github.com/theopenlane/utils/passwd"
@@ -2079,6 +2080,8 @@ type GetQuestionnaireResponse struct {
 	UISchema map[string]any `json:"uischema,omitempty"`
 	// SavedData is the previously saved draft data, if any.
 	SavedData map[string]any `json:"saved_data,omitempty"`
+	// RemoveBranding is used to configure if the Openlane branding on the rendered questionnaire page
+	RemoveBranding bool `json:"remove_branding,omitempty"`
 }
 
 // ExampleResponse returns an example GetQuestionnaireResponse for OpenAPI documentation

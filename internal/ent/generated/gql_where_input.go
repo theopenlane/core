@@ -57,6 +57,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
@@ -65010,6 +65011,10 @@ type OrganizationWhereInput struct {
 	HasPersonalAccessTokens     *bool                            `json:"hasPersonalAccessTokens,omitempty"`
 	HasPersonalAccessTokensWith []*PersonalAccessTokenWhereInput `json:"hasPersonalAccessTokensWith,omitempty"`
 
+	// "branding_setting" edge predicates.
+	HasBrandingSetting     *bool                                    `json:"hasBrandingSetting,omitempty"`
+	HasBrandingSettingWith []*OrganizationBrandingSettingWhereInput `json:"hasBrandingSettingWith,omitempty"`
+
 	// "users" edge predicates.
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
@@ -67008,6 +67013,25 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		}
 		predicates = append(predicates, organization.HasPersonalAccessTokensWith(with...))
 	}
+	if i.HasBrandingSetting != nil {
+		p := organization.HasBrandingSetting()
+		if !*i.HasBrandingSetting {
+			p = organization.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBrandingSettingWith) > 0 {
+		with := make([]predicate.OrganizationBrandingSetting, 0, len(i.HasBrandingSettingWith))
+		with = append(with, organizationbrandingsetting.DeletedAtIsNil())
+		for _, w := range i.HasBrandingSettingWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBrandingSettingWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organization.HasBrandingSettingWith(with...))
+	}
 	if i.HasUsers != nil {
 		p := organization.HasUsers()
 		if !*i.HasUsers {
@@ -67146,6 +67170,647 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 		return predicates[0], nil
 	default:
 		return organization.And(predicates...), nil
+	}
+}
+
+// OrganizationBrandingSettingWhereInput represents a where input for filtering OrganizationBrandingSetting queries.
+type OrganizationBrandingSettingWhereInput struct {
+	Predicates []predicate.OrganizationBrandingSetting  `json:"-"`
+	Not        *OrganizationBrandingSettingWhereInput   `json:"not,omitempty"`
+	Or         []*OrganizationBrandingSettingWhereInput `json:"or,omitempty"`
+	And        []*OrganizationBrandingSettingWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time `json:"createdAt,omitempty"`
+	CreatedAtGT     *time.Time `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool       `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool       `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time `json:"updatedAt,omitempty"`
+	UpdatedAtGT     *time.Time `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool       `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool       `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "updated_by_impersonator" field predicates.
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNEQ          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
+
+	// "organization_id" field predicates.
+	OrganizationID             *string  `json:"organizationID,omitempty"`
+	OrganizationIDNEQ          *string  `json:"organizationIDNEQ,omitempty"`
+	OrganizationIDIn           []string `json:"organizationIDIn,omitempty"`
+	OrganizationIDNotIn        []string `json:"organizationIDNotIn,omitempty"`
+	OrganizationIDContains     *string  `json:"organizationIDContains,omitempty"`
+	OrganizationIDHasPrefix    *string  `json:"organizationIDHasPrefix,omitempty"`
+	OrganizationIDHasSuffix    *string  `json:"organizationIDHasSuffix,omitempty"`
+	OrganizationIDIsNil        bool     `json:"organizationIDIsNil,omitempty"`
+	OrganizationIDNotNil       bool     `json:"organizationIDNotNil,omitempty"`
+	OrganizationIDEqualFold    *string  `json:"organizationIDEqualFold,omitempty"`
+	OrganizationIDContainsFold *string  `json:"organizationIDContainsFold,omitempty"`
+
+	// "remove_assessment_branding" field predicates.
+	RemoveAssessmentBranding       *bool `json:"removeAssessmentBranding,omitempty"`
+	RemoveAssessmentBrandingNEQ    *bool `json:"removeAssessmentBrandingNEQ,omitempty"`
+	RemoveAssessmentBrandingIsNil  bool  `json:"removeAssessmentBrandingIsNil,omitempty"`
+	RemoveAssessmentBrandingNotNil bool  `json:"removeAssessmentBrandingNotNil,omitempty"`
+
+	// "primary_color" field predicates.
+	PrimaryColor             *string  `json:"primaryColor,omitempty"`
+	PrimaryColorNEQ          *string  `json:"primaryColorNEQ,omitempty"`
+	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
+	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
+	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
+	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
+	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
+	PrimaryColorIsNil        bool     `json:"primaryColorIsNil,omitempty"`
+	PrimaryColorNotNil       bool     `json:"primaryColorNotNil,omitempty"`
+	PrimaryColorEqualFold    *string  `json:"primaryColorEqualFold,omitempty"`
+	PrimaryColorContainsFold *string  `json:"primaryColorContainsFold,omitempty"`
+
+	// "secondary_color" field predicates.
+	SecondaryColor             *string  `json:"secondaryColor,omitempty"`
+	SecondaryColorNEQ          *string  `json:"secondaryColorNEQ,omitempty"`
+	SecondaryColorIn           []string `json:"secondaryColorIn,omitempty"`
+	SecondaryColorNotIn        []string `json:"secondaryColorNotIn,omitempty"`
+	SecondaryColorContains     *string  `json:"secondaryColorContains,omitempty"`
+	SecondaryColorHasPrefix    *string  `json:"secondaryColorHasPrefix,omitempty"`
+	SecondaryColorHasSuffix    *string  `json:"secondaryColorHasSuffix,omitempty"`
+	SecondaryColorIsNil        bool     `json:"secondaryColorIsNil,omitempty"`
+	SecondaryColorNotNil       bool     `json:"secondaryColorNotNil,omitempty"`
+	SecondaryColorEqualFold    *string  `json:"secondaryColorEqualFold,omitempty"`
+	SecondaryColorContainsFold *string  `json:"secondaryColorContainsFold,omitempty"`
+
+	// "background_color" field predicates.
+	BackgroundColor             *string  `json:"backgroundColor,omitempty"`
+	BackgroundColorNEQ          *string  `json:"backgroundColorNEQ,omitempty"`
+	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
+	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
+	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
+	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
+	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
+	BackgroundColorIsNil        bool     `json:"backgroundColorIsNil,omitempty"`
+	BackgroundColorNotNil       bool     `json:"backgroundColorNotNil,omitempty"`
+	BackgroundColorEqualFold    *string  `json:"backgroundColorEqualFold,omitempty"`
+	BackgroundColorContainsFold *string  `json:"backgroundColorContainsFold,omitempty"`
+
+	// "text_color" field predicates.
+	TextColor             *string  `json:"textColor,omitempty"`
+	TextColorNEQ          *string  `json:"textColorNEQ,omitempty"`
+	TextColorIn           []string `json:"textColorIn,omitempty"`
+	TextColorNotIn        []string `json:"textColorNotIn,omitempty"`
+	TextColorContains     *string  `json:"textColorContains,omitempty"`
+	TextColorHasPrefix    *string  `json:"textColorHasPrefix,omitempty"`
+	TextColorHasSuffix    *string  `json:"textColorHasSuffix,omitempty"`
+	TextColorIsNil        bool     `json:"textColorIsNil,omitempty"`
+	TextColorNotNil       bool     `json:"textColorNotNil,omitempty"`
+	TextColorEqualFold    *string  `json:"textColorEqualFold,omitempty"`
+	TextColorContainsFold *string  `json:"textColorContainsFold,omitempty"`
+
+	// "font_family" field predicates.
+	FontFamily             *string  `json:"fontFamily,omitempty"`
+	FontFamilyNEQ          *string  `json:"fontFamilyNEQ,omitempty"`
+	FontFamilyIn           []string `json:"fontFamilyIn,omitempty"`
+	FontFamilyNotIn        []string `json:"fontFamilyNotIn,omitempty"`
+	FontFamilyContains     *string  `json:"fontFamilyContains,omitempty"`
+	FontFamilyHasPrefix    *string  `json:"fontFamilyHasPrefix,omitempty"`
+	FontFamilyHasSuffix    *string  `json:"fontFamilyHasSuffix,omitempty"`
+	FontFamilyIsNil        bool     `json:"fontFamilyIsNil,omitempty"`
+	FontFamilyNotNil       bool     `json:"fontFamilyNotNil,omitempty"`
+	FontFamilyEqualFold    *string  `json:"fontFamilyEqualFold,omitempty"`
+	FontFamilyContainsFold *string  `json:"fontFamilyContainsFold,omitempty"`
+
+	// "tags" JSON-string-array predicates.
+	TagsHas *string `json:"tagsHas,omitempty"`
+
+	// "organization" edge predicates.
+	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
+	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *OrganizationBrandingSettingWhereInput) AddPredicates(predicates ...predicate.OrganizationBrandingSetting) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the OrganizationBrandingSettingWhereInput filter on the OrganizationBrandingSettingQuery builder.
+func (i *OrganizationBrandingSettingWhereInput) Filter(q *OrganizationBrandingSettingQuery) (*OrganizationBrandingSettingQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyOrganizationBrandingSettingWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyOrganizationBrandingSettingWhereInput is returned in case the OrganizationBrandingSettingWhereInput is empty.
+var ErrEmptyOrganizationBrandingSettingWhereInput = errors.New("generated: empty predicate OrganizationBrandingSettingWhereInput")
+
+// P returns a predicate for filtering organizationbrandingsettings.
+// An error is returned if the input is empty or invalid.
+func (i *OrganizationBrandingSettingWhereInput) P() (predicate.OrganizationBrandingSetting, error) {
+	var predicates []predicate.OrganizationBrandingSetting
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, organizationbrandingsetting.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.OrganizationBrandingSetting, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, organizationbrandingsetting.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.OrganizationBrandingSetting, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, organizationbrandingsetting.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, organizationbrandingsetting.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.UpdatedByImpersonator != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorEQ(*i.UpdatedByImpersonator))
+	}
+	if i.UpdatedByImpersonatorNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorNEQ(*i.UpdatedByImpersonatorNEQ))
+	}
+	if len(i.UpdatedByImpersonatorIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorIn(i.UpdatedByImpersonatorIn...))
+	}
+	if len(i.UpdatedByImpersonatorNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorNotIn(i.UpdatedByImpersonatorNotIn...))
+	}
+	if i.UpdatedByImpersonatorContains != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
+	if i.UpdatedByImpersonatorHasSuffix != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
+	}
+	if i.UpdatedByImpersonatorIsNil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorIsNil())
+	}
+	if i.UpdatedByImpersonatorNotNil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorNotNil())
+	}
+	if i.UpdatedByImpersonatorEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorEqualFold(*i.UpdatedByImpersonatorEqualFold))
+	}
+	if i.UpdatedByImpersonatorContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.UpdatedByImpersonatorContainsFold(*i.UpdatedByImpersonatorContainsFold))
+	}
+	if i.OrganizationID != nil {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDEQ(*i.OrganizationID))
+	}
+	if i.OrganizationIDNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDNEQ(*i.OrganizationIDNEQ))
+	}
+	if len(i.OrganizationIDIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDIn(i.OrganizationIDIn...))
+	}
+	if len(i.OrganizationIDNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDNotIn(i.OrganizationIDNotIn...))
+	}
+	if i.OrganizationIDContains != nil {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDContains(*i.OrganizationIDContains))
+	}
+	if i.OrganizationIDHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDHasPrefix(*i.OrganizationIDHasPrefix))
+	}
+	if i.OrganizationIDHasSuffix != nil {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDHasSuffix(*i.OrganizationIDHasSuffix))
+	}
+	if i.OrganizationIDIsNil {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDIsNil())
+	}
+	if i.OrganizationIDNotNil {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDNotNil())
+	}
+	if i.OrganizationIDEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDEqualFold(*i.OrganizationIDEqualFold))
+	}
+	if i.OrganizationIDContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.OrganizationIDContainsFold(*i.OrganizationIDContainsFold))
+	}
+	if i.RemoveAssessmentBranding != nil {
+		predicates = append(predicates, organizationbrandingsetting.RemoveAssessmentBrandingEQ(*i.RemoveAssessmentBranding))
+	}
+	if i.RemoveAssessmentBrandingNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.RemoveAssessmentBrandingNEQ(*i.RemoveAssessmentBrandingNEQ))
+	}
+	if i.RemoveAssessmentBrandingIsNil {
+		predicates = append(predicates, organizationbrandingsetting.RemoveAssessmentBrandingIsNil())
+	}
+	if i.RemoveAssessmentBrandingNotNil {
+		predicates = append(predicates, organizationbrandingsetting.RemoveAssessmentBrandingNotNil())
+	}
+	if i.PrimaryColor != nil {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorEQ(*i.PrimaryColor))
+	}
+	if i.PrimaryColorNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorNEQ(*i.PrimaryColorNEQ))
+	}
+	if len(i.PrimaryColorIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorIn(i.PrimaryColorIn...))
+	}
+	if len(i.PrimaryColorNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorNotIn(i.PrimaryColorNotIn...))
+	}
+	if i.PrimaryColorContains != nil {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorContains(*i.PrimaryColorContains))
+	}
+	if i.PrimaryColorHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorHasPrefix(*i.PrimaryColorHasPrefix))
+	}
+	if i.PrimaryColorHasSuffix != nil {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorHasSuffix(*i.PrimaryColorHasSuffix))
+	}
+	if i.PrimaryColorIsNil {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorIsNil())
+	}
+	if i.PrimaryColorNotNil {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorNotNil())
+	}
+	if i.PrimaryColorEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorEqualFold(*i.PrimaryColorEqualFold))
+	}
+	if i.PrimaryColorContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.PrimaryColorContainsFold(*i.PrimaryColorContainsFold))
+	}
+	if i.SecondaryColor != nil {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorEQ(*i.SecondaryColor))
+	}
+	if i.SecondaryColorNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorNEQ(*i.SecondaryColorNEQ))
+	}
+	if len(i.SecondaryColorIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorIn(i.SecondaryColorIn...))
+	}
+	if len(i.SecondaryColorNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorNotIn(i.SecondaryColorNotIn...))
+	}
+	if i.SecondaryColorContains != nil {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorContains(*i.SecondaryColorContains))
+	}
+	if i.SecondaryColorHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorHasPrefix(*i.SecondaryColorHasPrefix))
+	}
+	if i.SecondaryColorHasSuffix != nil {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorHasSuffix(*i.SecondaryColorHasSuffix))
+	}
+	if i.SecondaryColorIsNil {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorIsNil())
+	}
+	if i.SecondaryColorNotNil {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorNotNil())
+	}
+	if i.SecondaryColorEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorEqualFold(*i.SecondaryColorEqualFold))
+	}
+	if i.SecondaryColorContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.SecondaryColorContainsFold(*i.SecondaryColorContainsFold))
+	}
+	if i.BackgroundColor != nil {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorEQ(*i.BackgroundColor))
+	}
+	if i.BackgroundColorNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorNEQ(*i.BackgroundColorNEQ))
+	}
+	if len(i.BackgroundColorIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorIn(i.BackgroundColorIn...))
+	}
+	if len(i.BackgroundColorNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorNotIn(i.BackgroundColorNotIn...))
+	}
+	if i.BackgroundColorContains != nil {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorContains(*i.BackgroundColorContains))
+	}
+	if i.BackgroundColorHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorHasPrefix(*i.BackgroundColorHasPrefix))
+	}
+	if i.BackgroundColorHasSuffix != nil {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorHasSuffix(*i.BackgroundColorHasSuffix))
+	}
+	if i.BackgroundColorIsNil {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorIsNil())
+	}
+	if i.BackgroundColorNotNil {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorNotNil())
+	}
+	if i.BackgroundColorEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorEqualFold(*i.BackgroundColorEqualFold))
+	}
+	if i.BackgroundColorContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.BackgroundColorContainsFold(*i.BackgroundColorContainsFold))
+	}
+	if i.TextColor != nil {
+		predicates = append(predicates, organizationbrandingsetting.TextColorEQ(*i.TextColor))
+	}
+	if i.TextColorNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.TextColorNEQ(*i.TextColorNEQ))
+	}
+	if len(i.TextColorIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.TextColorIn(i.TextColorIn...))
+	}
+	if len(i.TextColorNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.TextColorNotIn(i.TextColorNotIn...))
+	}
+	if i.TextColorContains != nil {
+		predicates = append(predicates, organizationbrandingsetting.TextColorContains(*i.TextColorContains))
+	}
+	if i.TextColorHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsetting.TextColorHasPrefix(*i.TextColorHasPrefix))
+	}
+	if i.TextColorHasSuffix != nil {
+		predicates = append(predicates, organizationbrandingsetting.TextColorHasSuffix(*i.TextColorHasSuffix))
+	}
+	if i.TextColorIsNil {
+		predicates = append(predicates, organizationbrandingsetting.TextColorIsNil())
+	}
+	if i.TextColorNotNil {
+		predicates = append(predicates, organizationbrandingsetting.TextColorNotNil())
+	}
+	if i.TextColorEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.TextColorEqualFold(*i.TextColorEqualFold))
+	}
+	if i.TextColorContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.TextColorContainsFold(*i.TextColorContainsFold))
+	}
+	if i.FontFamily != nil {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyEQ(*i.FontFamily))
+	}
+	if i.FontFamilyNEQ != nil {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyNEQ(*i.FontFamilyNEQ))
+	}
+	if len(i.FontFamilyIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyIn(i.FontFamilyIn...))
+	}
+	if len(i.FontFamilyNotIn) > 0 {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyNotIn(i.FontFamilyNotIn...))
+	}
+	if i.FontFamilyContains != nil {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyContains(*i.FontFamilyContains))
+	}
+	if i.FontFamilyHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyHasPrefix(*i.FontFamilyHasPrefix))
+	}
+	if i.FontFamilyHasSuffix != nil {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyHasSuffix(*i.FontFamilyHasSuffix))
+	}
+	if i.FontFamilyIsNil {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyIsNil())
+	}
+	if i.FontFamilyNotNil {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyNotNil())
+	}
+	if i.FontFamilyEqualFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyEqualFold(*i.FontFamilyEqualFold))
+	}
+	if i.FontFamilyContainsFold != nil {
+		predicates = append(predicates, organizationbrandingsetting.FontFamilyContainsFold(*i.FontFamilyContainsFold))
+	}
+
+	if i.TagsHas != nil {
+		v := *i.TagsHas
+		predicates = append(predicates, func(s *sql.Selector) {
+			s.Where(schemautil.ValueContainsFold(s.C(organizationbrandingsetting.FieldTags), v))
+		})
+	}
+
+	if i.HasOrganization != nil {
+		p := organizationbrandingsetting.HasOrganization()
+		if !*i.HasOrganization {
+			p = organizationbrandingsetting.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOrganizationWith) > 0 {
+		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
+		with = append(with, organization.DeletedAtIsNil())
+		for _, w := range i.HasOrganizationWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOrganizationWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, organizationbrandingsetting.HasOrganizationWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyOrganizationBrandingSettingWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return organizationbrandingsetting.And(predicates...), nil
 	}
 }
 

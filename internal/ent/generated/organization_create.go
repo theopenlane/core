@@ -56,6 +56,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -1573,6 +1574,25 @@ func (_c *OrganizationCreate) AddPersonalAccessTokens(v ...*PersonalAccessToken)
 		ids[i] = v[i].ID
 	}
 	return _c.AddPersonalAccessTokenIDs(ids...)
+}
+
+// SetBrandingSettingID sets the "branding_setting" edge to the OrganizationBrandingSetting entity by ID.
+func (_c *OrganizationCreate) SetBrandingSettingID(id string) *OrganizationCreate {
+	_c.mutation.SetBrandingSettingID(id)
+	return _c
+}
+
+// SetNillableBrandingSettingID sets the "branding_setting" edge to the OrganizationBrandingSetting entity by ID if the given value is not nil.
+func (_c *OrganizationCreate) SetNillableBrandingSettingID(id *string) *OrganizationCreate {
+	if id != nil {
+		_c = _c.SetBrandingSettingID(*id)
+	}
+	return _c
+}
+
+// SetBrandingSetting sets the "branding_setting" edge to the OrganizationBrandingSetting entity.
+func (_c *OrganizationCreate) SetBrandingSetting(v *OrganizationBrandingSetting) *OrganizationCreate {
+	return _c.SetBrandingSettingID(v.ID)
 }
 
 // AddAPITokenIDs adds the "api_tokens" edge to the APIToken entity by IDs.
@@ -4291,6 +4311,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.BrandingSettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   organization.BrandingSettingTable,
+			Columns: []string{organization.BrandingSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organizationbrandingsetting.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

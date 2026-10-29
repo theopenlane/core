@@ -42,6 +42,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
@@ -111,6 +112,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationbrandingsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
@@ -1237,6 +1239,37 @@ func PurgeOrganizationHistory(ctx context.Context, ps ...predicate.Organization)
 		s.Where(sql.In(organizationhistory.FieldRef, refs))
 	}).Exec(history.WithContext(ctx)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error purging organization history")
+
+		return err
+	}
+
+	return nil
+}
+
+// PurgeOrganizationBrandingSettingHistory removes the history rows belonging to every organizationbrandingsetting matching
+// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
+// deletes that should keep their audit trail are unaffected.
+// This has to run before the organizationbrandingsetting records themselves are deleted, the rows are matched
+// with a sub-select against the organizationbrandingsetting table
+func PurgeOrganizationBrandingSettingHistory(ctx context.Context, ps ...predicate.OrganizationBrandingSetting) error {
+	if !contextx.PurgeHistoryEnabled(ctx) {
+		return nil
+	}
+
+	client := FromContext(ctx)
+	if client == nil || client.HistoryClient == nil {
+		return nil
+	}
+
+	refs := sql.Select(organizationbrandingsetting.FieldID).From(sql.Table(organizationbrandingsetting.Table))
+	for _, p := range ps {
+		p(refs)
+	}
+
+	if _, err := client.HistoryClient.OrganizationBrandingSettingHistory.Delete().Where(func(s *sql.Selector) {
+		s.Where(sql.In(organizationbrandingsettinghistory.FieldRef, refs))
+	}).Exec(history.WithContext(ctx)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error purging organizationbrandingsetting history")
 
 		return err
 	}

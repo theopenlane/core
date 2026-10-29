@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
@@ -163,6 +164,7 @@ func (Assessment) Indexes() []ent.Index {
 func (Assessment) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorAssessmentAccessURL(),
+		interceptors.InterceptorAssessmentBranding(),
 	}
 }
 

@@ -2477,6 +2477,52 @@ type OrgMembershipUpdatePayload struct {
 	OrgMembership *generated.OrgMembership `json:"orgMembership"`
 }
 
+// Return response for createBulkOrganizationBrandingSetting mutation
+type OrganizationBrandingSettingBulkCreatePayload struct {
+	// Created organizationBrandingSettings
+	OrganizationBrandingSettings []*generated.OrganizationBrandingSetting `json:"organizationBrandingSettings,omitempty"`
+}
+
+// Return response for deleteBulkOrganizationBrandingSetting mutation
+type OrganizationBrandingSettingBulkDeletePayload struct {
+	// Deleted organizationBrandingSetting IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
+}
+
+// Return response for updateBulkOrganizationBrandingSetting mutation
+type OrganizationBrandingSettingBulkUpdatePayload struct {
+	// Updated organizationBrandingSettings
+	OrganizationBrandingSettings []*generated.OrganizationBrandingSetting `json:"organizationBrandingSettings,omitempty"`
+	// IDs of the updated organizationBrandingSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
+}
+
+// Return response for createOrganizationBrandingSetting mutation
+type OrganizationBrandingSettingCreatePayload struct {
+	// Created organizationBrandingSetting
+	OrganizationBrandingSetting *generated.OrganizationBrandingSetting `json:"organizationBrandingSetting"`
+}
+
+// Return response for deleteOrganizationBrandingSetting mutation
+type OrganizationBrandingSettingDeletePayload struct {
+	// Deleted organizationBrandingSetting ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateOrganizationBrandingSetting mutation
+type OrganizationBrandingSettingUpdatePayload struct {
+	// Updated organizationBrandingSetting
+	OrganizationBrandingSetting *generated.OrganizationBrandingSetting `json:"organizationBrandingSetting"`
+}
+
 // Return response for createBulkOrganization mutation
 type OrganizationBulkCreatePayload struct {
 	// Created organizations
