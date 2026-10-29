@@ -1,5 +1,4 @@
-github.com/99designs/gqlgen v0.17.97 h1:Dv4OZ+Mvt38+1cemFYatThs3Y3tq2fjuV2OFWq2R7kc=
-github.com/99designs/gqlgen v0.17.97/go.mod h1:Fk3sbEOHsiIkcmUhhTxe/Jmm3oXKDgc5L70P0rWOljw=
+github.com/99designs/gqlgen v0.17.98 h1:t7UTlygkXMx1tJmKyR0LxttcufXnJ7fF6fAaeHSofAc=
 github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2 h1:ZBbLwSJqkHBuFDA6DUhhse0IGJ7T5bemHyNILUjvOq4=
 github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2/go.mod h1:VSw57q4QFiWDbRnjdX8Cb3Ow0SFncRw+bA/ofY6Q83w=
 github.com/agnivade/levenshtein v1.2.2 h1:fI8RgiztYX1Nn5pBHHqQ9EMCCklhrmXqPRIedFmx5M4=
@@ -217,8 +216,7 @@ github.com/valyala/fastjson v1.6.10 h1:/yjJg8jaVQdYR3arGxPE2X5z89xrlhS0eGXdv+ADT
 github.com/valyala/fastjson v1.6.10/go.mod h1:e6FubmQouUNP73jtMLmcbxS6ydWIpOfhz34TSfO3JaE=
 github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQD0Loo=
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
-github.com/vektah/gqlparser/v2 v2.5.63 h1:vzHg/+/z7kZA3N4FhbGtF1pRo99KUpPzwXahk1bQtYk=
-github.com/vektah/gqlparser/v2 v2.5.63/go.mod h1:JNK+plRwKdXLsF/qPFPe5tE0z4s1WeroD9S5LR8um/Q=
+github.com/vektah/gqlparser/v2 v2.5.64 h1:N32yM6hQ6Kd5RdjCCEJsUrbCebVoA9yLLMOIa88Mkk0=
 github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IUPn0Bjt8=
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=

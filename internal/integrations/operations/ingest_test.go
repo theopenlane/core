@@ -867,7 +867,7 @@ func TestStampProvenanceOverridesMappedValues(t *testing.T) {
 
 	payload := json.RawMessage(`{"external_id":"acct-1","managed_by":"int_other","source_instance_id":"tenant-other","owner_id":"org_other","source_definition_id":"def_other"}`)
 
-	stamped := entityops.StampProvenance(payload, entityops.SchemaDirectoryAccount, installation, installation.DefinitionID, "run_1")
+	stamped := entityops.StampProvenance(payload, entityops.SchemaDirectoryAccount, entityops.ProvenanceSource{Integration: installation, DefinitionID: installation.DefinitionID, RunID: "run_1"})
 
 	assert.Equal(t, "int_owner", entityops.FieldValue(stamped, entityops.FieldManagedBy), "a mapping must not pick the managing installation")
 	assert.Equal(t, "tenant-test", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID), "a mapping must not pick the source instance")
@@ -875,4 +875,31 @@ func TestStampProvenanceOverridesMappedValues(t *testing.T) {
 	assert.Equal(t, "def_dir", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID), "a mapping must not pick the source definition")
 	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
 	assert.Equal(t, "acct-1", entityops.FieldValue(stamped, "external_id"), "mapped non-provenance fields pass through")
+}
+
+func TestStampProvenanceRuntime(t *testing.T) {
+	t.Parallel()
+
+	payload := json.RawMessage(`{"name":"Acme","owner_id":"org_other","source_instance_id":"other"}`)
+
+	stamped := entityops.StampProvenance(payload, entityops.SchemaEntity, entityops.ProvenanceSource{
+		DefinitionID:     "def_objectstore",
+		OwnerID:          "org_1",
+		SourceInstanceID: "source_demo_data",
+		RunID:            "run_1",
+	})
+
+	assert.Equal(t, "org_1", entityops.FieldValue(stamped, entityops.SchemaEntity.OwnerField))
+	assert.Equal(t, "source_demo_data", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID))
+	assert.Equal(t, "def_objectstore", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID))
+	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
+	assert.Equal(t, "Acme", entityops.FieldValue(stamped, "name"))
+}
+
+func TestStampProvenanceRuntimeWithoutValues(t *testing.T) {
+	t.Parallel()
+
+	payload := json.RawMessage(`{"name":"Acme"}`)
+
+	assert.Equal(t, string(payload), string(entityops.StampProvenance(payload, entityops.SchemaEntity, entityops.ProvenanceSource{})))
 }

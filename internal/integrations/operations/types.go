@@ -16,8 +16,10 @@ type IngestContext struct {
 	DB *ent.Client
 	// Runtime is the Gala instance used for async emit; nil on the synchronous persist path
 	Runtime *gala.Gala
-	// Integration is the integration record being ingested into
+	// Integration is the integration record being ingested into, nil for runtime ingest
 	Integration *ent.Integration
+	// OwnerID is the organization runtime ingest writes for, empty to write system-owned rows
+	OwnerID string
 	// DefinitionID identifies the definition when ingesting on the runtime path, where no installation exists
 	DefinitionID string
 }
