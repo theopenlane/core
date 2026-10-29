@@ -80,7 +80,7 @@ func Builder(cfg Config) registry.Builder {
 					},
 				},
 				{
-					Schema:  entityops.SchemaVulnerability.Name,
+					Schema:  entityops.SchemaFinding.Name,
 					Variant: githubAlertTypeCodeScanning,
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
@@ -131,7 +131,7 @@ func Builder(cfg Config) registry.Builder {
 						codeScanningAlertWebhookEvent.Registration(types.WebhookEventRegistration{
 							Ingest: []types.IngestContract{
 								{
-									Schema: entityops.SchemaVulnerability.Name,
+									Schema: entityops.SchemaFinding.Name,
 								},
 							},
 							Handle: CodeScanningAlertWebhook{}.Handle,

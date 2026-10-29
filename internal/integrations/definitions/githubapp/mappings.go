@@ -107,11 +107,21 @@ var (
 	},
 	)
 	// mapExprCodeScanning is the CEL mapping expression for code scanning webhook alert payloads
-	mapExprCodeScanning = buildWebhookMappingExpr(githubAlertTypeCodeScanning, `"github:" + resource + ":code_scanning:" + ('number' in payload && payload.number != 0 ? string(payload.number) : "unknown")`, []entityops.MappingEntry{
-		entityops.VulnerabilityFields.Severity.Expr(`'rule' in payload && 'security_severity_level' in payload.rule && payload.rule.security_severity_level != "" ? payload.rule.security_severity_level : ('rule' in payload && 'severity' in payload.rule ? payload.rule.severity : "")`),
-		entityops.VulnerabilityFields.Summary.Expr(`'rule' in payload && 'description' in payload.rule && payload.rule.description != "" ? payload.rule.description : ('rule' in payload && 'name' in payload.rule ? payload.rule.name : "")`),
-		entityops.VulnerabilityFields.Description.Expr(`paragraphs('most_recent_instance' in payload && 'message' in payload.most_recent_instance && 'text' in payload.most_recent_instance.message ? payload.most_recent_instance.message.text : "")`),
-	},
+	mapExprCodeScanning = providerkit.CelMapExpr(
+		entityops.FindingFields.ExternalID.Expr(`"github:" + resource + ":code_scanning:" + ('number' in payload && payload.number != 0 ? string(payload.number) : "unknown")`),
+		entityops.FindingFields.ExternalOwnerID.Expr("resource"),
+		entityops.FindingFields.Category.Expr(strconv.Quote(githubAlertTypeCodeScanning)),
+		entityops.FindingFields.FindingStatusName.Expr(`'state' in payload ? payload.state : ""`),
+		entityops.FindingFields.State.Expr(`'state' in payload ? payload.state : ""`),
+		entityops.FindingFields.ExternalURI.Expr(`'html_url' in payload ? payload.html_url : ""`),
+		entityops.FindingFields.SourceUpdatedAt.Expr(`'updated_at' in payload ? payload.updated_at : null`),
+		entityops.FindingFields.ReportedAt.Expr(`'created_at' in payload ? payload.created_at : null`),
+		entityops.FindingFields.Open.Expr(`'state' in payload ? payload.state == "open" : false`),
+		entityops.FindingFields.RawPayload.Expr("payload"),
+		entityops.FindingFields.Source.Expr(providerkit.ExprInstallationName),
+		entityops.FindingFields.Severity.Expr(`'rule' in payload && 'security_severity_level' in payload.rule && payload.rule.security_severity_level != "" ? payload.rule.security_severity_level : ('rule' in payload && 'severity' in payload.rule ? payload.rule.severity : "")`),
+		entityops.FindingFields.DisplayName.Expr(`'rule' in payload && 'description' in payload.rule && payload.rule.description != "" ? payload.rule.description : ('rule' in payload && 'name' in payload.rule ? payload.rule.name : "")`),
+		entityops.FindingFields.Description.Expr(`paragraphs('most_recent_instance' in payload && 'message' in payload.most_recent_instance && 'text' in payload.most_recent_instance.message ? payload.most_recent_instance.message.text : "")`),
 	)
 	// mapExprSecretScanning is the CEL mapping expression for secret scanning webhook alert payloads
 	mapExprSecretScanning = buildWebhookMappingExpr(githubAlertTypeSecretScan, `"github:" + resource + ":secret_scanning:" + ('number' in payload && payload.number != 0 ? string(payload.number) : "unknown")`, []entityops.MappingEntry{
