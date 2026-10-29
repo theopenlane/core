@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
@@ -154,6 +155,90 @@ func (_c *GroupCreate) SetDisplayID(v string) *GroupCreate {
 // SetTags sets the "tags" field.
 func (_c *GroupCreate) SetTags(v []string) *GroupCreate {
 	_c.mutation.SetTags(v)
+	return _c
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *GroupCreate) SetSourceDefinitionID(v string) *GroupCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableSourceDefinitionID(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *GroupCreate) SetSourceDefinitionVersion(v string) *GroupCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableSourceDefinitionVersion(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *GroupCreate) SetSourceInstanceID(v string) *GroupCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableSourceInstanceID(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *GroupCreate) SetManagedBy(v string) *GroupCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableManagedBy(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *GroupCreate) SetIntegrationRunID(v string) *GroupCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableIntegrationRunID(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
+// SetExternalID sets the "external_id" field.
+func (_c *GroupCreate) SetExternalID(v string) *GroupCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *GroupCreate) SetNillableExternalID(v *string) *GroupCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
 	return _c
 }
 
@@ -363,6 +448,21 @@ func (_c *GroupCreate) SetNillableID(v *string) *GroupCreate {
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *GroupCreate) AddIntegrationRunIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *GroupCreate) AddIntegrationRuns(v ...*IntegrationRun) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1362,6 +1462,30 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 		_spec.SetField(group.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(group.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(group.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(group.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(group.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(group.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(group.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(group.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -1413,6 +1537,22 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ScimGroupMailing(); ok {
 		_spec.SetField(group.FieldScimGroupMailing, field.TypeString, value)
 		_node.ScimGroupMailing = &value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   group.IntegrationRunsTable,
+			Columns: []string{group.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

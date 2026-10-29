@@ -652,26 +652,6 @@ func (_u *OrganizationSettingUpdate) ClearAllowSupportAccess() *OrganizationSett
 	return _u
 }
 
-// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (_u *OrganizationSettingUpdate) SetComplianceWebhookToken(v string) *OrganizationSettingUpdate {
-	_u.mutation.SetComplianceWebhookToken(v)
-	return _u
-}
-
-// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (_u *OrganizationSettingUpdate) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingUpdate {
-	if v != nil {
-		_u.SetComplianceWebhookToken(*v)
-	}
-	return _u
-}
-
-// ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
-func (_u *OrganizationSettingUpdate) ClearComplianceWebhookToken() *OrganizationSettingUpdate {
-	_u.mutation.ClearComplianceWebhookToken()
-	return _u
-}
-
 // SetPaymentMethodAdded sets the "payment_method_added" field.
 func (_u *OrganizationSettingUpdate) SetPaymentMethodAdded(v bool) *OrganizationSettingUpdate {
 	_u.mutation.SetPaymentMethodAdded(v)
@@ -1078,12 +1058,6 @@ func (_u *OrganizationSettingUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.AllowSupportAccessCleared() {
 		_spec.ClearField(organizationsetting.FieldAllowSupportAccess, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
-		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
-	}
-	if _u.mutation.ComplianceWebhookTokenCleared() {
-		_spec.ClearField(organizationsetting.FieldComplianceWebhookToken, field.TypeString)
 	}
 	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(organizationsetting.FieldPaymentMethodAdded, field.TypeBool, value)
@@ -1808,26 +1782,6 @@ func (_u *OrganizationSettingUpdateOne) ClearAllowSupportAccess() *OrganizationS
 	return _u
 }
 
-// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (_u *OrganizationSettingUpdateOne) SetComplianceWebhookToken(v string) *OrganizationSettingUpdateOne {
-	_u.mutation.SetComplianceWebhookToken(v)
-	return _u
-}
-
-// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (_u *OrganizationSettingUpdateOne) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingUpdateOne {
-	if v != nil {
-		_u.SetComplianceWebhookToken(*v)
-	}
-	return _u
-}
-
-// ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
-func (_u *OrganizationSettingUpdateOne) ClearComplianceWebhookToken() *OrganizationSettingUpdateOne {
-	_u.mutation.ClearComplianceWebhookToken()
-	return _u
-}
-
 // SetPaymentMethodAdded sets the "payment_method_added" field.
 func (_u *OrganizationSettingUpdateOne) SetPaymentMethodAdded(v bool) *OrganizationSettingUpdateOne {
 	_u.mutation.SetPaymentMethodAdded(v)
@@ -2264,12 +2218,6 @@ func (_u *OrganizationSettingUpdateOne) sqlSave(ctx context.Context) (_node *Org
 	}
 	if _u.mutation.AllowSupportAccessCleared() {
 		_spec.ClearField(organizationsetting.FieldAllowSupportAccess, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
-		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
-	}
-	if _u.mutation.ComplianceWebhookTokenCleared() {
-		_spec.ClearField(organizationsetting.FieldComplianceWebhookToken, field.TypeString)
 	}
 	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(organizationsetting.FieldPaymentMethodAdded, field.TypeBool, value)

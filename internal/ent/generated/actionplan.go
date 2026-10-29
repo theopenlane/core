@@ -53,6 +53,8 @@ type ActionPlan struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name,omitempty"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -451,7 +453,7 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplan.FieldApprovalRequired, actionplan.FieldSystemOwned, actionplan.FieldWorkflowEligibleMarker, actionplan.FieldRequiresApproval, actionplan.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldUpdatedByImpersonator, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldSourceDefinitionID, actionplan.FieldSourceDefinitionVersion, actionplan.FieldSourceInstanceID, actionplan.FieldManagedBy, actionplan.FieldIntegrationRunID, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldManagementMode, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldExternalFileID, actionplan.FieldExternalContents, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldInternalOwner, actionplan.FieldInternalOwnerUserID, actionplan.FieldInternalOwnerGroupID, actionplan.FieldInternalOwnerIdentityHolderID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldUpdatedByImpersonator, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldSourceDefinitionID, actionplan.FieldSourceDefinitionVersion, actionplan.FieldSourceInstanceID, actionplan.FieldManagedBy, actionplan.FieldIntegrationRunID, actionplan.FieldExternalID, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldManagementMode, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldExternalFileID, actionplan.FieldExternalContents, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldInternalOwner, actionplan.FieldInternalOwnerUserID, actionplan.FieldInternalOwnerGroupID, actionplan.FieldInternalOwnerIdentityHolderID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate, actionplan.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -568,6 +570,12 @@ func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case actionplan.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case actionplan.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1067,6 +1075,9 @@ func (_m *ActionPlan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

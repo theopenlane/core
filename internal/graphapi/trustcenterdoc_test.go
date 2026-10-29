@@ -11,12 +11,14 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
@@ -703,6 +705,31 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 			}
 		})
 	}
+
+	publicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+
+	dbCtx := th.SetInternalContext(tcOrg.Owner.UserCtx, suite.Client.DB)
+	_, err := suite.Client.DB.TrustCenterDoc.UpdateOneID(trustCenterDoc1.ID).SetStandardID(publicStandard.ID).Save(dbCtx)
+	assert.NilError(t, err)
+
+	complianceResp, err := suite.Client.API.CreateTrustCenterComplianceWithStandardDocs(tcOrg2.Owner.UserCtx, testclient.CreateTrustCenterComplianceInput{
+		StandardID:    publicStandard.ID,
+		TrustCenterID: &trustCenter2.ID,
+	})
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(int64(0), complianceResp.CreateTrustCenterCompliance.TrustCenterCompliance.Standard.TrustCenterDocs.TotalCount))
+
+	ownerSeesHistory, err := suite.Client.DB.HistoryClient.TrustCenterDocHistory.Query().
+		Where(trustcenterdochistory.Ref(trustCenterDoc1.ID)).
+		Exist(history.WithContext(tcOrg.Owner.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, ownerSeesHistory)
+
+	otherOrgSeesHistory, err := suite.Client.DB.HistoryClient.TrustCenterDocHistory.Query().
+		Where(trustcenterdochistory.Ref(trustCenterDoc1.ID)).
+		Exist(history.WithContext(tcOrg2.Owner.UserCtx))
+	assert.NilError(t, err)
+	assert.Check(t, !otherOrgSeesHistory)
 
 	// Clean up
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)

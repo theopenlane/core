@@ -70,7 +70,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	filters := controls.GetCloneFilterOptions(input)
+	filters := getCloneFilterOptions(input)
 
 	// if a standard is provided, clone those controls
 	if controls.FilterByStandard(filters) {
@@ -124,7 +124,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
-	convertedInput, err := controls.ConvertToCloneControlInput(data)
+	convertedInput, err := convertToCloneControlInput(data)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to convert clone control input")
 
@@ -167,7 +167,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		}
 
 		if isSubControl {
-			scInput, hasUpdate, convErr := controls.GetFieldsToUpdate[generated.UpdateSubcontrolInput](c)
+			scInput, hasUpdate, convErr := getFieldsToUpdate[generated.UpdateSubcontrolInput](c)
 			if convErr != nil {
 				logger.Error().Err(convErr).Msg("error preparing subcontrol update fields")
 			}
@@ -208,7 +208,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 				}
 			}
 		} else {
-			cInput, hasUpdate, convErr := controls.GetFieldsToUpdate[generated.UpdateControlInput](c)
+			cInput, hasUpdate, convErr := getFieldsToUpdate[generated.UpdateControlInput](c)
 			if convErr != nil {
 				logger.Error().Err(convErr).Msg("error preparing control update fields")
 			}

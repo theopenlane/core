@@ -42,6 +42,8 @@ const (
 	FieldManagedBy = "managed_by"
 	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
@@ -60,8 +62,6 @@ const (
 	FieldIdentityHolderID = "identity_holder_id"
 	// FieldDirectoryName holds the string denoting the directory_name field in the database.
 	FieldDirectoryName = "directory_name"
-	// FieldExternalID holds the string denoting the external_id field in the database.
-	FieldExternalID = "external_id"
 	// FieldSecondaryKey holds the string denoting the secondary_key field in the database.
 	FieldSecondaryKey = "secondary_key"
 	// FieldCanonicalEmail holds the string denoting the canonical_email field in the database.
@@ -233,6 +233,7 @@ var Columns = []string{
 	FieldSourceInstanceID,
 	FieldManagedBy,
 	FieldIntegrationRunID,
+	FieldExternalID,
 	FieldOwnerID,
 	FieldEnvironmentName,
 	FieldEnvironmentID,
@@ -242,7 +243,6 @@ var Columns = []string{
 	FieldPlatformID,
 	FieldIdentityHolderID,
 	FieldDirectoryName,
-	FieldExternalID,
 	FieldSecondaryKey,
 	FieldCanonicalEmail,
 	FieldEmailAliases,
@@ -311,14 +311,14 @@ var (
 	DisplayIDValidator func(string) error
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
+	ExternalIDValidator func(string) error
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
 	IntegrationIDValidator func(string) error
 	// PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	PlatformIDValidator func(string) error
-	// ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
-	ExternalIDValidator func(string) error
 	// DefaultEmailAliases holds the default value on creation for the "email_aliases" field.
 	DefaultEmailAliases []string
 	// EmailAliasesValidator is a validator for the "email_aliases" field. It is called by the builders before save.
@@ -436,6 +436,11 @@ func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
 }
 
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -479,11 +484,6 @@ func ByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
 // ByDirectoryName orders the results by the directory_name field.
 func ByDirectoryName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectoryName, opts...).ToFunc()
-}
-
-// ByExternalID orders the results by the external_id field.
-func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
 }
 
 // BySecondaryKey orders the results by the secondary_key field.

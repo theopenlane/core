@@ -15,7 +15,7 @@ if [[ -n "${CLEANUP_PR_STUB:-}" && -f "${CLEANUP_PR_STUB}" ]]; then
 fi
 
 # Configuration
-repo="${HELM_CHART_REPO}"
+repo="$(normalize_github_repo "${HELM_CHART_REPO}")"
 
 # Install dependencies
 install_dependencies

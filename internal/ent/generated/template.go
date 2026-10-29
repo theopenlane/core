@@ -39,6 +39,18 @@ type Template struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -79,6 +91,8 @@ type Template struct {
 
 // TemplateEdges holds the relations/edges for other nodes in the graph.
 type TemplateEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Environment holds the value of the environment edge.
@@ -99,10 +113,11 @@ type TemplateEdges struct {
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [10]map[string]int
 
+	namedIntegrationRuns map[string][]*IntegrationRun
 	namedDocuments       map[string][]*DocumentData
 	namedFiles           map[string][]*File
 	namedAssessments     map[string][]*Assessment
@@ -110,12 +125,21 @@ type TemplateEdges struct {
 	namedIdentityHolders map[string][]*IdentityHolder
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e TemplateEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e TemplateEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -126,7 +150,7 @@ func (e TemplateEdges) OwnerOrErr() (*Organization, error) {
 func (e TemplateEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -137,7 +161,7 @@ func (e TemplateEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e TemplateEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -146,7 +170,7 @@ func (e TemplateEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 // DocumentsOrErr returns the Documents value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) DocumentsOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Documents, nil
 	}
 	return nil, &NotLoadedError{edge: "documents"}
@@ -155,7 +179,7 @@ func (e TemplateEdges) DocumentsOrErr() ([]*DocumentData, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -166,7 +190,7 @@ func (e TemplateEdges) FilesOrErr() ([]*File, error) {
 func (e TemplateEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -175,7 +199,7 @@ func (e TemplateEdges) TrustCenterOrErr() (*TrustCenter, error) {
 // AssessmentsOrErr returns the Assessments value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) AssessmentsOrErr() ([]*Assessment, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Assessments, nil
 	}
 	return nil, &NotLoadedError{edge: "assessments"}
@@ -184,7 +208,7 @@ func (e TemplateEdges) AssessmentsOrErr() ([]*Assessment, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -193,7 +217,7 @@ func (e TemplateEdges) CampaignsOrErr() ([]*Campaign, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e TemplateEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -208,7 +232,7 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case template.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldUpdatedByImpersonator, template.FieldDeletedBy, template.FieldOwnerID, template.FieldInternalNotes, template.FieldSystemInternalID, template.FieldEnvironmentName, template.FieldEnvironmentID, template.FieldScopeName, template.FieldScopeID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind, template.FieldTrustCenterID:
+		case template.FieldID, template.FieldCreatedBy, template.FieldUpdatedBy, template.FieldUpdatedByImpersonator, template.FieldDeletedBy, template.FieldSourceDefinitionID, template.FieldSourceDefinitionVersion, template.FieldSourceInstanceID, template.FieldManagedBy, template.FieldIntegrationRunID, template.FieldExternalID, template.FieldOwnerID, template.FieldInternalNotes, template.FieldSystemInternalID, template.FieldEnvironmentName, template.FieldEnvironmentID, template.FieldScopeName, template.FieldScopeID, template.FieldName, template.FieldTemplateType, template.FieldDescription, template.FieldKind, template.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case template.FieldCreatedAt, template.FieldUpdatedAt, template.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -283,6 +307,42 @@ func (_m *Template) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case template.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case template.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case template.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case template.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case template.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case template.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case template.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -401,6 +461,11 @@ func (_m *Template) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the Template entity.
+func (_m *Template) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewTemplateClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the Template entity.
 func (_m *Template) QueryOwner() *OrganizationQuery {
 	return NewTemplateClient(_m.config).QueryOwner(_m)
@@ -495,6 +560,24 @@ func (_m *Template) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -548,6 +631,30 @@ func (_m *Template) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.TransformConfiguration))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Template) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Template) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedDocuments returns the Documents named value or an error if the edge was not

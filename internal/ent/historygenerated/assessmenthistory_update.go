@@ -97,6 +97,24 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessmenthistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(assessmenthistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(assessmenthistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldOwnerID, field.TypeString)
 	}
@@ -241,6 +259,24 @@ func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Asses
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessmenthistory.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(assessmenthistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(assessmenthistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldOwnerID, field.TypeString)

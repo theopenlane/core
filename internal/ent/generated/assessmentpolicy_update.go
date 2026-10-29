@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
@@ -82,6 +83,126 @@ func (_u *AssessmentPolicyUpdate) ClearUpdatedByImpersonator() *AssessmentPolicy
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *AssessmentPolicyUpdate) SetSourceDefinitionID(v string) *AssessmentPolicyUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdate) SetNillableSourceDefinitionID(v *string) *AssessmentPolicyUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *AssessmentPolicyUpdate) ClearSourceDefinitionID() *AssessmentPolicyUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *AssessmentPolicyUpdate) SetSourceDefinitionVersion(v string) *AssessmentPolicyUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdate) SetNillableSourceDefinitionVersion(v *string) *AssessmentPolicyUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *AssessmentPolicyUpdate) ClearSourceDefinitionVersion() *AssessmentPolicyUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *AssessmentPolicyUpdate) SetSourceInstanceID(v string) *AssessmentPolicyUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdate) SetNillableSourceInstanceID(v *string) *AssessmentPolicyUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *AssessmentPolicyUpdate) ClearSourceInstanceID() *AssessmentPolicyUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *AssessmentPolicyUpdate) SetManagedBy(v string) *AssessmentPolicyUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdate) SetNillableManagedBy(v *string) *AssessmentPolicyUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *AssessmentPolicyUpdate) ClearManagedBy() *AssessmentPolicyUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *AssessmentPolicyUpdate) SetIntegrationRunID(v string) *AssessmentPolicyUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdate) SetNillableIntegrationRunID(v *string) *AssessmentPolicyUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *AssessmentPolicyUpdate) ClearIntegrationRunID() *AssessmentPolicyUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *AssessmentPolicyUpdate) SetExternalID(v string) *AssessmentPolicyUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdate) SetNillableExternalID(v *string) *AssessmentPolicyUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *AssessmentPolicyUpdate) ClearExternalID() *AssessmentPolicyUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *AssessmentPolicyUpdate) SetOwnerID(v string) *AssessmentPolicyUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -102,6 +223,21 @@ func (_u *AssessmentPolicyUpdate) ClearOwnerID() *AssessmentPolicyUpdate {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *AssessmentPolicyUpdate) AddIntegrationRunIDs(ids ...string) *AssessmentPolicyUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssessmentPolicyUpdate) AddIntegrationRuns(v ...*IntegrationRun) *AssessmentPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *AssessmentPolicyUpdate) SetOwner(v *Organization) *AssessmentPolicyUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -110,6 +246,27 @@ func (_u *AssessmentPolicyUpdate) SetOwner(v *Organization) *AssessmentPolicyUpd
 // Mutation returns the AssessmentPolicyMutation object of the builder.
 func (_u *AssessmentPolicyUpdate) Mutation() *AssessmentPolicyMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssessmentPolicyUpdate) ClearIntegrationRuns() *AssessmentPolicyUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *AssessmentPolicyUpdate) RemoveIntegrationRunIDs(ids ...string) *AssessmentPolicyUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *AssessmentPolicyUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *AssessmentPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -218,8 +375,89 @@ func (_u *AssessmentPolicyUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(assessmentpolicy.FieldUpdatedByImpersonator, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(assessmentpolicy.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(assessmentpolicy.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(assessmentpolicy.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(assessmentpolicy.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(assessmentpolicy.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(assessmentpolicy.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(assessmentpolicy.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(assessmentpolicy.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(assessmentpolicy.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.PolicyRevisionCleared() {
 		_spec.ClearField(assessmentpolicy.FieldPolicyRevision, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentpolicy.IntegrationRunsTable,
+			Columns: []string{assessmentpolicy.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentpolicy.IntegrationRunsTable,
+			Columns: []string{assessmentpolicy.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentpolicy.IntegrationRunsTable,
+			Columns: []string{assessmentpolicy.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -324,6 +562,126 @@ func (_u *AssessmentPolicyUpdateOne) ClearUpdatedByImpersonator() *AssessmentPol
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *AssessmentPolicyUpdateOne) SetSourceDefinitionID(v string) *AssessmentPolicyUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdateOne) SetNillableSourceDefinitionID(v *string) *AssessmentPolicyUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *AssessmentPolicyUpdateOne) ClearSourceDefinitionID() *AssessmentPolicyUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *AssessmentPolicyUpdateOne) SetSourceDefinitionVersion(v string) *AssessmentPolicyUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdateOne) SetNillableSourceDefinitionVersion(v *string) *AssessmentPolicyUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *AssessmentPolicyUpdateOne) ClearSourceDefinitionVersion() *AssessmentPolicyUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *AssessmentPolicyUpdateOne) SetSourceInstanceID(v string) *AssessmentPolicyUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdateOne) SetNillableSourceInstanceID(v *string) *AssessmentPolicyUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *AssessmentPolicyUpdateOne) ClearSourceInstanceID() *AssessmentPolicyUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *AssessmentPolicyUpdateOne) SetManagedBy(v string) *AssessmentPolicyUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdateOne) SetNillableManagedBy(v *string) *AssessmentPolicyUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *AssessmentPolicyUpdateOne) ClearManagedBy() *AssessmentPolicyUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *AssessmentPolicyUpdateOne) SetIntegrationRunID(v string) *AssessmentPolicyUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdateOne) SetNillableIntegrationRunID(v *string) *AssessmentPolicyUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *AssessmentPolicyUpdateOne) ClearIntegrationRunID() *AssessmentPolicyUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *AssessmentPolicyUpdateOne) SetExternalID(v string) *AssessmentPolicyUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *AssessmentPolicyUpdateOne) SetNillableExternalID(v *string) *AssessmentPolicyUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *AssessmentPolicyUpdateOne) ClearExternalID() *AssessmentPolicyUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *AssessmentPolicyUpdateOne) SetOwnerID(v string) *AssessmentPolicyUpdateOne {
 	_u.mutation.SetOwnerID(v)
@@ -344,6 +702,21 @@ func (_u *AssessmentPolicyUpdateOne) ClearOwnerID() *AssessmentPolicyUpdateOne {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *AssessmentPolicyUpdateOne) AddIntegrationRunIDs(ids ...string) *AssessmentPolicyUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssessmentPolicyUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *AssessmentPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *AssessmentPolicyUpdateOne) SetOwner(v *Organization) *AssessmentPolicyUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -352,6 +725,27 @@ func (_u *AssessmentPolicyUpdateOne) SetOwner(v *Organization) *AssessmentPolicy
 // Mutation returns the AssessmentPolicyMutation object of the builder.
 func (_u *AssessmentPolicyUpdateOne) Mutation() *AssessmentPolicyMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssessmentPolicyUpdateOne) ClearIntegrationRuns() *AssessmentPolicyUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *AssessmentPolicyUpdateOne) RemoveIntegrationRunIDs(ids ...string) *AssessmentPolicyUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *AssessmentPolicyUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *AssessmentPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -490,8 +884,89 @@ func (_u *AssessmentPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Assess
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(assessmentpolicy.FieldUpdatedByImpersonator, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(assessmentpolicy.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(assessmentpolicy.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(assessmentpolicy.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(assessmentpolicy.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(assessmentpolicy.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(assessmentpolicy.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(assessmentpolicy.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(assessmentpolicy.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(assessmentpolicy.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(assessmentpolicy.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.PolicyRevisionCleared() {
 		_spec.ClearField(assessmentpolicy.FieldPolicyRevision, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentpolicy.IntegrationRunsTable,
+			Columns: []string{assessmentpolicy.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentpolicy.IntegrationRunsTable,
+			Columns: []string{assessmentpolicy.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   assessmentpolicy.IntegrationRunsTable,
+			Columns: []string{assessmentpolicy.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -11,24 +11,39 @@ env:
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
 
   # build settings
-  GOCACHE: $HOME/.cache/go-build
-  GOMODCACHE: $HOME/.cache/go/pkg/mod
-  GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
+  BK_HOME: /var/lib/buildkite-agent
+  GOCACHE: $BK_HOME/.cache/go-build
+  GOMODCACHE: $BK_HOME/.cache/go/pkg/mod
+  GOLANGCI_LINT_CACHE: $BK_HOME/.cache/golangci-lint
+  GIT_MIRRORS_PATH: $BK_HOME/git-mirrors
+  HOME: /tmp
+  GIT_CONFIG_GLOBAL: $HOME/.gitconfig
+  APOLLO_CONFIG_HOME: $HOME
+  SONAR_USER_HOME: $HOME/.sonar
+  SCANNER_WORKDIR_PATH: $HOME/sonar-scanner-work
 
   # helm settings
-  HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
+  HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
   # runner vars
-  LARGE_RUNNER_QUEUE: self-hosted-garage-vms
-  SMALL_RUNNER_QUEUE: self-hosted-garage-vms
+  LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-self-hosted-garage-vms}
+  SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-self-hosted-garage-vms}
   RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
   RUNNER_WORKLOAD_STANDARD: "standard"
+
+# cache for hosted runners
+cache:
+  name: go-cache
+  size: 100g
+  paths:
+    - $GOCACHE
+    - $GOMODCACHE
+    - $GOLANGCI_LINT_CACHE
 
 secrets:
   - GITHUB_TOKEN
   - SLACK_WEBHOOK_URL
-  - GITHUB_SSH_PRIVATE_KEY
   - ANALYTICS_KEY
   - SONAR_TOKEN
   - ATLAS_CLOUD_TOKEN
@@ -42,6 +57,11 @@ steps:
     key: "precheck"
     steps:
       - label: ":golang: go generate"
+        # runner disk could not be freed below the retry threshold in pre-command
+        retry: &disk-full-retry
+          automatic:
+            - exit_status: 75
+              limit: 2
         key: "generate"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -58,6 +78,7 @@ steps:
               always_pull: true
               command: ["task", "generate:checksums"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -66,6 +87,7 @@ steps:
                 - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
       - label: ":yaml: generate config"
+        retry: *disk-full-retry
         key: "generate_config"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -82,6 +104,7 @@ steps:
               always_pull: true
               command: ["task", "config:ci"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -90,6 +113,7 @@ steps:
                 - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
       - label: ":construction: create draft config PR"
+        retry: *disk-full-retry
         key: "draft_pr_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -103,19 +127,21 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"]
+              command: ["bash", ".buildkite/draft-pr-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
+                - GIT_CONFIG_GLOBAL=/tmp/.gitconfig
       - label: ":link: link PRs"
+        retry: *disk-full-retry
         key: "link_pr_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -132,17 +158,18 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/link-pr-automation.sh"]
+              command: ["bash", ".buildkite/link-pr-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":helm: update helm chart"
+        retry: *disk-full-retry
         key: "helm_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -157,19 +184,20 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/helm-automation.sh"]
+              command: ["bash", ".buildkite/helm-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":arrows_counterclockwise: close draft config PRs"
+        retry: *disk-full-retry
         key: "post_merge_automation"
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -183,19 +211,20 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"]
+              command: ["bash", ".buildkite/post-merge-pr-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":broom: cleanup draft PRs"
+        retry: *disk-full-retry
         key: "cleanup_draft_prs"
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -206,13 +235,14 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"]
+              command: ["bash", ".buildkite/cleanup-draft-prs.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
       - label: ":rocket: update image tag for release"
+        retry: *disk-full-retry
         key: "image_tag_automation"
         depends_on:
           - "docker-build-and-tag"
@@ -225,14 +255,14 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"]
+              command: ["bash", ".buildkite/image-tag-automation.sh"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
-                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -241,6 +271,7 @@ steps:
     key: "linter"
     steps:
       - label: ":golangci-lint: lint graphapi package :lint-roller:"
+        retry: *disk-full-retry
         if_changed:
           - "internal/graphapi/**.go"
           - .golangci.yaml
@@ -258,6 +289,7 @@ steps:
               command: ["task", "go:lint:ci:graphapi"]
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -266,6 +298,7 @@ steps:
                 - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
       - label: ":golangci-lint: lint handlers package :lint-roller:"
+        retry: *disk-full-retry
         if_changed:
           - "internal/httpserve/handlers/**.go"
           - .golangci.yaml
@@ -283,6 +316,7 @@ steps:
               command: ["task", "go:lint:ci:handlers"]
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -291,6 +325,7 @@ steps:
                 - "GOTOOLCHAIN=auto"
                 - "CGO_ENABLED=0"
       - label: ":golangci-lint: lint - non-api packages :lint-roller:"
+        retry: *disk-full-retry
         if_changed:
           include:
             - "**.go"
@@ -312,6 +347,7 @@ steps:
               command: ["task", "go:lint:ci:no-api"]
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -323,6 +359,7 @@ steps:
     key: "go_tests"
     steps:
       - label: ":golang: go test - graphapi only %n/%t"
+        retry: *disk-full-retry
         agents:
           queue: $LARGE_RUNNER_QUEUE
           workload: $RUNNER_WORKLOAD_STANDARD
@@ -343,6 +380,7 @@ steps:
               always_pull: true
               command: ["task", "go:testsum:ci:graph"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -358,6 +396,7 @@ steps:
                 - "BUILDKITE_PARALLEL_JOB_COUNT"
         artifact_paths: ["coverage-graph-*.out", "junit-graph-*.xml"]
       - label: ":golang: go test - events only"
+        retry: *disk-full-retry
         agents:
           queue: $LARGE_RUNNER_QUEUE
           workload: $RUNNER_WORKLOAD_STANDARD
@@ -392,6 +431,7 @@ steps:
               always_pull: true
               command: ["task", "go:testsum:ci:events"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -405,6 +445,7 @@ steps:
                 - "CGO_ENABLED=0"
         artifact_paths: ["coverage-events.out", "junit-events.xml"]
       - label: ":golang: go test - handlers only %n/%t"
+        retry: *disk-full-retry
         agents:
           queue: $LARGE_RUNNER_QUEUE
           workload: $RUNNER_WORKLOAD_STANDARD
@@ -425,6 +466,7 @@ steps:
               always_pull: true
               command: ["task", "go:testsum:ci:handlers"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -440,6 +482,7 @@ steps:
                 - "BUILDKITE_PARALLEL_JOB_COUNT"
         artifact_paths: ["coverage-handlers-*.out", "junit-handlers-*.xml"]
       - label: ":golang: go test - all except api"
+        retry: *disk-full-retry
         if_changed:
           include:
             - "**.go"
@@ -463,6 +506,7 @@ steps:
               always_pull: true
               command: ["task", "go:testsum:ci:no-graph"]
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -476,6 +520,7 @@ steps:
                 - "CGO_ENABLED=0"
         artifact_paths: ["coverage-no-api.out", "junit-no-api.xml"]
       - label: ":auth0: fga model test"
+        retry: *disk-full-retry
         if_changed:
           - "fga/**"
         agents:
@@ -489,11 +534,13 @@ steps:
           - docker#v5.14.0:
               image: openfga/cli:v0.5.1
               propagate-environment: true
+              propagate-uid-gid: true
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
   - group: ":closed_lock_with_key: Security Checks"
     key: "security"
     steps:
       - label: ":buildkite: upload test analytics report"
+        retry: *disk-full-retry
         key: "test-analytics"
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -542,6 +589,7 @@ steps:
               download: "junit-handlers-*.xml"
               step: "go_test_handlers"
       - label: ":github: upload PR reports"
+        retry: *disk-full-retry
         key: "scan-upload-pr"
         cancel_on_build_failing: true
         agents:
@@ -584,17 +632,22 @@ steps:
               ignore_missing: true
 
           - docker#v5.14.0:
-              image: "sonarsource/sonar-scanner-cli:11.5"
+              image: "sonarsource/sonar-scanner-cli:12.3"
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                # scanner needs the git mirror at the same path for SCM blame
+                - $GIT_MIRRORS_PATH:$GIT_MIRRORS_PATH:ro
+              command: [".buildkite/sonar-scan.sh"]
               environment:
                 - "SONAR_TOKEN"
                 - "SONAR_HOST_URL=$SONAR_HOST"
                 - "SONAR_SCANNER_OPTS=-Dsonar.pullrequest.branch=$BUILDKITE_BRANCH -Dsonar.pullrequest.base=$BUILDKITE_PULL_REQUEST_BASE_BRANCH -Dsonar.pullrequest.key=$BUILDKITE_PULL_REQUEST"
       - label: ":github: upload reports"
+        retry: *disk-full-retry
         key: "scan-upload"
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -635,12 +688,16 @@ steps:
               step: "go_test_events"
               ignore_missing: true
           - docker#v5.14.0:
-              image: "sonarsource/sonar-scanner-cli:11.5"
+              image: "sonarsource/sonar-scanner-cli:12.3"
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                # scanner needs the git mirror at the same path for SCM blame
+                - $GIT_MIRRORS_PATH:$GIT_MIRRORS_PATH:ro
+              command: [".buildkite/sonar-scan.sh"]
               environment:
                 - "SONAR_TOKEN"
                 - "SONAR_HOST_URL=$SONAR_HOST"
@@ -648,6 +705,7 @@ steps:
     key: "go-builds"
     steps:
       - label: ":golang: build"
+        retry: *disk-full-retry
         key: "gobuild-server"
         cancel_on_build_failing: true
         if: build.tag == null
@@ -668,6 +726,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -676,6 +735,7 @@ steps:
                 - GOOS=linux
               command: ["task", "go:build:ci"]
       - label: ":terminal: build cli"
+        retry: *disk-full-retry
         key: "gobuild-cli"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -692,6 +752,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -701,6 +762,7 @@ steps:
                 - GOARCH=arm64
               command: ["task", "go:build-cli:ci"]
       - label: ":golang: build release"
+        retry: *disk-full-retry
         key: "gobuild-server-release"
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         cancel_on_build_failing: true
@@ -713,6 +775,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -721,6 +784,7 @@ steps:
                 - GOOS=linux
               command: ["task", "go:build:ci:release"]
       - label: ":terminal: build cli release"
+        retry: *disk-full-retry
         if: build.tag != null && build.tag =~ /cli\//
         key: "gobuild-cli-release"
         agents:
@@ -733,6 +797,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
@@ -745,6 +810,7 @@ steps:
     key: "database"
     steps:
       - label: ":postgres: atlas lint"
+        retry: *disk-full-retry
         key: "atlas_lint"
         if: build.branch !~ /^renovate\//
         agents:
@@ -766,6 +832,7 @@ steps:
               dir: "file://db/migrations"
               step: lint
       - label: ":graphql: lint graphql schema"
+        retry: *disk-full-retry
         key: "apollo-lint-schema"
         if_changed: "**.graphql"
         agents:
@@ -811,6 +878,7 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               environment:
                 - "APOLLO_KEY"
                 - "BUILDKITE_AGENT_ACCESS_TOKEN"
@@ -819,6 +887,7 @@ steps:
     key: "image-build"
     steps:
       - label: ":docker: docker pr build"
+        retry: *disk-full-retry
         key: "docker-pr-build"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -862,6 +931,7 @@ steps:
               build-args:
                 - NAME=${APP_NAME}
       - label: ":docker: docker build and publish"
+        retry: *disk-full-retry
         key: "docker-build-and-tag"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -896,6 +966,7 @@ steps:
     key: "publish"
     steps:
       - label: ":graphql: publish graphql schema"
+        retry: *disk-full-retry
         key: "apollo-publish-schema"
         agents:
           queue: $SMALL_RUNNER_QUEUE
@@ -912,9 +983,11 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               environment:
                 - "APOLLO_KEY"
       - label: ":graphql: publish history graphql schema"
+        retry: *disk-full-retry
         key: "apollo-publish-history-schema"
         skip: false
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
@@ -934,9 +1007,11 @@ steps:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
+              propagate-uid-gid: true
               environment:
                 - "APOLLO_KEY"
       - label: ":rocket: atlas push"
+        retry: *disk-full-retry
         if: build.branch == "main" && build.tag == null
         key: "atlas_migrate"
         agents:

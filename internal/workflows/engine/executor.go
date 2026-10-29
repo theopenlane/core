@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	wfworkflows "github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/core/v2/pkg/celx"
@@ -341,7 +342,7 @@ func (e *WorkflowEngine) executeNotification(ctx context.Context, action models.
 		return ErrObjectRefMissingID
 	}
 
-	ownerID, err := wfworkflows.ResolveOwnerID(ctx, instance.OwnerID)
+	ownerID, err := utils.ResolveOwnerID(ctx, instance.OwnerID)
 	if err != nil {
 		return err
 	}

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/workflows"
 )
@@ -61,7 +62,7 @@ func recordWorkflowInstanceAdminCompletion(ctx context.Context, client *generate
 		Details:   encoded,
 	}
 
-	ownerID, err := workflows.ResolveOwnerID(ctx, instance.OwnerID)
+	ownerID, err := utils.ResolveOwnerID(ctx, instance.OwnerID)
 	if err != nil {
 		return err
 	}

@@ -49,6 +49,8 @@ type DirectoryAccount struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the environment of the directory_account
@@ -67,8 +69,6 @@ type DirectoryAccount struct {
 	IdentityHolderID *string `json:"identity_holder_id,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName *string `json:"directory_name,omitempty"`
-	// stable identifier from the directory system
-	ExternalID string `json:"external_id,omitempty"`
 	// optional secondary identifier such as Azure immutable ID
 	SecondaryKey *string `json:"secondary_key,omitempty"`
 	// lower-cased primary email address, if present
@@ -295,7 +295,7 @@ func (*DirectoryAccount) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directoryaccount.FieldPrimarySource:
 			values[i] = new(sql.NullBool)
-		case directoryaccount.FieldID, directoryaccount.FieldCreatedBy, directoryaccount.FieldUpdatedBy, directoryaccount.FieldUpdatedByImpersonator, directoryaccount.FieldDisplayID, directoryaccount.FieldSourceDefinitionID, directoryaccount.FieldSourceDefinitionVersion, directoryaccount.FieldSourceInstanceID, directoryaccount.FieldManagedBy, directoryaccount.FieldIntegrationRunID, directoryaccount.FieldOwnerID, directoryaccount.FieldEnvironmentName, directoryaccount.FieldEnvironmentID, directoryaccount.FieldScopeName, directoryaccount.FieldScopeID, directoryaccount.FieldIntegrationID, directoryaccount.FieldPlatformID, directoryaccount.FieldIdentityHolderID, directoryaccount.FieldDirectoryName, directoryaccount.FieldExternalID, directoryaccount.FieldSecondaryKey, directoryaccount.FieldCanonicalEmail, directoryaccount.FieldPhoneNumber, directoryaccount.FieldDisplayName, directoryaccount.FieldAvatarRemoteURL, directoryaccount.FieldAvatarLocalFileID, directoryaccount.FieldGivenName, directoryaccount.FieldFamilyName, directoryaccount.FieldJobTitle, directoryaccount.FieldDepartment, directoryaccount.FieldOrganizationUnit, directoryaccount.FieldAccountType, directoryaccount.FieldStatus, directoryaccount.FieldMfaState, directoryaccount.FieldLastSeenIP, directoryaccount.FieldRawProfileFileID, directoryaccount.FieldSourceVersion:
+		case directoryaccount.FieldID, directoryaccount.FieldCreatedBy, directoryaccount.FieldUpdatedBy, directoryaccount.FieldUpdatedByImpersonator, directoryaccount.FieldDisplayID, directoryaccount.FieldSourceDefinitionID, directoryaccount.FieldSourceDefinitionVersion, directoryaccount.FieldSourceInstanceID, directoryaccount.FieldManagedBy, directoryaccount.FieldIntegrationRunID, directoryaccount.FieldExternalID, directoryaccount.FieldOwnerID, directoryaccount.FieldEnvironmentName, directoryaccount.FieldEnvironmentID, directoryaccount.FieldScopeName, directoryaccount.FieldScopeID, directoryaccount.FieldIntegrationID, directoryaccount.FieldPlatformID, directoryaccount.FieldIdentityHolderID, directoryaccount.FieldDirectoryName, directoryaccount.FieldSecondaryKey, directoryaccount.FieldCanonicalEmail, directoryaccount.FieldPhoneNumber, directoryaccount.FieldDisplayName, directoryaccount.FieldAvatarRemoteURL, directoryaccount.FieldAvatarLocalFileID, directoryaccount.FieldGivenName, directoryaccount.FieldFamilyName, directoryaccount.FieldJobTitle, directoryaccount.FieldDepartment, directoryaccount.FieldOrganizationUnit, directoryaccount.FieldAccountType, directoryaccount.FieldStatus, directoryaccount.FieldMfaState, directoryaccount.FieldLastSeenIP, directoryaccount.FieldRawProfileFileID, directoryaccount.FieldSourceVersion:
 			values[i] = new(sql.NullString)
 		case directoryaccount.FieldCreatedAt, directoryaccount.FieldUpdatedAt, directoryaccount.FieldAvatarUpdatedAt, directoryaccount.FieldAddedAt, directoryaccount.FieldRemovedAt, directoryaccount.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -395,6 +395,12 @@ func (_m *DirectoryAccount) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
 			}
+		case directoryaccount.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		case directoryaccount.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -450,12 +456,6 @@ func (_m *DirectoryAccount) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DirectoryName = new(string)
 				*_m.DirectoryName = value.String
-			}
-		case directoryaccount.FieldExternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field external_id", values[i])
-			} else if value.Valid {
-				_m.ExternalID = value.String
 			}
 		case directoryaccount.FieldSecondaryKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -763,6 +763,9 @@ func (_m *DirectoryAccount) String() string {
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -793,9 +796,6 @@ func (_m *DirectoryAccount) String() string {
 		builder.WriteString("directory_name=")
 		builder.WriteString(*v)
 	}
-	builder.WriteString(", ")
-	builder.WriteString("external_id=")
-	builder.WriteString(_m.ExternalID)
 	builder.WriteString(", ")
 	if v := _m.SecondaryKey; v != nil {
 		builder.WriteString("secondary_key=")

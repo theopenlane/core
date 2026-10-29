@@ -965,6 +965,20 @@ var (
 			}
 		},
 	}
+	// ActionPlanOrderFieldExternalID orders ActionPlan by external_id.
+	ActionPlanOrderFieldExternalID = &ActionPlanOrderField{
+		Value: func(_m *ActionPlan) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: actionplan.FieldExternalID,
+		toTerm: actionplan.ByExternalID,
+		toCursor: func(_m *ActionPlan) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ActionPlanOrderFieldName orders ActionPlan by name.
 	ActionPlanOrderFieldName = &ActionPlanOrderField{
 		Value: func(_m *ActionPlan) (ent.Value, error) {
@@ -1117,6 +1131,8 @@ func (f ActionPlanOrderField) String() string {
 		str = "updated_at"
 	case ActionPlanOrderFieldRevision.column:
 		str = "revision"
+	case ActionPlanOrderFieldExternalID.column:
+		str = "external_id"
 	case ActionPlanOrderFieldName.column:
 		str = "name"
 	case ActionPlanOrderFieldStatus.column:
@@ -1159,6 +1175,8 @@ func (f *ActionPlanOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ActionPlanOrderFieldUpdatedAt
 	case "revision":
 		*f = *ActionPlanOrderFieldRevision
+	case "external_id":
+		*f = *ActionPlanOrderFieldExternalID
 	case "name":
 		*f = *ActionPlanOrderFieldName
 	case "STATUS":
@@ -1516,6 +1534,20 @@ var (
 			}
 		},
 	}
+	// AssessmentOrderFieldExternalID orders Assessment by external_id.
+	AssessmentOrderFieldExternalID = &AssessmentOrderField{
+		Value: func(_m *Assessment) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: assessment.FieldExternalID,
+		toTerm: assessment.ByExternalID,
+		toCursor: func(_m *Assessment) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// AssessmentOrderFieldName orders Assessment by name.
 	AssessmentOrderFieldName = &AssessmentOrderField{
 		Value: func(_m *Assessment) (ent.Value, error) {
@@ -1568,6 +1600,8 @@ func (f AssessmentOrderField) String() string {
 		str = "created_at"
 	case AssessmentOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssessmentOrderFieldExternalID.column:
+		str = "external_id"
 	case AssessmentOrderFieldName.column:
 		str = "name"
 	case AssessmentOrderFieldAssessmentType.column:
@@ -1594,6 +1628,8 @@ func (f *AssessmentOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssessmentOrderFieldUpdatedAt
+	case "external_id":
+		*f = *AssessmentOrderFieldExternalID
 	case "name":
 		*f = *AssessmentOrderFieldName
 	case "assessment_type":
@@ -1923,6 +1959,20 @@ var (
 			}
 		},
 	}
+	// AssessmentPolicyOrderFieldExternalID orders AssessmentPolicy by external_id.
+	AssessmentPolicyOrderFieldExternalID = &AssessmentPolicyOrderField{
+		Value: func(_m *AssessmentPolicy) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: assessmentpolicy.FieldExternalID,
+		toTerm: assessmentpolicy.ByExternalID,
+		toCursor: func(_m *AssessmentPolicy) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -1933,6 +1983,8 @@ func (f AssessmentPolicyOrderField) String() string {
 		str = "created_at"
 	case AssessmentPolicyOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssessmentPolicyOrderFieldExternalID.column:
+		str = "external_id"
 	}
 	return str
 }
@@ -1953,6 +2005,8 @@ func (f *AssessmentPolicyOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentPolicyOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssessmentPolicyOrderFieldUpdatedAt
+	case "external_id":
+		*f = *AssessmentPolicyOrderFieldExternalID
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentPolicyOrderField", str)
 	}
@@ -2927,6 +2981,20 @@ var (
 			}
 		},
 	}
+	// AssetOrderFieldExternalID orders Asset by external_id.
+	AssetOrderFieldExternalID = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: asset.FieldExternalID,
+		toTerm: asset.ByExternalID,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// AssetOrderFieldInternalOwner orders Asset by internal_owner.
 	AssetOrderFieldInternalOwner = &AssetOrderField{
 		Value: func(_m *Asset) (ent.Value, error) {
@@ -3145,6 +3213,8 @@ func (f AssetOrderField) String() string {
 		str = "created_at"
 	case AssetOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssetOrderFieldExternalID.column:
+		str = "external_id"
 	case AssetOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case AssetOrderFieldAssetType.column:
@@ -3191,6 +3261,8 @@ func (f *AssetOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssetOrderFieldUpdatedAt
+	case "external_id":
+		*f = *AssetOrderFieldExternalID
 	case "internal_owner":
 		*f = *AssetOrderFieldInternalOwner
 	case "ASSET_TYPE":
@@ -3551,6 +3623,20 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// CampaignOrderFieldExternalID orders Campaign by external_id.
+	CampaignOrderFieldExternalID = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: campaign.FieldExternalID,
+		toTerm: campaign.ByExternalID,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
 			}
 		},
 	}
@@ -3934,6 +4020,8 @@ func (f CampaignOrderField) String() string {
 		str = "created_at"
 	case CampaignOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case CampaignOrderFieldExternalID.column:
+		str = "external_id"
 	case CampaignOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case CampaignOrderFieldName.column:
@@ -3992,6 +4080,8 @@ func (f *CampaignOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CampaignOrderFieldCreatedAt
 	case "updated_at":
 		*f = *CampaignOrderFieldUpdatedAt
+	case "external_id":
+		*f = *CampaignOrderFieldExternalID
 	case "internal_owner":
 		*f = *CampaignOrderFieldInternalOwner
 	case "name":
@@ -5270,6 +5360,20 @@ var (
 			}
 		},
 	}
+	// ContactOrderFieldExternalID orders Contact by external_id.
+	ContactOrderFieldExternalID = &ContactOrderField{
+		Value: func(_m *Contact) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: contact.FieldExternalID,
+		toTerm: contact.ByExternalID,
+		toCursor: func(_m *Contact) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ContactOrderFieldFullName orders Contact by full_name.
 	ContactOrderFieldFullName = &ContactOrderField{
 		Value: func(_m *Contact) (ent.Value, error) {
@@ -5340,20 +5444,6 @@ var (
 			}
 		},
 	}
-	// ContactOrderFieldExternalID orders Contact by external_id.
-	ContactOrderFieldExternalID = &ContactOrderField{
-		Value: func(_m *Contact) (ent.Value, error) {
-			return _m.ExternalID, nil
-		},
-		column: contact.FieldExternalID,
-		toTerm: contact.ByExternalID,
-		toCursor: func(_m *Contact) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ExternalID,
-			}
-		},
-	}
 	// ContactOrderFieldObservedAt orders Contact by observed_at.
 	ContactOrderFieldObservedAt = &ContactOrderField{
 		Value: func(_m *Contact) (ent.Value, error) {
@@ -5391,6 +5481,8 @@ func (f ContactOrderField) String() string {
 		str = "created_at"
 	case ContactOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ContactOrderFieldExternalID.column:
+		str = "external_id"
 	case ContactOrderFieldFullName.column:
 		str = "full_name"
 	case ContactOrderFieldTitle.column:
@@ -5401,8 +5493,6 @@ func (f ContactOrderField) String() string {
 		str = "email"
 	case ContactOrderFieldStatus.column:
 		str = "STATUS"
-	case ContactOrderFieldExternalID.column:
-		str = "external_id"
 	case ContactOrderFieldObservedAt.column:
 		str = "observed_at"
 	}
@@ -5425,6 +5515,8 @@ func (f *ContactOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ContactOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ContactOrderFieldUpdatedAt
+	case "external_id":
+		*f = *ContactOrderFieldExternalID
 	case "full_name":
 		*f = *ContactOrderFieldFullName
 	case "title":
@@ -5435,8 +5527,6 @@ func (f *ContactOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ContactOrderFieldEmail
 	case "STATUS":
 		*f = *ContactOrderFieldStatus
-	case "external_id":
-		*f = *ContactOrderFieldExternalID
 	case "observed_at":
 		*f = *ContactOrderFieldObservedAt
 	default:
@@ -5775,6 +5865,20 @@ var (
 			}
 		},
 	}
+	// ControlOrderFieldExternalID orders Control by external_id.
+	ControlOrderFieldExternalID = &ControlOrderField{
+		Value: func(_m *Control) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: control.FieldExternalID,
+		toTerm: control.ByExternalID,
+		toCursor: func(_m *Control) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ControlOrderFieldTitle orders Control by title.
 	ControlOrderFieldTitle = &ControlOrderField{
 		Value: func(_m *Control) (ent.Value, error) {
@@ -5956,6 +6060,8 @@ func (f ControlOrderField) String() string {
 		str = "created_at"
 	case ControlOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ControlOrderFieldExternalID.column:
+		str = "external_id"
 	case ControlOrderFieldTitle.column:
 		str = "title"
 	case ControlOrderFieldStatus.column:
@@ -5996,6 +6102,8 @@ func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlOrderFieldUpdatedAt
+	case "external_id":
+		*f = *ControlOrderFieldExternalID
 	case "title":
 		*f = *ControlOrderFieldTitle
 	case "STATUS":
@@ -6353,6 +6461,20 @@ var (
 			}
 		},
 	}
+	// ControlImplementationOrderFieldExternalID orders ControlImplementation by external_id.
+	ControlImplementationOrderFieldExternalID = &ControlImplementationOrderField{
+		Value: func(_m *ControlImplementation) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: controlimplementation.FieldExternalID,
+		toTerm: controlimplementation.ByExternalID,
+		toCursor: func(_m *ControlImplementation) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ControlImplementationOrderFieldStatus orders ControlImplementation by status.
 	ControlImplementationOrderFieldStatus = &ControlImplementationOrderField{
 		Value: func(_m *ControlImplementation) (ent.Value, error) {
@@ -6419,6 +6541,8 @@ func (f ControlImplementationOrderField) String() string {
 		str = "created_at"
 	case ControlImplementationOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ControlImplementationOrderFieldExternalID.column:
+		str = "external_id"
 	case ControlImplementationOrderFieldStatus.column:
 		str = "STATUS"
 	case ControlImplementationOrderFieldImplementationDate.column:
@@ -6447,6 +6571,8 @@ func (f *ControlImplementationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlImplementationOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ControlImplementationOrderFieldUpdatedAt
+	case "external_id":
+		*f = *ControlImplementationOrderFieldExternalID
 	case "STATUS":
 		*f = *ControlImplementationOrderFieldStatus
 	case "implementation_date":
@@ -6806,6 +6932,20 @@ var (
 			}
 		},
 	}
+	// ControlObjectiveOrderFieldExternalID orders ControlObjective by external_id.
+	ControlObjectiveOrderFieldExternalID = &ControlObjectiveOrderField{
+		Value: func(_m *ControlObjective) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: controlobjective.FieldExternalID,
+		toTerm: controlobjective.ByExternalID,
+		toCursor: func(_m *ControlObjective) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ControlObjectiveOrderFieldName orders ControlObjective by name.
 	ControlObjectiveOrderFieldName = &ControlObjectiveOrderField{
 		Value: func(_m *ControlObjective) (ent.Value, error) {
@@ -6902,6 +7042,8 @@ func (f ControlObjectiveOrderField) String() string {
 		str = "updated_at"
 	case ControlObjectiveOrderFieldRevision.column:
 		str = "revision"
+	case ControlObjectiveOrderFieldExternalID.column:
+		str = "external_id"
 	case ControlObjectiveOrderFieldName.column:
 		str = "name"
 	case ControlObjectiveOrderFieldStatus.column:
@@ -6936,6 +7078,8 @@ func (f *ControlObjectiveOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlObjectiveOrderFieldUpdatedAt
 	case "revision":
 		*f = *ControlObjectiveOrderFieldRevision
+	case "external_id":
+		*f = *ControlObjectiveOrderFieldExternalID
 	case "name":
 		*f = *ControlObjectiveOrderFieldName
 	case "status":
@@ -7642,6 +7786,20 @@ var (
 			}
 		},
 	}
+	// CustomTypeEnumOrderFieldExternalID orders CustomTypeEnum by external_id.
+	CustomTypeEnumOrderFieldExternalID = &CustomTypeEnumOrderField{
+		Value: func(_m *CustomTypeEnum) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: customtypeenum.FieldExternalID,
+		toTerm: customtypeenum.ByExternalID,
+		toCursor: func(_m *CustomTypeEnum) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// CustomTypeEnumOrderFieldObjectType orders CustomTypeEnum by object_type.
 	CustomTypeEnumOrderFieldObjectType = &CustomTypeEnumOrderField{
 		Value: func(_m *CustomTypeEnum) (ent.Value, error) {
@@ -7694,6 +7852,8 @@ func (f CustomTypeEnumOrderField) String() string {
 		str = "created_at"
 	case CustomTypeEnumOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case CustomTypeEnumOrderFieldExternalID.column:
+		str = "external_id"
 	case CustomTypeEnumOrderFieldObjectType.column:
 		str = "object_type"
 	case CustomTypeEnumOrderFieldField.column:
@@ -7720,6 +7880,8 @@ func (f *CustomTypeEnumOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CustomTypeEnumOrderFieldCreatedAt
 	case "updated_at":
 		*f = *CustomTypeEnumOrderFieldUpdatedAt
+	case "external_id":
+		*f = *CustomTypeEnumOrderFieldExternalID
 	case "object_type":
 		*f = *CustomTypeEnumOrderFieldObjectType
 	case "field":
@@ -8416,6 +8578,20 @@ var (
 			}
 		},
 	}
+	// DirectoryAccountOrderFieldExternalID orders DirectoryAccount by external_id.
+	DirectoryAccountOrderFieldExternalID = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: directoryaccount.FieldExternalID,
+		toTerm: directoryaccount.ByExternalID,
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// DirectoryAccountOrderFieldDirectoryName orders DirectoryAccount by directory_name.
 	DirectoryAccountOrderFieldDirectoryName = &DirectoryAccountOrderField{
 		Value: func(_m *DirectoryAccount) (ent.Value, error) {
@@ -8440,20 +8616,6 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.DirectoryName,
-			}
-		},
-	}
-	// DirectoryAccountOrderFieldExternalID orders DirectoryAccount by external_id.
-	DirectoryAccountOrderFieldExternalID = &DirectoryAccountOrderField{
-		Value: func(_m *DirectoryAccount) (ent.Value, error) {
-			return _m.ExternalID, nil
-		},
-		column: directoryaccount.FieldExternalID,
-		toTerm: directoryaccount.ByExternalID,
-		toCursor: func(_m *DirectoryAccount) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ExternalID,
 			}
 		},
 	}
@@ -8508,10 +8670,10 @@ func (f DirectoryAccountOrderField) String() string {
 		str = "created_at"
 	case DirectoryAccountOrderFieldUpdatedAt.column:
 		str = "updated_at"
-	case DirectoryAccountOrderFieldDirectoryName.column:
-		str = "directory_name"
 	case DirectoryAccountOrderFieldExternalID.column:
 		str = "external_id"
+	case DirectoryAccountOrderFieldDirectoryName.column:
+		str = "directory_name"
 	case DirectoryAccountOrderFieldCanonicalEmail.column:
 		str = "canonical_email"
 	case DirectoryAccountOrderFieldDisplayName.column:
@@ -8536,10 +8698,10 @@ func (f *DirectoryAccountOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *DirectoryAccountOrderFieldCreatedAt
 	case "updated_at":
 		*f = *DirectoryAccountOrderFieldUpdatedAt
-	case "directory_name":
-		*f = *DirectoryAccountOrderFieldDirectoryName
 	case "external_id":
 		*f = *DirectoryAccountOrderFieldExternalID
+	case "directory_name":
+		*f = *DirectoryAccountOrderFieldDirectoryName
 	case "canonical_email":
 		*f = *DirectoryAccountOrderFieldCanonicalEmail
 	case "display_name":
@@ -10464,6 +10626,20 @@ var (
 			}
 		},
 	}
+	// EmailTemplateOrderFieldExternalID orders EmailTemplate by external_id.
+	EmailTemplateOrderFieldExternalID = &EmailTemplateOrderField{
+		Value: func(_m *EmailTemplate) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: emailtemplate.FieldExternalID,
+		toTerm: emailtemplate.ByExternalID,
+		toCursor: func(_m *EmailTemplate) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// EmailTemplateOrderFieldKey orders EmailTemplate by key.
 	EmailTemplateOrderFieldKey = &EmailTemplateOrderField{
 		Value: func(_m *EmailTemplate) (ent.Value, error) {
@@ -10574,6 +10750,8 @@ func (f EmailTemplateOrderField) String() string {
 		str = "updated_at"
 	case EmailTemplateOrderFieldRevision.column:
 		str = "revision"
+	case EmailTemplateOrderFieldExternalID.column:
+		str = "external_id"
 	case EmailTemplateOrderFieldKey.column:
 		str = "KEY"
 	case EmailTemplateOrderFieldName.column:
@@ -10610,6 +10788,8 @@ func (f *EmailTemplateOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EmailTemplateOrderFieldUpdatedAt
 	case "revision":
 		*f = *EmailTemplateOrderFieldRevision
+	case "external_id":
+		*f = *EmailTemplateOrderFieldExternalID
 	case "KEY":
 		*f = *EmailTemplateOrderFieldKey
 	case "NAME":
@@ -10944,6 +11124,20 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// EntityOrderFieldExternalID orders Entity by external_id.
+	EntityOrderFieldExternalID = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: entity.FieldExternalID,
+		toTerm: entity.ByExternalID,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
 			}
 		},
 	}
@@ -11417,20 +11611,6 @@ var (
 			}
 		},
 	}
-	// EntityOrderFieldExternalID orders Entity by external_id.
-	EntityOrderFieldExternalID = &EntityOrderField{
-		Value: func(_m *Entity) (ent.Value, error) {
-			return _m.ExternalID, nil
-		},
-		column: entity.FieldExternalID,
-		toTerm: entity.ByExternalID,
-		toCursor: func(_m *Entity) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ExternalID,
-			}
-		},
-	}
 	// EntityOrderFieldObservedAt orders Entity by observed_at.
 	EntityOrderFieldObservedAt = &EntityOrderField{
 		Value: func(_m *Entity) (ent.Value, error) {
@@ -11468,6 +11648,8 @@ func (f EntityOrderField) String() string {
 		str = "created_at"
 	case EntityOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case EntityOrderFieldExternalID.column:
+		str = "external_id"
 	case EntityOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case EntityOrderFieldReviewedBy.column:
@@ -11524,8 +11706,6 @@ func (f EntityOrderField) String() string {
 		str = "next_review_at"
 	case EntityOrderFieldContractRenewalAt.column:
 		str = "contract_renewal_at"
-	case EntityOrderFieldExternalID.column:
-		str = "external_id"
 	case EntityOrderFieldObservedAt.column:
 		str = "observed_at"
 	}
@@ -11548,6 +11728,8 @@ func (f *EntityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityOrderFieldCreatedAt
 	case "updated_at":
 		*f = *EntityOrderFieldUpdatedAt
+	case "external_id":
+		*f = *EntityOrderFieldExternalID
 	case "internal_owner":
 		*f = *EntityOrderFieldInternalOwner
 	case "reviewed_by":
@@ -11604,8 +11786,6 @@ func (f *EntityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityOrderFieldNextReviewAt
 	case "contract_renewal_at":
 		*f = *EntityOrderFieldContractRenewalAt
-	case "external_id":
-		*f = *EntityOrderFieldExternalID
 	case "observed_at":
 		*f = *EntityOrderFieldObservedAt
 	default:
@@ -12683,6 +12863,20 @@ var (
 			}
 		},
 	}
+	// EvidenceOrderFieldExternalID orders Evidence by external_id.
+	EvidenceOrderFieldExternalID = &EvidenceOrderField{
+		Value: func(_m *Evidence) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: evidence.FieldExternalID,
+		toTerm: evidence.ByExternalID,
+		toCursor: func(_m *Evidence) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// EvidenceOrderFieldName orders Evidence by name.
 	EvidenceOrderFieldName = &EvidenceOrderField{
 		Value: func(_m *Evidence) (ent.Value, error) {
@@ -12789,6 +12983,8 @@ func (f EvidenceOrderField) String() string {
 		str = "created_at"
 	case EvidenceOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case EvidenceOrderFieldExternalID.column:
+		str = "external_id"
 	case EvidenceOrderFieldName.column:
 		str = "name"
 	case EvidenceOrderFieldCreationDate.column:
@@ -12819,6 +13015,8 @@ func (f *EvidenceOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EvidenceOrderFieldCreatedAt
 	case "updated_at":
 		*f = *EvidenceOrderFieldUpdatedAt
+	case "external_id":
+		*f = *EvidenceOrderFieldExternalID
 	case "name":
 		*f = *EvidenceOrderFieldName
 	case "creation_date":
@@ -13975,20 +14173,6 @@ var (
 			}
 		},
 	}
-	// FindingOrderFieldInternalOwner orders Finding by internal_owner.
-	FindingOrderFieldInternalOwner = &FindingOrderField{
-		Value: func(_m *Finding) (ent.Value, error) {
-			return _m.InternalOwner, nil
-		},
-		column: finding.FieldInternalOwner,
-		toTerm: finding.ByInternalOwner,
-		toCursor: func(_m *Finding) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.InternalOwner,
-			}
-		},
-	}
 	// FindingOrderFieldExternalID orders Finding by external_id.
 	FindingOrderFieldExternalID = &FindingOrderField{
 		Value: func(_m *Finding) (ent.Value, error) {
@@ -14000,6 +14184,20 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.ExternalID,
+			}
+		},
+	}
+	// FindingOrderFieldInternalOwner orders Finding by internal_owner.
+	FindingOrderFieldInternalOwner = &FindingOrderField{
+		Value: func(_m *Finding) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: finding.FieldInternalOwner,
+		toTerm: finding.ByInternalOwner,
+		toCursor: func(_m *Finding) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
 			}
 		},
 	}
@@ -14123,10 +14321,10 @@ func (f FindingOrderField) String() string {
 		str = "created_at"
 	case FindingOrderFieldUpdatedAt.column:
 		str = "updated_at"
-	case FindingOrderFieldInternalOwner.column:
-		str = "internal_owner"
 	case FindingOrderFieldExternalID.column:
 		str = "external_id"
+	case FindingOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case FindingOrderFieldSecurityLevel.column:
 		str = "security_level"
 	case FindingOrderFieldExternalOwnerID.column:
@@ -14159,10 +14357,10 @@ func (f *FindingOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingOrderFieldCreatedAt
 	case "updated_at":
 		*f = *FindingOrderFieldUpdatedAt
-	case "internal_owner":
-		*f = *FindingOrderFieldInternalOwner
 	case "external_id":
 		*f = *FindingOrderFieldExternalID
+	case "internal_owner":
+		*f = *FindingOrderFieldInternalOwner
 	case "security_level":
 		*f = *FindingOrderFieldSecurityLevel
 	case "external_owner_id":
@@ -14851,6 +15049,20 @@ var (
 			}
 		},
 	}
+	// GroupOrderFieldExternalID orders Group by external_id.
+	GroupOrderFieldExternalID = &GroupOrderField{
+		Value: func(_m *Group) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: group.FieldExternalID,
+		toTerm: group.ByExternalID,
+		toCursor: func(_m *Group) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// GroupOrderFieldName orders Group by name.
 	GroupOrderFieldName = &GroupOrderField{
 		Value: func(_m *Group) (ent.Value, error) {
@@ -14889,6 +15101,8 @@ func (f GroupOrderField) String() string {
 		str = "created_at"
 	case GroupOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case GroupOrderFieldExternalID.column:
+		str = "external_id"
 	case GroupOrderFieldName.column:
 		str = "name"
 	case GroupOrderFieldDisplayName.column:
@@ -14913,6 +15127,8 @@ func (f *GroupOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *GroupOrderFieldCreatedAt
 	case "updated_at":
 		*f = *GroupOrderFieldUpdatedAt
+	case "external_id":
+		*f = *GroupOrderFieldExternalID
 	case "name":
 		*f = *GroupOrderFieldName
 	case "display_name":
@@ -16457,6 +16673,20 @@ var (
 			}
 		},
 	}
+	// IdentityHolderOrderFieldExternalID orders IdentityHolder by external_id.
+	IdentityHolderOrderFieldExternalID = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: identityholder.FieldExternalID,
+		toTerm: identityholder.ByExternalID,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// IdentityHolderOrderFieldInternalOwner orders IdentityHolder by internal_owner.
 	IdentityHolderOrderFieldInternalOwner = &IdentityHolderOrderField{
 		Value: func(_m *IdentityHolder) (ent.Value, error) {
@@ -16717,6 +16947,8 @@ func (f IdentityHolderOrderField) String() string {
 		str = "created_at"
 	case IdentityHolderOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case IdentityHolderOrderFieldExternalID.column:
+		str = "external_id"
 	case IdentityHolderOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case IdentityHolderOrderFieldFullName.column:
@@ -16769,6 +17001,8 @@ func (f *IdentityHolderOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *IdentityHolderOrderFieldCreatedAt
 	case "updated_at":
 		*f = *IdentityHolderOrderFieldUpdatedAt
+	case "external_id":
+		*f = *IdentityHolderOrderFieldExternalID
 	case "internal_owner":
 		*f = *IdentityHolderOrderFieldInternalOwner
 	case "full_name":
@@ -18131,6 +18365,20 @@ var (
 			}
 		},
 	}
+	// InternalPolicyOrderFieldExternalID orders InternalPolicy by external_id.
+	InternalPolicyOrderFieldExternalID = &InternalPolicyOrderField{
+		Value: func(_m *InternalPolicy) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: internalpolicy.FieldExternalID,
+		toTerm: internalpolicy.ByExternalID,
+		toCursor: func(_m *InternalPolicy) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// InternalPolicyOrderFieldName orders InternalPolicy by name.
 	InternalPolicyOrderFieldName = &InternalPolicyOrderField{
 		Value: func(_m *InternalPolicy) (ent.Value, error) {
@@ -18213,6 +18461,8 @@ func (f InternalPolicyOrderField) String() string {
 		str = "updated_at"
 	case InternalPolicyOrderFieldRevision.column:
 		str = "revision"
+	case InternalPolicyOrderFieldExternalID.column:
+		str = "external_id"
 	case InternalPolicyOrderFieldName.column:
 		str = "name"
 	case InternalPolicyOrderFieldStatus.column:
@@ -18245,6 +18495,8 @@ func (f *InternalPolicyOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *InternalPolicyOrderFieldUpdatedAt
 	case "revision":
 		*f = *InternalPolicyOrderFieldRevision
+	case "external_id":
+		*f = *InternalPolicyOrderFieldExternalID
 	case "name":
 		*f = *InternalPolicyOrderFieldName
 	case "STATUS":
@@ -19370,6 +19622,20 @@ var (
 			}
 		},
 	}
+	// MappedControlOrderFieldExternalID orders MappedControl by external_id.
+	MappedControlOrderFieldExternalID = &MappedControlOrderField{
+		Value: func(_m *MappedControl) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: mappedcontrol.FieldExternalID,
+		toTerm: mappedcontrol.ByExternalID,
+		toCursor: func(_m *MappedControl) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// MappedControlOrderFieldMappingType orders MappedControl by mapping_type.
 	MappedControlOrderFieldMappingType = &MappedControlOrderField{
 		Value: func(_m *MappedControl) (ent.Value, error) {
@@ -19408,6 +19674,8 @@ func (f MappedControlOrderField) String() string {
 		str = "created_at"
 	case MappedControlOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case MappedControlOrderFieldExternalID.column:
+		str = "external_id"
 	case MappedControlOrderFieldMappingType.column:
 		str = "MAPPING_TYPE"
 	case MappedControlOrderFieldSource.column:
@@ -19432,6 +19700,8 @@ func (f *MappedControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *MappedControlOrderFieldCreatedAt
 	case "updated_at":
 		*f = *MappedControlOrderFieldUpdatedAt
+	case "external_id":
+		*f = *MappedControlOrderFieldExternalID
 	case "MAPPING_TYPE":
 		*f = *MappedControlOrderFieldMappingType
 	case "SOURCE":
@@ -19773,6 +20043,20 @@ var (
 			}
 		},
 	}
+	// NarrativeOrderFieldExternalID orders Narrative by external_id.
+	NarrativeOrderFieldExternalID = &NarrativeOrderField{
+		Value: func(_m *Narrative) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: narrative.FieldExternalID,
+		toTerm: narrative.ByExternalID,
+		toCursor: func(_m *Narrative) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// NarrativeOrderFieldName orders Narrative by name.
 	NarrativeOrderFieldName = &NarrativeOrderField{
 		Value: func(_m *Narrative) (ent.Value, error) {
@@ -19797,6 +20081,8 @@ func (f NarrativeOrderField) String() string {
 		str = "created_at"
 	case NarrativeOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case NarrativeOrderFieldExternalID.column:
+		str = "external_id"
 	case NarrativeOrderFieldName.column:
 		str = "name"
 	}
@@ -19819,6 +20105,8 @@ func (f *NarrativeOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *NarrativeOrderFieldCreatedAt
 	case "updated_at":
 		*f = *NarrativeOrderFieldUpdatedAt
+	case "external_id":
+		*f = *NarrativeOrderFieldExternalID
 	case "name":
 		*f = *NarrativeOrderFieldName
 	default:
@@ -24113,6 +24401,20 @@ var (
 			}
 		},
 	}
+	// PlatformOrderFieldExternalID orders Platform by external_id.
+	PlatformOrderFieldExternalID = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: platform.FieldExternalID,
+		toTerm: platform.ByExternalID,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// PlatformOrderFieldInternalOwner orders Platform by internal_owner.
 	PlatformOrderFieldInternalOwner = &PlatformOrderField{
 		Value: func(_m *Platform) (ent.Value, error) {
@@ -24360,6 +24662,8 @@ func (f PlatformOrderField) String() string {
 		str = "created_at"
 	case PlatformOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case PlatformOrderFieldExternalID.column:
+		str = "external_id"
 	case PlatformOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case PlatformOrderFieldBusinessOwner.column:
@@ -24412,6 +24716,8 @@ func (f *PlatformOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *PlatformOrderFieldCreatedAt
 	case "updated_at":
 		*f = *PlatformOrderFieldUpdatedAt
+	case "external_id":
+		*f = *PlatformOrderFieldExternalID
 	case "internal_owner":
 		*f = *PlatformOrderFieldInternalOwner
 	case "business_owner":
@@ -24781,6 +25087,20 @@ var (
 			}
 		},
 	}
+	// ProcedureOrderFieldExternalID orders Procedure by external_id.
+	ProcedureOrderFieldExternalID = &ProcedureOrderField{
+		Value: func(_m *Procedure) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: procedure.FieldExternalID,
+		toTerm: procedure.ByExternalID,
+		toCursor: func(_m *Procedure) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ProcedureOrderFieldName orders Procedure by name.
 	ProcedureOrderFieldName = &ProcedureOrderField{
 		Value: func(_m *Procedure) (ent.Value, error) {
@@ -24863,6 +25183,8 @@ func (f ProcedureOrderField) String() string {
 		str = "updated_at"
 	case ProcedureOrderFieldRevision.column:
 		str = "revision"
+	case ProcedureOrderFieldExternalID.column:
+		str = "external_id"
 	case ProcedureOrderFieldName.column:
 		str = "name"
 	case ProcedureOrderFieldStatus.column:
@@ -24895,6 +25217,8 @@ func (f *ProcedureOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProcedureOrderFieldUpdatedAt
 	case "revision":
 		*f = *ProcedureOrderFieldRevision
+	case "external_id":
+		*f = *ProcedureOrderFieldExternalID
 	case "name":
 		*f = *ProcedureOrderFieldName
 	case "STATUS":
@@ -25228,6 +25552,20 @@ var (
 			}
 		},
 	}
+	// ProgramOrderFieldExternalID orders Program by external_id.
+	ProgramOrderFieldExternalID = &ProgramOrderField{
+		Value: func(_m *Program) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: program.FieldExternalID,
+		toTerm: program.ByExternalID,
+		toCursor: func(_m *Program) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ProgramOrderFieldName orders Program by name.
 	ProgramOrderFieldName = &ProgramOrderField{
 		Value: func(_m *Program) (ent.Value, error) {
@@ -25364,6 +25702,8 @@ func (f ProgramOrderField) String() string {
 		str = "created_at"
 	case ProgramOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ProgramOrderFieldExternalID.column:
+		str = "external_id"
 	case ProgramOrderFieldName.column:
 		str = "name"
 	case ProgramOrderFieldStatus.column:
@@ -25402,6 +25742,8 @@ func (f *ProgramOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProgramOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ProgramOrderFieldUpdatedAt
+	case "external_id":
+		*f = *ProgramOrderFieldExternalID
 	case "name":
 		*f = *ProgramOrderFieldName
 	case "STATUS":
@@ -27010,6 +27352,20 @@ var (
 			}
 		},
 	}
+	// RiskOrderFieldExternalID orders Risk by external_id.
+	RiskOrderFieldExternalID = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: risk.FieldExternalID,
+		toTerm: risk.ByExternalID,
+		toCursor: func(_m *Risk) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// RiskOrderFieldStakeholderName orders Risk by stakeholder_name.
 	RiskOrderFieldStakeholderName = &RiskOrderField{
 		Value: func(_m *Risk) (ent.Value, error) {
@@ -27035,20 +27391,6 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.DelegateName,
-			}
-		},
-	}
-	// RiskOrderFieldExternalID orders Risk by external_id.
-	RiskOrderFieldExternalID = &RiskOrderField{
-		Value: func(_m *Risk) (ent.Value, error) {
-			return _m.ExternalID, nil
-		},
-		column: risk.FieldExternalID,
-		toTerm: risk.ByExternalID,
-		toCursor: func(_m *Risk) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ExternalID,
 			}
 		},
 	}
@@ -27337,12 +27679,12 @@ func (f RiskOrderField) String() string {
 		str = "created_at"
 	case RiskOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case RiskOrderFieldExternalID.column:
+		str = "external_id"
 	case RiskOrderFieldStakeholderName.column:
 		str = "stakeholder_name"
 	case RiskOrderFieldDelegateName.column:
 		str = "delegate_name"
-	case RiskOrderFieldExternalID.column:
-		str = "external_id"
 	case RiskOrderFieldObservedAt.column:
 		str = "observed_at"
 	case RiskOrderFieldName.column:
@@ -27393,12 +27735,12 @@ func (f *RiskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskOrderFieldCreatedAt
 	case "updated_at":
 		*f = *RiskOrderFieldUpdatedAt
+	case "external_id":
+		*f = *RiskOrderFieldExternalID
 	case "stakeholder_name":
 		*f = *RiskOrderFieldStakeholderName
 	case "delegate_name":
 		*f = *RiskOrderFieldDelegateName
-	case "external_id":
-		*f = *RiskOrderFieldExternalID
 	case "observed_at":
 		*f = *RiskOrderFieldObservedAt
 	case "name":
@@ -28155,6 +28497,20 @@ var (
 			}
 		},
 	}
+	// ScanOrderFieldExternalID orders Scan by external_id.
+	ScanOrderFieldExternalID = &ScanOrderField{
+		Value: func(_m *Scan) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: scan.FieldExternalID,
+		toTerm: scan.ByExternalID,
+		toCursor: func(_m *Scan) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// ScanOrderFieldScanType orders Scan by scan_type.
 	ScanOrderFieldScanType = &ScanOrderField{
 		Value: func(_m *Scan) (ent.Value, error) {
@@ -28247,6 +28603,8 @@ func (f ScanOrderField) String() string {
 		str = "created_at"
 	case ScanOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case ScanOrderFieldExternalID.column:
+		str = "external_id"
 	case ScanOrderFieldScanType.column:
 		str = "SCAN_TYPE"
 	case ScanOrderFieldScanDate.column:
@@ -28275,6 +28633,8 @@ func (f *ScanOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ScanOrderFieldCreatedAt
 	case "updated_at":
 		*f = *ScanOrderFieldUpdatedAt
+	case "external_id":
+		*f = *ScanOrderFieldExternalID
 	case "SCAN_TYPE":
 		*f = *ScanOrderFieldScanType
 	case "scan_date":
@@ -29098,6 +29458,20 @@ var (
 			}
 		},
 	}
+	// SubcontrolOrderFieldExternalID orders Subcontrol by external_id.
+	SubcontrolOrderFieldExternalID = &SubcontrolOrderField{
+		Value: func(_m *Subcontrol) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: subcontrol.FieldExternalID,
+		toTerm: subcontrol.ByExternalID,
+		toCursor: func(_m *Subcontrol) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// SubcontrolOrderFieldTitle orders Subcontrol by title.
 	SubcontrolOrderFieldTitle = &SubcontrolOrderField{
 		Value: func(_m *Subcontrol) (ent.Value, error) {
@@ -29279,6 +29653,8 @@ func (f SubcontrolOrderField) String() string {
 		str = "created_at"
 	case SubcontrolOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SubcontrolOrderFieldExternalID.column:
+		str = "external_id"
 	case SubcontrolOrderFieldTitle.column:
 		str = "title"
 	case SubcontrolOrderFieldStatus.column:
@@ -29319,6 +29695,8 @@ func (f *SubcontrolOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SubcontrolOrderFieldUpdatedAt
+	case "external_id":
+		*f = *SubcontrolOrderFieldExternalID
 	case "title":
 		*f = *SubcontrolOrderFieldTitle
 	case "STATUS":
@@ -30486,6 +30864,20 @@ var (
 			}
 		},
 	}
+	// SystemDetailOrderFieldExternalID orders SystemDetail by external_id.
+	SystemDetailOrderFieldExternalID = &SystemDetailOrderField{
+		Value: func(_m *SystemDetail) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: systemdetail.FieldExternalID,
+		toTerm: systemdetail.ByExternalID,
+		toCursor: func(_m *SystemDetail) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// SystemDetailOrderFieldSystemName orders SystemDetail by system_name.
 	SystemDetailOrderFieldSystemName = &SystemDetailOrderField{
 		Value: func(_m *SystemDetail) (ent.Value, error) {
@@ -30510,6 +30902,8 @@ func (f SystemDetailOrderField) String() string {
 		str = "created_at"
 	case SystemDetailOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case SystemDetailOrderFieldExternalID.column:
+		str = "external_id"
 	case SystemDetailOrderFieldSystemName.column:
 		str = "system_name"
 	}
@@ -30532,6 +30926,8 @@ func (f *SystemDetailOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SystemDetailOrderFieldCreatedAt
 	case "updated_at":
 		*f = *SystemDetailOrderFieldUpdatedAt
+	case "external_id":
+		*f = *SystemDetailOrderFieldExternalID
 	case "system_name":
 		*f = *SystemDetailOrderFieldSystemName
 	default:
@@ -31224,6 +31620,20 @@ var (
 			}
 		},
 	}
+	// TagDefinitionOrderFieldExternalID orders TagDefinition by external_id.
+	TagDefinitionOrderFieldExternalID = &TagDefinitionOrderField{
+		Value: func(_m *TagDefinition) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: tagdefinition.FieldExternalID,
+		toTerm: tagdefinition.ByExternalID,
+		toCursor: func(_m *TagDefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// TagDefinitionOrderFieldName orders TagDefinition by name.
 	TagDefinitionOrderFieldName = &TagDefinitionOrderField{
 		Value: func(_m *TagDefinition) (ent.Value, error) {
@@ -31262,6 +31672,8 @@ func (f TagDefinitionOrderField) String() string {
 		str = "created_at"
 	case TagDefinitionOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case TagDefinitionOrderFieldExternalID.column:
+		str = "external_id"
 	case TagDefinitionOrderFieldName.column:
 		str = "name"
 	case TagDefinitionOrderFieldSlug.column:
@@ -31286,6 +31698,8 @@ func (f *TagDefinitionOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TagDefinitionOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TagDefinitionOrderFieldUpdatedAt
+	case "external_id":
+		*f = *TagDefinitionOrderFieldExternalID
 	case "name":
 		*f = *TagDefinitionOrderFieldName
 	case "slug":
@@ -31627,6 +32041,20 @@ var (
 			}
 		},
 	}
+	// TaskOrderFieldExternalID orders Task by external_id.
+	TaskOrderFieldExternalID = &TaskOrderField{
+		Value: func(_m *Task) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: task.FieldExternalID,
+		toTerm: task.ByExternalID,
+		toCursor: func(_m *Task) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// TaskOrderFieldTitle orders Task by title.
 	TaskOrderFieldTitle = &TaskOrderField{
 		Value: func(_m *Task) (ent.Value, error) {
@@ -31761,6 +32189,8 @@ func (f TaskOrderField) String() string {
 		str = "created_at"
 	case TaskOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case TaskOrderFieldExternalID.column:
+		str = "external_id"
 	case TaskOrderFieldTitle.column:
 		str = "title"
 	case TaskOrderFieldStatus.column:
@@ -31795,6 +32225,8 @@ func (f *TaskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TaskOrderFieldUpdatedAt
+	case "external_id":
+		*f = *TaskOrderFieldExternalID
 	case "title":
 		*f = *TaskOrderFieldTitle
 	case "STATUS":
@@ -32146,6 +32578,20 @@ var (
 			}
 		},
 	}
+	// TemplateOrderFieldExternalID orders Template by external_id.
+	TemplateOrderFieldExternalID = &TemplateOrderField{
+		Value: func(_m *Template) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: template.FieldExternalID,
+		toTerm: template.ByExternalID,
+		toCursor: func(_m *Template) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// TemplateOrderFieldName orders Template by name.
 	TemplateOrderFieldName = &TemplateOrderField{
 		Value: func(_m *Template) (ent.Value, error) {
@@ -32198,6 +32644,8 @@ func (f TemplateOrderField) String() string {
 		str = "created_at"
 	case TemplateOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case TemplateOrderFieldExternalID.column:
+		str = "external_id"
 	case TemplateOrderFieldName.column:
 		str = "name"
 	case TemplateOrderFieldTemplateType.column:
@@ -32224,6 +32672,8 @@ func (f *TemplateOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TemplateOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TemplateOrderFieldUpdatedAt
+	case "external_id":
+		*f = *TemplateOrderFieldExternalID
 	case "name":
 		*f = *TemplateOrderFieldName
 	case "TEMPLATE_TYPE":
@@ -37545,6 +37995,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityOrderFieldExternalID orders Vulnerability by external_id.
+	VulnerabilityOrderFieldExternalID = &VulnerabilityOrderField{
+		Value: func(_m *Vulnerability) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: vulnerability.FieldExternalID,
+		toTerm: vulnerability.ByExternalID,
+		toCursor: func(_m *Vulnerability) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
 	// VulnerabilityOrderFieldInternalOwner orders Vulnerability by internal_owner.
 	VulnerabilityOrderFieldInternalOwner = &VulnerabilityOrderField{
 		Value: func(_m *Vulnerability) (ent.Value, error) {
@@ -37584,20 +38048,6 @@ var (
 			return Cursor{
 				ID:    _m.ID,
 				Value: _m.SecurityLevel,
-			}
-		},
-	}
-	// VulnerabilityOrderFieldExternalID orders Vulnerability by external_id.
-	VulnerabilityOrderFieldExternalID = &VulnerabilityOrderField{
-		Value: func(_m *Vulnerability) (ent.Value, error) {
-			return _m.ExternalID, nil
-		},
-		column: vulnerability.FieldExternalID,
-		toTerm: vulnerability.ByExternalID,
-		toCursor: func(_m *Vulnerability) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ExternalID,
 			}
 		},
 	}
@@ -37667,14 +38117,14 @@ func (f VulnerabilityOrderField) String() string {
 		str = "created_at"
 	case VulnerabilityOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case VulnerabilityOrderFieldExternalID.column:
+		str = "external_id"
 	case VulnerabilityOrderFieldInternalOwner.column:
 		str = "internal_owner"
 	case VulnerabilityOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case VulnerabilityOrderFieldSecurityLevel.column:
 		str = "security_level"
-	case VulnerabilityOrderFieldExternalID.column:
-		str = "external_id"
 	case VulnerabilityOrderFieldCveID.column:
 		str = "cve_id"
 	case VulnerabilityOrderFieldCategory.column:
@@ -37703,14 +38153,14 @@ func (f *VulnerabilityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityOrderFieldCreatedAt
 	case "updated_at":
 		*f = *VulnerabilityOrderFieldUpdatedAt
+	case "external_id":
+		*f = *VulnerabilityOrderFieldExternalID
 	case "internal_owner":
 		*f = *VulnerabilityOrderFieldInternalOwner
 	case "external_owner_id":
 		*f = *VulnerabilityOrderFieldExternalOwnerID
 	case "security_level":
 		*f = *VulnerabilityOrderFieldSecurityLevel
-	case "external_id":
-		*f = *VulnerabilityOrderFieldExternalID
 	case "cve_id":
 		*f = *VulnerabilityOrderFieldCveID
 	case "category":
@@ -40760,6 +41210,13 @@ func (_q *AssessmentQuery) clonePage() *AssessmentQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -40842,6 +41299,13 @@ func (_q *AssessmentPolicyQuery) clonePage() *AssessmentPolicyQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withAssessment = _q.withAssessment.clonePage()
 	c.withInternalPolicy = _q.withInternalPolicy.clonePage()
@@ -41042,6 +41506,13 @@ func (_q *CampaignQuery) clonePage() *CampaignQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -41169,6 +41640,7 @@ func (_q *CheckResultQuery) clonePage() *CheckResultQuery {
 			c.withNamedIntegrationRuns[name] = q.clonePage()
 		}
 	}
+	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
 		c.withNamedBlockedGroups = make(map[string]*GroupQuery, len(_q.withNamedBlockedGroups))
@@ -41268,6 +41740,13 @@ func (_q *ControlQuery) clonePage() *ControlQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withEvidence = _q.withEvidence.clonePage()
 	if _q.withNamedEvidence != nil {
 		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
@@ -41496,6 +41975,13 @@ func (_q *ControlImplementationQuery) clonePage() *ControlImplementationQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -41549,6 +42035,13 @@ func (_q *ControlObjectiveQuery) clonePage() *ControlObjectiveQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -41657,6 +42150,13 @@ func (_q *CustomTypeEnumQuery) clonePage() *CustomTypeEnumQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withTasks = _q.withTasks.clonePage()
 	if _q.withNamedTasks != nil {
@@ -41940,6 +42440,13 @@ func (_q *EmailTemplateQuery) clonePage() *EmailTemplateQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -42348,6 +42855,13 @@ func (_q *EvidenceQuery) clonePage() *EvidenceQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withEnvironment = _q.withEnvironment.clonePage()
 	c.withScope = _q.withScope.clonePage()
@@ -42825,6 +43339,13 @@ func (_q *GroupQuery) clonePage() *GroupQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withProgramEditors = _q.withProgramEditors.clonePage()
 	if _q.withNamedProgramEditors != nil {
@@ -43258,6 +43779,13 @@ func (_q *IdentityHolderQuery) clonePage() *IdentityHolderQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -43911,6 +44439,13 @@ func (_q *MappedControlQuery) clonePage() *MappedControlQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -43964,6 +44499,13 @@ func (_q *NarrativeQuery) clonePage() *NarrativeQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -44032,6 +44574,8 @@ func (_q *NoteQuery) clonePage() *NoteQuery {
 	c.withRisk = _q.withRisk.clonePage()
 	c.withInternalPolicy = _q.withInternalPolicy.clonePage()
 	c.withReview = _q.withReview.clonePage()
+	c.withVulnerability = _q.withVulnerability.clonePage()
+	c.withFinding = _q.withFinding.clonePage()
 	c.withEvidence = _q.withEvidence.clonePage()
 	c.withTrustCenter = _q.withTrustCenter.clonePage()
 	c.withDiscussion = _q.withDiscussion.clonePage()
@@ -45333,6 +45877,13 @@ func (_q *OrganizationQuery) clonePage() *OrganizationQuery {
 			c.withNamedVendorRiskScores[name] = q.clonePage()
 		}
 	}
+	c.withCheckResults = _q.withCheckResults.clonePage()
+	if _q.withNamedCheckResults != nil {
+		c.withNamedCheckResults = make(map[string]*CheckResultQuery, len(_q.withNamedCheckResults))
+		for name, q := range _q.withNamedCheckResults {
+			c.withNamedCheckResults[name] = q.clonePage()
+		}
+	}
 	c.withMembers = _q.withMembers.clonePage()
 	if _q.withNamedMembers != nil {
 		c.withNamedMembers = make(map[string]*OrgMembershipQuery, len(_q.withNamedMembers))
@@ -45404,6 +45955,13 @@ func (_q *PlatformQuery) clonePage() *PlatformQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -45740,6 +46298,13 @@ func (_q *ProgramQuery) clonePage() *ProgramQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -45920,6 +46485,13 @@ func (_q *RemediationQuery) clonePage() *RemediationQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -46059,6 +46631,13 @@ func (_q *ReviewQuery) clonePage() *ReviewQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -46394,6 +46973,13 @@ func (_q *ScanQuery) clonePage() *ScanQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withBlockedGroups = _q.withBlockedGroups.clonePage()
 	if _q.withNamedBlockedGroups != nil {
@@ -46554,6 +47140,13 @@ func (_q *SubcontrolQuery) clonePage() *SubcontrolQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withEvidence = _q.withEvidence.clonePage()
 	if _q.withNamedEvidence != nil {
 		c.withNamedEvidence = make(map[string]*EvidenceQuery, len(_q.withNamedEvidence))
@@ -46778,6 +47371,13 @@ func (_q *SystemDetailQuery) clonePage() *SystemDetailQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withPrograms = _q.withPrograms.clonePage()
 	if _q.withNamedPrograms != nil {
@@ -46828,6 +47428,13 @@ func (_q *TagDefinitionQuery) clonePage() *TagDefinitionQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.loadTotal = _q.loadTotal
 	return c
@@ -46839,6 +47446,13 @@ func (_q *TaskQuery) clonePage() *TaskQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withTaskKind = _q.withTaskKind.clonePage()
 	c.withEnvironment = _q.withEnvironment.clonePage()
@@ -46989,6 +47603,13 @@ func (_q *TemplateQuery) clonePage() *TemplateQuery {
 		return nil
 	}
 	c := _q.Clone()
+	c.withIntegrationRuns = _q.withIntegrationRuns.clonePage()
+	if _q.withNamedIntegrationRuns != nil {
+		c.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery, len(_q.withNamedIntegrationRuns))
+		for name, q := range _q.withNamedIntegrationRuns {
+			c.withNamedIntegrationRuns[name] = q.clonePage()
+		}
+	}
 	c.withOwner = _q.withOwner.clonePage()
 	c.withEnvironment = _q.withEnvironment.clonePage()
 	c.withScope = _q.withScope.clonePage()

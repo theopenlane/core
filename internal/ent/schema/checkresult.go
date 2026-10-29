@@ -92,11 +92,12 @@ func (CheckResult) Fields() []ent.Field {
 func (c CheckResult) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: c},
+			newProvenanceMixin(c, withoutExternalID()),
 			newObjectOwnedMixin[generated.CheckResult](c,
 				withParents(
 					Control{},
 				),
+				withOrganizationOwner(),
 			),
 			newGroupPermissionsMixin(),
 		},

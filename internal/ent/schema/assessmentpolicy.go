@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/models"
@@ -88,6 +89,17 @@ func (AssessmentPolicy) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("assessment_id", "internal_policy_id").
 			Unique(),
+		index.Fields(externalIDFieldName, ownerFieldName).
+			Unique(),
+	}
+}
+
+// Annotations of the AssessmentPolicy
+func (AssessmentPolicy) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }
 
@@ -97,6 +109,7 @@ func (ap AssessmentPolicy) Mixin() []ent.Mixin {
 		excludeSoftDelete: true, // we cannot soft delete on a through table
 		excludeTags:       true,
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(ap, withoutExternalIDIndex()),
 			newOrgOwnedMixin(ap),
 		},
 	}.getMixins(ap)

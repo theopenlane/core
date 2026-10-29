@@ -40,6 +40,18 @@ type Evidence struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the environment of the evidence
@@ -84,6 +96,8 @@ type Evidence struct {
 
 // EvidenceEdges holds the relations/edges for other nodes in the graph.
 type EvidenceEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Environment holds the value of the environment edge.
@@ -118,10 +132,11 @@ type EvidenceEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [17]map[string]int
 
+	namedIntegrationRuns        map[string][]*IntegrationRun
 	namedControls               map[string][]*Control
 	namedSubcontrols            map[string][]*Subcontrol
 	namedControlObjectives      map[string][]*ControlObjective
@@ -137,12 +152,21 @@ type EvidenceEdges struct {
 	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e EvidenceEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -153,7 +177,7 @@ func (e EvidenceEdges) OwnerOrErr() (*Organization, error) {
 func (e EvidenceEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -164,7 +188,7 @@ func (e EvidenceEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e EvidenceEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -173,7 +197,7 @@ func (e EvidenceEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -182,7 +206,7 @@ func (e EvidenceEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -191,7 +215,7 @@ func (e EvidenceEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ControlObjectivesOrErr returns the ControlObjectives value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.ControlObjectives, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objectives"}
@@ -200,7 +224,7 @@ func (e EvidenceEdges) ControlObjectivesOrErr() ([]*ControlObjective, error) {
 // ControlImplementationsOrErr returns the ControlImplementations value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ControlImplementationsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.ControlImplementations, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementations"}
@@ -209,7 +233,7 @@ func (e EvidenceEdges) ControlImplementationsOrErr() ([]*ControlImplementation, 
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -218,7 +242,7 @@ func (e EvidenceEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -227,7 +251,7 @@ func (e EvidenceEdges) ProceduresOrErr() ([]*Procedure, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -236,7 +260,7 @@ func (e EvidenceEdges) FilesOrErr() ([]*File, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -245,7 +269,7 @@ func (e EvidenceEdges) ProgramsOrErr() ([]*Program, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -254,7 +278,7 @@ func (e EvidenceEdges) TasksOrErr() ([]*Task, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -263,7 +287,7 @@ func (e EvidenceEdges) PlatformsOrErr() ([]*Platform, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -272,7 +296,7 @@ func (e EvidenceEdges) ScansOrErr() ([]*Scan, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -281,7 +305,7 @@ func (e EvidenceEdges) CommentsOrErr() ([]*Note, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -298,7 +322,7 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case evidence.FieldWorkflowEligibleMarker, evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldUpdatedByImpersonator, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldExternalUUID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus, evidence.FieldReviewFrequency, evidence.FieldAuditorReferenceID:
+		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldUpdatedByImpersonator, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldSourceDefinitionID, evidence.FieldSourceDefinitionVersion, evidence.FieldSourceInstanceID, evidence.FieldManagedBy, evidence.FieldIntegrationRunID, evidence.FieldExternalID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldExternalUUID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus, evidence.FieldReviewFrequency, evidence.FieldAuditorReferenceID:
 			values[i] = new(sql.NullString)
 		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -379,6 +403,42 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case evidence.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case evidence.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case evidence.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case evidence.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case evidence.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case evidence.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case evidence.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -502,6 +562,11 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Evidence) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryIntegrationRuns queries the "integration_runs" edge of the Evidence entity.
+func (_m *Evidence) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewEvidenceClient(_m.config).QueryIntegrationRuns(_m)
 }
 
 // QueryOwner queries the "owner" edge of the Evidence entity.
@@ -636,6 +701,24 @@ func (_m *Evidence) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -697,6 +780,30 @@ func (_m *Evidence) String() string {
 	builder.WriteString(_m.AuditorReferenceID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedControls returns the Controls named value or an error if the edge was not

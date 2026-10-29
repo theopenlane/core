@@ -21,7 +21,7 @@ import (
 func (suite *HandlerTestSuite) TestGetQuestionnairePreviewAndRealResponse() {
 	t := suite.T()
 
-	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)

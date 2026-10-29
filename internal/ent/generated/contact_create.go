@@ -203,6 +203,20 @@ func (_c *ContactCreate) SetNillableIntegrationRunID(v *string) *ContactCreate {
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *ContactCreate) SetExternalID(v string) *ContactCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *ContactCreate) SetNillableExternalID(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ContactCreate) SetOwnerID(v string) *ContactCreate {
 	_c.mutation.SetOwnerID(v)
@@ -311,20 +325,6 @@ func (_c *ContactCreate) SetStatus(v enums.UserStatus) *ContactCreate {
 func (_c *ContactCreate) SetNillableStatus(v *enums.UserStatus) *ContactCreate {
 	if v != nil {
 		_c.SetStatus(*v)
-	}
-	return _c
-}
-
-// SetExternalID sets the "external_id" field.
-func (_c *ContactCreate) SetExternalID(v string) *ContactCreate {
-	_c.mutation.SetExternalID(v)
-	return _c
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_c *ContactCreate) SetNillableExternalID(v *string) *ContactCreate {
-	if v != nil {
-		_c.SetExternalID(*v)
 	}
 	return _c
 }
@@ -652,6 +652,10 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		_spec.SetField(contact.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(contact.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.FullName(); ok {
 		_spec.SetField(contact.FieldFullName, field.TypeString, value)
 		_node.FullName = value
@@ -679,10 +683,6 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(contact.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(contact.FieldIntegrationID, field.TypeString, value)

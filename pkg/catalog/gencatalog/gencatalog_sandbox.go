@@ -28,7 +28,7 @@ var DefaultSandboxCatalog = models.Catalog{
 			ProductID:            "prod_VRKVWuKkT9FOGT",
 		},
 		string(models.CatalogBrandingTrustcenterAddon): models.Feature{
-			Audience: "private",
+			Audience: "public",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_branding_trustcenter_monthly",
@@ -70,7 +70,7 @@ var DefaultSandboxCatalog = models.Catalog{
 			ProductID:            "prod_SzqDWb1fSmvyXC",
 		},
 		string(models.CatalogExtraEvidenceStorageAddon): models.Feature{
-			Audience: "public",
+			Audience: "private",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "extra_evidence_storage_100gb",
@@ -219,7 +219,7 @@ var DefaultSandboxCatalog = models.Catalog{
 			ProductID:            "prod_SzqDiFERRVzRmP",
 		},
 		string(models.CatalogRegistryModule): models.Feature{
-			Audience: "public",
+			Audience: "private",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_registry_monthly",
@@ -284,5 +284,5 @@ var DefaultSandboxCatalog = models.Catalog{
 		},
 	},
 	SHA:     "e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2",
-	Version: "v0.0.16",
+	Version: "v0.0.17",
 }

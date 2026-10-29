@@ -36,6 +36,18 @@ const (
 	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldSourceDefinitionID holds the string denoting the source_definition_id field in the database.
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion holds the string denoting the source_definition_version field in the database.
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID holds the string denoting the source_instance_id field in the database.
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldManagedBy holds the string denoting the managed_by field in the database.
+	FieldManagedBy = "managed_by"
+	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
+	FieldIntegrationRunID = "integration_run_id"
+	// FieldExternalID holds the string denoting the external_id field in the database.
+	FieldExternalID = "external_id"
 	// FieldExternalUUID holds the string denoting the external_uuid field in the database.
 	FieldExternalUUID = "external_uuid"
 	// FieldTitle holds the string denoting the title field in the database.
@@ -126,6 +138,8 @@ const (
 	FieldTrustCenterVisibility = "trust_center_visibility"
 	// FieldIsTrustCenterControl holds the string denoting the is_trust_center_control field in the database.
 	FieldIsTrustCenterControl = "is_trust_center_control"
+	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
+	EdgeIntegrationRuns = "integration_runs"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
 	// EdgeControlObjectives holds the string denoting the control_objectives edge name in mutations.
@@ -204,6 +218,13 @@ const (
 	EdgeControlMappings = "control_mappings"
 	// Table holds the table name of the control in the database.
 	Table = "controls"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge.
+	IntegrationRunsTable = "integration_runs"
+	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
+	IntegrationRunsInverseTable = "integration_runs"
+	// IntegrationRunsColumn is the table column denoting the integration_runs relation/edge.
+	IntegrationRunsColumn = "control_integration_runs"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
 	EvidenceTable = "evidence_controls"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -434,6 +455,12 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDisplayID,
 	FieldTags,
+	FieldSourceDefinitionID,
+	FieldSourceDefinitionVersion,
+	FieldSourceInstanceID,
+	FieldManagedBy,
+	FieldIntegrationRunID,
+	FieldExternalID,
 	FieldExternalUUID,
 	FieldTitle,
 	FieldDescription,
@@ -711,6 +738,36 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
+// BySourceDefinitionID orders the results by the source_definition_id field.
+func BySourceDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionID, opts...).ToFunc()
+}
+
+// BySourceDefinitionVersion orders the results by the source_definition_version field.
+func BySourceDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionVersion, opts...).ToFunc()
+}
+
+// BySourceInstanceID orders the results by the source_instance_id field.
+func BySourceInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceInstanceID, opts...).ToFunc()
+}
+
+// ByManagedBy orders the results by the managed_by field.
+func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagedBy, opts...).ToFunc()
+}
+
+// ByIntegrationRunID orders the results by the integration_run_id field.
+func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
+// ByExternalID orders the results by the external_id field.
+func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
 // ByExternalUUID orders the results by the external_uuid field.
 func ByExternalUUID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalUUID, opts...).ToFunc()
@@ -879,6 +936,20 @@ func ByTrustCenterVisibility(opts ...sql.OrderTermOption) OrderOption {
 // ByIsTrustCenterControl orders the results by the is_trust_center_control field.
 func ByIsTrustCenterControl(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsTrustCenterControl, opts...).ToFunc()
+}
+
+// ByIntegrationRunsCount orders the results by integration_runs count.
+func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRunsStep(), opts...)
+	}
+}
+
+// ByIntegrationRuns orders the results by integration_runs terms.
+func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
 }
 
 // ByEvidenceCount orders the results by evidence count.
@@ -1355,6 +1426,13 @@ func ByControlMappings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newControlMappingsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newIntegrationRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRunsTable, IntegrationRunsColumn),
+	)
 }
 func newEvidenceStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

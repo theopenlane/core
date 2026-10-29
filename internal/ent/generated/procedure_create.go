@@ -230,6 +230,20 @@ func (_c *ProcedureCreate) SetNillableIntegrationRunID(v *string) *ProcedureCrea
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *ProcedureCreate) SetExternalID(v string) *ProcedureCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableExternalID(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ProcedureCreate) SetOwnerID(v string) *ProcedureCreate {
 	_c.mutation.SetOwnerID(v)
@@ -1116,6 +1130,10 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(procedure.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(procedure.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)

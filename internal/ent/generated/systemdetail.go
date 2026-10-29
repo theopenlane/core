@@ -39,6 +39,18 @@ type SystemDetail struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// system name used in OSCAL metadata
@@ -65,6 +77,8 @@ type SystemDetail struct {
 
 // SystemDetailEdges holds the relations/edges for other nodes in the graph.
 type SystemDetailEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// Programs holds the value of the programs edge.
@@ -77,14 +91,24 @@ type SystemDetailEdges struct {
 	Assets []*Asset `json:"assets,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
-	namedPrograms  map[string][]*Program
-	namedPlatforms map[string][]*Platform
-	namedEntities  map[string][]*Entity
-	namedAssets    map[string][]*Asset
+	namedIntegrationRuns map[string][]*IntegrationRun
+	namedPrograms        map[string][]*Program
+	namedPlatforms       map[string][]*Platform
+	namedEntities        map[string][]*Entity
+	namedAssets          map[string][]*Asset
+}
+
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e SystemDetailEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -92,7 +116,7 @@ type SystemDetailEdges struct {
 func (e SystemDetailEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -101,7 +125,7 @@ func (e SystemDetailEdges) OwnerOrErr() (*Organization, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e SystemDetailEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -110,7 +134,7 @@ func (e SystemDetailEdges) ProgramsOrErr() ([]*Program, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e SystemDetailEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -119,7 +143,7 @@ func (e SystemDetailEdges) PlatformsOrErr() ([]*Platform, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e SystemDetailEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -128,7 +152,7 @@ func (e SystemDetailEdges) EntitiesOrErr() ([]*Entity, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e SystemDetailEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -143,7 +167,7 @@ func (*SystemDetail) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case systemdetail.FieldTags, systemdetail.FieldRevisionHistory, systemdetail.FieldOscalMetadataJSON:
 			values[i] = new([]byte)
-		case systemdetail.FieldID, systemdetail.FieldCreatedBy, systemdetail.FieldUpdatedBy, systemdetail.FieldUpdatedByImpersonator, systemdetail.FieldDeletedBy, systemdetail.FieldDisplayID, systemdetail.FieldOwnerID, systemdetail.FieldSystemName, systemdetail.FieldVersion, systemdetail.FieldDescription, systemdetail.FieldAuthorizationBoundary, systemdetail.FieldSensitivityLevel:
+		case systemdetail.FieldID, systemdetail.FieldCreatedBy, systemdetail.FieldUpdatedBy, systemdetail.FieldUpdatedByImpersonator, systemdetail.FieldDeletedBy, systemdetail.FieldDisplayID, systemdetail.FieldSourceDefinitionID, systemdetail.FieldSourceDefinitionVersion, systemdetail.FieldSourceInstanceID, systemdetail.FieldManagedBy, systemdetail.FieldIntegrationRunID, systemdetail.FieldExternalID, systemdetail.FieldOwnerID, systemdetail.FieldSystemName, systemdetail.FieldVersion, systemdetail.FieldDescription, systemdetail.FieldAuthorizationBoundary, systemdetail.FieldSensitivityLevel:
 			values[i] = new(sql.NullString)
 		case systemdetail.FieldCreatedAt, systemdetail.FieldUpdatedAt, systemdetail.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -225,6 +249,42 @@ func (_m *SystemDetail) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case systemdetail.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case systemdetail.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case systemdetail.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case systemdetail.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case systemdetail.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case systemdetail.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
+			}
 		case systemdetail.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -295,6 +355,11 @@ func (_m *SystemDetail) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *SystemDetail) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryIntegrationRuns queries the "integration_runs" edge of the SystemDetail entity.
+func (_m *SystemDetail) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewSystemDetailClient(_m.config).QueryIntegrationRuns(_m)
 }
 
 // QueryOwner queries the "owner" edge of the SystemDetail entity.
@@ -374,6 +439,24 @@ func (_m *SystemDetail) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -404,6 +487,30 @@ func (_m *SystemDetail) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.OscalMetadataJSON))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SystemDetail) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SystemDetail) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedPrograms returns the Programs named value or an error if the edge was not

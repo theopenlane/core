@@ -108,16 +108,60 @@ func TestPublicOnlyBlocksLoopbackDial(t *testing.T) {
 	}))
 	t.Cleanup(server.Close)
 
-	client, err := NewHTTPClient(PublicOnly())
+	publicRequester, err := NewPublicRequester()
 	require.NoError(t, err)
 
-	req, err := http.NewRequestWithContext(t.Context(), http.MethodGet, server.URL, nil)
-	require.NoError(t, err)
-
-	resp, err := client.Do(req)
-	if resp != nil {
-		resp.Body.Close()
+	testCases := []struct {
+		name      string
+		newClient func() (*http.Client, error)
+		wantErr   bool
+	}{
+		{
+			name:      "public only client",
+			newClient: func() (*http.Client, error) { return NewHTTPClient(PublicOnly()) },
+			wantErr:   true,
+		},
+		{
+			name:      "public requester",
+			newClient: func() (*http.Client, error) { return publicRequester.HTTPClient(), nil },
+			wantErr:   true,
+		},
+		{
+			name:      "customer client, private not allowed",
+			newClient: func() (*http.Client, error) { return NewCustomerHTTPClient(server.URL, false) },
+			wantErr:   true,
+		},
+		{
+			name:      "customer client, private allowed",
+			newClient: func() (*http.Client, error) { return NewCustomerHTTPClient(server.URL, true) },
+		},
 	}
 
-	assert.ErrorIs(t, err, ErrNonPublicDestination)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			client, err := tc.newClient()
+			if err != nil {
+				assert.True(t, tc.wantErr)
+				assert.ErrorIs(t, err, ErrNonPublicDestination)
+
+				return
+			}
+
+			req, err := http.NewRequestWithContext(t.Context(), http.MethodGet, server.URL, nil)
+			require.NoError(t, err)
+
+			resp, err := client.Do(req)
+			if resp != nil {
+				resp.Body.Close()
+			}
+
+			if tc.wantErr {
+				assert.ErrorIs(t, err, ErrNonPublicDestination)
+
+				return
+			}
+
+			assert.NoError(t, err)
+		})
+	}
 }

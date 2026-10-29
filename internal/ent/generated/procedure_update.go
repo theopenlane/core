@@ -276,6 +276,26 @@ func (_u *ProcedureUpdate) ClearIntegrationRunID() *ProcedureUpdate {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *ProcedureUpdate) SetExternalID(v string) *ProcedureUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableExternalID(v *string) *ProcedureUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ProcedureUpdate) ClearExternalID() *ProcedureUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *ProcedureUpdate) SetOwnerID(v string) *ProcedureUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -1604,6 +1624,12 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(procedure.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(procedure.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(procedure.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)
 	}
@@ -2820,6 +2846,26 @@ func (_u *ProcedureUpdateOne) SetNillableIntegrationRunID(v *string) *ProcedureU
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *ProcedureUpdateOne) ClearIntegrationRunID() *ProcedureUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *ProcedureUpdateOne) SetExternalID(v string) *ProcedureUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableExternalID(v *string) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ProcedureUpdateOne) ClearExternalID() *ProcedureUpdateOne {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -4180,6 +4226,12 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(procedure.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(procedure.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(procedure.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)

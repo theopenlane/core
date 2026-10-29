@@ -102,11 +102,6 @@ func trustCenterInterceptor(applyToAllRequests, allowAnonAccess bool) ent.Interc
 }
 
 func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyToAllRequests, allowAnonAccess bool) error {
-	// skip if we are creating an object, no need to filter
-	if isMutationRequest(ctx) {
-		return nil
-	}
-
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok {
 		return auth.ErrNoAuthUser
@@ -119,7 +114,8 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	if tcID, ok := auth.ActiveTrustCenterIDKey.Get(ctx); ok && tcID != "" {
-		return applyAnonTrustCenterFilter(q, tcID, allowAnonAccess)
+		// anonymous callers read back what they submit in a mutation, so scope those reads to their trust center instead of denying them
+		return applyAnonTrustCenterFilter(q, tcID, allowAnonAccess || isMutationRequest(ctx))
 	}
 
 	// deny all trust center requests that did not have a trust center key
@@ -134,7 +130,7 @@ func applyTrustCenterChildFilters(ctx context.Context, q intercept.Query, applyT
 	}
 
 	// filter by trust centers owned by the organization in the caller context
-	q.WhereP(trustCenterOwnedByOrgsP(caller.OrgIDs()))
+	q.WhereP(parentOwnedByOrgsP(trustcenter.Table, trustcenter.FieldOwnerID, "trust_center_id", caller.OrgIDs()))
 
 	return nil
 }
@@ -161,16 +157,16 @@ func applyAnonTrustCenterFilter(q intercept.Query, tcID string, allowAnonAccess 
 	return nil
 }
 
-// trustCenterOwnedByOrgsP restricts trust_center_id to trust centers owned by any of the given organizations
-func trustCenterOwnedByOrgsP(orgIDs []string) func(*sql.Selector) {
+// parentOwnedByOrgsP restricts fkColumn to rows of parentTable whose ownerColumn is any of the given organizations
+func parentOwnedByOrgsP(parentTable, ownerColumn, fkColumn string, orgIDs []string) func(*sql.Selector) {
 	return func(s *sql.Selector) {
-		t := sql.Table(trustcenter.Table)
+		t := sql.Table(parentTable)
 
 		s.Where(
 			sql.In(
-				s.C("trust_center_id"),
-				sql.Select(t.C(trustcenter.FieldID)).From(t).Where(
-					sql.In(t.C(trustcenter.FieldOwnerID), lo.ToAnySlice(orgIDs)...),
+				s.C(fkColumn),
+				sql.Select(t.C("id")).From(t).Where(
+					sql.In(t.C(ownerColumn), lo.ToAnySlice(orgIDs)...),
 				),
 			),
 		)

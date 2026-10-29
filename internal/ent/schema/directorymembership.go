@@ -123,7 +123,7 @@ func (m DirectoryMembership) Mixin() []ent.Mixin {
 		excludeTags:       true,
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: m},
+			newProvenanceMixin(m, withoutExternalID()),
 			newOrgOwnedMixin(m),
 			newCustomEnumMixin(m, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(m, withEnumFieldName("scope"), withGlobalEnum()),

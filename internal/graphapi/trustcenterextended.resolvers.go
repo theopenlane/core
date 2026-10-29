@@ -8,36 +8,11 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
 )
-
-// CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.
-func (r *createTrustCenterInputResolver) CreateTrustCenterSetting(ctx context.Context, obj *generated.CreateTrustCenterInput, data *generated.CreateTrustCenterSettingInput) error {
-	ctx, err := common.SetOrganizationInAuthContext(ctx, obj.OwnerID)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return rout.ErrPermissionDenied
-	}
-
-	groupSettings, err := withTransactionalMutation(ctx).TrustCenterSetting.Create().SetInput(*data).Save(ctx)
-	if err != nil {
-		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenter"})
-	}
-
-	if data.Environment != nil && *data.Environment == enums.TrustCenterEnvironmentPreview {
-		obj.PreviewSettingID = &groupSettings.ID
-	} else {
-		obj.SettingID = &groupSettings.ID
-	}
-
-	return nil
-}
 
 // UpdateTrustCenterSetting is the resolver for the updateTrustCenterSetting field.
 func (r *updateTrustCenterInputResolver) UpdateTrustCenterSetting(ctx context.Context, obj *generated.UpdateTrustCenterInput, data *generated.UpdateTrustCenterSettingInput) error {
@@ -51,20 +26,15 @@ func (r *updateTrustCenterInputResolver) UpdateTrustCenterSetting(ctx context.Co
 	c := withTransactionalMutation(ctx)
 
 	// get setting ID to update
-	settingID := obj.SettingID
-	if settingID == nil {
-		trustCenter, err := c.TrustCenter.Get(ctx, *trustCenterID)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenter"})
-		}
-
-		setting, err := trustCenter.Setting(ctx)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenter"})
-		}
-
-		settingID = &setting.ID
+	trustCenter, err := c.TrustCenter.Get(ctx, *trustCenterID)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenter"})
 	}
 
-	return c.TrustCenterSetting.UpdateOneID(*settingID).SetInput(*data).Exec(ctx)
+	setting, err := trustCenter.Setting(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenter"})
+	}
+
+	return c.TrustCenterSetting.UpdateOneID(setting.ID).SetInput(*data).Exec(ctx)
 }

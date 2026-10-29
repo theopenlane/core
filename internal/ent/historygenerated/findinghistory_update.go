@@ -112,6 +112,9 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(findinghistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(findinghistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findinghistory.FieldOwnerID, field.TypeString)
 	}
@@ -180,9 +183,6 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(findinghistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(findinghistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.SecurityLevelCleared() {
 		_spec.ClearField(findinghistory.FieldSecurityLevel, field.TypeEnum)
@@ -425,6 +425,9 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(findinghistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(findinghistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findinghistory.FieldOwnerID, field.TypeString)
 	}
@@ -493,9 +496,6 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(findinghistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(findinghistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.SecurityLevelCleared() {
 		_spec.ClearField(findinghistory.FieldSecurityLevel, field.TypeEnum)

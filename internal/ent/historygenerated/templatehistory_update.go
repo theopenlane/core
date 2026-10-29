@@ -97,6 +97,24 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(templatehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(templatehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(templatehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(templatehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(templatehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(templatehistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)
 	}
@@ -253,6 +271,24 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(templatehistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(templatehistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(templatehistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(templatehistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(templatehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(templatehistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(templatehistory.FieldOwnerID, field.TypeString)

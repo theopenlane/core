@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
@@ -153,6 +154,126 @@ func (_u *EvidenceUpdate) AppendTags(v []string) *EvidenceUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *EvidenceUpdate) ClearTags() *EvidenceUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *EvidenceUpdate) SetSourceDefinitionID(v string) *EvidenceUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableSourceDefinitionID(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *EvidenceUpdate) ClearSourceDefinitionID() *EvidenceUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *EvidenceUpdate) SetSourceDefinitionVersion(v string) *EvidenceUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableSourceDefinitionVersion(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *EvidenceUpdate) ClearSourceDefinitionVersion() *EvidenceUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *EvidenceUpdate) SetSourceInstanceID(v string) *EvidenceUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableSourceInstanceID(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *EvidenceUpdate) ClearSourceInstanceID() *EvidenceUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *EvidenceUpdate) SetManagedBy(v string) *EvidenceUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableManagedBy(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *EvidenceUpdate) ClearManagedBy() *EvidenceUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *EvidenceUpdate) SetIntegrationRunID(v string) *EvidenceUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableIntegrationRunID(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *EvidenceUpdate) ClearIntegrationRunID() *EvidenceUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *EvidenceUpdate) SetExternalID(v string) *EvidenceUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableExternalID(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EvidenceUpdate) ClearExternalID() *EvidenceUpdate {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -484,6 +605,21 @@ func (_u *EvidenceUpdate) ClearAuditorReferenceID() *EvidenceUpdate {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *EvidenceUpdate) AddIntegrationRunIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *EvidenceUpdate) AddIntegrationRuns(v ...*IntegrationRun) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *EvidenceUpdate) SetEnvironment(v *CustomTypeEnum) *EvidenceUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -692,6 +828,27 @@ func (_u *EvidenceUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Eviden
 // Mutation returns the EvidenceMutation object of the builder.
 func (_u *EvidenceUpdate) Mutation() *EvidenceMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *EvidenceUpdate) ClearIntegrationRuns() *EvidenceUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *EvidenceUpdate) RemoveIntegrationRunIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *EvidenceUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -1111,6 +1268,42 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidence.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(evidence.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(evidence.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(evidence.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(evidence.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(evidence.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(evidence.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(evidence.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(evidence.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(evidence.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(evidence.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(evidence.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(evidence.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(evidence.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -1194,6 +1387,51 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.AuditorReferenceIDCleared() {
 		_spec.ClearField(evidence.FieldAuditorReferenceID, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.IntegrationRunsTable,
+			Columns: []string{evidence.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.IntegrationRunsTable,
+			Columns: []string{evidence.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.IntegrationRunsTable,
+			Columns: []string{evidence.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1970,6 +2208,126 @@ func (_u *EvidenceUpdateOne) ClearTags() *EvidenceUpdateOne {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *EvidenceUpdateOne) SetSourceDefinitionID(v string) *EvidenceUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableSourceDefinitionID(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *EvidenceUpdateOne) ClearSourceDefinitionID() *EvidenceUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *EvidenceUpdateOne) SetSourceDefinitionVersion(v string) *EvidenceUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableSourceDefinitionVersion(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *EvidenceUpdateOne) ClearSourceDefinitionVersion() *EvidenceUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *EvidenceUpdateOne) SetSourceInstanceID(v string) *EvidenceUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableSourceInstanceID(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *EvidenceUpdateOne) ClearSourceInstanceID() *EvidenceUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *EvidenceUpdateOne) SetManagedBy(v string) *EvidenceUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableManagedBy(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *EvidenceUpdateOne) ClearManagedBy() *EvidenceUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *EvidenceUpdateOne) SetIntegrationRunID(v string) *EvidenceUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableIntegrationRunID(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *EvidenceUpdateOne) ClearIntegrationRunID() *EvidenceUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *EvidenceUpdateOne) SetExternalID(v string) *EvidenceUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableExternalID(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *EvidenceUpdateOne) ClearExternalID() *EvidenceUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_u *EvidenceUpdateOne) SetEnvironmentName(v string) *EvidenceUpdateOne {
 	_u.mutation.SetEnvironmentName(v)
@@ -2298,6 +2656,21 @@ func (_u *EvidenceUpdateOne) ClearAuditorReferenceID() *EvidenceUpdateOne {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *EvidenceUpdateOne) AddIntegrationRunIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *EvidenceUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *EvidenceUpdateOne) SetEnvironment(v *CustomTypeEnum) *EvidenceUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -2506,6 +2879,27 @@ func (_u *EvidenceUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Evi
 // Mutation returns the EvidenceMutation object of the builder.
 func (_u *EvidenceUpdateOne) Mutation() *EvidenceMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *EvidenceUpdateOne) ClearIntegrationRuns() *EvidenceUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *EvidenceUpdateOne) RemoveIntegrationRunIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *EvidenceUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -2955,6 +3349,42 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidence.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(evidence.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(evidence.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(evidence.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(evidence.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(evidence.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(evidence.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(evidence.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(evidence.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(evidence.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(evidence.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(evidence.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(evidence.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(evidence.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -3038,6 +3468,51 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 	}
 	if _u.mutation.AuditorReferenceIDCleared() {
 		_spec.ClearField(evidence.FieldAuditorReferenceID, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.IntegrationRunsTable,
+			Columns: []string{evidence.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.IntegrationRunsTable,
+			Columns: []string{evidence.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.IntegrationRunsTable,
+			Columns: []string{evidence.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{

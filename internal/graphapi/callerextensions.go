@@ -11,4 +11,7 @@ func WithCallerExtensions(srv *handler.Server) {
 
 	// anonymous callers can never use bulk or delete mutations, and may only set entx.AnonymousFields fields
 	WithAnonymousMutationBlock(srv)
+
+	// anonymous callers may only run root queries from the ent generated schema
+	WithAnonymousQueryBlock(srv)
 }

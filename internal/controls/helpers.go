@@ -3,21 +3,20 @@ package controls
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
-	"github.com/oklog/ulid/v2"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
-	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CloneFilterOptions holds the filter options for cloning controls
@@ -34,28 +33,6 @@ type CloneFilterOptions struct {
 	RefCodes []string
 	// Categories is a list of Categories to filter the controls by
 	Categories []string
-}
-
-// GetCloneFilterOptions returns the filter options for cloning controls from the input based on the provided fields
-func GetCloneFilterOptions(input *model.CloneControlInput) CloneFilterOptions {
-	filters := CloneFilterOptions{
-		Categories: input.Categories,
-		RefCodes:   input.RefCodes,
-	}
-
-	// if standardID is provided, used that, otherwise use the standardShortName
-	if input.StandardID != nil {
-		filters.StandardID = input.StandardID
-	} else {
-		if input.StandardShortName != nil {
-			filters.StandardShortName = input.StandardShortName
-		}
-		if input.StandardVersion != nil {
-			filters.StandardVersion = input.StandardVersion
-		}
-	}
-
-	return filters
 }
 
 // StandardFilter returns the predicate to filter by standard based on the filter options
@@ -81,6 +58,39 @@ func StandardFilter(opts CloneFilterOptions) []predicate.Standard {
 	}
 
 	return stdWhereFilter
+}
+
+// standardMatchLimit is enough results to tell one matching standard from an ambiguous match
+const standardMatchLimit = 2
+
+// findStandard returns the most recent revision of the standard matching the filters
+func findStandard(ctx context.Context, client *generated.Client, filters CloneFilterOptions, extra ...predicate.Standard) (*generated.Standard, error) {
+	stds, err := client.Standard.Query().
+		Where(append(StandardFilter(filters), extra...)...).
+		Select(standard.FieldID, standard.FieldIsPublic).
+		Order(standard.OrderOption(standard.ByVersion(sql.OrderDesc()))).
+		Limit(standardMatchLimit).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting standard")
+
+		return nil, err
+	}
+
+	if len(stds) == 0 {
+		return nil, common.NewNotFoundError("standard")
+	}
+
+	// if we have more than one standard, and the version was provided, return an error
+	// because we are unable to determine which standard to use
+	if len(stds) > 1 && (filters.StandardShortName != nil && filters.StandardVersion != nil) {
+		logx.FromContext(ctx).Error().Msg("too many standards matched the filter")
+
+		return nil, fmt.Errorf("%w: error getting standard, too many results", common.ErrInvalidInput)
+	}
+
+	// get the first standard, this will be the most recent revision if multiple revisions exist
+	return stds[0], nil
 }
 
 // controlRefCodeFilter returns the predicate to filter by control refCode or alias based on the filter options
@@ -143,101 +153,6 @@ func FilterByStandard(opts CloneFilterOptions) bool {
 	return opts.StandardID != nil || opts.StandardShortName != nil
 }
 
-// ConvertToCloneControlInput converts a slice of CloneControlUploadInput to a slice of CloneControlInput
-// this is used to process a bulk CSV upload of controls to be cloned and group them by standard
-func ConvertToCloneControlInput(input []*model.CloneControlUploadInput) ([]*model.CloneControlInput, error) {
-	out := []*model.CloneControlInput{}
-
-	// create a map of standards first
-	stds := controlUploadSliceToMap(input)
-
-	for stdName, controlInputs := range stds {
-		// sanity check if there are no controls keep going
-		if len(controlInputs) == 0 {
-			continue
-		}
-
-		i := &model.CloneControlInput{}
-
-		_, err := ulid.Parse(stdName)
-		if err == nil {
-			i.StandardID = &stdName
-		} else {
-			i.StandardShortName = &stdName
-		}
-
-		if controlInputs[0].StandardVersion != nil {
-			stdVersion := strings.TrimSpace(*controlInputs[0].StandardVersion)
-			i.StandardVersion = &stdVersion
-		}
-
-		if controlInputs[0].OwnerID != nil {
-			ownerID := strings.TrimSpace(*controlInputs[0].OwnerID)
-			i.OwnerID = &ownerID
-		}
-
-		for _, ci := range controlInputs {
-			if !stripeAndCompare(i.StandardVersion, ci.StandardVersion) {
-				return nil, fmt.Errorf("%w: all controls for a standard must have the same version", common.ErrInvalidInput)
-			}
-
-			if !stripeAndCompare(i.OwnerID, ci.OwnerID) {
-				return nil, fmt.Errorf("%w: all controls for a standard must have the same owner", common.ErrInvalidInput)
-			}
-
-			if ci.RefCode != nil {
-				i.RefCodes = append(i.RefCodes, *ci.RefCode)
-			}
-
-			if ci.ControlID != nil {
-				i.ControlIDs = append(i.ControlIDs, *ci.ControlID)
-			}
-		}
-
-		out = append(out, i)
-	}
-
-	return out, nil
-}
-
-// controlUploadSliceToMap converts a slice of CloneControlUploadInput to a map grouped by standard
-func controlUploadSliceToMap(input []*model.CloneControlUploadInput) map[string][]*model.CloneControlUploadInput {
-	out := map[string][]*model.CloneControlUploadInput{}
-
-	for _, i := range input {
-		key := ""
-		if i.StandardID != nil {
-			key = *i.StandardID
-		} else if i.StandardShortName != nil {
-			key = *i.StandardShortName
-		}
-
-		if key != "" {
-			out[key] = append(out[key], i)
-		}
-	}
-
-	return out
-}
-
-// stripeAndCompare trims leading and trailing spaces from two strings and compares them
-// returns true if they are equal, false otherwise
-func stripeAndCompare(a, b *string) bool {
-	if a == nil && b == nil {
-		return true
-	}
-
-	if a == nil && b != nil {
-		return false
-	}
-
-	if a != nil && b == nil {
-		return false
-	}
-
-	return strings.TrimSpace(*a) == strings.TrimSpace(*b)
-}
-
 // GetControlIDFromRefCode searches for a control ID by ref code or alias in the provided controls
 // returns the control ID and a boolean indicating if it is a subcontrol or not
 func GetControlIDFromRefCode(refCode string, controls []*generated.Control) (*string, bool) {
@@ -248,28 +163,15 @@ func GetControlIDFromRefCode(refCode string, controls []*generated.Control) (*st
 	}
 
 	for _, c := range controls {
-		for _, alias := range c.Aliases {
-			if alias == refCode {
-				return &c.ID, false
-			}
+		if slices.Contains(c.Aliases, refCode) {
+			return &c.ID, false
 		}
 	}
 
 	for _, c := range controls {
-		sc := c.Edges.Subcontrols
-		if sc == nil {
-			continue
-		}
-
-		for _, s := range sc {
-			if s.RefCode == refCode {
+		for _, s := range c.Edges.Subcontrols {
+			if s.RefCode == refCode || slices.Contains(s.Aliases, refCode) {
 				return &c.ID, true
-			}
-
-			for _, alias := range s.Aliases {
-				if alias == refCode {
-					return &c.ID, true
-				}
 			}
 		}
 	}

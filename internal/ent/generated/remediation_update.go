@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
@@ -157,6 +158,126 @@ func (_u *RemediationUpdate) AppendTags(v []string) *RemediationUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *RemediationUpdate) ClearTags() *RemediationUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *RemediationUpdate) SetSourceDefinitionID(v string) *RemediationUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableSourceDefinitionID(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *RemediationUpdate) ClearSourceDefinitionID() *RemediationUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *RemediationUpdate) SetSourceDefinitionVersion(v string) *RemediationUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableSourceDefinitionVersion(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *RemediationUpdate) ClearSourceDefinitionVersion() *RemediationUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *RemediationUpdate) SetSourceInstanceID(v string) *RemediationUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableSourceInstanceID(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *RemediationUpdate) ClearSourceInstanceID() *RemediationUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *RemediationUpdate) SetManagedBy(v string) *RemediationUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableManagedBy(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *RemediationUpdate) ClearManagedBy() *RemediationUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *RemediationUpdate) SetIntegrationRunID(v string) *RemediationUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableIntegrationRunID(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *RemediationUpdate) ClearIntegrationRunID() *RemediationUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *RemediationUpdate) SetExternalID(v string) *RemediationUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *RemediationUpdate) SetNillableExternalID(v *string) *RemediationUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *RemediationUpdate) ClearExternalID() *RemediationUpdate {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -297,26 +418,6 @@ func (_u *RemediationUpdate) SetNillableWorkflowEligibleMarker(v *bool) *Remedia
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *RemediationUpdate) ClearWorkflowEligibleMarker() *RemediationUpdate {
 	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *RemediationUpdate) SetExternalID(v string) *RemediationUpdate {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *RemediationUpdate) SetNillableExternalID(v *string) *RemediationUpdate {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *RemediationUpdate) ClearExternalID() *RemediationUpdate {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -692,6 +793,21 @@ func (_u *RemediationUpdate) ClearMetadata() *RemediationUpdate {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *RemediationUpdate) AddIntegrationRunIDs(ids ...string) *RemediationUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *RemediationUpdate) AddIntegrationRuns(v ...*IntegrationRun) *RemediationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *RemediationUpdate) AddBlockedGroupIDs(ids ...string) *RemediationUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -975,6 +1091,27 @@ func (_u *RemediationUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Rem
 // Mutation returns the RemediationMutation object of the builder.
 func (_u *RemediationUpdate) Mutation() *RemediationMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *RemediationUpdate) ClearIntegrationRuns() *RemediationUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *RemediationUpdate) RemoveIntegrationRunIDs(ids ...string) *RemediationUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *RemediationUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *RemediationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1484,6 +1621,42 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(remediation.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(remediation.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(remediation.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(remediation.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(remediation.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(remediation.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(remediation.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(remediation.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(remediation.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(remediation.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(remediation.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(remediation.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(remediation.FieldSystemOwned, field.TypeBool)
 	}
@@ -1516,12 +1689,6 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(remediation.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(remediation.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(remediation.FieldExternalOwnerID, field.TypeString, value)
@@ -1636,6 +1803,51 @@ func (_u *RemediationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(remediation.FieldMetadata, field.TypeJSON)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.IntegrationRunsTable,
+			Columns: []string{remediation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.IntegrationRunsTable,
+			Columns: []string{remediation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.IntegrationRunsTable,
+			Columns: []string{remediation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2637,6 +2849,126 @@ func (_u *RemediationUpdateOne) ClearTags() *RemediationUpdateOne {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *RemediationUpdateOne) SetSourceDefinitionID(v string) *RemediationUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableSourceDefinitionID(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *RemediationUpdateOne) ClearSourceDefinitionID() *RemediationUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *RemediationUpdateOne) SetSourceDefinitionVersion(v string) *RemediationUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableSourceDefinitionVersion(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *RemediationUpdateOne) ClearSourceDefinitionVersion() *RemediationUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *RemediationUpdateOne) SetSourceInstanceID(v string) *RemediationUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableSourceInstanceID(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *RemediationUpdateOne) ClearSourceInstanceID() *RemediationUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *RemediationUpdateOne) SetManagedBy(v string) *RemediationUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableManagedBy(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *RemediationUpdateOne) ClearManagedBy() *RemediationUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *RemediationUpdateOne) SetIntegrationRunID(v string) *RemediationUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableIntegrationRunID(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *RemediationUpdateOne) ClearIntegrationRunID() *RemediationUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *RemediationUpdateOne) SetExternalID(v string) *RemediationUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *RemediationUpdateOne) SetNillableExternalID(v *string) *RemediationUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *RemediationUpdateOne) ClearExternalID() *RemediationUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *RemediationUpdateOne) SetInternalNotes(v string) *RemediationUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -2774,26 +3106,6 @@ func (_u *RemediationUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *Reme
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *RemediationUpdateOne) ClearWorkflowEligibleMarker() *RemediationUpdateOne {
 	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *RemediationUpdateOne) SetExternalID(v string) *RemediationUpdateOne {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *RemediationUpdateOne) SetNillableExternalID(v *string) *RemediationUpdateOne {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *RemediationUpdateOne) ClearExternalID() *RemediationUpdateOne {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -3169,6 +3481,21 @@ func (_u *RemediationUpdateOne) ClearMetadata() *RemediationUpdateOne {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *RemediationUpdateOne) AddIntegrationRunIDs(ids ...string) *RemediationUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *RemediationUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *RemediationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *RemediationUpdateOne) AddBlockedGroupIDs(ids ...string) *RemediationUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -3452,6 +3779,27 @@ func (_u *RemediationUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *
 // Mutation returns the RemediationMutation object of the builder.
 func (_u *RemediationUpdateOne) Mutation() *RemediationMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *RemediationUpdateOne) ClearIntegrationRuns() *RemediationUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *RemediationUpdateOne) RemoveIntegrationRunIDs(ids ...string) *RemediationUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *RemediationUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *RemediationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -3991,6 +4339,42 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(remediation.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(remediation.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(remediation.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(remediation.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(remediation.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(remediation.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(remediation.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(remediation.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(remediation.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(remediation.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(remediation.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(remediation.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(remediation.FieldSystemOwned, field.TypeBool)
 	}
@@ -4023,12 +4407,6 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(remediation.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(remediation.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(remediation.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalOwnerID(); ok {
 		_spec.SetField(remediation.FieldExternalOwnerID, field.TypeString, value)
@@ -4143,6 +4521,51 @@ func (_u *RemediationUpdateOne) sqlSave(ctx context.Context) (_node *Remediation
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(remediation.FieldMetadata, field.TypeJSON)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.IntegrationRunsTable,
+			Columns: []string{remediation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.IntegrationRunsTable,
+			Columns: []string{remediation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.IntegrationRunsTable,
+			Columns: []string{remediation.IntegrationRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

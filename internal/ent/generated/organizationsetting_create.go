@@ -474,20 +474,6 @@ func (_c *OrganizationSettingCreate) SetNillableAllowSupportAccess(v *bool) *Org
 	return _c
 }
 
-// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (_c *OrganizationSettingCreate) SetComplianceWebhookToken(v string) *OrganizationSettingCreate {
-	_c.mutation.SetComplianceWebhookToken(v)
-	return _c
-}
-
-// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (_c *OrganizationSettingCreate) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingCreate {
-	if v != nil {
-		_c.SetComplianceWebhookToken(*v)
-	}
-	return _c
-}
-
 // SetPaymentMethodAdded sets the "payment_method_added" field.
 func (_c *OrganizationSettingCreate) SetPaymentMethodAdded(v bool) *OrganizationSettingCreate {
 	_c.mutation.SetPaymentMethodAdded(v)
@@ -640,13 +626,6 @@ func (_c *OrganizationSettingCreate) defaults() error {
 	if _, ok := _c.mutation.AllowSupportAccess(); !ok {
 		v := organizationsetting.DefaultAllowSupportAccess
 		_c.mutation.SetAllowSupportAccess(v)
-	}
-	if _, ok := _c.mutation.ComplianceWebhookToken(); !ok {
-		if organizationsetting.DefaultComplianceWebhookToken == nil {
-			return fmt.Errorf("generated: uninitialized organizationsetting.DefaultComplianceWebhookToken (forgotten import generated/runtime?)")
-		}
-		v := organizationsetting.DefaultComplianceWebhookToken()
-		_c.mutation.SetComplianceWebhookToken(v)
 	}
 	if _, ok := _c.mutation.PaymentMethodAdded(); !ok {
 		v := organizationsetting.DefaultPaymentMethodAdded
@@ -894,10 +873,6 @@ func (_c *OrganizationSettingCreate) createSpec() (*OrganizationSetting, *sqlgra
 	if value, ok := _c.mutation.AllowSupportAccess(); ok {
 		_spec.SetField(organizationsetting.FieldAllowSupportAccess, field.TypeBool, value)
 		_node.AllowSupportAccess = value
-	}
-	if value, ok := _c.mutation.ComplianceWebhookToken(); ok {
-		_spec.SetField(organizationsetting.FieldComplianceWebhookToken, field.TypeString, value)
-		_node.ComplianceWebhookToken = value
 	}
 	if value, ok := _c.mutation.PaymentMethodAdded(); ok {
 		_spec.SetField(organizationsetting.FieldPaymentMethodAdded, field.TypeBool, value)

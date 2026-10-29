@@ -249,6 +249,26 @@ func (_u *ContactUpdate) ClearIntegrationRunID() *ContactUpdate {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *ContactUpdate) SetExternalID(v string) *ContactUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ContactUpdate) SetNillableExternalID(v *string) *ContactUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ContactUpdate) ClearExternalID() *ContactUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *ContactUpdate) SetOwnerID(v string) *ContactUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -400,26 +420,6 @@ func (_u *ContactUpdate) SetNillableStatus(v *enums.UserStatus) *ContactUpdate {
 	if v != nil {
 		_u.SetStatus(*v)
 	}
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *ContactUpdate) SetExternalID(v string) *ContactUpdate {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *ContactUpdate) SetNillableExternalID(v *string) *ContactUpdate {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *ContactUpdate) ClearExternalID() *ContactUpdate {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -862,6 +862,12 @@ func (_u *ContactUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(contact.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(contact.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(contact.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.FullName(); ok {
 		_spec.SetField(contact.FieldFullName, field.TypeString, value)
 	}
@@ -900,12 +906,6 @@ func (_u *ContactUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(contact.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(contact.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IntegrationID(); ok {
 		_spec.SetField(contact.FieldIntegrationID, field.TypeString, value)
@@ -1450,6 +1450,26 @@ func (_u *ContactUpdateOne) ClearIntegrationRunID() *ContactUpdateOne {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *ContactUpdateOne) SetExternalID(v string) *ContactUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *ContactUpdateOne) SetNillableExternalID(v *string) *ContactUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *ContactUpdateOne) ClearExternalID() *ContactUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *ContactUpdateOne) SetOwnerID(v string) *ContactUpdateOne {
 	_u.mutation.SetOwnerID(v)
@@ -1601,26 +1621,6 @@ func (_u *ContactUpdateOne) SetNillableStatus(v *enums.UserStatus) *ContactUpdat
 	if v != nil {
 		_u.SetStatus(*v)
 	}
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *ContactUpdateOne) SetExternalID(v string) *ContactUpdateOne {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *ContactUpdateOne) SetNillableExternalID(v *string) *ContactUpdateOne {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *ContactUpdateOne) ClearExternalID() *ContactUpdateOne {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -2093,6 +2093,12 @@ func (_u *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err er
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(contact.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(contact.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(contact.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.FullName(); ok {
 		_spec.SetField(contact.FieldFullName, field.TypeString, value)
 	}
@@ -2131,12 +2137,6 @@ func (_u *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err er
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(contact.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(contact.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(contact.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IntegrationID(); ok {
 		_spec.SetField(contact.FieldIntegrationID, field.TypeString, value)

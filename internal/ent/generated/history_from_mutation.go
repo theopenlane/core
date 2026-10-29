@@ -116,6 +116,10 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetIntegrationRunID(integrationRunID)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -404,6 +408,12 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetIntegrationRunID(integrationRunID)
 		} else {
 			create = create.SetIntegrationRunID(actionplan.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(actionplan.ExternalID)
 		}
 
 		if name, exists := m.Name(); exists {
@@ -716,6 +726,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetSourceInstanceID(actionplan.SourceInstanceID).
 			SetManagedBy(actionplan.ManagedBy).
 			SetIntegrationRunID(actionplan.IntegrationRunID).
+			SetExternalID(actionplan.ExternalID).
 			SetName(actionplan.Name).
 			SetStatus(actionplan.Status).
 			SetManagementMode(actionplan.ManagementMode).
@@ -827,6 +838,30 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -955,6 +990,42 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetTags(assessment.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(assessment.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(assessment.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(assessment.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(assessment.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(assessment.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(assessment.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -1067,6 +1138,12 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDeletedAt(assessment.DeletedAt).
 			SetDeletedBy(assessment.DeletedBy).
 			SetTags(assessment.Tags).
+			SetSourceDefinitionID(assessment.SourceDefinitionID).
+			SetSourceDefinitionVersion(assessment.SourceDefinitionVersion).
+			SetSourceInstanceID(assessment.SourceInstanceID).
+			SetManagedBy(assessment.ManagedBy).
+			SetIntegrationRunID(assessment.IntegrationRunID).
+			SetExternalID(assessment.ExternalID).
 			SetOwnerID(assessment.OwnerID).
 			SetSystemOwned(assessment.SystemOwned).
 			SetNillableInternalNotes(assessment.InternalNotes).
@@ -1134,6 +1211,30 @@ func (m *AssessmentPolicyMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
 		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -1216,6 +1317,42 @@ func (m *AssessmentPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetNillableUpdatedByImpersonator(assessmentpolicy.UpdatedByImpersonator)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(assessmentpolicy.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(assessmentpolicy.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(assessmentpolicy.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(assessmentpolicy.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(assessmentpolicy.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(assessmentpolicy.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -1283,6 +1420,12 @@ func (m *AssessmentPolicyMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetCreatedBy(assessmentpolicy.CreatedBy).
 			SetUpdatedBy(assessmentpolicy.UpdatedBy).
 			SetNillableUpdatedByImpersonator(assessmentpolicy.UpdatedByImpersonator).
+			SetSourceDefinitionID(assessmentpolicy.SourceDefinitionID).
+			SetSourceDefinitionVersion(assessmentpolicy.SourceDefinitionVersion).
+			SetSourceInstanceID(assessmentpolicy.SourceInstanceID).
+			SetManagedBy(assessmentpolicy.ManagedBy).
+			SetIntegrationRunID(assessmentpolicy.IntegrationRunID).
+			SetExternalID(assessmentpolicy.ExternalID).
 			SetOwnerID(assessmentpolicy.OwnerID).
 			SetAssessmentID(assessmentpolicy.AssessmentID).
 			SetInternalPolicyID(assessmentpolicy.InternalPolicyID).
@@ -1828,6 +1971,10 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetIntegrationRunID(integrationRunID)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -2110,6 +2257,12 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIntegrationRunID(integrationRunID)
 		} else {
 			create = create.SetIntegrationRunID(asset.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(asset.ExternalID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -2421,6 +2574,7 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceInstanceID(asset.SourceInstanceID).
 			SetManagedBy(asset.ManagedBy).
 			SetIntegrationRunID(asset.IntegrationRunID).
+			SetExternalID(asset.ExternalID).
 			SetOwnerID(asset.OwnerID).
 			SetInternalOwner(asset.InternalOwner).
 			SetInternalOwnerUserID(asset.InternalOwnerUserID).
@@ -2536,6 +2690,30 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -2760,6 +2938,42 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(campaign.Tags)
+		}
+
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(campaign.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(campaign.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(campaign.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(campaign.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(campaign.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(campaign.ExternalID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -3013,6 +3227,12 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(campaign.DeletedBy).
 			SetDisplayID(campaign.DisplayID).
 			SetTags(campaign.Tags).
+			SetSourceDefinitionID(campaign.SourceDefinitionID).
+			SetSourceDefinitionVersion(campaign.SourceDefinitionVersion).
+			SetSourceInstanceID(campaign.SourceInstanceID).
+			SetManagedBy(campaign.ManagedBy).
+			SetIntegrationRunID(campaign.IntegrationRunID).
+			SetExternalID(campaign.ExternalID).
 			SetOwnerID(campaign.OwnerID).
 			SetInternalOwner(campaign.InternalOwner).
 			SetInternalOwnerUserID(campaign.InternalOwnerUserID).
@@ -3467,6 +3687,10 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetIntegrationRunID(integrationRunID)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -3497,10 +3721,6 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
-	}
-
-	if externalID, exists := m.ExternalID(); exists {
-		create = create.SetExternalID(externalID)
 	}
 
 	if integrationID, exists := m.IntegrationID(); exists {
@@ -3623,6 +3843,12 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIntegrationRunID(contact.IntegrationRunID)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(contact.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -3669,12 +3895,6 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(status)
 		} else {
 			create = create.SetStatus(contact.Status)
-		}
-
-		if externalID, exists := m.ExternalID(); exists {
-			create = create.SetExternalID(externalID)
-		} else {
-			create = create.SetExternalID(contact.ExternalID)
 		}
 
 		if integrationID, exists := m.IntegrationID(); exists {
@@ -3740,6 +3960,7 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceInstanceID(contact.SourceInstanceID).
 			SetManagedBy(contact.ManagedBy).
 			SetIntegrationRunID(contact.IntegrationRunID).
+			SetExternalID(contact.ExternalID).
 			SetOwnerID(contact.OwnerID).
 			SetFullName(contact.FullName).
 			SetTitle(contact.Title).
@@ -3748,7 +3969,6 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetPhoneNumber(contact.PhoneNumber).
 			SetAddress(contact.Address).
 			SetStatus(contact.Status).
-			SetExternalID(contact.ExternalID).
 			SetIntegrationID(contact.IntegrationID).
 			SetNillableObservedAt(contact.ObservedAt).
 			Save(ctx)
@@ -3823,6 +4043,30 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if externalUUID, exists := m.ExternalUUID(); exists {
@@ -4091,6 +4335,42 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(control.Tags)
+		}
+
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(control.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(control.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(control.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(control.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(control.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(control.ExternalID)
 		}
 
 		if externalUUID, exists := m.ExternalUUID(); exists {
@@ -4410,6 +4690,12 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(control.DeletedBy).
 			SetDisplayID(control.DisplayID).
 			SetTags(control.Tags).
+			SetSourceDefinitionID(control.SourceDefinitionID).
+			SetSourceDefinitionVersion(control.SourceDefinitionVersion).
+			SetSourceInstanceID(control.SourceInstanceID).
+			SetManagedBy(control.ManagedBy).
+			SetIntegrationRunID(control.IntegrationRunID).
+			SetExternalID(control.ExternalID).
 			SetNillableExternalUUID(control.ExternalUUID).
 			SetTitle(control.Title).
 			SetDescription(control.Description).
@@ -4523,6 +4809,30 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -4647,6 +4957,42 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetTags(controlimplementation.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(controlimplementation.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(controlimplementation.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(controlimplementation.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(controlimplementation.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(controlimplementation.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(controlimplementation.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -4753,6 +5099,12 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetDeletedAt(controlimplementation.DeletedAt).
 			SetDeletedBy(controlimplementation.DeletedBy).
 			SetTags(controlimplementation.Tags).
+			SetSourceDefinitionID(controlimplementation.SourceDefinitionID).
+			SetSourceDefinitionVersion(controlimplementation.SourceDefinitionVersion).
+			SetSourceInstanceID(controlimplementation.SourceInstanceID).
+			SetManagedBy(controlimplementation.ManagedBy).
+			SetIntegrationRunID(controlimplementation.IntegrationRunID).
+			SetExternalID(controlimplementation.ExternalID).
 			SetOwnerID(controlimplementation.OwnerID).
 			SetSystemOwned(controlimplementation.SystemOwned).
 			SetNillableInternalNotes(controlimplementation.InternalNotes).
@@ -4839,6 +5191,30 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if revision, exists := m.Revision(); exists {
 		create = create.SetRevision(revision)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -4983,6 +5359,42 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetRevision(controlobjective.Revision)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(controlobjective.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(controlobjective.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(controlobjective.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(controlobjective.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(controlobjective.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(controlobjective.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -5103,6 +5515,12 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetDisplayID(controlobjective.DisplayID).
 			SetTags(controlobjective.Tags).
 			SetRevision(controlobjective.Revision).
+			SetSourceDefinitionID(controlobjective.SourceDefinitionID).
+			SetSourceDefinitionVersion(controlobjective.SourceDefinitionVersion).
+			SetSourceInstanceID(controlobjective.SourceInstanceID).
+			SetManagedBy(controlobjective.ManagedBy).
+			SetIntegrationRunID(controlobjective.IntegrationRunID).
+			SetExternalID(controlobjective.ExternalID).
 			SetOwnerID(controlobjective.OwnerID).
 			SetSystemOwned(controlobjective.SystemOwned).
 			SetNillableInternalNotes(controlobjective.InternalNotes).
@@ -5988,6 +6406,30 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetRevision(revision)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -6164,6 +6606,42 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetRevision(revision)
 		} else {
 			create = create.SetRevision(emailtemplate.Revision)
+		}
+
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(emailtemplate.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(emailtemplate.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(emailtemplate.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(emailtemplate.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(emailtemplate.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(emailtemplate.ExternalID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -6356,6 +6834,12 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetDeletedAt(emailtemplate.DeletedAt).
 			SetDeletedBy(emailtemplate.DeletedBy).
 			SetRevision(emailtemplate.Revision).
+			SetSourceDefinitionID(emailtemplate.SourceDefinitionID).
+			SetSourceDefinitionVersion(emailtemplate.SourceDefinitionVersion).
+			SetSourceInstanceID(emailtemplate.SourceInstanceID).
+			SetManagedBy(emailtemplate.ManagedBy).
+			SetIntegrationRunID(emailtemplate.IntegrationRunID).
+			SetExternalID(emailtemplate.ExternalID).
 			SetOwnerID(emailtemplate.OwnerID).
 			SetSystemOwned(emailtemplate.SystemOwned).
 			SetNillableInternalNotes(emailtemplate.InternalNotes).
@@ -6468,6 +6952,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if integrationRunID, exists := m.IntegrationRunID(); exists {
 		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -6718,10 +7206,6 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableLogoFileID(&logoFileID)
 	}
 
-	if externalID, exists := m.ExternalID(); exists {
-		create = create.SetExternalID(externalID)
-	}
-
 	if observedAt, exists := m.ObservedAt(); exists {
 		create = create.SetNillableObservedAt(&observedAt)
 	}
@@ -6836,6 +7320,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIntegrationRunID(integrationRunID)
 		} else {
 			create = create.SetIntegrationRunID(entity.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(entity.ExternalID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -7210,12 +7700,6 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableLogoFileID(entity.LogoFileID)
 		}
 
-		if externalID, exists := m.ExternalID(); exists {
-			create = create.SetExternalID(externalID)
-		} else {
-			create = create.SetExternalID(entity.ExternalID)
-		}
-
 		if observedAt, exists := m.ObservedAt(); exists {
 			create = create.SetNillableObservedAt(&observedAt)
 		} else {
@@ -7273,6 +7757,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceInstanceID(entity.SourceInstanceID).
 			SetManagedBy(entity.ManagedBy).
 			SetIntegrationRunID(entity.IntegrationRunID).
+			SetExternalID(entity.ExternalID).
 			SetOwnerID(entity.OwnerID).
 			SetInternalOwner(entity.InternalOwner).
 			SetInternalOwnerUserID(entity.InternalOwnerUserID).
@@ -7335,7 +7820,6 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetVendorMetadata(entity.VendorMetadata).
 			SetNillableLogoRemoteURL(entity.LogoRemoteURL).
 			SetNillableLogoFileID(entity.LogoFileID).
-			SetExternalID(entity.ExternalID).
 			SetNillableObservedAt(entity.ObservedAt).
 			Save(ctx)
 		if err != nil {
@@ -7664,6 +8148,30 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -7824,6 +8332,42 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(evidence.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(evidence.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(evidence.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(evidence.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(evidence.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(evidence.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(evidence.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -7979,6 +8523,12 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(evidence.DeletedBy).
 			SetDisplayID(evidence.DisplayID).
 			SetTags(evidence.Tags).
+			SetSourceDefinitionID(evidence.SourceDefinitionID).
+			SetSourceDefinitionVersion(evidence.SourceDefinitionVersion).
+			SetSourceInstanceID(evidence.SourceInstanceID).
+			SetManagedBy(evidence.ManagedBy).
+			SetIntegrationRunID(evidence.IntegrationRunID).
+			SetExternalID(evidence.ExternalID).
 			SetOwnerID(evidence.OwnerID).
 			SetEnvironmentName(evidence.EnvironmentName).
 			SetEnvironmentID(evidence.EnvironmentID).
@@ -8597,6 +9147,10 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetIntegrationRunID(integrationRunID)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -8687,10 +9241,6 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
 		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
-	}
-
-	if externalID, exists := m.ExternalID(); exists {
-		create = create.SetExternalID(externalID)
 	}
 
 	if securityLevel, exists := m.SecurityLevel(); exists {
@@ -8955,6 +9505,12 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIntegrationRunID(finding.IntegrationRunID)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(finding.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -9091,12 +9647,6 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 		} else {
 			create = create.SetWorkflowEligibleMarker(finding.WorkflowEligibleMarker)
-		}
-
-		if externalID, exists := m.ExternalID(); exists {
-			create = create.SetExternalID(externalID)
-		} else {
-			create = create.SetExternalID(finding.ExternalID)
 		}
 
 		if securityLevel, exists := m.SecurityLevel(); exists {
@@ -9367,6 +9917,7 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceInstanceID(finding.SourceInstanceID).
 			SetManagedBy(finding.ManagedBy).
 			SetIntegrationRunID(finding.IntegrationRunID).
+			SetExternalID(finding.ExternalID).
 			SetOwnerID(finding.OwnerID).
 			SetInternalOwner(finding.InternalOwner).
 			SetInternalOwnerUserID(finding.InternalOwnerUserID).
@@ -9390,7 +9941,6 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetFindingStatusName(finding.FindingStatusName).
 			SetFindingStatusID(finding.FindingStatusID).
 			SetWorkflowEligibleMarker(finding.WorkflowEligibleMarker).
-			SetExternalID(finding.ExternalID).
 			SetSecurityLevel(finding.SecurityLevel).
 			SetExternalOwnerID(finding.ExternalOwnerID).
 			SetSource(finding.Source).
@@ -9776,6 +10326,30 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -9924,6 +10498,42 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(group.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(group.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(group.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(group.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(group.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(group.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(group.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -10061,6 +10671,12 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(group.DeletedBy).
 			SetDisplayID(group.DisplayID).
 			SetTags(group.Tags).
+			SetSourceDefinitionID(group.SourceDefinitionID).
+			SetSourceDefinitionVersion(group.SourceDefinitionVersion).
+			SetSourceInstanceID(group.SourceInstanceID).
+			SetManagedBy(group.ManagedBy).
+			SetIntegrationRunID(group.IntegrationRunID).
+			SetExternalID(group.ExternalID).
 			SetOwnerID(group.OwnerID).
 			SetName(group.Name).
 			SetDescription(group.Description).
@@ -10920,6 +11536,30 @@ func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetTags(tags)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -11130,6 +11770,42 @@ func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(identityholder.Tags)
+		}
+
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(identityholder.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(identityholder.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(identityholder.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(identityholder.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(identityholder.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(identityholder.ExternalID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -11365,6 +12041,12 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedBy(identityholder.DeletedBy).
 			SetDisplayID(identityholder.DisplayID).
 			SetTags(identityholder.Tags).
+			SetSourceDefinitionID(identityholder.SourceDefinitionID).
+			SetSourceDefinitionVersion(identityholder.SourceDefinitionVersion).
+			SetSourceInstanceID(identityholder.SourceInstanceID).
+			SetManagedBy(identityholder.ManagedBy).
+			SetIntegrationRunID(identityholder.IntegrationRunID).
+			SetExternalID(identityholder.ExternalID).
 			SetOwnerID(identityholder.OwnerID).
 			SetInternalOwner(identityholder.InternalOwner).
 			SetInternalOwnerUserID(identityholder.InternalOwnerUserID).
@@ -11492,6 +12174,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if integrationRunID, exists := m.IntegrationRunID(); exists {
 		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -11750,6 +12436,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetIntegrationRunID(internalpolicy.IntegrationRunID)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(internalpolicy.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -12001,6 +12693,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetSourceInstanceID(internalpolicy.SourceInstanceID).
 			SetManagedBy(internalpolicy.ManagedBy).
 			SetIntegrationRunID(internalpolicy.IntegrationRunID).
+			SetExternalID(internalpolicy.ExternalID).
 			SetOwnerID(internalpolicy.OwnerID).
 			SetSystemOwned(internalpolicy.SystemOwned).
 			SetNillableInternalNotes(internalpolicy.InternalNotes).
@@ -12324,6 +13017,30 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetTags(tags)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
 	}
@@ -12438,6 +13155,42 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetTags(mappedcontrol.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(mappedcontrol.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(mappedcontrol.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(mappedcontrol.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(mappedcontrol.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(mappedcontrol.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(mappedcontrol.ExternalID)
+		}
+
 		if systemOwned, exists := m.SystemOwned(); exists {
 			create = create.SetSystemOwned(systemOwned)
 		} else {
@@ -12532,6 +13285,12 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetDeletedAt(mappedcontrol.DeletedAt).
 			SetDeletedBy(mappedcontrol.DeletedBy).
 			SetTags(mappedcontrol.Tags).
+			SetSourceDefinitionID(mappedcontrol.SourceDefinitionID).
+			SetSourceDefinitionVersion(mappedcontrol.SourceDefinitionVersion).
+			SetSourceInstanceID(mappedcontrol.SourceInstanceID).
+			SetManagedBy(mappedcontrol.ManagedBy).
+			SetIntegrationRunID(mappedcontrol.IntegrationRunID).
+			SetExternalID(mappedcontrol.ExternalID).
 			SetSystemOwned(mappedcontrol.SystemOwned).
 			SetNillableInternalNotes(mappedcontrol.InternalNotes).
 			SetNillableSystemInternalID(mappedcontrol.SystemInternalID).
@@ -12612,6 +13371,30 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -12730,6 +13513,42 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(narrative.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(narrative.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(narrative.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(narrative.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(narrative.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(narrative.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(narrative.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -12819,6 +13638,12 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(narrative.DeletedBy).
 			SetDisplayID(narrative.DisplayID).
 			SetTags(narrative.Tags).
+			SetSourceDefinitionID(narrative.SourceDefinitionID).
+			SetSourceDefinitionVersion(narrative.SourceDefinitionVersion).
+			SetSourceInstanceID(narrative.SourceInstanceID).
+			SetManagedBy(narrative.ManagedBy).
+			SetIntegrationRunID(narrative.IntegrationRunID).
+			SetExternalID(narrative.ExternalID).
 			SetOwnerID(narrative.OwnerID).
 			SetSystemOwned(narrative.SystemOwned).
 			SetNillableInternalNotes(narrative.InternalNotes).
@@ -14819,10 +15644,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		create = create.SetAllowSupportAccess(allowSupportAccess)
 	}
 
-	if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
-		create = create.SetComplianceWebhookToken(complianceWebhookToken)
-	}
-
 	if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
 		create = create.SetPaymentMethodAdded(paymentMethodAdded)
 	}
@@ -15075,12 +15896,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			create = create.SetAllowSupportAccess(organizationsetting.AllowSupportAccess)
 		}
 
-		if complianceWebhookToken, exists := m.ComplianceWebhookToken(); exists {
-			create = create.SetComplianceWebhookToken(complianceWebhookToken)
-		} else {
-			create = create.SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken)
-		}
-
 		if paymentMethodAdded, exists := m.PaymentMethodAdded(); exists {
 			create = create.SetPaymentMethodAdded(paymentMethodAdded)
 		} else {
@@ -15166,7 +15981,6 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			SetMultifactorAuthEnforced(organizationsetting.MultifactorAuthEnforced).
 			SetSSOExemptDomains(organizationsetting.SSOExemptDomains).
 			SetAllowSupportAccess(organizationsetting.AllowSupportAccess).
-			SetComplianceWebhookToken(organizationsetting.ComplianceWebhookToken).
 			SetPaymentMethodAdded(organizationsetting.PaymentMethodAdded).
 			SetNillablePendingDeletionAt(organizationsetting.PendingDeletionAt).
 			Save(ctx)
@@ -15241,6 +16055,30 @@ func (m *PlatformMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -15541,6 +16379,42 @@ func (m *PlatformMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(platform.Tags)
+		}
+
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(platform.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(platform.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(platform.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(platform.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(platform.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(platform.ExternalID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -15908,6 +16782,12 @@ func (m *PlatformMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(platform.DeletedBy).
 			SetDisplayID(platform.DisplayID).
 			SetTags(platform.Tags).
+			SetSourceDefinitionID(platform.SourceDefinitionID).
+			SetSourceDefinitionVersion(platform.SourceDefinitionVersion).
+			SetSourceInstanceID(platform.SourceInstanceID).
+			SetManagedBy(platform.ManagedBy).
+			SetIntegrationRunID(platform.IntegrationRunID).
+			SetExternalID(platform.ExternalID).
 			SetOwnerID(platform.OwnerID).
 			SetInternalOwner(platform.InternalOwner).
 			SetInternalOwnerUserID(platform.InternalOwnerUserID).
@@ -16057,6 +16937,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if integrationRunID, exists := m.IntegrationRunID(); exists {
 		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -16311,6 +17195,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIntegrationRunID(procedure.IntegrationRunID)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(procedure.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -16556,6 +17446,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceInstanceID(procedure.SourceInstanceID).
 			SetManagedBy(procedure.ManagedBy).
 			SetIntegrationRunID(procedure.IntegrationRunID).
+			SetExternalID(procedure.ExternalID).
 			SetOwnerID(procedure.OwnerID).
 			SetName(procedure.Name).
 			SetStatus(procedure.Status).
@@ -16660,6 +17551,30 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -16832,6 +17747,42 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(program.Tags)
+		}
+
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(program.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(program.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(program.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(program.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(program.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(program.ExternalID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -17007,6 +17958,12 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(program.DeletedBy).
 			SetDisplayID(program.DisplayID).
 			SetTags(program.Tags).
+			SetSourceDefinitionID(program.SourceDefinitionID).
+			SetSourceDefinitionVersion(program.SourceDefinitionVersion).
+			SetSourceInstanceID(program.SourceInstanceID).
+			SetManagedBy(program.ManagedBy).
+			SetIntegrationRunID(program.IntegrationRunID).
+			SetExternalID(program.ExternalID).
 			SetOwnerID(program.OwnerID).
 			SetProgramKindName(program.ProgramKindName).
 			SetProgramKindID(program.ProgramKindID).
@@ -17300,6 +18257,30 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetTags(tags)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -17334,10 +18315,6 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
 		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
-	}
-
-	if externalID, exists := m.ExternalID(); exists {
-		create = create.SetExternalID(externalID)
 	}
 
 	if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -17504,6 +18481,42 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetTags(remediation.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(remediation.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(remediation.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(remediation.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(remediation.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(remediation.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(remediation.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -17556,12 +18569,6 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 		} else {
 			create = create.SetWorkflowEligibleMarker(remediation.WorkflowEligibleMarker)
-		}
-
-		if externalID, exists := m.ExternalID(); exists {
-			create = create.SetExternalID(externalID)
-		} else {
-			create = create.SetExternalID(remediation.ExternalID)
 		}
 
 		if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -17725,6 +18732,12 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetDeletedBy(remediation.DeletedBy).
 			SetDisplayID(remediation.DisplayID).
 			SetTags(remediation.Tags).
+			SetSourceDefinitionID(remediation.SourceDefinitionID).
+			SetSourceDefinitionVersion(remediation.SourceDefinitionVersion).
+			SetSourceInstanceID(remediation.SourceInstanceID).
+			SetManagedBy(remediation.ManagedBy).
+			SetIntegrationRunID(remediation.IntegrationRunID).
+			SetExternalID(remediation.ExternalID).
 			SetOwnerID(remediation.OwnerID).
 			SetSystemOwned(remediation.SystemOwned).
 			SetNillableInternalNotes(remediation.InternalNotes).
@@ -17734,7 +18747,6 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetScopeName(remediation.ScopeName).
 			SetScopeID(remediation.ScopeID).
 			SetWorkflowEligibleMarker(remediation.WorkflowEligibleMarker).
-			SetExternalID(remediation.ExternalID).
 			SetExternalOwnerID(remediation.ExternalOwnerID).
 			SetTitle(remediation.Title).
 			SetStatus(remediation.Status).
@@ -17824,6 +18836,30 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetTags(tags)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -17854,10 +18890,6 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if scopeID, exists := m.ScopeID(); exists {
 		create = create.SetScopeID(scopeID)
-	}
-
-	if externalID, exists := m.ExternalID(); exists {
-		create = create.SetExternalID(externalID)
 	}
 
 	if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -18014,6 +19046,42 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(review.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(review.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(review.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(review.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(review.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(review.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(review.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -18060,12 +19128,6 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(scopeID)
 		} else {
 			create = create.SetScopeID(review.ScopeID)
-		}
-
-		if externalID, exists := m.ExternalID(); exists {
-			create = create.SetExternalID(externalID)
-		} else {
-			create = create.SetExternalID(review.ExternalID)
 		}
 
 		if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -18222,6 +19284,12 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedAt(review.DeletedAt).
 			SetDeletedBy(review.DeletedBy).
 			SetTags(review.Tags).
+			SetSourceDefinitionID(review.SourceDefinitionID).
+			SetSourceDefinitionVersion(review.SourceDefinitionVersion).
+			SetSourceInstanceID(review.SourceInstanceID).
+			SetManagedBy(review.ManagedBy).
+			SetIntegrationRunID(review.IntegrationRunID).
+			SetExternalID(review.ExternalID).
 			SetOwnerID(review.OwnerID).
 			SetSystemOwned(review.SystemOwned).
 			SetNillableInternalNotes(review.InternalNotes).
@@ -18230,7 +19298,6 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(review.EnvironmentID).
 			SetScopeName(review.ScopeName).
 			SetScopeID(review.ScopeID).
-			SetExternalID(review.ExternalID).
 			SetExternalOwnerID(review.ExternalOwnerID).
 			SetTitle(review.Title).
 			SetState(review.State).
@@ -18343,6 +19410,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetIntegrationRunID(integrationRunID)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -18413,10 +19484,6 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
 		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
-	}
-
-	if externalID, exists := m.ExternalID(); exists {
-		create = create.SetExternalID(externalID)
 	}
 
 	if integrationID, exists := m.IntegrationID(); exists {
@@ -18633,6 +19700,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIntegrationRunID(risk.IntegrationRunID)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(risk.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -18739,12 +19812,6 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 		} else {
 			create = create.SetWorkflowEligibleMarker(risk.WorkflowEligibleMarker)
-		}
-
-		if externalID, exists := m.ExternalID(); exists {
-			create = create.SetExternalID(externalID)
-		} else {
-			create = create.SetExternalID(risk.ExternalID)
 		}
 
 		if integrationID, exists := m.IntegrationID(); exists {
@@ -18943,6 +20010,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceInstanceID(risk.SourceInstanceID).
 			SetManagedBy(risk.ManagedBy).
 			SetIntegrationRunID(risk.IntegrationRunID).
+			SetExternalID(risk.ExternalID).
 			SetOwnerID(risk.OwnerID).
 			SetStakeholderName(risk.StakeholderName).
 			SetStakeholderUserID(risk.StakeholderUserID).
@@ -18961,7 +20029,6 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetScopeName(risk.ScopeName).
 			SetScopeID(risk.ScopeID).
 			SetWorkflowEligibleMarker(risk.WorkflowEligibleMarker).
-			SetExternalID(risk.ExternalID).
 			SetIntegrationID(risk.IntegrationID).
 			SetNillableObservedAt(risk.ObservedAt).
 			SetNillableExternalUUID(risk.ExternalUUID).
@@ -19709,6 +20776,30 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetTags(tags)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if externalUUID, exists := m.ExternalUUID(); exists {
 		create = create.SetNillableExternalUUID(&externalUUID)
 	}
@@ -19951,6 +21042,42 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(subcontrol.Tags)
+		}
+
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(subcontrol.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(subcontrol.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(subcontrol.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(subcontrol.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(subcontrol.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(subcontrol.ExternalID)
 		}
 
 		if externalUUID, exists := m.ExternalUUID(); exists {
@@ -20234,6 +21361,12 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetDeletedBy(subcontrol.DeletedBy).
 			SetDisplayID(subcontrol.DisplayID).
 			SetTags(subcontrol.Tags).
+			SetSourceDefinitionID(subcontrol.SourceDefinitionID).
+			SetSourceDefinitionVersion(subcontrol.SourceDefinitionVersion).
+			SetSourceInstanceID(subcontrol.SourceInstanceID).
+			SetManagedBy(subcontrol.ManagedBy).
+			SetIntegrationRunID(subcontrol.IntegrationRunID).
+			SetExternalID(subcontrol.ExternalID).
 			SetNillableExternalUUID(subcontrol.ExternalUUID).
 			SetTitle(subcontrol.Title).
 			SetDescription(subcontrol.Description).
@@ -20633,6 +21766,30 @@ func (m *SystemDetailMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetTags(tags)
 	}
 
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -20757,6 +21914,42 @@ func (m *SystemDetailMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetTags(systemdetail.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(systemdetail.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(systemdetail.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(systemdetail.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(systemdetail.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(systemdetail.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(systemdetail.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -20858,6 +22051,12 @@ func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDeletedBy(systemdetail.DeletedBy).
 			SetDisplayID(systemdetail.DisplayID).
 			SetTags(systemdetail.Tags).
+			SetSourceDefinitionID(systemdetail.SourceDefinitionID).
+			SetSourceDefinitionVersion(systemdetail.SourceDefinitionVersion).
+			SetSourceInstanceID(systemdetail.SourceInstanceID).
+			SetManagedBy(systemdetail.ManagedBy).
+			SetIntegrationRunID(systemdetail.IntegrationRunID).
+			SetExternalID(systemdetail.ExternalID).
 			SetOwnerID(systemdetail.OwnerID).
 			SetSystemName(systemdetail.SystemName).
 			SetVersion(systemdetail.Version).
@@ -20939,6 +22138,30 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -21135,6 +22358,42 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(tags)
 		} else {
 			create = create.SetTags(task.Tags)
+		}
+
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(task.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(task.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(task.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(task.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(task.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(task.ExternalID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -21346,6 +22605,12 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(task.DeletedBy).
 			SetDisplayID(task.DisplayID).
 			SetTags(task.Tags).
+			SetSourceDefinitionID(task.SourceDefinitionID).
+			SetSourceDefinitionVersion(task.SourceDefinitionVersion).
+			SetSourceInstanceID(task.SourceInstanceID).
+			SetManagedBy(task.ManagedBy).
+			SetIntegrationRunID(task.IntegrationRunID).
+			SetExternalID(task.ExternalID).
 			SetOwnerID(task.OwnerID).
 			SetTaskKindName(task.TaskKindName).
 			SetTaskKindID(task.TaskKindID).
@@ -21441,6 +22706,30 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if tags, exists := m.Tags(); exists {
 		create = create.SetTags(tags)
+	}
+
+	if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+		create = create.SetSourceDefinitionID(sourceDefinitionID)
+	}
+
+	if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+		create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+	}
+
+	if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+		create = create.SetSourceInstanceID(sourceInstanceID)
+	}
+
+	if managedBy, exists := m.ManagedBy(); exists {
+		create = create.SetManagedBy(managedBy)
+	}
+
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
 	}
 
 	if ownerID, exists := m.OwnerID(); exists {
@@ -21589,6 +22878,42 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetTags(template.Tags)
 		}
 
+		if sourceDefinitionID, exists := m.SourceDefinitionID(); exists {
+			create = create.SetSourceDefinitionID(sourceDefinitionID)
+		} else {
+			create = create.SetSourceDefinitionID(template.SourceDefinitionID)
+		}
+
+		if sourceDefinitionVersion, exists := m.SourceDefinitionVersion(); exists {
+			create = create.SetSourceDefinitionVersion(sourceDefinitionVersion)
+		} else {
+			create = create.SetSourceDefinitionVersion(template.SourceDefinitionVersion)
+		}
+
+		if sourceInstanceID, exists := m.SourceInstanceID(); exists {
+			create = create.SetSourceInstanceID(sourceInstanceID)
+		} else {
+			create = create.SetSourceInstanceID(template.SourceInstanceID)
+		}
+
+		if managedBy, exists := m.ManagedBy(); exists {
+			create = create.SetManagedBy(managedBy)
+		} else {
+			create = create.SetManagedBy(template.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(template.IntegrationRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(template.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -21731,6 +23056,12 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedAt(template.DeletedAt).
 			SetDeletedBy(template.DeletedBy).
 			SetTags(template.Tags).
+			SetSourceDefinitionID(template.SourceDefinitionID).
+			SetSourceDefinitionVersion(template.SourceDefinitionVersion).
+			SetSourceInstanceID(template.SourceInstanceID).
+			SetManagedBy(template.ManagedBy).
+			SetIntegrationRunID(template.IntegrationRunID).
+			SetExternalID(template.ExternalID).
 			SetOwnerID(template.OwnerID).
 			SetSystemOwned(template.SystemOwned).
 			SetNillableInternalNotes(template.InternalNotes).
@@ -25900,6 +27231,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetIntegrationRunID(integrationRunID)
 	}
 
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -25998,10 +27333,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if securityLevel, exists := m.SecurityLevel(); exists {
 		create = create.SetSecurityLevel(securityLevel)
-	}
-
-	if externalID, exists := m.ExternalID(); exists {
-		create = create.SetExternalID(externalID)
 	}
 
 	if cveID, exists := m.CveID(); exists {
@@ -26278,6 +27609,12 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetIntegrationRunID(vulnerability.IntegrationRunID)
 		}
 
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(vulnerability.ExternalID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -26426,12 +27763,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetSecurityLevel(securityLevel)
 		} else {
 			create = create.SetSecurityLevel(vulnerability.SecurityLevel)
-		}
-
-		if externalID, exists := m.ExternalID(); exists {
-			create = create.SetExternalID(externalID)
-		} else {
-			create = create.SetExternalID(vulnerability.ExternalID)
 		}
 
 		if cveID, exists := m.CveID(); exists {
@@ -26720,6 +28051,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetSourceInstanceID(vulnerability.SourceInstanceID).
 			SetManagedBy(vulnerability.ManagedBy).
 			SetIntegrationRunID(vulnerability.IntegrationRunID).
+			SetExternalID(vulnerability.ExternalID).
 			SetOwnerID(vulnerability.OwnerID).
 			SetInternalOwner(vulnerability.InternalOwner).
 			SetInternalOwnerUserID(vulnerability.InternalOwnerUserID).
@@ -26745,7 +28077,6 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetWorkflowEligibleMarker(vulnerability.WorkflowEligibleMarker).
 			SetExternalOwnerID(vulnerability.ExternalOwnerID).
 			SetSecurityLevel(vulnerability.SecurityLevel).
-			SetExternalID(vulnerability.ExternalID).
 			SetCveID(vulnerability.CveID).
 			SetSource(vulnerability.Source).
 			SetDisplayName(vulnerability.DisplayName).

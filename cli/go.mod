@@ -11,7 +11,7 @@ require (
 	github.com/knadh/koanf/providers/env/v2 v2.0.2
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/posflag v1.0.2
-	github.com/knadh/koanf/v2 v2.3.8
+	github.com/knadh/koanf/v2 v2.4.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/rs/zerolog v1.35.1
@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/v2 v2.4.7
 	github.com/theopenlane/go-client v0.14.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.40.1
+	github.com/theopenlane/iam v0.40.2
 	github.com/theopenlane/utils v0.7.4
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/term v0.47.0
@@ -46,6 +46,7 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-webauthn/webauthn v0.18.2 // indirect
 	github.com/go-webauthn/x v0.3.1 // indirect
+	github.com/goccy/go-json v0.11.2 // indirect
 	github.com/godbus/dbus/v5 v5.2.2 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
@@ -58,7 +59,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jwx-go/jwkfetch/v4 v4.0.4 // indirect
 	github.com/knadh/koanf/maps v0.1.2 // indirect
-	github.com/labstack/echo/v5 v5.4.0 // indirect
+	github.com/labstack/echo/v5 v5.4.2 // indirect
 	github.com/labstack/gommon v0.5.0 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
@@ -68,13 +69,13 @@ require (
 	github.com/lestrrat-go/option/v3 v3.0.0-alpha1 // indirect
 	github.com/mattn/go-colorable v0.1.16 // indirect
 	github.com/mattn/go-isatty v0.0.24 // indirect
-	github.com/mattn/go-runewidth v0.0.28 // indirect
+	github.com/mattn/go-runewidth v0.0.31 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/oklog/ulid/v2 v2.1.2 // indirect
 	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
-	github.com/olekukonko/errors v1.2.0 // indirect
-	github.com/olekukonko/ll v0.1.6 // indirect
+	github.com/olekukonko/errors v1.3.0 // indirect
+	github.com/olekukonko/ll v0.1.9 // indirect
 	github.com/olekukonko/tablewriter v1.1.5 // indirect
 	github.com/openfga/api/proto v0.0.0-20260928071936-c0650ce2169b // indirect
 	github.com/openfga/go-sdk v0.8.3 // indirect
@@ -113,7 +114,7 @@ require (
 	golang.org/x/text v0.43.0 // indirect
 	golang.org/x/time v0.16.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20261019180522-ce908d29299b // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20261019180522-ce908d29299b // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20261026165753-2ffab32bce7e // indirect
 	google.golang.org/grpc v1.84.0 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

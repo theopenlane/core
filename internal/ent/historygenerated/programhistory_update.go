@@ -97,6 +97,24 @@ func (_u *ProgramHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(programhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(programhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(programhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(programhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(programhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(programhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(programhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(programhistory.FieldOwnerID, field.TypeString)
 	}
@@ -262,6 +280,24 @@ func (_u *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProgramH
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(programhistory.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(programhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(programhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(programhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(programhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(programhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(programhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(programhistory.FieldOwnerID, field.TypeString)

@@ -27,6 +27,11 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 		return ctx, auth.ErrNoAuthUser
 	}
 
+	// only a user signed in with their own session is issued a new one, tokens and impersonation sessions are not
+	if _, interactive := auth.InteractiveUserCallerFromContext(ctx); !interactive {
+		return ctx, nil
+	}
+
 	user, err := generated.FromContext(ctx).User.
 		Query().
 		WithSetting().

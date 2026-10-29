@@ -239,6 +239,20 @@ func (_c *InternalPolicyCreate) SetNillableIntegrationRunID(v *string) *Internal
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *InternalPolicyCreate) SetExternalID(v string) *InternalPolicyCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableExternalID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *InternalPolicyCreate) SetOwnerID(v string) *InternalPolicyCreate {
 	_c.mutation.SetOwnerID(v)
@@ -1274,6 +1288,10 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(internalpolicy.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(internalpolicy.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(internalpolicy.FieldSystemOwned, field.TypeBool, value)

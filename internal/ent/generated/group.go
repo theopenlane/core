@@ -39,6 +39,18 @@ type Group struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// identifier of the record in an external system
+	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the name of the group - must be unique within the organization
@@ -194,6 +206,8 @@ type Group struct {
 
 // GroupEdges holds the relations/edges for other nodes in the graph.
 type GroupEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// ProgramEditors holds the value of the program_editors edge.
@@ -304,10 +318,11 @@ type GroupEdges struct {
 	Members []*GroupMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [54]bool
+	loadedTypes [55]bool
 	// totalCount holds the count of the edges above.
-	totalCount [53]map[string]int
+	totalCount [54]map[string]int
 
+	namedIntegrationRuns                    map[string][]*IntegrationRun
 	namedProgramEditors                     map[string][]*Program
 	namedProgramBlockedGroups               map[string][]*Program
 	namedProgramViewers                     map[string][]*Program
@@ -361,12 +376,21 @@ type GroupEdges struct {
 	namedMembers                            map[string][]*GroupMembership
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e GroupEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e GroupEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -375,7 +399,7 @@ func (e GroupEdges) OwnerOrErr() (*Organization, error) {
 // ProgramEditorsOrErr returns the ProgramEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramEditorsOrErr() ([]*Program, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.ProgramEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "program_editors"}
@@ -384,7 +408,7 @@ func (e GroupEdges) ProgramEditorsOrErr() ([]*Program, error) {
 // ProgramBlockedGroupsOrErr returns the ProgramBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramBlockedGroupsOrErr() ([]*Program, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.ProgramBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "program_blocked_groups"}
@@ -393,7 +417,7 @@ func (e GroupEdges) ProgramBlockedGroupsOrErr() ([]*Program, error) {
 // ProgramViewersOrErr returns the ProgramViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProgramViewersOrErr() ([]*Program, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.ProgramViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "program_viewers"}
@@ -402,7 +426,7 @@ func (e GroupEdges) ProgramViewersOrErr() ([]*Program, error) {
 // RiskEditorsOrErr returns the RiskEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskEditorsOrErr() ([]*Risk, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.RiskEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_editors"}
@@ -411,7 +435,7 @@ func (e GroupEdges) RiskEditorsOrErr() ([]*Risk, error) {
 // RiskBlockedGroupsOrErr returns the RiskBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskBlockedGroupsOrErr() ([]*Risk, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.RiskBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_blocked_groups"}
@@ -420,7 +444,7 @@ func (e GroupEdges) RiskBlockedGroupsOrErr() ([]*Risk, error) {
 // RiskViewersOrErr returns the RiskViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RiskViewersOrErr() ([]*Risk, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.RiskViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "risk_viewers"}
@@ -429,7 +453,7 @@ func (e GroupEdges) RiskViewersOrErr() ([]*Risk, error) {
 // ControlObjectiveEditorsOrErr returns the ControlObjectiveEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveEditorsOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.ControlObjectiveEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_editors"}
@@ -438,7 +462,7 @@ func (e GroupEdges) ControlObjectiveEditorsOrErr() ([]*ControlObjective, error) 
 // ControlObjectiveBlockedGroupsOrErr returns the ControlObjectiveBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveBlockedGroupsOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.ControlObjectiveBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_blocked_groups"}
@@ -447,7 +471,7 @@ func (e GroupEdges) ControlObjectiveBlockedGroupsOrErr() ([]*ControlObjective, e
 // ControlObjectiveViewersOrErr returns the ControlObjectiveViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlObjectiveViewersOrErr() ([]*ControlObjective, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.ControlObjectiveViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "control_objective_viewers"}
@@ -456,7 +480,7 @@ func (e GroupEdges) ControlObjectiveViewersOrErr() ([]*ControlObjective, error) 
 // NarrativeEditorsOrErr returns the NarrativeEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeEditorsOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.NarrativeEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_editors"}
@@ -465,7 +489,7 @@ func (e GroupEdges) NarrativeEditorsOrErr() ([]*Narrative, error) {
 // NarrativeBlockedGroupsOrErr returns the NarrativeBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeBlockedGroupsOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.NarrativeBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_blocked_groups"}
@@ -474,7 +498,7 @@ func (e GroupEdges) NarrativeBlockedGroupsOrErr() ([]*Narrative, error) {
 // NarrativeViewersOrErr returns the NarrativeViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) NarrativeViewersOrErr() ([]*Narrative, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.NarrativeViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "narrative_viewers"}
@@ -483,7 +507,7 @@ func (e GroupEdges) NarrativeViewersOrErr() ([]*Narrative, error) {
 // ControlImplementationEditorsOrErr returns the ControlImplementationEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlImplementationEditorsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.ControlImplementationEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementation_editors"}
@@ -492,7 +516,7 @@ func (e GroupEdges) ControlImplementationEditorsOrErr() ([]*ControlImplementatio
 // ControlImplementationBlockedGroupsOrErr returns the ControlImplementationBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlImplementationBlockedGroupsOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.ControlImplementationBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementation_blocked_groups"}
@@ -501,7 +525,7 @@ func (e GroupEdges) ControlImplementationBlockedGroupsOrErr() ([]*ControlImpleme
 // ControlImplementationViewersOrErr returns the ControlImplementationViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlImplementationViewersOrErr() ([]*ControlImplementation, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.ControlImplementationViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "control_implementation_viewers"}
@@ -510,7 +534,7 @@ func (e GroupEdges) ControlImplementationViewersOrErr() ([]*ControlImplementatio
 // ActionPlanEditorsOrErr returns the ActionPlanEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ActionPlanEditorsOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.ActionPlanEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plan_editors"}
@@ -519,7 +543,7 @@ func (e GroupEdges) ActionPlanEditorsOrErr() ([]*ActionPlan, error) {
 // ActionPlanBlockedGroupsOrErr returns the ActionPlanBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ActionPlanBlockedGroupsOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.ActionPlanBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plan_blocked_groups"}
@@ -528,7 +552,7 @@ func (e GroupEdges) ActionPlanBlockedGroupsOrErr() ([]*ActionPlan, error) {
 // ActionPlanViewersOrErr returns the ActionPlanViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ActionPlanViewersOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.ActionPlanViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plan_viewers"}
@@ -537,7 +561,7 @@ func (e GroupEdges) ActionPlanViewersOrErr() ([]*ActionPlan, error) {
 // PlatformEditorsOrErr returns the PlatformEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) PlatformEditorsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.PlatformEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "platform_editors"}
@@ -546,7 +570,7 @@ func (e GroupEdges) PlatformEditorsOrErr() ([]*Platform, error) {
 // PlatformBlockedGroupsOrErr returns the PlatformBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) PlatformBlockedGroupsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.PlatformBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "platform_blocked_groups"}
@@ -555,7 +579,7 @@ func (e GroupEdges) PlatformBlockedGroupsOrErr() ([]*Platform, error) {
 // PlatformViewersOrErr returns the PlatformViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) PlatformViewersOrErr() ([]*Platform, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.PlatformViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "platform_viewers"}
@@ -564,7 +588,7 @@ func (e GroupEdges) PlatformViewersOrErr() ([]*Platform, error) {
 // CampaignEditorsOrErr returns the CampaignEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) CampaignEditorsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.CampaignEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_editors"}
@@ -573,7 +597,7 @@ func (e GroupEdges) CampaignEditorsOrErr() ([]*Campaign, error) {
 // CampaignBlockedGroupsOrErr returns the CampaignBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) CampaignBlockedGroupsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.CampaignBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_blocked_groups"}
@@ -582,7 +606,7 @@ func (e GroupEdges) CampaignBlockedGroupsOrErr() ([]*Campaign, error) {
 // CampaignViewersOrErr returns the CampaignViewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) CampaignViewersOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.CampaignViewers, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_viewers"}
@@ -591,7 +615,7 @@ func (e GroupEdges) CampaignViewersOrErr() ([]*Campaign, error) {
 // ProcedureEditorsOrErr returns the ProcedureEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProcedureEditorsOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.ProcedureEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure_editors"}
@@ -600,7 +624,7 @@ func (e GroupEdges) ProcedureEditorsOrErr() ([]*Procedure, error) {
 // ProcedureBlockedGroupsOrErr returns the ProcedureBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ProcedureBlockedGroupsOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.ProcedureBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "procedure_blocked_groups"}
@@ -609,7 +633,7 @@ func (e GroupEdges) ProcedureBlockedGroupsOrErr() ([]*Procedure, error) {
 // InternalPolicyEditorsOrErr returns the InternalPolicyEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InternalPolicyEditorsOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[28] {
 		return e.InternalPolicyEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy_editors"}
@@ -618,7 +642,7 @@ func (e GroupEdges) InternalPolicyEditorsOrErr() ([]*InternalPolicy, error) {
 // InternalPolicyBlockedGroupsOrErr returns the InternalPolicyBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InternalPolicyBlockedGroupsOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[29] {
 		return e.InternalPolicyBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policy_blocked_groups"}
@@ -627,7 +651,7 @@ func (e GroupEdges) InternalPolicyBlockedGroupsOrErr() ([]*InternalPolicy, error
 // ControlEditorsOrErr returns the ControlEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlEditorsOrErr() ([]*Control, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[30] {
 		return e.ControlEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "control_editors"}
@@ -636,7 +660,7 @@ func (e GroupEdges) ControlEditorsOrErr() ([]*Control, error) {
 // ControlBlockedGroupsOrErr returns the ControlBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ControlBlockedGroupsOrErr() ([]*Control, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[31] {
 		return e.ControlBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "control_blocked_groups"}
@@ -645,7 +669,7 @@ func (e GroupEdges) ControlBlockedGroupsOrErr() ([]*Control, error) {
 // MappedControlEditorsOrErr returns the MappedControlEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MappedControlEditorsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[32] {
 		return e.MappedControlEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_control_editors"}
@@ -654,7 +678,7 @@ func (e GroupEdges) MappedControlEditorsOrErr() ([]*MappedControl, error) {
 // MappedControlBlockedGroupsOrErr returns the MappedControlBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MappedControlBlockedGroupsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[33] {
 		return e.MappedControlBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_control_blocked_groups"}
@@ -663,7 +687,7 @@ func (e GroupEdges) MappedControlBlockedGroupsOrErr() ([]*MappedControl, error) 
 // ScanEditorsOrErr returns the ScanEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ScanEditorsOrErr() ([]*Scan, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[34] {
 		return e.ScanEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "scan_editors"}
@@ -672,7 +696,7 @@ func (e GroupEdges) ScanEditorsOrErr() ([]*Scan, error) {
 // ScanBlockedGroupsOrErr returns the ScanBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ScanBlockedGroupsOrErr() ([]*Scan, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[35] {
 		return e.ScanBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "scan_blocked_groups"}
@@ -681,7 +705,7 @@ func (e GroupEdges) ScanBlockedGroupsOrErr() ([]*Scan, error) {
 // EntityEditorsOrErr returns the EntityEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) EntityEditorsOrErr() ([]*Entity, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[36] {
 		return e.EntityEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "entity_editors"}
@@ -690,7 +714,7 @@ func (e GroupEdges) EntityEditorsOrErr() ([]*Entity, error) {
 // EntityBlockedGroupsOrErr returns the EntityBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) EntityBlockedGroupsOrErr() ([]*Entity, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[37] {
 		return e.EntityBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "entity_blocked_groups"}
@@ -699,7 +723,7 @@ func (e GroupEdges) EntityBlockedGroupsOrErr() ([]*Entity, error) {
 // FindingEditorsOrErr returns the FindingEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) FindingEditorsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[37] {
+	if e.loadedTypes[38] {
 		return e.FindingEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "finding_editors"}
@@ -708,7 +732,7 @@ func (e GroupEdges) FindingEditorsOrErr() ([]*Finding, error) {
 // FindingBlockedGroupsOrErr returns the FindingBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) FindingBlockedGroupsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[38] {
+	if e.loadedTypes[39] {
 		return e.FindingBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "finding_blocked_groups"}
@@ -717,7 +741,7 @@ func (e GroupEdges) FindingBlockedGroupsOrErr() ([]*Finding, error) {
 // ReviewEditorsOrErr returns the ReviewEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ReviewEditorsOrErr() ([]*Review, error) {
-	if e.loadedTypes[39] {
+	if e.loadedTypes[40] {
 		return e.ReviewEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "review_editors"}
@@ -726,7 +750,7 @@ func (e GroupEdges) ReviewEditorsOrErr() ([]*Review, error) {
 // ReviewBlockedGroupsOrErr returns the ReviewBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) ReviewBlockedGroupsOrErr() ([]*Review, error) {
-	if e.loadedTypes[40] {
+	if e.loadedTypes[41] {
 		return e.ReviewBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "review_blocked_groups"}
@@ -735,7 +759,7 @@ func (e GroupEdges) ReviewBlockedGroupsOrErr() ([]*Review, error) {
 // RemediationEditorsOrErr returns the RemediationEditors value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RemediationEditorsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[41] {
+	if e.loadedTypes[42] {
 		return e.RemediationEditors, nil
 	}
 	return nil, &NotLoadedError{edge: "remediation_editors"}
@@ -744,7 +768,7 @@ func (e GroupEdges) RemediationEditorsOrErr() ([]*Remediation, error) {
 // RemediationBlockedGroupsOrErr returns the RemediationBlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) RemediationBlockedGroupsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[42] {
+	if e.loadedTypes[43] {
 		return e.RemediationBlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "remediation_blocked_groups"}
@@ -755,7 +779,7 @@ func (e GroupEdges) RemediationBlockedGroupsOrErr() ([]*Remediation, error) {
 func (e GroupEdges) SettingOrErr() (*GroupSetting, error) {
 	if e.Setting != nil {
 		return e.Setting, nil
-	} else if e.loadedTypes[43] {
+	} else if e.loadedTypes[44] {
 		return nil, &NotFoundError{label: groupsetting.Label}
 	}
 	return nil, &NotLoadedError{edge: "setting"}
@@ -764,7 +788,7 @@ func (e GroupEdges) SettingOrErr() (*GroupSetting, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[44] {
+	if e.loadedTypes[45] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -773,7 +797,7 @@ func (e GroupEdges) UsersOrErr() ([]*User, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[45] {
+	if e.loadedTypes[46] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -782,7 +806,7 @@ func (e GroupEdges) EventsOrErr() ([]*Event, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[46] {
+	if e.loadedTypes[47] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -793,7 +817,7 @@ func (e GroupEdges) IntegrationsOrErr() ([]*Integration, error) {
 func (e GroupEdges) AvatarFileOrErr() (*File, error) {
 	if e.AvatarFile != nil {
 		return e.AvatarFile, nil
-	} else if e.loadedTypes[47] {
+	} else if e.loadedTypes[48] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "avatar_file"}
@@ -802,7 +826,7 @@ func (e GroupEdges) AvatarFileOrErr() (*File, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[48] {
+	if e.loadedTypes[49] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -811,7 +835,7 @@ func (e GroupEdges) FilesOrErr() ([]*File, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[49] {
+	if e.loadedTypes[50] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -820,7 +844,7 @@ func (e GroupEdges) TasksOrErr() ([]*Task, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[50] {
+	if e.loadedTypes[51] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -829,7 +853,7 @@ func (e GroupEdges) CampaignsOrErr() ([]*Campaign, error) {
 // CampaignTargetsOrErr returns the CampaignTargets value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
-	if e.loadedTypes[51] {
+	if e.loadedTypes[52] {
 		return e.CampaignTargets, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_targets"}
@@ -838,7 +862,7 @@ func (e GroupEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
 // InvitesOrErr returns the Invites value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) InvitesOrErr() ([]*Invite, error) {
-	if e.loadedTypes[52] {
+	if e.loadedTypes[53] {
 		return e.Invites, nil
 	}
 	return nil, &NotLoadedError{edge: "invites"}
@@ -847,7 +871,7 @@ func (e GroupEdges) InvitesOrErr() ([]*Invite, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e GroupEdges) MembersOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[53] {
+	if e.loadedTypes[54] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -862,7 +886,7 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case group.FieldIsManaged, group.FieldScimActive:
 			values[i] = new(sql.NullBool)
-		case group.FieldID, group.FieldCreatedBy, group.FieldUpdatedBy, group.FieldUpdatedByImpersonator, group.FieldDeletedBy, group.FieldDisplayID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldAvatarLocalFileID, group.FieldDisplayName, group.FieldOscalRole, group.FieldOscalPartyUUID, group.FieldScimExternalID, group.FieldScimDisplayName, group.FieldScimGroupMailing:
+		case group.FieldID, group.FieldCreatedBy, group.FieldUpdatedBy, group.FieldUpdatedByImpersonator, group.FieldDeletedBy, group.FieldDisplayID, group.FieldSourceDefinitionID, group.FieldSourceDefinitionVersion, group.FieldSourceInstanceID, group.FieldManagedBy, group.FieldIntegrationRunID, group.FieldExternalID, group.FieldOwnerID, group.FieldName, group.FieldDescription, group.FieldGravatarLogoURL, group.FieldLogoURL, group.FieldAvatarLocalFileID, group.FieldDisplayName, group.FieldOscalRole, group.FieldOscalPartyUUID, group.FieldScimExternalID, group.FieldScimDisplayName, group.FieldScimGroupMailing:
 			values[i] = new(sql.NullString)
 		case group.FieldCreatedAt, group.FieldUpdatedAt, group.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -1177,6 +1201,42 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case group.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case group.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case group.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case group.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case group.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
+		case group.FieldExternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field external_id", values[i])
+			} else if value.Valid {
+				_m.ExternalID = value.String
 			}
 		case group.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -2108,6 +2168,11 @@ func (_m *Group) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the Group entity.
+func (_m *Group) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewGroupClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the Group entity.
 func (_m *Group) QueryOwner() *OrganizationQuery {
 	return NewGroupClient(_m.config).QueryOwner(_m)
@@ -2430,6 +2495,24 @@ func (_m *Group) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("external_id=")
+	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -2488,6 +2571,30 @@ func (_m *Group) String() string {
 	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Group) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Group) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedProgramEditors returns the ProgramEditors named value or an error if the edge was not

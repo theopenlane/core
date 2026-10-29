@@ -23,6 +23,7 @@ mutation CreateAsset ($input: CreateAssetInput!) {
 			environmentID
 			environmentName
 			estimatedMonthlyCost
+			externalID
 			id
 			identifier
 			integrationID
@@ -84,6 +85,7 @@ mutation CreateBulkAsset ($input: [CreateAssetInput!]) {
 			environmentID
 			environmentName
 			estimatedMonthlyCost
+			externalID
 			id
 			identifier
 			integrationID
@@ -145,6 +147,7 @@ mutation CreateBulkCSVAsset ($input: Upload!) {
 			environmentID
 			environmentName
 			estimatedMonthlyCost
+			externalID
 			id
 			identifier
 			integrationID
@@ -226,6 +229,7 @@ query GetAllAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				environmentID
 				environmentName
 				estimatedMonthlyCost
+				externalID
 				id
 				identifier
 				integrationID
@@ -287,6 +291,7 @@ query GetAssetByID ($assetId: ID!) {
 		environmentID
 		environmentName
 		estimatedMonthlyCost
+		externalID
 		id
 		identifier
 		integrationID
@@ -355,6 +360,7 @@ query GetAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orde
 				environmentID
 				environmentName
 				estimatedMonthlyCost
+				externalID
 				id
 				identifier
 				integrationID
@@ -417,6 +423,7 @@ mutation UpdateAsset ($updateAssetId: ID!, $input: UpdateAssetInput!) {
 			environmentID
 			environmentName
 			estimatedMonthlyCost
+			externalID
 			id
 			identifier
 			integrationID
@@ -478,6 +485,7 @@ mutation UpdateBulkAsset ($ids: [ID!]!, $input: UpdateAssetInput!) {
 			environmentID
 			environmentName
 			estimatedMonthlyCost
+			externalID
 			id
 			identifier
 			integrationID
@@ -542,6 +550,7 @@ mutation UpdateBulkCSVAsset ($input: Upload!) {
 			environmentID
 			environmentName
 			estimatedMonthlyCost
+			externalID
 			id
 			identifier
 			integrationID

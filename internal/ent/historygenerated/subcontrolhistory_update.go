@@ -97,6 +97,24 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(subcontrolhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.ExternalUUIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldExternalUUID, field.TypeString)
 	}
@@ -325,6 +343,24 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subcontrolhistory.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(subcontrolhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(subcontrolhistory.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.ExternalUUIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldExternalUUID, field.TypeString)

@@ -380,7 +380,12 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 // registerAuthenticatedTestHandler registers a handler with authentication middleware for testing authenticated endpoints
 func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path string, handlerFunc func(echo.Context) error) {
-	suite.e.Add(method, path, handlerFunc, suite.sharedAuthMiddleware)
+	suite.e.Add(method, path, handlerFunc, suite.sharedAuthMiddleware, authmiddleware.BlockAnonymous())
+}
+
+// registerQuestionnaireTestHandler registers a handler with authentication middleware that also accepts questionnaire tokens
+func (suite *HandlerTestSuite) registerQuestionnaireTestHandler(method, path string, handlerFunc func(echo.Context) error) {
+	suite.e.Add(method, path, handlerFunc, suite.sharedAuthMiddleware, authmiddleware.BlockAnonymous(auth.CapQuestionnaireAnonymous))
 }
 
 // createAuthMiddleware creates authentication middleware for tests

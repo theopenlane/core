@@ -8,11 +8,6 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
-	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -20,6 +15,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateProgramWithMembers is the resolver for the createProgramWithMembers field.
@@ -45,7 +44,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 			cf.StandardVersion = input.StandardVersion
 		}
 
-		bulkControls, err := r.cloneControlsFromStandard(ctx, cf, nil, false)
+		bulkControls, err := r.controlCloner().FromStandard(ctx, cf, nil)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "program"})
 		}
@@ -110,7 +109,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	createdProgram := withTransactionalMutation(ctx).Program.Create()
 
 	if hasStandardFilter(input) {
-		bulkControls, err := r.cloneControlsFromStandard(ctx, controls.CloneFilterOptions{StandardID: input.StandardID}, nil, false)
+		bulkControls, err := r.controlCloner().FromStandard(ctx, controls.CloneFilterOptions{StandardID: input.StandardID}, nil)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "program"})
 		}

@@ -266,6 +266,26 @@ func (_u *FindingUpdate) ClearIntegrationRunID() *FindingUpdate {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *FindingUpdate) SetExternalID(v string) *FindingUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableExternalID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *FindingUpdate) ClearExternalID() *FindingUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetInternalOwner sets the "internal_owner" field.
 func (_u *FindingUpdate) SetInternalOwner(v string) *FindingUpdate {
 	_u.mutation.SetInternalOwner(v)
@@ -683,26 +703,6 @@ func (_u *FindingUpdate) SetNillableWorkflowEligibleMarker(v *bool) *FindingUpda
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *FindingUpdate) ClearWorkflowEligibleMarker() *FindingUpdate {
 	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *FindingUpdate) SetExternalID(v string) *FindingUpdate {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *FindingUpdate) SetNillableExternalID(v *string) *FindingUpdate {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *FindingUpdate) ClearExternalID() *FindingUpdate {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -2541,6 +2541,12 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(finding.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(finding.FieldInternalOwner, field.TypeString, value)
 	}
@@ -2597,12 +2603,6 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(finding.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(finding.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)
@@ -4491,6 +4491,26 @@ func (_u *FindingUpdateOne) ClearIntegrationRunID() *FindingUpdateOne {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *FindingUpdateOne) SetExternalID(v string) *FindingUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableExternalID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *FindingUpdateOne) ClearExternalID() *FindingUpdateOne {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetInternalOwner sets the "internal_owner" field.
 func (_u *FindingUpdateOne) SetInternalOwner(v string) *FindingUpdateOne {
 	_u.mutation.SetInternalOwner(v)
@@ -4908,26 +4928,6 @@ func (_u *FindingUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *FindingU
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *FindingUpdateOne) ClearWorkflowEligibleMarker() *FindingUpdateOne {
 	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *FindingUpdateOne) SetExternalID(v string) *FindingUpdateOne {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *FindingUpdateOne) SetNillableExternalID(v *string) *FindingUpdateOne {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *FindingUpdateOne) ClearExternalID() *FindingUpdateOne {
-	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -6796,6 +6796,12 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(finding.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(finding.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(finding.FieldInternalOwner, field.TypeString, value)
 	}
@@ -6852,12 +6858,6 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(finding.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
-	}
-	if _u.mutation.ExternalIDCleared() {
-		_spec.ClearField(finding.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.SecurityLevel(); ok {
 		_spec.SetField(finding.FieldSecurityLevel, field.TypeEnum, value)

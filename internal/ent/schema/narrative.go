@@ -99,6 +99,7 @@ func (n Narrative) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "NRT",
 		additionalMixins: []ent.Mixin{
+			newProvenanceMixin(n),
 			// narratives inherit permissions from the associated programs, but must have an organization as well
 			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 			// it will also create program parent tuples for the narrative when a program is associated to the narrative
@@ -128,6 +129,9 @@ func (n Narrative) Annotations() []schema.Annotation {
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("statement"),
 		),
+		entx.IntegrationMappingSchema().
+			StockPersist().
+			LookupAlternative(externalIDFieldName),
 	}
 }
 

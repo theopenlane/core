@@ -4,12 +4,18 @@ mutation CreateAssessment ($input: CreateAssessmentInput!) {
 			assessmentType
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalNotes
 			jsonconfig
+			managedBy
 			name
 			ownerID
 			responseDueDuration
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			tags
@@ -116,12 +122,18 @@ query GetAssessmentByID ($assessmentId: ID!) {
 		assessmentType
 		createdAt
 		createdBy
+		externalID
 		id
+		integrationRunID
 		internalNotes
 		jsonconfig
+		managedBy
 		name
 		ownerID
 		responseDueDuration
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		systemInternalID
 		systemOwned
 		tags
@@ -184,12 +196,18 @@ mutation UpdateAssessment ($updateAssessmentId: ID!, $input: UpdateAssessmentInp
 			assessmentType
 			createdAt
 			createdBy
+			externalID
 			id
+			integrationRunID
 			internalNotes
 			jsonconfig
+			managedBy
 			name
 			ownerID
 			responseDueDuration
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			systemInternalID
 			systemOwned
 			tags

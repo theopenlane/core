@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/core/common/enums"
 	coremodels "github.com/theopenlane/core/common/models"
 	models "github.com/theopenlane/core/common/openapi"
 	entEvent "github.com/theopenlane/core/v2/internal/ent/generated/event"
@@ -637,11 +638,27 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			}
 
 			if tc.expectTrustCenter {
-				trustCenterExists, err := suite.db.TrustCenter.Query().
+				createdTrustCenter, err := suite.db.TrustCenter.Query().
 					Where(trustcenter.OwnerID(moduleUser.OrganizationID)).
-					Exist(moduleUser.UserCtx)
+					WithSetting().
+					WithPreviewSetting().
+					WithWatermarkConfig().
+					Only(moduleUser.UserCtx)
 				require.NoError(t, err)
-				assert.True(t, trustCenterExists)
+
+				liveSetting := createdTrustCenter.Edges.Setting
+				require.NotNil(t, liveSetting)
+				assert.Equal(t, createdTrustCenter.ID, liveSetting.TrustCenterID)
+				assert.Equal(t, enums.TrustCenterEnvironmentLive, liveSetting.Environment)
+
+				previewSetting := createdTrustCenter.Edges.PreviewSetting
+				require.NotNil(t, previewSetting)
+				assert.Equal(t, createdTrustCenter.ID, previewSetting.TrustCenterID)
+				assert.Equal(t, enums.TrustCenterEnvironmentPreview, previewSetting.Environment)
+				assert.NotEqual(t, liveSetting.ID, previewSetting.ID)
+
+				require.NotNil(t, createdTrustCenter.Edges.WatermarkConfig)
+				assert.Equal(t, createdTrustCenter.ID, createdTrustCenter.Edges.WatermarkConfig.TrustCenterID)
 			}
 		})
 	}

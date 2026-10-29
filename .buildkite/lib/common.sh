@@ -41,6 +41,11 @@ install_gh() {
     fi
 }
 
+setup_git_auth() {
+    : "${GITHUB_TOKEN:?GITHUB_TOKEN is required}"
+    gh auth setup-git --hostname github.com
+}
+
 # Function to configure git user settings
 setup_git_user() {
     local email="${1:-bender@theopenlane.io}"
@@ -49,11 +54,6 @@ setup_git_user() {
     echo "🔧 Configuring git user settings..."
     git config --local user.email "$email"
     git config --local user.name "$name"
-
-    # Configure git to use GitHub token for authentication
-    if [[ -n "${GITHUB_TOKEN:-}" ]]; then
-        git config --local url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
-    fi
 
     echo "✅ Git user configured: $name <$email>"
 }
@@ -233,6 +233,7 @@ install_dependencies() {
     echo "🔧 Installing dependencies..."
     install_yq
     install_gh
+
     echo "✅ All dependencies installed"
 }
 

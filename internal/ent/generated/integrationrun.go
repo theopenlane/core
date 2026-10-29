@@ -63,8 +63,31 @@ type IntegrationRun struct {
 	Metrics map[string]interface{} `json:"metrics,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the IntegrationRunQuery when eager-loading is set.
-	Edges        IntegrationRunEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                                   IntegrationRunEdges `json:"edges"`
+	assessment_integration_runs             *string
+	assessment_policy_integration_runs      *string
+	campaign_integration_runs               *string
+	control_integration_runs                *string
+	control_implementation_integration_runs *string
+	control_objective_integration_runs      *string
+	custom_type_enum_integration_runs       *string
+	email_template_integration_runs         *string
+	evidence_integration_runs               *string
+	group_integration_runs                  *string
+	identity_holder_integration_runs        *string
+	mapped_control_integration_runs         *string
+	narrative_integration_runs              *string
+	platform_integration_runs               *string
+	program_integration_runs                *string
+	remediation_integration_runs            *string
+	review_integration_runs                 *string
+	scan_integration_runs                   *string
+	subcontrol_integration_runs             *string
+	system_detail_integration_runs          *string
+	tag_definition_integration_runs         *string
+	task_integration_runs                   *string
+	template_integration_runs               *string
+	selectValues                            sql.SelectValues
 }
 
 // IntegrationRunEdges holds the relations/edges for other nodes in the graph.
@@ -272,6 +295,52 @@ func (*IntegrationRun) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case integrationrun.FieldCreatedAt, integrationrun.FieldUpdatedAt, integrationrun.FieldDeletedAt, integrationrun.FieldStartedAt, integrationrun.FieldFinishedAt:
 			values[i] = new(sql.NullTime)
+		case integrationrun.ForeignKeys[0]: // assessment_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[1]: // assessment_policy_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[2]: // campaign_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[3]: // control_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[4]: // control_implementation_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[5]: // control_objective_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[6]: // custom_type_enum_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[7]: // email_template_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[8]: // evidence_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[9]: // group_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[10]: // identity_holder_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[11]: // mapped_control_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[12]: // narrative_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[13]: // platform_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[14]: // program_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[15]: // remediation_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[16]: // review_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[17]: // scan_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[18]: // subcontrol_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[19]: // system_detail_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[20]: // tag_definition_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[21]: // task_integration_runs
+			values[i] = new(sql.NullString)
+		case integrationrun.ForeignKeys[22]: // template_integration_runs
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -418,6 +487,167 @@ func (_m *IntegrationRun) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Metrics); err != nil {
 					return fmt.Errorf("unmarshal field metrics: %w", err)
 				}
+			}
+		case integrationrun.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_integration_runs", values[i])
+			} else if value.Valid {
+				_m.assessment_integration_runs = new(string)
+				*_m.assessment_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_policy_integration_runs", values[i])
+			} else if value.Valid {
+				_m.assessment_policy_integration_runs = new(string)
+				*_m.assessment_policy_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_integration_runs", values[i])
+			} else if value.Valid {
+				_m.campaign_integration_runs = new(string)
+				*_m.campaign_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_integration_runs", values[i])
+			} else if value.Valid {
+				_m.control_integration_runs = new(string)
+				*_m.control_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_implementation_integration_runs", values[i])
+			} else if value.Valid {
+				_m.control_implementation_integration_runs = new(string)
+				*_m.control_implementation_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[5]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_objective_integration_runs", values[i])
+			} else if value.Valid {
+				_m.control_objective_integration_runs = new(string)
+				*_m.control_objective_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[6]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field custom_type_enum_integration_runs", values[i])
+			} else if value.Valid {
+				_m.custom_type_enum_integration_runs = new(string)
+				*_m.custom_type_enum_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[7]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email_template_integration_runs", values[i])
+			} else if value.Valid {
+				_m.email_template_integration_runs = new(string)
+				*_m.email_template_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[8]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_integration_runs", values[i])
+			} else if value.Valid {
+				_m.evidence_integration_runs = new(string)
+				*_m.evidence_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[9]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field group_integration_runs", values[i])
+			} else if value.Valid {
+				_m.group_integration_runs = new(string)
+				*_m.group_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[10]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_integration_runs", values[i])
+			} else if value.Valid {
+				_m.identity_holder_integration_runs = new(string)
+				*_m.identity_holder_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[11]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field mapped_control_integration_runs", values[i])
+			} else if value.Valid {
+				_m.mapped_control_integration_runs = new(string)
+				*_m.mapped_control_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[12]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field narrative_integration_runs", values[i])
+			} else if value.Valid {
+				_m.narrative_integration_runs = new(string)
+				*_m.narrative_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[13]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_integration_runs", values[i])
+			} else if value.Valid {
+				_m.platform_integration_runs = new(string)
+				*_m.platform_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[14]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field program_integration_runs", values[i])
+			} else if value.Valid {
+				_m.program_integration_runs = new(string)
+				*_m.program_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[15]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remediation_integration_runs", values[i])
+			} else if value.Valid {
+				_m.remediation_integration_runs = new(string)
+				*_m.remediation_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[16]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_integration_runs", values[i])
+			} else if value.Valid {
+				_m.review_integration_runs = new(string)
+				*_m.review_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[17]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scan_integration_runs", values[i])
+			} else if value.Valid {
+				_m.scan_integration_runs = new(string)
+				*_m.scan_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[18]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_integration_runs", values[i])
+			} else if value.Valid {
+				_m.subcontrol_integration_runs = new(string)
+				*_m.subcontrol_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[19]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_detail_integration_runs", values[i])
+			} else if value.Valid {
+				_m.system_detail_integration_runs = new(string)
+				*_m.system_detail_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[20]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field tag_definition_integration_runs", values[i])
+			} else if value.Valid {
+				_m.tag_definition_integration_runs = new(string)
+				*_m.tag_definition_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[21]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field task_integration_runs", values[i])
+			} else if value.Valid {
+				_m.task_integration_runs = new(string)
+				*_m.task_integration_runs = value.String
+			}
+		case integrationrun.ForeignKeys[22]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field template_integration_runs", values[i])
+			} else if value.Valid {
+				_m.template_integration_runs = new(string)
+				*_m.template_integration_runs = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

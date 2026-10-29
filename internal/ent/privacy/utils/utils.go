@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -157,6 +158,15 @@ func PluralizerClient(ctx context.Context, m generated.Mutation) *pluralize.Clie
 	return nil
 }
 
+// ResolveOwnerID returns the provided owner ID or derives it from the context when empty
+func ResolveOwnerID(ctx context.Context, ownerID string) (string, error) {
+	if ownerID != "" {
+		return ownerID, nil
+	}
+
+	return auth.GetOrganizationIDFromContext(ctx)
+}
+
 // ModulesEnabled checks if the modules feature is enabled for the given client
 func ModulesEnabled(client *generated.Client) bool {
 	if client == nil {
@@ -187,4 +197,19 @@ func PaymentMethodCheckRequired(client *generated.Client) bool {
 	}
 
 	return client.EntConfig.Billing.RequirePaymentMethod
+}
+
+// CheckCallerOrgMembership checks if the caller in context holds any role in orgID
+func CheckCallerOrgMembership(ctx context.Context, authz fgax.Client, orgID string) (bool, error) {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok {
+		return false, auth.ErrNoAuthUser
+	}
+
+	return authz.CheckOrgAccess(ctx, fgax.AccessCheck{
+		SubjectID:   caller.SubjectID,
+		SubjectType: caller.SubjectType(),
+		ObjectID:    orgID,
+		Relation:    fgax.CanViewOrg,
+	})
 }

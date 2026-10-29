@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/enums"
@@ -14,6 +15,9 @@ import (
 )
 
 func TestNDAValidator(t *testing.T) {
+	// disable for testing
+	api.DisableConfigDir()
+
 	plain := pdftest.MinimalPDF(t)
 
 	tests := []struct {
@@ -48,7 +52,7 @@ func ndaUpload(content []byte, contentType string) storage.File {
 		OriginalName: "nda.pdf",
 		FieldName:    "templateFiles",
 		RawFile:      bytes.NewReader(content),
-		FileMetadata: storage.FileMetadata{ContentType: contentType},
+		ContentType:  contentType,
 	}
 
 	objects.SetTemplateKindHint(&file, enums.TemplateKindTrustCenterNda)

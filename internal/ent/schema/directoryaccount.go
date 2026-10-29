@@ -81,14 +81,6 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("directory_name"),
 			),
-		field.String("external_id").
-			Comment("stable identifier from the directory system").
-			NotEmpty().
-			Immutable().
-			Annotations(
-				entx.IntegrationMappingField().LookupKey(),
-				entgql.OrderField("external_id"),
-			),
 		field.String("secondary_key").
 			Comment("optional secondary identifier such as Azure immutable ID").
 			Optional().
@@ -244,7 +236,7 @@ func (d DirectoryAccount) Mixin() []ent.Mixin {
 		prefix:            "DAC",
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{SchemaType: d},
+			newProvenanceMixin(d, withRequiredExternalID(), withImmutableExternalID(), withoutExternalIDIndex()),
 			newObjectOwnedMixin[generated.DirectoryAccount](d,
 				withParents(IdentityHolder{}, Platform{}, Integration{}),
 				withOrganizationOwner(),
@@ -313,7 +305,7 @@ func (d DirectoryAccount) Edges() []ent.Edge {
 // Indexes of the DirectoryAccount
 func (DirectoryAccount) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("platform_id", "external_id"),
+		index.Fields("platform_id", externalIDFieldName),
 		index.Fields("integration_id", "canonical_email"),
 		index.Fields("platform_id", "canonical_email"),
 		index.Fields("identity_holder_id"),

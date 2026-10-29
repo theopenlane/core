@@ -285,6 +285,26 @@ func (_u *InternalPolicyUpdate) ClearIntegrationRunID() *InternalPolicyUpdate {
 	return _u
 }
 
+// SetExternalID sets the "external_id" field.
+func (_u *InternalPolicyUpdate) SetExternalID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableExternalID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *InternalPolicyUpdate) ClearExternalID() *InternalPolicyUpdate {
+	_u.mutation.ClearExternalID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *InternalPolicyUpdate) SetOwnerID(v string) *InternalPolicyUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -1957,6 +1977,12 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(internalpolicy.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(internalpolicy.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(internalpolicy.FieldExternalID, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(internalpolicy.FieldSystemOwned, field.TypeBool)
 	}
@@ -3605,6 +3631,26 @@ func (_u *InternalPolicyUpdateOne) SetNillableIntegrationRunID(v *string) *Inter
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *InternalPolicyUpdateOne) ClearIntegrationRunID() *InternalPolicyUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetExternalID sets the "external_id" field.
+func (_u *InternalPolicyUpdateOne) SetExternalID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetExternalID(v)
+	return _u
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableExternalID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetExternalID(*v)
+	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *InternalPolicyUpdateOne) ClearExternalID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -5309,6 +5355,12 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(internalpolicy.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternalID(); ok {
+		_spec.SetField(internalpolicy.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(internalpolicy.FieldExternalID, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(internalpolicy.FieldSystemOwned, field.TypeBool)

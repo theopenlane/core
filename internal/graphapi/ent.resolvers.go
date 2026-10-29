@@ -1190,8 +1190,6 @@ func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string]
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "hush"})
 	}
 
-	redactHushConnection(res)
-
 	return res, err
 }
 
@@ -3199,11 +3197,6 @@ func (r *Resolver) CreateTrustCenterFAQInput() gqlgenerated.CreateTrustCenterFAQ
 	return &createTrustCenterFAQInputResolver{r}
 }
 
-// CreateTrustCenterInput returns gqlgenerated.CreateTrustCenterInputResolver implementation.
-func (r *Resolver) CreateTrustCenterInput() gqlgenerated.CreateTrustCenterInputResolver {
-	return &createTrustCenterInputResolver{r}
-}
-
 // UpdateActionPlanInput returns gqlgenerated.UpdateActionPlanInputResolver implementation.
 func (r *Resolver) UpdateActionPlanInput() gqlgenerated.UpdateActionPlanInputResolver {
 	return &updateActionPlanInputResolver{r}
@@ -3232,6 +3225,11 @@ func (r *Resolver) UpdateEntityInput() gqlgenerated.UpdateEntityInputResolver {
 // UpdateEvidenceInput returns gqlgenerated.UpdateEvidenceInputResolver implementation.
 func (r *Resolver) UpdateEvidenceInput() gqlgenerated.UpdateEvidenceInputResolver {
 	return &updateEvidenceInputResolver{r}
+}
+
+// UpdateFindingInput returns gqlgenerated.UpdateFindingInputResolver implementation.
+func (r *Resolver) UpdateFindingInput() gqlgenerated.UpdateFindingInputResolver {
+	return &updateFindingInputResolver{r}
 }
 
 // UpdateGroupInput returns gqlgenerated.UpdateGroupInputResolver implementation.
@@ -3299,6 +3297,11 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 	return &updateTrustCenterInputResolver{r}
 }
 
+// UpdateVulnerabilityInput returns gqlgenerated.UpdateVulnerabilityInputResolver implementation.
+func (r *Resolver) UpdateVulnerabilityInput() gqlgenerated.UpdateVulnerabilityInputResolver {
+	return &updateVulnerabilityInputResolver{r}
+}
+
 type (
 	actionPlanResolver                  struct{ *Resolver }
 	assessmentResolver                  struct{ *Resolver }
@@ -3330,13 +3333,13 @@ type (
 	createNotificationInputResolver     struct{ *Resolver }
 	createOrganizationInputResolver     struct{ *Resolver }
 	createTrustCenterFAQInputResolver   struct{ *Resolver }
-	createTrustCenterInputResolver      struct{ *Resolver }
 	updateActionPlanInputResolver       struct{ *Resolver }
 	updateControlInputResolver          struct{ *Resolver }
 	updateControlObjectiveInputResolver struct{ *Resolver }
 	updateDiscussionInputResolver       struct{ *Resolver }
 	updateEntityInputResolver           struct{ *Resolver }
 	updateEvidenceInputResolver         struct{ *Resolver }
+	updateFindingInputResolver          struct{ *Resolver }
 	updateGroupInputResolver            struct{ *Resolver }
 	updateInternalPolicyInputResolver   struct{ *Resolver }
 	updateOrganizationInputResolver     struct{ *Resolver }
@@ -3350,4 +3353,5 @@ type (
 	updateTaskInputResolver             struct{ *Resolver }
 	updateTrustCenterFAQInputResolver   struct{ *Resolver }
 	updateTrustCenterInputResolver      struct{ *Resolver }
+	updateVulnerabilityInputResolver    struct{ *Resolver }
 )

@@ -64,7 +64,7 @@ type OrganizationSetting struct {
 	// client ID for SSO integration
 	IdentityProviderClientID *string `json:"identity_provider_client_id,omitempty"`
 	// client secret for SSO integration
-	IdentityProviderClientSecret *string `json:"identity_provider_client_secret,omitempty"`
+	IdentityProviderClientSecret *string `json:"-"`
 	// metadata URL for the SSO provider
 	IdentityProviderMetadataEndpoint string `json:"identity_provider_metadata_endpoint,omitempty"`
 	// has this sso configuration been tested to verify it works? SSO cannot be enforced unless this is done
@@ -91,8 +91,6 @@ type OrganizationSetting struct {
 	SSOExemptDomains []string `json:"sso_exempt_domains,omitempty"`
 	// allow Openlane support to access this organization without a directory account
 	AllowSupportAccess bool `json:"allow_support_access,omitempty"`
-	// unique token used to receive compliance webhook events
-	ComplianceWebhookToken string `json:"compliance_webhook_token,omitempty"`
 	// whether or not a payment method has been added to the account
 	PaymentMethodAdded bool `json:"payment_method_added,omitempty"`
 	// when will this organization be deleted? usually this is after org has not added a payment method after n period
@@ -149,7 +147,7 @@ func (*OrganizationSetting) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case organizationsetting.FieldBillingNotificationsEnabled, organizationsetting.FieldAllowMatchingDomainsAutojoin, organizationsetting.FieldIdentityProviderAuthTested, organizationsetting.FieldIdentityProviderLoginEnforced, organizationsetting.FieldIdentityProviderJitProvisioning, organizationsetting.FieldMultifactorAuthEnforced, organizationsetting.FieldAllowSupportAccess, organizationsetting.FieldPaymentMethodAdded:
 			values[i] = new(sql.NullBool)
-		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldUpdatedByImpersonator, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID, organizationsetting.FieldIdentityProvider, organizationsetting.FieldIdentityProviderClientID, organizationsetting.FieldIdentityProviderClientSecret, organizationsetting.FieldIdentityProviderMetadataEndpoint, organizationsetting.FieldIdentityProviderEntityID, organizationsetting.FieldOidcDiscoveryEndpoint, organizationsetting.FieldSamlSigninURL, organizationsetting.FieldSamlIssuer, organizationsetting.FieldSamlCert, organizationsetting.FieldComplianceWebhookToken:
+		case organizationsetting.FieldID, organizationsetting.FieldCreatedBy, organizationsetting.FieldUpdatedBy, organizationsetting.FieldUpdatedByImpersonator, organizationsetting.FieldDeletedBy, organizationsetting.FieldBillingContact, organizationsetting.FieldBillingEmail, organizationsetting.FieldBillingPhone, organizationsetting.FieldTaxIdentifier, organizationsetting.FieldGeoLocation, organizationsetting.FieldOrganizationID, organizationsetting.FieldIdentityProvider, organizationsetting.FieldIdentityProviderClientID, organizationsetting.FieldIdentityProviderClientSecret, organizationsetting.FieldIdentityProviderMetadataEndpoint, organizationsetting.FieldIdentityProviderEntityID, organizationsetting.FieldOidcDiscoveryEndpoint, organizationsetting.FieldSamlSigninURL, organizationsetting.FieldSamlIssuer, organizationsetting.FieldSamlCert:
 			values[i] = new(sql.NullString)
 		case organizationsetting.FieldCreatedAt, organizationsetting.FieldUpdatedAt, organizationsetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -399,12 +397,6 @@ func (_m *OrganizationSetting) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.AllowSupportAccess = value.Bool
 			}
-		case organizationsetting.FieldComplianceWebhookToken:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field compliance_webhook_token", values[i])
-			} else if value.Valid {
-				_m.ComplianceWebhookToken = value.String
-			}
 		case organizationsetting.FieldPaymentMethodAdded:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field payment_method_added", values[i])
@@ -531,10 +523,7 @@ func (_m *OrganizationSetting) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.IdentityProviderClientSecret; v != nil {
-		builder.WriteString("identity_provider_client_secret=")
-		builder.WriteString(*v)
-	}
+	builder.WriteString("identity_provider_client_secret=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("identity_provider_metadata_endpoint=")
 	builder.WriteString(_m.IdentityProviderMetadataEndpoint)
@@ -574,9 +563,6 @@ func (_m *OrganizationSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("allow_support_access=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AllowSupportAccess))
-	builder.WriteString(", ")
-	builder.WriteString("compliance_webhook_token=")
-	builder.WriteString(_m.ComplianceWebhookToken)
 	builder.WriteString(", ")
 	builder.WriteString("payment_method_added=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PaymentMethodAdded))

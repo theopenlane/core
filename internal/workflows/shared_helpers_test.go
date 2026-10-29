@@ -1,7 +1,6 @@
 package workflows
 
 import (
-	"context"
 	"errors"
 	"strings"
 	"testing"
@@ -10,8 +9,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestWorkflowCreationError(t *testing.T) {
@@ -20,21 +17,6 @@ func TestWorkflowCreationError(t *testing.T) {
 
 	assert.True(t, strings.Contains(err.Error(), "workflow instance creation failed"))
 	assert.ErrorIs(t, err, baseErr)
-}
-
-func TestResolveOwnerID(t *testing.T) {
-	ownerID, err := ResolveOwnerID(context.Background(), "owner-1")
-	assert.NoError(t, err)
-	assert.Equal(t, "owner-1", ownerID)
-
-	orgID := ulids.New().String()
-	ctx := auth.NewTestContextWithOrgID(ulids.New().String(), orgID)
-	ownerID, err = ResolveOwnerID(ctx, "")
-	assert.NoError(t, err)
-	assert.Equal(t, orgID, ownerID)
-
-	_, err = ResolveOwnerID(context.Background(), "")
-	assert.ErrorIs(t, err, auth.ErrNoAuthUser)
 }
 
 func TestBuildWorkflowActionContext(t *testing.T) {

@@ -233,6 +233,20 @@ func (_c *EntityHistoryCreate) SetNillableIntegrationRunID(v *string) *EntityHis
 	return _c
 }
 
+// SetExternalID sets the "external_id" field.
+func (_c *EntityHistoryCreate) SetExternalID(v string) *EntityHistoryCreate {
+	_c.mutation.SetExternalID(v)
+	return _c
+}
+
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableExternalID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *EntityHistoryCreate) SetOwnerID(v string) *EntityHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -1045,20 +1059,6 @@ func (_c *EntityHistoryCreate) SetNillableLogoFileID(v *string) *EntityHistoryCr
 	return _c
 }
 
-// SetExternalID sets the "external_id" field.
-func (_c *EntityHistoryCreate) SetExternalID(v string) *EntityHistoryCreate {
-	_c.mutation.SetExternalID(v)
-	return _c
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_c *EntityHistoryCreate) SetNillableExternalID(v *string) *EntityHistoryCreate {
-	if v != nil {
-		_c.SetExternalID(*v)
-	}
-	return _c
-}
-
 // SetObservedAt sets the "observed_at" field.
 func (_c *EntityHistoryCreate) SetObservedAt(v models.DateTime) *EntityHistoryCreate {
 	_c.mutation.SetObservedAt(v)
@@ -1346,6 +1346,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 		_spec.SetField(entityhistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.ExternalID(); ok {
+		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
+		_node.ExternalID = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(entityhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -1593,10 +1597,6 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.LogoFileID(); ok {
 		_spec.SetField(entityhistory.FieldLogoFileID, field.TypeString, value)
 		_node.LogoFileID = &value
-	}
-	if value, ok := _c.mutation.ExternalID(); ok {
-		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
-		_node.ExternalID = value
 	}
 	if value, ok := _c.mutation.ObservedAt(); ok {
 		_spec.SetField(entityhistory.FieldObservedAt, field.TypeTime, value)

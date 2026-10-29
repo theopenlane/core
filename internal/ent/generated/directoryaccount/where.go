@@ -121,6 +121,11 @@ func IntegrationRunID(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldIntegrationRunID, v))
 }
 
+// ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
+func ExternalID(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldExternalID, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldOwnerID, v))
@@ -164,11 +169,6 @@ func IdentityHolderID(v string) predicate.DirectoryAccount {
 // DirectoryName applies equality check predicate on the "directory_name" field. It's identical to DirectoryNameEQ.
 func DirectoryName(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldDirectoryName, v))
-}
-
-// ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
-func ExternalID(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldEQ(FieldExternalID, v))
 }
 
 // SecondaryKey applies equality check predicate on the "secondary_key" field. It's identical to SecondaryKeyEQ.
@@ -1041,6 +1041,71 @@ func IntegrationRunIDContainsFold(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldIntegrationRunID, v))
 }
 
+// ExternalIDEQ applies the EQ predicate on the "external_id" field.
+func ExternalIDEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEQ(FieldExternalID, v))
+}
+
+// ExternalIDNEQ applies the NEQ predicate on the "external_id" field.
+func ExternalIDNEQ(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNEQ(FieldExternalID, v))
+}
+
+// ExternalIDIn applies the In predicate on the "external_id" field.
+func ExternalIDIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldIn(FieldExternalID, vs...))
+}
+
+// ExternalIDNotIn applies the NotIn predicate on the "external_id" field.
+func ExternalIDNotIn(vs ...string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldNotIn(FieldExternalID, vs...))
+}
+
+// ExternalIDGT applies the GT predicate on the "external_id" field.
+func ExternalIDGT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGT(FieldExternalID, v))
+}
+
+// ExternalIDGTE applies the GTE predicate on the "external_id" field.
+func ExternalIDGTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldGTE(FieldExternalID, v))
+}
+
+// ExternalIDLT applies the LT predicate on the "external_id" field.
+func ExternalIDLT(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLT(FieldExternalID, v))
+}
+
+// ExternalIDLTE applies the LTE predicate on the "external_id" field.
+func ExternalIDLTE(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldLTE(FieldExternalID, v))
+}
+
+// ExternalIDContains applies the Contains predicate on the "external_id" field.
+func ExternalIDContains(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContains(FieldExternalID, v))
+}
+
+// ExternalIDHasPrefix applies the HasPrefix predicate on the "external_id" field.
+func ExternalIDHasPrefix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasPrefix(FieldExternalID, v))
+}
+
+// ExternalIDHasSuffix applies the HasSuffix predicate on the "external_id" field.
+func ExternalIDHasSuffix(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldExternalID, v))
+}
+
+// ExternalIDEqualFold applies the EqualFold predicate on the "external_id" field.
+func ExternalIDEqualFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldExternalID, v))
+}
+
+// ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
+func ExternalIDContainsFold(v string) predicate.DirectoryAccount {
+	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldExternalID, v))
+}
+
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldEQ(FieldOwnerID, v))
@@ -1714,71 +1779,6 @@ func DirectoryNameEqualFold(v string) predicate.DirectoryAccount {
 // DirectoryNameContainsFold applies the ContainsFold predicate on the "directory_name" field.
 func DirectoryNameContainsFold(v string) predicate.DirectoryAccount {
 	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldDirectoryName, v))
-}
-
-// ExternalIDEQ applies the EQ predicate on the "external_id" field.
-func ExternalIDEQ(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldEQ(FieldExternalID, v))
-}
-
-// ExternalIDNEQ applies the NEQ predicate on the "external_id" field.
-func ExternalIDNEQ(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldNEQ(FieldExternalID, v))
-}
-
-// ExternalIDIn applies the In predicate on the "external_id" field.
-func ExternalIDIn(vs ...string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldIn(FieldExternalID, vs...))
-}
-
-// ExternalIDNotIn applies the NotIn predicate on the "external_id" field.
-func ExternalIDNotIn(vs ...string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldNotIn(FieldExternalID, vs...))
-}
-
-// ExternalIDGT applies the GT predicate on the "external_id" field.
-func ExternalIDGT(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldGT(FieldExternalID, v))
-}
-
-// ExternalIDGTE applies the GTE predicate on the "external_id" field.
-func ExternalIDGTE(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldGTE(FieldExternalID, v))
-}
-
-// ExternalIDLT applies the LT predicate on the "external_id" field.
-func ExternalIDLT(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldLT(FieldExternalID, v))
-}
-
-// ExternalIDLTE applies the LTE predicate on the "external_id" field.
-func ExternalIDLTE(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldLTE(FieldExternalID, v))
-}
-
-// ExternalIDContains applies the Contains predicate on the "external_id" field.
-func ExternalIDContains(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldContains(FieldExternalID, v))
-}
-
-// ExternalIDHasPrefix applies the HasPrefix predicate on the "external_id" field.
-func ExternalIDHasPrefix(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldHasPrefix(FieldExternalID, v))
-}
-
-// ExternalIDHasSuffix applies the HasSuffix predicate on the "external_id" field.
-func ExternalIDHasSuffix(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldHasSuffix(FieldExternalID, v))
-}
-
-// ExternalIDEqualFold applies the EqualFold predicate on the "external_id" field.
-func ExternalIDEqualFold(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldEqualFold(FieldExternalID, v))
-}
-
-// ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
-func ExternalIDContainsFold(v string) predicate.DirectoryAccount {
-	return predicate.DirectoryAccount(sql.FieldContainsFold(FieldExternalID, v))
 }
 
 // SecondaryKeyEQ applies the EQ predicate on the "secondary_key" field.
