@@ -131,7 +131,7 @@ require (
 	github.com/vektah/gqlparser/v2 v2.5.63
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/yuin/goldmark v1.8.6
-	github.com/zitadel/oidc/v3 v3.49.6
+	github.com/zitadel/oidc/v3 v3.51.16
 	github.com/zitadel/zitadel-go/v3 v3.29.5
 	goauthentik.io/api/v3 v3.2026020.16
 	gocloud.dev v0.46.0
