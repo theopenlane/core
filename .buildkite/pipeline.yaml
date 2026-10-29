@@ -27,12 +27,11 @@ env:
   HELM_CHART_PATH: charts/openlane
 
   # # runner vars
-  LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-self-hosted-garage-vms}
-  SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-self-hosted-garage-vms}
+  LARGE_RUNNER_QUEUE: ${LARGE_RUNNER_QUEUE:-Namespace}
+  SMALL_RUNNER_QUEUE: ${SMALL_RUNNER_QUEUE:-Namespace}
   # RUNNER_WORKLOAD_LIGHTWEIGHT: "lightweight"
   # RUNNER_WORKLOAD_STANDARD: "standard"
 agents:
-  queue: "self-hosted-garage-vms"
   nsc-os: "linux"
   nsc-arch: "amd64"
   nsc-shape: "8x16"
