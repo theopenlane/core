@@ -51,6 +51,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reporthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reportmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
@@ -10348,6 +10350,329 @@ func newRemediationHistoryPaginateArgs(rv map[string]any) *remediationhistoryPag
 	}
 	if v, ok := rv[whereField].(*RemediationHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithRemediationHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *ReportHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ReportHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *ReportHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(reporthistory.Columns))
+		selectedFields = []string{reporthistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[reporthistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldHistoryTime)
+				fieldSeen[reporthistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[reporthistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldRef)
+				fieldSeen[reporthistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[reporthistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldOperation)
+				fieldSeen[reporthistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[reporthistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldCreatedAt)
+				fieldSeen[reporthistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[reporthistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldUpdatedAt)
+				fieldSeen[reporthistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[reporthistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldCreatedBy)
+				fieldSeen[reporthistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[reporthistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldUpdatedBy)
+				fieldSeen[reporthistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[reporthistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldUpdatedByImpersonator)
+				fieldSeen[reporthistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[reporthistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldDisplayID)
+				fieldSeen[reporthistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[reporthistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldTags)
+				fieldSeen[reporthistory.FieldTags] = struct{}{}
+			}
+		case "requestorID":
+			if _, ok := fieldSeen[reporthistory.FieldRequestorID]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldRequestorID)
+				fieldSeen[reporthistory.FieldRequestorID] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[reporthistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldOwnerID)
+				fieldSeen[reporthistory.FieldOwnerID] = struct{}{}
+			}
+		case "reportKindName":
+			if _, ok := fieldSeen[reporthistory.FieldReportKindName]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldReportKindName)
+				fieldSeen[reporthistory.FieldReportKindName] = struct{}{}
+			}
+		case "reportKindID":
+			if _, ok := fieldSeen[reporthistory.FieldReportKindID]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldReportKindID)
+				fieldSeen[reporthistory.FieldReportKindID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[reporthistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldName)
+				fieldSeen[reporthistory.FieldName] = struct{}{}
+			}
+		case "query":
+			if _, ok := fieldSeen[reporthistory.FieldQuery]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldQuery)
+				fieldSeen[reporthistory.FieldQuery] = struct{}{}
+			}
+		case "variables":
+			if _, ok := fieldSeen[reporthistory.FieldVariables]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldVariables)
+				fieldSeen[reporthistory.FieldVariables] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[reporthistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldStatus)
+				fieldSeen[reporthistory.FieldStatus] = struct{}{}
+			}
+		case "visibility":
+			if _, ok := fieldSeen[reporthistory.FieldVisibility]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldVisibility)
+				fieldSeen[reporthistory.FieldVisibility] = struct{}{}
+			}
+		case "reportOwnerID":
+			if _, ok := fieldSeen[reporthistory.FieldReportOwnerID]; !ok {
+				selectedFields = append(selectedFields, reporthistory.FieldReportOwnerID)
+				fieldSeen[reporthistory.FieldReportOwnerID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type reporthistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ReportHistoryPaginateOption
+}
+
+func newReportHistoryPaginateArgs(rv map[string]any) *reporthistoryPaginateArgs {
+	args := &reporthistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &ReportHistoryOrder{Field: &ReportHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithReportHistoryOrder(order))
+			}
+		case *ReportHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithReportHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*ReportHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithReportHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *ReportMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ReportMembershipHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *ReportMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(reportmembershiphistory.Columns))
+		selectedFields = []string{reportmembershiphistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldHistoryTime)
+				fieldSeen[reportmembershiphistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldRef)
+				fieldSeen[reportmembershiphistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldOperation)
+				fieldSeen[reportmembershiphistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldCreatedAt)
+				fieldSeen[reportmembershiphistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldUpdatedAt)
+				fieldSeen[reportmembershiphistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldCreatedBy)
+				fieldSeen[reportmembershiphistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldUpdatedBy)
+				fieldSeen[reportmembershiphistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldUpdatedByImpersonator)
+				fieldSeen[reportmembershiphistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "role":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldRole]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldRole)
+				fieldSeen[reportmembershiphistory.FieldRole] = struct{}{}
+			}
+		case "reportID":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldReportID]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldReportID)
+				fieldSeen[reportmembershiphistory.FieldReportID] = struct{}{}
+			}
+		case "userID":
+			if _, ok := fieldSeen[reportmembershiphistory.FieldUserID]; !ok {
+				selectedFields = append(selectedFields, reportmembershiphistory.FieldUserID)
+				fieldSeen[reportmembershiphistory.FieldUserID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type reportmembershiphistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []ReportMembershipHistoryPaginateOption
+}
+
+func newReportMembershipHistoryPaginateArgs(rv map[string]any) *reportmembershiphistoryPaginateArgs {
+	args := &reportmembershiphistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &ReportMembershipHistoryOrder{Field: &ReportMembershipHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithReportMembershipHistoryOrder(order))
+			}
+		case *ReportMembershipHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithReportMembershipHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*ReportMembershipHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithReportMembershipHistoryFilter(v.Filter))
 	}
 	return args
 }

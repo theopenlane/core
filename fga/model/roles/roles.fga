@@ -7,6 +7,7 @@ extend type organization
     # admin have specific create + view permissions but not always edit access to objects that were created
     define admin: [user] or admin from parent
     # member role gives view access to objects that are organization-wide or inherited from the organization, but not edit access
+    # @create: report
     define member: [user] or owner or admin or member from parent
     # super_admin role has full access to all objects and permissions, it is equivalent to the owner except no access to delete the organization itself
     define super_admin: [user] or super_admin from parent

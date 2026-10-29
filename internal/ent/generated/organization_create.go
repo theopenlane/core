@@ -68,6 +68,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -995,6 +996,36 @@ func (_c *OrganizationCreate) AddRemediationCreators(v ...*Group) *OrganizationC
 		ids[i] = v[i].ID
 	}
 	return _c.AddRemediationCreatorIDs(ids...)
+}
+
+// AddReportCreatorIDs adds the "report_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddReportCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddReportCreatorIDs(ids...)
+	return _c
+}
+
+// AddReportCreators adds the "report_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddReportCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReportCreatorIDs(ids...)
+}
+
+// AddReportMembershipCreatorIDs adds the "report_membership_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddReportMembershipCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddReportMembershipCreatorIDs(ids...)
+	return _c
+}
+
+// AddReportMembershipCreators adds the "report_membership_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddReportMembershipCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReportMembershipCreatorIDs(ids...)
 }
 
 // AddReviewCreatorIDs adds the "review_creators" edge to the Group entity by IDs.
@@ -2031,6 +2062,21 @@ func (_c *OrganizationCreate) AddPrograms(v ...*Program) *OrganizationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddProgramIDs(ids...)
+}
+
+// AddReportIDs adds the "reports" edge to the Report entity by IDs.
+func (_c *OrganizationCreate) AddReportIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddReportIDs(ids...)
+	return _c
+}
+
+// AddReports adds the "reports" edges to the Report entity.
+func (_c *OrganizationCreate) AddReports(v ...*Report) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReportIDs(ids...)
 }
 
 // AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
@@ -3663,6 +3709,38 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.ReportCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReportCreatorsTable,
+			Columns: []string{organization.ReportCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReportMembershipCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReportMembershipCreatorsTable,
+			Columns: []string{organization.ReportMembershipCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ReviewCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -4753,6 +4831,22 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReportsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.ReportsTable,
+			Columns: []string{organization.ReportsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

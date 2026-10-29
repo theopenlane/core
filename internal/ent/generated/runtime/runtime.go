@@ -73,6 +73,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -3210,6 +3212,8 @@ func init() {
 	group.Hooks[9] = groupHooks[1]
 
 	group.Hooks[10] = groupHooks[2]
+
+	group.Hooks[11] = groupHooks[3]
 	groupMixinInters3 := groupMixin[3].Interceptors()
 	groupMixinInters8 := groupMixin[8].Interceptors()
 	groupInters := schema.Group{}.Interceptors()
@@ -5207,11 +5211,15 @@ func init() {
 
 	organization.Hooks[79] = organizationMixinHooks7[74]
 
-	organization.Hooks[80] = organizationHooks[0]
+	organization.Hooks[80] = organizationMixinHooks7[75]
 
-	organization.Hooks[81] = organizationHooks[1]
+	organization.Hooks[81] = organizationMixinHooks7[76]
 
-	organization.Hooks[82] = organizationHooks[2]
+	organization.Hooks[82] = organizationHooks[0]
+
+	organization.Hooks[83] = organizationHooks[1]
+
+	organization.Hooks[84] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]
@@ -6177,6 +6185,151 @@ func init() {
 	remediationDescID := remediationMixinFields4[0].Descriptor()
 	// remediation.DefaultID holds the default value on creation for the id field.
 	remediation.DefaultID = remediationDescID.Default.(func() string)
+	reportMixin := schema.Report{}.Mixin()
+	report.Policy = privacy.NewPolicies(schema.Report{})
+	report.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := report.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	reportMixinHooks0 := reportMixin[0].Hooks()
+	reportMixinHooks1 := reportMixin[1].Hooks()
+	reportMixinHooks3 := reportMixin[3].Hooks()
+	reportMixinHooks4 := reportMixin[4].Hooks()
+	reportMixinHooks5 := reportMixin[5].Hooks()
+	reportMixinHooks6 := reportMixin[6].Hooks()
+	reportMixinHooks8 := reportMixin[8].Hooks()
+	reportMixinHooks9 := reportMixin[9].Hooks()
+	reportMixinHooks10 := reportMixin[10].Hooks()
+	reportHooks := schema.Report{}.Hooks()
+
+	report.Hooks[1] = reportMixinHooks0[0]
+
+	report.Hooks[2] = reportMixinHooks1[0]
+
+	report.Hooks[3] = reportMixinHooks3[0]
+
+	report.Hooks[4] = reportMixinHooks4[0]
+
+	report.Hooks[5] = reportMixinHooks5[0]
+
+	report.Hooks[6] = reportMixinHooks6[0]
+
+	report.Hooks[7] = reportMixinHooks8[0]
+
+	report.Hooks[8] = reportMixinHooks9[0]
+
+	report.Hooks[9] = reportMixinHooks9[1]
+
+	report.Hooks[10] = reportMixinHooks9[2]
+
+	report.Hooks[11] = reportMixinHooks10[0]
+
+	report.Hooks[12] = reportHooks[0]
+
+	report.Hooks[13] = reportHooks[1]
+	reportMixinInters3 := reportMixin[3].Interceptors()
+	reportMixinInters8 := reportMixin[8].Interceptors()
+	reportInters := schema.Report{}.Interceptors()
+	report.Interceptors[0] = reportMixinInters3[0]
+	report.Interceptors[1] = reportMixinInters8[0]
+	report.Interceptors[2] = reportInters[0]
+	reportMixinFields0 := reportMixin[0].Fields()
+	_ = reportMixinFields0
+	reportMixinFields4 := reportMixin[4].Fields()
+	_ = reportMixinFields4
+	reportMixinFields5 := reportMixin[5].Fields()
+	_ = reportMixinFields5
+	reportMixinFields6 := reportMixin[6].Fields()
+	_ = reportMixinFields6
+	reportMixinFields8 := reportMixin[8].Fields()
+	_ = reportMixinFields8
+	reportFields := schema.Report{}.Fields()
+	_ = reportFields
+	// reportDescCreatedAt is the schema descriptor for created_at field.
+	reportDescCreatedAt := reportMixinFields0[0].Descriptor()
+	// report.DefaultCreatedAt holds the default value on creation for the created_at field.
+	report.DefaultCreatedAt = reportDescCreatedAt.Default.(func() time.Time)
+	// reportDescUpdatedAt is the schema descriptor for updated_at field.
+	reportDescUpdatedAt := reportMixinFields0[1].Descriptor()
+	// report.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	report.DefaultUpdatedAt = reportDescUpdatedAt.Default.(func() time.Time)
+	// report.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	report.UpdateDefaultUpdatedAt = reportDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// reportDescDisplayID is the schema descriptor for display_id field.
+	reportDescDisplayID := reportMixinFields4[1].Descriptor()
+	// report.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	report.DisplayIDValidator = reportDescDisplayID.Validators[0].(func(string) error)
+	// reportDescTags is the schema descriptor for tags field.
+	reportDescTags := reportMixinFields5[0].Descriptor()
+	// report.DefaultTags holds the default value on creation for the tags field.
+	report.DefaultTags = reportDescTags.Default.([]string)
+	// reportDescRequestorID is the schema descriptor for requestor_id field.
+	reportDescRequestorID := reportMixinFields6[0].Descriptor()
+	// report.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
+	report.RequestorIDValidator = reportDescRequestorID.Validators[0].(func(string) error)
+	// reportDescOwnerID is the schema descriptor for owner_id field.
+	reportDescOwnerID := reportMixinFields8[0].Descriptor()
+	// report.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	report.OwnerIDValidator = reportDescOwnerID.Validators[0].(func(string) error)
+	// reportDescName is the schema descriptor for name field.
+	reportDescName := reportFields[0].Descriptor()
+	// report.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	report.NameValidator = reportDescName.Validators[0].(func(string) error)
+	// reportDescQuery is the schema descriptor for query field.
+	reportDescQuery := reportFields[1].Descriptor()
+	// report.QueryValidator is a validator for the "query" field. It is called by the builders before save.
+	report.QueryValidator = reportDescQuery.Validators[0].(func(string) error)
+	// reportDescID is the schema descriptor for id field.
+	reportDescID := reportMixinFields4[0].Descriptor()
+	// report.DefaultID holds the default value on creation for the id field.
+	report.DefaultID = reportDescID.Default.(func() string)
+	reportmembershipMixin := schema.ReportMembership{}.Mixin()
+	reportmembership.Policy = privacy.NewPolicies(schema.ReportMembership{})
+	reportmembership.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := reportmembership.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	reportmembershipMixinHooks0 := reportmembershipMixin[0].Hooks()
+	reportmembershipMixinHooks1 := reportmembershipMixin[1].Hooks()
+	reportmembershipHooks := schema.ReportMembership{}.Hooks()
+
+	reportmembership.Hooks[1] = reportmembershipMixinHooks0[0]
+
+	reportmembership.Hooks[2] = reportmembershipMixinHooks1[0]
+
+	reportmembership.Hooks[3] = reportmembershipHooks[0]
+
+	reportmembership.Hooks[4] = reportmembershipHooks[1]
+	reportmembershipInters := schema.ReportMembership{}.Interceptors()
+	reportmembership.Interceptors[0] = reportmembershipInters[0]
+	reportmembershipMixinFields0 := reportmembershipMixin[0].Fields()
+	_ = reportmembershipMixinFields0
+	reportmembershipMixinFields3 := reportmembershipMixin[3].Fields()
+	_ = reportmembershipMixinFields3
+	reportmembershipFields := schema.ReportMembership{}.Fields()
+	_ = reportmembershipFields
+	// reportmembershipDescCreatedAt is the schema descriptor for created_at field.
+	reportmembershipDescCreatedAt := reportmembershipMixinFields0[0].Descriptor()
+	// reportmembership.DefaultCreatedAt holds the default value on creation for the created_at field.
+	reportmembership.DefaultCreatedAt = reportmembershipDescCreatedAt.Default.(func() time.Time)
+	// reportmembershipDescUpdatedAt is the schema descriptor for updated_at field.
+	reportmembershipDescUpdatedAt := reportmembershipMixinFields0[1].Descriptor()
+	// reportmembership.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	reportmembership.DefaultUpdatedAt = reportmembershipDescUpdatedAt.Default.(func() time.Time)
+	// reportmembership.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	reportmembership.UpdateDefaultUpdatedAt = reportmembershipDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// reportmembershipDescID is the schema descriptor for id field.
+	reportmembershipDescID := reportmembershipMixinFields3[0].Descriptor()
+	// reportmembership.DefaultID holds the default value on creation for the id field.
+	reportmembership.DefaultID = reportmembershipDescID.Default.(func() string)
 	reviewMixin := schema.Review{}.Mixin()
 	review.Policy = privacy.NewPolicies(reviewMixin[10], schema.Review{})
 	review.Hooks[0] = func(next ent.Mutator) ent.Mutator {

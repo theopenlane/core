@@ -236,6 +236,7 @@ func (o Organization) Edges() []ent.Edge {
 		hiddenOwnerEdge(o, Note{}),
 		hiddenOwnerEdge(o, Task{}),
 		hiddenOwnerEdge(o, Program{}),
+		hiddenOwnerEdge(o, Report{}),
 		hiddenOwnerEdge(o, SystemDetail{}),
 		hiddenOwnerEdge(o, Procedure{}),
 		hiddenOwnerEdge(o, InternalPolicy{}),

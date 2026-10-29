@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/export"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -124,6 +125,25 @@ func Listeners() []gala.Registration {
 			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
 			Caller:     notificationCaller,
 			Handle:     handleProgramMutation,
+		},
+		entityops.MutationListener{
+			Concern:    entityops.MutationConcernNotification,
+			Schema:     entityops.SchemaReportMembership,
+			Operations: []string{entityops.OpCreate},
+			Caller:     notificationCaller,
+			Notify: &entityops.NotifySpec{
+				Recipients: entityops.RecipientsFromField(reportmembership.FieldUserID),
+				Content: entityops.NotificationContent{
+					Type:          enums.NotificationTypeUser,
+					Topic:         enums.NotificationTopicReportMembership,
+					TitleTemplate: "Added to a query report",
+					BodyTemplate:  "You have been added to a report",
+					Data: map[string]any{
+						"report_id": "{{ .Entity.report_id }}",
+						"url":       entityops.ConsoleObjectPath(generated.TypeReport, "{{ .Entity.report_id }}"),
+					},
+				},
+			},
 		},
 	)
 }

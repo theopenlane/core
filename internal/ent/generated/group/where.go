@@ -2225,6 +2225,75 @@ func HasProgramViewersWith(preds ...predicate.Program) predicate.Group {
 	})
 }
 
+// HasReportEditors applies the HasEdge predicate on the "report_editors" edge.
+func HasReportEditors() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ReportEditorsTable, ReportEditorsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportEditorsWith applies the HasEdge predicate on the "report_editors" edge with a given conditions (other predicates).
+func HasReportEditorsWith(preds ...predicate.Report) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newReportEditorsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReportBlockedGroups applies the HasEdge predicate on the "report_blocked_groups" edge.
+func HasReportBlockedGroups() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ReportBlockedGroupsTable, ReportBlockedGroupsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportBlockedGroupsWith applies the HasEdge predicate on the "report_blocked_groups" edge with a given conditions (other predicates).
+func HasReportBlockedGroupsWith(preds ...predicate.Report) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newReportBlockedGroupsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReportViewers applies the HasEdge predicate on the "report_viewers" edge.
+func HasReportViewers() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ReportViewersTable, ReportViewersPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportViewersWith applies the HasEdge predicate on the "report_viewers" edge with a given conditions (other predicates).
+func HasReportViewersWith(preds ...predicate.Report) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newReportViewersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasRiskEditors applies the HasEdge predicate on the "risk_editors" edge.
 func HasRiskEditors() predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {

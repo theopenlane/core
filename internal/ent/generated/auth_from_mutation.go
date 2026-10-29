@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
 )
@@ -603,6 +604,208 @@ func (m *ProgramMembershipMutation) CreateTuplesFromDelete(ctx context.Context) 
 			SubjectType: "user",
 			ObjectID:    member.ProgramID,
 			ObjectType:  "program",
+			Relation:    member.Role.String(),
+		}
+
+		t := fgax.GetTupleKey(req)
+		tuples = append(tuples, t)
+	}
+
+	if len(tuples) > 0 {
+		if _, err := m.Authz.WriteTupleKeys(ctx, nil, tuples); err != nil {
+			log.Error().Err(err).Interface("deletes", tuples).Msg("failed to delete relationship tuple")
+
+			return err
+		}
+
+		log.Debug().Msg("deleted relationship tuples")
+	}
+
+	return nil
+}
+
+func (m *ReportMembershipMutation) CreateTuplesFromCreate(ctx context.Context) error {
+	// Get fields for tuple creation
+	userID, _ := m.UserID()
+	objectID, _ := m.ReportID()
+	role, _ := m.Role()
+
+	// get tuple key
+	req := fgax.TupleRequest{
+		SubjectID:   userID,
+		SubjectType: "user",
+		ObjectID:    objectID,
+		ObjectType:  "report",
+		Relation:    role.String(),
+	}
+
+	tuple := fgax.GetTupleKey(req)
+
+	if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
+		log.Error().Err(err).Interface("writes", tuple).Msg("failed to create relationship tuple")
+
+		return err
+	}
+
+	log.Debug().Interface("tuple_request", tuple).Msg("created relationship tuple")
+
+	return nil
+}
+
+func (m *ReportMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) error {
+	// role was not updated, continue
+	newRole, exists := m.Role()
+	if !exists {
+		return nil
+	}
+
+	// get ids that will be updated
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to get ids for update")
+
+		return err
+	}
+
+	// check for the single update case
+	if len(ids) == 0 {
+		id, exists := m.ID()
+		if exists {
+			// singular delete
+			ids = append(ids, id)
+		}
+	}
+
+	var (
+		writes  []fgax.TupleKey
+		deletes []fgax.TupleKey
+	)
+
+	var oldRole *enums.Role
+	switch m.Op() {
+	case ent.OpUpdateOne:
+		role, err := m.OldRole(ctx)
+		if err == nil {
+			oldRole = &role
+		}
+
+	}
+
+	if oldRole != nil && *oldRole == newRole {
+		log.Debug().
+			Str("old_role", oldRole.String()).
+			Str("new_role", newRole.String()).
+			Msg("nothing to update, roles are the same")
+
+		return nil
+	}
+
+	members := []*ReportMembership{}
+
+	// use the predicates from the original request to get the members if we don't have ids
+	if len(ids) == 0 {
+		members, err = m.Client().ReportMembership.Query().Where(m.predicates...).All(ctx)
+	} else {
+		members, err = m.Client().ReportMembership.Query().Where(reportmembership.IDIn(ids...)).All(ctx)
+	}
+
+	if err != nil && !IsNotFound(err) {
+		log.Error().Err(err).Msg("failed to get members for update")
+
+		return err
+	}
+
+	// Delete all related tuples
+	for _, member := range members {
+		req := fgax.TupleRequest{
+			SubjectID:   member.UserID,
+			SubjectType: "user",
+			ObjectID:    member.ReportID,
+			ObjectType:  "report",
+		}
+
+		// if oldRole is set for OpUpdateOne, use that
+		if oldRole != nil {
+			req.Relation = oldRole.String()
+
+			d := fgax.GetTupleKey(req)
+			deletes = append(deletes, d)
+		} else {
+			// otherwise write a delete for all non-current roles
+			var r enums.Role
+			for _, role := range r.Values() {
+				if role == newRole.String() {
+					continue
+				}
+
+				req.Relation = role
+				d := fgax.GetTupleKey(req)
+				deletes = append(deletes, d)
+			}
+		}
+
+		req.Relation = newRole.String()
+
+		w := fgax.GetTupleKey(req)
+		writes = append(writes, w)
+
+		if len(writes) == 0 && len(deletes) == 0 {
+			log.Debug().Msg("no relationships to create or delete")
+
+			return nil
+		}
+
+		if _, err := m.Authz.WriteTupleKeys(ctx, writes, deletes); err != nil {
+			log.Error().Err(err).Interface("writes", writes).Interface("deletes", deletes).Msg("failed to update relationship tuple")
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *ReportMembershipMutation) CreateTuplesFromDelete(ctx context.Context) error {
+	// get ids that will be deleted
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	// check for the single delete case
+	if len(ids) == 0 {
+		id, exists := m.ID()
+		if exists {
+			// singular delete
+			ids = append(ids, id)
+		}
+	}
+
+	tuples := []fgax.TupleKey{}
+
+	members := []*ReportMembership{}
+
+	// use the predicates from the original request to get the members if we don't have ids
+	ctx = entx.SkipSoftDelete(ctx)
+	if len(ids) == 0 {
+		members, err = m.Client().ReportMembership.Query().Where(m.predicates...).All(ctx)
+	} else {
+		members, err = m.Client().ReportMembership.Query().Where(reportmembership.IDIn(ids...)).All(ctx)
+	}
+
+	if err != nil && !IsNotFound(err) {
+		log.Error().Err(err).Msg("failed to get members for delete")
+
+		return err
+	}
+
+	// Delete all related tuples
+	for _, member := range members {
+		req := fgax.TupleRequest{
+			SubjectID:   member.UserID,
+			SubjectType: "user",
+			ObjectID:    member.ReportID,
+			ObjectType:  "report",
 			Relation:    member.Role.String(),
 		}
 

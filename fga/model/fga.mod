@@ -5,6 +5,7 @@ contents:
     - base/organization.fga
     - base/groups.fga
     - base/export.fga
+    - base/report.fga
     - base/file.fga
     - base/note.fga
     - base/task.fga

@@ -32,6 +32,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
@@ -779,6 +781,36 @@ func (_u *UserUpdate) AddProgramsOwned(v ...*Program) *UserUpdate {
 	return _u.AddProgramsOwnedIDs(ids...)
 }
 
+// AddReportIDs adds the "reports" edge to the Report entity by IDs.
+func (_u *UserUpdate) AddReportIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddReportIDs(ids...)
+	return _u
+}
+
+// AddReports adds the "reports" edges to the Report entity.
+func (_u *UserUpdate) AddReports(v ...*Report) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportIDs(ids...)
+}
+
+// AddReportsOwnedIDs adds the "reports_owned" edge to the Report entity by IDs.
+func (_u *UserUpdate) AddReportsOwnedIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddReportsOwnedIDs(ids...)
+	return _u
+}
+
+// AddReportsOwned adds the "reports_owned" edges to the Report entity.
+func (_u *UserUpdate) AddReportsOwned(v ...*Report) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportsOwnedIDs(ids...)
+}
+
 // AddPlatformsOwnedIDs adds the "platforms_owned" edge to the Platform entity by IDs.
 func (_u *UserUpdate) AddPlatformsOwnedIDs(ids ...string) *UserUpdate {
 	_u.mutation.AddPlatformsOwnedIDs(ids...)
@@ -882,6 +914,21 @@ func (_u *UserUpdate) AddProgramMemberships(v ...*ProgramMembership) *UserUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramMembershipIDs(ids...)
+}
+
+// AddReportMembershipIDs adds the "report_memberships" edge to the ReportMembership entity by IDs.
+func (_u *UserUpdate) AddReportMembershipIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddReportMembershipIDs(ids...)
+	return _u
+}
+
+// AddReportMemberships adds the "report_memberships" edges to the ReportMembership entity.
+func (_u *UserUpdate) AddReportMemberships(v ...*ReportMembership) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportMembershipIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -1279,6 +1326,48 @@ func (_u *UserUpdate) RemoveProgramsOwned(v ...*Program) *UserUpdate {
 	return _u.RemoveProgramsOwnedIDs(ids...)
 }
 
+// ClearReports clears all "reports" edges to the Report entity.
+func (_u *UserUpdate) ClearReports() *UserUpdate {
+	_u.mutation.ClearReports()
+	return _u
+}
+
+// RemoveReportIDs removes the "reports" edge to Report entities by IDs.
+func (_u *UserUpdate) RemoveReportIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveReportIDs(ids...)
+	return _u
+}
+
+// RemoveReports removes "reports" edges to Report entities.
+func (_u *UserUpdate) RemoveReports(v ...*Report) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportIDs(ids...)
+}
+
+// ClearReportsOwned clears all "reports_owned" edges to the Report entity.
+func (_u *UserUpdate) ClearReportsOwned() *UserUpdate {
+	_u.mutation.ClearReportsOwned()
+	return _u
+}
+
+// RemoveReportsOwnedIDs removes the "reports_owned" edge to Report entities by IDs.
+func (_u *UserUpdate) RemoveReportsOwnedIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveReportsOwnedIDs(ids...)
+	return _u
+}
+
+// RemoveReportsOwned removes "reports_owned" edges to Report entities.
+func (_u *UserUpdate) RemoveReportsOwned(v ...*Report) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportsOwnedIDs(ids...)
+}
+
 // ClearPlatformsOwned clears all "platforms_owned" edges to the Platform entity.
 func (_u *UserUpdate) ClearPlatformsOwned() *UserUpdate {
 	_u.mutation.ClearPlatformsOwned()
@@ -1424,6 +1513,27 @@ func (_u *UserUpdate) RemoveProgramMemberships(v ...*ProgramMembership) *UserUpd
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramMembershipIDs(ids...)
+}
+
+// ClearReportMemberships clears all "report_memberships" edges to the ReportMembership entity.
+func (_u *UserUpdate) ClearReportMemberships() *UserUpdate {
+	_u.mutation.ClearReportMemberships()
+	return _u
+}
+
+// RemoveReportMembershipIDs removes the "report_memberships" edge to ReportMembership entities by IDs.
+func (_u *UserUpdate) RemoveReportMembershipIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveReportMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveReportMemberships removes "report_memberships" edges to ReportMembership entities.
+func (_u *UserUpdate) RemoveReportMemberships(v ...*ReportMembership) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportMembershipIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2606,6 +2716,117 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReportsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ReportsTable,
+			Columns: user.ReportsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		createE := &ReportMembershipCreate{config: _u.config, mutation: newReportMembershipMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportsIDs(); len(nodes) > 0 && !_u.mutation.ReportsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ReportsTable,
+			Columns: user.ReportsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ReportMembershipCreate{config: _u.config, mutation: newReportMembershipMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ReportsTable,
+			Columns: user.ReportsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ReportMembershipCreate{config: _u.config, mutation: newReportMembershipMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportsOwnedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReportsOwnedTable,
+			Columns: []string{user.ReportsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportsOwnedIDs(); len(nodes) > 0 && !_u.mutation.ReportsOwnedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReportsOwnedTable,
+			Columns: []string{user.ReportsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportsOwnedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReportsOwnedTable,
+			Columns: []string{user.ReportsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.PlatformsOwnedCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2914,6 +3135,51 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.ReportMembershipsTable,
+			Columns: []string{user.ReportMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(reportmembership.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportMembershipsIDs(); len(nodes) > 0 && !_u.mutation.ReportMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.ReportMembershipsTable,
+			Columns: []string{user.ReportMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(reportmembership.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.ReportMembershipsTable,
+			Columns: []string{user.ReportMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(reportmembership.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -3667,6 +3933,36 @@ func (_u *UserUpdateOne) AddProgramsOwned(v ...*Program) *UserUpdateOne {
 	return _u.AddProgramsOwnedIDs(ids...)
 }
 
+// AddReportIDs adds the "reports" edge to the Report entity by IDs.
+func (_u *UserUpdateOne) AddReportIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddReportIDs(ids...)
+	return _u
+}
+
+// AddReports adds the "reports" edges to the Report entity.
+func (_u *UserUpdateOne) AddReports(v ...*Report) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportIDs(ids...)
+}
+
+// AddReportsOwnedIDs adds the "reports_owned" edge to the Report entity by IDs.
+func (_u *UserUpdateOne) AddReportsOwnedIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddReportsOwnedIDs(ids...)
+	return _u
+}
+
+// AddReportsOwned adds the "reports_owned" edges to the Report entity.
+func (_u *UserUpdateOne) AddReportsOwned(v ...*Report) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportsOwnedIDs(ids...)
+}
+
 // AddPlatformsOwnedIDs adds the "platforms_owned" edge to the Platform entity by IDs.
 func (_u *UserUpdateOne) AddPlatformsOwnedIDs(ids ...string) *UserUpdateOne {
 	_u.mutation.AddPlatformsOwnedIDs(ids...)
@@ -3770,6 +4066,21 @@ func (_u *UserUpdateOne) AddProgramMemberships(v ...*ProgramMembership) *UserUpd
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramMembershipIDs(ids...)
+}
+
+// AddReportMembershipIDs adds the "report_memberships" edge to the ReportMembership entity by IDs.
+func (_u *UserUpdateOne) AddReportMembershipIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddReportMembershipIDs(ids...)
+	return _u
+}
+
+// AddReportMemberships adds the "report_memberships" edges to the ReportMembership entity.
+func (_u *UserUpdateOne) AddReportMemberships(v ...*ReportMembership) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportMembershipIDs(ids...)
 }
 
 // Mutation returns the UserMutation object of the builder.
@@ -4167,6 +4478,48 @@ func (_u *UserUpdateOne) RemoveProgramsOwned(v ...*Program) *UserUpdateOne {
 	return _u.RemoveProgramsOwnedIDs(ids...)
 }
 
+// ClearReports clears all "reports" edges to the Report entity.
+func (_u *UserUpdateOne) ClearReports() *UserUpdateOne {
+	_u.mutation.ClearReports()
+	return _u
+}
+
+// RemoveReportIDs removes the "reports" edge to Report entities by IDs.
+func (_u *UserUpdateOne) RemoveReportIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveReportIDs(ids...)
+	return _u
+}
+
+// RemoveReports removes "reports" edges to Report entities.
+func (_u *UserUpdateOne) RemoveReports(v ...*Report) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportIDs(ids...)
+}
+
+// ClearReportsOwned clears all "reports_owned" edges to the Report entity.
+func (_u *UserUpdateOne) ClearReportsOwned() *UserUpdateOne {
+	_u.mutation.ClearReportsOwned()
+	return _u
+}
+
+// RemoveReportsOwnedIDs removes the "reports_owned" edge to Report entities by IDs.
+func (_u *UserUpdateOne) RemoveReportsOwnedIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveReportsOwnedIDs(ids...)
+	return _u
+}
+
+// RemoveReportsOwned removes "reports_owned" edges to Report entities.
+func (_u *UserUpdateOne) RemoveReportsOwned(v ...*Report) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportsOwnedIDs(ids...)
+}
+
 // ClearPlatformsOwned clears all "platforms_owned" edges to the Platform entity.
 func (_u *UserUpdateOne) ClearPlatformsOwned() *UserUpdateOne {
 	_u.mutation.ClearPlatformsOwned()
@@ -4312,6 +4665,27 @@ func (_u *UserUpdateOne) RemoveProgramMemberships(v ...*ProgramMembership) *User
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramMembershipIDs(ids...)
+}
+
+// ClearReportMemberships clears all "report_memberships" edges to the ReportMembership entity.
+func (_u *UserUpdateOne) ClearReportMemberships() *UserUpdateOne {
+	_u.mutation.ClearReportMemberships()
+	return _u
+}
+
+// RemoveReportMembershipIDs removes the "report_memberships" edge to ReportMembership entities by IDs.
+func (_u *UserUpdateOne) RemoveReportMembershipIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveReportMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveReportMemberships removes "report_memberships" edges to ReportMembership entities.
+func (_u *UserUpdateOne) RemoveReportMemberships(v ...*ReportMembership) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportMembershipIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -5524,6 +5898,117 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReportsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ReportsTable,
+			Columns: user.ReportsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		createE := &ReportMembershipCreate{config: _u.config, mutation: newReportMembershipMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportsIDs(); len(nodes) > 0 && !_u.mutation.ReportsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ReportsTable,
+			Columns: user.ReportsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ReportMembershipCreate{config: _u.config, mutation: newReportMembershipMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.ReportsTable,
+			Columns: user.ReportsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		createE := &ReportMembershipCreate{config: _u.config, mutation: newReportMembershipMutation(_u.config, OpCreate)}
+		_ = createE.defaults()
+		_, specE := createE.createSpec()
+		edge.Target.Fields = specE.Fields
+		if specE.ID.Value != nil {
+			edge.Target.Fields = append(edge.Target.Fields, specE.ID)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportsOwnedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReportsOwnedTable,
+			Columns: []string{user.ReportsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportsOwnedIDs(); len(nodes) > 0 && !_u.mutation.ReportsOwnedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReportsOwnedTable,
+			Columns: []string{user.ReportsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportsOwnedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ReportsOwnedTable,
+			Columns: []string{user.ReportsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.PlatformsOwnedCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5832,6 +6317,51 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.ReportMembershipsTable,
+			Columns: []string{user.ReportMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(reportmembership.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportMembershipsIDs(); len(nodes) > 0 && !_u.mutation.ReportMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.ReportMembershipsTable,
+			Columns: []string{user.ReportMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(reportmembership.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   user.ReportMembershipsTable,
+			Columns: []string{user.ReportMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(reportmembership.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

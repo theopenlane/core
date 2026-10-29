@@ -68,6 +68,8 @@ type QueryResolver interface {
 	ProgramHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramHistoryOrder, where *historygenerated.ProgramHistoryWhereInput) (*historygenerated.ProgramHistoryConnection, error)
 	ProgramMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramMembershipHistoryOrder, where *historygenerated.ProgramMembershipHistoryWhereInput) (*historygenerated.ProgramMembershipHistoryConnection, error)
 	RemediationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RemediationHistoryOrder, where *historygenerated.RemediationHistoryWhereInput) (*historygenerated.RemediationHistoryConnection, error)
+	ReportHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReportHistoryOrder, where *historygenerated.ReportHistoryWhereInput) (*historygenerated.ReportHistoryConnection, error)
+	ReportMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReportMembershipHistoryOrder, where *historygenerated.ReportMembershipHistoryWhereInput) (*historygenerated.ReportMembershipHistoryConnection, error)
 	ReviewHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReviewHistoryOrder, where *historygenerated.ReviewHistoryWhereInput) (*historygenerated.ReviewHistoryConnection, error)
 	RiskHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RiskHistoryOrder, where *historygenerated.RiskHistoryWhereInput) (*historygenerated.RiskHistoryConnection, error)
 	SLADefinitionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SLADefinitionHistoryOrder, where *historygenerated.SLADefinitionHistoryWhereInput) (*historygenerated.SLADefinitionHistoryConnection, error)
@@ -2402,6 +2404,114 @@ func (ec *executionContext) field_Query_remediationHistories_args(ctx context.Co
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*historygenerated.RemediationHistoryWhereInput, error) {
 			return ec.unmarshalORemediationHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐRemediationHistoryWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_reportHistories_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) (*historygenerated.ReportHistoryOrder, error) {
+			return ec.unmarshalOReportHistoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryOrder(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*historygenerated.ReportHistoryWhereInput, error) {
+			return ec.unmarshalOReportHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_reportMembershipHistories_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) (*historygenerated.ReportMembershipHistoryOrder, error) {
+			return ec.unmarshalOReportMembershipHistoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryOrder(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*historygenerated.ReportMembershipHistoryWhereInput, error) {
+			return ec.unmarshalOReportMembershipHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -43436,6 +43546,94 @@ func (ec *executionContext) fieldContext_Query_remediationHistories(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_reportHistories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_reportHistories(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().ReportHistories(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].(*historygenerated.ReportHistoryOrder), fc.Args["where"].(*historygenerated.ReportHistoryWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *historygenerated.ReportHistoryConnection) graphql.Marshaler {
+			return ec.marshalNReportHistoryConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_reportHistories(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ReportHistoryConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_reportHistories_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_reportMembershipHistories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_reportMembershipHistories(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().ReportMembershipHistories(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].(*historygenerated.ReportMembershipHistoryOrder), fc.Args["where"].(*historygenerated.ReportMembershipHistoryWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *historygenerated.ReportMembershipHistoryConnection) graphql.Marshaler {
+			return ec.marshalNReportMembershipHistoryConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_reportMembershipHistories(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ReportMembershipHistoryConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_reportMembershipHistories_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_reviewHistories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -45867,6 +46065,1049 @@ func (ec *executionContext) _RemediationHistoryEdge_cursor(ctx context.Context, 
 }
 func (ec *executionContext) fieldContext_RemediationHistoryEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("RemediationHistoryEdge", field, false, false, "Cursor")
+}
+
+func (ec *executionContext) _ReportHistory_id(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "ID")
+}
+
+func (ec *executionContext) _ReportHistory_historyTime(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_historyTime(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HistoryTime, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalNTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_historyTime(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ReportHistory_ref(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_ref(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Ref, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_ref(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_operation(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_operation(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Operation, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v history.OpType) graphql.Marshaler {
+			return ec.marshalNReportHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_operation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "ReportHistoryOpType")
+}
+
+func (ec *executionContext) _ReportHistory_createdAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ReportHistory_updatedAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ReportHistory_createdBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_updatedBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_updatedByImpersonator(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_updatedByImpersonator(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedByImpersonator, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_updatedByImpersonator(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_displayID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_displayID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DisplayID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_displayID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_tags(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_tags(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Tags, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_tags(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_requestorID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_requestorID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.RequestorID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_requestorID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_ownerID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_ownerID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.OwnerID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_ownerID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_reportKindName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_reportKindName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReportKindName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_reportKindName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_reportKindID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_reportKindID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReportKindID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_reportKindID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_name(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_name(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_query(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_query(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Query, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_query(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistory_variables(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_variables(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Variables, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v map[string]any) graphql.Marshaler {
+			return ec.marshalOMap2map(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_variables(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "Map")
+}
+
+func (ec *executionContext) _ReportHistory_status(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_status(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Status, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.ReportStatus) graphql.Marshaler {
+			return ec.marshalNReportHistoryReportStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatus(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "ReportHistoryReportStatus")
+}
+
+func (ec *executionContext) _ReportHistory_visibility(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_visibility(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Visibility, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.ReportVisibility) graphql.Marshaler {
+			return ec.marshalOReportHistoryReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_visibility(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "ReportHistoryReportVisibility")
+}
+
+func (ec *executionContext) _ReportHistory_reportOwnerID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistory_reportOwnerID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReportOwnerID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistory_reportOwnerID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistoryConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistoryConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*historygenerated.ReportHistoryEdge) graphql.Marshaler {
+			return ec.marshalOReportHistoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryEdge(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistoryConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReportHistoryConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ReportHistoryEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ReportHistoryConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistoryConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistoryConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistoryConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReportHistoryConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ReportHistoryConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistoryConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistoryConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistoryConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistoryConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _ReportHistoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistoryEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistoryEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *historygenerated.ReportHistory) graphql.Marshaler {
+			return ec.marshalOReportHistory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistory(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistoryEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReportHistoryEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ReportHistory(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ReportHistoryEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportHistoryEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportHistoryEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportHistoryEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportHistoryEdge", field, false, false, "Cursor")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_id(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "ID")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_historyTime(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_historyTime(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HistoryTime, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalNTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_historyTime(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_ref(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_ref(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Ref, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_ref(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_operation(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_operation(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Operation, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v history.OpType) graphql.Marshaler {
+			return ec.marshalNReportMembershipHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_operation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "ReportMembershipHistoryOpType")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_createdAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_updatedAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "Time")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_createdBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_updatedBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_updatedByImpersonator(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_updatedByImpersonator(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedByImpersonator, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_updatedByImpersonator(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_role(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_role(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Role, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.Role) graphql.Marshaler {
+			return ec.marshalNReportMembershipHistoryRole2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_role(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "ReportMembershipHistoryRole")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_reportID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_reportID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReportID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_reportID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportMembershipHistory_userID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistory_userID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UserID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistory_userID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistory", field, false, false, "String")
+}
+
+func (ec *executionContext) _ReportMembershipHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistoryConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistoryConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*historygenerated.ReportMembershipHistoryEdge) graphql.Marshaler {
+			return ec.marshalOReportMembershipHistoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryEdge(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistoryConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReportMembershipHistoryConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ReportMembershipHistoryEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ReportMembershipHistoryConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistoryConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistoryConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistoryConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReportMembershipHistoryConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ReportMembershipHistoryConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistoryConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistoryConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistoryConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistoryConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _ReportMembershipHistoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistoryEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistoryEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *historygenerated.ReportMembershipHistory) graphql.Marshaler {
+			return ec.marshalOReportMembershipHistory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistory(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistoryEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ReportMembershipHistoryEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ReportMembershipHistory(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ReportMembershipHistoryEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReportMembershipHistoryEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ReportMembershipHistoryEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ReportMembershipHistoryEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ReportMembershipHistoryEdge", field, false, false, "Cursor")
 }
 
 func (ec *executionContext) _ReviewHistory_id(ctx context.Context, field graphql.CollectedField, obj *historygenerated.ReviewHistory) (ret graphql.Marshaler) {
@@ -151605,6 +152846,2044 @@ func UnmarshalRemediationHistoryWhereInput(ctx context.Context, raw any) (histor
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputReportHistoryOrder(ctx context.Context, obj any) (historygenerated.ReportHistoryOrder, error) {
+	var it historygenerated.ReportHistoryOrder
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNReportHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalReportHistoryOrder unmarshals raw into the ReportHistoryOrder input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalReportHistoryOrder(ctx context.Context, raw any) (historygenerated.ReportHistoryOrder, error) {
+	var out historygenerated.ReportHistoryOrder
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ReportHistoryOrder", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputReportHistoryWhereInput(ctx context.Context, obj any) (historygenerated.ReportHistoryWhereInput, error) {
+	var it historygenerated.ReportHistoryWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "requestorID", "requestorIDNEQ", "requestorIDIn", "requestorIDNotIn", "requestorIDContains", "requestorIDHasPrefix", "requestorIDHasSuffix", "requestorIDIsNil", "requestorIDNotNil", "requestorIDEqualFold", "requestorIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "reportKindName", "reportKindNameNEQ", "reportKindNameIn", "reportKindNameNotIn", "reportKindNameContains", "reportKindNameHasPrefix", "reportKindNameHasSuffix", "reportKindNameIsNil", "reportKindNameNotNil", "reportKindNameEqualFold", "reportKindNameContainsFold", "reportKindID", "reportKindIDNEQ", "reportKindIDIn", "reportKindIDNotIn", "reportKindIDContains", "reportKindIDHasPrefix", "reportKindIDHasSuffix", "reportKindIDIsNil", "reportKindIDNotNil", "reportKindIDEqualFold", "reportKindIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "query", "queryNEQ", "queryIn", "queryNotIn", "queryContains", "queryHasPrefix", "queryHasSuffix", "queryEqualFold", "queryContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "visibility", "visibilityNEQ", "visibilityIn", "visibilityNotIn", "visibilityIsNil", "visibilityNotNil", "reportOwnerID", "reportOwnerIDNEQ", "reportOwnerIDIn", "reportOwnerIDNotIn", "reportOwnerIDContains", "reportOwnerIDHasPrefix", "reportOwnerIDHasSuffix", "reportOwnerIDIsNil", "reportOwnerIDNotNil", "reportOwnerIDEqualFold", "reportOwnerIDContainsFold"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOReportHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOReportHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOReportHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDEqualFold = data
+		case "idContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDContainsFold = data
+		case "historyTime":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTime"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTime = data
+		case "historyTimeGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeGT = data
+		case "historyTimeGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeGTE = data
+		case "historyTimeLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeLT = data
+		case "historyTimeLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeLTE = data
+		case "ref":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ref"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Ref = data
+		case "refNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefNEQ = data
+		case "refIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefIn = data
+		case "refNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefNotIn = data
+		case "refContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
+		case "refHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasSuffix = data
+		case "refIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefIsNil = data
+		case "refNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefNotNil = data
+		case "refEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefEqualFold = data
+		case "refContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefContainsFold = data
+		case "operation":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operation"))
+			data, err := ec.unmarshalOReportHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Operation = data
+		case "operationNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationNEQ"))
+			data, err := ec.unmarshalOReportHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OperationNEQ = data
+		case "operationIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationIn"))
+			data, err := ec.unmarshalOReportHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OperationIn = data
+		case "operationNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationNotIn"))
+			data, err := ec.unmarshalOReportHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OperationNotIn = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIsNil = data
+		case "createdAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotNil = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIsNil = data
+		case "updatedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "updatedByImpersonator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonator"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonator = data
+		case "updatedByImpersonatorNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNEQ = data
+		case "updatedByImpersonatorIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIn = data
+		case "updatedByImpersonatorNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotIn = data
+		case "updatedByImpersonatorContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
+		case "updatedByImpersonatorHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasSuffix = data
+		case "updatedByImpersonatorIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIsNil = data
+		case "updatedByImpersonatorNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotNil = data
+		case "updatedByImpersonatorEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorEqualFold = data
+		case "updatedByImpersonatorContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContainsFold = data
+		case "displayID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayID = data
+		case "displayIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayIDNEQ = data
+		case "displayIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayIDIn = data
+		case "displayIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayIDNotIn = data
+		case "displayIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayIDContains = data
+		case "displayIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayIDHasPrefix = data
+		case "displayIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayIDHasSuffix = data
+		case "displayIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayIDEqualFold = data
+		case "displayIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayIDContainsFold = data
+		case "requestorID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorID = data
+		case "requestorIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDNEQ = data
+		case "requestorIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDIn = data
+		case "requestorIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDNotIn = data
+		case "requestorIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDContains = data
+		case "requestorIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDHasPrefix = data
+		case "requestorIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDHasSuffix = data
+		case "requestorIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDIsNil = data
+		case "requestorIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDNotNil = data
+		case "requestorIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDEqualFold = data
+		case "requestorIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestorIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RequestorIDContainsFold = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "ownerIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNEQ = data
+		case "ownerIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDIn = data
+		case "ownerIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNotIn = data
+		case "ownerIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
+		case "ownerIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasSuffix = data
+		case "ownerIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDIsNil = data
+		case "ownerIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDNotNil = data
+		case "ownerIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDEqualFold = data
+		case "ownerIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDContainsFold = data
+		case "reportKindName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindName = data
+		case "reportKindNameNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameNEQ = data
+		case "reportKindNameIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameIn = data
+		case "reportKindNameNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameNotIn = data
+		case "reportKindNameContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameContains = data
+		case "reportKindNameHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameHasPrefix = data
+		case "reportKindNameHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameHasSuffix = data
+		case "reportKindNameIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameIsNil = data
+		case "reportKindNameNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameNotNil = data
+		case "reportKindNameEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameEqualFold = data
+		case "reportKindNameContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindNameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindNameContainsFold = data
+		case "reportKindID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindID = data
+		case "reportKindIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDNEQ = data
+		case "reportKindIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDIn = data
+		case "reportKindIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDNotIn = data
+		case "reportKindIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDContains = data
+		case "reportKindIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDHasPrefix = data
+		case "reportKindIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDHasSuffix = data
+		case "reportKindIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDIsNil = data
+		case "reportKindIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDNotNil = data
+		case "reportKindIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDEqualFold = data
+		case "reportKindIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportKindIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportKindIDContainsFold = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "nameNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameNEQ = data
+		case "nameIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameIn = data
+		case "nameNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameNotIn = data
+		case "nameContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameContains = data
+		case "nameHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameHasPrefix = data
+		case "nameHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameHasSuffix = data
+		case "nameEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameEqualFold = data
+		case "nameContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NameContainsFold = data
+		case "query":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("query"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Query = data
+		case "queryNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QueryNEQ = data
+		case "queryIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QueryIn = data
+		case "queryNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QueryNotIn = data
+		case "queryContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QueryContains = data
+		case "queryHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QueryHasPrefix = data
+		case "queryHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QueryHasSuffix = data
+		case "queryEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QueryEqualFold = data
+		case "queryContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.QueryContainsFold = data
+		case "status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+			data, err := ec.unmarshalOReportHistoryReportStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatus(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Status = data
+		case "statusNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("statusNEQ"))
+			data, err := ec.unmarshalOReportHistoryReportStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatus(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StatusNEQ = data
+		case "statusIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("statusIn"))
+			data, err := ec.unmarshalOReportHistoryReportStatus2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatusᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StatusIn = data
+		case "statusNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("statusNotIn"))
+			data, err := ec.unmarshalOReportHistoryReportStatus2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatusᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StatusNotIn = data
+		case "visibility":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibility"))
+			data, err := ec.unmarshalOReportHistoryReportVisibility2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Visibility = data
+		case "visibilityNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibilityNEQ"))
+			data, err := ec.unmarshalOReportHistoryReportVisibility2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VisibilityNEQ = data
+		case "visibilityIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibilityIn"))
+			data, err := ec.unmarshalOReportHistoryReportVisibility2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibilityᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VisibilityIn = data
+		case "visibilityNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibilityNotIn"))
+			data, err := ec.unmarshalOReportHistoryReportVisibility2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibilityᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VisibilityNotIn = data
+		case "visibilityIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibilityIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VisibilityIsNil = data
+		case "visibilityNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("visibilityNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VisibilityNotNil = data
+		case "reportOwnerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerID = data
+		case "reportOwnerIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDNEQ = data
+		case "reportOwnerIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDIn = data
+		case "reportOwnerIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDNotIn = data
+		case "reportOwnerIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDContains = data
+		case "reportOwnerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDHasPrefix = data
+		case "reportOwnerIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDHasSuffix = data
+		case "reportOwnerIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDIsNil = data
+		case "reportOwnerIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDNotNil = data
+		case "reportOwnerIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDEqualFold = data
+		case "reportOwnerIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportOwnerIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportOwnerIDContainsFold = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalReportHistoryWhereInput unmarshals raw into the ReportHistoryWhereInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalReportHistoryWhereInput(ctx context.Context, raw any) (historygenerated.ReportHistoryWhereInput, error) {
+	var out historygenerated.ReportHistoryWhereInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ReportHistoryWhereInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputReportMembershipHistoryOrder(ctx context.Context, obj any) (historygenerated.ReportMembershipHistoryOrder, error) {
+	var it historygenerated.ReportMembershipHistoryOrder
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNReportMembershipHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalReportMembershipHistoryOrder unmarshals raw into the ReportMembershipHistoryOrder input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalReportMembershipHistoryOrder(ctx context.Context, raw any) (historygenerated.ReportMembershipHistoryOrder, error) {
+	var out historygenerated.ReportMembershipHistoryOrder
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ReportMembershipHistoryOrder", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputReportMembershipHistoryWhereInput(ctx context.Context, obj any) (historygenerated.ReportMembershipHistoryWhereInput, error) {
+	var it historygenerated.ReportMembershipHistoryWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "reportID", "reportIDNEQ", "reportIDIn", "reportIDNotIn", "reportIDContains", "reportIDHasPrefix", "reportIDHasSuffix", "reportIDEqualFold", "reportIDContainsFold", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "userIDContains", "userIDHasPrefix", "userIDHasSuffix", "userIDEqualFold", "userIDContainsFold"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOReportMembershipHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOReportMembershipHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOReportMembershipHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDEqualFold = data
+		case "idContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDContainsFold = data
+		case "historyTime":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTime"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTime = data
+		case "historyTimeGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeGT = data
+		case "historyTimeGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeGTE = data
+		case "historyTimeLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeLT = data
+		case "historyTimeLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeLTE = data
+		case "ref":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ref"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Ref = data
+		case "refNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefNEQ = data
+		case "refIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefIn = data
+		case "refNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefNotIn = data
+		case "refContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
+		case "refHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasSuffix = data
+		case "refIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefIsNil = data
+		case "refNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefNotNil = data
+		case "refEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefEqualFold = data
+		case "refContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefContainsFold = data
+		case "operation":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operation"))
+			data, err := ec.unmarshalOReportMembershipHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Operation = data
+		case "operationNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationNEQ"))
+			data, err := ec.unmarshalOReportMembershipHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OperationNEQ = data
+		case "operationIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationIn"))
+			data, err := ec.unmarshalOReportMembershipHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OperationIn = data
+		case "operationNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationNotIn"))
+			data, err := ec.unmarshalOReportMembershipHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OperationNotIn = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIsNil = data
+		case "createdAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotNil = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIsNil = data
+		case "updatedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "updatedByImpersonator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonator"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonator = data
+		case "updatedByImpersonatorNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNEQ = data
+		case "updatedByImpersonatorIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIn = data
+		case "updatedByImpersonatorNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotIn = data
+		case "updatedByImpersonatorContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
+		case "updatedByImpersonatorHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasSuffix = data
+		case "updatedByImpersonatorIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIsNil = data
+		case "updatedByImpersonatorNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotNil = data
+		case "updatedByImpersonatorEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorEqualFold = data
+		case "updatedByImpersonatorContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContainsFold = data
+		case "role":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
+			data, err := ec.unmarshalOReportMembershipHistoryRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Role = data
+		case "roleNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roleNEQ"))
+			data, err := ec.unmarshalOReportMembershipHistoryRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RoleNEQ = data
+		case "roleIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roleIn"))
+			data, err := ec.unmarshalOReportMembershipHistoryRole2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRoleᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RoleIn = data
+		case "roleNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("roleNotIn"))
+			data, err := ec.unmarshalOReportMembershipHistoryRole2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRoleᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RoleNotIn = data
+		case "reportID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportID = data
+		case "reportIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportIDNEQ = data
+		case "reportIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportIDIn = data
+		case "reportIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportIDNotIn = data
+		case "reportIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportIDContains = data
+		case "reportIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportIDHasPrefix = data
+		case "reportIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportIDHasSuffix = data
+		case "reportIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportIDEqualFold = data
+		case "reportIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reportIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReportIDContainsFold = data
+		case "userID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserID = data
+		case "userIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserIDNEQ = data
+		case "userIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserIDIn = data
+		case "userIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserIDNotIn = data
+		case "userIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserIDContains = data
+		case "userIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserIDHasPrefix = data
+		case "userIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserIDHasSuffix = data
+		case "userIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserIDEqualFold = data
+		case "userIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UserIDContainsFold = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalReportMembershipHistoryWhereInput unmarshals raw into the ReportMembershipHistoryWhereInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalReportMembershipHistoryWhereInput(ctx context.Context, raw any) (historygenerated.ReportMembershipHistoryWhereInput, error) {
+	var out historygenerated.ReportMembershipHistoryWhereInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ReportMembershipHistoryWhereInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputReviewHistoryOrder(ctx context.Context, obj any) (historygenerated.ReviewHistoryOrder, error) {
 	var it historygenerated.ReviewHistoryOrder
 	if obj == nil {
@@ -196367,6 +199646,16 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._ReviewHistory(ctx, sel, obj)
+	case *historygenerated.ReportMembershipHistory:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ReportMembershipHistory(ctx, sel, obj)
+	case *historygenerated.ReportHistory:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._ReportHistory(ctx, sel, obj)
 	case *historygenerated.RemediationHistory:
 		if obj == nil {
 			return graphql.Null
@@ -208120,6 +211409,18 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_remediationHistories(ctx, field)
 				})
+		case "reportHistories":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_reportHistories(ctx, field)
+				})
+		case "reportMembershipHistories":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_reportMembershipHistories(ctx, field)
+				})
 		case "reviewHistories":
 			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
 				true, true,
@@ -208621,6 +211922,389 @@ func (ec *executionContext) _RemediationHistoryEdge(ctx context.Context, sel ast
 			}
 		case "cursor":
 			out.Values[i] = ec._RemediationHistoryEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var reportHistoryImplementors = []string{"ReportHistory", "Node"}
+
+func (ec *executionContext) _ReportHistory(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.ReportHistory) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, reportHistoryImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ReportHistory")
+		case "id":
+			out.Values[i] = ec._ReportHistory_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "historyTime":
+			out.Values[i] = ec._ReportHistory_historyTime(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "ref":
+			out.Values[i] = ec._ReportHistory_ref(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "operation":
+			out.Values[i] = ec._ReportHistory_operation(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._ReportHistory_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._ReportHistory_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "createdBy":
+			out.Values[i] = ec._ReportHistory_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "updatedBy":
+			out.Values[i] = ec._ReportHistory_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "updatedByImpersonator":
+			out.Values[i] = ec._ReportHistory_updatedByImpersonator(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "displayID":
+			out.Values[i] = ec._ReportHistory_displayID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "tags":
+			out.Values[i] = ec._ReportHistory_tags(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "requestorID":
+			out.Values[i] = ec._ReportHistory_requestorID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "ownerID":
+			out.Values[i] = ec._ReportHistory_ownerID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reportKindName":
+			out.Values[i] = ec._ReportHistory_reportKindName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reportKindID":
+			out.Values[i] = ec._ReportHistory_reportKindID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._ReportHistory_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "query":
+			out.Values[i] = ec._ReportHistory_query(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "variables":
+			out.Values[i] = ec._ReportHistory_variables(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "status":
+			out.Values[i] = ec._ReportHistory_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "visibility":
+			out.Values[i] = ec._ReportHistory_visibility(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "reportOwnerID":
+			out.Values[i] = ec._ReportHistory_reportOwnerID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var reportHistoryConnectionImplementors = []string{"ReportHistoryConnection"}
+
+func (ec *executionContext) _ReportHistoryConnection(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.ReportHistoryConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, reportHistoryConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ReportHistoryConnection")
+		case "edges":
+			out.Values[i] = ec._ReportHistoryConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._ReportHistoryConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._ReportHistoryConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var reportHistoryEdgeImplementors = []string{"ReportHistoryEdge"}
+
+func (ec *executionContext) _ReportHistoryEdge(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.ReportHistoryEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, reportHistoryEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ReportHistoryEdge")
+		case "node":
+			out.Values[i] = ec._ReportHistoryEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._ReportHistoryEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var reportMembershipHistoryImplementors = []string{"ReportMembershipHistory", "Node"}
+
+func (ec *executionContext) _ReportMembershipHistory(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.ReportMembershipHistory) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, reportMembershipHistoryImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ReportMembershipHistory")
+		case "id":
+			out.Values[i] = ec._ReportMembershipHistory_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "historyTime":
+			out.Values[i] = ec._ReportMembershipHistory_historyTime(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "ref":
+			out.Values[i] = ec._ReportMembershipHistory_ref(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "operation":
+			out.Values[i] = ec._ReportMembershipHistory_operation(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._ReportMembershipHistory_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._ReportMembershipHistory_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "createdBy":
+			out.Values[i] = ec._ReportMembershipHistory_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "updatedBy":
+			out.Values[i] = ec._ReportMembershipHistory_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "updatedByImpersonator":
+			out.Values[i] = ec._ReportMembershipHistory_updatedByImpersonator(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "role":
+			out.Values[i] = ec._ReportMembershipHistory_role(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "reportID":
+			out.Values[i] = ec._ReportMembershipHistory_reportID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "userID":
+			out.Values[i] = ec._ReportMembershipHistory_userID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var reportMembershipHistoryConnectionImplementors = []string{"ReportMembershipHistoryConnection"}
+
+func (ec *executionContext) _ReportMembershipHistoryConnection(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.ReportMembershipHistoryConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, reportMembershipHistoryConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ReportMembershipHistoryConnection")
+		case "edges":
+			out.Values[i] = ec._ReportMembershipHistoryConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._ReportMembershipHistoryConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._ReportMembershipHistoryConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var reportMembershipHistoryEdgeImplementors = []string{"ReportMembershipHistoryEdge"}
+
+func (ec *executionContext) _ReportMembershipHistoryEdge(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.ReportMembershipHistoryEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, reportMembershipHistoryEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ReportMembershipHistoryEdge")
+		case "node":
+			out.Values[i] = ec._ReportMembershipHistoryEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._ReportMembershipHistoryEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -217342,6 +221026,110 @@ func (ec *executionContext) marshalNRemediationHistoryRemediationStatus2github�
 
 func (ec *executionContext) unmarshalNRemediationHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐRemediationHistoryWhereInput(ctx context.Context, v any) (*historygenerated.RemediationHistoryWhereInput, error) {
 	res, err := ec.unmarshalInputRemediationHistoryWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReportHistoryConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryConnection(ctx context.Context, sel ast.SelectionSet, v *historygenerated.ReportHistoryConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ReportHistoryConnection!")
+		return graphql.Null
+	}
+	return ec._ReportHistoryConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNReportHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, v any) (history.OpType, error) {
+	var res history.OpType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReportHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, sel ast.SelectionSet, v history.OpType) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNReportHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryOrderField(ctx context.Context, v any) (*historygenerated.ReportHistoryOrderField, error) {
+	var res = new(historygenerated.ReportHistoryOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReportHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryOrderField(ctx context.Context, sel ast.SelectionSet, v *historygenerated.ReportHistoryOrderField) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ReportHistoryOrderField!")
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNReportHistoryReportStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatus(ctx context.Context, v any) (enums.ReportStatus, error) {
+	var res enums.ReportStatus
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReportHistoryReportStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatus(ctx context.Context, sel ast.SelectionSet, v enums.ReportStatus) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNReportHistoryReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx context.Context, v any) (enums.ReportVisibility, error) {
+	var res enums.ReportVisibility
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReportHistoryReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx context.Context, sel ast.SelectionSet, v enums.ReportVisibility) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNReportHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryWhereInput(ctx context.Context, v any) (*historygenerated.ReportHistoryWhereInput, error) {
+	res, err := ec.unmarshalInputReportHistoryWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReportMembershipHistoryConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryConnection(ctx context.Context, sel ast.SelectionSet, v *historygenerated.ReportMembershipHistoryConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ReportMembershipHistoryConnection!")
+		return graphql.Null
+	}
+	return ec._ReportMembershipHistoryConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNReportMembershipHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, v any) (history.OpType, error) {
+	var res history.OpType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReportMembershipHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, sel ast.SelectionSet, v history.OpType) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNReportMembershipHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryOrderField(ctx context.Context, v any) (*historygenerated.ReportMembershipHistoryOrderField, error) {
+	var res = new(historygenerated.ReportMembershipHistoryOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReportMembershipHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryOrderField(ctx context.Context, sel ast.SelectionSet, v *historygenerated.ReportMembershipHistoryOrderField) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ReportMembershipHistoryOrderField!")
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNReportMembershipHistoryRole2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx context.Context, v any) (enums.Role, error) {
+	var res enums.Role
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNReportMembershipHistoryRole2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx context.Context, sel ast.SelectionSet, v enums.Role) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNReportMembershipHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryWhereInput(ctx context.Context, v any) (*historygenerated.ReportMembershipHistoryWhereInput, error) {
+	res, err := ec.unmarshalInputReportMembershipHistoryWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -226769,6 +230557,396 @@ func (ec *executionContext) unmarshalORemediationHistoryWhereInput2ᚖgithubᚗc
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputRemediationHistoryWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOReportHistory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistory(ctx context.Context, sel ast.SelectionSet, v *historygenerated.ReportHistory) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ReportHistory(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOReportHistoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryEdge(ctx context.Context, sel ast.SelectionSet, v []*historygenerated.ReportHistoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalOReportHistoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryEdge(ctx, sel, v[i])
+	})
+
+	return ret
+}
+
+func (ec *executionContext) marshalOReportHistoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryEdge(ctx context.Context, sel ast.SelectionSet, v *historygenerated.ReportHistoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ReportHistoryEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOReportHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx context.Context, v any) ([]history.OpType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]history.OpType, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNReportHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOReportHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []history.OpType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNReportHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOReportHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, v any) (*history.OpType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(history.OpType)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOReportHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, sel ast.SelectionSet, v *history.OpType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOReportHistoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryOrder(ctx context.Context, v any) (*historygenerated.ReportHistoryOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputReportHistoryOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOReportHistoryReportStatus2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatusᚄ(ctx context.Context, v any) ([]enums.ReportStatus, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]enums.ReportStatus, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNReportHistoryReportStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatus(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOReportHistoryReportStatus2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatusᚄ(ctx context.Context, sel ast.SelectionSet, v []enums.ReportStatus) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNReportHistoryReportStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatus(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOReportHistoryReportStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatus(ctx context.Context, v any) (*enums.ReportStatus, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(enums.ReportStatus)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOReportHistoryReportStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportStatus(ctx context.Context, sel ast.SelectionSet, v *enums.ReportStatus) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOReportHistoryReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx context.Context, v any) (enums.ReportVisibility, error) {
+	var res enums.ReportVisibility
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOReportHistoryReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx context.Context, sel ast.SelectionSet, v enums.ReportVisibility) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOReportHistoryReportVisibility2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibilityᚄ(ctx context.Context, v any) ([]enums.ReportVisibility, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]enums.ReportVisibility, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNReportHistoryReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOReportHistoryReportVisibility2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibilityᚄ(ctx context.Context, sel ast.SelectionSet, v []enums.ReportVisibility) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNReportHistoryReportVisibility2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOReportHistoryReportVisibility2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx context.Context, v any) (*enums.ReportVisibility, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(enums.ReportVisibility)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOReportHistoryReportVisibility2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐReportVisibility(ctx context.Context, sel ast.SelectionSet, v *enums.ReportVisibility) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOReportHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryWhereInputᚄ(ctx context.Context, v any) ([]*historygenerated.ReportHistoryWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*historygenerated.ReportHistoryWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNReportHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOReportHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportHistoryWhereInput(ctx context.Context, v any) (*historygenerated.ReportHistoryWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputReportHistoryWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOReportMembershipHistory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistory(ctx context.Context, sel ast.SelectionSet, v *historygenerated.ReportMembershipHistory) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ReportMembershipHistory(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOReportMembershipHistoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryEdge(ctx context.Context, sel ast.SelectionSet, v []*historygenerated.ReportMembershipHistoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalOReportMembershipHistoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryEdge(ctx, sel, v[i])
+	})
+
+	return ret
+}
+
+func (ec *executionContext) marshalOReportMembershipHistoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryEdge(ctx context.Context, sel ast.SelectionSet, v *historygenerated.ReportMembershipHistoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ReportMembershipHistoryEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOReportMembershipHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx context.Context, v any) ([]history.OpType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]history.OpType, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNReportMembershipHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOReportMembershipHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []history.OpType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNReportMembershipHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOReportMembershipHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, v any) (*history.OpType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(history.OpType)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOReportMembershipHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, sel ast.SelectionSet, v *history.OpType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOReportMembershipHistoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryOrder(ctx context.Context, v any) (*historygenerated.ReportMembershipHistoryOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputReportMembershipHistoryOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOReportMembershipHistoryRole2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRoleᚄ(ctx context.Context, v any) ([]enums.Role, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]enums.Role, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNReportMembershipHistoryRole2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOReportMembershipHistoryRole2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []enums.Role) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNReportMembershipHistoryRole2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOReportMembershipHistoryRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx context.Context, v any) (*enums.Role, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(enums.Role)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOReportMembershipHistoryRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx context.Context, sel ast.SelectionSet, v *enums.Role) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOReportMembershipHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryWhereInputᚄ(ctx context.Context, v any) ([]*historygenerated.ReportMembershipHistoryWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*historygenerated.ReportMembershipHistoryWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNReportMembershipHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOReportMembershipHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐReportMembershipHistoryWhereInput(ctx context.Context, v any) (*historygenerated.ReportMembershipHistoryWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputReportMembershipHistoryWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
