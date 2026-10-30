@@ -214,7 +214,6 @@ func TestMutationReport_Member(t *testing.T) {
 }
 
 func TestMutationDeleteReport(t *testing.T) {
-
 	report := (&th.ReportBuilder{Client: suite.Client, Visibility: enums.ReportVisibilityOrganization}).
 		MustNew(th.SharedTestUser1.UserCtx, t)
 
