@@ -46,6 +46,11 @@ extend type Mutation{
         values of the remediation
         """
         input: CreateRemediationInput!
+        """
+        Files to attach to the remediation
+        """
+        remediationFiles: [Upload!]
+        remediationFilesMetadata: [FileMetadataInput!]
     ): RemediationCreatePayload!
     """
     Create multiple new remediations
@@ -77,6 +82,11 @@ extend type Mutation{
         New values for the remediation
         """
         input: UpdateRemediationInput!
+        """
+        Files to attach to the remediation
+        """
+        remediationFiles: [Upload!]
+        remediationFilesMetadata: [FileMetadataInput!]
     ): RemediationUpdatePayload!
     """
     Delete an existing remediation

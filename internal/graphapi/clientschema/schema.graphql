@@ -49498,7 +49498,12 @@ type Mutation {
 		values of the remediation
 		"""
 		input: CreateRemediationInput!
-	): RemediationCreatePayload!
+
+		"""
+		Files to attach to the remediation
+		"""
+		remediationFiles: [Upload!]
+	remediationFilesMetadata: [FileMetadataInput!]): RemediationCreatePayload!
 	"""
 	Create multiple new remediations
 	"""
@@ -49530,7 +49535,12 @@ type Mutation {
 		New values for the remediation
 		"""
 		input: UpdateRemediationInput!
-	): RemediationUpdatePayload!
+
+		"""
+		Files to attach to the remediation
+		"""
+		remediationFiles: [Upload!]
+	remediationFilesMetadata: [FileMetadataInput!]): RemediationUpdatePayload!
 	"""
 	Delete an existing remediation
 	"""

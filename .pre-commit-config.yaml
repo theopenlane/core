@@ -16,7 +16,7 @@ repos:
     hooks:
       - id: yamlfmt
   - repo: https://github.com/adhtruong/mirrors-typos
-    rev: v1.47.2
+    rev: v1.51.1
     hooks:
       - id: typos
   - repo: local
@@ -24,6 +24,7 @@ repos:
       - id: format-graphql
         name: Format GraphQL
         description: This hook formats GraphQL schemas
-        entry: npx format-graphql@1.5.0 --write=true
+        entry: format-graphql --write=true
         language: node
+        additional_dependencies: ["format-graphql@1.5.0"]
         files: 'query/.*\.graphql$'

@@ -410,10 +410,10 @@ type MutationResolver interface {
 	DeleteBulkProgramMembership(ctx context.Context, ids []string) (*model.ProgramMembershipBulkDeletePayload, error)
 	UpdateBulkProgramMembership(ctx context.Context, ids []string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipBulkUpdatePayload, error)
 	UpdateBulkCSVProgramMembership(ctx context.Context, input graphql.Upload) (*model.ProgramMembershipBulkUpdatePayload, error)
-	CreateRemediation(ctx context.Context, input generated.CreateRemediationInput) (*model.RemediationCreatePayload, error)
+	CreateRemediation(ctx context.Context, input generated.CreateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) (*model.RemediationCreatePayload, error)
 	CreateBulkRemediation(ctx context.Context, input []*generated.CreateRemediationInput) (*model.RemediationBulkCreatePayload, error)
 	CreateBulkCSVRemediation(ctx context.Context, input graphql.Upload) (*model.RemediationBulkCreatePayload, error)
-	UpdateRemediation(ctx context.Context, id string, input generated.UpdateRemediationInput) (*model.RemediationUpdatePayload, error)
+	UpdateRemediation(ctx context.Context, id string, input generated.UpdateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) (*model.RemediationUpdatePayload, error)
 	DeleteRemediation(ctx context.Context, id string) (*model.RemediationDeletePayload, error)
 	UpdateBulkRemediation(ctx context.Context, ids []string, input generated.UpdateRemediationInput) (*model.RemediationBulkUpdatePayload, error)
 	UpdateBulkCSVRemediation(ctx context.Context, input graphql.Upload) (*model.RemediationBulkUpdatePayload, error)
@@ -3844,6 +3844,22 @@ func (ec *executionContext) field_Mutation_createRemediation_args(ctx context.Co
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "remediationFiles",
+		func(ctx context.Context, v any) ([]*graphql.Upload, error) {
+			return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["remediationFiles"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "remediationFilesMetadata",
+		func(ctx context.Context, v any) ([]*model.FileMetadataInput, error) {
+			return ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["remediationFilesMetadata"] = arg2
 	return args, nil
 }
 
@@ -10376,6 +10392,22 @@ func (ec *executionContext) field_Mutation_updateRemediation_args(ctx context.Co
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "remediationFiles",
+		func(ctx context.Context, v any) ([]*graphql.Upload, error) {
+			return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["remediationFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "remediationFilesMetadata",
+		func(ctx context.Context, v any) ([]*model.FileMetadataInput, error) {
+			return ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["remediationFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -29182,7 +29214,7 @@ func (ec *executionContext) _Mutation_createRemediation(ctx context.Context, fie
 		},
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateRemediation(ctx, fc.Args["input"].(generated.CreateRemediationInput))
+			return ec.Resolvers.Mutation().CreateRemediation(ctx, fc.Args["input"].(generated.CreateRemediationInput), fc.Args["remediationFiles"].([]*graphql.Upload), fc.Args["remediationFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.RemediationCreatePayload) graphql.Marshaler {
@@ -29314,7 +29346,7 @@ func (ec *executionContext) _Mutation_updateRemediation(ctx context.Context, fie
 		},
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateRemediation(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateRemediationInput))
+			return ec.Resolvers.Mutation().UpdateRemediation(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateRemediationInput), fc.Args["remediationFiles"].([]*graphql.Upload), fc.Args["remediationFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.RemediationUpdatePayload) graphql.Marshaler {

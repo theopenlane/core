@@ -3825,7 +3825,7 @@ type ComplexityRoot struct {
 		CreateProgram                            func(childComplexity int, input generated.CreateProgramInput) int
 		CreateProgramMembership                  func(childComplexity int, input generated.CreateProgramMembershipInput) int
 		CreateProgramWithMembers                 func(childComplexity int, input model.CreateProgramWithMembersInput) int
-		CreateRemediation                        func(childComplexity int, input generated.CreateRemediationInput) int
+		CreateRemediation                        func(childComplexity int, input generated.CreateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) int
 		CreateReport                             func(childComplexity int, input generated.CreateReportInput) int
 		CreateReportMembership                   func(childComplexity int, input generated.CreateReportMembershipInput) int
 		CreateReview                             func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
@@ -4184,7 +4184,7 @@ type ComplexityRoot struct {
 		UpdateProcedureComment                   func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateProgram                            func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership                  func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
-		UpdateRemediation                        func(childComplexity int, id string, input generated.UpdateRemediationInput) int
+		UpdateRemediation                        func(childComplexity int, id string, input generated.UpdateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) int
 		UpdateReport                             func(childComplexity int, id string, input generated.UpdateReportInput) int
 		UpdateReportMembership                   func(childComplexity int, id string, input generated.UpdateReportMembershipInput) int
 		UpdateReview                             func(childComplexity int, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
@@ -27784,7 +27784,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateRemediation(childComplexity, args["input"].(generated.CreateRemediationInput)), true
+		return e.ComplexityRoot.Mutation.CreateRemediation(childComplexity, args["input"].(generated.CreateRemediationInput), args["remediationFiles"].([]*graphql.Upload), args["remediationFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createReport":
 		if e.ComplexityRoot.Mutation.CreateReport == nil {
 			break
@@ -31728,7 +31728,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateRemediation(childComplexity, args["id"].(string), args["input"].(generated.UpdateRemediationInput)), true
+		return e.ComplexityRoot.Mutation.UpdateRemediation(childComplexity, args["id"].(string), args["input"].(generated.UpdateRemediationInput), args["remediationFiles"].([]*graphql.Upload), args["remediationFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateReport":
 		if e.ComplexityRoot.Mutation.UpdateReport == nil {
 			break
@@ -156082,6 +156082,11 @@ extend type Mutation{
         values of the remediation
         """
         input: CreateRemediationInput!
+        """
+        Files to attach to the remediation
+        """
+        remediationFiles: [Upload!]
+        remediationFilesMetadata: [FileMetadataInput!]
     ): RemediationCreatePayload!
     """
     Create multiple new remediations
@@ -156113,6 +156118,11 @@ extend type Mutation{
         New values for the remediation
         """
         input: UpdateRemediationInput!
+        """
+        Files to attach to the remediation
+        """
+        remediationFiles: [Upload!]
+        remediationFilesMetadata: [FileMetadataInput!]
     ): RemediationUpdatePayload!
     """
     Delete an existing remediation
