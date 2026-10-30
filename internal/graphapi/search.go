@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -529,6 +530,24 @@ func searchRemediations(ctx context.Context, query string, after *entgql.Cursor[
 					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
 				},
 				remediation.TitleContainsFold(query), // search by Title
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchReport searches for Report based on the query string looking for matches
+func searchReports(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ReportConnection, error) {
+	request := withTransactionalMutation(ctx).Report.Query().
+		Where(
+			report.Or(
+				report.DisplayID(query),        // search equal to DisplayID
+				report.ID(query),               // search equal to ID
+				report.NameContainsFold(query), // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+				},
 			),
 		)
 

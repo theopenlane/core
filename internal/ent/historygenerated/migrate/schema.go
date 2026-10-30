@@ -1727,6 +1727,41 @@ var (
 			},
 		},
 	}
+	// OrganizationBrandingSettingHistoryColumns holds the columns for the "organization_branding_setting_history" table.
+	OrganizationBrandingSettingHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "organization_id", Type: field.TypeString, Nullable: true},
+		{Name: "remove_assessment_branding", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "primary_color", Type: field.TypeString, Nullable: true},
+		{Name: "secondary_color", Type: field.TypeString, Nullable: true},
+		{Name: "background_color", Type: field.TypeString, Nullable: true},
+		{Name: "text_color", Type: field.TypeString, Nullable: true},
+		{Name: "font_family", Type: field.TypeString, Nullable: true},
+	}
+	// OrganizationBrandingSettingHistoryTable holds the schema information for the "organization_branding_setting_history" table.
+	OrganizationBrandingSettingHistoryTable = &schema.Table{
+		Name:       "organization_branding_setting_history",
+		Columns:    OrganizationBrandingSettingHistoryColumns,
+		PrimaryKey: []*schema.Column{OrganizationBrandingSettingHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "organizationbrandingsettinghistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{OrganizationBrandingSettingHistoryColumns[1]},
+			},
+		},
+	}
 	// OrganizationHistoryColumns holds the columns for the "organization_history" table.
 	OrganizationHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2122,6 +2157,73 @@ var (
 				Name:    "remediationhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{RemediationHistoryColumns[1]},
+			},
+		},
+	}
+	// ReportHistoryColumns holds the columns for the "report_history" table.
+	ReportHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "report_kind_name", Type: field.TypeString, Nullable: true},
+		{Name: "report_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "query", Type: field.TypeString, Size: 2147483647},
+		{Name: "variables", Type: field.TypeJSON, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"DRAFT", "SAVED"}, Default: "DRAFT"},
+		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PRIVATE", "RESTRICTED", "ORGANIZATION"}},
+		{Name: "report_owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// ReportHistoryTable holds the schema information for the "report_history" table.
+	ReportHistoryTable = &schema.Table{
+		Name:       "report_history",
+		Columns:    ReportHistoryColumns,
+		PrimaryKey: []*schema.Column{ReportHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "reporthistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ReportHistoryColumns[1]},
+			},
+		},
+	}
+	// ReportMembershipHistoryColumns holds the columns for the "report_membership_history" table.
+	ReportMembershipHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
+		{Name: "report_id", Type: field.TypeString},
+		{Name: "user_id", Type: field.TypeString},
+	}
+	// ReportMembershipHistoryTable holds the schema information for the "report_membership_history" table.
+	ReportMembershipHistoryTable = &schema.Table{
+		Name:       "report_membership_history",
+		Columns:    ReportMembershipHistoryColumns,
+		PrimaryKey: []*schema.Column{ReportMembershipHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "reportmembershiphistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ReportMembershipHistoryColumns[1]},
 			},
 		},
 	}
@@ -3372,6 +3474,7 @@ var (
 		NotificationPreferenceHistoryTable,
 		NotificationTemplateHistoryTable,
 		OrgMembershipHistoryTable,
+		OrganizationBrandingSettingHistoryTable,
 		OrganizationHistoryTable,
 		OrganizationSettingHistoryTable,
 		PlatformHistoryTable,
@@ -3379,6 +3482,8 @@ var (
 		ProgramHistoryTable,
 		ProgramMembershipHistoryTable,
 		RemediationHistoryTable,
+		ReportHistoryTable,
+		ReportMembershipHistoryTable,
 		ReviewHistoryTable,
 		RiskHistoryTable,
 		SLADefinitionHistoryTable,
@@ -3511,6 +3616,9 @@ func init() {
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
 	}
+	OrganizationBrandingSettingHistoryTable.Annotation = &entsql.Annotation{
+		Table: "organization_branding_setting_history",
+	}
 	OrganizationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_history",
 	}
@@ -3531,6 +3639,12 @@ func init() {
 	}
 	RemediationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "remediation_history",
+	}
+	ReportHistoryTable.Annotation = &entsql.Annotation{
+		Table: "report_history",
+	}
+	ReportMembershipHistoryTable.Annotation = &entsql.Annotation{
+		Table: "report_membership_history",
 	}
 	ReviewHistoryTable.Annotation = &entsql.Annotation{
 		Table: "review_history",

@@ -15,29 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
-	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
-
-// HookEntityFiles runs on entity mutations to check for uploaded files
-func HookEntityFiles() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.EntityFunc(func(ctx context.Context, m *generated.EntityMutation) (generated.Value, error) {
-			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
-			if len(fileIDs) > 0 {
-				var err error
-
-				ctx, err = pkgobjects.ProcessFilesForMutation(ctx, m, "entityFiles")
-				if err != nil {
-					return nil, err
-				}
-
-				m.AddFileIDs(fileIDs...)
-			}
-
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
 
 var (
 	approvedStatus = []enums.EntityStatus{enums.EntityStatusApproved, enums.EntityStatusActive}
@@ -64,42 +42,6 @@ func HookEntityApprovedForUse() ent.Hook {
 			hook.HasOp(ent.OpCreate|ent.OpUpdateOne),
 		),
 	)
-}
-
-// HookEntityLogoFile runs on entity mutations to check for an uploaded logo file
-func HookEntityLogoFile() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.EntityFunc(func(ctx context.Context, m *generated.EntityMutation) (generated.Value, error) {
-			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
-			if len(fileIDs) > 0 {
-				var err error
-
-				ctx, err = checkEntityLogoFile(ctx, m)
-				if err != nil {
-					return nil, err
-				}
-			}
-
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpCreate|ent.OpUpdateOne)
-}
-
-func checkEntityLogoFile(ctx context.Context, m *generated.EntityMutation) (context.Context, error) {
-	logoKey := "logoFile"
-
-	logoFiles, _ := pkgobjects.FilesFromContextWithKey(ctx, logoKey)
-	if len(logoFiles) == 0 {
-		return ctx, nil
-	}
-
-	if len(logoFiles) > 1 {
-		return ctx, ErrTooManyLogoFiles
-	}
-
-	m.SetLogoFileID(logoFiles[0].ID)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, m, logoKey)
 }
 
 // HookEntityCreate runs on entity mutations to set default values that are not provided

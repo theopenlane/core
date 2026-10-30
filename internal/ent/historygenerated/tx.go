@@ -82,6 +82,8 @@ type Tx struct {
 	NotificationTemplateHistory *NotificationTemplateHistoryClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
+	// OrganizationBrandingSettingHistory is the client for interacting with the OrganizationBrandingSettingHistory builders.
+	OrganizationBrandingSettingHistory *OrganizationBrandingSettingHistoryClient
 	// OrganizationHistory is the client for interacting with the OrganizationHistory builders.
 	OrganizationHistory *OrganizationHistoryClient
 	// OrganizationSettingHistory is the client for interacting with the OrganizationSettingHistory builders.
@@ -96,6 +98,10 @@ type Tx struct {
 	ProgramMembershipHistory *ProgramMembershipHistoryClient
 	// RemediationHistory is the client for interacting with the RemediationHistory builders.
 	RemediationHistory *RemediationHistoryClient
+	// ReportHistory is the client for interacting with the ReportHistory builders.
+	ReportHistory *ReportHistoryClient
+	// ReportMembershipHistory is the client for interacting with the ReportMembershipHistory builders.
+	ReportMembershipHistory *ReportMembershipHistoryClient
 	// ReviewHistory is the client for interacting with the ReviewHistory builders.
 	ReviewHistory *ReviewHistoryClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
@@ -313,6 +319,7 @@ func (tx *Tx) init() {
 	tx.NotificationPreferenceHistory = NewNotificationPreferenceHistoryClient(tx.config)
 	tx.NotificationTemplateHistory = NewNotificationTemplateHistoryClient(tx.config)
 	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
+	tx.OrganizationBrandingSettingHistory = NewOrganizationBrandingSettingHistoryClient(tx.config)
 	tx.OrganizationHistory = NewOrganizationHistoryClient(tx.config)
 	tx.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(tx.config)
 	tx.PlatformHistory = NewPlatformHistoryClient(tx.config)
@@ -320,6 +327,8 @@ func (tx *Tx) init() {
 	tx.ProgramHistory = NewProgramHistoryClient(tx.config)
 	tx.ProgramMembershipHistory = NewProgramMembershipHistoryClient(tx.config)
 	tx.RemediationHistory = NewRemediationHistoryClient(tx.config)
+	tx.ReportHistory = NewReportHistoryClient(tx.config)
+	tx.ReportMembershipHistory = NewReportMembershipHistoryClient(tx.config)
 	tx.ReviewHistory = NewReviewHistoryClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
 	tx.SLADefinitionHistory = NewSLADefinitionHistoryClient(tx.config)

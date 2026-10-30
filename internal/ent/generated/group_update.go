@@ -37,6 +37,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -617,6 +618,51 @@ func (_u *GroupUpdate) AddProgramViewers(v ...*Program) *GroupUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddProgramViewerIDs(ids...)
+}
+
+// AddReportEditorIDs adds the "report_editors" edge to the Report entity by IDs.
+func (_u *GroupUpdate) AddReportEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddReportEditorIDs(ids...)
+	return _u
+}
+
+// AddReportEditors adds the "report_editors" edges to the Report entity.
+func (_u *GroupUpdate) AddReportEditors(v ...*Report) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportEditorIDs(ids...)
+}
+
+// AddReportBlockedGroupIDs adds the "report_blocked_groups" edge to the Report entity by IDs.
+func (_u *GroupUpdate) AddReportBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddReportBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddReportBlockedGroups adds the "report_blocked_groups" edges to the Report entity.
+func (_u *GroupUpdate) AddReportBlockedGroups(v ...*Report) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportBlockedGroupIDs(ids...)
+}
+
+// AddReportViewerIDs adds the "report_viewers" edge to the Report entity by IDs.
+func (_u *GroupUpdate) AddReportViewerIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddReportViewerIDs(ids...)
+	return _u
+}
+
+// AddReportViewers adds the "report_viewers" edges to the Report entity.
+func (_u *GroupUpdate) AddReportViewers(v ...*Report) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportViewerIDs(ids...)
 }
 
 // AddRiskEditorIDs adds the "risk_editors" edge to the Risk entity by IDs.
@@ -1470,6 +1516,69 @@ func (_u *GroupUpdate) RemoveProgramViewers(v ...*Program) *GroupUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramViewerIDs(ids...)
+}
+
+// ClearReportEditors clears all "report_editors" edges to the Report entity.
+func (_u *GroupUpdate) ClearReportEditors() *GroupUpdate {
+	_u.mutation.ClearReportEditors()
+	return _u
+}
+
+// RemoveReportEditorIDs removes the "report_editors" edge to Report entities by IDs.
+func (_u *GroupUpdate) RemoveReportEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveReportEditorIDs(ids...)
+	return _u
+}
+
+// RemoveReportEditors removes "report_editors" edges to Report entities.
+func (_u *GroupUpdate) RemoveReportEditors(v ...*Report) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportEditorIDs(ids...)
+}
+
+// ClearReportBlockedGroups clears all "report_blocked_groups" edges to the Report entity.
+func (_u *GroupUpdate) ClearReportBlockedGroups() *GroupUpdate {
+	_u.mutation.ClearReportBlockedGroups()
+	return _u
+}
+
+// RemoveReportBlockedGroupIDs removes the "report_blocked_groups" edge to Report entities by IDs.
+func (_u *GroupUpdate) RemoveReportBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveReportBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveReportBlockedGroups removes "report_blocked_groups" edges to Report entities.
+func (_u *GroupUpdate) RemoveReportBlockedGroups(v ...*Report) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportBlockedGroupIDs(ids...)
+}
+
+// ClearReportViewers clears all "report_viewers" edges to the Report entity.
+func (_u *GroupUpdate) ClearReportViewers() *GroupUpdate {
+	_u.mutation.ClearReportViewers()
+	return _u
+}
+
+// RemoveReportViewerIDs removes the "report_viewers" edge to Report entities by IDs.
+func (_u *GroupUpdate) RemoveReportViewerIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveReportViewerIDs(ids...)
+	return _u
+}
+
+// RemoveReportViewers removes "report_viewers" edges to Report entities.
+func (_u *GroupUpdate) RemoveReportViewers(v ...*Report) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportViewerIDs(ids...)
 }
 
 // ClearRiskEditors clears all "risk_editors" edges to the Risk entity.
@@ -2941,6 +3050,141 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportEditorsTable,
+			Columns: group.ReportEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportEditorsIDs(); len(nodes) > 0 && !_u.mutation.ReportEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportEditorsTable,
+			Columns: group.ReportEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportEditorsTable,
+			Columns: group.ReportEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportBlockedGroupsTable,
+			Columns: group.ReportBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ReportBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportBlockedGroupsTable,
+			Columns: group.ReportBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportBlockedGroupsTable,
+			Columns: group.ReportBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportViewersTable,
+			Columns: group.ReportViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportViewersIDs(); len(nodes) > 0 && !_u.mutation.ReportViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportViewersTable,
+			Columns: group.ReportViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportViewersTable,
+			Columns: group.ReportViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -5770,6 +6014,51 @@ func (_u *GroupUpdateOne) AddProgramViewers(v ...*Program) *GroupUpdateOne {
 	return _u.AddProgramViewerIDs(ids...)
 }
 
+// AddReportEditorIDs adds the "report_editors" edge to the Report entity by IDs.
+func (_u *GroupUpdateOne) AddReportEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddReportEditorIDs(ids...)
+	return _u
+}
+
+// AddReportEditors adds the "report_editors" edges to the Report entity.
+func (_u *GroupUpdateOne) AddReportEditors(v ...*Report) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportEditorIDs(ids...)
+}
+
+// AddReportBlockedGroupIDs adds the "report_blocked_groups" edge to the Report entity by IDs.
+func (_u *GroupUpdateOne) AddReportBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddReportBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddReportBlockedGroups adds the "report_blocked_groups" edges to the Report entity.
+func (_u *GroupUpdateOne) AddReportBlockedGroups(v ...*Report) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportBlockedGroupIDs(ids...)
+}
+
+// AddReportViewerIDs adds the "report_viewers" edge to the Report entity by IDs.
+func (_u *GroupUpdateOne) AddReportViewerIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddReportViewerIDs(ids...)
+	return _u
+}
+
+// AddReportViewers adds the "report_viewers" edges to the Report entity.
+func (_u *GroupUpdateOne) AddReportViewers(v ...*Report) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddReportViewerIDs(ids...)
+}
+
 // AddRiskEditorIDs adds the "risk_editors" edge to the Risk entity by IDs.
 func (_u *GroupUpdateOne) AddRiskEditorIDs(ids ...string) *GroupUpdateOne {
 	_u.mutation.AddRiskEditorIDs(ids...)
@@ -6621,6 +6910,69 @@ func (_u *GroupUpdateOne) RemoveProgramViewers(v ...*Program) *GroupUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveProgramViewerIDs(ids...)
+}
+
+// ClearReportEditors clears all "report_editors" edges to the Report entity.
+func (_u *GroupUpdateOne) ClearReportEditors() *GroupUpdateOne {
+	_u.mutation.ClearReportEditors()
+	return _u
+}
+
+// RemoveReportEditorIDs removes the "report_editors" edge to Report entities by IDs.
+func (_u *GroupUpdateOne) RemoveReportEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveReportEditorIDs(ids...)
+	return _u
+}
+
+// RemoveReportEditors removes "report_editors" edges to Report entities.
+func (_u *GroupUpdateOne) RemoveReportEditors(v ...*Report) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportEditorIDs(ids...)
+}
+
+// ClearReportBlockedGroups clears all "report_blocked_groups" edges to the Report entity.
+func (_u *GroupUpdateOne) ClearReportBlockedGroups() *GroupUpdateOne {
+	_u.mutation.ClearReportBlockedGroups()
+	return _u
+}
+
+// RemoveReportBlockedGroupIDs removes the "report_blocked_groups" edge to Report entities by IDs.
+func (_u *GroupUpdateOne) RemoveReportBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveReportBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveReportBlockedGroups removes "report_blocked_groups" edges to Report entities.
+func (_u *GroupUpdateOne) RemoveReportBlockedGroups(v ...*Report) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportBlockedGroupIDs(ids...)
+}
+
+// ClearReportViewers clears all "report_viewers" edges to the Report entity.
+func (_u *GroupUpdateOne) ClearReportViewers() *GroupUpdateOne {
+	_u.mutation.ClearReportViewers()
+	return _u
+}
+
+// RemoveReportViewerIDs removes the "report_viewers" edge to Report entities by IDs.
+func (_u *GroupUpdateOne) RemoveReportViewerIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveReportViewerIDs(ids...)
+	return _u
+}
+
+// RemoveReportViewers removes "report_viewers" edges to Report entities.
+func (_u *GroupUpdateOne) RemoveReportViewers(v ...*Report) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveReportViewerIDs(ids...)
 }
 
 // ClearRiskEditors clears all "risk_editors" edges to the Risk entity.
@@ -8122,6 +8474,141 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportEditorsTable,
+			Columns: group.ReportEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportEditorsIDs(); len(nodes) > 0 && !_u.mutation.ReportEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportEditorsTable,
+			Columns: group.ReportEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportEditorsTable,
+			Columns: group.ReportEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportBlockedGroupsTable,
+			Columns: group.ReportBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ReportBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportBlockedGroupsTable,
+			Columns: group.ReportBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportBlockedGroupsTable,
+			Columns: group.ReportBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReportViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportViewersTable,
+			Columns: group.ReportViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedReportViewersIDs(); len(nodes) > 0 && !_u.mutation.ReportViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportViewersTable,
+			Columns: group.ReportViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReportViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ReportViewersTable,
+			Columns: group.ReportViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(report.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

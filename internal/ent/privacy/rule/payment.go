@@ -11,12 +11,13 @@ import (
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	"github.com/theopenlane/logx"
 )
 
 var (
@@ -34,7 +35,8 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 			return auth.ErrNoAuthUser
 		}
 
-		if !utils.PaymentMethodCheckRequired(client) || caller.Has(auth.CapSystemAdmin) {
+		if !utils.PaymentMethodCheckRequired(client) || caller.HasAny(auth.CapSystemAdmin|auth.CapOrgSupport) ||
+			auth.IsAPITokenAuthentication(ctx) {
 			return privacy.Skip
 		}
 

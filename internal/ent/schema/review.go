@@ -285,7 +285,7 @@ func (Review) Indexes() []ent.Index {
 
 func (Review) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookReviewFiles(),
+		hooks.HookFiles("reviewFiles"),
 		hooks.HookReviews(),
 	}
 }

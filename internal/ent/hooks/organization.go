@@ -168,6 +168,10 @@ func postOrgCreateMutation(ctx context.Context, v *generated.Organization, m *ge
 		return ctx, err
 	}
 
+	if err := createDefaultBrandingSettings(ctx, v.ID, m); err != nil {
+		return ctx, err
+	}
+
 	return ctx, nil
 }
 
@@ -258,6 +262,19 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 
 		// add the org setting ID to the input
 		m.SetSettingID(orgSettingID)
+	}
+
+	return nil
+}
+
+func createDefaultBrandingSettings(ctx context.Context, orgID string, m *generated.OrganizationMutation) error {
+	err := m.Client().OrganizationBrandingSetting.Create().
+		SetOrganizationID(orgID).
+		Exec(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating default organization branding settings")
+
+		return err
 	}
 
 	return nil

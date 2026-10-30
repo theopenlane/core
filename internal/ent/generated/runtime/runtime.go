@@ -59,6 +59,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -72,6 +73,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -423,6 +426,7 @@ func init() {
 	assessment.Interceptors[1] = assessmentMixinInters8[0]
 	assessment.Interceptors[2] = assessmentMixinInters8[1]
 	assessment.Interceptors[3] = assessmentInters[0]
+	assessment.Interceptors[4] = assessmentInters[1]
 	assessmentMixinFields0 := assessmentMixin[0].Fields()
 	_ = assessmentMixinFields0
 	assessmentMixinFields4 := assessmentMixin[4].Fields()
@@ -1068,6 +1072,8 @@ func init() {
 	contact.Hooks[5] = contactMixinHooks8[0]
 
 	contact.Hooks[6] = contactHooks[0]
+
+	contact.Hooks[7] = contactHooks[1]
 	contactMixinInters3 := contactMixin[3].Interceptors()
 	contactMixinInters8 := contactMixin[8].Interceptors()
 	contact.Interceptors[0] = contactMixinInters3[0]
@@ -2734,6 +2740,8 @@ func init() {
 	evidence.Hooks[12] = evidenceHooks[1]
 
 	evidence.Hooks[13] = evidenceHooks[2]
+
+	evidence.Hooks[14] = evidenceHooks[3]
 	evidenceMixinInters3 := evidenceMixin[3].Interceptors()
 	evidenceMixinInters8 := evidenceMixin[8].Interceptors()
 	evidence.Interceptors[0] = evidenceMixinInters3[0]
@@ -3048,6 +3056,8 @@ func init() {
 	finding.Hooks[14] = findingMixinHooks15[0]
 
 	finding.Hooks[15] = findingHooks[0]
+
+	finding.Hooks[16] = findingHooks[1]
 	findingMixinInters3 := findingMixin[3].Interceptors()
 	findingMixinInters8 := findingMixin[8].Interceptors()
 	findingMixinInters9 := findingMixin[9].Interceptors()
@@ -3208,6 +3218,8 @@ func init() {
 	group.Hooks[9] = groupHooks[1]
 
 	group.Hooks[10] = groupHooks[2]
+
+	group.Hooks[11] = groupHooks[3]
 	groupMixinInters3 := groupMixin[3].Interceptors()
 	groupMixinInters8 := groupMixin[8].Interceptors()
 	groupInters := schema.Group{}.Interceptors()
@@ -5205,11 +5217,15 @@ func init() {
 
 	organization.Hooks[79] = organizationMixinHooks7[74]
 
-	organization.Hooks[80] = organizationHooks[0]
+	organization.Hooks[80] = organizationMixinHooks7[75]
 
-	organization.Hooks[81] = organizationHooks[1]
+	organization.Hooks[81] = organizationMixinHooks7[76]
 
-	organization.Hooks[82] = organizationHooks[2]
+	organization.Hooks[82] = organizationHooks[0]
+
+	organization.Hooks[83] = organizationHooks[1]
+
+	organization.Hooks[84] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]
@@ -5295,6 +5311,78 @@ func init() {
 	organizationDescID := organizationMixinFields4[0].Descriptor()
 	// organization.DefaultID holds the default value on creation for the id field.
 	organization.DefaultID = organizationDescID.Default.(func() string)
+	organizationbrandingsettingMixin := schema.OrganizationBrandingSetting{}.Mixin()
+	organizationbrandingsetting.Policy = privacy.NewPolicies(schema.OrganizationBrandingSetting{})
+	organizationbrandingsetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := organizationbrandingsetting.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	organizationbrandingsettingMixinHooks0 := organizationbrandingsettingMixin[0].Hooks()
+	organizationbrandingsettingMixinHooks1 := organizationbrandingsettingMixin[1].Hooks()
+	organizationbrandingsettingMixinHooks3 := organizationbrandingsettingMixin[3].Hooks()
+	organizationbrandingsettingMixinHooks5 := organizationbrandingsettingMixin[5].Hooks()
+
+	organizationbrandingsetting.Hooks[1] = organizationbrandingsettingMixinHooks0[0]
+
+	organizationbrandingsetting.Hooks[2] = organizationbrandingsettingMixinHooks1[0]
+
+	organizationbrandingsetting.Hooks[3] = organizationbrandingsettingMixinHooks3[0]
+
+	organizationbrandingsetting.Hooks[4] = organizationbrandingsettingMixinHooks5[0]
+	organizationbrandingsettingMixinInters3 := organizationbrandingsettingMixin[3].Interceptors()
+	organizationbrandingsettingInters := schema.OrganizationBrandingSetting{}.Interceptors()
+	organizationbrandingsetting.Interceptors[0] = organizationbrandingsettingMixinInters3[0]
+	organizationbrandingsetting.Interceptors[1] = organizationbrandingsettingInters[0]
+	organizationbrandingsettingMixinFields0 := organizationbrandingsettingMixin[0].Fields()
+	_ = organizationbrandingsettingMixinFields0
+	organizationbrandingsettingMixinFields4 := organizationbrandingsettingMixin[4].Fields()
+	_ = organizationbrandingsettingMixinFields4
+	organizationbrandingsettingMixinFields5 := organizationbrandingsettingMixin[5].Fields()
+	_ = organizationbrandingsettingMixinFields5
+	organizationbrandingsettingFields := schema.OrganizationBrandingSetting{}.Fields()
+	_ = organizationbrandingsettingFields
+	// organizationbrandingsettingDescCreatedAt is the schema descriptor for created_at field.
+	organizationbrandingsettingDescCreatedAt := organizationbrandingsettingMixinFields0[0].Descriptor()
+	// organizationbrandingsetting.DefaultCreatedAt holds the default value on creation for the created_at field.
+	organizationbrandingsetting.DefaultCreatedAt = organizationbrandingsettingDescCreatedAt.Default.(func() time.Time)
+	// organizationbrandingsettingDescUpdatedAt is the schema descriptor for updated_at field.
+	organizationbrandingsettingDescUpdatedAt := organizationbrandingsettingMixinFields0[1].Descriptor()
+	// organizationbrandingsetting.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	organizationbrandingsetting.DefaultUpdatedAt = organizationbrandingsettingDescUpdatedAt.Default.(func() time.Time)
+	// organizationbrandingsetting.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	organizationbrandingsetting.UpdateDefaultUpdatedAt = organizationbrandingsettingDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// organizationbrandingsettingDescTags is the schema descriptor for tags field.
+	organizationbrandingsettingDescTags := organizationbrandingsettingMixinFields5[0].Descriptor()
+	// organizationbrandingsetting.DefaultTags holds the default value on creation for the tags field.
+	organizationbrandingsetting.DefaultTags = organizationbrandingsettingDescTags.Default.([]string)
+	// organizationbrandingsettingDescRemoveAssessmentBranding is the schema descriptor for remove_assessment_branding field.
+	organizationbrandingsettingDescRemoveAssessmentBranding := organizationbrandingsettingFields[1].Descriptor()
+	// organizationbrandingsetting.DefaultRemoveAssessmentBranding holds the default value on creation for the remove_assessment_branding field.
+	organizationbrandingsetting.DefaultRemoveAssessmentBranding = organizationbrandingsettingDescRemoveAssessmentBranding.Default.(bool)
+	// organizationbrandingsettingDescPrimaryColor is the schema descriptor for primary_color field.
+	organizationbrandingsettingDescPrimaryColor := organizationbrandingsettingFields[2].Descriptor()
+	// organizationbrandingsetting.PrimaryColorValidator is a validator for the "primary_color" field. It is called by the builders before save.
+	organizationbrandingsetting.PrimaryColorValidator = organizationbrandingsettingDescPrimaryColor.Validators[0].(func(string) error)
+	// organizationbrandingsettingDescSecondaryColor is the schema descriptor for secondary_color field.
+	organizationbrandingsettingDescSecondaryColor := organizationbrandingsettingFields[3].Descriptor()
+	// organizationbrandingsetting.SecondaryColorValidator is a validator for the "secondary_color" field. It is called by the builders before save.
+	organizationbrandingsetting.SecondaryColorValidator = organizationbrandingsettingDescSecondaryColor.Validators[0].(func(string) error)
+	// organizationbrandingsettingDescBackgroundColor is the schema descriptor for background_color field.
+	organizationbrandingsettingDescBackgroundColor := organizationbrandingsettingFields[4].Descriptor()
+	// organizationbrandingsetting.BackgroundColorValidator is a validator for the "background_color" field. It is called by the builders before save.
+	organizationbrandingsetting.BackgroundColorValidator = organizationbrandingsettingDescBackgroundColor.Validators[0].(func(string) error)
+	// organizationbrandingsettingDescTextColor is the schema descriptor for text_color field.
+	organizationbrandingsettingDescTextColor := organizationbrandingsettingFields[5].Descriptor()
+	// organizationbrandingsetting.TextColorValidator is a validator for the "text_color" field. It is called by the builders before save.
+	organizationbrandingsetting.TextColorValidator = organizationbrandingsettingDescTextColor.Validators[0].(func(string) error)
+	// organizationbrandingsettingDescID is the schema descriptor for id field.
+	organizationbrandingsettingDescID := organizationbrandingsettingMixinFields4[0].Descriptor()
+	// organizationbrandingsetting.DefaultID holds the default value on creation for the id field.
+	organizationbrandingsetting.DefaultID = organizationbrandingsettingDescID.Default.(func() string)
 	organizationsettingMixin := schema.OrganizationSetting{}.Mixin()
 	organizationsetting.Policy = privacy.NewPolicies(schema.OrganizationSetting{})
 	organizationsetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -6022,6 +6110,7 @@ func init() {
 	remediationMixinHooks11 := remediationMixin[11].Hooks()
 	remediationMixinHooks12 := remediationMixin[12].Hooks()
 	remediationMixinHooks13 := remediationMixin[13].Hooks()
+	remediationHooks := schema.Remediation{}.Hooks()
 
 	remediation.Hooks[1] = remediationMixinHooks0[0]
 
@@ -6048,6 +6137,8 @@ func init() {
 	remediation.Hooks[12] = remediationMixinHooks12[0]
 
 	remediation.Hooks[13] = remediationMixinHooks13[0]
+
+	remediation.Hooks[14] = remediationHooks[0]
 	remediationMixinInters3 := remediationMixin[3].Interceptors()
 	remediationMixinInters8 := remediationMixin[8].Interceptors()
 	remediationMixinInters9 := remediationMixin[9].Interceptors()
@@ -6103,6 +6194,151 @@ func init() {
 	remediationDescID := remediationMixinFields4[0].Descriptor()
 	// remediation.DefaultID holds the default value on creation for the id field.
 	remediation.DefaultID = remediationDescID.Default.(func() string)
+	reportMixin := schema.Report{}.Mixin()
+	report.Policy = privacy.NewPolicies(schema.Report{})
+	report.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := report.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	reportMixinHooks0 := reportMixin[0].Hooks()
+	reportMixinHooks1 := reportMixin[1].Hooks()
+	reportMixinHooks3 := reportMixin[3].Hooks()
+	reportMixinHooks4 := reportMixin[4].Hooks()
+	reportMixinHooks5 := reportMixin[5].Hooks()
+	reportMixinHooks6 := reportMixin[6].Hooks()
+	reportMixinHooks8 := reportMixin[8].Hooks()
+	reportMixinHooks9 := reportMixin[9].Hooks()
+	reportMixinHooks10 := reportMixin[10].Hooks()
+	reportHooks := schema.Report{}.Hooks()
+
+	report.Hooks[1] = reportMixinHooks0[0]
+
+	report.Hooks[2] = reportMixinHooks1[0]
+
+	report.Hooks[3] = reportMixinHooks3[0]
+
+	report.Hooks[4] = reportMixinHooks4[0]
+
+	report.Hooks[5] = reportMixinHooks5[0]
+
+	report.Hooks[6] = reportMixinHooks6[0]
+
+	report.Hooks[7] = reportMixinHooks8[0]
+
+	report.Hooks[8] = reportMixinHooks9[0]
+
+	report.Hooks[9] = reportMixinHooks9[1]
+
+	report.Hooks[10] = reportMixinHooks9[2]
+
+	report.Hooks[11] = reportMixinHooks10[0]
+
+	report.Hooks[12] = reportHooks[0]
+
+	report.Hooks[13] = reportHooks[1]
+	reportMixinInters3 := reportMixin[3].Interceptors()
+	reportMixinInters8 := reportMixin[8].Interceptors()
+	reportInters := schema.Report{}.Interceptors()
+	report.Interceptors[0] = reportMixinInters3[0]
+	report.Interceptors[1] = reportMixinInters8[0]
+	report.Interceptors[2] = reportInters[0]
+	reportMixinFields0 := reportMixin[0].Fields()
+	_ = reportMixinFields0
+	reportMixinFields4 := reportMixin[4].Fields()
+	_ = reportMixinFields4
+	reportMixinFields5 := reportMixin[5].Fields()
+	_ = reportMixinFields5
+	reportMixinFields6 := reportMixin[6].Fields()
+	_ = reportMixinFields6
+	reportMixinFields8 := reportMixin[8].Fields()
+	_ = reportMixinFields8
+	reportFields := schema.Report{}.Fields()
+	_ = reportFields
+	// reportDescCreatedAt is the schema descriptor for created_at field.
+	reportDescCreatedAt := reportMixinFields0[0].Descriptor()
+	// report.DefaultCreatedAt holds the default value on creation for the created_at field.
+	report.DefaultCreatedAt = reportDescCreatedAt.Default.(func() time.Time)
+	// reportDescUpdatedAt is the schema descriptor for updated_at field.
+	reportDescUpdatedAt := reportMixinFields0[1].Descriptor()
+	// report.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	report.DefaultUpdatedAt = reportDescUpdatedAt.Default.(func() time.Time)
+	// report.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	report.UpdateDefaultUpdatedAt = reportDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// reportDescDisplayID is the schema descriptor for display_id field.
+	reportDescDisplayID := reportMixinFields4[1].Descriptor()
+	// report.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	report.DisplayIDValidator = reportDescDisplayID.Validators[0].(func(string) error)
+	// reportDescTags is the schema descriptor for tags field.
+	reportDescTags := reportMixinFields5[0].Descriptor()
+	// report.DefaultTags holds the default value on creation for the tags field.
+	report.DefaultTags = reportDescTags.Default.([]string)
+	// reportDescRequestorID is the schema descriptor for requestor_id field.
+	reportDescRequestorID := reportMixinFields6[0].Descriptor()
+	// report.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
+	report.RequestorIDValidator = reportDescRequestorID.Validators[0].(func(string) error)
+	// reportDescOwnerID is the schema descriptor for owner_id field.
+	reportDescOwnerID := reportMixinFields8[0].Descriptor()
+	// report.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	report.OwnerIDValidator = reportDescOwnerID.Validators[0].(func(string) error)
+	// reportDescName is the schema descriptor for name field.
+	reportDescName := reportFields[0].Descriptor()
+	// report.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	report.NameValidator = reportDescName.Validators[0].(func(string) error)
+	// reportDescQuery is the schema descriptor for query field.
+	reportDescQuery := reportFields[1].Descriptor()
+	// report.QueryValidator is a validator for the "query" field. It is called by the builders before save.
+	report.QueryValidator = reportDescQuery.Validators[0].(func(string) error)
+	// reportDescID is the schema descriptor for id field.
+	reportDescID := reportMixinFields4[0].Descriptor()
+	// report.DefaultID holds the default value on creation for the id field.
+	report.DefaultID = reportDescID.Default.(func() string)
+	reportmembershipMixin := schema.ReportMembership{}.Mixin()
+	reportmembership.Policy = privacy.NewPolicies(schema.ReportMembership{})
+	reportmembership.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := reportmembership.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	reportmembershipMixinHooks0 := reportmembershipMixin[0].Hooks()
+	reportmembershipMixinHooks1 := reportmembershipMixin[1].Hooks()
+	reportmembershipHooks := schema.ReportMembership{}.Hooks()
+
+	reportmembership.Hooks[1] = reportmembershipMixinHooks0[0]
+
+	reportmembership.Hooks[2] = reportmembershipMixinHooks1[0]
+
+	reportmembership.Hooks[3] = reportmembershipHooks[0]
+
+	reportmembership.Hooks[4] = reportmembershipHooks[1]
+	reportmembershipInters := schema.ReportMembership{}.Interceptors()
+	reportmembership.Interceptors[0] = reportmembershipInters[0]
+	reportmembershipMixinFields0 := reportmembershipMixin[0].Fields()
+	_ = reportmembershipMixinFields0
+	reportmembershipMixinFields3 := reportmembershipMixin[3].Fields()
+	_ = reportmembershipMixinFields3
+	reportmembershipFields := schema.ReportMembership{}.Fields()
+	_ = reportmembershipFields
+	// reportmembershipDescCreatedAt is the schema descriptor for created_at field.
+	reportmembershipDescCreatedAt := reportmembershipMixinFields0[0].Descriptor()
+	// reportmembership.DefaultCreatedAt holds the default value on creation for the created_at field.
+	reportmembership.DefaultCreatedAt = reportmembershipDescCreatedAt.Default.(func() time.Time)
+	// reportmembershipDescUpdatedAt is the schema descriptor for updated_at field.
+	reportmembershipDescUpdatedAt := reportmembershipMixinFields0[1].Descriptor()
+	// reportmembership.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	reportmembership.DefaultUpdatedAt = reportmembershipDescUpdatedAt.Default.(func() time.Time)
+	// reportmembership.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	reportmembership.UpdateDefaultUpdatedAt = reportmembershipDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// reportmembershipDescID is the schema descriptor for id field.
+	reportmembershipDescID := reportmembershipMixinFields3[0].Descriptor()
+	// reportmembership.DefaultID holds the default value on creation for the id field.
+	reportmembership.DefaultID = reportmembershipDescID.Default.(func() string)
 	reviewMixin := schema.Review{}.Mixin()
 	review.Policy = privacy.NewPolicies(reviewMixin[10], schema.Review{})
 	review.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -6414,6 +6650,7 @@ func init() {
 	scanMixinHooks10 := scanMixin[10].Hooks()
 	scanMixinHooks12 := scanMixin[12].Hooks()
 	scanMixinHooks13 := scanMixin[13].Hooks()
+	scanHooks := schema.Scan{}.Hooks()
 
 	scan.Hooks[1] = scanMixinHooks0[0]
 
@@ -6436,6 +6673,8 @@ func init() {
 	scan.Hooks[10] = scanMixinHooks12[0]
 
 	scan.Hooks[11] = scanMixinHooks13[0]
+
+	scan.Hooks[12] = scanHooks[0]
 	scanMixinInters3 := scanMixin[3].Interceptors()
 	scanMixinInters8 := scanMixin[8].Interceptors()
 	scanMixinInters10 := scanMixin[10].Interceptors()
@@ -7903,6 +8142,12 @@ func init() {
 	trustcentersetting.Hooks[7] = trustcentersettingHooks[0]
 
 	trustcentersetting.Hooks[8] = trustcentersettingHooks[1]
+
+	trustcentersetting.Hooks[9] = trustcentersettingHooks[2]
+
+	trustcentersetting.Hooks[10] = trustcentersettingHooks[3]
+
+	trustcentersetting.Hooks[11] = trustcentersettingHooks[4]
 	trustcentersettingMixinInters3 := trustcentersettingMixin[3].Interceptors()
 	trustcentersettingMixinInters6 := trustcentersettingMixin[6].Interceptors()
 	trustcentersettingInters := schema.TrustCenterSetting{}.Interceptors()
@@ -8673,6 +8918,8 @@ func init() {
 	vulnerability.Hooks[15] = vulnerabilityMixinHooks15[0]
 
 	vulnerability.Hooks[16] = vulnerabilityHooks[0]
+
+	vulnerability.Hooks[17] = vulnerabilityHooks[1]
 	vulnerabilityMixinInters3 := vulnerabilityMixin[3].Interceptors()
 	vulnerabilityMixinInters8 := vulnerabilityMixin[8].Interceptors()
 	vulnerability.Interceptors[0] = vulnerabilityMixinInters3[0]

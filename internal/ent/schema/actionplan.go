@@ -169,6 +169,7 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		}}.getMixins(a)
 }
 
+// Modules of the ActionPlan
 func (ActionPlan) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,

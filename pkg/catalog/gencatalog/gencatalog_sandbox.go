@@ -27,6 +27,27 @@ var DefaultSandboxCatalog = models.Catalog{
 			MarketingDescription: "Use a custom domain for your hosted questionnaires",
 			ProductID:            "prod_VRKVWuKkT9FOGT",
 		},
+		string(models.CatalogBrandingAssessmentAddon): models.Feature{
+			Audience: "public",
+			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
+				Interval:   "month",
+				LookupKey:  "price_branding_assessment_monthly",
+				Nickname:   "price_assessment_branding_monthly",
+				PriceID:    "price_1UUviHJIzM4Pa2ZcrMIuRkBA",
+				UnitAmount: int64(2500),
+			}, models.ItemPrice{
+				Interval:   "year",
+				LookupKey:  "price_branding_assessment_yearly",
+				Nickname:   "price_assessment_branding_annually",
+				PriceID:    "price_1UUviIJIzM4Pa2ZctSKiPEBP",
+				UnitAmount: int64(27000),
+			}}},
+			Description:          "Assessment Branding",
+			DisplayName:          "Assessment Branding",
+			LookupKey:            "branding_assessment_addon",
+			MarketingDescription: "Customization option to remove the Openlane branding on your assessments",
+			ProductID:            "prod_VVxdpnZhQfO5lM",
+		},
 		string(models.CatalogBrandingTrustcenterAddon): models.Feature{
 			Audience: "public",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
@@ -283,6 +304,6 @@ var DefaultSandboxCatalog = models.Catalog{
 			ProductID:            "prod_SzpzB3d9rAjrb3",
 		},
 	},
-	SHA:     "e74e920fd951dab9c0222fe864e3e8cbce34ead0876af1760372a085ec657cb2",
-	Version: "v0.0.17",
+	SHA:     "9c67c9d7716b4a449bc73e093f71b932d06bffc6b760a0615607ebd32f284adf",
+	Version: "v0.0.18",
 }

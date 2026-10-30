@@ -115,6 +115,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*OrganizationMutation]() {
 		c.Organization.Use(hook)
 	}
+	for _, hook := range history.Hooks[*OrganizationBrandingSettingMutation]() {
+		c.OrganizationBrandingSetting.Use(hook)
+	}
 	for _, hook := range history.Hooks[*OrganizationSettingMutation]() {
 		c.OrganizationSetting.Use(hook)
 	}
@@ -132,6 +135,12 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*RemediationMutation]() {
 		c.Remediation.Use(hook)
+	}
+	for _, hook := range history.Hooks[*ReportMutation]() {
+		c.Report.Use(hook)
+	}
+	for _, hook := range history.Hooks[*ReportMembershipMutation]() {
+		c.ReportMembership.Use(hook)
 	}
 	for _, hook := range history.Hooks[*ReviewMutation]() {
 		c.Review.Use(hook)

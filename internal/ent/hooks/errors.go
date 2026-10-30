@@ -108,12 +108,6 @@ var (
 	ErrUnableToCreateContact = errors.New("unable to create a contact")
 	// ErrUnableToCreateAssessmentResponse is returned when an assessment response could not be created
 	ErrUnableToCreateAssessmentResponse = errors.New("unable to create assessment response")
-	// ErrTooManyLogoFiles is returned when a user attempts to upload more than one logo file
-	ErrTooManyLogoFiles = errors.New("too many logo files uploaded, only one is allowed")
-	// ErrTooManyFaviconFiles is returned when a user attempts to upload more than one favicon file
-	ErrTooManyFaviconFiles = errors.New("too many favicon files uploaded, only one is allowed")
-	// ErrTooManyHeroImageFiles is returned when a user attempts to upload more than one hero image file
-	ErrTooManyHeroImageFiles = errors.New("too many hero image files uploaded, only one is allowed")
 	// ErrMissingTrustCenterID is returned when a trust center id is required but not provided
 	ErrMissingTrustCenterID = errors.New("trust center id is required")
 	// ErrMissingFileID is returned when a file id is required but not provided
@@ -264,6 +258,8 @@ var (
 	ErrQuestionnaireTransformInvalid = errors.New("questionnaire transform invalid")
 	// ErrClientResolveFailed indicates the ent client could not be resolved from the context
 	ErrClientResolveFailed = errors.New("client resolve failed")
+	// ErrTooManyFiles is returned when a file upload only allows one file and multiple were provided
+	ErrTooManyFiles = errors.New("too many files uploaded, only one is allowed")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

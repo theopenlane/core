@@ -1505,6 +1505,11 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		Rules: []CSVReferenceRule{
 		},
 	},
+	"OrganizationBrandingSetting": {
+		SchemaName: "OrganizationBrandingSetting",
+		Rules: []CSVReferenceRule{
+		},
+	},
 	"OrganizationSetting": {
 		SchemaName: "OrganizationSetting",
 		Rules: []CSVReferenceRule{
@@ -1730,6 +1735,24 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				IsSlice:         true,
 				CreateIfMissing: false,
 			},
+		},
+	},
+	"Report": {
+		SchemaName: "Report",
+		Rules: []CSVReferenceRule{
+			{
+				SourceColumn:    "ReportOwnerEmail",
+				TargetField:     "ReportOwnerID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+		},
+	},
+	"ReportMembership": {
+		SchemaName: "ReportMembership",
+		Rules: []CSVReferenceRule{
 		},
 	},
 	"Review": {
@@ -3164,6 +3187,24 @@ type OrganizationCSVUpdateInput struct {
 // CSVInputWrapper marks OrganizationCSVUpdateInput for CSV header preprocessing.
 func (OrganizationCSVUpdateInput) CSVInputWrapper() {}
 
+// OrganizationBrandingSettingCSVInput wraps CreateOrganizationBrandingSettingInput with CSV reference columns.
+type OrganizationBrandingSettingCSVInput struct {
+	Input generated.CreateOrganizationBrandingSettingInput
+}
+
+// CSVInputWrapper marks OrganizationBrandingSettingCSVInput for CSV header preprocessing.
+func (OrganizationBrandingSettingCSVInput) CSVInputWrapper() {}
+
+// OrganizationBrandingSettingCSVUpdateInput wraps UpdateOrganizationBrandingSettingInput with CSV reference columns for bulk updates.
+type OrganizationBrandingSettingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateOrganizationBrandingSettingInput
+}
+
+// CSVInputWrapper marks OrganizationBrandingSettingCSVUpdateInput for CSV header preprocessing.
+func (OrganizationBrandingSettingCSVUpdateInput) CSVInputWrapper() {}
+
 // OrganizationSettingCSVInput wraps CreateOrganizationSettingInput with CSV reference columns.
 type OrganizationSettingCSVInput struct {
 	Input generated.CreateOrganizationSettingInput
@@ -3337,6 +3378,44 @@ type RemediationCSVUpdateInput struct {
 
 // CSVInputWrapper marks RemediationCSVUpdateInput for CSV header preprocessing.
 func (RemediationCSVUpdateInput) CSVInputWrapper() {}
+
+// ReportCSVInput wraps CreateReportInput with CSV reference columns.
+type ReportCSVInput struct {
+	Input generated.CreateReportInput
+	ReportOwnerEmail string `csv:"ReportOwnerEmail"`
+}
+
+// CSVInputWrapper marks ReportCSVInput for CSV header preprocessing.
+func (ReportCSVInput) CSVInputWrapper() {}
+
+// ReportCSVUpdateInput wraps UpdateReportInput with CSV reference columns for bulk updates.
+type ReportCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateReportInput
+	ReportOwnerEmail string `csv:"ReportOwnerEmail"`
+}
+
+// CSVInputWrapper marks ReportCSVUpdateInput for CSV header preprocessing.
+func (ReportCSVUpdateInput) CSVInputWrapper() {}
+
+// ReportMembershipCSVInput wraps CreateReportMembershipInput with CSV reference columns.
+type ReportMembershipCSVInput struct {
+	Input generated.CreateReportMembershipInput
+}
+
+// CSVInputWrapper marks ReportMembershipCSVInput for CSV header preprocessing.
+func (ReportMembershipCSVInput) CSVInputWrapper() {}
+
+// ReportMembershipCSVUpdateInput wraps UpdateReportMembershipInput with CSV reference columns for bulk updates.
+type ReportMembershipCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID string `csv:"ID"`
+	Input generated.UpdateReportMembershipInput
+}
+
+// CSVInputWrapper marks ReportMembershipCSVUpdateInput for CSV header preprocessing.
+func (ReportMembershipCSVUpdateInput) CSVInputWrapper() {}
 
 // ReviewCSVInput wraps CreateReviewInput with CSV reference columns.
 type ReviewCSVInput struct {

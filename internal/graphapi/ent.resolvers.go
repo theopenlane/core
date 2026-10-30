@@ -1665,6 +1665,40 @@ func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[
 	return res, err
 }
 
+// OrganizationBrandingSettings is the resolver for the organizationBrandingSettings field.
+func (r *queryResolver) OrganizationBrandingSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationBrandingSettingOrder, where *generated.OrganizationBrandingSettingWhereInput) (*generated.OrganizationBrandingSettingConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.OrganizationBrandingSettingOrder{
+			{
+				Field:     generated.OrganizationBrandingSettingOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).OrganizationBrandingSetting.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationbrandingsetting"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithOrganizationBrandingSettingOrder(orderBy),
+		generated.WithOrganizationBrandingSettingFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationbrandingsetting"})
+	}
+
+	return res, err
+}
+
 // OrganizationSettings is the resolver for the organizationSettings field.
 func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationSettingOrder, where *generated.OrganizationSettingWhereInput) (*generated.OrganizationSettingConnection, error) {
 	// set page limit if nothing was set
@@ -1907,6 +1941,74 @@ func (r *queryResolver) Remediations(ctx context.Context, after *entgql.Cursor[s
 		generated.WithRemediationFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "remediation"})
+	}
+
+	return res, err
+}
+
+// Reports is the resolver for the reports field.
+func (r *queryResolver) Reports(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportOrder, where *generated.ReportWhereInput) (*generated.ReportConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ReportOrder{
+			{
+				Field:     generated.ReportOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Report.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "report"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithReportOrder(orderBy),
+		generated.WithReportFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "report"})
+	}
+
+	return res, err
+}
+
+// ReportMemberships is the resolver for the reportMemberships field.
+func (r *queryResolver) ReportMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportMembershipOrder, where *generated.ReportMembershipWhereInput) (*generated.ReportMembershipConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ReportMembershipOrder{
+			{
+				Field:     generated.ReportMembershipOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ReportMembership.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reportmembership"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithReportMembershipOrder(orderBy),
+		generated.WithReportMembershipFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reportmembership"})
 	}
 
 	return res, err

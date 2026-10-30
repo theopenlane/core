@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/logx"
 )
 
@@ -100,27 +99,6 @@ func HookReviews() ent.Hook {
 			}
 
 			return v, nil
-		})
-	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
-
-// HookReviewFiles runs on review mutations to check for uploaded files
-func HookReviewFiles() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.ReviewFunc(func(ctx context.Context, m *generated.ReviewMutation) (generated.Value, error) {
-			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
-			if len(fileIDs) > 0 {
-				var err error
-
-				ctx, err = pkgobjects.ProcessFilesForMutation(ctx, m, "reviewFiles")
-				if err != nil {
-					return nil, err
-				}
-
-				m.AddFileIDs(fileIDs...)
-			}
-
-			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }

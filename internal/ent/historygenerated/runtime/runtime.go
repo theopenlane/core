@@ -42,6 +42,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationbrandingsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
@@ -50,6 +51,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reporthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reportmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
@@ -1572,6 +1575,43 @@ func init() {
 	orgmembershiphistoryDescID := orgmembershiphistoryFields[8].Descriptor()
 	// orgmembershiphistory.DefaultID holds the default value on creation for the id field.
 	orgmembershiphistory.DefaultID = orgmembershiphistoryDescID.Default.(func() string)
+	organizationbrandingsettinghistory.Policy = privacy.NewPolicies(historyschema.OrganizationBrandingSettingHistory{})
+	organizationbrandingsettinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := organizationbrandingsettinghistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	organizationbrandingsettinghistoryInters := historyschema.OrganizationBrandingSettingHistory{}.Interceptors()
+	organizationbrandingsettinghistory.Interceptors[0] = organizationbrandingsettinghistoryInters[0]
+	organizationbrandingsettinghistoryFields := historyschema.OrganizationBrandingSettingHistory{}.Fields()
+	_ = organizationbrandingsettinghistoryFields
+	// organizationbrandingsettinghistoryDescHistoryTime is the schema descriptor for history_time field.
+	organizationbrandingsettinghistoryDescHistoryTime := organizationbrandingsettinghistoryFields[0].Descriptor()
+	// organizationbrandingsettinghistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	organizationbrandingsettinghistory.DefaultHistoryTime = organizationbrandingsettinghistoryDescHistoryTime.Default.(func() time.Time)
+	// organizationbrandingsettinghistoryDescCreatedAt is the schema descriptor for created_at field.
+	organizationbrandingsettinghistoryDescCreatedAt := organizationbrandingsettinghistoryFields[3].Descriptor()
+	// organizationbrandingsettinghistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	organizationbrandingsettinghistory.DefaultCreatedAt = organizationbrandingsettinghistoryDescCreatedAt.Default.(func() time.Time)
+	// organizationbrandingsettinghistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	organizationbrandingsettinghistoryDescUpdatedAt := organizationbrandingsettinghistoryFields[4].Descriptor()
+	// organizationbrandingsettinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	organizationbrandingsettinghistory.DefaultUpdatedAt = organizationbrandingsettinghistoryDescUpdatedAt.Default.(func() time.Time)
+	// organizationbrandingsettinghistoryDescTags is the schema descriptor for tags field.
+	organizationbrandingsettinghistoryDescTags := organizationbrandingsettinghistoryFields[11].Descriptor()
+	// organizationbrandingsettinghistory.DefaultTags holds the default value on creation for the tags field.
+	organizationbrandingsettinghistory.DefaultTags = organizationbrandingsettinghistoryDescTags.Default.([]string)
+	// organizationbrandingsettinghistoryDescRemoveAssessmentBranding is the schema descriptor for remove_assessment_branding field.
+	organizationbrandingsettinghistoryDescRemoveAssessmentBranding := organizationbrandingsettinghistoryFields[13].Descriptor()
+	// organizationbrandingsettinghistory.DefaultRemoveAssessmentBranding holds the default value on creation for the remove_assessment_branding field.
+	organizationbrandingsettinghistory.DefaultRemoveAssessmentBranding = organizationbrandingsettinghistoryDescRemoveAssessmentBranding.Default.(bool)
+	// organizationbrandingsettinghistoryDescID is the schema descriptor for id field.
+	organizationbrandingsettinghistoryDescID := organizationbrandingsettinghistoryFields[10].Descriptor()
+	// organizationbrandingsettinghistory.DefaultID holds the default value on creation for the id field.
+	organizationbrandingsettinghistory.DefaultID = organizationbrandingsettinghistoryDescID.Default.(func() string)
 	organizationhistory.Policy = privacy.NewPolicies(historyschema.OrganizationHistory{})
 	organizationhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -1915,6 +1955,68 @@ func init() {
 	remediationhistoryDescID := remediationhistoryFields[10].Descriptor()
 	// remediationhistory.DefaultID holds the default value on creation for the id field.
 	remediationhistory.DefaultID = remediationhistoryDescID.Default.(func() string)
+	reporthistory.Policy = privacy.NewPolicies(historyschema.ReportHistory{})
+	reporthistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := reporthistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	reporthistoryInters := historyschema.ReportHistory{}.Interceptors()
+	reporthistory.Interceptors[0] = reporthistoryInters[0]
+	reporthistoryFields := historyschema.ReportHistory{}.Fields()
+	_ = reporthistoryFields
+	// reporthistoryDescHistoryTime is the schema descriptor for history_time field.
+	reporthistoryDescHistoryTime := reporthistoryFields[0].Descriptor()
+	// reporthistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	reporthistory.DefaultHistoryTime = reporthistoryDescHistoryTime.Default.(func() time.Time)
+	// reporthistoryDescCreatedAt is the schema descriptor for created_at field.
+	reporthistoryDescCreatedAt := reporthistoryFields[3].Descriptor()
+	// reporthistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	reporthistory.DefaultCreatedAt = reporthistoryDescCreatedAt.Default.(func() time.Time)
+	// reporthistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	reporthistoryDescUpdatedAt := reporthistoryFields[4].Descriptor()
+	// reporthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	reporthistory.DefaultUpdatedAt = reporthistoryDescUpdatedAt.Default.(func() time.Time)
+	// reporthistoryDescTags is the schema descriptor for tags field.
+	reporthistoryDescTags := reporthistoryFields[12].Descriptor()
+	// reporthistory.DefaultTags holds the default value on creation for the tags field.
+	reporthistory.DefaultTags = reporthistoryDescTags.Default.([]string)
+	// reporthistoryDescID is the schema descriptor for id field.
+	reporthistoryDescID := reporthistoryFields[10].Descriptor()
+	// reporthistory.DefaultID holds the default value on creation for the id field.
+	reporthistory.DefaultID = reporthistoryDescID.Default.(func() string)
+	reportmembershiphistory.Policy = privacy.NewPolicies(historyschema.ReportMembershipHistory{})
+	reportmembershiphistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := reportmembershiphistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	reportmembershiphistoryInters := historyschema.ReportMembershipHistory{}.Interceptors()
+	reportmembershiphistory.Interceptors[0] = reportmembershiphistoryInters[0]
+	reportmembershiphistoryFields := historyschema.ReportMembershipHistory{}.Fields()
+	_ = reportmembershiphistoryFields
+	// reportmembershiphistoryDescHistoryTime is the schema descriptor for history_time field.
+	reportmembershiphistoryDescHistoryTime := reportmembershiphistoryFields[0].Descriptor()
+	// reportmembershiphistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	reportmembershiphistory.DefaultHistoryTime = reportmembershiphistoryDescHistoryTime.Default.(func() time.Time)
+	// reportmembershiphistoryDescCreatedAt is the schema descriptor for created_at field.
+	reportmembershiphistoryDescCreatedAt := reportmembershiphistoryFields[3].Descriptor()
+	// reportmembershiphistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	reportmembershiphistory.DefaultCreatedAt = reportmembershiphistoryDescCreatedAt.Default.(func() time.Time)
+	// reportmembershiphistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	reportmembershiphistoryDescUpdatedAt := reportmembershiphistoryFields[4].Descriptor()
+	// reportmembershiphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	reportmembershiphistory.DefaultUpdatedAt = reportmembershiphistoryDescUpdatedAt.Default.(func() time.Time)
+	// reportmembershiphistoryDescID is the schema descriptor for id field.
+	reportmembershiphistoryDescID := reportmembershiphistoryFields[8].Descriptor()
+	// reportmembershiphistory.DefaultID holds the default value on creation for the id field.
+	reportmembershiphistory.DefaultID = reportmembershiphistoryDescID.Default.(func() string)
 	reviewhistory.Policy = privacy.NewPolicies(historyschema.ReviewHistory{})
 	reviewhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {

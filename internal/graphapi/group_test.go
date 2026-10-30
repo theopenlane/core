@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
@@ -1375,4 +1376,54 @@ func TestManagedGroupMembership_AdminGroup(t *testing.T) {
 	assert.Check(t, exists)
 
 	th.CleanupOrganizationDataWithContext(users.Owner.UserCtx, t)
+}
+
+func TestMutationGroup_ReportSelfAccess(t *testing.T) {
+
+	org := suite.SeedFreshMinimalOrgUsers(t, false)
+
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t)
+	})
+
+	// make a private report. group should not be able to add itself as a member directly from it's mutation
+	report := (&th.ReportBuilder{
+		Client:     suite.Client,
+		Visibility: enums.ReportVisibilityPrivate,
+	}).MustNew(org.Owner.UserCtx, t)
+
+	tt := []struct {
+		name       string
+		withEditor bool
+	}{
+		{
+			name: "cannot add to viewer group",
+		},
+		{
+			name:       "cannot add to editor group",
+			withEditor: true,
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			createInput := testclient.CreateGroupInput{
+				Name:            tc.name,
+				ReportViewerIDs: []string{report.ID},
+			}
+
+			if tc.withEditor {
+				createInput.ReportViewerIDs = nil
+				createInput.ReportEditorIDs = []string{report.ID}
+			}
+
+			_, err := suite.Client.API.CreateGroup(org.Owner.UserCtx, createInput)
+			assert.Assert(t, err != nil)
+
+			resp, err := suite.Client.API.GetReportByID(org.Owner.UserCtx, report.ID)
+			assert.NilError(t, err)
+			assert.Check(t, is.Len(resp.Report.Viewers.Edges, 0))
+			assert.Check(t, is.Len(resp.Report.Editors.Edges, 0))
+		})
+	}
 }

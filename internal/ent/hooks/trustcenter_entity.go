@@ -66,33 +66,3 @@ func HookTrustCenterEntityCreate() ent.Hook {
 		})
 	}, ent.OpCreate)
 }
-
-// HookTrustCenterEntityFiles runs on trustcenter entity mutations
-// and checks for an uploaded logo file
-func HookTrustCenterEntityFiles() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.TrustCenterEntityFunc(func(ctx context.Context, m *generated.TrustCenterEntityMutation) (generated.Value, error) {
-			var err error
-
-			ctx, err = checkTrustCenterEntityFiles(ctx, m)
-			if err != nil {
-				return nil, err
-			}
-
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
-
-// checkTrustCenterEntityFiles checks for logo files in the context
-func checkTrustCenterEntityFiles(ctx context.Context, m *generated.TrustCenterEntityMutation) (context.Context, error) {
-	key := "logoFile"
-	ctx, err := processSingleMutationFile(ctx, m, key, "trust_center_entity", ErrTooManyAvatarFiles,
-		func(mut *generated.TrustCenterEntityMutation, id string) { mut.SetLogoFileID(id) },
-	)
-	if err != nil {
-		return ctx, err
-	}
-
-	return ctx, nil
-}

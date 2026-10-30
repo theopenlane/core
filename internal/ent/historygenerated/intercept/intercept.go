@@ -43,6 +43,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationbrandingsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
@@ -52,6 +53,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reporthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reportmembershiphistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
@@ -1054,6 +1057,33 @@ func (f TraverseOrgMembershipHistory) Traverse(ctx context.Context, q historygen
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.OrgMembershipHistoryQuery", q)
 }
 
+// The OrganizationBrandingSettingHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OrganizationBrandingSettingHistoryFunc func(context.Context, *historygenerated.OrganizationBrandingSettingHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OrganizationBrandingSettingHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.OrganizationBrandingSettingHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.OrganizationBrandingSettingHistoryQuery", q)
+}
+
+// The TraverseOrganizationBrandingSettingHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOrganizationBrandingSettingHistory func(context.Context, *historygenerated.OrganizationBrandingSettingHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOrganizationBrandingSettingHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOrganizationBrandingSettingHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.OrganizationBrandingSettingHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.OrganizationBrandingSettingHistoryQuery", q)
+}
+
 // The OrganizationHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type OrganizationHistoryFunc func(context.Context, *historygenerated.OrganizationHistoryQuery) (historygenerated.Value, error)
 
@@ -1241,6 +1271,60 @@ func (f TraverseRemediationHistory) Traverse(ctx context.Context, q historygener
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.RemediationHistoryQuery", q)
+}
+
+// The ReportHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ReportHistoryFunc func(context.Context, *historygenerated.ReportHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ReportHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.ReportHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.ReportHistoryQuery", q)
+}
+
+// The TraverseReportHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseReportHistory func(context.Context, *historygenerated.ReportHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseReportHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseReportHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.ReportHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.ReportHistoryQuery", q)
+}
+
+// The ReportMembershipHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ReportMembershipHistoryFunc func(context.Context, *historygenerated.ReportMembershipHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ReportMembershipHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.ReportMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.ReportMembershipHistoryQuery", q)
+}
+
+// The TraverseReportMembershipHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseReportMembershipHistory func(context.Context, *historygenerated.ReportMembershipHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseReportMembershipHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseReportMembershipHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.ReportMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.ReportMembershipHistoryQuery", q)
 }
 
 // The ReviewHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2016,6 +2100,8 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.NotificationTemplateHistoryQuery, predicate.NotificationTemplateHistory, notificationtemplatehistory.OrderOption]{typ: historygenerated.TypeNotificationTemplateHistory, tq: q}, nil
 	case *historygenerated.OrgMembershipHistoryQuery:
 		return &query[*historygenerated.OrgMembershipHistoryQuery, predicate.OrgMembershipHistory, orgmembershiphistory.OrderOption]{typ: historygenerated.TypeOrgMembershipHistory, tq: q}, nil
+	case *historygenerated.OrganizationBrandingSettingHistoryQuery:
+		return &query[*historygenerated.OrganizationBrandingSettingHistoryQuery, predicate.OrganizationBrandingSettingHistory, organizationbrandingsettinghistory.OrderOption]{typ: historygenerated.TypeOrganizationBrandingSettingHistory, tq: q}, nil
 	case *historygenerated.OrganizationHistoryQuery:
 		return &query[*historygenerated.OrganizationHistoryQuery, predicate.OrganizationHistory, organizationhistory.OrderOption]{typ: historygenerated.TypeOrganizationHistory, tq: q}, nil
 	case *historygenerated.OrganizationSettingHistoryQuery:
@@ -2030,6 +2116,10 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.ProgramMembershipHistoryQuery, predicate.ProgramMembershipHistory, programmembershiphistory.OrderOption]{typ: historygenerated.TypeProgramMembershipHistory, tq: q}, nil
 	case *historygenerated.RemediationHistoryQuery:
 		return &query[*historygenerated.RemediationHistoryQuery, predicate.RemediationHistory, remediationhistory.OrderOption]{typ: historygenerated.TypeRemediationHistory, tq: q}, nil
+	case *historygenerated.ReportHistoryQuery:
+		return &query[*historygenerated.ReportHistoryQuery, predicate.ReportHistory, reporthistory.OrderOption]{typ: historygenerated.TypeReportHistory, tq: q}, nil
+	case *historygenerated.ReportMembershipHistoryQuery:
+		return &query[*historygenerated.ReportMembershipHistoryQuery, predicate.ReportMembershipHistory, reportmembershiphistory.OrderOption]{typ: historygenerated.TypeReportMembershipHistory, tq: q}, nil
 	case *historygenerated.ReviewHistoryQuery:
 		return &query[*historygenerated.ReviewHistoryQuery, predicate.ReviewHistory, reviewhistory.OrderOption]{typ: historygenerated.TypeReviewHistory, tq: q}, nil
 	case *historygenerated.RiskHistoryQuery:

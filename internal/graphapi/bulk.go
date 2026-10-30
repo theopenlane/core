@@ -6993,6 +6993,225 @@ func (r *mutationResolver) bulkDeleteNotificationTemplate(ctx context.Context, i
 	}, nil
 }
 
+// bulkCreateOrganizationBrandingSetting uses the CreateBulk function to create multiple OrganizationBrandingSetting entities
+func (r *mutationResolver) bulkCreateOrganizationBrandingSetting(ctx context.Context, input []*generated.CreateOrganizationBrandingSettingInput) (*model.OrganizationBrandingSettingBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.OrganizationBrandingSettingCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.OrganizationBrandingSetting.Create().SetInput(*data)
+	}
+
+	res, err := c.OrganizationBrandingSetting.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organizationbrandingsetting"})
+	}
+
+	// return response
+	return &model.OrganizationBrandingSettingBulkCreatePayload{
+		OrganizationBrandingSettings: res,
+	}, nil
+}
+
+// bulkDeleteOrganizationBrandingSetting deletes multiple OrganizationBrandingSetting entities by their IDs
+func (r *mutationResolver) bulkDeleteOrganizationBrandingSetting(ctx context.Context, ids []string) (*model.OrganizationBrandingSettingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "organization_branding_setting", fgax.CanDelete)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.OrganizationBrandingSettingBulkDeletePayload{
+			DeletedIDs:    []string{},
+			NotDeletedIDs: originalIDs,
+			Error:         &err,
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each organizationbrandingsetting individually to ensure proper cleanup
+			if err := r.db.OrganizationBrandingSetting.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("organizationbrandingsetting_id", id).Msg("failed to delete organizationbrandingsetting in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.OrganizationBrandingSettingEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("organizationbrandingsetting_id", id).Msg("failed to cleanup organizationbrandingsetting edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some organizationbrandingsetting deletions failed")
+	}
+
+	deleted := make(map[string]struct{}, len(deletedIDs))
+	for _, id := range deletedIDs {
+		deleted[id] = struct{}{}
+	}
+
+	notDeletedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := deleted[id]; !ok {
+			notDeletedIDs = append(notDeletedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notDeletedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.OrganizationBrandingSettingBulkDeletePayload{
+		DeletedIDs:    deletedIDs,
+		NotDeletedIDs: notDeletedIDs,
+		Error:         err,
+	}, nil
+}
+
+// bulkUpdateOrganizationBrandingSetting updates multiple OrganizationBrandingSetting entities
+func (r *mutationResolver) bulkUpdateOrganizationBrandingSetting(ctx context.Context, ids []string, input generated.UpdateOrganizationBrandingSettingInput) (*model.OrganizationBrandingSettingBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "organization_branding_setting", fgax.CanEdit)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.OrganizationBrandingSettingBulkUpdatePayload{
+			OrganizationBrandingSettings: []*generated.OrganizationBrandingSetting{},
+			UpdatedIDs:                   []string{},
+			NotUpdatedIDs:                originalIDs,
+			Error:                        &err,
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.OrganizationBrandingSetting, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each organizationbrandingsetting individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for organizationbrandingsetting")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.OrganizationBrandingSetting.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("organizationbrandingsetting_id", id).Msg("failed to get organizationbrandingsetting in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("organizationbrandingsetting_id", id).Msg("failed to update organizationbrandingsetting in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.OrganizationBrandingSettingBulkUpdatePayload{
+		OrganizationBrandingSettings: results,
+		UpdatedIDs:                   updatedIDs,
+		NotUpdatedIDs:                notUpdatedIDs,
+		Error:                        err,
+	}, nil
+}
+
+// bulkUpdateCSVOrganizationBrandingSetting updates multiple OrganizationBrandingSetting entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVOrganizationBrandingSetting(ctx context.Context, inputs []*csvgenerated.OrganizationBrandingSettingCSVUpdateInput) (*model.OrganizationBrandingSettingBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.OrganizationBrandingSetting, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each organizationbrandingsetting individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for organizationbrandingsetting")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.OrganizationBrandingSetting.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("organizationbrandingsetting_id", input.ID).Msg("failed to get organizationbrandingsetting in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("organizationbrandingsetting_id", input.ID).Msg("failed to update organizationbrandingsetting in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organizationbrandingsetting"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.OrganizationBrandingSettingBulkUpdatePayload{
+		OrganizationBrandingSettings: results,
+		UpdatedIDs:                   updatedIDs,
+	}, nil
+}
+
 // bulkCreateOrganizationSetting uses the CreateBulk function to create multiple OrganizationSetting entities
 func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -8320,6 +8539,184 @@ func (r *mutationResolver) bulkDeleteRemediation(ctx context.Context, ids []stri
 	}
 
 	return &model.RemediationBulkDeletePayload{
+		DeletedIDs:    deletedIDs,
+		NotDeletedIDs: notDeletedIDs,
+		Error:         err,
+	}, nil
+}
+
+// bulkCreateReportMembership uses the CreateBulk function to create multiple ReportMembership entities
+func (r *mutationResolver) bulkCreateReportMembership(ctx context.Context, input []*generated.CreateReportMembershipInput) (*model.ReportMembershipBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ReportMembershipCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.ReportMembership.Create().SetInput(*data)
+	}
+
+	res, err := c.ReportMembership.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "reportmembership"})
+	}
+
+	// return response
+	return &model.ReportMembershipBulkCreatePayload{
+		ReportMemberships: res,
+	}, nil
+}
+
+// bulkUpdateReportMembership updates multiple ReportMembership entities
+func (r *mutationResolver) bulkUpdateReportMembership(ctx context.Context, ids []string, input generated.UpdateReportMembershipInput) (*model.ReportMembershipBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "report_membership", fgax.CanEdit)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.ReportMembershipBulkUpdatePayload{
+			ReportMemberships: []*generated.ReportMembership{},
+			UpdatedIDs:        []string{},
+			NotUpdatedIDs:     originalIDs,
+			Error:             &err,
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.ReportMembership, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each reportmembership individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for reportmembership")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.ReportMembership.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("reportmembership_id", id).Msg("failed to get reportmembership in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("reportmembership_id", id).Msg("failed to update reportmembership in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.ReportMembershipBulkUpdatePayload{
+		ReportMemberships: results,
+		UpdatedIDs:        updatedIDs,
+		NotUpdatedIDs:     notUpdatedIDs,
+		Error:             err,
+	}, nil
+}
+
+// bulkDeleteReportMembership deletes multiple ReportMembership entities by their IDs
+func (r *mutationResolver) bulkDeleteReportMembership(ctx context.Context, ids []string) (*model.ReportMembershipBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "report_membership", fgax.CanDelete)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.ReportMembershipBulkDeletePayload{
+			DeletedIDs:    []string{},
+			NotDeletedIDs: originalIDs,
+			Error:         &err,
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each reportmembership individually to ensure proper cleanup
+			if err := r.db.ReportMembership.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("reportmembership_id", id).Msg("failed to delete reportmembership in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.ReportMembershipEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("reportmembership_id", id).Msg("failed to cleanup reportmembership edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some reportmembership deletions failed")
+	}
+
+	deleted := make(map[string]struct{}, len(deletedIDs))
+	for _, id := range deletedIDs {
+		deleted[id] = struct{}{}
+	}
+
+	notDeletedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := deleted[id]; !ok {
+			notDeletedIDs = append(notDeletedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notDeletedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.ReportMembershipBulkDeletePayload{
 		DeletedIDs:    deletedIDs,
 		NotDeletedIDs: notDeletedIDs,
 		Error:         err,

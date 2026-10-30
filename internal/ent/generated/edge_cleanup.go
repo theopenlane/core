@@ -59,6 +59,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -72,6 +73,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -673,6 +676,29 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 		if organizationsettingCount, err := FromContext(ctx).OrganizationSetting.Delete().Where(organizationsetting.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", organizationsettingCount).Msg("error deleting organizationsetting")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).OrganizationBrandingSetting.Query().Where(organizationbrandingsetting.HasOrganizationWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying organizationbrandingsetting ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := OrganizationBrandingSettingEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up organizationbrandingsetting edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).OrganizationBrandingSetting.Query().Where((organizationbrandingsetting.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if err := PurgeOrganizationBrandingSettingHistory(ctx, organizationbrandingsetting.HasOrganizationWith(organization.ID(id))); err != nil {
+			return err
+		}
+		if organizationbrandingsettingCount, err := FromContext(ctx).OrganizationBrandingSetting.Delete().Where(organizationbrandingsetting.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", organizationbrandingsettingCount).Msg("error deleting organizationbrandingsetting")
 			return err
 		}
 	}
@@ -1287,6 +1313,29 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 		if programCount, err := FromContext(ctx).Program.Delete().Where(program.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", programCount).Msg("error deleting program")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).Report.Query().Where(report.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying report ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := ReportEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up report edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).Report.Query().Where((report.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if err := PurgeReportHistory(ctx, report.HasOwnerWith(organization.ID(id))); err != nil {
+			return err
+		}
+		if reportCount, err := FromContext(ctx).Report.Delete().Where(report.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", reportCount).Msg("error deleting report")
 			return err
 		}
 	}
@@ -2344,6 +2393,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func OrganizationBrandingSettingEdgeCleanup(ctx context.Context, id string) error {
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
+
+	return nil
+}
+
 func OrganizationSettingEdgeCleanup(ctx context.Context, id string) error {
 	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
 	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
@@ -2405,6 +2461,31 @@ func ProgramMembershipEdgeCleanup(ctx context.Context, id string) error {
 }
 
 func RemediationEdgeCleanup(ctx context.Context, id string) error {
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
+
+	return nil
+}
+
+func ReportEdgeCleanup(ctx context.Context, id string) error {
+	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
+	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
+
+	if exists, err := FromContext(ctx).ReportMembership.Query().Where((reportmembership.HasReportWith(report.ID(id)))).Exist(ctx); err == nil && exists {
+		if err := PurgeReportMembershipHistory(ctx, reportmembership.HasReportWith(report.ID(id))); err != nil {
+			return err
+		}
+
+		if reportmembershipCount, err := FromContext(ctx).ReportMembership.Delete().Where(reportmembership.HasReportWith(report.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", reportmembershipCount).Msg("error deleting reportmembership")
+			return err
+		}
+	}
+
+	return nil
+}
+
+func ReportMembershipEdgeCleanup(ctx context.Context, id string) error {
 	// every query below is pinned to the deleted object's id, the bypass keeps the caller's filters from hiding related rows
 	ctx = entfga.WithDeleteTuplesFirst(auth.WithInternalCrossOrgContext(ctx))
 
@@ -3135,6 +3216,17 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 
 		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", groupmembershipCount).Msg("error deleting groupmembership")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).ReportMembership.Query().Where((reportmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if err := PurgeReportMembershipHistory(ctx, reportmembership.HasUserWith(user.ID(id))); err != nil {
+			return err
+		}
+
+		if reportmembershipCount, err := FromContext(ctx).ReportMembership.Delete().Where(reportmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", reportmembershipCount).Msg("error deleting reportmembership")
 			return err
 		}
 	}

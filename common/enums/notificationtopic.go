@@ -8,6 +8,8 @@ type NotificationTopic string
 var (
 	// NotificationTopicTaskAssignment indicates the task assignment.
 	NotificationTopicTaskAssignment NotificationTopic = "TASK_ASSIGNMENT"
+	// NotificationTopicReportMembership indicates the membership of a user in a private query report
+	NotificationTopicReportMembership NotificationTopic = "REPORT_MEMBERSHIP"
 	// NotificationTopicApproval indicates the approval.
 	NotificationTopicApproval NotificationTopic = "APPROVAL"
 	// NotificationTopicMention indicates the mention.
@@ -30,6 +32,7 @@ var (
 
 var notificationTopicValues = []NotificationTopic{
 	NotificationTopicTaskAssignment,
+	NotificationTopicReportMembership,
 	NotificationTopicApproval,
 	NotificationTopicMention,
 	NotificationTopicExport,

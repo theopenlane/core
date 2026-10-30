@@ -419,6 +419,18 @@ func (f OrgMembershipHistoryFunc) Mutate(ctx context.Context, m historygenerated
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.OrgMembershipHistoryMutation", m)
 }
 
+// The OrganizationBrandingSettingHistoryFunc type is an adapter to allow the use of ordinary
+// function as OrganizationBrandingSettingHistory mutator.
+type OrganizationBrandingSettingHistoryFunc func(context.Context, *historygenerated.OrganizationBrandingSettingHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OrganizationBrandingSettingHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.OrganizationBrandingSettingHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.OrganizationBrandingSettingHistoryMutation", m)
+}
+
 // The OrganizationHistoryFunc type is an adapter to allow the use of ordinary
 // function as OrganizationHistory mutator.
 type OrganizationHistoryFunc func(context.Context, *historygenerated.OrganizationHistoryMutation) (historygenerated.Value, error)
@@ -501,6 +513,30 @@ func (f RemediationHistoryFunc) Mutate(ctx context.Context, m historygenerated.M
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.RemediationHistoryMutation", m)
+}
+
+// The ReportHistoryFunc type is an adapter to allow the use of ordinary
+// function as ReportHistory mutator.
+type ReportHistoryFunc func(context.Context, *historygenerated.ReportHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ReportHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.ReportHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.ReportHistoryMutation", m)
+}
+
+// The ReportMembershipHistoryFunc type is an adapter to allow the use of ordinary
+// function as ReportMembershipHistory mutator.
+type ReportMembershipHistoryFunc func(context.Context, *historygenerated.ReportMembershipHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ReportMembershipHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.ReportMembershipHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.ReportMembershipHistoryMutation", m)
 }
 
 // The ReviewHistoryFunc type is an adapter to allow the use of ordinary

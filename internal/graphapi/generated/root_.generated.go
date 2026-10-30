@@ -310,6 +310,7 @@ type ComplexityRoot struct {
 		OwnerID                 func(childComplexity int) int
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
 		PolicyAttestations      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentPolicyOrder, where *generated.AssessmentPolicyWhereInput) int
+		RemoveBranding          func(childComplexity int) int
 		ResponseDueDuration     func(childComplexity int) int
 		SourceDefinitionID      func(childComplexity int) int
 		SourceDefinitionVersion func(childComplexity int) int
@@ -2795,6 +2796,9 @@ type ComplexityRoot struct {
 		ProgramViewers                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RemediationBlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
 		RemediationEditors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		ReportBlockedGroups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportOrder, where *generated.ReportWhereInput) int
+		ReportEditors                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportOrder, where *generated.ReportWhereInput) int
+		ReportViewers                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportOrder, where *generated.ReportWhereInput) int
 		ReviewBlockedGroups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		ReviewEditors                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		RiskBlockedGroups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
@@ -3612,600 +3616,618 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		AdminReassignWorkflowAssignment      func(childComplexity int, input model.ReassignWorkflowAssignmentInput) int
-		AdoptEntity                          func(childComplexity int, catalogID string, input *generated.CreateEntityInput) int
-		ApproveNDARequests                   func(childComplexity int, ids []string) int
-		ApproveWorkflowAssignment            func(childComplexity int, id string) int
-		BulkCancelWorkflowInstances          func(childComplexity int, ids []string, reason *string) int
-		BulkForceCompleteWorkflowInstances   func(childComplexity int, ids []string, applyProposal *bool) int
-		CancelWorkflowInstance               func(childComplexity int, id string, reason *string) int
-		CloneBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
-		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
-		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
-		CreateAssessment                     func(childComplexity int, input generated.CreateAssessmentInput) int
-		CreateAssessmentDomain               func(childComplexity int, input model.CreateAssessmentDomainInput) int
-		CreateAssessmentPolicy               func(childComplexity int, input generated.CreateAssessmentPolicyInput) int
-		CreateAssessmentResponse             func(childComplexity int, input generated.CreateAssessmentResponseInput) int
-		CreateAssessmentTemplate             func(childComplexity int, input model.CreateAssessmentTemplateInput) int
-		CreateAssessmentWithPolicies         func(childComplexity int, assessmentInput generated.CreateAssessmentInput, policies []*model.AssessmentPoliciesInput) int
-		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
-		CreateBulkAPIToken                   func(childComplexity int, input []*generated.CreateAPITokenInput) int
-		CreateBulkActionPlan                 func(childComplexity int, input []*generated.CreateActionPlanInput) int
-		CreateBulkAssessmentPolicy           func(childComplexity int, input []*generated.CreateAssessmentPolicyInput) int
-		CreateBulkAsset                      func(childComplexity int, input []*generated.CreateAssetInput) int
-		CreateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVAssessmentPolicy        func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVCampaign                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVCampaignTarget          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVCheckResult             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVContact                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControl                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControlImplementation   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControlObjective        func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVCustomDomain            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVCustomTypeEnum          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDNSVerification         func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDirectoryAccount        func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDirectoryGroup          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDirectoryMembership     func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDiscussion              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEmailTemplate           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEntity                  func(childComplexity int, input graphql.Upload, entityTypeName *string) int
-		CreateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEvidence                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVFinding                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVFindingControl          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroup                   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVHush                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVIdentityHolder          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVNotificationPreference  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVNotificationTemplate    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrgMembership           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrganizationSetting     func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVPlatform                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProcedure               func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProgram                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProgramMembership       func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVReview                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSLADefinition           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubscriber              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSystemDetail            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTagDefinition           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTrustCenterCompliance   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTrustCenterDoc          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTrustCenterEntity       func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTrustCenterFaq          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTrustCenterNDARequest   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVVendorRiskScore         func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVVendorScoringConfig     func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVVulnerability           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVWorkflowDefinition      func(childComplexity int, input graphql.Upload) int
-		CreateBulkCampaign                   func(childComplexity int, input []*generated.CreateCampaignInput) int
-		CreateBulkCampaignTarget             func(childComplexity int, input []*generated.CreateCampaignTargetInput) int
-		CreateBulkCheckResult                func(childComplexity int, input []*generated.CreateCheckResultInput) int
-		CreateBulkContact                    func(childComplexity int, input []*generated.CreateContactInput) int
-		CreateBulkControl                    func(childComplexity int, input []*generated.CreateControlInput) int
-		CreateBulkControlImplementation      func(childComplexity int, input []*generated.CreateControlImplementationInput) int
-		CreateBulkControlObjective           func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
-		CreateBulkCustomDomain               func(childComplexity int, input []*generated.CreateCustomDomainInput) int
-		CreateBulkCustomTypeEnum             func(childComplexity int, input []*generated.CreateCustomTypeEnumInput) int
-		CreateBulkDNSVerification            func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
-		CreateBulkDirectoryAccount           func(childComplexity int, input []*generated.CreateDirectoryAccountInput) int
-		CreateBulkDirectoryGroup             func(childComplexity int, input []*generated.CreateDirectoryGroupInput) int
-		CreateBulkDirectoryMembership        func(childComplexity int, input []*generated.CreateDirectoryMembershipInput) int
-		CreateBulkDiscussion                 func(childComplexity int, input []*generated.CreateDiscussionInput) int
-		CreateBulkDocumentData               func(childComplexity int, input []*generated.CreateDocumentDataInput) int
-		CreateBulkEmailTemplate              func(childComplexity int, input []*generated.CreateEmailTemplateInput) int
-		CreateBulkEntity                     func(childComplexity int, input []*generated.CreateEntityInput, entityTypeName *string) int
-		CreateBulkEntityType                 func(childComplexity int, input []*generated.CreateEntityTypeInput) int
-		CreateBulkEvent                      func(childComplexity int, input []*generated.CreateEventInput) int
-		CreateBulkEvidence                   func(childComplexity int, input []*generated.CreateEvidenceInput) int
-		CreateBulkFinding                    func(childComplexity int, input []*generated.CreateFindingInput) int
-		CreateBulkFindingControl             func(childComplexity int, input []*generated.CreateFindingControlInput) int
-		CreateBulkGroup                      func(childComplexity int, input []*generated.CreateGroupInput) int
-		CreateBulkGroupMembership            func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
-		CreateBulkGroupSetting               func(childComplexity int, input []*generated.CreateGroupSettingInput) int
-		CreateBulkHush                       func(childComplexity int, input []*generated.CreateHushInput) int
-		CreateBulkIdentityHolder             func(childComplexity int, input []*generated.CreateIdentityHolderInput) int
-		CreateBulkInternalPolicy             func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
-		CreateBulkInvite                     func(childComplexity int, input []*generated.CreateInviteInput) int
-		CreateBulkMappableDomain             func(childComplexity int, input []*generated.CreateMappableDomainInput) int
-		CreateBulkMappedControl              func(childComplexity int, input []*generated.CreateMappedControlInput) int
-		CreateBulkNarrative                  func(childComplexity int, input []*generated.CreateNarrativeInput) int
-		CreateBulkNotificationPreference     func(childComplexity int, input []*generated.CreateNotificationPreferenceInput) int
-		CreateBulkNotificationTemplate       func(childComplexity int, input []*generated.CreateNotificationTemplateInput) int
-		CreateBulkOrgMembership              func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
-		CreateBulkOrganizationSetting        func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
-		CreateBulkPlatform                   func(childComplexity int, input []*generated.CreatePlatformInput) int
-		CreateBulkProcedure                  func(childComplexity int, input []*generated.CreateProcedureInput) int
-		CreateBulkProgram                    func(childComplexity int, input []*generated.CreateProgramInput) int
-		CreateBulkProgramMembership          func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
-		CreateBulkRemediation                func(childComplexity int, input []*generated.CreateRemediationInput) int
-		CreateBulkReview                     func(childComplexity int, input []*generated.CreateReviewInput) int
-		CreateBulkRisk                       func(childComplexity int, input []*generated.CreateRiskInput) int
-		CreateBulkSLADefinition              func(childComplexity int, input []*generated.CreateSLADefinitionInput) int
-		CreateBulkScan                       func(childComplexity int, input []*generated.CreateScanInput) int
-		CreateBulkSubcontrol                 func(childComplexity int, input []*generated.CreateSubcontrolInput) int
-		CreateBulkSubprocessor               func(childComplexity int, input []*generated.CreateSubprocessorInput) int
-		CreateBulkSubscriber                 func(childComplexity int, input []*generated.CreateSubscriberInput) int
-		CreateBulkSystemDetail               func(childComplexity int, input []*generated.CreateSystemDetailInput) int
-		CreateBulkTagDefinition              func(childComplexity int, input []*generated.CreateTagDefinitionInput) int
-		CreateBulkTask                       func(childComplexity int, input []*generated.CreateTaskInput) int
-		CreateBulkTemplate                   func(childComplexity int, input []*generated.CreateTemplateInput) int
-		CreateBulkTrustCenterCompliance      func(childComplexity int, input []*generated.CreateTrustCenterComplianceInput) int
-		CreateBulkTrustCenterDoc             func(childComplexity int, input []*generated.CreateTrustCenterDocInput) int
-		CreateBulkTrustCenterEntity          func(childComplexity int, input []*generated.CreateTrustCenterEntityInput) int
-		CreateBulkTrustCenterFaq             func(childComplexity int, input []*generated.CreateTrustCenterFAQInput) int
-		CreateBulkTrustCenterNDARequest      func(childComplexity int, input []*generated.CreateTrustCenterNDARequestInput) int
-		CreateBulkTrustCenterSubprocessor    func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
-		CreateBulkUserSetting                func(childComplexity int, input []*generated.CreateUserSettingInput) int
-		CreateBulkVendorRiskScore            func(childComplexity int, input []*generated.CreateVendorRiskScoreInput) int
-		CreateBulkVendorScoringConfig        func(childComplexity int, input []*generated.CreateVendorScoringConfigInput) int
-		CreateBulkVulnerability              func(childComplexity int, input []*generated.CreateVulnerabilityInput) int
-		CreateBulkWorkflowDefinition         func(childComplexity int, input []*generated.CreateWorkflowDefinitionInput) int
-		CreateCampaign                       func(childComplexity int, input generated.CreateCampaignInput) int
-		CreateCampaignTarget                 func(childComplexity int, input generated.CreateCampaignTargetInput) int
-		CreateCampaignWithTargets            func(childComplexity int, input model.CreateCampaignWithTargetsInput) int
-		CreateCampaignWithTargetsCSV         func(childComplexity int, campaign generated.CreateCampaignInput, targets graphql.Upload) int
-		CreateCheckResult                    func(childComplexity int, input generated.CreateCheckResultInput) int
-		CreateContact                        func(childComplexity int, input generated.CreateContactInput) int
-		CreateControl                        func(childComplexity int, input generated.CreateControlInput) int
-		CreateControlImplementation          func(childComplexity int, input generated.CreateControlImplementationInput) int
-		CreateControlObjective               func(childComplexity int, input generated.CreateControlObjectiveInput) int
-		CreateControlWithSubcontrols         func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
-		CreateControlsByClone                func(childComplexity int, input *model.CloneControlInput) int
-		CreateCustomDomain                   func(childComplexity int, input generated.CreateCustomDomainInput) int
-		CreateCustomTypeEnum                 func(childComplexity int, input generated.CreateCustomTypeEnumInput) int
-		CreateDNSVerification                func(childComplexity int, input generated.CreateDNSVerificationInput) int
-		CreateDirectoryAccount               func(childComplexity int, input generated.CreateDirectoryAccountInput) int
-		CreateDirectoryGroup                 func(childComplexity int, input generated.CreateDirectoryGroupInput) int
-		CreateDirectoryMembership            func(childComplexity int, input generated.CreateDirectoryMembershipInput) int
-		CreateDiscussion                     func(childComplexity int, input generated.CreateDiscussionInput) int
-		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
-		CreateEmailTemplate                  func(childComplexity int, input generated.CreateEmailTemplateInput) int
-		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
-		CreateEntityType                     func(childComplexity int, input generated.CreateEntityTypeInput) int
-		CreateEvent                          func(childComplexity int, input generated.CreateEventInput) int
-		CreateEvidence                       func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) int
-		CreateExport                         func(childComplexity int, input generated.CreateExportInput) int
-		CreateFinding                        func(childComplexity int, input generated.CreateFindingInput) int
-		CreateFindingControl                 func(childComplexity int, input generated.CreateFindingControlInput) int
-		CreateFullProgram                    func(childComplexity int, input model.CreateFullProgramInput) int
-		CreateGroup                          func(childComplexity int, input generated.CreateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
-		CreateGroupByClone                   func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
-		CreateGroupMembership                func(childComplexity int, input generated.CreateGroupMembershipInput) int
-		CreateGroupSetting                   func(childComplexity int, input generated.CreateGroupSettingInput) int
-		CreateGroupWithMembers               func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
-		CreateHush                           func(childComplexity int, input generated.CreateHushInput) int
-		CreateIdentityHolder                 func(childComplexity int, input generated.CreateIdentityHolderInput, identityHolderFiles []*graphql.Upload, identityHolderFilesMetadata []*model.FileMetadataInput) int
-		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
-		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
-		CreateMappableDomain                 func(childComplexity int, input generated.CreateMappableDomainInput) int
-		CreateMappedControl                  func(childComplexity int, input generated.CreateMappedControlInput) int
-		CreateNarrative                      func(childComplexity int, input generated.CreateNarrativeInput) int
-		CreateNotification                   func(childComplexity int, input generated.CreateNotificationInput) int
-		CreateNotificationPreference         func(childComplexity int, input generated.CreateNotificationPreferenceInput) int
-		CreateNotificationTemplate           func(childComplexity int, input generated.CreateNotificationTemplateInput) int
-		CreateOnboarding                     func(childComplexity int, input generated.CreateOnboardingInput) int
-		CreateOrgMembership                  func(childComplexity int, input generated.CreateOrgMembershipInput) int
-		CreateOrganization                   func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
-		CreateOrganizationSetting            func(childComplexity int, input generated.CreateOrganizationSettingInput) int
-		CreateOrganizationWithMembers        func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput, members []*model.OrgMembersInput) int
-		CreatePersonalAccessToken            func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
-		CreatePlatform                       func(childComplexity int, input generated.CreatePlatformInput, architectureDiagrams []*graphql.Upload, architectureDiagramsMetadata []*model.FileMetadataInput, dataFlowDiagrams []*graphql.Upload, dataFlowDiagramsMetadata []*model.FileMetadataInput, trustBoundaryDiagrams []*graphql.Upload, trustBoundaryDiagramsMetadata []*model.FileMetadataInput) int
-		CreateProcedure                      func(childComplexity int, input generated.CreateProcedureInput) int
-		CreateProgram                        func(childComplexity int, input generated.CreateProgramInput) int
-		CreateProgramMembership              func(childComplexity int, input generated.CreateProgramMembershipInput) int
-		CreateProgramWithMembers             func(childComplexity int, input model.CreateProgramWithMembersInput) int
-		CreateRemediation                    func(childComplexity int, input generated.CreateRemediationInput) int
-		CreateReview                         func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
-		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
-		CreateSLADefinition                  func(childComplexity int, input generated.CreateSLADefinitionInput) int
-		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
-		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
-		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
-		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
-		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
-		CreateSystemDetail                   func(childComplexity int, input generated.CreateSystemDetailInput) int
-		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
-		CreateTagDefinition                  func(childComplexity int, input generated.CreateTagDefinitionInput) int
-		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
-		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
-		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
-		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
-		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput) int
-		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
-		CreateTrustCenterEntity              func(childComplexity int, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
-		CreateTrustCenterFaq                 func(childComplexity int, input generated.CreateTrustCenterFAQInput) int
-		CreateTrustCenterNDARequest          func(childComplexity int, input generated.CreateTrustCenterNDARequestInput) int
-		CreateTrustCenterNda                 func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
-		CreateTrustCenterPreviewSetting      func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
-		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
-		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
-		CreateTrustCenterWatermarkConfig     func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) int
-		CreateUploadInternalPolicy           func(childComplexity int, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) int
-		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) int
-		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
-		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
-		CreateVendorRiskScore                func(childComplexity int, input generated.CreateVendorRiskScoreInput) int
-		CreateVendorScoringConfig            func(childComplexity int, input generated.CreateVendorScoringConfigInput) int
-		CreateVulnerability                  func(childComplexity int, input generated.CreateVulnerabilityInput) int
-		CreateWorkflowDefinition             func(childComplexity int, input generated.CreateWorkflowDefinitionInput) int
-		DeleteAPIToken                       func(childComplexity int, id string) int
-		DeleteActionPlan                     func(childComplexity int, id string) int
-		DeleteAssessment                     func(childComplexity int, id string) int
-		DeleteAssessmentPolicy               func(childComplexity int, id string) int
-		DeleteAssessmentResponse             func(childComplexity int, id string) int
-		DeleteAsset                          func(childComplexity int, id string) int
-		DeleteBulkAPIToken                   func(childComplexity int, ids []string) int
-		DeleteBulkActionPlan                 func(childComplexity int, ids []string) int
-		DeleteBulkAssessment                 func(childComplexity int, ids []string) int
-		DeleteBulkAssessmentPolicy           func(childComplexity int, ids []string) int
-		DeleteBulkAsset                      func(childComplexity int, ids []string) int
-		DeleteBulkCheckResult                func(childComplexity int, ids []string) int
-		DeleteBulkContact                    func(childComplexity int, ids []string) int
-		DeleteBulkControl                    func(childComplexity int, ids []string) int
-		DeleteBulkControlImplementation      func(childComplexity int, ids []string) int
-		DeleteBulkControlObjective           func(childComplexity int, ids []string) int
-		DeleteBulkCustomDomain               func(childComplexity int, ids []string) int
-		DeleteBulkDNSVerification            func(childComplexity int, ids []string) int
-		DeleteBulkDocumentData               func(childComplexity int, ids []string) int
-		DeleteBulkEmailTemplate              func(childComplexity int, ids []string) int
-		DeleteBulkEntity                     func(childComplexity int, ids []string) int
-		DeleteBulkEntityType                 func(childComplexity int, ids []string) int
-		DeleteBulkEvent                      func(childComplexity int, ids []string) int
-		DeleteBulkEvidence                   func(childComplexity int, ids []string) int
-		DeleteBulkExport                     func(childComplexity int, ids []string) int
-		DeleteBulkFinding                    func(childComplexity int, ids []string) int
-		DeleteBulkFindingControl             func(childComplexity int, ids []string) int
-		DeleteBulkGroup                      func(childComplexity int, ids []string) int
-		DeleteBulkGroupMembership            func(childComplexity int, ids []string) int
-		DeleteBulkGroupSetting               func(childComplexity int, ids []string) int
-		DeleteBulkHush                       func(childComplexity int, ids []string) int
-		DeleteBulkIdentityHolder             func(childComplexity int, ids []string) int
-		DeleteBulkInternalPolicy             func(childComplexity int, ids []string) int
-		DeleteBulkInvite                     func(childComplexity int, ids []string) int
-		DeleteBulkMappableDomain             func(childComplexity int, ids []string) int
-		DeleteBulkMappedControl              func(childComplexity int, ids []string) int
-		DeleteBulkNarrative                  func(childComplexity int, ids []string) int
-		DeleteBulkNotificationPreference     func(childComplexity int, ids []string) int
-		DeleteBulkNotificationTemplate       func(childComplexity int, ids []string) int
-		DeleteBulkOrgMembership              func(childComplexity int, ids []string) int
-		DeleteBulkOrganizationSetting        func(childComplexity int, ids []string) int
-		DeleteBulkProcedure                  func(childComplexity int, ids []string) int
-		DeleteBulkProgram                    func(childComplexity int, ids []string) int
-		DeleteBulkProgramMembership          func(childComplexity int, ids []string) int
-		DeleteBulkRemediation                func(childComplexity int, ids []string) int
-		DeleteBulkReview                     func(childComplexity int, ids []string) int
-		DeleteBulkRisk                       func(childComplexity int, ids []string) int
-		DeleteBulkSLADefinition              func(childComplexity int, ids []string) int
-		DeleteBulkScan                       func(childComplexity int, ids []string) int
-		DeleteBulkSubcontrol                 func(childComplexity int, ids []string) int
-		DeleteBulkSubprocessor               func(childComplexity int, ids []string) int
-		DeleteBulkSystemDetail               func(childComplexity int, ids []string) int
-		DeleteBulkTask                       func(childComplexity int, ids []string) int
-		DeleteBulkTemplate                   func(childComplexity int, ids []string) int
-		DeleteBulkTrustCenterCompliance      func(childComplexity int, ids []string) int
-		DeleteBulkTrustCenterDoc             func(childComplexity int, ids []string) int
-		DeleteBulkTrustCenterFaq             func(childComplexity int, ids []string) int
-		DeleteBulkTrustCenterNDARequest      func(childComplexity int, ids []string) int
-		DeleteBulkTrustCenterSubprocessor    func(childComplexity int, ids []string) int
-		DeleteBulkUserSetting                func(childComplexity int, ids []string) int
-		DeleteBulkVendorRiskScore            func(childComplexity int, ids []string) int
-		DeleteBulkVendorScoringConfig        func(childComplexity int, ids []string) int
-		DeleteBulkVulnerability              func(childComplexity int, ids []string) int
-		DeleteCampaign                       func(childComplexity int, id string) int
-		DeleteCampaignTarget                 func(childComplexity int, id string) int
-		DeleteCheckResult                    func(childComplexity int, id string) int
-		DeleteContact                        func(childComplexity int, id string) int
-		DeleteControl                        func(childComplexity int, id string) int
-		DeleteControlImplementation          func(childComplexity int, id string) int
-		DeleteControlObjective               func(childComplexity int, id string) int
-		DeleteCustomDomain                   func(childComplexity int, id string) int
-		DeleteCustomTypeEnum                 func(childComplexity int, id string) int
-		DeleteDNSVerification                func(childComplexity int, id string) int
-		DeleteDirectoryAccount               func(childComplexity int, id string) int
-		DeleteDirectoryGroup                 func(childComplexity int, id string) int
-		DeleteDirectoryMembership            func(childComplexity int, id string) int
-		DeleteDiscussion                     func(childComplexity int, id string) int
-		DeleteDocumentData                   func(childComplexity int, id string) int
-		DeleteEmailTemplate                  func(childComplexity int, id string) int
-		DeleteEntity                         func(childComplexity int, id string) int
-		DeleteEntityType                     func(childComplexity int, id string) int
-		DeleteEvent                          func(childComplexity int, id string) int
-		DeleteEvidence                       func(childComplexity int, id string) int
-		DeleteExport                         func(childComplexity int, id string) int
-		DeleteFile                           func(childComplexity int, id string) int
-		DeleteFinding                        func(childComplexity int, id string) int
-		DeleteFindingControl                 func(childComplexity int, id string) int
-		DeleteGroup                          func(childComplexity int, id string) int
-		DeleteGroupMembership                func(childComplexity int, id string) int
-		DeleteGroupSetting                   func(childComplexity int, id string) int
-		DeleteHush                           func(childComplexity int, id string) int
-		DeleteIdentityHolder                 func(childComplexity int, id string) int
-		DeleteIntegration                    func(childComplexity int, id string) int
-		DeleteInternalPolicy                 func(childComplexity int, id string) int
-		DeleteInvite                         func(childComplexity int, id string) int
-		DeleteMappableDomain                 func(childComplexity int, id string) int
-		DeleteMappedControl                  func(childComplexity int, id string) int
-		DeleteNarrative                      func(childComplexity int, id string) int
-		DeleteNote                           func(childComplexity int, id string) int
-		DeleteNotificationPreference         func(childComplexity int, id string) int
-		DeleteNotificationTemplate           func(childComplexity int, id string) int
-		DeleteOrgMembership                  func(childComplexity int, id string) int
-		DeleteOrganization                   func(childComplexity int, id string) int
-		DeleteOrganizationSetting            func(childComplexity int, id string) int
-		DeletePersonalAccessToken            func(childComplexity int, id string) int
-		DeletePlatform                       func(childComplexity int, id string) int
-		DeleteProcedure                      func(childComplexity int, id string) int
-		DeleteProgram                        func(childComplexity int, id string) int
-		DeleteProgramMembership              func(childComplexity int, id string) int
-		DeleteRemediation                    func(childComplexity int, id string) int
-		DeleteReview                         func(childComplexity int, id string) int
-		DeleteRisk                           func(childComplexity int, id string) int
-		DeleteSLADefinition                  func(childComplexity int, id string) int
-		DeleteScan                           func(childComplexity int, id string) int
-		DeleteStandard                       func(childComplexity int, id string) int
-		DeleteSubcontrol                     func(childComplexity int, id string) int
-		DeleteSubprocessor                   func(childComplexity int, id string) int
-		DeleteSubscriber                     func(childComplexity int, email string, ownerID *string) int
-		DeleteSystemDetail                   func(childComplexity int, id string) int
-		DeleteTagDefinition                  func(childComplexity int, id string) int
-		DeleteTask                           func(childComplexity int, id string) int
-		DeleteTemplate                       func(childComplexity int, id string) int
-		DeleteTrustCenter                    func(childComplexity int, id string) int
-		DeleteTrustCenterCompliance          func(childComplexity int, id string) int
-		DeleteTrustCenterDoc                 func(childComplexity int, id string) int
-		DeleteTrustCenterEntity              func(childComplexity int, id string) int
-		DeleteTrustCenterFaq                 func(childComplexity int, id string) int
-		DeleteTrustCenterNDARequest          func(childComplexity int, id string) int
-		DeleteTrustCenterSetting             func(childComplexity int, id string) int
-		DeleteTrustCenterSubprocessor        func(childComplexity int, id string) int
-		DeleteTrustCenterWatermarkConfig     func(childComplexity int, id string) int
-		DeleteUser                           func(childComplexity int, id string) int
-		DeleteVendorRiskScore                func(childComplexity int, id string) int
-		DeleteVendorScoringConfig            func(childComplexity int, id string) int
-		DeleteVulnerability                  func(childComplexity int, id string) int
-		DeleteWebauthn                       func(childComplexity int, id string) int
-		DeleteWorkflowDefinition             func(childComplexity int, id string) int
-		DenyNDARequests                      func(childComplexity int, ids []string) int
-		ForceCompleteWorkflowInstance        func(childComplexity int, id string, applyProposal *bool) int
-		ImportDomainScanReview               func(childComplexity int, input model.ImportDomainScanReviewInput) int
-		LaunchCampaign                       func(childComplexity int, input model.LaunchCampaignInput) int
-		LeaveOrganization                    func(childComplexity int, organizationID string) int
-		MarkNotificationsAsRead              func(childComplexity int, ids []string) int
-		PublishTrustCenterSetting            func(childComplexity int) int
-		ReassignWorkflowAssignment           func(childComplexity int, id string, targetUserID string) int
-		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
-		RequestChangesWorkflowAssignment     func(childComplexity int, id string, reason *string, inputs map[string]any) int
-		RequestNewTrustCenterToken           func(childComplexity int, email string) int
-		ResendCampaignIncompleteTargets      func(childComplexity int, input model.ResendCampaignIncompleteInput) int
-		ResolveVulnerability                 func(childComplexity int, id string, input model.ResolveVulnerabilityInput) int
-		SendCampaignTestEmail                func(childComplexity int, input model.SendCampaignTestEmailInput) int
-		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
-		SubmitWorkflowProposal               func(childComplexity int, id string) int
-		TransferOrganizationOwnership        func(childComplexity int, newOwnerEmail string) int
-		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
-		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
-		UpdateAssessment                     func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
-		UpdateAssessmentPolicy               func(childComplexity int, id string, input generated.UpdateAssessmentPolicyInput) int
-		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
-		UpdateBulkAPIToken                   func(childComplexity int, ids []string, input generated.UpdateAPITokenInput) int
-		UpdateBulkActionPlan                 func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
-		UpdateBulkAssessmentPolicy           func(childComplexity int, ids []string, input generated.UpdateAssessmentPolicyInput) int
-		UpdateBulkAsset                      func(childComplexity int, ids []string, input generated.UpdateAssetInput) int
-		UpdateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVAssessmentPolicy        func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVCheckResult             func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVContact                 func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVControl                 func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVControlImplementation   func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVControlObjective        func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVCustomDomain            func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVDNSVerification         func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVEmailTemplate           func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVEvidence                func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVFinding                 func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVGroup                   func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVHush                    func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVIdentityHolder          func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVNotificationPreference  func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVNotificationTemplate    func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVOrgMembership           func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVOrganizationSetting     func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVProcedure               func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVProgram                 func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVProgramMembership       func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVReview                  func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVSLADefinition           func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVSystemDetail            func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVTrustCenterCompliance   func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVTrustCenterDoc          func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVTrustCenterFaq          func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVVendorRiskScore         func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVVendorScoringConfig     func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVVulnerability           func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCheckResult                func(childComplexity int, ids []string, input generated.UpdateCheckResultInput) int
-		UpdateBulkContact                    func(childComplexity int, ids []string, input generated.UpdateContactInput) int
-		UpdateBulkControl                    func(childComplexity int, ids []string, input generated.UpdateControlInput) int
-		UpdateBulkControlImplementation      func(childComplexity int, ids []string, input generated.UpdateControlImplementationInput) int
-		UpdateBulkControlObjective           func(childComplexity int, ids []string, input generated.UpdateControlObjectiveInput) int
-		UpdateBulkCustomDomain               func(childComplexity int, ids []string, input generated.UpdateCustomDomainInput) int
-		UpdateBulkDNSVerification            func(childComplexity int, ids []string, input generated.UpdateDNSVerificationInput) int
-		UpdateBulkDocumentData               func(childComplexity int, ids []string, input generated.UpdateDocumentDataInput) int
-		UpdateBulkEmailTemplate              func(childComplexity int, ids []string, input generated.UpdateEmailTemplateInput) int
-		UpdateBulkEntity                     func(childComplexity int, ids []string, input generated.UpdateEntityInput) int
-		UpdateBulkEntityType                 func(childComplexity int, ids []string, input generated.UpdateEntityTypeInput) int
-		UpdateBulkEvent                      func(childComplexity int, ids []string, input generated.UpdateEventInput) int
-		UpdateBulkEvidence                   func(childComplexity int, ids []string, input generated.UpdateEvidenceInput) int
-		UpdateBulkFinding                    func(childComplexity int, ids []string, input generated.UpdateFindingInput) int
-		UpdateBulkGroup                      func(childComplexity int, ids []string, input generated.UpdateGroupInput) int
-		UpdateBulkGroupMembership            func(childComplexity int, ids []string, input generated.UpdateGroupMembershipInput) int
-		UpdateBulkGroupSetting               func(childComplexity int, ids []string, input generated.UpdateGroupSettingInput) int
-		UpdateBulkHush                       func(childComplexity int, ids []string, input generated.UpdateHushInput) int
-		UpdateBulkIdentityHolder             func(childComplexity int, ids []string, input generated.UpdateIdentityHolderInput) int
-		UpdateBulkInternalPolicy             func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
-		UpdateBulkInvite                     func(childComplexity int, ids []string, input generated.UpdateInviteInput) int
-		UpdateBulkMappableDomain             func(childComplexity int, ids []string, input generated.UpdateMappableDomainInput) int
-		UpdateBulkMappedControl              func(childComplexity int, ids []string, input generated.UpdateMappedControlInput) int
-		UpdateBulkNarrative                  func(childComplexity int, ids []string, input generated.UpdateNarrativeInput) int
-		UpdateBulkNotificationPreference     func(childComplexity int, ids []string, input generated.UpdateNotificationPreferenceInput) int
-		UpdateBulkNotificationTemplate       func(childComplexity int, ids []string, input generated.UpdateNotificationTemplateInput) int
-		UpdateBulkOrgMembership              func(childComplexity int, ids []string, input generated.UpdateOrgMembershipInput) int
-		UpdateBulkOrganizationSetting        func(childComplexity int, ids []string, input generated.UpdateOrganizationSettingInput) int
-		UpdateBulkProcedure                  func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
-		UpdateBulkProgram                    func(childComplexity int, ids []string, input generated.UpdateProgramInput) int
-		UpdateBulkProgramMembership          func(childComplexity int, ids []string, input generated.UpdateProgramMembershipInput) int
-		UpdateBulkRemediation                func(childComplexity int, ids []string, input generated.UpdateRemediationInput) int
-		UpdateBulkReview                     func(childComplexity int, ids []string, input generated.UpdateReviewInput) int
-		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
-		UpdateBulkSLADefinition              func(childComplexity int, ids []string, input generated.UpdateSLADefinitionInput) int
-		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
-		UpdateBulkSubcontrol                 func(childComplexity int, ids []string, input generated.UpdateSubcontrolInput) int
-		UpdateBulkSubprocessor               func(childComplexity int, ids []string, input generated.UpdateSubprocessorInput) int
-		UpdateBulkSystemDetail               func(childComplexity int, ids []string, input generated.UpdateSystemDetailInput) int
-		UpdateBulkTask                       func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
-		UpdateBulkTemplate                   func(childComplexity int, ids []string, input generated.UpdateTemplateInput) int
-		UpdateBulkTrustCenterCompliance      func(childComplexity int, ids []string, input generated.UpdateTrustCenterComplianceInput) int
-		UpdateBulkTrustCenterDoc             func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
-		UpdateBulkTrustCenterFaq             func(childComplexity int, ids []string, input generated.UpdateTrustCenterFAQInput) int
-		UpdateBulkTrustCenterSubprocessor    func(childComplexity int, ids []string, input generated.UpdateTrustCenterSubprocessorInput) int
-		UpdateBulkUserSetting                func(childComplexity int, ids []string, input generated.UpdateUserSettingInput) int
-		UpdateBulkVendorRiskScore            func(childComplexity int, ids []string, input generated.UpdateVendorRiskScoreInput) int
-		UpdateBulkVendorScoringConfig        func(childComplexity int, ids []string, input generated.UpdateVendorScoringConfigInput) int
-		UpdateBulkVulnerability              func(childComplexity int, ids []string, input generated.UpdateVulnerabilityInput) int
-		UpdateCampaign                       func(childComplexity int, id string, input generated.UpdateCampaignInput) int
-		UpdateCampaignTarget                 func(childComplexity int, id string, input generated.UpdateCampaignTargetInput) int
-		UpdateCheckResult                    func(childComplexity int, id string, input generated.UpdateCheckResultInput) int
-		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
-		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
-		UpdateControlComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateControlImplementation          func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
-		UpdateControlObjective               func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
-		UpdateCustomDomain                   func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
-		UpdateCustomTypeEnum                 func(childComplexity int, id string, input generated.UpdateCustomTypeEnumInput) int
-		UpdateDNSVerification                func(childComplexity int, id string, input generated.UpdateDNSVerificationInput) int
-		UpdateDirectoryAccount               func(childComplexity int, id string, input generated.UpdateDirectoryAccountInput) int
-		UpdateDirectoryGroup                 func(childComplexity int, id string, input generated.UpdateDirectoryGroupInput) int
-		UpdateDirectoryMembership            func(childComplexity int, id string, input generated.UpdateDirectoryMembershipInput) int
-		UpdateDiscussion                     func(childComplexity int, id string, input generated.UpdateDiscussionInput) int
-		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload, documentDataFileMetadata *model.FileMetadataInput) int
-		UpdateEmailTemplate                  func(childComplexity int, id string, input generated.UpdateEmailTemplateInput) int
-		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
-		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
-		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
-		UpdateEvidence                       func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) int
-		UpdateEvidenceComment                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateExport                         func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload, exportFilesMetadata []*model.FileMetadataInput) int
-		UpdateFinding                        func(childComplexity int, id string, input generated.UpdateFindingInput) int
-		UpdateFindingComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateFindingControl                 func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
-		UpdateGroup                          func(childComplexity int, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
-		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
-		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
-		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
-		UpdateIdentityHolder                 func(childComplexity int, id string, input generated.UpdateIdentityHolderInput, identityHolderFiles []*graphql.Upload, identityHolderFilesMetadata []*model.FileMetadataInput) int
-		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput) int
-		UpdateInternalPolicyComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
-		UpdateMappableDomain                 func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
-		UpdateMappedControl                  func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
-		UpdateNarrative                      func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
-		UpdateNotification                   func(childComplexity int, id string, input generated.UpdateNotificationInput) int
-		UpdateNotificationPreference         func(childComplexity int, id string, input generated.UpdateNotificationPreferenceInput) int
-		UpdateNotificationTemplate           func(childComplexity int, id string, input generated.UpdateNotificationTemplateInput) int
-		UpdateOrgMembership                  func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
-		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
-		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
-		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
-		UpdatePlatform                       func(childComplexity int, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, architectureDiagramsMetadata []*model.FileMetadataInput, dataFlowDiagrams []*graphql.Upload, dataFlowDiagramsMetadata []*model.FileMetadataInput, trustBoundaryDiagrams []*graphql.Upload, trustBoundaryDiagramsMetadata []*model.FileMetadataInput) int
-		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload, procedureFileMetadata *model.FileMetadataInput) int
-		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
-		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
-		UpdateRemediation                    func(childComplexity int, id string, input generated.UpdateRemediationInput) int
-		UpdateReview                         func(childComplexity int, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
-		UpdateReviewComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
-		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateSLADefinition                  func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
-		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
-		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
-		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
-		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
-		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
-		UpdateSystemDetail                   func(childComplexity int, id string, input generated.UpdateSystemDetailInput) int
-		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
-		UpdateTagDefinition                  func(childComplexity int, id string, input generated.UpdateTagDefinitionInput) int
-		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
-		UpdateTaskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
-		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
-		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
-		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput, watermarkedTrustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFileMetadata *model.FileMetadataInput) int
-		UpdateTrustCenterEntity              func(childComplexity int, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
-		UpdateTrustCenterFAQComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateTrustCenterFaq                 func(childComplexity int, id string, input generated.UpdateTrustCenterFAQInput) int
-		UpdateTrustCenterNDARequest          func(childComplexity int, id string, input generated.UpdateTrustCenterNDARequestInput) int
-		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
-		UpdateTrustCenterPost                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateTrustCenterPreviewSetting      func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
-		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
-		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
-		UpdateTrustCenterWatermarkConfig     func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) int
-		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
-		UpdateUserSetting                    func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
-		UpdateVendorRiskScore                func(childComplexity int, id string, input generated.UpdateVendorRiskScoreInput) int
-		UpdateVendorScoringConfig            func(childComplexity int, id string, input generated.UpdateVendorScoringConfigInput) int
-		UpdateVulnerability                  func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
-		UpdateVulnerabilityComment           func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
-		UpdateWorkflowDefinition             func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
-		UpdateWorkflowProposalChanges        func(childComplexity int, input model.UpdateWorkflowProposalChangesInput) int
-		ValidateCustomDomain                 func(childComplexity int, id string) int
-		WithdrawWorkflowProposal             func(childComplexity int, id string, reason *string) int
+		AdminReassignWorkflowAssignment          func(childComplexity int, input model.ReassignWorkflowAssignmentInput) int
+		AdoptEntity                              func(childComplexity int, catalogID string, input *generated.CreateEntityInput) int
+		ApproveNDARequests                       func(childComplexity int, ids []string) int
+		ApproveWorkflowAssignment                func(childComplexity int, id string) int
+		BulkCancelWorkflowInstances              func(childComplexity int, ids []string, reason *string) int
+		BulkForceCompleteWorkflowInstances       func(childComplexity int, ids []string, applyProposal *bool) int
+		CancelWorkflowInstance                   func(childComplexity int, id string, reason *string) int
+		CloneBulkCSVControl                      func(childComplexity int, input graphql.Upload) int
+		CreateAPIToken                           func(childComplexity int, input generated.CreateAPITokenInput) int
+		CreateActionPlan                         func(childComplexity int, input generated.CreateActionPlanInput) int
+		CreateAssessment                         func(childComplexity int, input generated.CreateAssessmentInput) int
+		CreateAssessmentDomain                   func(childComplexity int, input model.CreateAssessmentDomainInput) int
+		CreateAssessmentPolicy                   func(childComplexity int, input generated.CreateAssessmentPolicyInput) int
+		CreateAssessmentResponse                 func(childComplexity int, input generated.CreateAssessmentResponseInput) int
+		CreateAssessmentTemplate                 func(childComplexity int, input model.CreateAssessmentTemplateInput) int
+		CreateAssessmentWithPolicies             func(childComplexity int, assessmentInput generated.CreateAssessmentInput, policies []*model.AssessmentPoliciesInput) int
+		CreateAsset                              func(childComplexity int, input generated.CreateAssetInput) int
+		CreateBulkAPIToken                       func(childComplexity int, input []*generated.CreateAPITokenInput) int
+		CreateBulkActionPlan                     func(childComplexity int, input []*generated.CreateActionPlanInput) int
+		CreateBulkAssessmentPolicy               func(childComplexity int, input []*generated.CreateAssessmentPolicyInput) int
+		CreateBulkAsset                          func(childComplexity int, input []*generated.CreateAssetInput) int
+		CreateBulkCSVAPIToken                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVActionPlan                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVAssessmentPolicy            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVAsset                       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCampaign                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCampaignTarget              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCheckResult                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVContact                     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControl                     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControlImplementation       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControlObjective            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCustomDomain                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCustomTypeEnum              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDNSVerification             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDirectoryAccount            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDirectoryGroup              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDirectoryMembership         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDiscussion                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDocumentData                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEmailTemplate               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEntity                      func(childComplexity int, input graphql.Upload, entityTypeName *string) int
+		CreateBulkCSVEntityType                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEvent                       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEvidence                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVFinding                     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVFindingControl              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroup                       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroupMembership             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroupSetting                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVHush                        func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVIdentityHolder              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVInternalPolicy              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVInvite                      func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVMappableDomain              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVMappedControl               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVNarrative                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVNotificationPreference      func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVNotificationTemplate        func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOrgMembership               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOrganizationBrandingSetting func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOrganizationSetting         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVPlatform                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProcedure                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProgram                     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProgramMembership           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVRemediation                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVReview                      func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVRisk                        func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSLADefinition               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVScan                        func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubcontrol                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubprocessor                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubscriber                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSystemDetail                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTagDefinition               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTask                        func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTemplate                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterCompliance       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterDoc              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterEntity           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterFaq              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterNDARequest       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterSubprocessor     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVUserSetting                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVVendorRiskScore             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVVendorScoringConfig         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVVulnerability               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVWorkflowDefinition          func(childComplexity int, input graphql.Upload) int
+		CreateBulkCampaign                       func(childComplexity int, input []*generated.CreateCampaignInput) int
+		CreateBulkCampaignTarget                 func(childComplexity int, input []*generated.CreateCampaignTargetInput) int
+		CreateBulkCheckResult                    func(childComplexity int, input []*generated.CreateCheckResultInput) int
+		CreateBulkContact                        func(childComplexity int, input []*generated.CreateContactInput) int
+		CreateBulkControl                        func(childComplexity int, input []*generated.CreateControlInput) int
+		CreateBulkControlImplementation          func(childComplexity int, input []*generated.CreateControlImplementationInput) int
+		CreateBulkControlObjective               func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
+		CreateBulkCustomDomain                   func(childComplexity int, input []*generated.CreateCustomDomainInput) int
+		CreateBulkCustomTypeEnum                 func(childComplexity int, input []*generated.CreateCustomTypeEnumInput) int
+		CreateBulkDNSVerification                func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
+		CreateBulkDirectoryAccount               func(childComplexity int, input []*generated.CreateDirectoryAccountInput) int
+		CreateBulkDirectoryGroup                 func(childComplexity int, input []*generated.CreateDirectoryGroupInput) int
+		CreateBulkDirectoryMembership            func(childComplexity int, input []*generated.CreateDirectoryMembershipInput) int
+		CreateBulkDiscussion                     func(childComplexity int, input []*generated.CreateDiscussionInput) int
+		CreateBulkDocumentData                   func(childComplexity int, input []*generated.CreateDocumentDataInput) int
+		CreateBulkEmailTemplate                  func(childComplexity int, input []*generated.CreateEmailTemplateInput) int
+		CreateBulkEntity                         func(childComplexity int, input []*generated.CreateEntityInput, entityTypeName *string) int
+		CreateBulkEntityType                     func(childComplexity int, input []*generated.CreateEntityTypeInput) int
+		CreateBulkEvent                          func(childComplexity int, input []*generated.CreateEventInput) int
+		CreateBulkEvidence                       func(childComplexity int, input []*generated.CreateEvidenceInput) int
+		CreateBulkFinding                        func(childComplexity int, input []*generated.CreateFindingInput) int
+		CreateBulkFindingControl                 func(childComplexity int, input []*generated.CreateFindingControlInput) int
+		CreateBulkGroup                          func(childComplexity int, input []*generated.CreateGroupInput) int
+		CreateBulkGroupMembership                func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
+		CreateBulkGroupSetting                   func(childComplexity int, input []*generated.CreateGroupSettingInput) int
+		CreateBulkHush                           func(childComplexity int, input []*generated.CreateHushInput) int
+		CreateBulkIdentityHolder                 func(childComplexity int, input []*generated.CreateIdentityHolderInput) int
+		CreateBulkInternalPolicy                 func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
+		CreateBulkInvite                         func(childComplexity int, input []*generated.CreateInviteInput) int
+		CreateBulkMappableDomain                 func(childComplexity int, input []*generated.CreateMappableDomainInput) int
+		CreateBulkMappedControl                  func(childComplexity int, input []*generated.CreateMappedControlInput) int
+		CreateBulkNarrative                      func(childComplexity int, input []*generated.CreateNarrativeInput) int
+		CreateBulkNotificationPreference         func(childComplexity int, input []*generated.CreateNotificationPreferenceInput) int
+		CreateBulkNotificationTemplate           func(childComplexity int, input []*generated.CreateNotificationTemplateInput) int
+		CreateBulkOrgMembership                  func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
+		CreateBulkOrganizationBrandingSetting    func(childComplexity int, input []*generated.CreateOrganizationBrandingSettingInput) int
+		CreateBulkOrganizationSetting            func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
+		CreateBulkPlatform                       func(childComplexity int, input []*generated.CreatePlatformInput) int
+		CreateBulkProcedure                      func(childComplexity int, input []*generated.CreateProcedureInput) int
+		CreateBulkProgram                        func(childComplexity int, input []*generated.CreateProgramInput) int
+		CreateBulkProgramMembership              func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
+		CreateBulkRemediation                    func(childComplexity int, input []*generated.CreateRemediationInput) int
+		CreateBulkReportMembership               func(childComplexity int, input []*generated.CreateReportMembershipInput) int
+		CreateBulkReview                         func(childComplexity int, input []*generated.CreateReviewInput) int
+		CreateBulkRisk                           func(childComplexity int, input []*generated.CreateRiskInput) int
+		CreateBulkSLADefinition                  func(childComplexity int, input []*generated.CreateSLADefinitionInput) int
+		CreateBulkScan                           func(childComplexity int, input []*generated.CreateScanInput) int
+		CreateBulkSubcontrol                     func(childComplexity int, input []*generated.CreateSubcontrolInput) int
+		CreateBulkSubprocessor                   func(childComplexity int, input []*generated.CreateSubprocessorInput) int
+		CreateBulkSubscriber                     func(childComplexity int, input []*generated.CreateSubscriberInput) int
+		CreateBulkSystemDetail                   func(childComplexity int, input []*generated.CreateSystemDetailInput) int
+		CreateBulkTagDefinition                  func(childComplexity int, input []*generated.CreateTagDefinitionInput) int
+		CreateBulkTask                           func(childComplexity int, input []*generated.CreateTaskInput) int
+		CreateBulkTemplate                       func(childComplexity int, input []*generated.CreateTemplateInput) int
+		CreateBulkTrustCenterCompliance          func(childComplexity int, input []*generated.CreateTrustCenterComplianceInput) int
+		CreateBulkTrustCenterDoc                 func(childComplexity int, input []*generated.CreateTrustCenterDocInput) int
+		CreateBulkTrustCenterEntity              func(childComplexity int, input []*generated.CreateTrustCenterEntityInput) int
+		CreateBulkTrustCenterFaq                 func(childComplexity int, input []*generated.CreateTrustCenterFAQInput) int
+		CreateBulkTrustCenterNDARequest          func(childComplexity int, input []*generated.CreateTrustCenterNDARequestInput) int
+		CreateBulkTrustCenterSubprocessor        func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
+		CreateBulkUserSetting                    func(childComplexity int, input []*generated.CreateUserSettingInput) int
+		CreateBulkVendorRiskScore                func(childComplexity int, input []*generated.CreateVendorRiskScoreInput) int
+		CreateBulkVendorScoringConfig            func(childComplexity int, input []*generated.CreateVendorScoringConfigInput) int
+		CreateBulkVulnerability                  func(childComplexity int, input []*generated.CreateVulnerabilityInput) int
+		CreateBulkWorkflowDefinition             func(childComplexity int, input []*generated.CreateWorkflowDefinitionInput) int
+		CreateCampaign                           func(childComplexity int, input generated.CreateCampaignInput) int
+		CreateCampaignTarget                     func(childComplexity int, input generated.CreateCampaignTargetInput) int
+		CreateCampaignWithTargets                func(childComplexity int, input model.CreateCampaignWithTargetsInput) int
+		CreateCampaignWithTargetsCSV             func(childComplexity int, campaign generated.CreateCampaignInput, targets graphql.Upload) int
+		CreateCheckResult                        func(childComplexity int, input generated.CreateCheckResultInput) int
+		CreateContact                            func(childComplexity int, input generated.CreateContactInput, contactFiles []*graphql.Upload, contactFilesMetadata []*model.FileMetadataInput) int
+		CreateControl                            func(childComplexity int, input generated.CreateControlInput) int
+		CreateControlImplementation              func(childComplexity int, input generated.CreateControlImplementationInput) int
+		CreateControlObjective                   func(childComplexity int, input generated.CreateControlObjectiveInput) int
+		CreateControlWithSubcontrols             func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
+		CreateControlsByClone                    func(childComplexity int, input *model.CloneControlInput) int
+		CreateCustomDomain                       func(childComplexity int, input generated.CreateCustomDomainInput) int
+		CreateCustomTypeEnum                     func(childComplexity int, input generated.CreateCustomTypeEnumInput) int
+		CreateDNSVerification                    func(childComplexity int, input generated.CreateDNSVerificationInput) int
+		CreateDirectoryAccount                   func(childComplexity int, input generated.CreateDirectoryAccountInput) int
+		CreateDirectoryGroup                     func(childComplexity int, input generated.CreateDirectoryGroupInput) int
+		CreateDirectoryMembership                func(childComplexity int, input generated.CreateDirectoryMembershipInput) int
+		CreateDiscussion                         func(childComplexity int, input generated.CreateDiscussionInput) int
+		CreateDocumentData                       func(childComplexity int, input generated.CreateDocumentDataInput) int
+		CreateEmailTemplate                      func(childComplexity int, input generated.CreateEmailTemplateInput) int
+		CreateEntity                             func(childComplexity int, input generated.CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
+		CreateEntityType                         func(childComplexity int, input generated.CreateEntityTypeInput) int
+		CreateEvent                              func(childComplexity int, input generated.CreateEventInput) int
+		CreateEvidence                           func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) int
+		CreateExport                             func(childComplexity int, input generated.CreateExportInput) int
+		CreateFinding                            func(childComplexity int, input generated.CreateFindingInput, findingFiles []*graphql.Upload, findingFilesMetadata []*model.FileMetadataInput) int
+		CreateFindingControl                     func(childComplexity int, input generated.CreateFindingControlInput) int
+		CreateFullProgram                        func(childComplexity int, input model.CreateFullProgramInput) int
+		CreateGroup                              func(childComplexity int, input generated.CreateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
+		CreateGroupByClone                       func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
+		CreateGroupMembership                    func(childComplexity int, input generated.CreateGroupMembershipInput) int
+		CreateGroupSetting                       func(childComplexity int, input generated.CreateGroupSettingInput) int
+		CreateGroupWithMembers                   func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
+		CreateHush                               func(childComplexity int, input generated.CreateHushInput) int
+		CreateIdentityHolder                     func(childComplexity int, input generated.CreateIdentityHolderInput, identityHolderFiles []*graphql.Upload, identityHolderFilesMetadata []*model.FileMetadataInput) int
+		CreateInternalPolicy                     func(childComplexity int, input generated.CreateInternalPolicyInput) int
+		CreateInvite                             func(childComplexity int, input generated.CreateInviteInput) int
+		CreateMappableDomain                     func(childComplexity int, input generated.CreateMappableDomainInput) int
+		CreateMappedControl                      func(childComplexity int, input generated.CreateMappedControlInput) int
+		CreateNarrative                          func(childComplexity int, input generated.CreateNarrativeInput) int
+		CreateNotification                       func(childComplexity int, input generated.CreateNotificationInput) int
+		CreateNotificationPreference             func(childComplexity int, input generated.CreateNotificationPreferenceInput) int
+		CreateNotificationTemplate               func(childComplexity int, input generated.CreateNotificationTemplateInput) int
+		CreateOnboarding                         func(childComplexity int, input generated.CreateOnboardingInput) int
+		CreateOrgMembership                      func(childComplexity int, input generated.CreateOrgMembershipInput) int
+		CreateOrganization                       func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
+		CreateOrganizationBrandingSetting        func(childComplexity int, input generated.CreateOrganizationBrandingSettingInput) int
+		CreateOrganizationSetting                func(childComplexity int, input generated.CreateOrganizationSettingInput) int
+		CreateOrganizationWithMembers            func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput, members []*model.OrgMembersInput) int
+		CreatePersonalAccessToken                func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
+		CreatePlatform                           func(childComplexity int, input generated.CreatePlatformInput, architectureDiagrams []*graphql.Upload, architectureDiagramsMetadata []*model.FileMetadataInput, dataFlowDiagrams []*graphql.Upload, dataFlowDiagramsMetadata []*model.FileMetadataInput, trustBoundaryDiagrams []*graphql.Upload, trustBoundaryDiagramsMetadata []*model.FileMetadataInput) int
+		CreateProcedure                          func(childComplexity int, input generated.CreateProcedureInput) int
+		CreateProgram                            func(childComplexity int, input generated.CreateProgramInput) int
+		CreateProgramMembership                  func(childComplexity int, input generated.CreateProgramMembershipInput) int
+		CreateProgramWithMembers                 func(childComplexity int, input model.CreateProgramWithMembersInput) int
+		CreateRemediation                        func(childComplexity int, input generated.CreateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) int
+		CreateReport                             func(childComplexity int, input generated.CreateReportInput) int
+		CreateReportMembership                   func(childComplexity int, input generated.CreateReportMembershipInput) int
+		CreateReview                             func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
+		CreateRisk                               func(childComplexity int, input generated.CreateRiskInput) int
+		CreateSLADefinition                      func(childComplexity int, input generated.CreateSLADefinitionInput) int
+		CreateScan                               func(childComplexity int, input generated.CreateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
+		CreateStandard                           func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
+		CreateSubcontrol                         func(childComplexity int, input generated.CreateSubcontrolInput) int
+		CreateSubprocessor                       func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
+		CreateSubscriber                         func(childComplexity int, input generated.CreateSubscriberInput) int
+		CreateSystemDetail                       func(childComplexity int, input generated.CreateSystemDetailInput) int
+		CreateTFASetting                         func(childComplexity int, input generated.CreateTFASettingInput) int
+		CreateTagDefinition                      func(childComplexity int, input generated.CreateTagDefinitionInput) int
+		CreateTask                               func(childComplexity int, input generated.CreateTaskInput) int
+		CreateTemplate                           func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
+		CreateTrustCenter                        func(childComplexity int, input generated.CreateTrustCenterInput) int
+		CreateTrustCenterCompliance              func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
+		CreateTrustCenterDoc                     func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput) int
+		CreateTrustCenterDomain                  func(childComplexity int, input model.CreateTrustCenterDomainInput) int
+		CreateTrustCenterEntity                  func(childComplexity int, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
+		CreateTrustCenterFaq                     func(childComplexity int, input generated.CreateTrustCenterFAQInput) int
+		CreateTrustCenterNDARequest              func(childComplexity int, input generated.CreateTrustCenterNDARequestInput) int
+		CreateTrustCenterNda                     func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
+		CreateTrustCenterPreviewSetting          func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
+		CreateTrustCenterSetting                 func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
+		CreateTrustCenterSubprocessor            func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
+		CreateTrustCenterWatermarkConfig         func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) int
+		CreateUploadActionPlan                   func(childComplexity int, actionPlanFile graphql.Upload, actionPlanFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) int
+		CreateUploadInternalPolicy               func(childComplexity int, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) int
+		CreateUploadProcedure                    func(childComplexity int, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) int
+		CreateUser                               func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
+		CreateUserSetting                        func(childComplexity int, input generated.CreateUserSettingInput) int
+		CreateVendorRiskScore                    func(childComplexity int, input generated.CreateVendorRiskScoreInput) int
+		CreateVendorScoringConfig                func(childComplexity int, input generated.CreateVendorScoringConfigInput) int
+		CreateVulnerability                      func(childComplexity int, input generated.CreateVulnerabilityInput, vulnerabilityFiles []*graphql.Upload, vulnerabilityFilesMetadata []*model.FileMetadataInput) int
+		CreateWorkflowDefinition                 func(childComplexity int, input generated.CreateWorkflowDefinitionInput) int
+		DeleteAPIToken                           func(childComplexity int, id string) int
+		DeleteActionPlan                         func(childComplexity int, id string) int
+		DeleteAssessment                         func(childComplexity int, id string) int
+		DeleteAssessmentPolicy                   func(childComplexity int, id string) int
+		DeleteAssessmentResponse                 func(childComplexity int, id string) int
+		DeleteAsset                              func(childComplexity int, id string) int
+		DeleteBulkAPIToken                       func(childComplexity int, ids []string) int
+		DeleteBulkActionPlan                     func(childComplexity int, ids []string) int
+		DeleteBulkAssessment                     func(childComplexity int, ids []string) int
+		DeleteBulkAssessmentPolicy               func(childComplexity int, ids []string) int
+		DeleteBulkAsset                          func(childComplexity int, ids []string) int
+		DeleteBulkCheckResult                    func(childComplexity int, ids []string) int
+		DeleteBulkContact                        func(childComplexity int, ids []string) int
+		DeleteBulkControl                        func(childComplexity int, ids []string) int
+		DeleteBulkControlImplementation          func(childComplexity int, ids []string) int
+		DeleteBulkControlObjective               func(childComplexity int, ids []string) int
+		DeleteBulkCustomDomain                   func(childComplexity int, ids []string) int
+		DeleteBulkDNSVerification                func(childComplexity int, ids []string) int
+		DeleteBulkDocumentData                   func(childComplexity int, ids []string) int
+		DeleteBulkEmailTemplate                  func(childComplexity int, ids []string) int
+		DeleteBulkEntity                         func(childComplexity int, ids []string) int
+		DeleteBulkEntityType                     func(childComplexity int, ids []string) int
+		DeleteBulkEvent                          func(childComplexity int, ids []string) int
+		DeleteBulkEvidence                       func(childComplexity int, ids []string) int
+		DeleteBulkExport                         func(childComplexity int, ids []string) int
+		DeleteBulkFinding                        func(childComplexity int, ids []string) int
+		DeleteBulkFindingControl                 func(childComplexity int, ids []string) int
+		DeleteBulkGroup                          func(childComplexity int, ids []string) int
+		DeleteBulkGroupMembership                func(childComplexity int, ids []string) int
+		DeleteBulkGroupSetting                   func(childComplexity int, ids []string) int
+		DeleteBulkHush                           func(childComplexity int, ids []string) int
+		DeleteBulkIdentityHolder                 func(childComplexity int, ids []string) int
+		DeleteBulkInternalPolicy                 func(childComplexity int, ids []string) int
+		DeleteBulkInvite                         func(childComplexity int, ids []string) int
+		DeleteBulkMappableDomain                 func(childComplexity int, ids []string) int
+		DeleteBulkMappedControl                  func(childComplexity int, ids []string) int
+		DeleteBulkNarrative                      func(childComplexity int, ids []string) int
+		DeleteBulkNotificationPreference         func(childComplexity int, ids []string) int
+		DeleteBulkNotificationTemplate           func(childComplexity int, ids []string) int
+		DeleteBulkOrgMembership                  func(childComplexity int, ids []string) int
+		DeleteBulkOrganizationBrandingSetting    func(childComplexity int, ids []string) int
+		DeleteBulkOrganizationSetting            func(childComplexity int, ids []string) int
+		DeleteBulkProcedure                      func(childComplexity int, ids []string) int
+		DeleteBulkProgram                        func(childComplexity int, ids []string) int
+		DeleteBulkProgramMembership              func(childComplexity int, ids []string) int
+		DeleteBulkRemediation                    func(childComplexity int, ids []string) int
+		DeleteBulkReportMembership               func(childComplexity int, ids []string) int
+		DeleteBulkReview                         func(childComplexity int, ids []string) int
+		DeleteBulkRisk                           func(childComplexity int, ids []string) int
+		DeleteBulkSLADefinition                  func(childComplexity int, ids []string) int
+		DeleteBulkScan                           func(childComplexity int, ids []string) int
+		DeleteBulkSubcontrol                     func(childComplexity int, ids []string) int
+		DeleteBulkSubprocessor                   func(childComplexity int, ids []string) int
+		DeleteBulkSystemDetail                   func(childComplexity int, ids []string) int
+		DeleteBulkTask                           func(childComplexity int, ids []string) int
+		DeleteBulkTemplate                       func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterCompliance          func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterDoc                 func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterFaq                 func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterNDARequest          func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterSubprocessor        func(childComplexity int, ids []string) int
+		DeleteBulkUserSetting                    func(childComplexity int, ids []string) int
+		DeleteBulkVendorRiskScore                func(childComplexity int, ids []string) int
+		DeleteBulkVendorScoringConfig            func(childComplexity int, ids []string) int
+		DeleteBulkVulnerability                  func(childComplexity int, ids []string) int
+		DeleteCampaign                           func(childComplexity int, id string) int
+		DeleteCampaignTarget                     func(childComplexity int, id string) int
+		DeleteCheckResult                        func(childComplexity int, id string) int
+		DeleteContact                            func(childComplexity int, id string) int
+		DeleteControl                            func(childComplexity int, id string) int
+		DeleteControlImplementation              func(childComplexity int, id string) int
+		DeleteControlObjective                   func(childComplexity int, id string) int
+		DeleteCustomDomain                       func(childComplexity int, id string) int
+		DeleteCustomTypeEnum                     func(childComplexity int, id string) int
+		DeleteDNSVerification                    func(childComplexity int, id string) int
+		DeleteDirectoryAccount                   func(childComplexity int, id string) int
+		DeleteDirectoryGroup                     func(childComplexity int, id string) int
+		DeleteDirectoryMembership                func(childComplexity int, id string) int
+		DeleteDiscussion                         func(childComplexity int, id string) int
+		DeleteDocumentData                       func(childComplexity int, id string) int
+		DeleteEmailTemplate                      func(childComplexity int, id string) int
+		DeleteEntity                             func(childComplexity int, id string) int
+		DeleteEntityType                         func(childComplexity int, id string) int
+		DeleteEvent                              func(childComplexity int, id string) int
+		DeleteEvidence                           func(childComplexity int, id string) int
+		DeleteExport                             func(childComplexity int, id string) int
+		DeleteFile                               func(childComplexity int, id string) int
+		DeleteFinding                            func(childComplexity int, id string) int
+		DeleteFindingControl                     func(childComplexity int, id string) int
+		DeleteGroup                              func(childComplexity int, id string) int
+		DeleteGroupMembership                    func(childComplexity int, id string) int
+		DeleteGroupSetting                       func(childComplexity int, id string) int
+		DeleteHush                               func(childComplexity int, id string) int
+		DeleteIdentityHolder                     func(childComplexity int, id string) int
+		DeleteIntegration                        func(childComplexity int, id string) int
+		DeleteInternalPolicy                     func(childComplexity int, id string) int
+		DeleteInvite                             func(childComplexity int, id string) int
+		DeleteMappableDomain                     func(childComplexity int, id string) int
+		DeleteMappedControl                      func(childComplexity int, id string) int
+		DeleteNarrative                          func(childComplexity int, id string) int
+		DeleteNote                               func(childComplexity int, id string) int
+		DeleteNotificationPreference             func(childComplexity int, id string) int
+		DeleteNotificationTemplate               func(childComplexity int, id string) int
+		DeleteOrgMembership                      func(childComplexity int, id string) int
+		DeleteOrganization                       func(childComplexity int, id string) int
+		DeleteOrganizationBrandingSetting        func(childComplexity int, id string) int
+		DeleteOrganizationSetting                func(childComplexity int, id string) int
+		DeletePersonalAccessToken                func(childComplexity int, id string) int
+		DeletePlatform                           func(childComplexity int, id string) int
+		DeleteProcedure                          func(childComplexity int, id string) int
+		DeleteProgram                            func(childComplexity int, id string) int
+		DeleteProgramMembership                  func(childComplexity int, id string) int
+		DeleteRemediation                        func(childComplexity int, id string) int
+		DeleteReport                             func(childComplexity int, id string) int
+		DeleteReportMembership                   func(childComplexity int, id string) int
+		DeleteReview                             func(childComplexity int, id string) int
+		DeleteRisk                               func(childComplexity int, id string) int
+		DeleteSLADefinition                      func(childComplexity int, id string) int
+		DeleteScan                               func(childComplexity int, id string) int
+		DeleteStandard                           func(childComplexity int, id string) int
+		DeleteSubcontrol                         func(childComplexity int, id string) int
+		DeleteSubprocessor                       func(childComplexity int, id string) int
+		DeleteSubscriber                         func(childComplexity int, email string, ownerID *string) int
+		DeleteSystemDetail                       func(childComplexity int, id string) int
+		DeleteTagDefinition                      func(childComplexity int, id string) int
+		DeleteTask                               func(childComplexity int, id string) int
+		DeleteTemplate                           func(childComplexity int, id string) int
+		DeleteTrustCenter                        func(childComplexity int, id string) int
+		DeleteTrustCenterCompliance              func(childComplexity int, id string) int
+		DeleteTrustCenterDoc                     func(childComplexity int, id string) int
+		DeleteTrustCenterEntity                  func(childComplexity int, id string) int
+		DeleteTrustCenterFaq                     func(childComplexity int, id string) int
+		DeleteTrustCenterNDARequest              func(childComplexity int, id string) int
+		DeleteTrustCenterSetting                 func(childComplexity int, id string) int
+		DeleteTrustCenterSubprocessor            func(childComplexity int, id string) int
+		DeleteTrustCenterWatermarkConfig         func(childComplexity int, id string) int
+		DeleteUser                               func(childComplexity int, id string) int
+		DeleteVendorRiskScore                    func(childComplexity int, id string) int
+		DeleteVendorScoringConfig                func(childComplexity int, id string) int
+		DeleteVulnerability                      func(childComplexity int, id string) int
+		DeleteWebauthn                           func(childComplexity int, id string) int
+		DeleteWorkflowDefinition                 func(childComplexity int, id string) int
+		DenyNDARequests                          func(childComplexity int, ids []string) int
+		ForceCompleteWorkflowInstance            func(childComplexity int, id string, applyProposal *bool) int
+		ImportDomainScanReview                   func(childComplexity int, input model.ImportDomainScanReviewInput) int
+		LaunchCampaign                           func(childComplexity int, input model.LaunchCampaignInput) int
+		LeaveOrganization                        func(childComplexity int, organizationID string) int
+		MarkNotificationsAsRead                  func(childComplexity int, ids []string) int
+		PublishTrustCenterSetting                func(childComplexity int) int
+		ReassignWorkflowAssignment               func(childComplexity int, id string, targetUserID string) int
+		RejectWorkflowAssignment                 func(childComplexity int, id string, reason *string) int
+		RequestChangesWorkflowAssignment         func(childComplexity int, id string, reason *string, inputs map[string]any) int
+		RequestNewTrustCenterToken               func(childComplexity int, email string) int
+		ResendCampaignIncompleteTargets          func(childComplexity int, input model.ResendCampaignIncompleteInput) int
+		ResolveVulnerability                     func(childComplexity int, id string, input model.ResolveVulnerabilityInput) int
+		SendCampaignTestEmail                    func(childComplexity int, input model.SendCampaignTestEmailInput) int
+		SubmitTrustCenterNDAResponse             func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
+		SubmitWorkflowProposal                   func(childComplexity int, id string) int
+		TransferOrganizationOwnership            func(childComplexity int, newOwnerEmail string) int
+		UpdateAPIToken                           func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
+		UpdateActionPlan                         func(childComplexity int, id string, input generated.UpdateActionPlanInput, actionPlanFile *graphql.Upload, actionPlanFileMetadata *model.FileMetadataInput) int
+		UpdateAssessment                         func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
+		UpdateAssessmentPolicy                   func(childComplexity int, id string, input generated.UpdateAssessmentPolicyInput) int
+		UpdateAsset                              func(childComplexity int, id string, input generated.UpdateAssetInput) int
+		UpdateBulkAPIToken                       func(childComplexity int, ids []string, input generated.UpdateAPITokenInput) int
+		UpdateBulkActionPlan                     func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
+		UpdateBulkAssessmentPolicy               func(childComplexity int, ids []string, input generated.UpdateAssessmentPolicyInput) int
+		UpdateBulkAsset                          func(childComplexity int, ids []string, input generated.UpdateAssetInput) int
+		UpdateBulkCSVAPIToken                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVActionPlan                  func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVAssessmentPolicy            func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVAsset                       func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVCheckResult                 func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVContact                     func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVControl                     func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVControlImplementation       func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVControlObjective            func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVCustomDomain                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVDNSVerification             func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVDocumentData                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEmailTemplate               func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEntity                      func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEntityType                  func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEvent                       func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVEvidence                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVFinding                     func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVGroup                       func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVGroupMembership             func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVGroupSetting                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVHush                        func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVIdentityHolder              func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVInternalPolicy              func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVInvite                      func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVMappableDomain              func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVMappedControl               func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVNarrative                   func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVNotificationPreference      func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVNotificationTemplate        func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVOrgMembership               func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVOrganizationBrandingSetting func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVOrganizationSetting         func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVProcedure                   func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVProgram                     func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVProgramMembership           func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVRemediation                 func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVReview                      func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVRisk                        func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVSLADefinition               func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVScan                        func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVSubcontrol                  func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVSubprocessor                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVSystemDetail                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTask                        func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTemplate                    func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTrustCenterCompliance       func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTrustCenterDoc              func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTrustCenterFaq              func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVTrustCenterSubprocessor     func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVUserSetting                 func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVVendorRiskScore             func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVVendorScoringConfig         func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVVulnerability               func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCheckResult                    func(childComplexity int, ids []string, input generated.UpdateCheckResultInput) int
+		UpdateBulkContact                        func(childComplexity int, ids []string, input generated.UpdateContactInput) int
+		UpdateBulkControl                        func(childComplexity int, ids []string, input generated.UpdateControlInput) int
+		UpdateBulkControlImplementation          func(childComplexity int, ids []string, input generated.UpdateControlImplementationInput) int
+		UpdateBulkControlObjective               func(childComplexity int, ids []string, input generated.UpdateControlObjectiveInput) int
+		UpdateBulkCustomDomain                   func(childComplexity int, ids []string, input generated.UpdateCustomDomainInput) int
+		UpdateBulkDNSVerification                func(childComplexity int, ids []string, input generated.UpdateDNSVerificationInput) int
+		UpdateBulkDocumentData                   func(childComplexity int, ids []string, input generated.UpdateDocumentDataInput) int
+		UpdateBulkEmailTemplate                  func(childComplexity int, ids []string, input generated.UpdateEmailTemplateInput) int
+		UpdateBulkEntity                         func(childComplexity int, ids []string, input generated.UpdateEntityInput) int
+		UpdateBulkEntityType                     func(childComplexity int, ids []string, input generated.UpdateEntityTypeInput) int
+		UpdateBulkEvent                          func(childComplexity int, ids []string, input generated.UpdateEventInput) int
+		UpdateBulkEvidence                       func(childComplexity int, ids []string, input generated.UpdateEvidenceInput) int
+		UpdateBulkFinding                        func(childComplexity int, ids []string, input generated.UpdateFindingInput) int
+		UpdateBulkGroup                          func(childComplexity int, ids []string, input generated.UpdateGroupInput) int
+		UpdateBulkGroupMembership                func(childComplexity int, ids []string, input generated.UpdateGroupMembershipInput) int
+		UpdateBulkGroupSetting                   func(childComplexity int, ids []string, input generated.UpdateGroupSettingInput) int
+		UpdateBulkHush                           func(childComplexity int, ids []string, input generated.UpdateHushInput) int
+		UpdateBulkIdentityHolder                 func(childComplexity int, ids []string, input generated.UpdateIdentityHolderInput) int
+		UpdateBulkInternalPolicy                 func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
+		UpdateBulkInvite                         func(childComplexity int, ids []string, input generated.UpdateInviteInput) int
+		UpdateBulkMappableDomain                 func(childComplexity int, ids []string, input generated.UpdateMappableDomainInput) int
+		UpdateBulkMappedControl                  func(childComplexity int, ids []string, input generated.UpdateMappedControlInput) int
+		UpdateBulkNarrative                      func(childComplexity int, ids []string, input generated.UpdateNarrativeInput) int
+		UpdateBulkNotificationPreference         func(childComplexity int, ids []string, input generated.UpdateNotificationPreferenceInput) int
+		UpdateBulkNotificationTemplate           func(childComplexity int, ids []string, input generated.UpdateNotificationTemplateInput) int
+		UpdateBulkOrgMembership                  func(childComplexity int, ids []string, input generated.UpdateOrgMembershipInput) int
+		UpdateBulkOrganizationBrandingSetting    func(childComplexity int, ids []string, input generated.UpdateOrganizationBrandingSettingInput) int
+		UpdateBulkOrganizationSetting            func(childComplexity int, ids []string, input generated.UpdateOrganizationSettingInput) int
+		UpdateBulkProcedure                      func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
+		UpdateBulkProgram                        func(childComplexity int, ids []string, input generated.UpdateProgramInput) int
+		UpdateBulkProgramMembership              func(childComplexity int, ids []string, input generated.UpdateProgramMembershipInput) int
+		UpdateBulkRemediation                    func(childComplexity int, ids []string, input generated.UpdateRemediationInput) int
+		UpdateBulkReportMembership               func(childComplexity int, ids []string, input generated.UpdateReportMembershipInput) int
+		UpdateBulkReview                         func(childComplexity int, ids []string, input generated.UpdateReviewInput) int
+		UpdateBulkRisk                           func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
+		UpdateBulkSLADefinition                  func(childComplexity int, ids []string, input generated.UpdateSLADefinitionInput) int
+		UpdateBulkScan                           func(childComplexity int, ids []string, input generated.UpdateScanInput) int
+		UpdateBulkSubcontrol                     func(childComplexity int, ids []string, input generated.UpdateSubcontrolInput) int
+		UpdateBulkSubprocessor                   func(childComplexity int, ids []string, input generated.UpdateSubprocessorInput) int
+		UpdateBulkSystemDetail                   func(childComplexity int, ids []string, input generated.UpdateSystemDetailInput) int
+		UpdateBulkTask                           func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
+		UpdateBulkTemplate                       func(childComplexity int, ids []string, input generated.UpdateTemplateInput) int
+		UpdateBulkTrustCenterCompliance          func(childComplexity int, ids []string, input generated.UpdateTrustCenterComplianceInput) int
+		UpdateBulkTrustCenterDoc                 func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
+		UpdateBulkTrustCenterFaq                 func(childComplexity int, ids []string, input generated.UpdateTrustCenterFAQInput) int
+		UpdateBulkTrustCenterSubprocessor        func(childComplexity int, ids []string, input generated.UpdateTrustCenterSubprocessorInput) int
+		UpdateBulkUserSetting                    func(childComplexity int, ids []string, input generated.UpdateUserSettingInput) int
+		UpdateBulkVendorRiskScore                func(childComplexity int, ids []string, input generated.UpdateVendorRiskScoreInput) int
+		UpdateBulkVendorScoringConfig            func(childComplexity int, ids []string, input generated.UpdateVendorScoringConfigInput) int
+		UpdateBulkVulnerability                  func(childComplexity int, ids []string, input generated.UpdateVulnerabilityInput) int
+		UpdateCampaign                           func(childComplexity int, id string, input generated.UpdateCampaignInput) int
+		UpdateCampaignTarget                     func(childComplexity int, id string, input generated.UpdateCampaignTargetInput) int
+		UpdateCheckResult                        func(childComplexity int, id string, input generated.UpdateCheckResultInput) int
+		UpdateContact                            func(childComplexity int, id string, input generated.UpdateContactInput, contactFiles []*graphql.Upload, contactFilesMetadata []*model.FileMetadataInput) int
+		UpdateControl                            func(childComplexity int, id string, input generated.UpdateControlInput) int
+		UpdateControlComment                     func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateControlImplementation              func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
+		UpdateControlObjective                   func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
+		UpdateCustomDomain                       func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
+		UpdateCustomTypeEnum                     func(childComplexity int, id string, input generated.UpdateCustomTypeEnumInput) int
+		UpdateDNSVerification                    func(childComplexity int, id string, input generated.UpdateDNSVerificationInput) int
+		UpdateDirectoryAccount                   func(childComplexity int, id string, input generated.UpdateDirectoryAccountInput) int
+		UpdateDirectoryGroup                     func(childComplexity int, id string, input generated.UpdateDirectoryGroupInput) int
+		UpdateDirectoryMembership                func(childComplexity int, id string, input generated.UpdateDirectoryMembershipInput) int
+		UpdateDiscussion                         func(childComplexity int, id string, input generated.UpdateDiscussionInput) int
+		UpdateDocumentData                       func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload, documentDataFileMetadata *model.FileMetadataInput) int
+		UpdateEmailTemplate                      func(childComplexity int, id string, input generated.UpdateEmailTemplateInput) int
+		UpdateEntity                             func(childComplexity int, id string, input generated.UpdateEntityInput, entityFiles []*graphql.Upload, entityFilesMetadata []*model.FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
+		UpdateEntityType                         func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
+		UpdateEvent                              func(childComplexity int, id string, input generated.UpdateEventInput) int
+		UpdateEvidence                           func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) int
+		UpdateEvidenceComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateExport                             func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload, exportFilesMetadata []*model.FileMetadataInput) int
+		UpdateFinding                            func(childComplexity int, id string, input generated.UpdateFindingInput, findingFiles []*graphql.Upload, findingFilesMetadata []*model.FileMetadataInput) int
+		UpdateFindingComment                     func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateFindingControl                     func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
+		UpdateGroup                              func(childComplexity int, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
+		UpdateGroupMembership                    func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
+		UpdateGroupSetting                       func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
+		UpdateHush                               func(childComplexity int, id string, input generated.UpdateHushInput) int
+		UpdateIdentityHolder                     func(childComplexity int, id string, input generated.UpdateIdentityHolderInput, identityHolderFiles []*graphql.Upload, identityHolderFilesMetadata []*model.FileMetadataInput) int
+		UpdateInternalPolicy                     func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput) int
+		UpdateInternalPolicyComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateInvite                             func(childComplexity int, id string, input generated.UpdateInviteInput) int
+		UpdateMappableDomain                     func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
+		UpdateMappedControl                      func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
+		UpdateNarrative                          func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
+		UpdateNotification                       func(childComplexity int, id string, input generated.UpdateNotificationInput) int
+		UpdateNotificationPreference             func(childComplexity int, id string, input generated.UpdateNotificationPreferenceInput) int
+		UpdateNotificationTemplate               func(childComplexity int, id string, input generated.UpdateNotificationTemplateInput) int
+		UpdateOrgMembership                      func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
+		UpdateOrganization                       func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
+		UpdateOrganizationBrandingSetting        func(childComplexity int, id string, input generated.UpdateOrganizationBrandingSettingInput) int
+		UpdateOrganizationSetting                func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
+		UpdatePersonalAccessToken                func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
+		UpdatePlatform                           func(childComplexity int, id string, input generated.UpdatePlatformInput, architectureDiagrams []*graphql.Upload, architectureDiagramsMetadata []*model.FileMetadataInput, dataFlowDiagrams []*graphql.Upload, dataFlowDiagramsMetadata []*model.FileMetadataInput, trustBoundaryDiagrams []*graphql.Upload, trustBoundaryDiagramsMetadata []*model.FileMetadataInput) int
+		UpdateProcedure                          func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload, procedureFileMetadata *model.FileMetadataInput) int
+		UpdateProcedureComment                   func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateProgram                            func(childComplexity int, id string, input generated.UpdateProgramInput) int
+		UpdateProgramMembership                  func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
+		UpdateRemediation                        func(childComplexity int, id string, input generated.UpdateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) int
+		UpdateReport                             func(childComplexity int, id string, input generated.UpdateReportInput) int
+		UpdateReportMembership                   func(childComplexity int, id string, input generated.UpdateReportMembershipInput) int
+		UpdateReview                             func(childComplexity int, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
+		UpdateReviewComment                      func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateRisk                               func(childComplexity int, id string, input generated.UpdateRiskInput) int
+		UpdateRiskComment                        func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateSLADefinition                      func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
+		UpdateScan                               func(childComplexity int, id string, input generated.UpdateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
+		UpdateStandard                           func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
+		UpdateSubcontrol                         func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
+		UpdateSubcontrolComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateSubprocessor                       func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
+		UpdateSubscriber                         func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
+		UpdateSystemDetail                       func(childComplexity int, id string, input generated.UpdateSystemDetailInput) int
+		UpdateTFASetting                         func(childComplexity int, input generated.UpdateTFASettingInput) int
+		UpdateTagDefinition                      func(childComplexity int, id string, input generated.UpdateTagDefinitionInput) int
+		UpdateTask                               func(childComplexity int, id string, input generated.UpdateTaskInput) int
+		UpdateTaskComment                        func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateTemplate                           func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
+		UpdateTrustCenter                        func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
+		UpdateTrustCenterCompliance              func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
+		UpdateTrustCenterDoc                     func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, trustCenterDocFileMetadata *model.FileMetadataInput, watermarkedTrustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFileMetadata *model.FileMetadataInput) int
+		UpdateTrustCenterEntity                  func(childComplexity int, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
+		UpdateTrustCenterFAQComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateTrustCenterFaq                     func(childComplexity int, id string, input generated.UpdateTrustCenterFAQInput) int
+		UpdateTrustCenterNDARequest              func(childComplexity int, id string, input generated.UpdateTrustCenterNDARequestInput) int
+		UpdateTrustCenterNda                     func(childComplexity int, id string, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
+		UpdateTrustCenterPost                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateTrustCenterPreviewSetting          func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
+		UpdateTrustCenterSetting                 func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
+		UpdateTrustCenterSubprocessor            func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
+		UpdateTrustCenterWatermarkConfig         func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) int
+		UpdateUser                               func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
+		UpdateUserSetting                        func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
+		UpdateVendorRiskScore                    func(childComplexity int, id string, input generated.UpdateVendorRiskScoreInput) int
+		UpdateVendorScoringConfig                func(childComplexity int, id string, input generated.UpdateVendorScoringConfigInput) int
+		UpdateVulnerability                      func(childComplexity int, id string, input generated.UpdateVulnerabilityInput, vulnerabilityFiles []*graphql.Upload, vulnerabilityFilesMetadata []*model.FileMetadataInput) int
+		UpdateVulnerabilityComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
+		UpdateWorkflowDefinition                 func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
+		UpdateWorkflowProposalChanges            func(childComplexity int, input model.UpdateWorkflowProposalChangesInput) int
+		ValidateCustomDomain                     func(childComplexity int, id string) int
+		WithdrawWorkflowProposal                 func(childComplexity int, id string, reason *string) int
 	}
 
 	Narrative struct {
@@ -4649,6 +4671,7 @@ type ComplexityRoot struct {
 		AvatarLocalFileID                  func(childComplexity int) int
 		AvatarRemoteURL                    func(childComplexity int) int
 		AvatarUpdatedAt                    func(childComplexity int) int
+		BrandingSetting                    func(childComplexity int) int
 		CampaignCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CampaignTargetCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CampaignsManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -4707,6 +4730,8 @@ type ComplexityRoot struct {
 		ProgramMembershipCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		RegistryManager                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		RemediationCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ReportCreators                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ReportMembershipCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ReviewCreators                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		RiskCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		RiskManager                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -4742,6 +4767,64 @@ type ComplexityRoot struct {
 		VulnerabilityCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		WorkflowDefinitionCreators         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		WorkflowsManager                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+	}
+
+	OrganizationBrandingSetting struct {
+		BackgroundColor          func(childComplexity int) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		FontFamily               func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		Organization             func(childComplexity int) int
+		OrganizationID           func(childComplexity int) int
+		PrimaryColor             func(childComplexity int) int
+		RemoveAssessmentBranding func(childComplexity int) int
+		SecondaryColor           func(childComplexity int) int
+		Tags                     func(childComplexity int) int
+		TextColor                func(childComplexity int) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
+		UpdatedByImpersonator    func(childComplexity int) int
+	}
+
+	OrganizationBrandingSettingBulkCreatePayload struct {
+		OrganizationBrandingSettings func(childComplexity int) int
+	}
+
+	OrganizationBrandingSettingBulkDeletePayload struct {
+		DeletedIDs    func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotDeletedIDs func(childComplexity int) int
+	}
+
+	OrganizationBrandingSettingBulkUpdatePayload struct {
+		Error                        func(childComplexity int) int
+		NotUpdatedIDs                func(childComplexity int) int
+		OrganizationBrandingSettings func(childComplexity int) int
+		UpdatedIDs                   func(childComplexity int) int
+	}
+
+	OrganizationBrandingSettingConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	OrganizationBrandingSettingCreatePayload struct {
+		OrganizationBrandingSetting func(childComplexity int) int
+	}
+
+	OrganizationBrandingSettingDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	OrganizationBrandingSettingEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	OrganizationBrandingSettingUpdatePayload struct {
+		OrganizationBrandingSetting func(childComplexity int) int
 	}
 
 	OrganizationBulkCreatePayload struct {
@@ -5474,6 +5557,8 @@ type ComplexityRoot struct {
 		OrgSubscription                 func(childComplexity int, id string) int
 		OrgSubscriptions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
 		Organization                    func(childComplexity int, id string) int
+		OrganizationBrandingSetting     func(childComplexity int, id string) int
+		OrganizationBrandingSettings    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationBrandingSettingOrder, where *generated.OrganizationBrandingSettingWhereInput) int
 		OrganizationSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		OrganizationSetting             func(childComplexity int, id string) int
 		OrganizationSettings            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationSettingOrder, where *generated.OrganizationSettingWhereInput) int
@@ -5495,6 +5580,11 @@ type ComplexityRoot struct {
 		Remediation                     func(childComplexity int, id string) int
 		RemediationSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Remediations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Report                          func(childComplexity int, id string) int
+		ReportMembership                func(childComplexity int, id string) int
+		ReportMemberships               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportMembershipOrder, where *generated.ReportMembershipWhereInput) int
+		ReportSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Reports                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportOrder, where *generated.ReportWhereInput) int
 		Review                          func(childComplexity int, id string) int
 		ReviewSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Reviews                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
@@ -5712,6 +5802,112 @@ type ComplexityRoot struct {
 
 	RemediationUpdatePayload struct {
 		Remediation func(childComplexity int) int
+	}
+
+	Report struct {
+		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		Editors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                    func(childComplexity int) int
+		Members               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportMembershipOrder, where *generated.ReportMembershipWhereInput) int
+		Name                  func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Query                 func(childComplexity int) int
+		ReportKind            func(childComplexity int) int
+		ReportKindID          func(childComplexity int) int
+		ReportKindName        func(childComplexity int) int
+		ReportOwner           func(childComplexity int) int
+		ReportOwnerID         func(childComplexity int) int
+		RequestorID           func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		Users                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		Variables             func(childComplexity int) int
+		Viewers               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Visibility            func(childComplexity int) int
+	}
+
+	ReportConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ReportCreatePayload struct {
+		Report func(childComplexity int) int
+	}
+
+	ReportDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ReportEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ReportMembership struct {
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Report                func(childComplexity int) int
+		ReportID              func(childComplexity int) int
+		Role                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		User                  func(childComplexity int) int
+		UserID                func(childComplexity int) int
+	}
+
+	ReportMembershipBulkCreatePayload struct {
+		ReportMemberships func(childComplexity int) int
+	}
+
+	ReportMembershipBulkDeletePayload struct {
+		DeletedIDs    func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotDeletedIDs func(childComplexity int) int
+	}
+
+	ReportMembershipBulkUpdatePayload struct {
+		Error             func(childComplexity int) int
+		NotUpdatedIDs     func(childComplexity int) int
+		ReportMemberships func(childComplexity int) int
+		UpdatedIDs        func(childComplexity int) int
+	}
+
+	ReportMembershipConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ReportMembershipCreatePayload struct {
+		ReportMembership func(childComplexity int) int
+	}
+
+	ReportMembershipDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	ReportMembershipEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	ReportMembershipUpdatePayload struct {
+		ReportMembership func(childComplexity int) int
+	}
+
+	ReportUpdatePayload struct {
+		Report func(childComplexity int) int
 	}
 
 	Review struct {
@@ -6159,6 +6355,7 @@ type ComplexityRoot struct {
 		Procedures            func(childComplexity int) int
 		Programs              func(childComplexity int) int
 		Remediations          func(childComplexity int) int
+		Reports               func(childComplexity int) int
 		Reviews               func(childComplexity int) int
 		Risks                 func(childComplexity int) int
 		Scans                 func(childComplexity int) int
@@ -7456,6 +7653,9 @@ type ComplexityRoot struct {
 		ProgramMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
 		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ProgramsOwned          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ReportMemberships      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportMembershipOrder, where *generated.ReportMembershipWhereInput) int
+		Reports                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportOrder, where *generated.ReportWhereInput) int
+		ReportsOwned           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReportOrder, where *generated.ReportWhereInput) int
 		Role                   func(childComplexity int) int
 		ScimActive             func(childComplexity int) int
 		ScimExternalID         func(childComplexity int) int
@@ -9416,6 +9616,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Assessment.PolicyAttestations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentPolicyOrder), args["where"].(*generated.AssessmentPolicyWhereInput)), true
+	case "Assessment.removeBranding":
+		if e.ComplexityRoot.Assessment.RemoveBranding == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Assessment.RemoveBranding(childComplexity), true
 	case "Assessment.responseDueDuration":
 		if e.ComplexityRoot.Assessment.ResponseDueDuration == nil {
 			break
@@ -21399,6 +21605,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Group.RemediationEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+	case "Group.reportBlockedGroups":
+		if e.ComplexityRoot.Group.ReportBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_reportBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Group.ReportBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportOrder), args["where"].(*generated.ReportWhereInput)), true
+	case "Group.reportEditors":
+		if e.ComplexityRoot.Group.ReportEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_reportEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Group.ReportEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportOrder), args["where"].(*generated.ReportWhereInput)), true
+	case "Group.reportViewers":
+		if e.ComplexityRoot.Group.ReportViewers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_reportViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Group.ReportViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportOrder), args["where"].(*generated.ReportWhereInput)), true
 	case "Group.reviewBlockedGroups":
 		if e.ComplexityRoot.Group.ReviewBlockedGroups == nil {
 			break
@@ -25897,6 +26136,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVOrgMembership(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.createBulkCSVOrganizationBrandingSetting":
+		if e.ComplexityRoot.Mutation.CreateBulkCSVOrganizationBrandingSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVOrganizationBrandingSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkCSVOrganizationBrandingSetting(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVOrganizationSetting":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVOrganizationSetting == nil {
 			break
@@ -26590,6 +26840,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkOrgMembership(childComplexity, args["input"].([]*generated.CreateOrgMembershipInput)), true
+	case "Mutation.createBulkOrganizationBrandingSetting":
+		if e.ComplexityRoot.Mutation.CreateBulkOrganizationBrandingSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkOrganizationBrandingSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkOrganizationBrandingSetting(childComplexity, args["input"].([]*generated.CreateOrganizationBrandingSettingInput)), true
 	case "Mutation.createBulkOrganizationSetting":
 		if e.ComplexityRoot.Mutation.CreateBulkOrganizationSetting == nil {
 			break
@@ -26656,6 +26917,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkRemediation(childComplexity, args["input"].([]*generated.CreateRemediationInput)), true
+	case "Mutation.createBulkReportMembership":
+		if e.ComplexityRoot.Mutation.CreateBulkReportMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkReportMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkReportMembership(childComplexity, args["input"].([]*generated.CreateReportMembershipInput)), true
 	case "Mutation.createBulkReview":
 		if e.ComplexityRoot.Mutation.CreateBulkReview == nil {
 			break
@@ -26963,7 +27235,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateContact(childComplexity, args["input"].(generated.CreateContactInput)), true
+		return e.ComplexityRoot.Mutation.CreateContact(childComplexity, args["input"].(generated.CreateContactInput), args["contactFiles"].([]*graphql.Upload), args["contactFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createControl":
 		if e.ComplexityRoot.Mutation.CreateControl == nil {
 			break
@@ -27183,7 +27455,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateFinding(childComplexity, args["input"].(generated.CreateFindingInput)), true
+		return e.ComplexityRoot.Mutation.CreateFinding(childComplexity, args["input"].(generated.CreateFindingInput), args["findingFiles"].([]*graphql.Upload), args["findingFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createFindingControl":
 		if e.ComplexityRoot.Mutation.CreateFindingControl == nil {
 			break
@@ -27404,6 +27676,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateOrganization(childComplexity, args["input"].(generated.CreateOrganizationInput), args["avatarFile"].(*graphql.Upload), args["avatarFileMetadata"].(*model.FileMetadataInput)), true
+	case "Mutation.createOrganizationBrandingSetting":
+		if e.ComplexityRoot.Mutation.CreateOrganizationBrandingSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createOrganizationBrandingSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateOrganizationBrandingSetting(childComplexity, args["input"].(generated.CreateOrganizationBrandingSettingInput)), true
 	case "Mutation.createOrganizationSetting":
 		if e.ComplexityRoot.Mutation.CreateOrganizationSetting == nil {
 			break
@@ -27502,7 +27785,29 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateRemediation(childComplexity, args["input"].(generated.CreateRemediationInput)), true
+		return e.ComplexityRoot.Mutation.CreateRemediation(childComplexity, args["input"].(generated.CreateRemediationInput), args["remediationFiles"].([]*graphql.Upload), args["remediationFilesMetadata"].([]*model.FileMetadataInput)), true
+	case "Mutation.createReport":
+		if e.ComplexityRoot.Mutation.CreateReport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createReport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateReport(childComplexity, args["input"].(generated.CreateReportInput)), true
+	case "Mutation.createReportMembership":
+		if e.ComplexityRoot.Mutation.CreateReportMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createReportMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateReportMembership(childComplexity, args["input"].(generated.CreateReportMembershipInput)), true
 	case "Mutation.createReview":
 		if e.ComplexityRoot.Mutation.CreateReview == nil {
 			break
@@ -27546,7 +27851,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput)), true
+		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createStandard":
 		if e.ComplexityRoot.Mutation.CreateStandard == nil {
 			break
@@ -27778,6 +28083,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateTrustCenterWatermarkConfig(childComplexity, args["input"].(generated.CreateTrustCenterWatermarkConfigInput), args["watermarkFile"].(*graphql.Upload), args["watermarkFileMetadata"].(*model.FileMetadataInput)), true
+	case "Mutation.createUploadActionPlan":
+		if e.ComplexityRoot.Mutation.CreateUploadActionPlan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createUploadActionPlan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateUploadActionPlan(childComplexity, args["actionPlanFile"].(graphql.Upload), args["actionPlanFileMetadata"].(*model.FileMetadataInput), args["ownerID"].(*string), args["managementMode"].(*enums.DocumentManagementMode)), true
 	case "Mutation.createUploadInternalPolicy":
 		if e.ComplexityRoot.Mutation.CreateUploadInternalPolicy == nil {
 			break
@@ -27854,7 +28170,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateVulnerability(childComplexity, args["input"].(generated.CreateVulnerabilityInput)), true
+		return e.ComplexityRoot.Mutation.CreateVulnerability(childComplexity, args["input"].(generated.CreateVulnerabilityInput), args["vulnerabilityFiles"].([]*graphql.Upload), args["vulnerabilityFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createWorkflowDefinition":
 		if e.ComplexityRoot.Mutation.CreateWorkflowDefinition == nil {
 			break
@@ -28306,6 +28622,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkOrgMembership(childComplexity, args["ids"].([]string)), true
+	case "Mutation.deleteBulkOrganizationBrandingSetting":
+		if e.ComplexityRoot.Mutation.DeleteBulkOrganizationBrandingSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkOrganizationBrandingSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkOrganizationBrandingSetting(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkOrganizationSetting":
 		if e.ComplexityRoot.Mutation.DeleteBulkOrganizationSetting == nil {
 			break
@@ -28361,6 +28688,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkRemediation(childComplexity, args["ids"].([]string)), true
+	case "Mutation.deleteBulkReportMembership":
+		if e.ComplexityRoot.Mutation.DeleteBulkReportMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkReportMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkReportMembership(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkReview":
 		if e.ComplexityRoot.Mutation.DeleteBulkReview == nil {
 			break
@@ -28999,6 +29337,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteOrganization(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteOrganizationBrandingSetting":
+		if e.ComplexityRoot.Mutation.DeleteOrganizationBrandingSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteOrganizationBrandingSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteOrganizationBrandingSetting(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteOrganizationSetting":
 		if e.ComplexityRoot.Mutation.DeleteOrganizationSetting == nil {
 			break
@@ -29076,6 +29425,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteRemediation(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteReport":
+		if e.ComplexityRoot.Mutation.DeleteReport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteReport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteReport(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteReportMembership":
+		if e.ComplexityRoot.Mutation.DeleteReportMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteReportMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteReportMembership(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteReview":
 		if e.ComplexityRoot.Mutation.DeleteReview == nil {
 			break
@@ -29576,7 +29947,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateActionPlan(childComplexity, args["id"].(string), args["input"].(generated.UpdateActionPlanInput)), true
+		return e.ComplexityRoot.Mutation.UpdateActionPlan(childComplexity, args["id"].(string), args["input"].(generated.UpdateActionPlanInput), args["actionPlanFile"].(*graphql.Upload), args["actionPlanFileMetadata"].(*model.FileMetadataInput)), true
 	case "Mutation.updateAssessment":
 		if e.ComplexityRoot.Mutation.UpdateAssessment == nil {
 			break
@@ -29995,6 +30366,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVOrgMembership(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.updateBulkCSVOrganizationBrandingSetting":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVOrganizationBrandingSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVOrganizationBrandingSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVOrganizationBrandingSetting(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVOrganizationSetting":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVOrganizationSetting == nil {
 			break
@@ -30534,6 +30916,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkOrgMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateOrgMembershipInput)), true
+	case "Mutation.updateBulkOrganizationBrandingSetting":
+		if e.ComplexityRoot.Mutation.UpdateBulkOrganizationBrandingSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkOrganizationBrandingSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkOrganizationBrandingSetting(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateOrganizationBrandingSettingInput)), true
 	case "Mutation.updateBulkOrganizationSetting":
 		if e.ComplexityRoot.Mutation.UpdateBulkOrganizationSetting == nil {
 			break
@@ -30589,6 +30982,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkRemediation(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateRemediationInput)), true
+	case "Mutation.updateBulkReportMembership":
+		if e.ComplexityRoot.Mutation.UpdateBulkReportMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkReportMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkReportMembership(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateReportMembershipInput)), true
 	case "Mutation.updateBulkReview":
 		if e.ComplexityRoot.Mutation.UpdateBulkReview == nil {
 			break
@@ -30819,7 +31223,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateContact(childComplexity, args["id"].(string), args["input"].(generated.UpdateContactInput)), true
+		return e.ComplexityRoot.Mutation.UpdateContact(childComplexity, args["id"].(string), args["input"].(generated.UpdateContactInput), args["contactFiles"].([]*graphql.Upload), args["contactFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateControl":
 		if e.ComplexityRoot.Mutation.UpdateControl == nil {
 			break
@@ -31039,7 +31443,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateFinding(childComplexity, args["id"].(string), args["input"].(generated.UpdateFindingInput)), true
+		return e.ComplexityRoot.Mutation.UpdateFinding(childComplexity, args["id"].(string), args["input"].(generated.UpdateFindingInput), args["findingFiles"].([]*graphql.Upload), args["findingFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateFindingComment":
 		if e.ComplexityRoot.Mutation.UpdateFindingComment == nil {
 			break
@@ -31238,6 +31642,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateOrganization(childComplexity, args["id"].(string), args["input"].(generated.UpdateOrganizationInput), args["avatarFile"].(*graphql.Upload), args["avatarFileMetadata"].(*model.FileMetadataInput)), true
+	case "Mutation.updateOrganizationBrandingSetting":
+		if e.ComplexityRoot.Mutation.UpdateOrganizationBrandingSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateOrganizationBrandingSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateOrganizationBrandingSetting(childComplexity, args["id"].(string), args["input"].(generated.UpdateOrganizationBrandingSettingInput)), true
 	case "Mutation.updateOrganizationSetting":
 		if e.ComplexityRoot.Mutation.UpdateOrganizationSetting == nil {
 			break
@@ -31325,7 +31740,29 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateRemediation(childComplexity, args["id"].(string), args["input"].(generated.UpdateRemediationInput)), true
+		return e.ComplexityRoot.Mutation.UpdateRemediation(childComplexity, args["id"].(string), args["input"].(generated.UpdateRemediationInput), args["remediationFiles"].([]*graphql.Upload), args["remediationFilesMetadata"].([]*model.FileMetadataInput)), true
+	case "Mutation.updateReport":
+		if e.ComplexityRoot.Mutation.UpdateReport == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateReport_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateReport(childComplexity, args["id"].(string), args["input"].(generated.UpdateReportInput)), true
+	case "Mutation.updateReportMembership":
+		if e.ComplexityRoot.Mutation.UpdateReportMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateReportMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateReportMembership(childComplexity, args["id"].(string), args["input"].(generated.UpdateReportMembershipInput)), true
 	case "Mutation.updateReview":
 		if e.ComplexityRoot.Mutation.UpdateReview == nil {
 			break
@@ -31391,7 +31828,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput)), true
+		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateStandard":
 		if e.ComplexityRoot.Mutation.UpdateStandard == nil {
 			break
@@ -31710,7 +32147,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateVulnerability(childComplexity, args["id"].(string), args["input"].(generated.UpdateVulnerabilityInput)), true
+		return e.ComplexityRoot.Mutation.UpdateVulnerability(childComplexity, args["id"].(string), args["input"].(generated.UpdateVulnerabilityInput), args["vulnerabilityFiles"].([]*graphql.Upload), args["vulnerabilityFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateVulnerabilityComment":
 		if e.ComplexityRoot.Mutation.UpdateVulnerabilityComment == nil {
 			break
@@ -33647,6 +34084,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.AvatarUpdatedAt(childComplexity), true
+	case "Organization.brandingSetting":
+		if e.ComplexityRoot.Organization.BrandingSetting == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Organization.BrandingSetting(childComplexity), true
 	case "Organization.campaignCreators":
 		if e.ComplexityRoot.Organization.CampaignCreators == nil {
 			break
@@ -34240,6 +34683,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.RemediationCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.reportCreators":
+		if e.ComplexityRoot.Organization.ReportCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_reportCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.ReportCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.reportMembershipCreators":
+		if e.ComplexityRoot.Organization.ReportMembershipCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_reportMembershipCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.ReportMembershipCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 	case "Organization.reviewCreators":
 		if e.ComplexityRoot.Organization.ReviewCreators == nil {
 			break
@@ -34590,6 +35055,201 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.WorkflowsManager(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "OrganizationBrandingSetting.backgroundColor":
+		if e.ComplexityRoot.OrganizationBrandingSetting.BackgroundColor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.BackgroundColor(childComplexity), true
+	case "OrganizationBrandingSetting.createdAt":
+		if e.ComplexityRoot.OrganizationBrandingSetting.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.CreatedAt(childComplexity), true
+	case "OrganizationBrandingSetting.createdBy":
+		if e.ComplexityRoot.OrganizationBrandingSetting.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.CreatedBy(childComplexity), true
+	case "OrganizationBrandingSetting.fontFamily":
+		if e.ComplexityRoot.OrganizationBrandingSetting.FontFamily == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.FontFamily(childComplexity), true
+	case "OrganizationBrandingSetting.id":
+		if e.ComplexityRoot.OrganizationBrandingSetting.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.ID(childComplexity), true
+	case "OrganizationBrandingSetting.organization":
+		if e.ComplexityRoot.OrganizationBrandingSetting.Organization == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.Organization(childComplexity), true
+	case "OrganizationBrandingSetting.organizationID":
+		if e.ComplexityRoot.OrganizationBrandingSetting.OrganizationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.OrganizationID(childComplexity), true
+	case "OrganizationBrandingSetting.primaryColor":
+		if e.ComplexityRoot.OrganizationBrandingSetting.PrimaryColor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.PrimaryColor(childComplexity), true
+	case "OrganizationBrandingSetting.removeAssessmentBranding":
+		if e.ComplexityRoot.OrganizationBrandingSetting.RemoveAssessmentBranding == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.RemoveAssessmentBranding(childComplexity), true
+	case "OrganizationBrandingSetting.secondaryColor":
+		if e.ComplexityRoot.OrganizationBrandingSetting.SecondaryColor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.SecondaryColor(childComplexity), true
+	case "OrganizationBrandingSetting.tags":
+		if e.ComplexityRoot.OrganizationBrandingSetting.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.Tags(childComplexity), true
+	case "OrganizationBrandingSetting.textColor":
+		if e.ComplexityRoot.OrganizationBrandingSetting.TextColor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.TextColor(childComplexity), true
+	case "OrganizationBrandingSetting.updatedAt":
+		if e.ComplexityRoot.OrganizationBrandingSetting.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.UpdatedAt(childComplexity), true
+	case "OrganizationBrandingSetting.updatedBy":
+		if e.ComplexityRoot.OrganizationBrandingSetting.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.UpdatedBy(childComplexity), true
+	case "OrganizationBrandingSetting.updatedByImpersonator":
+		if e.ComplexityRoot.OrganizationBrandingSetting.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSetting.UpdatedByImpersonator(childComplexity), true
+
+	case "OrganizationBrandingSettingBulkCreatePayload.organizationBrandingSettings":
+		if e.ComplexityRoot.OrganizationBrandingSettingBulkCreatePayload.OrganizationBrandingSettings == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingBulkCreatePayload.OrganizationBrandingSettings(childComplexity), true
+
+	case "OrganizationBrandingSettingBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.OrganizationBrandingSettingBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingBulkDeletePayload.DeletedIDs(childComplexity), true
+	case "OrganizationBrandingSettingBulkDeletePayload.error":
+		if e.ComplexityRoot.OrganizationBrandingSettingBulkDeletePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingBulkDeletePayload.Error(childComplexity), true
+	case "OrganizationBrandingSettingBulkDeletePayload.notDeletedIDs":
+		if e.ComplexityRoot.OrganizationBrandingSettingBulkDeletePayload.NotDeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingBulkDeletePayload.NotDeletedIDs(childComplexity), true
+
+	case "OrganizationBrandingSettingBulkUpdatePayload.error":
+		if e.ComplexityRoot.OrganizationBrandingSettingBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingBulkUpdatePayload.Error(childComplexity), true
+	case "OrganizationBrandingSettingBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.OrganizationBrandingSettingBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
+	case "OrganizationBrandingSettingBulkUpdatePayload.organizationBrandingSettings":
+		if e.ComplexityRoot.OrganizationBrandingSettingBulkUpdatePayload.OrganizationBrandingSettings == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingBulkUpdatePayload.OrganizationBrandingSettings(childComplexity), true
+	case "OrganizationBrandingSettingBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.OrganizationBrandingSettingBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "OrganizationBrandingSettingConnection.edges":
+		if e.ComplexityRoot.OrganizationBrandingSettingConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingConnection.Edges(childComplexity), true
+	case "OrganizationBrandingSettingConnection.pageInfo":
+		if e.ComplexityRoot.OrganizationBrandingSettingConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingConnection.PageInfo(childComplexity), true
+	case "OrganizationBrandingSettingConnection.totalCount":
+		if e.ComplexityRoot.OrganizationBrandingSettingConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingConnection.TotalCount(childComplexity), true
+
+	case "OrganizationBrandingSettingCreatePayload.organizationBrandingSetting":
+		if e.ComplexityRoot.OrganizationBrandingSettingCreatePayload.OrganizationBrandingSetting == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingCreatePayload.OrganizationBrandingSetting(childComplexity), true
+
+	case "OrganizationBrandingSettingDeletePayload.deletedID":
+		if e.ComplexityRoot.OrganizationBrandingSettingDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingDeletePayload.DeletedID(childComplexity), true
+
+	case "OrganizationBrandingSettingEdge.cursor":
+		if e.ComplexityRoot.OrganizationBrandingSettingEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingEdge.Cursor(childComplexity), true
+	case "OrganizationBrandingSettingEdge.node":
+		if e.ComplexityRoot.OrganizationBrandingSettingEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingEdge.Node(childComplexity), true
+
+	case "OrganizationBrandingSettingUpdatePayload.organizationBrandingSetting":
+		if e.ComplexityRoot.OrganizationBrandingSettingUpdatePayload.OrganizationBrandingSetting == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationBrandingSettingUpdatePayload.OrganizationBrandingSetting(childComplexity), true
 
 	case "OrganizationBulkCreatePayload.organizations":
 		if e.ComplexityRoot.OrganizationBulkCreatePayload.Organizations == nil {
@@ -38938,6 +39598,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Organization(childComplexity, args["id"].(string)), true
+	case "Query.organizationBrandingSetting":
+		if e.ComplexityRoot.Query.OrganizationBrandingSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Query_organizationBrandingSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.OrganizationBrandingSetting(childComplexity, args["id"].(string)), true
+	case "Query.organizationBrandingSettings":
+		if e.ComplexityRoot.Query.OrganizationBrandingSettings == nil {
+			break
+		}
+
+		args, err := ec.field_Query_organizationBrandingSettings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.OrganizationBrandingSettings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.OrganizationBrandingSettingOrder), args["where"].(*generated.OrganizationBrandingSettingWhereInput)), true
 	case "Query.organizationSearch":
 		if e.ComplexityRoot.Query.OrganizationSearch == nil {
 			break
@@ -39169,6 +39851,61 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Remediations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RemediationOrder), args["where"].(*generated.RemediationWhereInput)), true
+	case "Query.report":
+		if e.ComplexityRoot.Query.Report == nil {
+			break
+		}
+
+		args, err := ec.field_Query_report_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Report(childComplexity, args["id"].(string)), true
+	case "Query.reportMembership":
+		if e.ComplexityRoot.Query.ReportMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reportMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ReportMembership(childComplexity, args["id"].(string)), true
+	case "Query.reportMemberships":
+		if e.ComplexityRoot.Query.ReportMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reportMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ReportMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportMembershipOrder), args["where"].(*generated.ReportMembershipWhereInput)), true
+	case "Query.reportSearch":
+		if e.ComplexityRoot.Query.ReportSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reportSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ReportSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+	case "Query.reports":
+		if e.ComplexityRoot.Query.Reports == nil {
+			break
+		}
+
+		args, err := ec.field_Query_reports_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Reports(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportOrder), args["where"].(*generated.ReportWhereInput)), true
 	case "Query.review":
 		if e.ComplexityRoot.Query.Review == nil {
 			break
@@ -40775,6 +41512,412 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RemediationUpdatePayload.Remediation(childComplexity), true
+
+	case "Report.blockedGroups":
+		if e.ComplexityRoot.Report.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Report_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Report.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Report.createdAt":
+		if e.ComplexityRoot.Report.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.CreatedAt(childComplexity), true
+	case "Report.createdBy":
+		if e.ComplexityRoot.Report.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.CreatedBy(childComplexity), true
+	case "Report.displayID":
+		if e.ComplexityRoot.Report.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.DisplayID(childComplexity), true
+	case "Report.editors":
+		if e.ComplexityRoot.Report.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Report_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Report.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Report.id":
+		if e.ComplexityRoot.Report.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.ID(childComplexity), true
+	case "Report.members":
+		if e.ComplexityRoot.Report.Members == nil {
+			break
+		}
+
+		args, err := ec.field_Report_members_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Report.Members(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportMembershipOrder), args["where"].(*generated.ReportMembershipWhereInput)), true
+	case "Report.name":
+		if e.ComplexityRoot.Report.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Name(childComplexity), true
+	case "Report.owner":
+		if e.ComplexityRoot.Report.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Owner(childComplexity), true
+	case "Report.ownerID":
+		if e.ComplexityRoot.Report.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.OwnerID(childComplexity), true
+	case "Report.query":
+		if e.ComplexityRoot.Report.Query == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Query(childComplexity), true
+	case "Report.reportKind":
+		if e.ComplexityRoot.Report.ReportKind == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.ReportKind(childComplexity), true
+	case "Report.reportKindID":
+		if e.ComplexityRoot.Report.ReportKindID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.ReportKindID(childComplexity), true
+	case "Report.reportKindName":
+		if e.ComplexityRoot.Report.ReportKindName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.ReportKindName(childComplexity), true
+	case "Report.reportOwner":
+		if e.ComplexityRoot.Report.ReportOwner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.ReportOwner(childComplexity), true
+	case "Report.reportOwnerID":
+		if e.ComplexityRoot.Report.ReportOwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.ReportOwnerID(childComplexity), true
+	case "Report.requestorID":
+		if e.ComplexityRoot.Report.RequestorID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.RequestorID(childComplexity), true
+	case "Report.status":
+		if e.ComplexityRoot.Report.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Status(childComplexity), true
+	case "Report.tags":
+		if e.ComplexityRoot.Report.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Tags(childComplexity), true
+	case "Report.updatedAt":
+		if e.ComplexityRoot.Report.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.UpdatedAt(childComplexity), true
+	case "Report.updatedBy":
+		if e.ComplexityRoot.Report.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.UpdatedBy(childComplexity), true
+	case "Report.updatedByImpersonator":
+		if e.ComplexityRoot.Report.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.UpdatedByImpersonator(childComplexity), true
+	case "Report.users":
+		if e.ComplexityRoot.Report.Users == nil {
+			break
+		}
+
+		args, err := ec.field_Report_users_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Report.Users(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.UserOrder), args["where"].(*generated.UserWhereInput)), true
+	case "Report.variables":
+		if e.ComplexityRoot.Report.Variables == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Variables(childComplexity), true
+	case "Report.viewers":
+		if e.ComplexityRoot.Report.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Report_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Report.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Report.visibility":
+		if e.ComplexityRoot.Report.Visibility == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Report.Visibility(childComplexity), true
+
+	case "ReportConnection.edges":
+		if e.ComplexityRoot.ReportConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportConnection.Edges(childComplexity), true
+	case "ReportConnection.pageInfo":
+		if e.ComplexityRoot.ReportConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportConnection.PageInfo(childComplexity), true
+	case "ReportConnection.totalCount":
+		if e.ComplexityRoot.ReportConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportConnection.TotalCount(childComplexity), true
+
+	case "ReportCreatePayload.report":
+		if e.ComplexityRoot.ReportCreatePayload.Report == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportCreatePayload.Report(childComplexity), true
+
+	case "ReportDeletePayload.deletedID":
+		if e.ComplexityRoot.ReportDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportDeletePayload.DeletedID(childComplexity), true
+
+	case "ReportEdge.cursor":
+		if e.ComplexityRoot.ReportEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportEdge.Cursor(childComplexity), true
+	case "ReportEdge.node":
+		if e.ComplexityRoot.ReportEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportEdge.Node(childComplexity), true
+
+	case "ReportMembership.createdAt":
+		if e.ComplexityRoot.ReportMembership.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.CreatedAt(childComplexity), true
+	case "ReportMembership.createdBy":
+		if e.ComplexityRoot.ReportMembership.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.CreatedBy(childComplexity), true
+	case "ReportMembership.id":
+		if e.ComplexityRoot.ReportMembership.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.ID(childComplexity), true
+	case "ReportMembership.report":
+		if e.ComplexityRoot.ReportMembership.Report == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.Report(childComplexity), true
+	case "ReportMembership.reportID":
+		if e.ComplexityRoot.ReportMembership.ReportID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.ReportID(childComplexity), true
+	case "ReportMembership.role":
+		if e.ComplexityRoot.ReportMembership.Role == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.Role(childComplexity), true
+	case "ReportMembership.updatedAt":
+		if e.ComplexityRoot.ReportMembership.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.UpdatedAt(childComplexity), true
+	case "ReportMembership.updatedBy":
+		if e.ComplexityRoot.ReportMembership.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.UpdatedBy(childComplexity), true
+	case "ReportMembership.updatedByImpersonator":
+		if e.ComplexityRoot.ReportMembership.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.UpdatedByImpersonator(childComplexity), true
+	case "ReportMembership.user":
+		if e.ComplexityRoot.ReportMembership.User == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.User(childComplexity), true
+	case "ReportMembership.userID":
+		if e.ComplexityRoot.ReportMembership.UserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembership.UserID(childComplexity), true
+
+	case "ReportMembershipBulkCreatePayload.reportMemberships":
+		if e.ComplexityRoot.ReportMembershipBulkCreatePayload.ReportMemberships == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipBulkCreatePayload.ReportMemberships(childComplexity), true
+
+	case "ReportMembershipBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.DeletedIDs(childComplexity), true
+	case "ReportMembershipBulkDeletePayload.error":
+		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.Error(childComplexity), true
+	case "ReportMembershipBulkDeletePayload.notDeletedIDs":
+		if e.ComplexityRoot.ReportMembershipBulkDeletePayload.NotDeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
+
+	case "ReportMembershipBulkUpdatePayload.error":
+		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.Error(childComplexity), true
+	case "ReportMembershipBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
+	case "ReportMembershipBulkUpdatePayload.reportMemberships":
+		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.ReportMemberships == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.ReportMemberships(childComplexity), true
+	case "ReportMembershipBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.ReportMembershipBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "ReportMembershipConnection.edges":
+		if e.ComplexityRoot.ReportMembershipConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipConnection.Edges(childComplexity), true
+	case "ReportMembershipConnection.pageInfo":
+		if e.ComplexityRoot.ReportMembershipConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipConnection.PageInfo(childComplexity), true
+	case "ReportMembershipConnection.totalCount":
+		if e.ComplexityRoot.ReportMembershipConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipConnection.TotalCount(childComplexity), true
+
+	case "ReportMembershipCreatePayload.reportMembership":
+		if e.ComplexityRoot.ReportMembershipCreatePayload.ReportMembership == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipCreatePayload.ReportMembership(childComplexity), true
+
+	case "ReportMembershipDeletePayload.deletedID":
+		if e.ComplexityRoot.ReportMembershipDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipDeletePayload.DeletedID(childComplexity), true
+
+	case "ReportMembershipEdge.cursor":
+		if e.ComplexityRoot.ReportMembershipEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipEdge.Cursor(childComplexity), true
+	case "ReportMembershipEdge.node":
+		if e.ComplexityRoot.ReportMembershipEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipEdge.Node(childComplexity), true
+
+	case "ReportMembershipUpdatePayload.reportMembership":
+		if e.ComplexityRoot.ReportMembershipUpdatePayload.ReportMembership == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportMembershipUpdatePayload.ReportMembership(childComplexity), true
+
+	case "ReportUpdatePayload.report":
+		if e.ComplexityRoot.ReportUpdatePayload.Report == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReportUpdatePayload.Report(childComplexity), true
 
 	case "Review.actionPlans":
 		if e.ComplexityRoot.Review.ActionPlans == nil {
@@ -43101,6 +44244,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SearchResults.Remediations(childComplexity), true
+	case "SearchResults.reports":
+		if e.ComplexityRoot.SearchResults.Reports == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResults.Reports(childComplexity), true
 	case "SearchResults.reviews":
 		if e.ComplexityRoot.SearchResults.Reviews == nil {
 			break
@@ -48822,6 +49971,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.User.ProgramsOwned(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+	case "User.reportMemberships":
+		if e.ComplexityRoot.User.ReportMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_User_reportMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.User.ReportMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportMembershipOrder), args["where"].(*generated.ReportMembershipWhereInput)), true
+	case "User.reports":
+		if e.ComplexityRoot.User.Reports == nil {
+			break
+		}
+
+		args, err := ec.field_User_reports_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.User.Reports(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportOrder), args["where"].(*generated.ReportWhereInput)), true
+	case "User.reportsOwned":
+		if e.ComplexityRoot.User.ReportsOwned == nil {
+			break
+		}
+
+		args, err := ec.field_User_reportsOwned_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.User.ReportsOwned(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ReportOrder), args["where"].(*generated.ReportWhereInput)), true
 	case "User.role":
 		if e.ComplexityRoot.User.Role == nil {
 			break
@@ -52641,6 +53823,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("CreateNotificationTemplateInput", ec.unmarshalInputCreateNotificationTemplateInput),
 			graphql.NewInputUnmarshaler("CreateOnboardingInput", ec.unmarshalInputCreateOnboardingInput),
 			graphql.NewInputUnmarshaler("CreateOrgMembershipInput", ec.unmarshalInputCreateOrgMembershipInput),
+			graphql.NewInputUnmarshaler("CreateOrganizationBrandingSettingInput", ec.unmarshalInputCreateOrganizationBrandingSettingInput),
 			graphql.NewInputUnmarshaler("CreateOrganizationInput", ec.unmarshalInputCreateOrganizationInput),
 			graphql.NewInputUnmarshaler("CreateOrganizationSettingInput", ec.unmarshalInputCreateOrganizationSettingInput),
 			graphql.NewInputUnmarshaler("CreatePersonalAccessTokenInput", ec.unmarshalInputCreatePersonalAccessTokenInput),
@@ -52650,6 +53833,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("CreateProgramMembershipInput", ec.unmarshalInputCreateProgramMembershipInput),
 			graphql.NewInputUnmarshaler("CreateProgramWithMembersInput", ec.unmarshalInputCreateProgramWithMembersInput),
 			graphql.NewInputUnmarshaler("CreateRemediationInput", ec.unmarshalInputCreateRemediationInput),
+			graphql.NewInputUnmarshaler("CreateReportInput", ec.unmarshalInputCreateReportInput),
+			graphql.NewInputUnmarshaler("CreateReportMembershipInput", ec.unmarshalInputCreateReportMembershipInput),
 			graphql.NewInputUnmarshaler("CreateReviewInput", ec.unmarshalInputCreateReviewInput),
 			graphql.NewInputUnmarshaler("CreateRiskInput", ec.unmarshalInputCreateRiskInput),
 			graphql.NewInputUnmarshaler("CreateSLADefinitionInput", ec.unmarshalInputCreateSLADefinitionInput),
@@ -52764,6 +53949,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("OrgMembershipWhereInput", ec.unmarshalInputOrgMembershipWhereInput),
 			graphql.NewInputUnmarshaler("OrgSubscriptionOrder", ec.unmarshalInputOrgSubscriptionOrder),
 			graphql.NewInputUnmarshaler("OrgSubscriptionWhereInput", ec.unmarshalInputOrgSubscriptionWhereInput),
+			graphql.NewInputUnmarshaler("OrganizationBrandingSettingOrder", ec.unmarshalInputOrganizationBrandingSettingOrder),
+			graphql.NewInputUnmarshaler("OrganizationBrandingSettingWhereInput", ec.unmarshalInputOrganizationBrandingSettingWhereInput),
 			graphql.NewInputUnmarshaler("OrganizationOrder", ec.unmarshalInputOrganizationOrder),
 			graphql.NewInputUnmarshaler("OrganizationSettingOrder", ec.unmarshalInputOrganizationSettingOrder),
 			graphql.NewInputUnmarshaler("OrganizationSettingWhereInput", ec.unmarshalInputOrganizationSettingWhereInput),
@@ -52781,6 +53968,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("ReassignWorkflowAssignmentInput", ec.unmarshalInputReassignWorkflowAssignmentInput),
 			graphql.NewInputUnmarshaler("RemediationOrder", ec.unmarshalInputRemediationOrder),
 			graphql.NewInputUnmarshaler("RemediationWhereInput", ec.unmarshalInputRemediationWhereInput),
+			graphql.NewInputUnmarshaler("ReportMembershipOrder", ec.unmarshalInputReportMembershipOrder),
+			graphql.NewInputUnmarshaler("ReportMembershipWhereInput", ec.unmarshalInputReportMembershipWhereInput),
+			graphql.NewInputUnmarshaler("ReportOrder", ec.unmarshalInputReportOrder),
+			graphql.NewInputUnmarshaler("ReportWhereInput", ec.unmarshalInputReportWhereInput),
 			graphql.NewInputUnmarshaler("ResendCampaignIncompleteInput", ec.unmarshalInputResendCampaignIncompleteInput),
 			graphql.NewInputUnmarshaler("ResolveVulnerabilityInput", ec.unmarshalInputResolveVulnerabilityInput),
 			graphql.NewInputUnmarshaler("ReviewOrder", ec.unmarshalInputReviewOrder),
@@ -52874,6 +54065,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("UpdateNotificationPreferenceInput", ec.unmarshalInputUpdateNotificationPreferenceInput),
 			graphql.NewInputUnmarshaler("UpdateNotificationTemplateInput", ec.unmarshalInputUpdateNotificationTemplateInput),
 			graphql.NewInputUnmarshaler("UpdateOrgMembershipInput", ec.unmarshalInputUpdateOrgMembershipInput),
+			graphql.NewInputUnmarshaler("UpdateOrganizationBrandingSettingInput", ec.unmarshalInputUpdateOrganizationBrandingSettingInput),
 			graphql.NewInputUnmarshaler("UpdateOrganizationInput", ec.unmarshalInputUpdateOrganizationInput),
 			graphql.NewInputUnmarshaler("UpdateOrganizationSettingInput", ec.unmarshalInputUpdateOrganizationSettingInput),
 			graphql.NewInputUnmarshaler("UpdatePersonalAccessTokenInput", ec.unmarshalInputUpdatePersonalAccessTokenInput),
@@ -52882,6 +54074,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("UpdateProgramInput", ec.unmarshalInputUpdateProgramInput),
 			graphql.NewInputUnmarshaler("UpdateProgramMembershipInput", ec.unmarshalInputUpdateProgramMembershipInput),
 			graphql.NewInputUnmarshaler("UpdateRemediationInput", ec.unmarshalInputUpdateRemediationInput),
+			graphql.NewInputUnmarshaler("UpdateReportInput", ec.unmarshalInputUpdateReportInput),
+			graphql.NewInputUnmarshaler("UpdateReportMembershipInput", ec.unmarshalInputUpdateReportMembershipInput),
 			graphql.NewInputUnmarshaler("UpdateReviewInput", ec.unmarshalInputUpdateReviewInput),
 			graphql.NewInputUnmarshaler("UpdateRiskInput", ec.unmarshalInputUpdateRiskInput),
 			graphql.NewInputUnmarshaler("UpdateSLADefinitionInput", ec.unmarshalInputUpdateSLADefinitionInput),
@@ -53258,6 +54452,26 @@ extend type Mutation{
         input: CreateActionPlanInput!
     ): ActionPlanCreatePayload!
     """
+    Create a new actionPlan via file upload
+    """
+    createUploadActionPlan(
+        """
+        file containing values of the actionPlan
+        """
+        actionPlanFile: Upload!
+        actionPlanFileMetadata: FileMetadataInput
+        """
+        ID of the owner organization
+        """
+        ownerID: ID
+        """
+        How the uploaded actionPlan should be managed: parsed and edited in Openlane
+        (OPENLANE_MANAGED, default) or kept as an external reference file viewed
+        in Openlane (EXTERNAL_REFERENCE, e.g. Word documents managed in Microsoft Word)
+        """
+        managementMode: ActionPlanDocumentManagementMode
+    ): ActionPlanCreatePayload!
+    """
     Create multiple new actionPlans
     """
     createBulkActionPlan(
@@ -53300,6 +54514,11 @@ extend type Mutation{
         New values for the actionPlan
         """
         input: UpdateActionPlanInput!
+        """
+        file containing values of the actionPlan
+        """
+        actionPlanFile: Upload
+        actionPlanFileMetadata: FileMetadataInput
     ): ActionPlanUpdatePayload!
     """
     Delete an existing actionPlan
@@ -53781,7 +55000,15 @@ input CreateAssessmentDomainInput {
 }
 `, BuiltIn: false},
 	{Name: "../schema/assessmentextended.graphql", Input: `extend type Assessment {
+    """
+    the anonymous questionnaire access URL for system-owned assessments
+    """
     accessURL: String
+
+    """
+    decides whether to hide or show the Openlane branding on the assessment page
+    """
+    removeBranding: Boolean
 }
 
 """
@@ -54864,6 +56091,11 @@ extend type Mutation{
         values of the contact
         """
         input: CreateContactInput!
+        """
+        Files to attach to the contact
+        """
+        contactFiles: [Upload!]
+        contactFilesMetadata: [FileMetadataInput!]
     ): ContactCreatePayload!
     """
     Create multiple new contacts
@@ -54908,6 +56140,11 @@ extend type Mutation{
         New values for the contact
         """
         input: UpdateContactInput!
+        """
+        Files to attach to the contact
+        """
+        contactFiles: [Upload!]
+        contactFilesMetadata: [FileMetadataInput!]
     ): ContactUpdatePayload!
     """
     Delete an existing contact
@@ -72314,6 +73551,9 @@ input CreateGroupInput {
   programEditorIDs: [ID!]
   programBlockedGroupIDs: [ID!]
   programViewerIDs: [ID!]
+  reportEditorIDs: [ID!]
+  reportBlockedGroupIDs: [ID!]
+  reportViewerIDs: [ID!]
   riskEditorIDs: [ID!]
   riskBlockedGroupIDs: [ID!]
   riskViewerIDs: [ID!]
@@ -73183,6 +74423,37 @@ input CreateOrgMembershipInput {
   eventIDs: [ID!]
 }
 """
+CreateOrganizationBrandingSettingInput is used for create OrganizationBrandingSetting object.
+Input was generated by ent.
+"""
+input CreateOrganizationBrandingSettingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the primary brand color of the Organization
+  """
+  primaryColor: String
+  """
+  the secondary brand color of the Organization
+  """
+  secondaryColor: String
+  """
+  the background color of the Organization
+  """
+  backgroundColor: String
+  """
+  the text color of the Organization
+  """
+  textColor: String
+  """
+  the font family of the Organization
+  """
+  fontFamily: String
+  organizationID: ID
+}
+"""
 CreateOrganizationInput is used for create Organization object.
 Input was generated by ent.
 """
@@ -73258,6 +74529,8 @@ input CreateOrganizationInput {
   programCreatorIDs: [ID!]
   programMembershipCreatorIDs: [ID!]
   remediationCreatorIDs: [ID!]
+  reportCreatorIDs: [ID!]
+  reportMembershipCreatorIDs: [ID!]
   reviewCreatorIDs: [ID!]
   riskCreatorIDs: [ID!]
   scanCreatorIDs: [ID!]
@@ -73293,6 +74566,7 @@ input CreateOrganizationInput {
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
+  brandingSettingID: ID
   fileIDs: [ID!]
   eventIDs: [ID!]
   avatarFileID: ID
@@ -74010,6 +75284,49 @@ input CreateRemediationInput {
   commentIDs: [ID!]
   fileIDs: [ID!]
   workflowObjectRefIDs: [ID!]
+}
+"""
+CreateReportInput is used for create Report object.
+Input was generated by ent.
+"""
+input CreateReportInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the kind of the report
+  """
+  reportKindName: String
+  """
+  Name of this report
+  """
+  name: String!
+  """
+  the saved query to be re-executed or shared
+  """
+  query: String!
+  """
+  the variables that would be needed to completely execute the query
+  """
+  variables: Map
+  status: ReportReportStatus
+  visibility: ReportReportVisibility
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  reportKindID: ID
+  reportOwnerID: ID
+}
+"""
+CreateReportMembershipInput is used for create ReportMembership object.
+Input was generated by ent.
+"""
+input CreateReportMembershipInput {
+  role: ReportMembershipRole
+  reportID: ID!
+  userID: ID!
 }
 """
 CreateReviewInput is used for create Review object.
@@ -75461,6 +76778,8 @@ input CreateUserInput {
   assigneeTaskIDs: [ID!]
   programIDs: [ID!]
   programsOwnedIDs: [ID!]
+  reportIDs: [ID!]
+  reportsOwnedIDs: [ID!]
   platformsOwnedIDs: [ID!]
   identityHolderProfileIDs: [ID!]
   impersonationEventIDs: [ID!]
@@ -89553,6 +90872,99 @@ type Group implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  reportEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reports returned from the connection.
+    """
+    orderBy: [ReportOrder!]
+
+    """
+    Filtering options for Reports returned from the connection.
+    """
+    where: ReportWhereInput
+  ): ReportConnection!
+  reportBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reports returned from the connection.
+    """
+    orderBy: [ReportOrder!]
+
+    """
+    Filtering options for Reports returned from the connection.
+    """
+    where: ReportWhereInput
+  ): ReportConnection!
+  reportViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reports returned from the connection.
+    """
+    orderBy: [ReportOrder!]
+
+    """
+    Filtering options for Reports returned from the connection.
+    """
+    where: ReportWhereInput
+  ): ReportConnection!
   riskEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -91819,6 +93231,21 @@ input GroupWhereInput {
   """
   hasProgramViewers: Boolean
   hasProgramViewersWith: [ProgramWhereInput!]
+  """
+  report_editors edge predicates
+  """
+  hasReportEditors: Boolean
+  hasReportEditorsWith: [ReportWhereInput!]
+  """
+  report_blocked_groups edge predicates
+  """
+  hasReportBlockedGroups: Boolean
+  hasReportBlockedGroupsWith: [ReportWhereInput!]
+  """
+  report_viewers edge predicates
+  """
+  hasReportViewers: Boolean
+  hasReportViewersWith: [ReportWhereInput!]
   """
   risk_editors edge predicates
   """
@@ -100252,6 +101679,7 @@ NotificationNotificationTopic is enum for the field topic
 """
 enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/common/enums.NotificationTopic") {
   TASK_ASSIGNMENT
+  REPORT_MEMBERSHIP
   APPROVAL
   MENTION
   EXPORT
@@ -103461,6 +104889,68 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  reportCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  reportMembershipCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   reviewCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -104517,6 +106007,7 @@ type Organization implements Node {
     """
     where: PersonalAccessTokenWhereInput
   ): PersonalAccessTokenConnection!
+  brandingSetting: OrganizationBrandingSetting
   users(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -104674,6 +106165,280 @@ type Organization implements Node {
     """
     where: OrgMembershipWhereInput
   ): OrgMembershipConnection!
+}
+type OrganizationBrandingSetting implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the ID of the organization the settings belong to
+  """
+  organizationID: ID
+  """
+  whether to hide the Openlane branding on the Organization's assessments
+  """
+  removeAssessmentBranding: Boolean
+  """
+  the primary brand color of the Organization
+  """
+  primaryColor: String
+  """
+  the secondary brand color of the Organization
+  """
+  secondaryColor: String
+  """
+  the background color of the Organization
+  """
+  backgroundColor: String
+  """
+  the text color of the Organization
+  """
+  textColor: String
+  """
+  the font family of the Organization
+  """
+  fontFamily: String
+  organization: Organization
+}
+"""
+A connection to a list of items.
+"""
+type OrganizationBrandingSettingConnection {
+  """
+  A list of edges.
+  """
+  edges: [OrganizationBrandingSettingEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type OrganizationBrandingSettingEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: OrganizationBrandingSetting
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for OrganizationBrandingSetting connections
+"""
+input OrganizationBrandingSettingOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order OrganizationBrandingSettings.
+  """
+  field: OrganizationBrandingSettingOrderField!
+}
+"""
+Properties by which OrganizationBrandingSetting connections can be ordered.
+"""
+enum OrganizationBrandingSettingOrderField {
+  created_at
+  updated_at
+}
+"""
+OrganizationBrandingSettingWhereInput is used for filtering OrganizationBrandingSetting objects.
+Input was generated by ent.
+"""
+input OrganizationBrandingSettingWhereInput {
+  not: OrganizationBrandingSettingWhereInput
+  and: [OrganizationBrandingSettingWhereInput!]
+  or: [OrganizationBrandingSettingWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  organization_id field predicates
+  """
+  organizationID: ID
+  organizationIDNEQ: ID
+  organizationIDIn: [ID!]
+  organizationIDNotIn: [ID!]
+  organizationIDContains: ID
+  organizationIDHasPrefix: ID
+  organizationIDHasSuffix: ID
+  organizationIDIsNil: Boolean
+  organizationIDNotNil: Boolean
+  organizationIDEqualFold: ID
+  organizationIDContainsFold: ID
+  """
+  remove_assessment_branding field predicates
+  """
+  removeAssessmentBranding: Boolean
+  removeAssessmentBrandingNEQ: Boolean
+  removeAssessmentBrandingIsNil: Boolean
+  removeAssessmentBrandingNotNil: Boolean
+  """
+  primary_color field predicates
+  """
+  primaryColor: String
+  primaryColorNEQ: String
+  primaryColorIn: [String!]
+  primaryColorNotIn: [String!]
+  primaryColorContains: String
+  primaryColorHasPrefix: String
+  primaryColorHasSuffix: String
+  primaryColorIsNil: Boolean
+  primaryColorNotNil: Boolean
+  primaryColorEqualFold: String
+  primaryColorContainsFold: String
+  """
+  secondary_color field predicates
+  """
+  secondaryColor: String
+  secondaryColorNEQ: String
+  secondaryColorIn: [String!]
+  secondaryColorNotIn: [String!]
+  secondaryColorContains: String
+  secondaryColorHasPrefix: String
+  secondaryColorHasSuffix: String
+  secondaryColorIsNil: Boolean
+  secondaryColorNotNil: Boolean
+  secondaryColorEqualFold: String
+  secondaryColorContainsFold: String
+  """
+  background_color field predicates
+  """
+  backgroundColor: String
+  backgroundColorNEQ: String
+  backgroundColorIn: [String!]
+  backgroundColorNotIn: [String!]
+  backgroundColorContains: String
+  backgroundColorHasPrefix: String
+  backgroundColorHasSuffix: String
+  backgroundColorIsNil: Boolean
+  backgroundColorNotNil: Boolean
+  backgroundColorEqualFold: String
+  backgroundColorContainsFold: String
+  """
+  text_color field predicates
+  """
+  textColor: String
+  textColorNEQ: String
+  textColorIn: [String!]
+  textColorNotIn: [String!]
+  textColorContains: String
+  textColorHasPrefix: String
+  textColorHasSuffix: String
+  textColorIsNil: Boolean
+  textColorNotNil: Boolean
+  textColorEqualFold: String
+  textColorContainsFold: String
+  """
+  font_family field predicates
+  """
+  fontFamily: String
+  fontFamilyNEQ: String
+  fontFamilyIn: [String!]
+  fontFamilyNotIn: [String!]
+  fontFamilyContains: String
+  fontFamilyHasPrefix: String
+  fontFamilyHasSuffix: String
+  fontFamilyIsNil: Boolean
+  fontFamilyNotNil: Boolean
+  fontFamilyEqualFold: String
+  fontFamilyContainsFold: String
+  """
+  organization edge predicates
+  """
+  hasOrganization: Boolean
+  hasOrganizationWith: [OrganizationWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
 }
 """
 A connection to a list of items.
@@ -105689,6 +107454,16 @@ input OrganizationWhereInput {
   hasRemediationCreators: Boolean
   hasRemediationCreatorsWith: [GroupWhereInput!]
   """
+  report_creators edge predicates
+  """
+  hasReportCreators: Boolean
+  hasReportCreatorsWith: [GroupWhereInput!]
+  """
+  report_membership_creators edge predicates
+  """
+  hasReportMembershipCreators: Boolean
+  hasReportMembershipCreatorsWith: [GroupWhereInput!]
+  """
   review_creators edge predicates
   """
   hasReviewCreators: Boolean
@@ -105868,6 +107643,11 @@ input OrganizationWhereInput {
   """
   hasPersonalAccessTokens: Boolean
   hasPersonalAccessTokensWith: [PersonalAccessTokenWhereInput!]
+  """
+  branding_setting edge predicates
+  """
+  hasBrandingSetting: Boolean
+  hasBrandingSettingWith: [OrganizationBrandingSettingWhereInput!]
   """
   users edge predicates
   """
@@ -113038,6 +114818,37 @@ type Query {
     """
     where: OrganizationWhereInput
   ): OrganizationConnection!
+  organizationBrandingSettings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for OrganizationBrandingSettings returned from the connection.
+    """
+    orderBy: [OrganizationBrandingSettingOrder!]
+
+    """
+    Filtering options for OrganizationBrandingSettings returned from the connection.
+    """
+    where: OrganizationBrandingSettingWhereInput
+  ): OrganizationBrandingSettingConnection!
   organizationSettings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -113255,6 +115066,68 @@ type Query {
     """
     where: RemediationWhereInput
   ): RemediationConnection!
+  reports(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reports returned from the connection.
+    """
+    orderBy: [ReportOrder!]
+
+    """
+    Filtering options for Reports returned from the connection.
+    """
+    where: ReportWhereInput
+  ): ReportConnection!
+  reportMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ReportMemberships returned from the connection.
+    """
+    orderBy: [ReportMembershipOrder!]
+
+    """
+    Filtering options for ReportMemberships returned from the connection.
+    """
+    where: ReportMembershipWhereInput
+  ): ReportMembershipConnection!
   reviews(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -115754,6 +117627,693 @@ input RemediationWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
+type Report implements Node @modules(names: ["any_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the user who initiated the request
+  """
+  requestorID: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the kind of the report
+  """
+  reportKindName: String
+  """
+  the kind of the report
+  """
+  reportKindID: ID
+  """
+  Name of this report
+  """
+  name: String!
+  """
+  the saved query to be re-executed or shared
+  """
+  query: String!
+  """
+  the variables that would be needed to completely execute the query
+  """
+  variables: Map
+  status: ReportReportStatus!
+  visibility: ReportReportVisibility
+  """
+  the id of the user who is responsible for this report
+  """
+  reportOwnerID: ID
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  reportKind: CustomTypeEnum
+  users(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Users returned from the connection.
+    """
+    orderBy: [UserOrder!]
+
+    """
+    Filtering options for Users returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
+  reportOwner: User
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ReportMemberships returned from the connection.
+    """
+    orderBy: [ReportMembershipOrder!]
+
+    """
+    Filtering options for ReportMemberships returned from the connection.
+    """
+    where: ReportMembershipWhereInput
+  ): ReportMembershipConnection!
+}
+"""
+A connection to a list of items.
+"""
+type ReportConnection {
+  """
+  A list of edges.
+  """
+  edges: [ReportEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ReportEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Report
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type ReportMembership implements Node @modules(names: ["any_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  role: ReportMembershipRole!
+  reportID: ID!
+  userID: ID!
+  report: Report!
+  user: User!
+}
+"""
+A connection to a list of items.
+"""
+type ReportMembershipConnection {
+  """
+  A list of edges.
+  """
+  edges: [ReportMembershipEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type ReportMembershipEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: ReportMembership
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for ReportMembership connections
+"""
+input ReportMembershipOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order ReportMemberships.
+  """
+  field: ReportMembershipOrderField!
+}
+"""
+Properties by which ReportMembership connections can be ordered.
+"""
+enum ReportMembershipOrderField {
+  created_at
+  updated_at
+  ROLE
+}
+"""
+ReportMembershipRole is enum for the field role
+"""
+enum ReportMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
+  ADMIN
+  MEMBER
+  OWNER
+}
+"""
+ReportMembershipWhereInput is used for filtering ReportMembership objects.
+Input was generated by ent.
+"""
+input ReportMembershipWhereInput {
+  not: ReportMembershipWhereInput
+  and: [ReportMembershipWhereInput!]
+  or: [ReportMembershipWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  role field predicates
+  """
+  role: ReportMembershipRole
+  roleNEQ: ReportMembershipRole
+  roleIn: [ReportMembershipRole!]
+  roleNotIn: [ReportMembershipRole!]
+}
+"""
+Ordering options for Report connections
+"""
+input ReportOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Reports.
+  """
+  field: ReportOrderField!
+}
+"""
+Properties by which Report connections can be ordered.
+"""
+enum ReportOrderField {
+  created_at
+  updated_at
+  name
+  STATUS
+  VISIBILITY
+}
+"""
+ReportReportStatus is enum for the field status
+"""
+enum ReportReportStatus @goModel(model: "github.com/theopenlane/core/common/enums.ReportStatus") {
+  DRAFT
+  SAVED
+}
+"""
+ReportReportVisibility is enum for the field visibility
+"""
+enum ReportReportVisibility @goModel(model: "github.com/theopenlane/core/common/enums.ReportVisibility") {
+  PRIVATE
+  RESTRICTED
+  ORGANIZATION
+}
+"""
+ReportWhereInput is used for filtering Report objects.
+Input was generated by ent.
+"""
+input ReportWhereInput {
+  not: ReportWhereInput
+  and: [ReportWhereInput!]
+  or: [ReportWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  requestor_id field predicates
+  """
+  requestorID: String
+  requestorIDNEQ: String
+  requestorIDIn: [String!]
+  requestorIDNotIn: [String!]
+  requestorIDContains: String
+  requestorIDHasPrefix: String
+  requestorIDHasSuffix: String
+  requestorIDIsNil: Boolean
+  requestorIDNotNil: Boolean
+  requestorIDEqualFold: String
+  requestorIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  report_kind_name field predicates
+  """
+  reportKindName: String
+  reportKindNameNEQ: String
+  reportKindNameIn: [String!]
+  reportKindNameNotIn: [String!]
+  reportKindNameContains: String
+  reportKindNameHasPrefix: String
+  reportKindNameHasSuffix: String
+  reportKindNameIsNil: Boolean
+  reportKindNameNotNil: Boolean
+  reportKindNameEqualFold: String
+  reportKindNameContainsFold: String
+  """
+  report_kind_id field predicates
+  """
+  reportKindID: ID
+  reportKindIDNEQ: ID
+  reportKindIDIn: [ID!]
+  reportKindIDNotIn: [ID!]
+  reportKindIDContains: ID
+  reportKindIDHasPrefix: ID
+  reportKindIDHasSuffix: ID
+  reportKindIDIsNil: Boolean
+  reportKindIDNotNil: Boolean
+  reportKindIDEqualFold: ID
+  reportKindIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  query field predicates
+  """
+  query: String
+  queryNEQ: String
+  queryIn: [String!]
+  queryNotIn: [String!]
+  queryContains: String
+  queryHasPrefix: String
+  queryHasSuffix: String
+  queryEqualFold: String
+  queryContainsFold: String
+  """
+  status field predicates
+  """
+  status: ReportReportStatus
+  statusNEQ: ReportReportStatus
+  statusIn: [ReportReportStatus!]
+  statusNotIn: [ReportReportStatus!]
+  """
+  visibility field predicates
+  """
+  visibility: ReportReportVisibility
+  visibilityNEQ: ReportReportVisibility
+  visibilityIn: [ReportReportVisibility!]
+  visibilityNotIn: [ReportReportVisibility!]
+  visibilityIsNil: Boolean
+  visibilityNotNil: Boolean
+  """
+  report_owner_id field predicates
+  """
+  reportOwnerID: ID
+  reportOwnerIDNEQ: ID
+  reportOwnerIDIn: [ID!]
+  reportOwnerIDNotIn: [ID!]
+  reportOwnerIDContains: ID
+  reportOwnerIDHasPrefix: ID
+  reportOwnerIDHasSuffix: ID
+  reportOwnerIDIsNil: Boolean
+  reportOwnerIDNotNil: Boolean
+  reportOwnerIDEqualFold: ID
+  reportOwnerIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  report_kind edge predicates
+  """
+  hasReportKind: Boolean
+  hasReportKindWith: [CustomTypeEnumWhereInput!]
+  """
+  users edge predicates
+  """
+  hasUsers: Boolean
+  hasUsersWith: [UserWhereInput!]
+  """
+  report_owner edge predicates
+  """
+  hasReportOwner: Boolean
+  hasReportOwnerWith: [UserWhereInput!]
+  """
+  members edge predicates
+  """
+  hasMembers: Boolean
+  hasMembersWith: [ReportMembershipWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -134532,6 +137092,15 @@ input UpdateGroupInput {
   addProgramViewerIDs: [ID!]
   removeProgramViewerIDs: [ID!]
   clearProgramViewers: Boolean
+  addReportEditorIDs: [ID!]
+  removeReportEditorIDs: [ID!]
+  clearReportEditors: Boolean
+  addReportBlockedGroupIDs: [ID!]
+  removeReportBlockedGroupIDs: [ID!]
+  clearReportBlockedGroups: Boolean
+  addReportViewerIDs: [ID!]
+  removeReportViewerIDs: [ID!]
+  clearReportViewers: Boolean
   addRiskEditorIDs: [ID!]
   removeRiskEditorIDs: [ID!]
   clearRiskEditors: Boolean
@@ -135702,6 +138271,45 @@ input UpdateOrgMembershipInput {
   clearEvents: Boolean
 }
 """
+UpdateOrganizationBrandingSettingInput is used for update OrganizationBrandingSetting object.
+Input was generated by ent.
+"""
+input UpdateOrganizationBrandingSettingInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the primary brand color of the Organization
+  """
+  primaryColor: String
+  clearPrimaryColor: Boolean
+  """
+  the secondary brand color of the Organization
+  """
+  secondaryColor: String
+  clearSecondaryColor: Boolean
+  """
+  the background color of the Organization
+  """
+  backgroundColor: String
+  clearBackgroundColor: Boolean
+  """
+  the text color of the Organization
+  """
+  textColor: String
+  clearTextColor: Boolean
+  """
+  the font family of the Organization
+  """
+  fontFamily: String
+  clearFontFamily: Boolean
+  organizationID: ID
+  clearOrganization: Boolean
+}
+"""
 UpdateOrganizationInput is used for update Organization object.
 Input was generated by ent.
 """
@@ -135860,6 +138468,12 @@ input UpdateOrganizationInput {
   addRemediationCreatorIDs: [ID!]
   removeRemediationCreatorIDs: [ID!]
   clearRemediationCreators: Boolean
+  addReportCreatorIDs: [ID!]
+  removeReportCreatorIDs: [ID!]
+  clearReportCreators: Boolean
+  addReportMembershipCreatorIDs: [ID!]
+  removeReportMembershipCreatorIDs: [ID!]
+  clearReportMembershipCreators: Boolean
   addReviewCreatorIDs: [ID!]
   removeReviewCreatorIDs: [ID!]
   clearReviewCreators: Boolean
@@ -135961,6 +138575,8 @@ input UpdateOrganizationInput {
   addPersonalAccessTokenIDs: [ID!]
   removePersonalAccessTokenIDs: [ID!]
   clearPersonalAccessTokens: Boolean
+  brandingSettingID: ID
+  clearBrandingSetting: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -137035,6 +139651,61 @@ input UpdateRemediationInput {
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
+}
+"""
+UpdateReportInput is used for update Report object.
+Input was generated by ent.
+"""
+input UpdateReportInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the kind of the report
+  """
+  reportKindName: String
+  clearReportKindName: Boolean
+  """
+  Name of this report
+  """
+  name: String
+  """
+  the saved query to be re-executed or shared
+  """
+  query: String
+  """
+  the variables that would be needed to completely execute the query
+  """
+  variables: Map
+  clearVariables: Boolean
+  status: ReportReportStatus
+  visibility: ReportReportVisibility
+  clearVisibility: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  reportKindID: ID
+  clearReportKind: Boolean
+  reportOwnerID: ID
+  clearReportOwner: Boolean
+}
+"""
+UpdateReportMembershipInput is used for update ReportMembership object.
+Input was generated by ent.
+"""
+input UpdateReportMembershipInput {
+  role: ReportMembershipRole
 }
 """
 UpdateReviewInput is used for update Review object.
@@ -139108,6 +141779,12 @@ input UpdateUserInput {
   addProgramsOwnedIDs: [ID!]
   removeProgramsOwnedIDs: [ID!]
   clearProgramsOwned: Boolean
+  addReportIDs: [ID!]
+  removeReportIDs: [ID!]
+  clearReports: Boolean
+  addReportsOwnedIDs: [ID!]
+  removeReportsOwnedIDs: [ID!]
+  clearReportsOwned: Boolean
   addPlatformsOwnedIDs: [ID!]
   removePlatformsOwnedIDs: [ID!]
   clearPlatformsOwned: Boolean
@@ -140244,6 +142921,68 @@ type User implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
+  reports(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reports returned from the connection.
+    """
+    orderBy: [ReportOrder!]
+
+    """
+    Filtering options for Reports returned from the connection.
+    """
+    where: ReportWhereInput
+  ): ReportConnection!
+  reportsOwned(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Reports returned from the connection.
+    """
+    orderBy: [ReportOrder!]
+
+    """
+    Filtering options for Reports returned from the connection.
+    """
+    where: ReportWhereInput
+  ): ReportConnection!
   platformsOwned(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -140399,6 +143138,37 @@ type User implements Node {
     """
     where: ProgramMembershipWhereInput
   ): ProgramMembershipConnection!
+  reportMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ReportMemberships returned from the connection.
+    """
+    orderBy: [ReportMembershipOrder!]
+
+    """
+    Filtering options for ReportMemberships returned from the connection.
+    """
+    where: ReportMembershipWhereInput
+  ): ReportMembershipConnection!
 }
 """
 UserAuthProvider is enum for the field last_login_provider
@@ -141144,6 +143914,16 @@ input UserWhereInput {
   hasProgramsOwned: Boolean
   hasProgramsOwnedWith: [ProgramWhereInput!]
   """
+  reports edge predicates
+  """
+  hasReports: Boolean
+  hasReportsWith: [ReportWhereInput!]
+  """
+  reports_owned edge predicates
+  """
+  hasReportsOwned: Boolean
+  hasReportsOwnedWith: [ReportWhereInput!]
+  """
   platforms_owned edge predicates
   """
   hasPlatformsOwned: Boolean
@@ -141168,6 +143948,11 @@ input UserWhereInput {
   """
   hasProgramMemberships: Boolean
   hasProgramMembershipsWith: [ProgramMembershipWhereInput!]
+  """
+  report_memberships edge predicates
+  """
+  hasReportMemberships: Boolean
+  hasReportMembershipsWith: [ReportMembershipWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -148456,6 +151241,11 @@ extend type Mutation{
         values of the finding
         """
         input: CreateFindingInput!
+        """
+        Files to attach to the finding
+        """
+        findingFiles: [Upload!]
+        findingFilesMetadata: [FileMetadataInput!]
     ): FindingCreatePayload!
     """
     Create multiple new findings
@@ -148487,6 +151277,11 @@ extend type Mutation{
         New values for the finding
         """
         input: UpdateFindingInput!
+        """
+        Files to attach to the finding
+        """
+        findingFiles: [Upload!]
+        findingFilesMetadata: [FileMetadataInput!]
     ): FindingUpdatePayload!
     """
     Delete an existing finding
@@ -151772,6 +154567,181 @@ type OrganizationBulkCreatePayload {
     organizations: [Organization!]
 }
 `, BuiltIn: false},
+	{Name: "../schema/organizationbrandingsetting.graphql", Input: `extend type Query {
+    """
+    Look up organizationBrandingSetting by ID
+    """
+     organizationBrandingSetting(
+        """
+        ID of the organizationBrandingSetting
+        """
+        id: ID!
+    ):  OrganizationBrandingSetting!
+}
+
+extend type Mutation{
+    """
+    Create a new organizationBrandingSetting
+    """
+    createOrganizationBrandingSetting(
+        """
+        values of the organizationBrandingSetting
+        """
+        input: CreateOrganizationBrandingSettingInput!
+    ): OrganizationBrandingSettingCreatePayload!
+    """
+    Create multiple new organizationBrandingSettings
+    """
+    createBulkOrganizationBrandingSetting(
+        """
+        values of the organizationBrandingSetting
+        """
+        input: [CreateOrganizationBrandingSettingInput!]
+    ): OrganizationBrandingSettingBulkCreatePayload!
+    """
+    Create multiple new organizationBrandingSettings via file upload
+    """
+    createBulkCSVOrganizationBrandingSetting(
+        """
+        csv file containing values of the organizationBrandingSetting
+        """
+        input: Upload!
+    ): OrganizationBrandingSettingBulkCreatePayload!
+    """
+    Update an existing organizationBrandingSetting
+    """
+    updateOrganizationBrandingSetting(
+        """
+        ID of the organizationBrandingSetting
+        """
+        id: ID!
+        """
+        New values for the organizationBrandingSetting
+        """
+        input: UpdateOrganizationBrandingSettingInput!
+    ): OrganizationBrandingSettingUpdatePayload!
+    """
+    Delete an existing organizationBrandingSetting
+    """
+    deleteOrganizationBrandingSetting(
+        """
+        ID of the organizationBrandingSetting
+        """
+        id: ID!
+    ): OrganizationBrandingSettingDeletePayload!
+    """
+    Delete multiple organizationBrandingSettings
+    """
+    deleteBulkOrganizationBrandingSetting(
+        """
+        IDs of the organizationBrandingSettings to delete
+        """
+        ids: [ID!]!
+    ): OrganizationBrandingSettingBulkDeletePayload!
+    """
+    Update multiple existing organizationBrandingSettings
+    """
+    updateBulkOrganizationBrandingSetting(
+        """
+        IDs of the organizationBrandingSettings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the organizationBrandingSettings with
+        """
+        input: UpdateOrganizationBrandingSettingInput!
+    ): OrganizationBrandingSettingBulkUpdatePayload!
+    """
+    Update multiple existing organizationBrandingSettings via file upload
+    """
+    updateBulkCSVOrganizationBrandingSetting(
+        """
+        csv file containing values of the organizationBrandingSetting, must include ID column
+        """
+        input: Upload!
+    ): OrganizationBrandingSettingBulkUpdatePayload!
+}
+
+"""
+Return response for createOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingCreatePayload {
+    """
+    Created organizationBrandingSetting
+    """
+    organizationBrandingSetting: OrganizationBrandingSetting!
+}
+
+"""
+Return response for updateOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingUpdatePayload {
+    """
+    Updated organizationBrandingSetting
+    """
+    organizationBrandingSetting: OrganizationBrandingSetting!
+}
+
+"""
+Return response for deleteOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingDeletePayload {
+    """
+    Deleted organizationBrandingSetting ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingBulkCreatePayload {
+    """
+    Created organizationBrandingSettings
+    """
+    organizationBrandingSettings: [OrganizationBrandingSetting!]
+}
+
+"""
+Return response for deleteBulkOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingBulkDeletePayload {
+    """
+    Deleted organizationBrandingSetting IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    IDs that were not deleted
+    """
+    notDeletedIDs: [ID!]!
+    """
+    Error message when the bulk delete did not apply to every requested ID
+    """
+    error: String
+}
+
+"""
+Return response for updateBulkOrganizationBrandingSetting mutation
+"""
+type OrganizationBrandingSettingBulkUpdatePayload {
+    """
+    Updated organizationBrandingSettings
+    """
+    organizationBrandingSettings: [OrganizationBrandingSetting!]
+    """
+    IDs of the updated organizationBrandingSettings
+    """
+    updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
+}
+`, BuiltIn: false},
 	{Name: "../schema/organizationsetting.graphql", Input: `extend type Query {
     """
     Look up organizationSetting by ID
@@ -153174,6 +156144,11 @@ extend type Mutation{
         values of the remediation
         """
         input: CreateRemediationInput!
+        """
+        Files to attach to the remediation
+        """
+        remediationFiles: [Upload!]
+        remediationFilesMetadata: [FileMetadataInput!]
     ): RemediationCreatePayload!
     """
     Create multiple new remediations
@@ -153205,6 +156180,11 @@ extend type Mutation{
         New values for the remediation
         """
         input: UpdateRemediationInput!
+        """
+        Files to attach to the remediation
+        """
+        remediationFiles: [Upload!]
+        remediationFilesMetadata: [FileMetadataInput!]
     ): RemediationUpdatePayload!
     """
     Delete an existing remediation
@@ -153327,6 +156307,239 @@ type RemediationBulkDeletePayload {
     """
     error: String
 }`, BuiltIn: false},
+	{Name: "../schema/report.graphql", Input: `extend type Query {
+    """
+    Look up report by ID
+    """
+     report(
+        """
+        ID of the report
+        """
+        id: ID!
+    ):  Report!
+}
+
+extend type Mutation{
+    """
+    Create a new report
+    """
+    createReport(
+        """
+        values of the report
+        """
+        input: CreateReportInput!
+    ): ReportCreatePayload!
+    """
+    Update an existing report
+    """
+    updateReport(
+        """
+        ID of the report
+        """
+        id: ID!
+        """
+        New values for the report
+        """
+        input: UpdateReportInput!
+    ): ReportUpdatePayload!
+    """
+    Delete an existing report
+    """
+    deleteReport(
+        """
+        ID of the report
+        """
+        id: ID!
+    ): ReportDeletePayload!
+}
+
+"""
+Return response for createReport mutation
+"""
+type ReportCreatePayload {
+    """
+    Created report
+    """
+    report: Report!
+}
+
+"""
+Return response for updateReport mutation
+"""
+type ReportUpdatePayload {
+    """
+    Updated report
+    """
+    report: Report!
+}
+
+"""
+Return response for deleteReport mutation
+"""
+type ReportDeletePayload {
+    """
+    Deleted report ID
+    """
+    deletedID: ID!
+}
+`, BuiltIn: false},
+	{Name: "../schema/reportmembership.graphql", Input: `extend type Query {
+    """
+    Look up reportMembership by ID
+    """
+     reportMembership(
+        """
+        ID of the reportMembership
+        """
+        id: ID!
+    ):  ReportMembership!
+}
+
+extend type Mutation{
+    """
+    Create a new reportMembership
+    """
+    createReportMembership(
+        """
+        values of the reportMembership
+        """
+        input: CreateReportMembershipInput!
+    ): ReportMembershipCreatePayload!
+    """
+    Create multiple new reportMemberships
+    """
+    createBulkReportMembership(
+        """
+        values of the reportMembership
+        """
+        input: [CreateReportMembershipInput!]
+    ): ReportMembershipBulkCreatePayload!
+    """
+    Update multiple existing reportMemberships
+    """
+    updateBulkReportMembership(
+        """
+        IDs of the reportMemberships to update
+        """
+        ids: [ID!]!
+        """
+        values to update the reportMemberships with
+        """
+        input: UpdateReportMembershipInput!
+    ): ReportMembershipBulkUpdatePayload!
+    """
+    Update an existing reportMembership
+    """
+    updateReportMembership(
+        """
+        ID of the reportMembership
+        """
+        id: ID!
+        """
+        New values for the reportMembership
+        """
+        input: UpdateReportMembershipInput!
+    ): ReportMembershipUpdatePayload!
+    """
+    Delete an existing reportMembership
+    """
+    deleteReportMembership(
+        """
+        ID of the reportMembership
+        """
+        id: ID!
+    ): ReportMembershipDeletePayload!
+    """
+    Delete multiple reportMemberships
+    """
+    deleteBulkReportMembership(
+        """
+        IDs of the reportMemberships to delete
+        """
+        ids: [ID!]!
+    ): ReportMembershipBulkDeletePayload!
+}
+
+"""
+Return response for createReportMembership mutation
+"""
+type ReportMembershipCreatePayload {
+    """
+    Created reportMembership
+    """
+    reportMembership: ReportMembership!
+}
+
+"""
+Return response for updateReportMembership mutation
+"""
+type ReportMembershipUpdatePayload {
+    """
+    Updated reportMembership
+    """
+    reportMembership: ReportMembership!
+}
+
+"""
+Return response for deleteReportMembership mutation
+"""
+type ReportMembershipDeletePayload {
+    """
+    Deleted reportMembership ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkReportMembership mutation
+"""
+type ReportMembershipBulkCreatePayload {
+    """
+    Created reportMemberships
+    """
+    reportMemberships: [ReportMembership!]
+}
+
+"""
+Return response for updateBulkReportMembership mutation
+"""
+type ReportMembershipBulkUpdatePayload {
+    """
+    Updated reportMemberships
+    """
+    reportMemberships: [ReportMembership!]
+    """
+    IDs of the updated reportMemberships
+    """
+    updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
+}
+
+"""
+Return response for deleteBulkReportMembership mutation
+"""
+type ReportMembershipBulkDeletePayload {
+    """
+    Deleted reportMembership IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of reportMemberships that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/review.graphql", Input: `extend type Query {
     """
     Look up review by ID
@@ -153758,6 +156971,11 @@ extend type Mutation{
         values of the scan
         """
         input: CreateScanInput!
+        """
+        Files to attach to the scan
+        """
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanCreatePayload!
     """
     Create multiple new scans
@@ -153802,6 +157020,11 @@ extend type Mutation{
         New values for the scan
         """
         input: UpdateScanInput!
+        """
+        Files to attach to the scan
+        """
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanUpdatePayload!
     """
     Delete an existing scan
@@ -154563,6 +157786,31 @@ type ScanBulkDeletePayload {
         last: Int
     ): RemediationConnection
     """
+    Search across Report objects
+    """
+    reportSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ReportConnection
+    """
     Search across Review objects
     """
     reviewSearch(
@@ -154923,6 +158171,7 @@ type SearchResults{
   procedures: ProcedureConnection
   programs: ProgramConnection
   remediations: RemediationConnection
+  reports: ReportConnection
   reviews: ReviewConnection
   risks: RiskConnection
   scans: ScanConnection
@@ -158707,6 +161956,11 @@ extend type Mutation{
         values of the vulnerability
         """
         input: CreateVulnerabilityInput!
+        """
+        Files to attach to the vulnerability
+        """
+        vulnerabilityFiles: [Upload!]
+        vulnerabilityFilesMetadata: [FileMetadataInput!]
     ): VulnerabilityCreatePayload!
     """
     Create multiple new vulnerabilitys
@@ -158738,6 +161992,11 @@ extend type Mutation{
         New values for the vulnerability
         """
         input: UpdateVulnerabilityInput!
+        """
+        Files to attach to the vulnerability
+        """
+        vulnerabilityFiles: [Upload!]
+        vulnerabilityFilesMetadata: [FileMetadataInput!]
     ): VulnerabilityUpdatePayload!
     """
     Delete an existing vulnerability
@@ -160171,6 +163430,8 @@ func (ec *executionContext) childFields_Assessment(ctx context.Context, field gr
 		return ec.fieldContext_Assessment_workflowTimeline(ctx, field)
 	case "accessURL":
 		return ec.fieldContext_Assessment_accessURL(ctx, field)
+	case "removeBranding":
+		return ec.fieldContext_Assessment_removeBranding(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type Assessment", field.Name)
 }
@@ -165027,6 +168288,12 @@ func (ec *executionContext) childFields_Group(ctx context.Context, field graphql
 		return ec.fieldContext_Group_programBlockedGroups(ctx, field)
 	case "programViewers":
 		return ec.fieldContext_Group_programViewers(ctx, field)
+	case "reportEditors":
+		return ec.fieldContext_Group_reportEditors(ctx, field)
+	case "reportBlockedGroups":
+		return ec.fieldContext_Group_reportBlockedGroups(ctx, field)
+	case "reportViewers":
+		return ec.fieldContext_Group_reportViewers(ctx, field)
 	case "riskEditors":
 		return ec.fieldContext_Group_riskEditors(ctx, field)
 	case "riskBlockedGroups":
@@ -167701,6 +170968,10 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_programMembershipCreators(ctx, field)
 	case "remediationCreators":
 		return ec.fieldContext_Organization_remediationCreators(ctx, field)
+	case "reportCreators":
+		return ec.fieldContext_Organization_reportCreators(ctx, field)
+	case "reportMembershipCreators":
+		return ec.fieldContext_Organization_reportMembershipCreators(ctx, field)
 	case "reviewCreators":
 		return ec.fieldContext_Organization_reviewCreators(ctx, field)
 	case "riskCreators":
@@ -167773,6 +171044,8 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_setting(ctx, field)
 	case "personalAccessTokens":
 		return ec.fieldContext_Organization_personalAccessTokens(ctx, field)
+	case "brandingSetting":
+		return ec.fieldContext_Organization_brandingSetting(ctx, field)
 	case "users":
 		return ec.fieldContext_Organization_users(ctx, field)
 	case "files":
@@ -167789,6 +171062,122 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_members(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type Organization", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationBrandingSetting(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_OrganizationBrandingSetting_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_OrganizationBrandingSetting_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_OrganizationBrandingSetting_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_OrganizationBrandingSetting_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_OrganizationBrandingSetting_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_OrganizationBrandingSetting_updatedByImpersonator(ctx, field)
+	case "tags":
+		return ec.fieldContext_OrganizationBrandingSetting_tags(ctx, field)
+	case "organizationID":
+		return ec.fieldContext_OrganizationBrandingSetting_organizationID(ctx, field)
+	case "removeAssessmentBranding":
+		return ec.fieldContext_OrganizationBrandingSetting_removeAssessmentBranding(ctx, field)
+	case "primaryColor":
+		return ec.fieldContext_OrganizationBrandingSetting_primaryColor(ctx, field)
+	case "secondaryColor":
+		return ec.fieldContext_OrganizationBrandingSetting_secondaryColor(ctx, field)
+	case "backgroundColor":
+		return ec.fieldContext_OrganizationBrandingSetting_backgroundColor(ctx, field)
+	case "textColor":
+		return ec.fieldContext_OrganizationBrandingSetting_textColor(ctx, field)
+	case "fontFamily":
+		return ec.fieldContext_OrganizationBrandingSetting_fontFamily(ctx, field)
+	case "organization":
+		return ec.fieldContext_OrganizationBrandingSetting_organization(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSetting", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationBrandingSettingBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "organizationBrandingSettings":
+		return ec.fieldContext_OrganizationBrandingSettingBulkCreatePayload_organizationBrandingSettings(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSettingBulkCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationBrandingSettingBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedIDs":
+		return ec.fieldContext_OrganizationBrandingSettingBulkDeletePayload_deletedIDs(ctx, field)
+	case "notDeletedIDs":
+		return ec.fieldContext_OrganizationBrandingSettingBulkDeletePayload_notDeletedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_OrganizationBrandingSettingBulkDeletePayload_error(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSettingBulkDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationBrandingSettingBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "organizationBrandingSettings":
+		return ec.fieldContext_OrganizationBrandingSettingBulkUpdatePayload_organizationBrandingSettings(ctx, field)
+	case "updatedIDs":
+		return ec.fieldContext_OrganizationBrandingSettingBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_OrganizationBrandingSettingBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_OrganizationBrandingSettingBulkUpdatePayload_error(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSettingBulkUpdatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationBrandingSettingConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_OrganizationBrandingSettingConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_OrganizationBrandingSettingConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_OrganizationBrandingSettingConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSettingConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationBrandingSettingCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "organizationBrandingSetting":
+		return ec.fieldContext_OrganizationBrandingSettingCreatePayload_organizationBrandingSetting(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSettingCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationBrandingSettingDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedID":
+		return ec.fieldContext_OrganizationBrandingSettingDeletePayload_deletedID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSettingDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationBrandingSettingEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_OrganizationBrandingSettingEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_OrganizationBrandingSettingEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSettingEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_OrganizationBrandingSettingUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "organizationBrandingSetting":
+		return ec.fieldContext_OrganizationBrandingSettingUpdatePayload_organizationBrandingSetting(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type OrganizationBrandingSettingUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_OrganizationConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -169215,6 +172604,218 @@ func (ec *executionContext) childFields_RemediationUpdatePayload(ctx context.Con
 	return nil, fmt.Errorf("no field named %q was found under type RemediationUpdatePayload", field.Name)
 }
 
+func (ec *executionContext) childFields_Report(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_Report_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_Report_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_Report_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_Report_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_Report_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_Report_updatedByImpersonator(ctx, field)
+	case "displayID":
+		return ec.fieldContext_Report_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_Report_tags(ctx, field)
+	case "requestorID":
+		return ec.fieldContext_Report_requestorID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_Report_ownerID(ctx, field)
+	case "reportKindName":
+		return ec.fieldContext_Report_reportKindName(ctx, field)
+	case "reportKindID":
+		return ec.fieldContext_Report_reportKindID(ctx, field)
+	case "name":
+		return ec.fieldContext_Report_name(ctx, field)
+	case "query":
+		return ec.fieldContext_Report_query(ctx, field)
+	case "variables":
+		return ec.fieldContext_Report_variables(ctx, field)
+	case "status":
+		return ec.fieldContext_Report_status(ctx, field)
+	case "visibility":
+		return ec.fieldContext_Report_visibility(ctx, field)
+	case "reportOwnerID":
+		return ec.fieldContext_Report_reportOwnerID(ctx, field)
+	case "owner":
+		return ec.fieldContext_Report_owner(ctx, field)
+	case "blockedGroups":
+		return ec.fieldContext_Report_blockedGroups(ctx, field)
+	case "editors":
+		return ec.fieldContext_Report_editors(ctx, field)
+	case "viewers":
+		return ec.fieldContext_Report_viewers(ctx, field)
+	case "reportKind":
+		return ec.fieldContext_Report_reportKind(ctx, field)
+	case "users":
+		return ec.fieldContext_Report_users(ctx, field)
+	case "reportOwner":
+		return ec.fieldContext_Report_reportOwner(ctx, field)
+	case "members":
+		return ec.fieldContext_Report_members(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Report", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ReportConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ReportConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ReportConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "report":
+		return ec.fieldContext_ReportCreatePayload_report(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedID":
+		return ec.fieldContext_ReportDeletePayload_deletedID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ReportEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ReportEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportMembership(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ReportMembership_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_ReportMembership_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_ReportMembership_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_ReportMembership_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_ReportMembership_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_ReportMembership_updatedByImpersonator(ctx, field)
+	case "role":
+		return ec.fieldContext_ReportMembership_role(ctx, field)
+	case "reportID":
+		return ec.fieldContext_ReportMembership_reportID(ctx, field)
+	case "userID":
+		return ec.fieldContext_ReportMembership_userID(ctx, field)
+	case "report":
+		return ec.fieldContext_ReportMembership_report(ctx, field)
+	case "user":
+		return ec.fieldContext_ReportMembership_user(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportMembership", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportMembershipBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "reportMemberships":
+		return ec.fieldContext_ReportMembershipBulkCreatePayload_reportMemberships(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipBulkCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportMembershipBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedIDs":
+		return ec.fieldContext_ReportMembershipBulkDeletePayload_deletedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ReportMembershipBulkDeletePayload_error(ctx, field)
+	case "notDeletedIDs":
+		return ec.fieldContext_ReportMembershipBulkDeletePayload_notDeletedIDs(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipBulkDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportMembershipBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "reportMemberships":
+		return ec.fieldContext_ReportMembershipBulkUpdatePayload_reportMemberships(ctx, field)
+	case "updatedIDs":
+		return ec.fieldContext_ReportMembershipBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ReportMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ReportMembershipBulkUpdatePayload_error(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipBulkUpdatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportMembershipConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ReportMembershipConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ReportMembershipConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ReportMembershipConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportMembershipCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "reportMembership":
+		return ec.fieldContext_ReportMembershipCreatePayload_reportMembership(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportMembershipDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedID":
+		return ec.fieldContext_ReportMembershipDeletePayload_deletedID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportMembershipEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ReportMembershipEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ReportMembershipEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportMembershipUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "reportMembership":
+		return ec.fieldContext_ReportMembershipUpdatePayload_reportMembership(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportMembershipUpdatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_ReportUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "report":
+		return ec.fieldContext_ReportUpdatePayload_report(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ReportUpdatePayload", field.Name)
+}
+
 func (ec *executionContext) childFields_Review(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -170107,6 +173708,8 @@ func (ec *executionContext) childFields_SearchResults(ctx context.Context, field
 		return ec.fieldContext_SearchResults_programs(ctx, field)
 	case "remediations":
 		return ec.fieldContext_SearchResults_remediations(ctx, field)
+	case "reports":
+		return ec.fieldContext_SearchResults_reports(ctx, field)
 	case "reviews":
 		return ec.fieldContext_SearchResults_reviews(ctx, field)
 	case "risks":
@@ -172687,6 +176290,10 @@ func (ec *executionContext) childFields_User(ctx context.Context, field graphql.
 		return ec.fieldContext_User_programs(ctx, field)
 	case "programsOwned":
 		return ec.fieldContext_User_programsOwned(ctx, field)
+	case "reports":
+		return ec.fieldContext_User_reports(ctx, field)
+	case "reportsOwned":
+		return ec.fieldContext_User_reportsOwned(ctx, field)
 	case "platformsOwned":
 		return ec.fieldContext_User_platformsOwned(ctx, field)
 	case "identityHolderProfiles":
@@ -172697,6 +176304,8 @@ func (ec *executionContext) childFields_User(ctx context.Context, field graphql.
 		return ec.fieldContext_User_orgMemberships(ctx, field)
 	case "programMemberships":
 		return ec.fieldContext_User_programMemberships(ctx, field)
+	case "reportMemberships":
+		return ec.fieldContext_User_reportMemberships(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 }

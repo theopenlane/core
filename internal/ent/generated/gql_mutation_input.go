@@ -11667,6 +11667,9 @@ type CreateGroupInput struct {
 	ProgramEditorIDs                     []string `json:"program_editor_ids,omitempty"`
 	ProgramBlockedGroupIDs               []string `json:"program_blocked_group_ids,omitempty"`
 	ProgramViewerIDs                     []string `json:"program_viewer_ids,omitempty"`
+	ReportEditorIDs                      []string `json:"report_editor_ids,omitempty"`
+	ReportBlockedGroupIDs                []string `json:"report_blocked_group_ids,omitempty"`
+	ReportViewerIDs                      []string `json:"report_viewer_ids,omitempty"`
 	RiskEditorIDs                        []string `json:"risk_editor_ids,omitempty"`
 	RiskBlockedGroupIDs                  []string `json:"risk_blocked_group_ids,omitempty"`
 	RiskViewerIDs                        []string `json:"risk_viewer_ids,omitempty"`
@@ -11769,6 +11772,15 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ProgramViewerIDs; len(v) > 0 {
 		m.AddProgramViewerIDs(v...)
+	}
+	if v := i.ReportEditorIDs; len(v) > 0 {
+		m.AddReportEditorIDs(v...)
+	}
+	if v := i.ReportBlockedGroupIDs; len(v) > 0 {
+		m.AddReportBlockedGroupIDs(v...)
+	}
+	if v := i.ReportViewerIDs; len(v) > 0 {
+		m.AddReportViewerIDs(v...)
 	}
 	if v := i.RiskEditorIDs; len(v) > 0 {
 		m.AddRiskEditorIDs(v...)
@@ -11961,6 +11973,15 @@ type UpdateGroupInput struct {
 	ClearProgramViewers                        bool
 	AddProgramViewerIDs                        []string `json:"add_program_viewer_ids,omitempty"`
 	RemoveProgramViewerIDs                     []string `json:"remove_program_viewer_ids,omitempty"`
+	ClearReportEditors                         bool
+	AddReportEditorIDs                         []string `json:"add_report_editor_ids,omitempty"`
+	RemoveReportEditorIDs                      []string `json:"remove_report_editor_ids,omitempty"`
+	ClearReportBlockedGroups                   bool
+	AddReportBlockedGroupIDs                   []string `json:"add_report_blocked_group_ids,omitempty"`
+	RemoveReportBlockedGroupIDs                []string `json:"remove_report_blocked_group_ids,omitempty"`
+	ClearReportViewers                         bool
+	AddReportViewerIDs                         []string `json:"add_report_viewer_ids,omitempty"`
+	RemoveReportViewerIDs                      []string `json:"remove_report_viewer_ids,omitempty"`
 	ClearRiskEditors                           bool
 	AddRiskEditorIDs                           []string `json:"add_risk_editor_ids,omitempty"`
 	RemoveRiskEditorIDs                        []string `json:"remove_risk_editor_ids,omitempty"`
@@ -12223,6 +12244,33 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveProgramViewerIDs; len(v) > 0 {
 		m.RemoveProgramViewerIDs(v...)
+	}
+	if i.ClearReportEditors {
+		m.ClearReportEditors()
+	}
+	if v := i.AddReportEditorIDs; len(v) > 0 {
+		m.AddReportEditorIDs(v...)
+	}
+	if v := i.RemoveReportEditorIDs; len(v) > 0 {
+		m.RemoveReportEditorIDs(v...)
+	}
+	if i.ClearReportBlockedGroups {
+		m.ClearReportBlockedGroups()
+	}
+	if v := i.AddReportBlockedGroupIDs; len(v) > 0 {
+		m.AddReportBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveReportBlockedGroupIDs; len(v) > 0 {
+		m.RemoveReportBlockedGroupIDs(v...)
+	}
+	if i.ClearReportViewers {
+		m.ClearReportViewers()
+	}
+	if v := i.AddReportViewerIDs; len(v) > 0 {
+		m.AddReportViewerIDs(v...)
+	}
+	if v := i.RemoveReportViewerIDs; len(v) > 0 {
+		m.RemoveReportViewerIDs(v...)
 	}
 	if i.ClearRiskEditors {
 		m.ClearRiskEditors()
@@ -16383,6 +16431,8 @@ type CreateOrganizationInput struct {
 	ProgramCreatorIDs                    []string   `json:"program_creator_ids,omitempty"`
 	ProgramMembershipCreatorIDs          []string   `json:"program_membership_creator_ids,omitempty"`
 	RemediationCreatorIDs                []string   `json:"remediation_creator_ids,omitempty"`
+	ReportCreatorIDs                     []string   `json:"report_creator_ids,omitempty"`
+	ReportMembershipCreatorIDs           []string   `json:"report_membership_creator_ids,omitempty"`
 	ReviewCreatorIDs                     []string   `json:"review_creator_ids,omitempty"`
 	RiskCreatorIDs                       []string   `json:"risk_creator_ids,omitempty"`
 	ScanCreatorIDs                       []string   `json:"scan_creator_ids,omitempty"`
@@ -16418,6 +16468,7 @@ type CreateOrganizationInput struct {
 	ParentID                             *string    `json:"parent_id,omitempty"`
 	SettingID                            *string    `json:"setting_id,omitempty"`
 	PersonalAccessTokenIDs               []string   `json:"personal_access_token_ids,omitempty"`
+	BrandingSettingID                    *string    `json:"branding_setting_id,omitempty"`
 	FileIDs                              []string   `json:"file_ids,omitempty"`
 	EventIDs                             []string   `json:"event_ids,omitempty"`
 	AvatarFileID                         *string    `json:"avatar_file_id,omitempty"`
@@ -16576,6 +16627,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemediationCreatorIDs; len(v) > 0 {
 		m.AddRemediationCreatorIDs(v...)
 	}
+	if v := i.ReportCreatorIDs; len(v) > 0 {
+		m.AddReportCreatorIDs(v...)
+	}
+	if v := i.ReportMembershipCreatorIDs; len(v) > 0 {
+		m.AddReportMembershipCreatorIDs(v...)
+	}
 	if v := i.ReviewCreatorIDs; len(v) > 0 {
 		m.AddReviewCreatorIDs(v...)
 	}
@@ -16680,6 +16737,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.PersonalAccessTokenIDs; len(v) > 0 {
 		m.AddPersonalAccessTokenIDs(v...)
+	}
+	if v := i.BrandingSettingID; v != nil {
+		m.SetBrandingSettingID(*v)
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -16848,6 +16908,12 @@ type UpdateOrganizationInput struct {
 	ClearRemediationCreators                   bool
 	AddRemediationCreatorIDs                   []string `json:"add_remediation_creator_ids,omitempty"`
 	RemoveRemediationCreatorIDs                []string `json:"remove_remediation_creator_ids,omitempty"`
+	ClearReportCreators                        bool
+	AddReportCreatorIDs                        []string `json:"add_report_creator_ids,omitempty"`
+	RemoveReportCreatorIDs                     []string `json:"remove_report_creator_ids,omitempty"`
+	ClearReportMembershipCreators              bool
+	AddReportMembershipCreatorIDs              []string `json:"add_report_membership_creator_ids,omitempty"`
+	RemoveReportMembershipCreatorIDs           []string `json:"remove_report_membership_creator_ids,omitempty"`
 	ClearReviewCreators                        bool
 	AddReviewCreatorIDs                        []string `json:"add_review_creator_ids,omitempty"`
 	RemoveReviewCreatorIDs                     []string `json:"remove_review_creator_ids,omitempty"`
@@ -16949,6 +17015,8 @@ type UpdateOrganizationInput struct {
 	ClearPersonalAccessTokens                  bool
 	AddPersonalAccessTokenIDs                  []string `json:"add_personal_access_token_ids,omitempty"`
 	RemovePersonalAccessTokenIDs               []string `json:"remove_personal_access_token_ids,omitempty"`
+	ClearBrandingSetting                       bool
+	BrandingSettingID                          *string `json:"branding_setting_id,omitempty"`
 	ClearFiles                                 bool
 	AddFileIDs                                 []string `json:"add_file_ids,omitempty"`
 	RemoveFileIDs                              []string `json:"remove_file_ids,omitempty"`
@@ -17387,6 +17455,24 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveRemediationCreatorIDs; len(v) > 0 {
 		m.RemoveRemediationCreatorIDs(v...)
 	}
+	if i.ClearReportCreators {
+		m.ClearReportCreators()
+	}
+	if v := i.AddReportCreatorIDs; len(v) > 0 {
+		m.AddReportCreatorIDs(v...)
+	}
+	if v := i.RemoveReportCreatorIDs; len(v) > 0 {
+		m.RemoveReportCreatorIDs(v...)
+	}
+	if i.ClearReportMembershipCreators {
+		m.ClearReportMembershipCreators()
+	}
+	if v := i.AddReportMembershipCreatorIDs; len(v) > 0 {
+		m.AddReportMembershipCreatorIDs(v...)
+	}
+	if v := i.RemoveReportMembershipCreatorIDs; len(v) > 0 {
+		m.RemoveReportMembershipCreatorIDs(v...)
+	}
 	if i.ClearReviewCreators {
 		m.ClearReviewCreators()
 	}
@@ -17690,6 +17776,12 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemovePersonalAccessTokenIDs; len(v) > 0 {
 		m.RemovePersonalAccessTokenIDs(v...)
 	}
+	if i.ClearBrandingSetting {
+		m.ClearBrandingSetting()
+	}
+	if v := i.BrandingSettingID; v != nil {
+		m.SetBrandingSettingID(*v)
+	}
 	if i.ClearFiles {
 		m.ClearFiles()
 	}
@@ -17751,6 +17843,128 @@ func (c *OrganizationUpdate) SetInput(i UpdateOrganizationInput) *OrganizationUp
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdateOne builder.
 func (c *OrganizationUpdateOne) SetInput(i UpdateOrganizationInput) *OrganizationUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateOrganizationBrandingSettingInput represents a mutation input for creating organizationbrandingsettings.
+type CreateOrganizationBrandingSettingInput struct {
+	Tags            []string `json:"tags,omitempty"`
+	PrimaryColor    *string  `json:"primary_color,omitempty"`
+	SecondaryColor  *string  `json:"secondary_color,omitempty"`
+	BackgroundColor *string  `json:"background_color,omitempty"`
+	TextColor       *string  `json:"text_color,omitempty"`
+	FontFamily      *string  `json:"font_family,omitempty"`
+	OrganizationID  *string  `json:"organization_id,omitempty"`
+}
+
+// Mutate applies the CreateOrganizationBrandingSettingInput on the OrganizationBrandingSettingMutation builder.
+func (i *CreateOrganizationBrandingSettingInput) Mutate(m *OrganizationBrandingSettingMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.PrimaryColor; v != nil {
+		m.SetPrimaryColor(*v)
+	}
+	if v := i.SecondaryColor; v != nil {
+		m.SetSecondaryColor(*v)
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if v := i.TextColor; v != nil {
+		m.SetTextColor(*v)
+	}
+	if v := i.FontFamily; v != nil {
+		m.SetFontFamily(*v)
+	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateOrganizationBrandingSettingInput on the OrganizationBrandingSettingCreate builder.
+func (c *OrganizationBrandingSettingCreate) SetInput(i CreateOrganizationBrandingSettingInput) *OrganizationBrandingSettingCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateOrganizationBrandingSettingInput represents a mutation input for updating organizationbrandingsettings.
+type UpdateOrganizationBrandingSettingInput struct {
+	ClearTags            bool
+	Tags                 []string `json:"tags,omitempty"`
+	AppendTags           []string
+	ClearPrimaryColor    bool
+	PrimaryColor         *string `json:"primary_color,omitempty"`
+	ClearSecondaryColor  bool
+	SecondaryColor       *string `json:"secondary_color,omitempty"`
+	ClearBackgroundColor bool
+	BackgroundColor      *string `json:"background_color,omitempty"`
+	ClearTextColor       bool
+	TextColor            *string `json:"text_color,omitempty"`
+	ClearFontFamily      bool
+	FontFamily           *string `json:"font_family,omitempty"`
+	ClearOrganization    bool
+	OrganizationID       *string `json:"organization_id,omitempty"`
+}
+
+// Mutate applies the UpdateOrganizationBrandingSettingInput on the OrganizationBrandingSettingMutation builder.
+func (i *UpdateOrganizationBrandingSettingInput) Mutate(m *OrganizationBrandingSettingMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearPrimaryColor {
+		m.ClearPrimaryColor()
+	}
+	if v := i.PrimaryColor; v != nil {
+		m.SetPrimaryColor(*v)
+	}
+	if i.ClearSecondaryColor {
+		m.ClearSecondaryColor()
+	}
+	if v := i.SecondaryColor; v != nil {
+		m.SetSecondaryColor(*v)
+	}
+	if i.ClearBackgroundColor {
+		m.ClearBackgroundColor()
+	}
+	if v := i.BackgroundColor; v != nil {
+		m.SetBackgroundColor(*v)
+	}
+	if i.ClearTextColor {
+		m.ClearTextColor()
+	}
+	if v := i.TextColor; v != nil {
+		m.SetTextColor(*v)
+	}
+	if i.ClearFontFamily {
+		m.ClearFontFamily()
+	}
+	if v := i.FontFamily; v != nil {
+		m.SetFontFamily(*v)
+	}
+	if i.ClearOrganization {
+		m.ClearOrganization()
+	}
+	if v := i.OrganizationID; v != nil {
+		m.SetOrganizationID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateOrganizationBrandingSettingInput on the OrganizationBrandingSettingUpdate builder.
+func (c *OrganizationBrandingSettingUpdate) SetInput(i UpdateOrganizationBrandingSettingInput) *OrganizationBrandingSettingUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateOrganizationBrandingSettingInput on the OrganizationBrandingSettingUpdateOne builder.
+func (c *OrganizationBrandingSettingUpdateOne) SetInput(i UpdateOrganizationBrandingSettingInput) *OrganizationBrandingSettingUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -21437,6 +21651,242 @@ func (c *RemediationUpdate) SetInput(i UpdateRemediationInput) *RemediationUpdat
 
 // SetInput applies the change-set in the UpdateRemediationInput on the RemediationUpdateOne builder.
 func (c *RemediationUpdateOne) SetInput(i UpdateRemediationInput) *RemediationUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateReportInput represents a mutation input for creating reports.
+type CreateReportInput struct {
+	Tags            []string                `json:"tags,omitempty"`
+	ReportKindName  *string                 `json:"report_kind_name,omitempty"`
+	Name            string                  `json:"name,omitempty"`
+	Query           string                  `json:"query,omitempty"`
+	Variables       map[string]interface{}  `json:"variables,omitempty"`
+	Status          *enums.ReportStatus     `json:"status,omitempty"`
+	Visibility      *enums.ReportVisibility `json:"visibility,omitempty"`
+	OwnerID         *string                 `json:"owner_id,omitempty"`
+	BlockedGroupIDs []string                `json:"blocked_group_ids,omitempty"`
+	EditorIDs       []string                `json:"editor_ids,omitempty"`
+	ViewerIDs       []string                `json:"viewer_ids,omitempty"`
+	ReportKindID    *string                 `json:"report_kind_id,omitempty"`
+	ReportOwnerID   *string                 `json:"report_owner_id,omitempty"`
+}
+
+// Mutate applies the CreateReportInput on the ReportMutation builder.
+func (i *CreateReportInput) Mutate(m *ReportMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.ReportKindName; v != nil {
+		m.SetReportKindName(*v)
+	}
+	m.SetName(i.Name)
+	m.SetQuery(i.Query)
+	if v := i.Variables; v != nil {
+		m.SetVariables(v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.Visibility; v != nil {
+		m.SetVisibility(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.ReportKindID; v != nil {
+		m.SetReportKindID(*v)
+	}
+	if v := i.ReportOwnerID; v != nil {
+		m.SetReportOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateReportInput on the ReportCreate builder.
+func (c *ReportCreate) SetInput(i CreateReportInput) *ReportCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateReportInput represents a mutation input for updating reports.
+type UpdateReportInput struct {
+	ClearTags             bool
+	Tags                  []string `json:"tags,omitempty"`
+	AppendTags            []string
+	ClearReportKindName   bool
+	ReportKindName        *string `json:"report_kind_name,omitempty"`
+	Name                  *string `json:"name,omitempty"`
+	Query                 *string `json:"query,omitempty"`
+	ClearVariables        bool
+	Variables             map[string]interface{} `json:"variables,omitempty"`
+	Status                *enums.ReportStatus    `json:"status,omitempty"`
+	ClearVisibility       bool
+	Visibility            *enums.ReportVisibility `json:"visibility,omitempty"`
+	ClearOwner            bool
+	OwnerID               *string `json:"owner_id,omitempty"`
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs []string `json:"remove_blocked_group_ids,omitempty"`
+	ClearEditors          bool
+	AddEditorIDs          []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs       []string `json:"remove_editor_ids,omitempty"`
+	ClearViewers          bool
+	AddViewerIDs          []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs       []string `json:"remove_viewer_ids,omitempty"`
+	ClearReportKind       bool
+	ReportKindID          *string `json:"report_kind_id,omitempty"`
+	ClearReportOwner      bool
+	ReportOwnerID         *string `json:"report_owner_id,omitempty"`
+}
+
+// Mutate applies the UpdateReportInput on the ReportMutation builder.
+func (i *UpdateReportInput) Mutate(m *ReportMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearReportKindName {
+		m.ClearReportKindName()
+	}
+	if v := i.ReportKindName; v != nil {
+		m.SetReportKindName(*v)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if v := i.Query; v != nil {
+		m.SetQuery(*v)
+	}
+	if i.ClearVariables {
+		m.ClearVariables()
+	}
+	if v := i.Variables; v != nil {
+		m.SetVariables(v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearVisibility {
+		m.ClearVisibility()
+	}
+	if v := i.Visibility; v != nil {
+		m.SetVisibility(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearReportKind {
+		m.ClearReportKind()
+	}
+	if v := i.ReportKindID; v != nil {
+		m.SetReportKindID(*v)
+	}
+	if i.ClearReportOwner {
+		m.ClearReportOwner()
+	}
+	if v := i.ReportOwnerID; v != nil {
+		m.SetReportOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateReportInput on the ReportUpdate builder.
+func (c *ReportUpdate) SetInput(i UpdateReportInput) *ReportUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateReportInput on the ReportUpdateOne builder.
+func (c *ReportUpdateOne) SetInput(i UpdateReportInput) *ReportUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateReportMembershipInput represents a mutation input for creating reportmemberships.
+type CreateReportMembershipInput struct {
+	Role     *enums.Role `json:"role,omitempty"`
+	ReportID string      `json:"report_id,omitempty"`
+	UserID   string      `json:"user_id,omitempty"`
+}
+
+// Mutate applies the CreateReportMembershipInput on the ReportMembershipMutation builder.
+func (i *CreateReportMembershipInput) Mutate(m *ReportMembershipMutation) {
+	if v := i.Role; v != nil {
+		m.SetRole(*v)
+	}
+	m.SetReportID(i.ReportID)
+	m.SetUserID(i.UserID)
+}
+
+// SetInput applies the change-set in the CreateReportMembershipInput on the ReportMembershipCreate builder.
+func (c *ReportMembershipCreate) SetInput(i CreateReportMembershipInput) *ReportMembershipCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateReportMembershipInput represents a mutation input for updating reportmemberships.
+type UpdateReportMembershipInput struct {
+	Role *enums.Role `json:"role,omitempty"`
+}
+
+// Mutate applies the UpdateReportMembershipInput on the ReportMembershipMutation builder.
+func (i *UpdateReportMembershipInput) Mutate(m *ReportMembershipMutation) {
+	if v := i.Role; v != nil {
+		m.SetRole(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateReportMembershipInput on the ReportMembershipUpdate builder.
+func (c *ReportMembershipUpdate) SetInput(i UpdateReportMembershipInput) *ReportMembershipUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateReportMembershipInput on the ReportMembershipUpdateOne builder.
+func (c *ReportMembershipUpdateOne) SetInput(i UpdateReportMembershipInput) *ReportMembershipUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -28444,6 +28894,8 @@ type CreateUserInput struct {
 	AssigneeTaskIDs          []string            `json:"assignee_task_ids,omitempty"`
 	ProgramIDs               []string            `json:"program_ids,omitempty"`
 	ProgramsOwnedIDs         []string            `json:"programs_owned_ids,omitempty"`
+	ReportIDs                []string            `json:"report_ids,omitempty"`
+	ReportsOwnedIDs          []string            `json:"reports_owned_ids,omitempty"`
 	PlatformsOwnedIDs        []string            `json:"platforms_owned_ids,omitempty"`
 	IdentityHolderProfileIDs []string            `json:"identity_holder_profile_ids,omitempty"`
 	ImpersonationEventIDs    []string            `json:"impersonation_event_ids,omitempty"`
@@ -28551,6 +29003,12 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.ProgramsOwnedIDs; len(v) > 0 {
 		m.AddProgramsOwnedIDs(v...)
 	}
+	if v := i.ReportIDs; len(v) > 0 {
+		m.AddReportIDs(v...)
+	}
+	if v := i.ReportsOwnedIDs; len(v) > 0 {
+		m.AddReportsOwnedIDs(v...)
+	}
 	if v := i.PlatformsOwnedIDs; len(v) > 0 {
 		m.AddPlatformsOwnedIDs(v...)
 	}
@@ -28655,6 +29113,12 @@ type UpdateUserInput struct {
 	ClearProgramsOwned             bool
 	AddProgramsOwnedIDs            []string `json:"add_programs_owned_ids,omitempty"`
 	RemoveProgramsOwnedIDs         []string `json:"remove_programs_owned_ids,omitempty"`
+	ClearReports                   bool
+	AddReportIDs                   []string `json:"add_report_ids,omitempty"`
+	RemoveReportIDs                []string `json:"remove_report_ids,omitempty"`
+	ClearReportsOwned              bool
+	AddReportsOwnedIDs             []string `json:"add_reports_owned_ids,omitempty"`
+	RemoveReportsOwnedIDs          []string `json:"remove_reports_owned_ids,omitempty"`
 	ClearPlatformsOwned            bool
 	AddPlatformsOwnedIDs           []string `json:"add_platforms_owned_ids,omitempty"`
 	RemovePlatformsOwnedIDs        []string `json:"remove_platforms_owned_ids,omitempty"`
@@ -28916,6 +29380,24 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveProgramsOwnedIDs; len(v) > 0 {
 		m.RemoveProgramsOwnedIDs(v...)
+	}
+	if i.ClearReports {
+		m.ClearReports()
+	}
+	if v := i.AddReportIDs; len(v) > 0 {
+		m.AddReportIDs(v...)
+	}
+	if v := i.RemoveReportIDs; len(v) > 0 {
+		m.RemoveReportIDs(v...)
+	}
+	if i.ClearReportsOwned {
+		m.ClearReportsOwned()
+	}
+	if v := i.AddReportsOwnedIDs; len(v) > 0 {
+		m.AddReportsOwnedIDs(v...)
+	}
+	if v := i.RemoveReportsOwnedIDs; len(v) > 0 {
+		m.RemoveReportsOwnedIDs(v...)
 	}
 	if i.ClearPlatformsOwned {
 		m.ClearPlatformsOwned()

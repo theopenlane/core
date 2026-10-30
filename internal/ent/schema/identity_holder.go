@@ -332,7 +332,7 @@ func (IdentityHolder) Annotations() []schema.Annotation {
 // Hooks of the IdentityHolder
 func (IdentityHolder) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookIdentityHolderFiles(),
+		hooks.HookFiles("identityHolderFiles"),
 		hooks.HookIdentityHolderSoftDelete(),
 	}
 }

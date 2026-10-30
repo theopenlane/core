@@ -19,7 +19,7 @@ import (
 )
 
 // CreateContact is the resolver for the createContact field.
-func (r *mutationResolver) CreateContact(ctx context.Context, input generated.CreateContactInput) (*model.ContactCreatePayload, error) {
+func (r *mutationResolver) CreateContact(ctx context.Context, input generated.CreateContactInput, contactFiles []*graphql.Upload, contactFilesMetadata []*model.FileMetadataInput) (*model.ContactCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	ctx, err := common.SetOrganizationInAuthContext(ctx, input.OwnerID)
 	if err != nil {
@@ -104,7 +104,7 @@ func (r *mutationResolver) UpdateBulkContact(ctx context.Context, ids []string, 
 }
 
 // UpdateContact is the resolver for the updateContact field.
-func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput) (*model.ContactUpdatePayload, error) {
+func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput, contactFiles []*graphql.Upload, contactFilesMetadata []*model.FileMetadataInput) (*model.ContactUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Contact.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "contact"})

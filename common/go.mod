@@ -11,7 +11,7 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.12.1
-	github.com/theopenlane/core/v2 v2.4.7
+	github.com/theopenlane/core/v2 v2.9.1
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.36.3
 	github.com/theopenlane/utils v0.7.4
@@ -64,7 +64,6 @@ require (
 	github.com/riverqueue/river/rivertype v0.47.0 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/sosodev/duration v1.4.0 // indirect
-	github.com/stretchr/objx v0.8.0 // indirect
 	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
 	github.com/tidwall/pretty v1.2.2 // indirect
@@ -81,7 +80,6 @@ require (
 	go.opentelemetry.io/otel v1.47.0 // indirect
 	go.opentelemetry.io/otel/log v1.47.0 // indirect
 	go.opentelemetry.io/otel/metric v1.47.0 // indirect
-	go.opentelemetry.io/otel/sdk/metric v1.47.0 // indirect
 	go.opentelemetry.io/otel/trace v1.47.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/crypto v0.58.0 // indirect

@@ -281,6 +281,19 @@ func (u User) Edges() []ent.Edge {
 			name:       "programs_owned",
 			t:          Program.Type,
 		}),
+		edge.To("reports", Report.Type).
+			Through("report_memberships", ReportMembership.Type).
+			Annotations(
+				entgql.RelayConnection(),
+				entgql.QueryField(),
+				entgql.MultiOrder(),
+				accessmap.EdgeNoAuthCheck(),
+			),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: u,
+			name:       "reports_owned",
+			t:          Report.Type,
+		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: u,
 			name:       "platforms_owned",
@@ -313,6 +326,10 @@ func (u User) Annotations() []schema.Annotation {
 				{
 					Field:   "User",
 					Through: "GroupMembership",
+				},
+				{
+					Field:   "User",
+					Through: "ReportMembership",
 				},
 			},
 		),

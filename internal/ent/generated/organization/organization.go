@@ -137,6 +137,10 @@ const (
 	EdgeProgramMembershipCreators = "program_membership_creators"
 	// EdgeRemediationCreators holds the string denoting the remediation_creators edge name in mutations.
 	EdgeRemediationCreators = "remediation_creators"
+	// EdgeReportCreators holds the string denoting the report_creators edge name in mutations.
+	EdgeReportCreators = "report_creators"
+	// EdgeReportMembershipCreators holds the string denoting the report_membership_creators edge name in mutations.
+	EdgeReportMembershipCreators = "report_membership_creators"
 	// EdgeReviewCreators holds the string denoting the review_creators edge name in mutations.
 	EdgeReviewCreators = "review_creators"
 	// EdgeRiskCreators holds the string denoting the risk_creators edge name in mutations.
@@ -209,6 +213,8 @@ const (
 	EdgeSetting = "setting"
 	// EdgePersonalAccessTokens holds the string denoting the personal_access_tokens edge name in mutations.
 	EdgePersonalAccessTokens = "personal_access_tokens"
+	// EdgeBrandingSetting holds the string denoting the branding_setting edge name in mutations.
+	EdgeBrandingSetting = "branding_setting"
 	// EdgeAPITokens holds the string denoting the api_tokens edge name in mutations.
 	EdgeAPITokens = "api_tokens"
 	// EdgeEmailTemplates holds the string denoting the email_templates edge name in mutations.
@@ -271,6 +277,8 @@ const (
 	EdgeTasks = "tasks"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgeReports holds the string denoting the reports edge name in mutations.
+	EdgeReports = "reports"
 	// EdgeSystemDetails holds the string denoting the system_details edge name in mutations.
 	EdgeSystemDetails = "system_details"
 	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
@@ -672,6 +680,20 @@ const (
 	RemediationCreatorsInverseTable = "groups"
 	// RemediationCreatorsColumn is the table column denoting the remediation_creators relation/edge.
 	RemediationCreatorsColumn = "organization_remediation_creators"
+	// ReportCreatorsTable is the table that holds the report_creators relation/edge.
+	ReportCreatorsTable = "groups"
+	// ReportCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ReportCreatorsInverseTable = "groups"
+	// ReportCreatorsColumn is the table column denoting the report_creators relation/edge.
+	ReportCreatorsColumn = "organization_report_creators"
+	// ReportMembershipCreatorsTable is the table that holds the report_membership_creators relation/edge.
+	ReportMembershipCreatorsTable = "groups"
+	// ReportMembershipCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ReportMembershipCreatorsInverseTable = "groups"
+	// ReportMembershipCreatorsColumn is the table column denoting the report_membership_creators relation/edge.
+	ReportMembershipCreatorsColumn = "organization_report_membership_creators"
 	// ReviewCreatorsTable is the table that holds the review_creators relation/edge.
 	ReviewCreatorsTable = "groups"
 	// ReviewCreatorsInverseTable is the table name for the Group entity.
@@ -916,6 +938,13 @@ const (
 	// PersonalAccessTokensInverseTable is the table name for the PersonalAccessToken entity.
 	// It exists in this package in order to avoid circular dependency with the "personalaccesstoken" package.
 	PersonalAccessTokensInverseTable = "personal_access_tokens"
+	// BrandingSettingTable is the table that holds the branding_setting relation/edge.
+	BrandingSettingTable = "organization_branding_settings"
+	// BrandingSettingInverseTable is the table name for the OrganizationBrandingSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "organizationbrandingsetting" package.
+	BrandingSettingInverseTable = "organization_branding_settings"
+	// BrandingSettingColumn is the table column denoting the branding_setting relation/edge.
+	BrandingSettingColumn = "organization_id"
 	// APITokensTable is the table that holds the api_tokens relation/edge.
 	APITokensTable = "api_tokens"
 	// APITokensInverseTable is the table name for the APIToken entity.
@@ -1127,6 +1156,13 @@ const (
 	ProgramsInverseTable = "programs"
 	// ProgramsColumn is the table column denoting the programs relation/edge.
 	ProgramsColumn = "owner_id"
+	// ReportsTable is the table that holds the reports relation/edge.
+	ReportsTable = "reports"
+	// ReportsInverseTable is the table name for the Report entity.
+	// It exists in this package in order to avoid circular dependency with the "report" package.
+	ReportsInverseTable = "reports"
+	// ReportsColumn is the table column denoting the reports relation/edge.
+	ReportsColumn = "owner_id"
 	// SystemDetailsTable is the table that holds the system_details relation/edge.
 	SystemDetailsTable = "system_details"
 	// SystemDetailsInverseTable is the table name for the SystemDetail entity.
@@ -1526,7 +1562,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [83]ent.Hook
+	Hooks        [85]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -2250,6 +2286,34 @@ func ByRemediationCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 	}
 }
 
+// ByReportCreatorsCount orders the results by report_creators count.
+func ByReportCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportCreatorsStep(), opts...)
+	}
+}
+
+// ByReportCreators orders the results by report_creators terms.
+func ByReportCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReportMembershipCreatorsCount orders the results by report_membership_creators count.
+func ByReportMembershipCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportMembershipCreatorsStep(), opts...)
+	}
+}
+
+// ByReportMembershipCreators orders the results by report_membership_creators terms.
+func ByReportMembershipCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportMembershipCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByReviewCreatorsCount orders the results by review_creators count.
 func ByReviewCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2740,6 +2804,13 @@ func ByPersonalAccessTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 	}
 }
 
+// ByBrandingSettingField orders the results by branding_setting field.
+func ByBrandingSettingField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBrandingSettingStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByAPITokensCount orders the results by api_tokens count.
 func ByAPITokensCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -3164,6 +3235,20 @@ func ByProgramsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReportsCount orders the results by reports count.
+func ByReportsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReportsStep(), opts...)
+	}
+}
+
+// ByReports orders the results by reports terms.
+func ByReports(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReportsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -4153,6 +4238,20 @@ func newRemediationCreatorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, RemediationCreatorsTable, RemediationCreatorsColumn),
 	)
 }
+func newReportCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ReportCreatorsTable, ReportCreatorsColumn),
+	)
+}
+func newReportMembershipCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportMembershipCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ReportMembershipCreatorsTable, ReportMembershipCreatorsColumn),
+	)
+}
 func newReviewCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -4405,6 +4504,13 @@ func newPersonalAccessTokensStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, PersonalAccessTokensTable, PersonalAccessTokensPrimaryKey...),
 	)
 }
+func newBrandingSettingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BrandingSettingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, BrandingSettingTable, BrandingSettingColumn),
+	)
+}
 func newAPITokensStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -4620,6 +4726,13 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ProgramsTable, ProgramsColumn),
+	)
+}
+func newReportsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReportsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ReportsTable, ReportsColumn),
 	)
 }
 func newSystemDetailsStep() *sqlgraph.Step {

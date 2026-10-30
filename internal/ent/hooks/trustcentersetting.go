@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
-	"github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/logx"
 )
 
@@ -48,17 +47,6 @@ func HookTrustCenterSetting() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterSettingFunc(func(ctx context.Context, m *generated.TrustCenterSettingMutation) (generated.Value, error) {
 			logx.FromContext(ctx).Debug().Msg("trust center setting hook")
-
-			// check for uploaded files (e.g. logo image)
-			fileIDs := objects.GetFileIDsFromContext(ctx)
-			if len(fileIDs) > 0 {
-				var err error
-
-				ctx, err = checkTrustCenterFiles(ctx, m)
-				if err != nil {
-					return nil, err
-				}
-			}
 
 			if err := setDefaultCompanyName(ctx, m); err != nil {
 				return nil, err
@@ -227,37 +215,4 @@ func getTrustCenterSettingID(ctx context.Context, m *generated.TrustCenterSettin
 	}
 
 	return oldTrustCenterID, oldTrustCenterID != ""
-}
-
-// checkTrustCenterFiles checks for logo and favicon files in the context
-// and processes them for the trust center setting mutation
-func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingMutation) (context.Context, error) {
-	logoKey := "logoFile"
-	faviconKey := "faviconFile"
-	heroImageKey := "heroImageFile"
-
-	var err error
-
-	ctx, err = processSingleMutationFile(ctx, m, logoKey, "trust_center_setting", ErrTooManyLogoFiles,
-		func(mut *generated.TrustCenterSettingMutation, id string) { mut.SetLogoLocalFileID(id) },
-	)
-	if err != nil {
-		return ctx, err
-	}
-
-	ctx, err = processSingleMutationFile(ctx, m, faviconKey, "trust_center_setting", ErrTooManyFaviconFiles,
-		func(mut *generated.TrustCenterSettingMutation, id string) { mut.SetFaviconLocalFileID(id) },
-	)
-	if err != nil {
-		return ctx, err
-	}
-
-	ctx, err = processSingleMutationFile(ctx, m, heroImageKey, "trust_center_setting", ErrTooManyHeroImageFiles,
-		func(mut *generated.TrustCenterSettingMutation, id string) { mut.SetHeroImageLocalFileID(id) },
-	)
-	if err != nil {
-		return ctx, err
-	}
-
-	return ctx, nil
 }

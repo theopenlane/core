@@ -60,6 +60,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -74,6 +75,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -1706,6 +1709,33 @@ func (f TraverseOrganization) Traverse(ctx context.Context, q generated.Query) e
 	return fmt.Errorf("unexpected query type %T. expect *generated.OrganizationQuery", q)
 }
 
+// The OrganizationBrandingSettingFunc type is an adapter to allow the use of ordinary function as a Querier.
+type OrganizationBrandingSettingFunc func(context.Context, *generated.OrganizationBrandingSettingQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f OrganizationBrandingSettingFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.OrganizationBrandingSettingQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.OrganizationBrandingSettingQuery", q)
+}
+
+// The TraverseOrganizationBrandingSetting type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseOrganizationBrandingSetting func(context.Context, *generated.OrganizationBrandingSettingQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseOrganizationBrandingSetting) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseOrganizationBrandingSetting) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrganizationBrandingSettingQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.OrganizationBrandingSettingQuery", q)
+}
+
 // The OrganizationSettingFunc type is an adapter to allow the use of ordinary function as a Querier.
 type OrganizationSettingFunc func(context.Context, *generated.OrganizationSettingQuery) (generated.Value, error)
 
@@ -1920,6 +1950,60 @@ func (f TraverseRemediation) Traverse(ctx context.Context, q generated.Query) er
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.RemediationQuery", q)
+}
+
+// The ReportFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ReportFunc func(context.Context, *generated.ReportQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ReportFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ReportQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ReportQuery", q)
+}
+
+// The TraverseReport type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseReport func(context.Context, *generated.ReportQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseReport) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseReport) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ReportQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ReportQuery", q)
+}
+
+// The ReportMembershipFunc type is an adapter to allow the use of ordinary function as a Querier.
+type ReportMembershipFunc func(context.Context, *generated.ReportMembershipQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f ReportMembershipFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.ReportMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ReportMembershipQuery", q)
+}
+
+// The TraverseReportMembership type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseReportMembership func(context.Context, *generated.ReportMembershipQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseReportMembership) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseReportMembership) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ReportMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.ReportMembershipQuery", q)
 }
 
 // The ReviewFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2984,6 +3068,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.OrgSubscriptionQuery, predicate.OrgSubscription, orgsubscription.OrderOption]{typ: generated.TypeOrgSubscription, tq: q}, nil
 	case *generated.OrganizationQuery:
 		return &query[*generated.OrganizationQuery, predicate.Organization, organization.OrderOption]{typ: generated.TypeOrganization, tq: q}, nil
+	case *generated.OrganizationBrandingSettingQuery:
+		return &query[*generated.OrganizationBrandingSettingQuery, predicate.OrganizationBrandingSetting, organizationbrandingsetting.OrderOption]{typ: generated.TypeOrganizationBrandingSetting, tq: q}, nil
 	case *generated.OrganizationSettingQuery:
 		return &query[*generated.OrganizationSettingQuery, predicate.OrganizationSetting, organizationsetting.OrderOption]{typ: generated.TypeOrganizationSetting, tq: q}, nil
 	case *generated.PasswordResetTokenQuery:
@@ -3000,6 +3086,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ProgramMembershipQuery, predicate.ProgramMembership, programmembership.OrderOption]{typ: generated.TypeProgramMembership, tq: q}, nil
 	case *generated.RemediationQuery:
 		return &query[*generated.RemediationQuery, predicate.Remediation, remediation.OrderOption]{typ: generated.TypeRemediation, tq: q}, nil
+	case *generated.ReportQuery:
+		return &query[*generated.ReportQuery, predicate.Report, report.OrderOption]{typ: generated.TypeReport, tq: q}, nil
+	case *generated.ReportMembershipQuery:
+		return &query[*generated.ReportMembershipQuery, predicate.ReportMembership, reportmembership.OrderOption]{typ: generated.TypeReportMembership, tq: q}, nil
 	case *generated.ReviewQuery:
 		return &query[*generated.ReviewQuery, predicate.Review, review.OrderOption]{typ: generated.TypeReview, tq: q}, nil
 	case *generated.RiskQuery:

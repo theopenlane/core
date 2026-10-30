@@ -1123,6 +1123,38 @@ func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgq
 	return res, err
 }
 
+// OrganizationBrandingSettingHistories is the resolver for the organizationBrandingSettingHistories field.
+func (r *queryResolver) OrganizationBrandingSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationBrandingSettingHistoryOrder, where *historygenerated.OrganizationBrandingSettingHistoryWhereInput) (*historygenerated.OrganizationBrandingSettingHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.OrganizationBrandingSettingHistoryOrder{
+			Field:     historygenerated.OrganizationBrandingSettingHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).OrganizationBrandingSettingHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationbrandingsettinghistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithOrganizationBrandingSettingHistoryOrder(orderBy),
+		historygenerated.WithOrganizationBrandingSettingHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationbrandingsettinghistory"})
+	}
+
+	return res, err
+}
+
 // OrganizationHistories is the resolver for the organizationHistories field.
 func (r *queryResolver) OrganizationHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationHistoryOrder, where *historygenerated.OrganizationHistoryWhereInput) (*historygenerated.OrganizationHistoryConnection, error) {
 	// set page limit if nothing was set
@@ -1342,6 +1374,70 @@ func (r *queryResolver) RemediationHistories(ctx context.Context, after *entgql.
 		historygenerated.WithRemediationHistoryFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "remediationhistory"})
+	}
+
+	return res, err
+}
+
+// ReportHistories is the resolver for the reportHistories field.
+func (r *queryResolver) ReportHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReportHistoryOrder, where *historygenerated.ReportHistoryWhereInput) (*historygenerated.ReportHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.ReportHistoryOrder{
+			Field:     historygenerated.ReportHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ReportHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reporthistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithReportHistoryOrder(orderBy),
+		historygenerated.WithReportHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reporthistory"})
+	}
+
+	return res, err
+}
+
+// ReportMembershipHistories is the resolver for the reportMembershipHistories field.
+func (r *queryResolver) ReportMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReportMembershipHistoryOrder, where *historygenerated.ReportMembershipHistoryWhereInput) (*historygenerated.ReportMembershipHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.ReportMembershipHistoryOrder{
+			Field:     historygenerated.ReportMembershipHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ReportMembershipHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reportmembershiphistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithReportMembershipHistoryOrder(orderBy),
+		historygenerated.WithReportMembershipHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reportmembershiphistory"})
 	}
 
 	return res, err

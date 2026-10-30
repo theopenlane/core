@@ -1,0 +1,322 @@
+mutation CreateReport ($input: CreateReportInput!) {
+	createReport(input: $input) {
+		report {
+			createdAt
+			createdBy
+			displayID
+			id
+			name
+			ownerID
+			query
+			reportKindID
+			reportKindName
+			reportOwnerID
+			requestorID
+			status
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			variables
+			visibility
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+		}
+	}
+}
+mutation DeleteReport ($deleteReportId: ID!) {
+	deleteReport(id: $deleteReportId) {
+		deletedID
+	}
+}
+query GetAllReports ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportOrder!]) {
+	reports(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				name
+				ownerID
+				query
+				reportKindID
+				reportKindName
+				reportOwnerID
+				requestorID
+				status
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				variables
+				visibility
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				members {
+					edges {
+						node {
+							id
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+query GetReportByID ($reportId: ID!) {
+	report(id: $reportId) {
+		createdAt
+		createdBy
+		displayID
+		id
+		name
+		ownerID
+		query
+		reportKindID
+		reportKindName
+		reportOwnerID
+		requestorID
+		status
+		tags
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		variables
+		visibility
+		editors {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		viewers {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		blockedGroups {
+			edges {
+				node {
+					id
+					name
+				}
+			}
+		}
+		members {
+			edges {
+				node {
+					id
+					user {
+						id
+						firstName
+						lastName
+					}
+				}
+			}
+		}
+	}
+}
+query GetReportMembersByReportID ($reportId: ID!) {
+	report(id: $reportId) {
+		members {
+			edges {
+				node {
+					id
+					userID
+					role
+				}
+			}
+		}
+	}
+}
+query GetReports ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [ReportOrder!], $where: ReportWhereInput) {
+	reports(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				createdAt
+				createdBy
+				displayID
+				id
+				name
+				ownerID
+				query
+				reportKindID
+				reportKindName
+				reportOwnerID
+				requestorID
+				status
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				variables
+				visibility
+				editors {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				viewers {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				blockedGroups {
+					edges {
+						node {
+							id
+							name
+						}
+					}
+				}
+				members {
+					edges {
+						node {
+							id
+							user {
+								id
+								firstName
+								lastName
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+mutation UpdateReport ($updateReportId: ID!, $input: UpdateReportInput!) {
+	updateReport(id: $updateReportId, input: $input) {
+		report {
+			createdAt
+			createdBy
+			displayID
+			id
+			name
+			ownerID
+			query
+			reportKindID
+			reportKindName
+			reportOwnerID
+			requestorID
+			status
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			variables
+			visibility
+			editors {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			viewers {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			blockedGroups {
+				edges {
+					node {
+						id
+						name
+					}
+				}
+			}
+			members {
+				edges {
+					node {
+						id
+						user {
+							id
+							firstName
+							lastName
+						}
+					}
+				}
+			}
+		}
+	}
+}

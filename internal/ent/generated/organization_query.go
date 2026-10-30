@@ -59,6 +59,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
@@ -71,6 +72,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -150,6 +152,8 @@ type OrganizationQuery struct {
 	withProgramCreators                         *GroupQuery
 	withProgramMembershipCreators               *GroupQuery
 	withRemediationCreators                     *GroupQuery
+	withReportCreators                          *GroupQuery
+	withReportMembershipCreators                *GroupQuery
 	withReviewCreators                          *GroupQuery
 	withRiskCreators                            *GroupQuery
 	withScanCreators                            *GroupQuery
@@ -186,6 +190,7 @@ type OrganizationQuery struct {
 	withChildren                                *OrganizationQuery
 	withSetting                                 *OrganizationSettingQuery
 	withPersonalAccessTokens                    *PersonalAccessTokenQuery
+	withBrandingSetting                         *OrganizationBrandingSettingQuery
 	withAPITokens                               *APITokenQuery
 	withEmailTemplates                          *EmailTemplateQuery
 	withIntegrationWebhooks                     *IntegrationWebhookQuery
@@ -217,6 +222,7 @@ type OrganizationQuery struct {
 	withNotes                                   *NoteQuery
 	withTasks                                   *TaskQuery
 	withPrograms                                *ProgramQuery
+	withReports                                 *ReportQuery
 	withSystemDetails                           *SystemDetailQuery
 	withProcedures                              *ProcedureQuery
 	withInternalPolicies                        *InternalPolicyQuery
@@ -311,6 +317,8 @@ type OrganizationQuery struct {
 	withNamedProgramCreators                    map[string]*GroupQuery
 	withNamedProgramMembershipCreators          map[string]*GroupQuery
 	withNamedRemediationCreators                map[string]*GroupQuery
+	withNamedReportCreators                     map[string]*GroupQuery
+	withNamedReportMembershipCreators           map[string]*GroupQuery
 	withNamedReviewCreators                     map[string]*GroupQuery
 	withNamedRiskCreators                       map[string]*GroupQuery
 	withNamedScanCreators                       map[string]*GroupQuery
@@ -375,6 +383,7 @@ type OrganizationQuery struct {
 	withNamedNotes                              map[string]*NoteQuery
 	withNamedTasks                              map[string]*TaskQuery
 	withNamedPrograms                           map[string]*ProgramQuery
+	withNamedReports                            map[string]*ReportQuery
 	withNamedSystemDetails                      map[string]*SystemDetailQuery
 	withNamedProcedures                         map[string]*ProcedureQuery
 	withNamedInternalPolicies                   map[string]*InternalPolicyQuery
@@ -1406,6 +1415,50 @@ func (_q *OrganizationQuery) QueryRemediationCreators() *GroupQuery {
 	return query
 }
 
+// QueryReportCreators chains the current query on the "report_creators" edge.
+func (_q *OrganizationQuery) QueryReportCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ReportCreatorsTable, organization.ReportCreatorsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReportMembershipCreators chains the current query on the "report_membership_creators" edge.
+func (_q *OrganizationQuery) QueryReportMembershipCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ReportMembershipCreatorsTable, organization.ReportMembershipCreatorsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryReviewCreators chains the current query on the "review_creators" edge.
 func (_q *OrganizationQuery) QueryReviewCreators() *GroupQuery {
 	query := (&GroupClient{config: _q.config}).Query()
@@ -2198,6 +2251,28 @@ func (_q *OrganizationQuery) QueryPersonalAccessTokens() *PersonalAccessTokenQue
 	return query
 }
 
+// QueryBrandingSetting chains the current query on the "branding_setting" edge.
+func (_q *OrganizationQuery) QueryBrandingSetting() *OrganizationBrandingSettingQuery {
+	query := (&OrganizationBrandingSettingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(organizationbrandingsetting.Table, organizationbrandingsetting.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, organization.BrandingSettingTable, organization.BrandingSettingColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryAPITokens chains the current query on the "api_tokens" edge.
 func (_q *OrganizationQuery) QueryAPITokens() *APITokenQuery {
 	query := (&APITokenClient{config: _q.config}).Query()
@@ -2873,6 +2948,28 @@ func (_q *OrganizationQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProgramsTable, organization.ProgramsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReports chains the current query on the "reports" edge.
+func (_q *OrganizationQuery) QueryReports() *ReportQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(report.Table, report.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ReportsTable, organization.ReportsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -4193,6 +4290,8 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withProgramCreators:                    _q.withProgramCreators.Clone(),
 		withProgramMembershipCreators:          _q.withProgramMembershipCreators.Clone(),
 		withRemediationCreators:                _q.withRemediationCreators.Clone(),
+		withReportCreators:                     _q.withReportCreators.Clone(),
+		withReportMembershipCreators:           _q.withReportMembershipCreators.Clone(),
 		withReviewCreators:                     _q.withReviewCreators.Clone(),
 		withRiskCreators:                       _q.withRiskCreators.Clone(),
 		withScanCreators:                       _q.withScanCreators.Clone(),
@@ -4229,6 +4328,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withChildren:                           _q.withChildren.Clone(),
 		withSetting:                            _q.withSetting.Clone(),
 		withPersonalAccessTokens:               _q.withPersonalAccessTokens.Clone(),
+		withBrandingSetting:                    _q.withBrandingSetting.Clone(),
 		withAPITokens:                          _q.withAPITokens.Clone(),
 		withEmailTemplates:                     _q.withEmailTemplates.Clone(),
 		withIntegrationWebhooks:                _q.withIntegrationWebhooks.Clone(),
@@ -4260,6 +4360,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withNotes:                              _q.withNotes.Clone(),
 		withTasks:                              _q.withTasks.Clone(),
 		withPrograms:                           _q.withPrograms.Clone(),
+		withReports:                            _q.withReports.Clone(),
 		withSystemDetails:                      _q.withSystemDetails.Clone(),
 		withProcedures:                         _q.withProcedures.Clone(),
 		withInternalPolicies:                   _q.withInternalPolicies.Clone(),
@@ -4789,6 +4890,28 @@ func (_q *OrganizationQuery) WithRemediationCreators(opts ...func(*GroupQuery)) 
 	return _q
 }
 
+// WithReportCreators tells the query-builder to eager-load the nodes that are connected to
+// the "report_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithReportCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReportCreators = query
+	return _q
+}
+
+// WithReportMembershipCreators tells the query-builder to eager-load the nodes that are connected to
+// the "report_membership_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithReportMembershipCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReportMembershipCreators = query
+	return _q
+}
+
 // WithReviewCreators tells the query-builder to eager-load the nodes that are connected to
 // the "review_creators" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithReviewCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -5185,6 +5308,17 @@ func (_q *OrganizationQuery) WithPersonalAccessTokens(opts ...func(*PersonalAcce
 	return _q
 }
 
+// WithBrandingSetting tells the query-builder to eager-load the nodes that are connected to
+// the "branding_setting" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithBrandingSetting(opts ...func(*OrganizationBrandingSettingQuery)) *OrganizationQuery {
+	query := (&OrganizationBrandingSettingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withBrandingSetting = query
+	return _q
+}
+
 // WithAPITokens tells the query-builder to eager-load the nodes that are connected to
 // the "api_tokens" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithAPITokens(opts ...func(*APITokenQuery)) *OrganizationQuery {
@@ -5523,6 +5657,17 @@ func (_q *OrganizationQuery) WithPrograms(opts ...func(*ProgramQuery)) *Organiza
 		opt(query)
 	}
 	_q.withPrograms = query
+	return _q
+}
+
+// WithReports tells the query-builder to eager-load the nodes that are connected to
+// the "reports" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithReports(opts ...func(*ReportQuery)) *OrganizationQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReports = query
 	return _q
 }
 
@@ -6149,7 +6294,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [159]bool{
+		loadedTypes = [163]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6193,6 +6338,8 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withProgramCreators != nil,
 			_q.withProgramMembershipCreators != nil,
 			_q.withRemediationCreators != nil,
+			_q.withReportCreators != nil,
+			_q.withReportMembershipCreators != nil,
 			_q.withReviewCreators != nil,
 			_q.withRiskCreators != nil,
 			_q.withScanCreators != nil,
@@ -6229,6 +6376,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withChildren != nil,
 			_q.withSetting != nil,
 			_q.withPersonalAccessTokens != nil,
+			_q.withBrandingSetting != nil,
 			_q.withAPITokens != nil,
 			_q.withEmailTemplates != nil,
 			_q.withIntegrationWebhooks != nil,
@@ -6260,6 +6408,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withNotes != nil,
 			_q.withTasks != nil,
 			_q.withPrograms != nil,
+			_q.withReports != nil,
 			_q.withSystemDetails != nil,
 			_q.withProcedures != nil,
 			_q.withInternalPolicies != nil,
@@ -6673,6 +6822,22 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withReportCreators; query != nil {
+		if err := _q.loadReportCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ReportCreators = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.ReportCreators = append(n.Edges.ReportCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReportMembershipCreators; query != nil {
+		if err := _q.loadReportMembershipCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ReportMembershipCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.ReportMembershipCreators = append(n.Edges.ReportMembershipCreators, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withReviewCreators; query != nil {
 		if err := _q.loadReviewCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.ReviewCreators = []*Group{} },
@@ -6955,6 +7120,12 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withBrandingSetting; query != nil {
+		if err := _q.loadBrandingSetting(ctx, query, nodes, nil,
+			func(n *Organization, e *OrganizationBrandingSetting) { n.Edges.BrandingSetting = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withAPITokens; query != nil {
 		if err := _q.loadAPITokens(ctx, query, nodes,
 			func(n *Organization) { n.Edges.APITokens = []*APIToken{} },
@@ -7176,6 +7347,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Programs = []*Program{} },
 			func(n *Organization, e *Program) { n.Edges.Programs = append(n.Edges.Programs, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReports; query != nil {
+		if err := _q.loadReports(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Reports = []*Report{} },
+			func(n *Organization, e *Report) { n.Edges.Reports = append(n.Edges.Reports, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -7859,6 +8037,20 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedReportCreators {
+		if err := _q.loadReportCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedReportCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedReportCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReportMembershipCreators {
+		if err := _q.loadReportMembershipCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedReportMembershipCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedReportMembershipCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedReviewCreators {
 		if err := _q.loadReviewCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedReviewCreators(name) },
@@ -8304,6 +8496,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedPrograms(name) },
 			func(n *Organization, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedReports {
+		if err := _q.loadReports(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedReports(name) },
+			func(n *Organization, e *Report) { n.appendNamedReports(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -9993,6 +10192,68 @@ func (_q *OrganizationQuery) loadRemediationCreators(ctx context.Context, query 
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadReportCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ReportCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_report_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_report_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_report_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadReportMembershipCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ReportMembershipCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_report_membership_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_report_membership_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_report_membership_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadReviewCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -11132,6 +11393,33 @@ func (_q *OrganizationQuery) loadPersonalAccessTokens(ctx context.Context, query
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadBrandingSetting(ctx context.Context, query *OrganizationBrandingSettingQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrganizationBrandingSetting)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(organizationbrandingsetting.FieldOrganizationID)
+	}
+	query.Where(predicate.OrganizationBrandingSetting(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.BrandingSettingColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OrganizationID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadAPITokens(ctx context.Context, query *APITokenQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *APIToken)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -12152,6 +12440,36 @@ func (_q *OrganizationQuery) loadPrograms(ctx context.Context, query *ProgramQue
 	}
 	query.Where(predicate.Program(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.ProgramsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadReports(ctx context.Context, query *ReportQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Report)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(report.FieldOwnerID)
+	}
+	query.Where(predicate.Report(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ReportsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -14360,6 +14678,34 @@ func (_q *OrganizationQuery) WithNamedRemediationCreators(name string, opts ...f
 	return _q
 }
 
+// WithNamedReportCreators tells the query-builder to eager-load the nodes that are connected to the "report_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedReportCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReportCreators == nil {
+		_q.withNamedReportCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedReportCreators[name] = query
+	return _q
+}
+
+// WithNamedReportMembershipCreators tells the query-builder to eager-load the nodes that are connected to the "report_membership_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedReportMembershipCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReportMembershipCreators == nil {
+		_q.withNamedReportMembershipCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedReportMembershipCreators[name] = query
+	return _q
+}
+
 // WithNamedReviewCreators tells the query-builder to eager-load the nodes that are connected to the "review_creators"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedReviewCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -15253,6 +15599,20 @@ func (_q *OrganizationQuery) WithNamedPrograms(name string, opts ...func(*Progra
 		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedPrograms[name] = query
+	return _q
+}
+
+// WithNamedReports tells the query-builder to eager-load the nodes that are connected to the "reports"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedReports(name string, opts ...func(*ReportQuery)) *OrganizationQuery {
+	query := (&ReportClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedReports == nil {
+		_q.withNamedReports = make(map[string]*ReportQuery)
+	}
+	_q.withNamedReports[name] = query
 	return _q
 }
 

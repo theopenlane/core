@@ -1479,6 +1479,30 @@ func (f OrganizationMutationRuleFunc) EvalMutation(ctx context.Context, m genera
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrganizationMutation", m)
 }
 
+// The OrganizationBrandingSettingQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type OrganizationBrandingSettingQueryRuleFunc func(context.Context, *generated.OrganizationBrandingSettingQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f OrganizationBrandingSettingQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.OrganizationBrandingSettingQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.OrganizationBrandingSettingQuery", q)
+}
+
+// The OrganizationBrandingSettingMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type OrganizationBrandingSettingMutationRuleFunc func(context.Context, *generated.OrganizationBrandingSettingMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f OrganizationBrandingSettingMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.OrganizationBrandingSettingMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.OrganizationBrandingSettingMutation", m)
+}
+
 // The OrganizationSettingQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type OrganizationSettingQueryRuleFunc func(context.Context, *generated.OrganizationSettingQuery) error
@@ -1669,6 +1693,54 @@ func (f RemediationMutationRuleFunc) EvalMutation(ctx context.Context, m generat
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.RemediationMutation", m)
+}
+
+// The ReportQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ReportQueryRuleFunc func(context.Context, *generated.ReportQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ReportQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ReportQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ReportQuery", q)
+}
+
+// The ReportMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ReportMutationRuleFunc func(context.Context, *generated.ReportMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ReportMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ReportMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ReportMutation", m)
+}
+
+// The ReportMembershipQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type ReportMembershipQueryRuleFunc func(context.Context, *generated.ReportMembershipQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f ReportMembershipQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.ReportMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.ReportMembershipQuery", q)
+}
+
+// The ReportMembershipMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type ReportMembershipMutationRuleFunc func(context.Context, *generated.ReportMembershipMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f ReportMembershipMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.ReportMembershipMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.ReportMembershipMutation", m)
 }
 
 // The ReviewQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -2660,6 +2732,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.OrganizationQuery:
 		return q.Filter(), nil
+	case *generated.OrganizationBrandingSettingQuery:
+		return q.Filter(), nil
 	case *generated.OrganizationSettingQuery:
 		return q.Filter(), nil
 	case *generated.PasswordResetTokenQuery:
@@ -2675,6 +2749,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 	case *generated.ProgramMembershipQuery:
 		return q.Filter(), nil
 	case *generated.RemediationQuery:
+		return q.Filter(), nil
+	case *generated.ReportQuery:
+		return q.Filter(), nil
+	case *generated.ReportMembershipQuery:
 		return q.Filter(), nil
 	case *generated.ReviewQuery:
 		return q.Filter(), nil
@@ -2867,6 +2945,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.OrganizationMutation:
 		return m.Filter(), nil
+	case *generated.OrganizationBrandingSettingMutation:
+		return m.Filter(), nil
 	case *generated.OrganizationSettingMutation:
 		return m.Filter(), nil
 	case *generated.PasswordResetTokenMutation:
@@ -2882,6 +2962,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.ProgramMembershipMutation:
 		return m.Filter(), nil
 	case *generated.RemediationMutation:
+		return m.Filter(), nil
+	case *generated.ReportMutation:
+		return m.Filter(), nil
+	case *generated.ReportMembershipMutation:
 		return m.Filter(), nil
 	case *generated.ReviewMutation:
 		return m.Filter(), nil

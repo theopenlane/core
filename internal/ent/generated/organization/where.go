@@ -2249,6 +2249,52 @@ func HasRemediationCreatorsWith(preds ...predicate.Group) predicate.Organization
 	})
 }
 
+// HasReportCreators applies the HasEdge predicate on the "report_creators" edge.
+func HasReportCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReportCreatorsTable, ReportCreatorsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportCreatorsWith applies the HasEdge predicate on the "report_creators" edge with a given conditions (other predicates).
+func HasReportCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newReportCreatorsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReportMembershipCreators applies the HasEdge predicate on the "report_membership_creators" edge.
+func HasReportMembershipCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReportMembershipCreatorsTable, ReportMembershipCreatorsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportMembershipCreatorsWith applies the HasEdge predicate on the "report_membership_creators" edge with a given conditions (other predicates).
+func HasReportMembershipCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newReportMembershipCreatorsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasReviewCreators applies the HasEdge predicate on the "review_creators" edge.
 func HasReviewCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -3077,6 +3123,29 @@ func HasPersonalAccessTokensWith(preds ...predicate.PersonalAccessToken) predica
 	})
 }
 
+// HasBrandingSetting applies the HasEdge predicate on the "branding_setting" edge.
+func HasBrandingSetting() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, BrandingSettingTable, BrandingSettingColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBrandingSettingWith applies the HasEdge predicate on the "branding_setting" edge with a given conditions (other predicates).
+func HasBrandingSettingWith(preds ...predicate.OrganizationBrandingSetting) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newBrandingSettingStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasAPITokens applies the HasEdge predicate on the "api_tokens" edge.
 func HasAPITokens() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -3782,6 +3851,29 @@ func HasPrograms() predicate.Organization {
 func HasProgramsWith(preds ...predicate.Program) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := newProgramsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReports applies the HasEdge predicate on the "reports" edge.
+func HasReports() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReportsTable, ReportsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportsWith applies the HasEdge predicate on the "reports" edge with a given conditions (other predicates).
+func HasReportsWith(preds ...predicate.Report) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newReportsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

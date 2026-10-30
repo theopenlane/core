@@ -759,8 +759,8 @@ github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf h1:o1uxfymjZ7jZ4M
 github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf/go.mod h1:9dIRpgIY7hVhoqfe0/FcYp0bpInZaT7dc3BYOprrIUE=
 github.com/sirupsen/logrus v1.10.2 h1:G2SED73/qrAu6YwbdxOD6peLkCBI3z7L+ykJFTXJBBo=
 github.com/sirupsen/logrus v1.10.2/go.mod h1:SLEg8TqYulVKKfIGHldVp2K2aYz2DKSVBq4g/H5bR7Q=
-github.com/slack-go/slack v0.29.0 h1:ohhMNgp9DmPKiLhH/pNZV4NxhOXKgNy0SH8FzVHNerI=
-github.com/slack-go/slack v0.29.0/go.mod h1:UEe+jmo9WLlwHB04qsOrTDvqM7Aa4rQL3O5wF3n0hx4=
+github.com/slack-go/slack v0.30.1 h1:q6FjZssqts6hJ+DRWCnnO2YVUh+E3/UNrC0EIO2xci8=
+github.com/slack-go/slack v0.30.1/go.mod h1:radSmEe8GEgE+aK980ZafMR0AQhiZjADptN5k/gOw34=
 github.com/sony/gobreaker/v2 v2.4.0 h1:g2KJRW1Ubty3+ZOcSEUN7K+REQJdN6yo6XvaML+jptg=
 github.com/sony/gobreaker/v2 v2.4.0/go.mod h1:pTyFJgcZ3h2tdQVLZZruK2C0eoFL1fb/G83wK1ZQl+s=
 github.com/sosodev/duration v1.4.0 h1:35ed0KiVFriGHHzZZJaZLgmTEEICIyt8Sx0RQfj9IjE=
@@ -820,8 +820,8 @@ github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4l
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
 github.com/theopenlane/entx v0.36.3 h1:BMVtL+FESaSAI5AtNQSly/DU6WZyep3ENYeyHhcC6tU=
 github.com/theopenlane/entx v0.36.3/go.mod h1:p1eAOkVRExjf17q7WkFknI7/Q+l8tOGpFH4pI/98odc=
-github.com/theopenlane/go-client v0.14.1 h1:GgwLjm71/j327rEjQEQbtVZCORkZguUmZqdcDEqxzMc=
-github.com/theopenlane/go-client v0.14.1/go.mod h1:lhKySZzvREDbEutwBpkO3/yZXcxFro7RMU8UNJnF/+k=
+github.com/theopenlane/go-client v0.15.0 h1:Jz1y0cm46lN24rog8YakV7u7jxgTZ9NZ4iIxP6mbMLs=
+github.com/theopenlane/go-client v0.15.0/go.mod h1:E0KiZ+wOpJf/GAD0F223vpsizFmqRomJETKMtMaLmZI=
 github.com/theopenlane/gqlgen-plugins v0.18.4 h1:433KyDIW5y72aqMqkMAiIq0R7Y4OJ7laRBJaO6UchYM=
 github.com/theopenlane/gqlgen-plugins v0.18.4/go.mod h1:AhBPUZSil2tXQOejR1co98DQznofub4PXFeK/7SXsxA=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=

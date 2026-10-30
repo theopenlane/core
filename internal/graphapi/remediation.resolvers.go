@@ -20,7 +20,7 @@ import (
 )
 
 // CreateRemediation is the resolver for the createRemediation field.
-func (r *mutationResolver) CreateRemediation(ctx context.Context, input generated.CreateRemediationInput) (*model.RemediationCreatePayload, error) {
+func (r *mutationResolver) CreateRemediation(ctx context.Context, input generated.CreateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) (*model.RemediationCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Remediation.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "remediation"})
@@ -88,7 +88,7 @@ func (r *mutationResolver) CreateBulkCSVRemediation(ctx context.Context, input g
 }
 
 // UpdateRemediation is the resolver for the updateRemediation field.
-func (r *mutationResolver) UpdateRemediation(ctx context.Context, id string, input generated.UpdateRemediationInput) (*model.RemediationUpdatePayload, error) {
+func (r *mutationResolver) UpdateRemediation(ctx context.Context, id string, input generated.UpdateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) (*model.RemediationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Remediation.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "remediation"})

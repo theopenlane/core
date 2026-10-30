@@ -185,7 +185,7 @@ func (Standard) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookStandardPublicAccessTuples(),
 		hooks.HookStandardCreate(),
-		hooks.HookStandardFileUpload(),
+		hooks.HookLogoFile(),
 		hooks.HookStandardDelete(),
 		hook.On(
 			hooks.OrgOwnedTuplesHook(),

@@ -49,6 +49,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		procedureResults            *generated.ProcedureConnection
 		programResults              *generated.ProgramConnection
 		remediationResults          *generated.RemediationConnection
+		reportResults               *generated.ReportConnection
 		reviewResults               *generated.ReviewConnection
 		riskResults                 *generated.RiskConnection
 		scanResults                 *generated.ScanConnection
@@ -383,6 +384,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			reportResults, err = searchReports(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, reportResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			reviewResults, err = searchReviews(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -680,6 +693,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Remediations = remediationResults
 
 		res.TotalCount += remediationResults.TotalCount
+	}
+	if reportResults != nil && len(reportResults.Edges) > 0 {
+		res.Reports = reportResults
+
+		res.TotalCount += reportResults.TotalCount
 	}
 	if reviewResults != nil && len(reviewResults.Edges) > 0 {
 		res.Reviews = reviewResults
@@ -1008,6 +1026,16 @@ func (r *queryResolver) RemediationSearch(ctx context.Context, query string, aft
 
 	// return the results
 	return remediationResults, nil
+}
+func (r *queryResolver) ReportSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ReportConnection, error) {
+	reportResults, err := searchReports(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return reportResults, nil
 }
 func (r *queryResolver) ReviewSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ReviewConnection, error) {
 	reviewResults, err := searchReviews(ctx, query, after, first, before, last)

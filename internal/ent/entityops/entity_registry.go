@@ -78,6 +78,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -4922,6 +4924,28 @@ var (
 			return data, nil
 		},
 	}
+	SchemaOrganizationBrandingSetting = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "OrganizationBrandingSetting",
+			Snake: "organization_branding_setting",
+			Lower: "organizationbrandingsetting",
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "organization_branding_setting", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.OrganizationBrandingSetting.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
 	SchemaOrganizationSetting = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
 			Name:  "OrganizationSetting",
@@ -5426,6 +5450,76 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "remediation.ingest.requested"),
+		},
+	}
+	SchemaReport = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "Report",
+			Snake: "report",
+			Lower: "report",
+		},
+		ProjectionType: reflect.TypeFor[ReportProjection](),
+		ConsoleRoute:   &ConsoleRoute{Base: "reports"},
+		OwnerField:     report.FieldOwnerID,
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "report", Operation: refOpQuery}
+
+			entities, err := client.Report.Query().
+				Where(report.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "report", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.Report.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
+	SchemaReportMembership = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "ReportMembership",
+			Snake: "report_membership",
+			Lower: "reportmembership",
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "report_membership", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.ReportMembership.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
 		},
 	}
 	SchemaReview = &Schema{
@@ -8734,6 +8828,23 @@ func init() {
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
+	SchemaOrganizationBrandingSetting.Fields = []FieldDescriptor{
+		{Name: "background_color", Label: "BackgroundColor", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "font_family", Label: "FontFamily", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "primary_color", Label: "PrimaryColor", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "remove_assessment_branding", Label: "RemoveAssessmentBranding", Type: "bool", Clearable: true},
+		{Name: "secondary_color", Label: "SecondaryColor", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "text_color", Label: "TextColor", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+	}
 	SchemaOrganizationSetting.Fields = []FieldDescriptor{
 		{Name: "allow_matching_domains_autojoin", Label: "AllowMatchingDomainsAutojoin", Type: "bool", Clearable: true},
 		{Name: "allow_support_access", Label: "AllowSupportAccess", Type: "bool", Clearable: true},
@@ -9020,6 +9131,37 @@ func init() {
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
+	}
+	SchemaReport.Fields = []FieldDescriptor{
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "query", Label: "Query", Type: "string", MatchKey: true},
+		{Name: "report_kind_id", Label: "ReportKindID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "report_kind_name", Label: "ReportKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
+		{Name: "report_owner_id", Label: "ReportOwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "requestor_id", Label: "RequestorID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "status", Label: "Status", Type: "enums.ReportStatus"},
+		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "variables", Label: "Variables", Type: "map[string]interface {}", Clearable: true},
+		{Name: "visibility", Label: "Visibility", Type: "enums.ReportVisibility", Clearable: true},
+	}
+	SchemaReportMembership.Fields = []FieldDescriptor{
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "report_id", Label: "ReportID", Type: "string", MatchKey: true},
+		{Name: "role", Label: "Role", Type: "enums.Role"},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 	}
 	SchemaReview.Fields = []FieldDescriptor{
 		{Name: "approved", Label: "Approved", Type: "bool", InputKey: "approved", Clearable: true},
@@ -13923,6 +14065,30 @@ func init() {
 			AddField:    "add_remediation_editor_ids",
 		},
 		{
+			Name:        "report_blocked_groups",
+			Label:       "ReportBlockedGroups",
+			Target:      SchemaReport,
+			TargetType:  "Report",
+			CreateField: "report_blocked_group_ids",
+			AddField:    "add_report_blocked_group_ids",
+		},
+		{
+			Name:        "report_editors",
+			Label:       "ReportEditors",
+			Target:      SchemaReport,
+			TargetType:  "Report",
+			CreateField: "report_editor_ids",
+			AddField:    "add_report_editor_ids",
+		},
+		{
+			Name:        "report_viewers",
+			Label:       "ReportViewers",
+			Target:      SchemaReport,
+			TargetType:  "Report",
+			CreateField: "report_viewer_ids",
+			AddField:    "add_report_viewer_ids",
+		},
+		{
 			Name:        "review_blocked_groups",
 			Label:       "ReviewBlockedGroups",
 			Target:      SchemaReview,
@@ -15694,6 +15860,14 @@ func init() {
 			Field:       "avatar_local_file_id",
 		},
 		{
+			Name:        "branding_setting",
+			Label:       "BrandingSetting",
+			Target:      SchemaOrganizationBrandingSetting,
+			TargetType:  "OrganizationBrandingSetting",
+			Unique:      true,
+			CreateField: "branding_setting_id",
+		},
+		{
 			Name:        "campaign_creators",
 			Label:       "CampaignCreators",
 			Target:      SchemaGroup,
@@ -16439,6 +16613,30 @@ func init() {
 			AddField:    "add_remediation_ids",
 		},
 		{
+			Name:        "report_creators",
+			Label:       "ReportCreators",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "report_creator_ids",
+			AddField:    "add_report_creator_ids",
+		},
+		{
+			Name:        "report_membership_creators",
+			Label:       "ReportMembershipCreators",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "report_membership_creator_ids",
+			AddField:    "add_report_membership_creator_ids",
+		},
+		{
+			Name:        "reports",
+			Label:       "Reports",
+			Target:      SchemaReport,
+			TargetType:  "Report",
+			CreateField: "report_ids",
+			AddField:    "add_report_ids",
+		},
+		{
 			Name:        "review_creators",
 			Label:       "ReviewCreators",
 			Target:      SchemaGroup,
@@ -16894,6 +17092,17 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "workflows_manager_ids",
 			AddField:    "add_workflows_manager_ids",
+		},
+	}
+	SchemaOrganizationBrandingSetting.Edges = []EdgeDescriptor{
+		{
+			Name:        "organization",
+			Label:       "Organization",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "organization_id",
+			Field:       "organization_id",
 		},
 	}
 	SchemaOrganizationSetting.Edges = []EdgeDescriptor{
@@ -18013,6 +18222,129 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
+		},
+	}
+	SchemaReport.Edges = []EdgeDescriptor{
+		{
+			Name:        "blocked_groups",
+			Label:       "BlockedGroups",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "blocked_group_ids",
+			AddField:    "add_blocked_group_ids",
+		},
+		{
+			Name:        "editors",
+			Label:       "Editors",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "editor_ids",
+			AddField:    "add_editor_ids",
+		},
+		{
+			Name:        "members",
+			Label:       "Members",
+			Target:      SchemaReportMembership,
+			TargetType:  "ReportMembership",
+			CreateField: "member_ids",
+			AddField:    "add_member_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
+		{
+			Name:        "report_kind",
+			Label:       "ReportKind",
+			Target:      SchemaCustomTypeEnum,
+			TargetType:  "CustomTypeEnum",
+			Unique:      true,
+			CreateField: "report_kind_id",
+			Field:       "report_kind_id",
+		},
+		{
+			Name:        "report_owner",
+			Label:       "ReportOwner",
+			Target:      SchemaUser,
+			TargetType:  "User",
+			Unique:      true,
+			CreateField: "report_owner_id",
+			Field:       "report_owner_id",
+		},
+		{
+			Name:        "users",
+			Label:       "Users",
+			Target:      SchemaUser,
+			TargetType:  "User",
+			CreateField: "user_ids",
+			Through:     true,
+			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.ReportMembership.Query().
+					Where(reportmembership.ReportID(sourceID), reportmembership.UserIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.UserID] = struct{}{}
+				}
+
+				for _, targetID := range targetIDs {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.ReportMembership.Create().SetReportID(sourceID).SetUserID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
+						return err
+					}
+				}
+
+				return nil
+			},
+		},
+		{
+			Name:        "viewers",
+			Label:       "Viewers",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "viewer_ids",
+			AddField:    "add_viewer_ids",
+		},
+	}
+	SchemaReportMembership.Edges = []EdgeDescriptor{
+		{
+			Name:        "org_membership",
+			Label:       "OrgMembership",
+			Target:      SchemaOrgMembership,
+			TargetType:  "OrgMembership",
+			Unique:      true,
+			CreateField: "org_membership_id",
+			Field:       "report_membership_org_membership",
+		},
+		{
+			Name:        "report",
+			Label:       "Report",
+			Target:      SchemaReport,
+			TargetType:  "Report",
+			Unique:      true,
+			CreateField: "report_id",
+			Field:       "report_id",
+		},
+		{
+			Name:        "user",
+			Label:       "User",
+			Target:      SchemaUser,
+			TargetType:  "User",
+			Unique:      true,
+			CreateField: "user_id",
+			Field:       "user_id",
 		},
 	}
 	SchemaReview.Edges = []EdgeDescriptor{
@@ -20341,6 +20673,55 @@ func init() {
 			AddField:    "add_programs_owned_ids",
 		},
 		{
+			Name:        "report_memberships",
+			Label:       "ReportMemberships",
+			Target:      SchemaReportMembership,
+			TargetType:  "ReportMembership",
+			CreateField: "report_membership_ids",
+			AddField:    "add_report_membership_ids",
+		},
+		{
+			Name:        "reports",
+			Label:       "Reports",
+			Target:      SchemaReport,
+			TargetType:  "Report",
+			CreateField: "report_ids",
+			Through:     true,
+			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.ReportMembership.Query().
+					Where(reportmembership.UserID(sourceID), reportmembership.ReportIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.ReportID] = struct{}{}
+				}
+
+				for _, targetID := range targetIDs {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.ReportMembership.Create().SetUserID(sourceID).SetReportID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
+						return err
+					}
+				}
+
+				return nil
+			},
+		},
+		{
+			Name:        "reports_owned",
+			Label:       "ReportsOwned",
+			Target:      SchemaReport,
+			TargetType:  "Report",
+			CreateField: "reports_owned_ids",
+			AddField:    "add_reports_owned_ids",
+		},
+		{
 			Name:        "setting",
 			Label:       "Setting",
 			Target:      SchemaUserSetting,
@@ -22449,6 +22830,34 @@ func init() {
 		entities, err := client.Remediation.Query().
 			Where(ownerScopeRemediation(orgID)).
 			Where(predicate.Remediation(matchKeyIn(SchemaRemediation, field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaReport.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "report", Operation: refOpQuery}
+
+		if !SchemaReport.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "report"))
+		}
+
+		entities, err := client.Report.Query().
+			Where(report.OwnerID(orgID)).
+			Where(predicate.Report(matchKeyIn(SchemaReport, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -28605,6 +29014,7 @@ var allSchemas = []*Schema{
 	SchemaOrgProduct,
 	SchemaOrgSubscription,
 	SchemaOrganization,
+	SchemaOrganizationBrandingSetting,
 	SchemaOrganizationSetting,
 	SchemaPasswordResetToken,
 	SchemaPersonalAccessToken,
@@ -28613,6 +29023,8 @@ var allSchemas = []*Schema{
 	SchemaProgram,
 	SchemaProgramMembership,
 	SchemaRemediation,
+	SchemaReport,
+	SchemaReportMembership,
 	SchemaReview,
 	SchemaRisk,
 	SchemaSLADefinition,
