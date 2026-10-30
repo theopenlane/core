@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"entgo.io/ent"
@@ -34,6 +35,13 @@ func HookInvite() ent.Hook {
 				logx.FromContext(ctx).Info().Err(err).Msg("unable to add user to specified organization")
 
 				return nil, err
+			}
+
+			emailAddress, emailOK := m.Recipient()
+			// lowercase the email so we are sure it matches later, this needs to be
+			// done before the token is created
+			if emailOK {
+				m.SetRecipient(strings.ToLower(emailAddress))
 			}
 
 			// generate token based on recipient + target org ID
@@ -72,7 +80,6 @@ func HookInvite() ent.Hook {
 			orgID, _ := m.OwnerID()
 			reqID, _ := m.RequestorID()
 			tokenValue, _ := m.Token()
-			emailAddress, _ := m.Recipient()
 
 			role, _ := m.Role()
 
@@ -114,12 +121,12 @@ func HookInvite() ent.Hook {
 			}
 
 			if err := sendSystemEmail(ctx, emaildef.InviteOp.Name(), emaildef.InviteRequest{
-				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
-				InviterName:   inviterName,
-				OrgName:       orgName,
-				Role:          string(role),
-				Token:         tokenValue,
-				NewUser:       !recipientExists,
+				Email:       emailAddress,
+				InviterName: inviterName,
+				OrgName:     orgName,
+				Role:        string(role),
+				Token:       tokenValue,
+				NewUser:     !recipientExists,
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
 
