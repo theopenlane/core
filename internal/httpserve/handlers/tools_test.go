@@ -382,9 +382,7 @@ func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path str
 
 // registerQuestionnaireTestHandler registers a handler with authentication middleware that also accepts questionnaire tokens
 func (suite *HandlerTestSuite) registerQuestionnaireTestHandler(method, path string, handlerFunc func(echo.Context) error) {
-	transactionConfig := transaction.Client{EntDBClient: suite.db}
-
-	suite.e.Add(method, path, handlerFunc, transactionConfig.Middleware, suite.sharedAuthMiddleware, authmiddleware.BlockAnonymous(auth.CapQuestionnaireAnonymous))
+	suite.e.Add(method, path, handlerFunc, suite.sharedAuthMiddleware, authmiddleware.BlockAnonymous(auth.CapQuestionnaireAnonymous))
 }
 
 // createAuthMiddleware creates authentication middleware for tests
