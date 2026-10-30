@@ -293,6 +293,7 @@ func (Evidence) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookEvidenceReviewDate(),
 		hooks.HookEvidenceFiles(),
+		hooks.HookFiles("evidenceFiles"),
 		hooks.HookSystemOwnedControls(),
 	}
 }

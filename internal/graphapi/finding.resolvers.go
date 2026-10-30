@@ -40,7 +40,7 @@ func (r *findingResolver) WorkflowTimeline(ctx context.Context, obj *generated.F
 }
 
 // CreateFinding is the resolver for the createFinding field.
-func (r *mutationResolver) CreateFinding(ctx context.Context, input generated.CreateFindingInput) (*model.FindingCreatePayload, error) {
+func (r *mutationResolver) CreateFinding(ctx context.Context, input generated.CreateFindingInput, findingFiles []*graphql.Upload, findingFilesMetadata []*model.FileMetadataInput) (*model.FindingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Finding.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "finding"})
@@ -108,7 +108,7 @@ func (r *mutationResolver) CreateBulkCSVFinding(ctx context.Context, input graph
 }
 
 // UpdateFinding is the resolver for the updateFinding field.
-func (r *mutationResolver) UpdateFinding(ctx context.Context, id string, input generated.UpdateFindingInput) (*model.FindingUpdatePayload, error) {
+func (r *mutationResolver) UpdateFinding(ctx context.Context, id string, input generated.UpdateFindingInput, findingFiles []*graphql.Upload, findingFilesMetadata []*model.FileMetadataInput) (*model.FindingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Finding.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})

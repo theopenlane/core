@@ -48,6 +48,26 @@ extend type Mutation{
         input: CreateActionPlanInput!
     ): ActionPlanCreatePayload!
     """
+    Create a new actionPlan via file upload
+    """
+    createUploadActionPlan(
+        """
+        file containing values of the actionPlan
+        """
+        actionPlanFile: Upload!
+        actionPlanFileMetadata: FileMetadataInput
+        """
+        ID of the owner organization
+        """
+        ownerID: ID
+        """
+        How the uploaded actionPlan should be managed: parsed and edited in Openlane
+        (OPENLANE_MANAGED, default) or kept as an external reference file viewed
+        in Openlane (EXTERNAL_REFERENCE, e.g. Word documents managed in Microsoft Word)
+        """
+        managementMode: ActionPlanDocumentManagementMode
+    ): ActionPlanCreatePayload!
+    """
     Create multiple new actionPlans
     """
     createBulkActionPlan(
@@ -90,6 +110,11 @@ extend type Mutation{
         New values for the actionPlan
         """
         input: UpdateActionPlanInput!
+        """
+        file containing values of the actionPlan
+        """
+        actionPlanFile: Upload
+        actionPlanFileMetadata: FileMetadataInput
     ): ActionPlanUpdatePayload!
     """
     Delete an existing actionPlan

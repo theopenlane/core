@@ -120,7 +120,7 @@ func (Subprocessor) Hooks() []ent.Hook {
 			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
-		hooks.HookSubprocessor(),
+		hooks.HookLogoFile(),
 	}
 }
 

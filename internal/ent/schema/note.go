@@ -253,7 +253,7 @@ func (n Note) Policy() ent.Policy {
 // Hooks of the Note
 func (Note) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookNoteFiles(),
+		hooks.HookFiles("noteFiles"),
 		hooks.HookSlateJSON(),
 		hooks.HookDeleteDiscussion(),
 	}

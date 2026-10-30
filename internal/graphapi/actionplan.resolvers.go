@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/csvgenerated"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
@@ -51,6 +52,35 @@ func (r *mutationResolver) CreateActionPlan(ctx context.Context, input generated
 	}
 
 	res, err := withTransactionalMutation(ctx).ActionPlan.Create().SetInput(input).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "actionplan"})
+	}
+
+	return &model.ActionPlanCreatePayload{
+		ActionPlan: res,
+	}, nil
+}
+
+// CreateUploadActionPlan is the resolver for the createUploadActionPlan field.
+func (r *mutationResolver) CreateUploadActionPlan(ctx context.Context, actionPlanFile graphql.Upload, actionPlanFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) (*model.ActionPlanCreatePayload, error) {
+	var actionPlanInput generated.CreateActionPlanInput
+
+	if ownerID != nil && *ownerID != "" {
+		actionPlanInput.OwnerID = ownerID
+	}
+
+	if managementMode != nil {
+		actionPlanInput.ManagementMode = managementMode
+	}
+
+	// set the organization in the auth context if its not done for us
+	ctx, err := common.SetOrganizationInAuthContext(ctx, ownerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).ActionPlan.Create().SetInput(actionPlanInput).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "actionplan"})
 	}
@@ -126,7 +156,7 @@ func (r *mutationResolver) UpdateBulkActionPlan(ctx context.Context, ids []strin
 }
 
 // UpdateActionPlan is the resolver for the updateActionPlan field.
-func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, input generated.UpdateActionPlanInput) (*model.ActionPlanUpdatePayload, error) {
+func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, input generated.UpdateActionPlanInput, actionPlanFile *graphql.Upload, actionPlanFileMetadata *model.FileMetadataInput) (*model.ActionPlanUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ActionPlan.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "actionplan"})

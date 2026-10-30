@@ -45315,6 +45315,27 @@ type Mutation {
 		input: CreateActionPlanInput!
 	): ActionPlanCreatePayload!
 	"""
+	Create a new actionPlan via file upload
+	"""
+	createUploadActionPlan(
+		"""
+		file containing values of the actionPlan
+		"""
+		actionPlanFile: Upload!
+	actionPlanFileMetadata: FileMetadataInput,
+		"""
+		ID of the owner organization
+		"""
+		ownerID: ID
+
+		"""
+		How the uploaded actionPlan should be managed: parsed and edited in Openlane
+		(OPENLANE_MANAGED, default) or kept as an external reference file viewed
+		in Openlane (EXTERNAL_REFERENCE, e.g. Word documents managed in Microsoft Word)
+		"""
+		managementMode: ActionPlanDocumentManagementMode
+	): ActionPlanCreatePayload!
+	"""
 	Create multiple new actionPlans
 	"""
 	createBulkActionPlan(
@@ -45359,7 +45380,12 @@ type Mutation {
 		New values for the actionPlan
 		"""
 		input: UpdateActionPlanInput!
-	): ActionPlanUpdatePayload!
+
+		"""
+		file containing values of the actionPlan
+		"""
+		actionPlanFile: Upload
+	actionPlanFileMetadata: FileMetadataInput): ActionPlanUpdatePayload!
 	"""
 	Delete an existing actionPlan
 	"""
@@ -45964,7 +45990,12 @@ type Mutation {
 		values of the contact
 		"""
 		input: CreateContactInput!
-	): ContactCreatePayload!
+
+		"""
+		Files to attach to the contact
+		"""
+		contactFiles: [Upload!]
+	contactFilesMetadata: [FileMetadataInput!]): ContactCreatePayload!
 	"""
 	Create multiple new contacts
 	"""
@@ -46010,7 +46041,12 @@ type Mutation {
 		New values for the contact
 		"""
 		input: UpdateContactInput!
-	): ContactUpdatePayload!
+
+		"""
+		Files to attach to the contact
+		"""
+		contactFiles: [Upload!]
+	contactFilesMetadata: [FileMetadataInput!]): ContactUpdatePayload!
 	"""
 	Delete an existing contact
 	"""
@@ -47319,7 +47355,12 @@ type Mutation {
 		values of the finding
 		"""
 		input: CreateFindingInput!
-	): FindingCreatePayload!
+
+		"""
+		Files to attach to the finding
+		"""
+		findingFiles: [Upload!]
+	findingFilesMetadata: [FileMetadataInput!]): FindingCreatePayload!
 	"""
 	Create multiple new findings
 	"""
@@ -47351,7 +47392,12 @@ type Mutation {
 		New values for the finding
 		"""
 		input: UpdateFindingInput!
-	): FindingUpdatePayload!
+
+		"""
+		Files to attach to the finding
+		"""
+		findingFiles: [Upload!]
+	findingFilesMetadata: [FileMetadataInput!]): FindingUpdatePayload!
 	"""
 	Delete an existing finding
 	"""
@@ -49860,7 +49906,12 @@ type Mutation {
 		values of the scan
 		"""
 		input: CreateScanInput!
-	): ScanCreatePayload!
+
+		"""
+		Files to attach to the scan
+		"""
+		scanFiles: [Upload!]
+	scanFilesMetadata: [FileMetadataInput!]): ScanCreatePayload!
 	"""
 	Create multiple new scans
 	"""
@@ -49906,7 +49957,12 @@ type Mutation {
 		New values for the scan
 		"""
 		input: UpdateScanInput!
-	): ScanUpdatePayload!
+
+		"""
+		Files to attach to the scan
+		"""
+		scanFiles: [Upload!]
+	scanFilesMetadata: [FileMetadataInput!]): ScanUpdatePayload!
 	"""
 	Delete an existing scan
 	"""
@@ -51513,7 +51569,12 @@ type Mutation {
 		values of the vulnerability
 		"""
 		input: CreateVulnerabilityInput!
-	): VulnerabilityCreatePayload!
+
+		"""
+		Files to attach to the vulnerability
+		"""
+		vulnerabilityFiles: [Upload!]
+	vulnerabilityFilesMetadata: [FileMetadataInput!]): VulnerabilityCreatePayload!
 	"""
 	Create multiple new vulnerabilitys
 	"""
@@ -51545,7 +51606,12 @@ type Mutation {
 		New values for the vulnerability
 		"""
 		input: UpdateVulnerabilityInput!
-	): VulnerabilityUpdatePayload!
+
+		"""
+		Files to attach to the vulnerability
+		"""
+		vulnerabilityFiles: [Upload!]
+	vulnerabilityFilesMetadata: [FileMetadataInput!]): VulnerabilityUpdatePayload!
 	"""
 	Delete an existing vulnerability
 	"""

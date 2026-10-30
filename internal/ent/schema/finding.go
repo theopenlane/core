@@ -428,6 +428,7 @@ func (Finding) Indexes() []ent.Index {
 func (Finding) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookSeverityLevel(),
+		hooks.HookFiles("findingFiles"),
 	}
 }
 
