@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -243,7 +244,7 @@ func (i *Invite) validateInviteRequest() error {
 // validateUser is a helper function that ensures the logged-in user is the same as the invite
 func (i *Invite) validateUser(email string) error {
 	// ensure the logged in user is the same as the invite
-	if i.Email != email {
+	if !strings.EqualFold(i.Email, email) {
 		return ErrUnableToVerifyEmail
 	}
 

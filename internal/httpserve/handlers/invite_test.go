@@ -41,7 +41,10 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 		Save(ctx)
 	require.NoError(t, err)
 
-	var groot = "groot@theopenlane.io"
+	var (
+		groot  = "groot@theopenlane.io"
+		mantis = "mantis@theopenlane.io"
+	)
 
 	// recipient test data
 	recipient, err := suite.db.User.Create().
@@ -57,49 +60,80 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 	userSetting, err := recipient.Setting(ctx)
 	require.NoError(t, err)
 
-	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, userSetting.Edges.DefaultOrg.ID)
-
 	suite.enableModules(recipient.ID, userSetting.Edges.DefaultOrg.ID,
 		[]models.OrgModule{models.CatalogBaseModule})
 
+	mantisRecipient, err := suite.db.User.Create().
+		SetEmail(mantis).
+		SetFirstName("Mantis").
+		SetLastName("JustMantis").
+		SetAuthProvider(enums.AuthProviderGoogle).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
+		Save(ctx)
+	require.NoError(t, err)
+
+	mantisSetting, err := mantisRecipient.Setting(ctx)
+	require.NoError(t, err)
+
+	suite.enableModules(mantisRecipient.ID, mantisSetting.Edges.DefaultOrg.ID,
+		[]models.OrgModule{models.CatalogBaseModule})
+
 	testCases := []struct {
-		name     string
-		email    string
-		tokenSet bool
-		apiToken bool
-		wantErr  bool
-		wantCode int
-		errMsg   string
+		name           string
+		email          string
+		recipientID    string
+		recipientOrgID string
+		tokenSet       bool
+		apiToken       bool
+		wantErr        bool
+		wantCode       int
+		errMsg         string
 	}{
 		{
-			name:     "api token cannot accept invite",
-			email:    "rocket@theopenlane.io",
-			tokenSet: true,
-			apiToken: true,
-			wantErr:  true,
-			wantCode: http.StatusUnauthorized,
-			errMsg:   handlers.ErrAuthenticationRequired.Error(),
+			name:           "api token cannot accept invite",
+			email:          "rocket@theopenlane.io",
+			recipientID:    recipient.ID,
+			recipientOrgID: userSetting.Edges.DefaultOrg.ID,
+			tokenSet:       true,
+			apiToken:       true,
+			wantErr:        true,
+			wantCode:       http.StatusUnauthorized,
+			errMsg:         handlers.ErrAuthenticationRequired.Error(),
 		},
 		{
-			name:     "happy path",
-			email:    groot,
-			tokenSet: true,
+			name:           "happy path",
+			email:          groot,
+			recipientID:    recipient.ID,
+			recipientOrgID: userSetting.Edges.DefaultOrg.ID,
+			tokenSet:       true,
 		},
 		{
-			name:     "missing token",
-			email:    groot,
-			tokenSet: false,
-			wantErr:  true,
-			wantCode: http.StatusBadRequest,
-			errMsg:   "token is required",
+			name:           "happy path, invite email case does not match user email",
+			email:          "Mantis@TheOpenLane.io",
+			recipientID:    mantisRecipient.ID,
+			recipientOrgID: mantisSetting.Edges.DefaultOrg.ID,
+			tokenSet:       true,
 		},
 		{
-			name:     "emails do not match token",
-			email:    "drax@theopenlane.io",
-			tokenSet: true,
-			wantErr:  true,
-			wantCode: http.StatusBadRequest,
-			errMsg:   "could not verify email",
+			name:           "missing token",
+			email:          groot,
+			recipientID:    recipient.ID,
+			recipientOrgID: userSetting.Edges.DefaultOrg.ID,
+			tokenSet:       false,
+			wantErr:        true,
+			wantCode:       http.StatusBadRequest,
+			errMsg:         "token is required",
+		},
+		{
+			name:           "emails do not match token",
+			email:          "drax@theopenlane.io",
+			recipientID:    recipient.ID,
+			recipientOrgID: userSetting.Edges.DefaultOrg.ID,
+			tokenSet:       true,
+			wantErr:        true,
+			wantCode:       http.StatusBadRequest,
+			errMsg:         "could not verify email",
 		},
 	}
 
@@ -124,11 +158,11 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 			// Set writer for tests that write on the response
 			recorder := httptest.NewRecorder()
 
-			reqCtx := recipientCtx
+			reqCtx := auth.NewTestContextWithOrgID(tc.recipientID, tc.recipientOrgID)
 			if tc.apiToken {
-				reqCtx = auth.WithCaller(recipientCtx, &auth.Caller{
+				reqCtx = auth.WithCaller(reqCtx, &auth.Caller{
 					SubjectID:          ulids.New().String(),
-					OrganizationID:     userSetting.Edges.DefaultOrg.ID,
+					OrganizationID:     tc.recipientOrgID,
 					AuthenticationType: auth.APITokenAuthentication,
 				})
 			}
@@ -156,13 +190,13 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			assert.Equal(t, http.StatusCreated, recorder.Code)
 			assert.Equal(t, testUser1.OrganizationID, out.JoinedOrgID)
-			assert.Equal(t, tc.email, out.Email)
+			assert.Equal(t, strings.ToLower(tc.email), out.Email)
 
 			// update context to reflect the joined org for subsequent queries
-			recipientCtx = auth.NewTestContextWithOrgID(recipient.ID, testUser1.OrganizationID)
+			recipientCtx := auth.NewTestContextWithOrgID(tc.recipientID, testUser1.OrganizationID)
 
 			// Test the default org is updated
-			user, err := suite.api.GetUserByID(recipientCtx, recipient.ID)
+			user, err := suite.api.GetUserByID(recipientCtx, tc.recipientID)
 			require.NoError(t, err)
 			require.NotNil(t, user)
 			require.NotNil(t, user.User.Setting.DefaultOrg)
@@ -175,7 +209,7 @@ func (suite *HandlerTestSuite) TestOrgInviteAcceptHandler() {
 
 			foundMember := false
 			for _, member := range group.Group.Members.Edges {
-				if member.Node.User.ID == recipient.ID {
+				if member.Node.User.ID == tc.recipientID {
 					foundMember = true
 					break
 				}
