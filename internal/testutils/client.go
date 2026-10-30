@@ -19,6 +19,7 @@ import (
 	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/pkg/middleware/auth"
 	mock_shared "github.com/theopenlane/core/v2/pkg/objects/mocks"
@@ -178,7 +179,8 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 		WithTrustCenterCnameTarget(TrustCenterCnameTarget).
 		WithAssessmentCnameTarget(AssessmentCnameTarget).
 		WithTrustCenterDefaultDomain(TrustCenterDefaultDomain).
-		WithSubscriptions(true, nil)
+		WithSubscriptions(true, nil).
+		WithIntegrationsRuntime(runtime.Default())
 
 	// add the pool to the resolver
 	r.WithPool(100) //nolint:mnd

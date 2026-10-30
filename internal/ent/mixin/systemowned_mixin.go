@@ -16,10 +16,14 @@ import (
 	"entgo.io/ent/schema/index"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
+
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -28,10 +32,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/graphapi/directives"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/logx"
 )
 
 const (
@@ -366,7 +366,7 @@ func queryForSystemOwned(ctx context.Context, m utils.SystemOwnedMutation, ids [
 		return false, nil
 	}
 
-	table := strcase.SnakeCase(pluralize.NewClient().Plural(m.Type()))
+	table := strcase.SnakeCase(m.Client().Pluralizer.Plural(m.Type()))
 
 	// Build placeholders for IN clause: $1, $2, $3, ...
 	placeholders := make([]string, len(ids))

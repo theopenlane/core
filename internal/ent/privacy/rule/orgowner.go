@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/privacy"
-	"github.com/gertd/go-pluralize"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
@@ -242,7 +241,7 @@ func EnsureObjectInOrganization(ctx context.Context, m ent.Mutation, objectType,
 	}
 
 	// check if the object is in the organization
-	pluralObjectType := pluralize.NewClient().Plural(objectType)
+	pluralObjectType := utils.PluralizerClient(ctx, m).Plural(objectType)
 	tableName := strcase.SnakeCase(pluralObjectType)
 
 	// files are not org owned, they rely on parents
@@ -329,7 +328,7 @@ func CheckIsSystemOwned(ctx context.Context, m ent.Mutation, objectType, objectI
 	}
 
 	// check if the object is in the organization
-	pluralObjectType := pluralize.NewClient().Plural(objectType)
+	pluralObjectType := utils.PluralizerClient(ctx, m).Plural(objectType)
 	tableName := strcase.SnakeCase(pluralObjectType)
 
 	query := "SELECT EXISTS (SELECT 1 FROM " + tableName + " WHERE id = $1 and (owner_id is null and system_owned = true))"

@@ -4433,6 +4433,8 @@ type CloneControlInput struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// optional program ID to associate to the controls
 	ProgramID *string `json:"programID,omitempty"`
+	// optionally choose to import existing template mappings for the cloned controls
+	ImportTemplateMappings *bool `json:"importTemplateMappings,omitempty"`
 }
 
 // CloneControlUploadInput is used to clone controls and their subcontrols

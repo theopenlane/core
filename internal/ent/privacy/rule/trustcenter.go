@@ -6,7 +6,6 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
@@ -87,7 +86,7 @@ func getStoredTrustCenterID(ctx context.Context, tcMutation utils.TrustCenterMut
 		return ""
 	}
 
-	pluralObjectType := pluralize.NewClient().Plural(objectType)
+	pluralObjectType := tcMutation.Client().Pluralizer.Plural(objectType)
 	tableName := strcase.SnakeCase(pluralObjectType)
 
 	query := "SELECT trust_center_id FROM " + tableName + " WHERE id = $1"

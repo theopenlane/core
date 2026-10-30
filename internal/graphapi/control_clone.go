@@ -7,13 +7,17 @@ import (
 	"strings"
 
 	"github.com/oklog/ulid/v2"
+	"github.com/samber/lo"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/schema"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 type createProgramRequest interface {
@@ -34,6 +38,66 @@ func hasStandardFilter[T createProgramRequest](value T) bool {
 // controlCloner copies controls into the organization on the request context with the resolver's client and worker pool
 func (r *mutationResolver) controlCloner() controls.Cloner {
 	return controls.Cloner{DB: r.db, Pool: r.withPool(), RequiredModules: schema.Control{}.Modules()}
+}
+
+// cloneControlsFromStandard loads source controls and clones them with optional template mappings.
+func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filters controls.CloneFilterOptions, programID *string, cloneTemplateMappings bool) ([]*generated.Control, error) {
+	controlsToClone, err := r.controlCloner().SourceControlsFromStandard(ctx, filters)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.cloneTemplateControls(ctx, controlsToClone, programID, cloneTemplateMappings)
+}
+
+func (r *mutationResolver) cloneTemplateControls(ctx context.Context, controlsToClone []*generated.Control,
+	programID *string, shouldCloneTemplates bool) ([]*generated.Control, error) {
+
+	clonedControls, err := r.controlCloner().Controls(ctx, controlsToClone, programID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !shouldCloneTemplates {
+		return clonedControls, nil
+	}
+
+	if r.integrationsRuntime == nil {
+		return nil, common.ErrInternalServerError
+	}
+
+	ids := make([]string, 0, len(controlsToClone))
+	for _, c := range controlsToClone {
+		if controls.IsOpenlaneBaseControl(c) {
+			ids = append(ids, c.ID)
+		}
+	}
+
+	return clonedControls, r.emitTemplateMappingsJob(ctx, ids, lo.FromPtr(programID))
+}
+
+func (r *mutationResolver) emitTemplateMappingsJob(ctx context.Context, controlIDs []string, programID string) error {
+	if len(controlIDs) == 0 {
+		return nil
+	}
+
+	req := hooks.TemplateMappingRequest{
+		ControlIDs: controlIDs,
+		ProgramID:  programID,
+	}
+
+	var value = req.ProgramID
+
+	if value == "" {
+		value = ulids.New().String()
+	}
+
+	_, err := r.integrationsRuntime.Gala().
+		EmitWithHeaders(ctx, hooks.TemplateMappingTopic.Name, req, gala.Headers{
+			UniqueKey: "template-mapping-" + value,
+		})
+
+	return err
 }
 
 // getCloneFilterOptions returns the filter options for cloning controls from the input based on the provided fields
