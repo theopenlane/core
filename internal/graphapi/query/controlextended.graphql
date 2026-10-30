@@ -213,3 +213,49 @@ mutation UpdateControlComment($updateControlCommentId: ID!, $input: UpdateNoteIn
     }
   }
 }
+
+query GetControlsGroupBy($field: ControlGroupByField!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: ControlWhereInput, $orderBy: GroupByOrder, $rowsFirst: Int, $rowsAfter: Cursor, $rowsOrderBy: [ControlOrder!]) {
+  controlsGroupBy(
+    field: $field
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      cursor
+      node {
+        key
+        count
+        controls(first: $rowsFirst, after: $rowsAfter, orderBy: $rowsOrderBy) {
+          totalCount
+          pageInfo {
+            startCursor
+            endCursor
+            hasPreviousPage
+            hasNextPage
+          }
+          edges {
+            node {
+              id
+              refCode
+              category
+              subcategory
+              referenceFramework
+              ownerID
+            }
+          }
+        }
+      }
+    }
+  }
+}

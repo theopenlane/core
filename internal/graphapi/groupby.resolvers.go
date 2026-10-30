@@ -11,7 +11,9 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
@@ -19,6 +21,143 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/gqlgen-plugins/groupby"
 )
+
+// Controls is the resolver for the controls field.
+func (r *controlGroupByBucketResolver) Controls(ctx context.Context, obj *groupby.Bucket, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder) (*generated.ControlConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.ControlOrder{
+			{
+				Field:     generated.ControlOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Control.Query().Where(predicate.Control(obj.Filter)).CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "control"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithControlOrder(orderBy))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "control"})
+	}
+
+	return res, err
+}
+
+// ControlsGroupBy is the resolver for the controlsGroupBy field.
+func (r *queryResolver) ControlsGroupBy(ctx context.Context, field model.ControlGroupByField, where *generated.ControlWhereInput, orderBy *groupby.Order, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*groupby.Connection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	var column string
+
+	switch field {
+	case model.ControlGroupByFieldCategory:
+		column = control.FieldCategory
+	case model.ControlGroupByFieldSubcategory:
+		column = control.FieldSubcategory
+	default:
+		return nil, parseRequestError(ctx, groupby.ErrInvalidField, common.Action{Action: common.ActionGet, Object: "control"})
+	}
+
+	var (
+		filter predicate.Control
+		rows   []groupby.Row
+		total  int
+		err    error
+	)
+
+	query := withTransactionalMutation(ctx).Control.Query()
+
+	if where != nil {
+		filter, err = where.P()
+		if err != nil && !errors.Is(err, generated.ErrEmptyControlWhereInput) {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "control"})
+		}
+	}
+
+	if filter != nil {
+		query = query.Where(filter)
+	}
+
+	groupQuery := groupby.NewQuery(column, filter, orderBy, after, first, before, last)
+
+	if err := query.Clone().Modify(groupQuery.Modifier).Scan(ctx, &rows); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "control"})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, "totalCount") {
+		total, err = query.Modify(groupQuery.TotalModifier).Int(ctx)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "control"})
+		}
+	}
+
+	return groupQuery.Connection(rows, total), nil
+}
+
+// SubcontrolsGroupBy is the resolver for the subcontrolsGroupBy field.
+func (r *queryResolver) SubcontrolsGroupBy(ctx context.Context, field model.SubcontrolGroupByField, where *generated.SubcontrolWhereInput, orderBy *groupby.Order, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*groupby.Connection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	var column string
+
+	switch field {
+	case model.SubcontrolGroupByFieldCategory:
+		column = subcontrol.FieldCategory
+	case model.SubcontrolGroupByFieldSubcategory:
+		column = subcontrol.FieldSubcategory
+	default:
+		return nil, parseRequestError(ctx, groupby.ErrInvalidField, common.Action{Action: common.ActionGet, Object: "subcontrol"})
+	}
+
+	var (
+		filter predicate.Subcontrol
+		rows   []groupby.Row
+		total  int
+		err    error
+	)
+
+	query := withTransactionalMutation(ctx).Subcontrol.Query()
+
+	if where != nil {
+		filter, err = where.P()
+		if err != nil && !errors.Is(err, generated.ErrEmptySubcontrolWhereInput) {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subcontrol"})
+		}
+	}
+
+	if filter != nil {
+		query = query.Where(filter)
+	}
+
+	groupQuery := groupby.NewQuery(column, filter, orderBy, after, first, before, last)
+
+	if err := query.Clone().Modify(groupQuery.Modifier).Scan(ctx, &rows); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subcontrol"})
+	}
+
+	if graphutils.CheckForRequestedField(ctx, "totalCount") {
+		total, err = query.Modify(groupQuery.TotalModifier).Int(ctx)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subcontrol"})
+		}
+	}
+
+	return groupQuery.Connection(rows, total), nil
+}
 
 // VulnerabilitiesGroupBy is the resolver for the vulnerabilitiesGroupBy field.
 func (r *queryResolver) VulnerabilitiesGroupBy(ctx context.Context, field model.VulnerabilityGroupByField, where *generated.VulnerabilityWhereInput, orderBy *groupby.Order, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*groupby.Connection, error) {
@@ -28,10 +167,16 @@ func (r *queryResolver) VulnerabilitiesGroupBy(ctx context.Context, field model.
 	var column string
 
 	switch field {
+	case model.VulnerabilityGroupByFieldVulnerabilityStatusName:
+		column = vulnerability.FieldVulnerabilityStatusName
 	case model.VulnerabilityGroupByFieldExternalOwnerID:
 		column = vulnerability.FieldExternalOwnerID
 	case model.VulnerabilityGroupByFieldCveID:
 		column = vulnerability.FieldCveID
+	case model.VulnerabilityGroupByFieldSource:
+		column = vulnerability.FieldSource
+	case model.VulnerabilityGroupByFieldSeverity:
+		column = vulnerability.FieldSeverity
 	default:
 		return nil, parseRequestError(ctx, groupby.ErrInvalidField, common.Action{Action: common.ActionGet, Object: "vulnerability"})
 	}
@@ -72,6 +217,39 @@ func (r *queryResolver) VulnerabilitiesGroupBy(ctx context.Context, field model.
 	return groupQuery.Connection(rows, total), nil
 }
 
+// Subcontrols is the resolver for the subcontrols field.
+func (r *subcontrolGroupByBucketResolver) Subcontrols(ctx context.Context, obj *groupby.Bucket, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder) (*generated.SubcontrolConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.SubcontrolOrder{
+			{
+				Field:     generated.SubcontrolOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(predicate.Subcontrol(obj.Filter)).CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subcontrol"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithSubcontrolOrder(orderBy))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subcontrol"})
+	}
+
+	return res, err
+}
+
 // Vulnerabilities is the resolver for the vulnerabilities field.
 func (r *vulnerabilityGroupByBucketResolver) Vulnerabilities(ctx context.Context, obj *groupby.Bucket, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder) (*generated.VulnerabilityConnection, error) {
 	// set page limit if nothing was set
@@ -105,9 +283,23 @@ func (r *vulnerabilityGroupByBucketResolver) Vulnerabilities(ctx context.Context
 	return res, err
 }
 
+// ControlGroupByBucket returns gqlgenerated.ControlGroupByBucketResolver implementation.
+func (r *Resolver) ControlGroupByBucket() gqlgenerated.ControlGroupByBucketResolver {
+	return &controlGroupByBucketResolver{r}
+}
+
+// SubcontrolGroupByBucket returns gqlgenerated.SubcontrolGroupByBucketResolver implementation.
+func (r *Resolver) SubcontrolGroupByBucket() gqlgenerated.SubcontrolGroupByBucketResolver {
+	return &subcontrolGroupByBucketResolver{r}
+}
+
 // VulnerabilityGroupByBucket returns gqlgenerated.VulnerabilityGroupByBucketResolver implementation.
 func (r *Resolver) VulnerabilityGroupByBucket() gqlgenerated.VulnerabilityGroupByBucketResolver {
 	return &vulnerabilityGroupByBucketResolver{r}
 }
 
-type vulnerabilityGroupByBucketResolver struct{ *Resolver }
+type (
+	controlGroupByBucketResolver       struct{ *Resolver }
+	subcontrolGroupByBucketResolver    struct{ *Resolver }
+	vulnerabilityGroupByBucketResolver struct{ *Resolver }
+)

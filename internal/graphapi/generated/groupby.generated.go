@@ -18,6 +18,12 @@ import (
 
 // region    ************************** generated!.gotpl **************************
 
+type ControlGroupByBucketResolver interface {
+	Controls(ctx context.Context, obj *groupby.Bucket, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder) (*generated.ControlConnection, error)
+}
+type SubcontrolGroupByBucketResolver interface {
+	Subcontrols(ctx context.Context, obj *groupby.Bucket, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder) (*generated.SubcontrolConnection, error)
+}
 type VulnerabilityGroupByBucketResolver interface {
 	Vulnerabilities(ctx context.Context, obj *groupby.Bucket, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder) (*generated.VulnerabilityConnection, error)
 }
@@ -25,6 +31,98 @@ type VulnerabilityGroupByBucketResolver interface {
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_ControlGroupByBucket_controls_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.ControlOrder, error) {
+			return ec.unmarshalOControlOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	return args, nil
+}
+
+func (ec *executionContext) field_SubcontrolGroupByBucket_subcontrols_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.SubcontrolOrder, error) {
+			return ec.unmarshalOSubcontrolOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	return args, nil
+}
 
 func (ec *executionContext) field_VulnerabilityGroupByBucket_vulnerabilities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
@@ -75,6 +173,470 @@ func (ec *executionContext) field_VulnerabilityGroupByBucket_vulnerabilities_arg
 // endregion ***************************** args.gotpl *****************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _ControlGroupByBucket_key(ctx context.Context, field graphql.CollectedField, obj *groupby.Bucket) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupByBucket_key(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Key, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlGroupByBucket_key(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlGroupByBucket", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlGroupByBucket_count(ctx context.Context, field graphql.CollectedField, obj *groupby.Bucket) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupByBucket_count(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Count, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ControlGroupByBucket_count(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlGroupByBucket", field, false, false, "Int")
+}
+
+func (ec *executionContext) _ControlGroupByBucket_controls(ctx context.Context, field graphql.CollectedField, obj *groupby.Bucket) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupByBucket_controls(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.ControlGroupByBucket().Controls(ctx, obj, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ControlOrder))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlConnection) graphql.Marshaler {
+			return ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ControlGroupByBucket_controls(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlGroupByBucket",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ControlConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_ControlGroupByBucket_controls_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlGroupByConnection_edges(ctx context.Context, field graphql.CollectedField, obj *groupby.Connection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupByConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*groupby.Edge) graphql.Marshaler {
+			return ec.marshalNControlGroupByEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐEdgeᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ControlGroupByConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ControlGroupByEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlGroupByConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *groupby.Connection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupByConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ControlGroupByConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlGroupByConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *groupby.Connection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupByConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ControlGroupByConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _ControlGroupByEdge_node(ctx context.Context, field graphql.CollectedField, obj *groupby.Edge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupByEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *groupby.Bucket) graphql.Marshaler {
+			return ec.marshalNControlGroupByBucket2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐBucket(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ControlGroupByEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ControlGroupByEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ControlGroupByBucket(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ControlGroupByEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *groupby.Edge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlGroupByEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ControlGroupByEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlGroupByEdge", field, false, false, "Cursor")
+}
+
+func (ec *executionContext) _SubcontrolGroupByBucket_key(ctx context.Context, field graphql.CollectedField, obj *groupby.Bucket) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolGroupByBucket_key(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Key, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolGroupByBucket_key(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SubcontrolGroupByBucket", field, false, false, "String")
+}
+
+func (ec *executionContext) _SubcontrolGroupByBucket_count(ctx context.Context, field graphql.CollectedField, obj *groupby.Bucket) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolGroupByBucket_count(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Count, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolGroupByBucket_count(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SubcontrolGroupByBucket", field, false, false, "Int")
+}
+
+func (ec *executionContext) _SubcontrolGroupByBucket_subcontrols(ctx context.Context, field graphql.CollectedField, obj *groupby.Bucket) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolGroupByBucket_subcontrols(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.SubcontrolGroupByBucket().Subcontrols(ctx, obj, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.SubcontrolOrder))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubcontrolConnection) graphql.Marshaler {
+			return ec.marshalNSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolGroupByBucket_subcontrols(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubcontrolGroupByBucket",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SubcontrolConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_SubcontrolGroupByBucket_subcontrols_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SubcontrolGroupByConnection_edges(ctx context.Context, field graphql.CollectedField, obj *groupby.Connection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolGroupByConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*groupby.Edge) graphql.Marshaler {
+			return ec.marshalNSubcontrolGroupByEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐEdgeᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolGroupByConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubcontrolGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SubcontrolGroupByEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SubcontrolGroupByConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *groupby.Connection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolGroupByConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolGroupByConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubcontrolGroupByConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SubcontrolGroupByConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *groupby.Connection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolGroupByConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolGroupByConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SubcontrolGroupByConnection", field, false, false, "Int")
+}
+
+func (ec *executionContext) _SubcontrolGroupByEdge_node(ctx context.Context, field graphql.CollectedField, obj *groupby.Edge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolGroupByEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *groupby.Bucket) graphql.Marshaler {
+			return ec.marshalNSubcontrolGroupByBucket2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐBucket(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolGroupByEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SubcontrolGroupByEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SubcontrolGroupByBucket(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SubcontrolGroupByEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *groupby.Edge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SubcontrolGroupByEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SubcontrolGroupByEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SubcontrolGroupByEdge", field, false, false, "Cursor")
+}
 
 func (ec *executionContext) _VulnerabilityGroupByBucket_key(ctx context.Context, field graphql.CollectedField, obj *groupby.Bucket) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
@@ -376,6 +938,256 @@ func UnmarshalGroupByOrder(ctx context.Context, raw any) (groupby.Order, error) 
 
 // region    **************************** object.gotpl ****************************
 
+var controlGroupByBucketImplementors = []string{"ControlGroupByBucket"}
+
+func (ec *executionContext) _ControlGroupByBucket(ctx context.Context, sel ast.SelectionSet, obj *groupby.Bucket) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlGroupByBucketImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlGroupByBucket")
+		case "key":
+			out.Values[i] = ec._ControlGroupByBucket_key(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "count":
+			out.Values[i] = ec._ControlGroupByBucket_count(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "controls":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._ControlGroupByBucket_controls(ctx, field, obj)
+				})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var controlGroupByConnectionImplementors = []string{"ControlGroupByConnection"}
+
+func (ec *executionContext) _ControlGroupByConnection(ctx context.Context, sel ast.SelectionSet, obj *groupby.Connection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlGroupByConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlGroupByConnection")
+		case "edges":
+			out.Values[i] = ec._ControlGroupByConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._ControlGroupByConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._ControlGroupByConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var controlGroupByEdgeImplementors = []string{"ControlGroupByEdge"}
+
+func (ec *executionContext) _ControlGroupByEdge(ctx context.Context, sel ast.SelectionSet, obj *groupby.Edge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, controlGroupByEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ControlGroupByEdge")
+		case "node":
+			out.Values[i] = ec._ControlGroupByEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._ControlGroupByEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var subcontrolGroupByBucketImplementors = []string{"SubcontrolGroupByBucket"}
+
+func (ec *executionContext) _SubcontrolGroupByBucket(ctx context.Context, sel ast.SelectionSet, obj *groupby.Bucket) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subcontrolGroupByBucketImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SubcontrolGroupByBucket")
+		case "key":
+			out.Values[i] = ec._SubcontrolGroupByBucket_key(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "count":
+			out.Values[i] = ec._SubcontrolGroupByBucket_count(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "subcontrols":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._SubcontrolGroupByBucket_subcontrols(ctx, field, obj)
+				})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var subcontrolGroupByConnectionImplementors = []string{"SubcontrolGroupByConnection"}
+
+func (ec *executionContext) _SubcontrolGroupByConnection(ctx context.Context, sel ast.SelectionSet, obj *groupby.Connection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subcontrolGroupByConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SubcontrolGroupByConnection")
+		case "edges":
+			out.Values[i] = ec._SubcontrolGroupByConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._SubcontrolGroupByConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._SubcontrolGroupByConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var subcontrolGroupByEdgeImplementors = []string{"SubcontrolGroupByEdge"}
+
+func (ec *executionContext) _SubcontrolGroupByEdge(ctx context.Context, sel ast.SelectionSet, obj *groupby.Edge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subcontrolGroupByEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SubcontrolGroupByEdge")
+		case "node":
+			out.Values[i] = ec._SubcontrolGroupByEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._SubcontrolGroupByEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var vulnerabilityGroupByBucketImplementors = []string{"VulnerabilityGroupByBucket"}
 
 func (ec *executionContext) _VulnerabilityGroupByBucket(ctx context.Context, sel ast.SelectionSet, obj *groupby.Bucket) graphql.Marshaler {
@@ -505,6 +1317,56 @@ func (ec *executionContext) _VulnerabilityGroupByEdge(ctx context.Context, sel a
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) marshalNControlGroupByBucket2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐBucket(ctx context.Context, sel ast.SelectionSet, v *groupby.Bucket) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ControlGroupByBucket!")
+		return graphql.Null
+	}
+	return ec._ControlGroupByBucket(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNControlGroupByConnection2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐConnection(ctx context.Context, sel ast.SelectionSet, v *groupby.Connection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ControlGroupByConnection!")
+		return graphql.Null
+	}
+	return ec._ControlGroupByConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNControlGroupByEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*groupby.Edge) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNControlGroupByEdge2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐEdge(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNControlGroupByEdge2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐEdge(ctx context.Context, sel ast.SelectionSet, v *groupby.Edge) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ControlGroupByEdge!")
+		return graphql.Null
+	}
+	return ec._ControlGroupByEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNControlGroupByField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupByField(ctx context.Context, v any) (model.ControlGroupByField, error) {
+	var res model.ControlGroupByField
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNControlGroupByField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupByField(ctx context.Context, sel ast.SelectionSet, v model.ControlGroupByField) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNGroupByOrderField2githubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐOrderField(ctx context.Context, v any) (groupby.OrderField, error) {
 	tmp, err := graphql.UnmarshalString(v)
 	res := unmarshalNGroupByOrderField2githubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐOrderField[tmp]
@@ -530,6 +1392,56 @@ var (
 		groupby.OrderFieldKey:   "KEY",
 	}
 )
+
+func (ec *executionContext) marshalNSubcontrolGroupByBucket2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐBucket(ctx context.Context, sel ast.SelectionSet, v *groupby.Bucket) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SubcontrolGroupByBucket!")
+		return graphql.Null
+	}
+	return ec._SubcontrolGroupByBucket(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSubcontrolGroupByConnection2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐConnection(ctx context.Context, sel ast.SelectionSet, v *groupby.Connection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SubcontrolGroupByConnection!")
+		return graphql.Null
+	}
+	return ec._SubcontrolGroupByConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSubcontrolGroupByEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*groupby.Edge) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNSubcontrolGroupByEdge2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐEdge(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNSubcontrolGroupByEdge2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐEdge(ctx context.Context, sel ast.SelectionSet, v *groupby.Edge) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SubcontrolGroupByEdge!")
+		return graphql.Null
+	}
+	return ec._SubcontrolGroupByEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNSubcontrolGroupByField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubcontrolGroupByField(ctx context.Context, v any) (model.SubcontrolGroupByField, error) {
+	var res model.SubcontrolGroupByField
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNSubcontrolGroupByField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubcontrolGroupByField(ctx context.Context, sel ast.SelectionSet, v model.SubcontrolGroupByField) graphql.Marshaler {
+	return v
+}
 
 func (ec *executionContext) marshalNVulnerabilityGroupByBucket2ᚖgithubᚗcomᚋtheopenlaneᚋgqlgenᚑpluginsᚋgroupbyᚐBucket(ctx context.Context, sel ast.SelectionSet, v *groupby.Bucket) graphql.Marshaler {
 	if v == nil {

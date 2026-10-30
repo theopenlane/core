@@ -32,6 +32,7 @@ type ResolverRoot interface {
 	Campaign() CampaignResolver
 	CampaignTarget() CampaignTargetResolver
 	Control() ControlResolver
+	ControlGroupByBucket() ControlGroupByBucketResolver
 	Evidence() EvidenceResolver
 	Finding() FindingResolver
 	Group() GroupResolver
@@ -46,6 +47,7 @@ type ResolverRoot interface {
 	Remediation() RemediationResolver
 	Risk() RiskResolver
 	Subcontrol() SubcontrolResolver
+	SubcontrolGroupByBucket() SubcontrolGroupByBucketResolver
 	Subscription() SubscriptionResolver
 	Task() TaskResolver
 	TemplateContextEntry() TemplateContextEntryResolver
@@ -1143,6 +1145,23 @@ type ComplexityRoot struct {
 	ControlGroup struct {
 		Category func(childComplexity int) int
 		Controls func(childComplexity int) int
+	}
+
+	ControlGroupByBucket struct {
+		Controls func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder) int
+		Count    func(childComplexity int) int
+		Key      func(childComplexity int) int
+	}
+
+	ControlGroupByConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	ControlGroupByEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	ControlGroupConnection struct {
@@ -5472,6 +5491,7 @@ type ComplexityRoot struct {
 		ControlSubcategories            func(childComplexity int) int
 		ControlSubcategoriesByFramework func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
 		Controls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ControlsGroupBy                 func(childComplexity int, field model.ControlGroupByField, where *generated.ControlWhereInput, orderBy *groupby.Order, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		ControlsGroupByCategory         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput, category *string) int
 		CustomDomain                    func(childComplexity int, id string) int
 		CustomDomains                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
@@ -5605,6 +5625,7 @@ type ComplexityRoot struct {
 		Subcontrol                      func(childComplexity int, id string) int
 		SubcontrolSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SubcontrolsGroupBy              func(childComplexity int, field model.SubcontrolGroupByField, where *generated.SubcontrolWhereInput, orderBy *groupby.Order, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Subprocessor                    func(childComplexity int, id string) int
 		SubprocessorSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Subprocessors                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
@@ -6562,6 +6583,23 @@ type ComplexityRoot struct {
 	}
 
 	SubcontrolEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	SubcontrolGroupByBucket struct {
+		Count       func(childComplexity int) int
+		Key         func(childComplexity int) int
+		Subcontrols func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder) int
+	}
+
+	SubcontrolGroupByConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	SubcontrolGroupByEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -13625,6 +13663,62 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlGroup.Controls(childComplexity), true
+
+	case "ControlGroupByBucket.controls":
+		if e.ComplexityRoot.ControlGroupByBucket.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_ControlGroupByBucket_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.ControlGroupByBucket.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder)), true
+	case "ControlGroupByBucket.count":
+		if e.ComplexityRoot.ControlGroupByBucket.Count == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlGroupByBucket.Count(childComplexity), true
+	case "ControlGroupByBucket.key":
+		if e.ComplexityRoot.ControlGroupByBucket.Key == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlGroupByBucket.Key(childComplexity), true
+
+	case "ControlGroupByConnection.edges":
+		if e.ComplexityRoot.ControlGroupByConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlGroupByConnection.Edges(childComplexity), true
+	case "ControlGroupByConnection.pageInfo":
+		if e.ComplexityRoot.ControlGroupByConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlGroupByConnection.PageInfo(childComplexity), true
+	case "ControlGroupByConnection.totalCount":
+		if e.ComplexityRoot.ControlGroupByConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlGroupByConnection.TotalCount(childComplexity), true
+
+	case "ControlGroupByEdge.cursor":
+		if e.ComplexityRoot.ControlGroupByEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlGroupByEdge.Cursor(childComplexity), true
+	case "ControlGroupByEdge.node":
+		if e.ComplexityRoot.ControlGroupByEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlGroupByEdge.Node(childComplexity), true
 
 	case "ControlGroupConnection.edges":
 		if e.ComplexityRoot.ControlGroupConnection.Edges == nil {
@@ -38664,6 +38758,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+	case "Query.controlsGroupBy":
+		if e.ComplexityRoot.Query.ControlsGroupBy == nil {
+			break
+		}
+
+		args, err := ec.field_Query_controlsGroupBy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ControlsGroupBy(childComplexity, args["field"].(model.ControlGroupByField), args["where"].(*generated.ControlWhereInput), args["orderBy"].(*groupby.Order), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 	case "Query.controlsGroupByCategory":
 		if e.ComplexityRoot.Query.ControlsGroupByCategory == nil {
 			break
@@ -40118,6 +40223,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+	case "Query.subcontrolsGroupBy":
+		if e.ComplexityRoot.Query.SubcontrolsGroupBy == nil {
+			break
+		}
+
+		args, err := ec.field_Query_subcontrolsGroupBy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.SubcontrolsGroupBy(childComplexity, args["field"].(model.SubcontrolGroupByField), args["where"].(*generated.SubcontrolWhereInput), args["orderBy"].(*groupby.Order), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 	case "Query.subprocessor":
 		if e.ComplexityRoot.Query.Subprocessor == nil {
 			break
@@ -45363,6 +45479,62 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SubcontrolEdge.Node(childComplexity), true
+
+	case "SubcontrolGroupByBucket.count":
+		if e.ComplexityRoot.SubcontrolGroupByBucket.Count == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolGroupByBucket.Count(childComplexity), true
+	case "SubcontrolGroupByBucket.key":
+		if e.ComplexityRoot.SubcontrolGroupByBucket.Key == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolGroupByBucket.Key(childComplexity), true
+	case "SubcontrolGroupByBucket.subcontrols":
+		if e.ComplexityRoot.SubcontrolGroupByBucket.Subcontrols == nil {
+			break
+		}
+
+		args, err := ec.field_SubcontrolGroupByBucket_subcontrols_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.SubcontrolGroupByBucket.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder)), true
+
+	case "SubcontrolGroupByConnection.edges":
+		if e.ComplexityRoot.SubcontrolGroupByConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolGroupByConnection.Edges(childComplexity), true
+	case "SubcontrolGroupByConnection.pageInfo":
+		if e.ComplexityRoot.SubcontrolGroupByConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolGroupByConnection.PageInfo(childComplexity), true
+	case "SubcontrolGroupByConnection.totalCount":
+		if e.ComplexityRoot.SubcontrolGroupByConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolGroupByConnection.TotalCount(childComplexity), true
+
+	case "SubcontrolGroupByEdge.cursor":
+		if e.ComplexityRoot.SubcontrolGroupByEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolGroupByEdge.Cursor(childComplexity), true
+	case "SubcontrolGroupByEdge.node":
+		if e.ComplexityRoot.SubcontrolGroupByEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolGroupByEdge.Node(childComplexity), true
 
 	case "SubcontrolUpdatePayload.subcontrol":
 		if e.ComplexityRoot.SubcontrolUpdatePayload.Subcontrol == nil {
@@ -56713,11 +56885,11 @@ extend type Query {
     """
     All existing categories or domains used in the organization @deprecated
     """
-    controlCategories: [String!]
+    controlCategories: [String!] @deprecated(reason: "use controlsGroupBy and subcontrolsGroupBy with field: CATEGORY")
     """
     All existing subcategories or domains used in the organization @deprecated
     """
-    controlSubcategories: [String!]
+    controlSubcategories: [String!] @deprecated(reason: "use controlsGroupBy and subcontrolsGroupBy with field: SUBCATEGORY")
     """
     Existing categories or domains for controls used in the organization
     """
@@ -56731,7 +56903,7 @@ extend type Query {
         Filtering options for APITokens returned from the connection.
         """
         where: ControlWhereInput
-    ): [ControlCategoryEdge!]
+    ): [ControlCategoryEdge!] @deprecated(reason: "use controlsGroupBy with field: CATEGORY")
     """
     Existing subcategories or subdomains for controls used in the organization
     """
@@ -56744,7 +56916,7 @@ extend type Query {
         Filtering options for APITokens returned from the connection.
         """
         where: ControlWhereInput
-    ): [ControlCategoryEdge!]
+    ): [ControlCategoryEdge!] @deprecated(reason: "use controlsGroupBy with field: SUBCATEGORY")
 
     """
     Get controls grouped by category
@@ -56783,7 +56955,7 @@ extend type Query {
     Filter by category, used for paginated requests to pull more data per category
     """
     category: String
-  ): ControlGroupConnection!
+  ): ControlGroupConnection! @deprecated(reason: "use controlsGroupBy with field: CATEGORY")
 }
 
 type ControlCategory {
@@ -151761,11 +151933,122 @@ input GroupByOrder @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupb
     field: GroupByOrderField! = COUNT
 }
 """
+ControlGroupByField are the Control fields that can be grouped on
+"""
+enum ControlGroupByField {
+    CATEGORY
+    SUBCATEGORY
+}
+"""
+ControlGroupByBucket is a group of controls sharing the same value for the grouped field
+"""
+type ControlGroupByBucket @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Bucket") {
+    """
+    The grouped value, null when the rows have no value
+    """
+    key: String
+    """
+    The number of controls in the group
+    """
+    count: Int!
+    """
+    The controls in the group
+    """
+    controls(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [ControlOrder!]): ControlConnection! @goField(forceResolver: true)
+}
+"""
+ControlGroupByEdge is a Control group by bucket with its pagination cursor
+"""
+type ControlGroupByEdge @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Edge") {
+    """
+    The bucket at the end of the edge
+    """
+    node: ControlGroupByBucket!
+    """
+    A cursor for use in pagination
+    """
+    cursor: Cursor!
+}
+"""
+ControlGroupByConnection is a paginated list of Control group by buckets
+"""
+type ControlGroupByConnection @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Connection") {
+    """
+    A list of edges
+    """
+    edges: [ControlGroupByEdge!]!
+    """
+    Information to aid in pagination
+    """
+    pageInfo: PageInfo!
+    """
+    Identifies the total count of groups in the connection
+    """
+    totalCount: Int!
+}
+"""
+SubcontrolGroupByField are the Subcontrol fields that can be grouped on
+"""
+enum SubcontrolGroupByField {
+    CATEGORY
+    SUBCATEGORY
+}
+"""
+SubcontrolGroupByBucket is a group of subcontrols sharing the same value for the grouped field
+"""
+type SubcontrolGroupByBucket @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Bucket") {
+    """
+    The grouped value, null when the rows have no value
+    """
+    key: String
+    """
+    The number of subcontrols in the group
+    """
+    count: Int!
+    """
+    The subcontrols in the group
+    """
+    subcontrols(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [SubcontrolOrder!]): SubcontrolConnection! @goField(forceResolver: true)
+}
+"""
+SubcontrolGroupByEdge is a Subcontrol group by bucket with its pagination cursor
+"""
+type SubcontrolGroupByEdge @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Edge") {
+    """
+    The bucket at the end of the edge
+    """
+    node: SubcontrolGroupByBucket!
+    """
+    A cursor for use in pagination
+    """
+    cursor: Cursor!
+}
+"""
+SubcontrolGroupByConnection is a paginated list of Subcontrol group by buckets
+"""
+type SubcontrolGroupByConnection @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Connection") {
+    """
+    A list of edges
+    """
+    edges: [SubcontrolGroupByEdge!]!
+    """
+    Information to aid in pagination
+    """
+    pageInfo: PageInfo!
+    """
+    Identifies the total count of groups in the connection
+    """
+    totalCount: Int!
+}
+"""
 VulnerabilityGroupByField are the Vulnerability fields that can be grouped on
 """
 enum VulnerabilityGroupByField {
+    VULNERABILITY_STATUS_NAME
     EXTERNAL_OWNER_ID
     CVE_ID
+    SOURCE
+    SEVERITY
 }
 """
 VulnerabilityGroupByBucket is a group of vulnerabilities sharing the same value for the grouped field
@@ -151815,6 +152098,72 @@ type VulnerabilityGroupByConnection @goModel(model: "github.com/theopenlane/gqlg
     totalCount: Int!
 }
 extend type Query {
+    """
+    controlsGroupBy groups controls by a field and returns each group with its count and rows
+    """
+    controlsGroupBy(
+        """
+        The field to group by
+        """
+        field: ControlGroupByField!
+        """
+        Filtering options for controls included in the groups
+        """
+        where: ControlWhereInput
+        """
+        Ordering options for the groups, defaults to count descending
+        """
+        orderBy: GroupByOrder
+        """
+        Returns the groups that come after the specified cursor
+        """
+        after: Cursor
+        """
+        Returns the first _n_ groups
+        """
+        first: Int
+        """
+        Returns the groups that come before the specified cursor
+        """
+        before: Cursor
+        """
+        Returns the last _n_ groups
+        """
+        last: Int
+    ): ControlGroupByConnection!
+    """
+    subcontrolsGroupBy groups subcontrols by a field and returns each group with its count and rows
+    """
+    subcontrolsGroupBy(
+        """
+        The field to group by
+        """
+        field: SubcontrolGroupByField!
+        """
+        Filtering options for subcontrols included in the groups
+        """
+        where: SubcontrolWhereInput
+        """
+        Ordering options for the groups, defaults to count descending
+        """
+        orderBy: GroupByOrder
+        """
+        Returns the groups that come after the specified cursor
+        """
+        after: Cursor
+        """
+        Returns the first _n_ groups
+        """
+        first: Int
+        """
+        Returns the groups that come before the specified cursor
+        """
+        before: Cursor
+        """
+        Returns the last _n_ groups
+        """
+        last: Int
+    ): SubcontrolGroupByConnection!
     """
     vulnerabilitiesGroupBy groups vulnerabilities by a field and returns each group with its count and rows
     """
@@ -162335,7 +162684,7 @@ extend type Query {
     Filtering options for vulnerabilities included in the summary.
     """
     where: VulnerabilityWhereInput
-  ): VulnerabilitySummary!
+  ): VulnerabilitySummary! @deprecated(reason: "use vulnerabilitiesGroupBy with field: SEVERITY, SOURCE, or VULNERABILITY_STATUS_NAME")
 }
 `, BuiltIn: false},
 	{Name: "../schema/webauthn.graphql", Input: `extend type Mutation{
@@ -165155,6 +165504,40 @@ func (ec *executionContext) childFields_ControlGroup(ctx context.Context, field 
 		return ec.fieldContext_ControlGroup_controls(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ControlGroup", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlGroupByBucket(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "key":
+		return ec.fieldContext_ControlGroupByBucket_key(ctx, field)
+	case "count":
+		return ec.fieldContext_ControlGroupByBucket_count(ctx, field)
+	case "controls":
+		return ec.fieldContext_ControlGroupByBucket_controls(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlGroupByBucket", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlGroupByConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_ControlGroupByConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_ControlGroupByConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ControlGroupByConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlGroupByConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_ControlGroupByEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_ControlGroupByEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_ControlGroupByEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ControlGroupByEdge", field.Name)
 }
 
 func (ec *executionContext) childFields_ControlGroupConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -174221,6 +174604,40 @@ func (ec *executionContext) childFields_SubcontrolEdge(ctx context.Context, fiel
 		return ec.fieldContext_SubcontrolEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type SubcontrolEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_SubcontrolGroupByBucket(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "key":
+		return ec.fieldContext_SubcontrolGroupByBucket_key(ctx, field)
+	case "count":
+		return ec.fieldContext_SubcontrolGroupByBucket_count(ctx, field)
+	case "subcontrols":
+		return ec.fieldContext_SubcontrolGroupByBucket_subcontrols(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SubcontrolGroupByBucket", field.Name)
+}
+
+func (ec *executionContext) childFields_SubcontrolGroupByConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_SubcontrolGroupByConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_SubcontrolGroupByConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_SubcontrolGroupByConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SubcontrolGroupByConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_SubcontrolGroupByEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_SubcontrolGroupByEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_SubcontrolGroupByEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SubcontrolGroupByEdge", field.Name)
 }
 
 func (ec *executionContext) childFields_SubcontrolUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

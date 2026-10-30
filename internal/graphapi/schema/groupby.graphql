@@ -20,11 +20,122 @@ input GroupByOrder @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupb
     field: GroupByOrderField! = COUNT
 }
 """
+ControlGroupByField are the Control fields that can be grouped on
+"""
+enum ControlGroupByField {
+    CATEGORY
+    SUBCATEGORY
+}
+"""
+ControlGroupByBucket is a group of controls sharing the same value for the grouped field
+"""
+type ControlGroupByBucket @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Bucket") {
+    """
+    The grouped value, null when the rows have no value
+    """
+    key: String
+    """
+    The number of controls in the group
+    """
+    count: Int!
+    """
+    The controls in the group
+    """
+    controls(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [ControlOrder!]): ControlConnection! @goField(forceResolver: true)
+}
+"""
+ControlGroupByEdge is a Control group by bucket with its pagination cursor
+"""
+type ControlGroupByEdge @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Edge") {
+    """
+    The bucket at the end of the edge
+    """
+    node: ControlGroupByBucket!
+    """
+    A cursor for use in pagination
+    """
+    cursor: Cursor!
+}
+"""
+ControlGroupByConnection is a paginated list of Control group by buckets
+"""
+type ControlGroupByConnection @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Connection") {
+    """
+    A list of edges
+    """
+    edges: [ControlGroupByEdge!]!
+    """
+    Information to aid in pagination
+    """
+    pageInfo: PageInfo!
+    """
+    Identifies the total count of groups in the connection
+    """
+    totalCount: Int!
+}
+"""
+SubcontrolGroupByField are the Subcontrol fields that can be grouped on
+"""
+enum SubcontrolGroupByField {
+    CATEGORY
+    SUBCATEGORY
+}
+"""
+SubcontrolGroupByBucket is a group of subcontrols sharing the same value for the grouped field
+"""
+type SubcontrolGroupByBucket @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Bucket") {
+    """
+    The grouped value, null when the rows have no value
+    """
+    key: String
+    """
+    The number of subcontrols in the group
+    """
+    count: Int!
+    """
+    The subcontrols in the group
+    """
+    subcontrols(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [SubcontrolOrder!]): SubcontrolConnection! @goField(forceResolver: true)
+}
+"""
+SubcontrolGroupByEdge is a Subcontrol group by bucket with its pagination cursor
+"""
+type SubcontrolGroupByEdge @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Edge") {
+    """
+    The bucket at the end of the edge
+    """
+    node: SubcontrolGroupByBucket!
+    """
+    A cursor for use in pagination
+    """
+    cursor: Cursor!
+}
+"""
+SubcontrolGroupByConnection is a paginated list of Subcontrol group by buckets
+"""
+type SubcontrolGroupByConnection @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Connection") {
+    """
+    A list of edges
+    """
+    edges: [SubcontrolGroupByEdge!]!
+    """
+    Information to aid in pagination
+    """
+    pageInfo: PageInfo!
+    """
+    Identifies the total count of groups in the connection
+    """
+    totalCount: Int!
+}
+"""
 VulnerabilityGroupByField are the Vulnerability fields that can be grouped on
 """
 enum VulnerabilityGroupByField {
+    VULNERABILITY_STATUS_NAME
     EXTERNAL_OWNER_ID
     CVE_ID
+    SOURCE
+    SEVERITY
 }
 """
 VulnerabilityGroupByBucket is a group of vulnerabilities sharing the same value for the grouped field
@@ -74,6 +185,72 @@ type VulnerabilityGroupByConnection @goModel(model: "github.com/theopenlane/gqlg
     totalCount: Int!
 }
 extend type Query {
+    """
+    controlsGroupBy groups controls by a field and returns each group with its count and rows
+    """
+    controlsGroupBy(
+        """
+        The field to group by
+        """
+        field: ControlGroupByField!
+        """
+        Filtering options for controls included in the groups
+        """
+        where: ControlWhereInput
+        """
+        Ordering options for the groups, defaults to count descending
+        """
+        orderBy: GroupByOrder
+        """
+        Returns the groups that come after the specified cursor
+        """
+        after: Cursor
+        """
+        Returns the first _n_ groups
+        """
+        first: Int
+        """
+        Returns the groups that come before the specified cursor
+        """
+        before: Cursor
+        """
+        Returns the last _n_ groups
+        """
+        last: Int
+    ): ControlGroupByConnection!
+    """
+    subcontrolsGroupBy groups subcontrols by a field and returns each group with its count and rows
+    """
+    subcontrolsGroupBy(
+        """
+        The field to group by
+        """
+        field: SubcontrolGroupByField!
+        """
+        Filtering options for subcontrols included in the groups
+        """
+        where: SubcontrolWhereInput
+        """
+        Ordering options for the groups, defaults to count descending
+        """
+        orderBy: GroupByOrder
+        """
+        Returns the groups that come after the specified cursor
+        """
+        after: Cursor
+        """
+        Returns the first _n_ groups
+        """
+        first: Int
+        """
+        Returns the groups that come before the specified cursor
+        """
+        before: Cursor
+        """
+        Returns the last _n_ groups
+        """
+        last: Int
+    ): SubcontrolGroupByConnection!
     """
     vulnerabilitiesGroupBy groups vulnerabilities by a field and returns each group with its count and rows
     """

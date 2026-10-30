@@ -51006,6 +51006,62 @@ func (e ControlCategoryOrderField) MarshalJSON() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+// ControlGroupByField are the Control fields that can be grouped on
+type ControlGroupByField string
+
+const (
+	ControlGroupByFieldCategory    ControlGroupByField = "CATEGORY"
+	ControlGroupByFieldSubcategory ControlGroupByField = "SUBCATEGORY"
+)
+
+var AllControlGroupByField = []ControlGroupByField{
+	ControlGroupByFieldCategory,
+	ControlGroupByFieldSubcategory,
+}
+
+func (e ControlGroupByField) IsValid() bool {
+	switch e {
+	case ControlGroupByFieldCategory, ControlGroupByFieldSubcategory:
+		return true
+	}
+	return false
+}
+
+func (e ControlGroupByField) String() string {
+	return string(e)
+}
+
+func (e *ControlGroupByField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ControlGroupByField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ControlGroupByField", str)
+	}
+	return nil
+}
+
+func (e ControlGroupByField) MarshalGQL(w io.Writer) {
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ControlGroupByField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ControlGroupByField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
 // Properties by which ControlImplementation connections can be ordered.
 type ControlImplementationOrderField string
 
@@ -54731,6 +54787,62 @@ func (e StandardOrderField) MarshalJSON() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+// SubcontrolGroupByField are the Subcontrol fields that can be grouped on
+type SubcontrolGroupByField string
+
+const (
+	SubcontrolGroupByFieldCategory    SubcontrolGroupByField = "CATEGORY"
+	SubcontrolGroupByFieldSubcategory SubcontrolGroupByField = "SUBCATEGORY"
+)
+
+var AllSubcontrolGroupByField = []SubcontrolGroupByField{
+	SubcontrolGroupByFieldCategory,
+	SubcontrolGroupByFieldSubcategory,
+}
+
+func (e SubcontrolGroupByField) IsValid() bool {
+	switch e {
+	case SubcontrolGroupByFieldCategory, SubcontrolGroupByFieldSubcategory:
+		return true
+	}
+	return false
+}
+
+func (e SubcontrolGroupByField) String() string {
+	return string(e)
+}
+
+func (e *SubcontrolGroupByField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = SubcontrolGroupByField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid SubcontrolGroupByField", str)
+	}
+	return nil
+}
+
+func (e SubcontrolGroupByField) MarshalGQL(w io.Writer) {
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *SubcontrolGroupByField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e SubcontrolGroupByField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
 // Properties by which Subcontrol connections can be ordered.
 type SubcontrolOrderField string
 
@@ -56001,18 +56113,24 @@ func (e VendorScoringConfigOrderField) MarshalJSON() ([]byte, error) {
 type VulnerabilityGroupByField string
 
 const (
-	VulnerabilityGroupByFieldExternalOwnerID VulnerabilityGroupByField = "EXTERNAL_OWNER_ID"
-	VulnerabilityGroupByFieldCveID           VulnerabilityGroupByField = "CVE_ID"
+	VulnerabilityGroupByFieldVulnerabilityStatusName VulnerabilityGroupByField = "VULNERABILITY_STATUS_NAME"
+	VulnerabilityGroupByFieldExternalOwnerID         VulnerabilityGroupByField = "EXTERNAL_OWNER_ID"
+	VulnerabilityGroupByFieldCveID                   VulnerabilityGroupByField = "CVE_ID"
+	VulnerabilityGroupByFieldSource                  VulnerabilityGroupByField = "SOURCE"
+	VulnerabilityGroupByFieldSeverity                VulnerabilityGroupByField = "SEVERITY"
 )
 
 var AllVulnerabilityGroupByField = []VulnerabilityGroupByField{
+	VulnerabilityGroupByFieldVulnerabilityStatusName,
 	VulnerabilityGroupByFieldExternalOwnerID,
 	VulnerabilityGroupByFieldCveID,
+	VulnerabilityGroupByFieldSource,
+	VulnerabilityGroupByFieldSeverity,
 }
 
 func (e VulnerabilityGroupByField) IsValid() bool {
 	switch e {
-	case VulnerabilityGroupByFieldExternalOwnerID, VulnerabilityGroupByFieldCveID:
+	case VulnerabilityGroupByFieldVulnerabilityStatusName, VulnerabilityGroupByFieldExternalOwnerID, VulnerabilityGroupByFieldCveID, VulnerabilityGroupByFieldSource, VulnerabilityGroupByFieldSeverity:
 		return true
 	}
 	return false
