@@ -425,6 +425,13 @@
       "isSlice": true
     }
   ],
+  "Report": [
+    {
+      "csvColumn": "ReportOwnerEmail",
+      "targetField": "ReportOwnerID",
+      "isSlice": false
+    }
+  ],
   "Review": [
     {
       "csvColumn": "ControlRefCodes",

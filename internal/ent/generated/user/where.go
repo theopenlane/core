@@ -2196,6 +2196,52 @@ func HasProgramsOwnedWith(preds ...predicate.Program) predicate.User {
 	})
 }
 
+// HasReports applies the HasEdge predicate on the "reports" edge.
+func HasReports() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, ReportsTable, ReportsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportsWith applies the HasEdge predicate on the "reports" edge with a given conditions (other predicates).
+func HasReportsWith(preds ...predicate.Report) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newReportsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReportsOwned applies the HasEdge predicate on the "reports_owned" edge.
+func HasReportsOwned() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ReportsOwnedTable, ReportsOwnedColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportsOwnedWith applies the HasEdge predicate on the "reports_owned" edge with a given conditions (other predicates).
+func HasReportsOwnedWith(preds ...predicate.Report) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newReportsOwnedStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasPlatformsOwned applies the HasEdge predicate on the "platforms_owned" edge.
 func HasPlatformsOwned() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
@@ -2349,6 +2395,29 @@ func HasProgramMemberships() predicate.User {
 func HasProgramMembershipsWith(preds ...predicate.ProgramMembership) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newProgramMembershipsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReportMemberships applies the HasEdge predicate on the "report_memberships" edge.
+func HasReportMemberships() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, ReportMembershipsTable, ReportMembershipsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReportMembershipsWith applies the HasEdge predicate on the "report_memberships" edge with a given conditions (other predicates).
+func HasReportMembershipsWith(preds ...predicate.ReportMembership) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newReportMembershipsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

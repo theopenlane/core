@@ -1,0 +1,75 @@
+extend type Query {
+    """
+    Look up report by ID
+    """
+     report(
+        """
+        ID of the report
+        """
+        id: ID!
+    ):  Report!
+}
+
+extend type Mutation{
+    """
+    Create a new report
+    """
+    createReport(
+        """
+        values of the report
+        """
+        input: CreateReportInput!
+    ): ReportCreatePayload!
+    """
+    Update an existing report
+    """
+    updateReport(
+        """
+        ID of the report
+        """
+        id: ID!
+        """
+        New values for the report
+        """
+        input: UpdateReportInput!
+    ): ReportUpdatePayload!
+    """
+    Delete an existing report
+    """
+    deleteReport(
+        """
+        ID of the report
+        """
+        id: ID!
+    ): ReportDeletePayload!
+}
+
+"""
+Return response for createReport mutation
+"""
+type ReportCreatePayload {
+    """
+    Created report
+    """
+    report: Report!
+}
+
+"""
+Return response for updateReport mutation
+"""
+type ReportUpdatePayload {
+    """
+    Updated report
+    """
+    report: Report!
+}
+
+"""
+Return response for deleteReport mutation
+"""
+type ReportDeletePayload {
+    """
+    Deleted report ID
+    """
+    deletedID: ID!
+}

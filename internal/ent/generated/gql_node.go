@@ -67,6 +67,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/report"
+	"github.com/theopenlane/core/v2/internal/ent/generated/reportmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -398,6 +400,16 @@ var remediationImplementors = []string{"Remediation", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Remediation) IsNode() {}
+
+var reportImplementors = []string{"Report", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Report) IsNode() {}
+
+var reportmembershipImplementors = []string{"ReportMembership", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ReportMembership) IsNode() {}
 
 var reviewImplementors = []string{"Review", "Node"}
 
@@ -1150,6 +1162,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(remediation.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, remediationImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case report.Table:
+		query := c.Report.Query().
+			Where(report.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, reportImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case reportmembership.Table:
+		query := c.ReportMembership.Query().
+			Where(reportmembership.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, reportmembershipImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2458,6 +2488,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Remediation.Query().
 			Where(remediation.IDIn(ids...))
 		query, err := query.CollectFields(ctx, remediationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case report.Table:
+		query := c.Report.Query().
+			Where(report.IDIn(ids...))
+		query, err := query.CollectFields(ctx, reportImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case reportmembership.Table:
+		query := c.ReportMembership.Query().
+			Where(reportmembership.IDIn(ids...))
+		query, err := query.CollectFields(ctx, reportmembershipImplementors...)
 		if err != nil {
 			return nil, err
 		}

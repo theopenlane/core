@@ -1379,6 +1379,70 @@ func (r *queryResolver) RemediationHistories(ctx context.Context, after *entgql.
 	return res, err
 }
 
+// ReportHistories is the resolver for the reportHistories field.
+func (r *queryResolver) ReportHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReportHistoryOrder, where *historygenerated.ReportHistoryWhereInput) (*historygenerated.ReportHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.ReportHistoryOrder{
+			Field:     historygenerated.ReportHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ReportHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reporthistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithReportHistoryOrder(orderBy),
+		historygenerated.WithReportHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reporthistory"})
+	}
+
+	return res, err
+}
+
+// ReportMembershipHistories is the resolver for the reportMembershipHistories field.
+func (r *queryResolver) ReportMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReportMembershipHistoryOrder, where *historygenerated.ReportMembershipHistoryWhereInput) (*historygenerated.ReportMembershipHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.ReportMembershipHistoryOrder{
+			Field:     historygenerated.ReportMembershipHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).ReportMembershipHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reportmembershiphistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithReportMembershipHistoryOrder(orderBy),
+		historygenerated.WithReportMembershipHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "reportmembershiphistory"})
+	}
+
+	return res, err
+}
+
 // ReviewHistories is the resolver for the reviewHistories field.
 func (r *queryResolver) ReviewHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReviewHistoryOrder, where *historygenerated.ReviewHistoryWhereInput) (*historygenerated.ReviewHistoryConnection, error) {
 	// set page limit if nothing was set
