@@ -88,7 +88,7 @@ func Builder(cfg Config) registry.Builder {
 					},
 				},
 				{
-					Schema:  entityops.SchemaVulnerability.Name,
+					Schema:  entityops.SchemaFinding.Name,
 					Variant: githubAlertTypeSecretScan,
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
@@ -139,7 +139,7 @@ func Builder(cfg Config) registry.Builder {
 						secretScanningAlertWebhookEvent.Registration(types.WebhookEventRegistration{
 							Ingest: []types.IngestContract{
 								{
-									Schema: entityops.SchemaVulnerability.Name,
+									Schema: entityops.SchemaFinding.Name,
 								},
 							},
 							Handle: SecretScanningAlertWebhook{}.Handle,

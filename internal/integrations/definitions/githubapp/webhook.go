@@ -247,7 +247,7 @@ func (SecretScanningAlertWebhook) Handle(ctx context.Context, request types.Webh
 		return ErrWebhookPayloadInvalid
 	}
 
-	return ingestGitHubAlert(ctx, request, entityops.SchemaVulnerability, githubAlertTypeSecretScan, envelope)
+	return ingestGitHubAlert(ctx, request, entityops.SchemaFinding, githubAlertTypeSecretScan, envelope)
 }
 
 // ingestGitHubAlert extracts the alert from a webhook payload and routes it for ingest

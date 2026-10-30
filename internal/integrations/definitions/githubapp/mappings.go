@@ -123,11 +123,20 @@ var (
 		entityops.FindingFields.Description.Expr(`paragraphs('most_recent_instance' in payload && 'message' in payload.most_recent_instance && 'text' in payload.most_recent_instance.message ? payload.most_recent_instance.message.text : "")`),
 	)
 	// mapExprSecretScanning is the CEL mapping expression for secret scanning webhook alert payloads
-	mapExprSecretScanning = buildWebhookMappingExpr(githubAlertTypeSecretScan, `"github:" + resource + ":secret_scanning:" + ('number' in payload && payload.number != 0 ? string(payload.number) : "unknown")`, []entityops.MappingEntry{
-		entityops.VulnerabilityFields.Severity.Expr(`"high"`),
-		entityops.VulnerabilityFields.Summary.Expr(`'secret_type_display_name' in payload && payload.secret_type_display_name != "" ? payload.secret_type_display_name : ('secret_type' in payload ? payload.secret_type : "")`),
-		entityops.VulnerabilityFields.Description.Expr(`paragraphs('resolution' in payload ? payload.resolution : "")`),
-	},
+	mapExprSecretScanning = providerkit.CelMapExpr(
+		entityops.FindingFields.ExternalID.Expr(`"github:" + resource + ":secret_scanning:" + ('number' in payload && payload.number != 0 ? string(payload.number) : "unknown")`),
+		entityops.FindingFields.ExternalOwnerID.Expr("resource"),
+		entityops.FindingFields.Category.Expr(strconv.Quote(githubAlertTypeSecretScan)),
+		entityops.FindingFields.FindingStatusName.Expr(`'state' in payload ? payload.state : ""`),
+		entityops.FindingFields.ExternalURI.Expr(`'html_url' in payload ? payload.html_url : ""`),
+		entityops.FindingFields.SourceUpdatedAt.Expr(`'updated_at' in payload ? payload.updated_at : null`),
+		entityops.FindingFields.ReportedAt.Expr(`'created_at' in payload ? payload.created_at : null`),
+		entityops.FindingFields.Open.Expr(`'state' in payload ? payload.state == "open" : false`),
+		entityops.FindingFields.RawPayload.Expr("payload"),
+		entityops.FindingFields.Source.Expr(providerkit.ExprInstallationName),
+		entityops.FindingFields.Severity.Expr(`"high"`),
+		entityops.FindingFields.DisplayName.Expr(`'secret_type_display_name' in payload && payload.secret_type_display_name != "" ? payload.secret_type_display_name : ('secret_type' in payload ? payload.secret_type : "")`),
+		entityops.FindingFields.Description.Expr(`paragraphs('resolution' in payload ? payload.resolution : "")`),
 	)
 )
 
