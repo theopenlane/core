@@ -23,6 +23,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationbrandingsetting"
 )
 
 func (suite *HandlerTestSuite) TestGetQuestionnaire() {
@@ -67,6 +68,12 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
 
+	_, err = suite.db.OrganizationBrandingSetting.Update().
+		Where(organizationbrandingsetting.OrganizationID(testUser1.OrganizationID)).
+		SetRemoveAssessmentBranding(true).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
 	testEmail := "test@example.com"
 
 	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", testEmail)))
@@ -108,6 +115,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 				questions, ok := resp.Jsonconfig["questions"].([]interface{})
 				assert.True(t, ok)
 				assert.Len(t, questions, 2)
+				assert.True(t, resp.RemoveBranding)
 			},
 		},
 		{

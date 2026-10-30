@@ -1072,6 +1072,8 @@ func init() {
 	contact.Hooks[5] = contactMixinHooks8[0]
 
 	contact.Hooks[6] = contactHooks[0]
+
+	contact.Hooks[7] = contactHooks[1]
 	contactMixinInters3 := contactMixin[3].Interceptors()
 	contactMixinInters8 := contactMixin[8].Interceptors()
 	contact.Interceptors[0] = contactMixinInters3[0]
@@ -2738,6 +2740,8 @@ func init() {
 	evidence.Hooks[12] = evidenceHooks[1]
 
 	evidence.Hooks[13] = evidenceHooks[2]
+
+	evidence.Hooks[14] = evidenceHooks[3]
 	evidenceMixinInters3 := evidenceMixin[3].Interceptors()
 	evidenceMixinInters8 := evidenceMixin[8].Interceptors()
 	evidence.Interceptors[0] = evidenceMixinInters3[0]
@@ -3052,6 +3056,8 @@ func init() {
 	finding.Hooks[14] = findingMixinHooks15[0]
 
 	finding.Hooks[15] = findingHooks[0]
+
+	finding.Hooks[16] = findingHooks[1]
 	findingMixinInters3 := findingMixin[3].Interceptors()
 	findingMixinInters8 := findingMixin[8].Interceptors()
 	findingMixinInters9 := findingMixin[9].Interceptors()
@@ -6104,6 +6110,7 @@ func init() {
 	remediationMixinHooks11 := remediationMixin[11].Hooks()
 	remediationMixinHooks12 := remediationMixin[12].Hooks()
 	remediationMixinHooks13 := remediationMixin[13].Hooks()
+	remediationHooks := schema.Remediation{}.Hooks()
 
 	remediation.Hooks[1] = remediationMixinHooks0[0]
 
@@ -6130,6 +6137,8 @@ func init() {
 	remediation.Hooks[12] = remediationMixinHooks12[0]
 
 	remediation.Hooks[13] = remediationMixinHooks13[0]
+
+	remediation.Hooks[14] = remediationHooks[0]
 	remediationMixinInters3 := remediationMixin[3].Interceptors()
 	remediationMixinInters8 := remediationMixin[8].Interceptors()
 	remediationMixinInters9 := remediationMixin[9].Interceptors()
@@ -6641,6 +6650,7 @@ func init() {
 	scanMixinHooks10 := scanMixin[10].Hooks()
 	scanMixinHooks12 := scanMixin[12].Hooks()
 	scanMixinHooks13 := scanMixin[13].Hooks()
+	scanHooks := schema.Scan{}.Hooks()
 
 	scan.Hooks[1] = scanMixinHooks0[0]
 
@@ -6663,6 +6673,8 @@ func init() {
 	scan.Hooks[10] = scanMixinHooks12[0]
 
 	scan.Hooks[11] = scanMixinHooks13[0]
+
+	scan.Hooks[12] = scanHooks[0]
 	scanMixinInters3 := scanMixin[3].Interceptors()
 	scanMixinInters8 := scanMixin[8].Interceptors()
 	scanMixinInters10 := scanMixin[10].Interceptors()
@@ -8130,6 +8142,12 @@ func init() {
 	trustcentersetting.Hooks[7] = trustcentersettingHooks[0]
 
 	trustcentersetting.Hooks[8] = trustcentersettingHooks[1]
+
+	trustcentersetting.Hooks[9] = trustcentersettingHooks[2]
+
+	trustcentersetting.Hooks[10] = trustcentersettingHooks[3]
+
+	trustcentersetting.Hooks[11] = trustcentersettingHooks[4]
 	trustcentersettingMixinInters3 := trustcentersettingMixin[3].Interceptors()
 	trustcentersettingMixinInters6 := trustcentersettingMixin[6].Interceptors()
 	trustcentersettingInters := schema.TrustCenterSetting{}.Interceptors()
@@ -8900,6 +8918,8 @@ func init() {
 	vulnerability.Hooks[15] = vulnerabilityMixinHooks15[0]
 
 	vulnerability.Hooks[16] = vulnerabilityHooks[0]
+
+	vulnerability.Hooks[17] = vulnerabilityHooks[1]
 	vulnerabilityMixinInters3 := vulnerabilityMixin[3].Interceptors()
 	vulnerabilityMixinInters8 := vulnerabilityMixin[8].Interceptors()
 	vulnerability.Interceptors[0] = vulnerabilityMixinInters3[0]

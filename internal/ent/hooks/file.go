@@ -3,12 +3,15 @@ package hooks
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/logx"
 )
 
@@ -63,16 +66,14 @@ func HookFileDelete() ent.Hook {
 					if f.StoragePath != "" && m.ObjectManager != nil {
 						// Convert ent File to storagetypes.File
 						storageFile := &storagetypes.File{
-							ID:           f.ID,
-							OriginalName: f.ProvidedFileName,
-							FileMetadata: storagetypes.FileMetadata{
-								Key:           f.StoragePath,
-								ContentType:   f.DetectedContentType,
-								Size:          f.PersistedFileSize,
-								Bucket:        f.StorageVolume,
-								Region:        f.StorageRegion,
-								ProviderHints: &storagetypes.ProviderHints{},
-							},
+							ID:            f.ID,
+							OriginalName:  f.ProvidedFileName,
+							Key:           f.StoragePath,
+							ContentType:   f.DetectedContentType,
+							Size:          f.PersistedFileSize,
+							Bucket:        f.StorageVolume,
+							Region:        f.StorageRegion,
+							ProviderHints: &storagetypes.ProviderHints{},
 						}
 
 						if f.Metadata != nil {
@@ -115,4 +116,83 @@ func HookFileDelete() ent.Hook {
 				return v, err
 			})
 	}, ent.OpDelete|ent.OpDeleteOne)
+}
+
+// fileEdgeMutation is a mutation on a schema with a files edge
+type fileEdgeMutation interface {
+	utils.GenericMutation
+	AddFileIDs(ids ...string)
+}
+
+// HookFiles runs on mutations with a files edge to check for uploaded files under key
+func HookFiles(key string) ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			mut, ok := m.(fileEdgeMutation)
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			ctx, err := checkMutationFiles(ctx, mut, key)
+			if err != nil {
+				return nil, err
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne)
+}
+
+// HookSingleFile runs on mutations to check for a single uploaded file under key and set it on field
+func HookSingleFile(key, field string) ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			mut, ok := m.(utils.GenericMutation)
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
+			if len(files) == 0 {
+				return next.Mutate(ctx, m)
+			}
+
+			if len(files) > 1 {
+				return nil, fmt.Errorf("%w: %s", ErrTooManyFiles, key)
+			}
+
+			if err := m.SetField(field, files[0].ID); err != nil {
+				return nil, err
+			}
+
+			ctx, err := pkgobjects.ProcessFilesForMutation(ctx, mut, key)
+			if err != nil {
+				return nil, err
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne)
+}
+
+// HookLogoFile runs on mutations to check for an uploaded logo file
+func HookLogoFile() ent.Hook {
+	return HookSingleFile("logoFile", "logo_file_id")
+}
+
+// checkMutationFiles checks if files are provided under key and sets the local file ID(s)
+func checkMutationFiles(ctx context.Context, m fileEdgeMutation, key string) (context.Context, error) {
+	files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
+	if len(files) == 0 {
+		return ctx, nil
+	}
+
+	fileIDs := make([]string, len(files))
+	for i, f := range files {
+		fileIDs[i] = f.ID
+	}
+
+	m.AddFileIDs(fileIDs...)
+
+	return pkgobjects.ProcessFilesForMutation(ctx, m, key)
 }

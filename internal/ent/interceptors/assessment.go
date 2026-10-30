@@ -120,11 +120,20 @@ func InterceptorAssessmentBranding() ent.Interceptor {
 				return nil, err
 			}
 
-			setting, err := utils.EntClientFromContext(ctx).OrganizationBrandingSetting.Query().
+			client := utils.EntClientFromContext(ctx)
+			if client == nil {
+				return v, nil
+			}
+
+			setting, err := client.OrganizationBrandingSetting.Query().
 				Where(organizationbrandingsetting.OrganizationID(orgID)).
 				Select(organizationbrandingsetting.FieldRemoveAssessmentBranding).
 				Only(ctx)
 			if err != nil {
+				if generated.IsNotFound(err) {
+					return v, nil
+				}
+
 				return nil, err
 			}
 

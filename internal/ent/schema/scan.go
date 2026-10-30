@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/mixin"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -206,6 +207,13 @@ func (s Scan) Policy() ent.Policy {
 			entfga.CheckEditAccess[*generated.ScanMutation](),
 		),
 	)
+}
+
+// Hooks of the Scan
+func (Scan) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookFiles("scanFiles"),
+	}
 }
 
 // Modules this schema has access to
