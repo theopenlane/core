@@ -227,7 +227,7 @@ func (DependabotAlertWebhook) Handle(ctx context.Context, request types.WebhookH
 		return ErrWebhookPayloadInvalid
 	}
 
-	return ingestGitHubAlert(ctx, request, githubAlertTypeDependabot, envelope)
+	return ingestGitHubAlert(ctx, request, entityops.SchemaVulnerability, githubAlertTypeDependabot, envelope)
 }
 
 // Handle ingests one code scanning alert from the webhook payload
@@ -237,7 +237,7 @@ func (CodeScanningAlertWebhook) Handle(ctx context.Context, request types.Webhoo
 		return ErrWebhookPayloadInvalid
 	}
 
-	return ingestGitHubAlert(ctx, request, githubAlertTypeCodeScanning, envelope)
+	return ingestGitHubAlert(ctx, request, entityops.SchemaFinding, githubAlertTypeCodeScanning, envelope)
 }
 
 // Handle ingests one secret scanning alert from the webhook payload
@@ -247,11 +247,11 @@ func (SecretScanningAlertWebhook) Handle(ctx context.Context, request types.Webh
 		return ErrWebhookPayloadInvalid
 	}
 
-	return ingestGitHubAlert(ctx, request, githubAlertTypeSecretScan, envelope)
+	return ingestGitHubAlert(ctx, request, entityops.SchemaFinding, githubAlertTypeSecretScan, envelope)
 }
 
 // ingestGitHubAlert extracts the alert from a webhook payload and routes it for ingest
-func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, variant string, envelope githubWebhookEnvelope) error {
+func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, schema *entityops.Schema, variant string, envelope githubWebhookEnvelope) error {
 	resource := githubRepoFromWebhook(envelope.Repository)
 	if resource == "" || len(envelope.Alert) == 0 {
 		return nil
@@ -259,7 +259,7 @@ func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, 
 
 	if err := request.Ingest(ctx, []types.IngestPayloadSet{
 		{
-			Schema: entityops.SchemaVulnerability.Name,
+			Schema: schema.Name,
 			Envelopes: []types.MappingEnvelope{
 				{
 					Variant:  variant,
