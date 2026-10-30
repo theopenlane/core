@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/gqlgen-plugins/groupby"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -49,6 +50,7 @@ type ResolverRoot interface {
 	Task() TaskResolver
 	TemplateContextEntry() TemplateContextEntryResolver
 	Vulnerability() VulnerabilityResolver
+	VulnerabilityGroupByBucket() VulnerabilityGroupByBucketResolver
 	WorkflowInstance() WorkflowInstanceResolver
 	WorkflowProposal() WorkflowProposalResolver
 	CreateDiscussionInput() CreateDiscussionInputResolver
@@ -5652,6 +5654,7 @@ type ComplexityRoot struct {
 		VendorScoringConfig             func(childComplexity int, id string) int
 		VendorScoringConfigs            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VendorScoringConfigOrder, where *generated.VendorScoringConfigWhereInput) int
 		Vulnerabilities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		VulnerabilitiesGroupBy          func(childComplexity int, field model.VulnerabilityGroupByField, where *generated.VulnerabilityWhereInput, orderBy *groupby.Order, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Vulnerability                   func(childComplexity int, id string) int
 		VulnerabilitySearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		VulnerabilitySummary            func(childComplexity int, where *generated.VulnerabilityWhereInput) int
@@ -8032,6 +8035,23 @@ type ComplexityRoot struct {
 	}
 
 	VulnerabilityEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	VulnerabilityGroupByBucket struct {
+		Count           func(childComplexity int) int
+		Key             func(childComplexity int) int
+		Vulnerabilities func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder) int
+	}
+
+	VulnerabilityGroupByConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	VulnerabilityGroupByEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -40632,6 +40652,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
+	case "Query.vulnerabilitiesGroupBy":
+		if e.ComplexityRoot.Query.VulnerabilitiesGroupBy == nil {
+			break
+		}
+
+		args, err := ec.field_Query_vulnerabilitiesGroupBy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.VulnerabilitiesGroupBy(childComplexity, args["field"].(model.VulnerabilityGroupByField), args["where"].(*generated.VulnerabilityWhereInput), args["orderBy"].(*groupby.Order), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 	case "Query.vulnerability":
 		if e.ComplexityRoot.Query.Vulnerability == nil {
 			break
@@ -51717,6 +51748,62 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityEdge.Node(childComplexity), true
 
+	case "VulnerabilityGroupByBucket.count":
+		if e.ComplexityRoot.VulnerabilityGroupByBucket.Count == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityGroupByBucket.Count(childComplexity), true
+	case "VulnerabilityGroupByBucket.key":
+		if e.ComplexityRoot.VulnerabilityGroupByBucket.Key == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityGroupByBucket.Key(childComplexity), true
+	case "VulnerabilityGroupByBucket.vulnerabilities":
+		if e.ComplexityRoot.VulnerabilityGroupByBucket.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_VulnerabilityGroupByBucket_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.VulnerabilityGroupByBucket.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder)), true
+
+	case "VulnerabilityGroupByConnection.edges":
+		if e.ComplexityRoot.VulnerabilityGroupByConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityGroupByConnection.Edges(childComplexity), true
+	case "VulnerabilityGroupByConnection.pageInfo":
+		if e.ComplexityRoot.VulnerabilityGroupByConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityGroupByConnection.PageInfo(childComplexity), true
+	case "VulnerabilityGroupByConnection.totalCount":
+		if e.ComplexityRoot.VulnerabilityGroupByConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityGroupByConnection.TotalCount(childComplexity), true
+
+	case "VulnerabilityGroupByEdge.cursor":
+		if e.ComplexityRoot.VulnerabilityGroupByEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityGroupByEdge.Cursor(childComplexity), true
+	case "VulnerabilityGroupByEdge.node":
+		if e.ComplexityRoot.VulnerabilityGroupByEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityGroupByEdge.Node(childComplexity), true
+
 	case "VulnerabilityResolvePayload.review":
 		if e.ComplexityRoot.VulnerabilityResolvePayload.Review == nil {
 			break
@@ -53889,6 +53976,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("FindingControlWhereInput", ec.unmarshalInputFindingControlWhereInput),
 			graphql.NewInputUnmarshaler("FindingOrder", ec.unmarshalInputFindingOrder),
 			graphql.NewInputUnmarshaler("FindingWhereInput", ec.unmarshalInputFindingWhereInput),
+			graphql.NewInputUnmarshaler("GroupByOrder", ec.unmarshalInputGroupByOrder),
 			graphql.NewInputUnmarshaler("GroupMembersInput", ec.unmarshalInputGroupMembersInput),
 			graphql.NewInputUnmarshaler("GroupMembershipOrder", ec.unmarshalInputGroupMembershipOrder),
 			graphql.NewInputUnmarshaler("GroupMembershipWhereInput", ec.unmarshalInputGroupMembershipWhereInput),
@@ -151651,6 +151739,117 @@ type GroupBulkUpdatePayload {
     error: String
 }
 `, BuiltIn: false},
+	{Name: "../schema/groupby.graphql", Input: `directive @goEnum(value: String) on ENUM_VALUE
+"""
+GroupByOrderField is the field group by buckets are ordered by
+"""
+enum GroupByOrderField @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.OrderField") {
+    COUNT @goEnum(value: "github.com/theopenlane/gqlgen-plugins/groupby.OrderFieldCount")
+    KEY @goEnum(value: "github.com/theopenlane/gqlgen-plugins/groupby.OrderFieldKey")
+}
+"""
+GroupByOrder is the ordering of group by buckets
+"""
+input GroupByOrder @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Order") {
+    """
+    The ordering direction
+    """
+    direction: OrderDirection! = DESC
+    """
+    The field by which to order the groups
+    """
+    field: GroupByOrderField! = COUNT
+}
+"""
+VulnerabilityGroupByField are the Vulnerability fields that can be grouped on
+"""
+enum VulnerabilityGroupByField {
+    EXTERNAL_OWNER_ID
+    CVE_ID
+}
+"""
+VulnerabilityGroupByBucket is a group of vulnerabilities sharing the same value for the grouped field
+"""
+type VulnerabilityGroupByBucket @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Bucket") {
+    """
+    The grouped value, null when the rows have no value
+    """
+    key: String
+    """
+    The number of vulnerabilities in the group
+    """
+    count: Int!
+    """
+    The vulnerabilities in the group
+    """
+    vulnerabilities(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [VulnerabilityOrder!]): VulnerabilityConnection! @goField(forceResolver: true)
+}
+"""
+VulnerabilityGroupByEdge is a Vulnerability group by bucket with its pagination cursor
+"""
+type VulnerabilityGroupByEdge @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Edge") {
+    """
+    The bucket at the end of the edge
+    """
+    node: VulnerabilityGroupByBucket!
+    """
+    A cursor for use in pagination
+    """
+    cursor: Cursor!
+}
+"""
+VulnerabilityGroupByConnection is a paginated list of Vulnerability group by buckets
+"""
+type VulnerabilityGroupByConnection @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Connection") {
+    """
+    A list of edges
+    """
+    edges: [VulnerabilityGroupByEdge!]!
+    """
+    Information to aid in pagination
+    """
+    pageInfo: PageInfo!
+    """
+    Identifies the total count of groups in the connection
+    """
+    totalCount: Int!
+}
+extend type Query {
+    """
+    vulnerabilitiesGroupBy groups vulnerabilities by a field and returns each group with its count and rows
+    """
+    vulnerabilitiesGroupBy(
+        """
+        The field to group by
+        """
+        field: VulnerabilityGroupByField!
+        """
+        Filtering options for vulnerabilities included in the groups
+        """
+        where: VulnerabilityWhereInput
+        """
+        Ordering options for the groups, defaults to count descending
+        """
+        orderBy: GroupByOrder
+        """
+        Returns the groups that come after the specified cursor
+        """
+        after: Cursor
+        """
+        Returns the first _n_ groups
+        """
+        first: Int
+        """
+        Returns the groups that come before the specified cursor
+        """
+        before: Cursor
+        """
+        Returns the last _n_ groups
+        """
+        last: Int
+    ): VulnerabilityGroupByConnection!
+}
+`, BuiltIn: false},
 	{Name: "../schema/groupextended.graphql", Input: `extend input CreateGroupInput {
   createGroupSettings: CreateGroupSettingInput
 }
@@ -176936,6 +177135,40 @@ func (ec *executionContext) childFields_VulnerabilityEdge(ctx context.Context, f
 		return ec.fieldContext_VulnerabilityEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type VulnerabilityEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_VulnerabilityGroupByBucket(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "key":
+		return ec.fieldContext_VulnerabilityGroupByBucket_key(ctx, field)
+	case "count":
+		return ec.fieldContext_VulnerabilityGroupByBucket_count(ctx, field)
+	case "vulnerabilities":
+		return ec.fieldContext_VulnerabilityGroupByBucket_vulnerabilities(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VulnerabilityGroupByBucket", field.Name)
+}
+
+func (ec *executionContext) childFields_VulnerabilityGroupByConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_VulnerabilityGroupByConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_VulnerabilityGroupByConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_VulnerabilityGroupByConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VulnerabilityGroupByConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_VulnerabilityGroupByEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_VulnerabilityGroupByEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_VulnerabilityGroupByEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VulnerabilityGroupByEdge", field.Name)
 }
 
 func (ec *executionContext) childFields_VulnerabilityResolvePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

@@ -55997,6 +55997,62 @@ func (e VendorScoringConfigOrderField) MarshalJSON() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+// VulnerabilityGroupByField are the Vulnerability fields that can be grouped on
+type VulnerabilityGroupByField string
+
+const (
+	VulnerabilityGroupByFieldExternalOwnerID VulnerabilityGroupByField = "EXTERNAL_OWNER_ID"
+	VulnerabilityGroupByFieldCveID           VulnerabilityGroupByField = "CVE_ID"
+)
+
+var AllVulnerabilityGroupByField = []VulnerabilityGroupByField{
+	VulnerabilityGroupByFieldExternalOwnerID,
+	VulnerabilityGroupByFieldCveID,
+}
+
+func (e VulnerabilityGroupByField) IsValid() bool {
+	switch e {
+	case VulnerabilityGroupByFieldExternalOwnerID, VulnerabilityGroupByFieldCveID:
+		return true
+	}
+	return false
+}
+
+func (e VulnerabilityGroupByField) String() string {
+	return string(e)
+}
+
+func (e *VulnerabilityGroupByField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = VulnerabilityGroupByField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid VulnerabilityGroupByField", str)
+	}
+	return nil
+}
+
+func (e VulnerabilityGroupByField) MarshalGQL(w io.Writer) {
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *VulnerabilityGroupByField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e VulnerabilityGroupByField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
 // Properties by which Vulnerability connections can be ordered.
 type VulnerabilityOrderField string
 
