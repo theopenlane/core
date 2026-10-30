@@ -10,6 +10,7 @@ import (
 	"github.com/gqlgo/gqlgenc/clientv2"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/gqlgen-plugins/groupby"
 )
 
 type TestGraphClient interface {
@@ -739,6 +740,7 @@ type TestGraphClient interface {
 	UpdateBulkVulnerability(ctx context.Context, ids []string, input UpdateVulnerabilityInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkVulnerability, error)
 	UpdateVulnerability(ctx context.Context, updateVulnerabilityID string, input UpdateVulnerabilityInput, interceptors ...clientv2.RequestInterceptor) (*UpdateVulnerability, error)
 	UpdateVulnerabilityComment(ctx context.Context, updateVulnerabilityCommentID string, input UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateVulnerabilityComment, error)
+	GetVulnerabilitiesGroupByCve(ctx context.Context, first *int64, last *int64, after *string, before *string, where *VulnerabilityWhereInput, orderBy *groupby.Order, rowsFirst *int64, rowsAfter *string, rowsOrderBy []*VulnerabilityOrder, interceptors ...clientv2.RequestInterceptor) (*GetVulnerabilitiesGroupByCve, error)
 	DeleteWebauthn(ctx context.Context, deleteWebauthnID string, interceptors ...clientv2.RequestInterceptor) (*DeleteWebauthn, error)
 	GetAllWebauthns(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllWebauthns, error)
 	ApproveWorkflowAssignment(ctx context.Context, id string, interceptors ...clientv2.RequestInterceptor) (*ApproveWorkflowAssignment, error)
@@ -163059,6 +163061,724 @@ func (t *UpdateVulnerabilityComment_UpdateVulnerabilityComment) GetVulnerability
 	return &t.Vulnerability
 }
 
+type GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node struct {
+	AssignedTo                    *string              "json:\"assignedTo,omitempty\" graphql:\"assignedTo\""
+	AssignedToGroupID             *string              "json:\"assignedToGroupID,omitempty\" graphql:\"assignedToGroupID\""
+	AssignedToIdentityHolderID    *string              "json:\"assignedToIdentityHolderID,omitempty\" graphql:\"assignedToIdentityHolderID\""
+	AssignedToUserID              *string              "json:\"assignedToUserID,omitempty\" graphql:\"assignedToUserID\""
+	AutoDismissedAt               *models.DateTime     "json:\"autoDismissedAt,omitempty\" graphql:\"autoDismissedAt\""
+	Blocking                      *bool                "json:\"blocking,omitempty\" graphql:\"blocking\""
+	Category                      *string              "json:\"category,omitempty\" graphql:\"category\""
+	CreatedAt                     *time.Time           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                     *string              "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	CveID                         *string              "json:\"cveID,omitempty\" graphql:\"cveID\""
+	CweIds                        []string             "json:\"cweIds,omitempty\" graphql:\"cweIds\""
+	DependencyScope               *string              "json:\"dependencyScope,omitempty\" graphql:\"dependencyScope\""
+	Description                   *string              "json:\"description,omitempty\" graphql:\"description\""
+	DiscoveredAt                  *models.DateTime     "json:\"discoveredAt,omitempty\" graphql:\"discoveredAt\""
+	DismissedAt                   *models.DateTime     "json:\"dismissedAt,omitempty\" graphql:\"dismissedAt\""
+	DismissedComment              *string              "json:\"dismissedComment,omitempty\" graphql:\"dismissedComment\""
+	DismissedReason               *string              "json:\"dismissedReason,omitempty\" graphql:\"dismissedReason\""
+	DisplayID                     string               "json:\"displayID\" graphql:\"displayID\""
+	DisplayName                   *string              "json:\"displayName,omitempty\" graphql:\"displayName\""
+	EnvironmentID                 *string              "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName               *string              "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	Exploitability                *float64             "json:\"exploitability,omitempty\" graphql:\"exploitability\""
+	ExternalID                    string               "json:\"externalID\" graphql:\"externalID\""
+	ExternalOwnerID               *string              "json:\"externalOwnerID,omitempty\" graphql:\"externalOwnerID\""
+	ExternalURI                   *string              "json:\"externalURI,omitempty\" graphql:\"externalURI\""
+	FirstPatchedVersion           *string              "json:\"firstPatchedVersion,omitempty\" graphql:\"firstPatchedVersion\""
+	FixAvailable                  *bool                "json:\"fixAvailable,omitempty\" graphql:\"fixAvailable\""
+	FixedAt                       *models.DateTime     "json:\"fixedAt,omitempty\" graphql:\"fixedAt\""
+	ID                            string               "json:\"id\" graphql:\"id\""
+	Impact                        *float64             "json:\"impact,omitempty\" graphql:\"impact\""
+	Impacts                       []string             "json:\"impacts,omitempty\" graphql:\"impacts\""
+	IntegrationRunID              *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes                 *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	InternalOwner                 *string              "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
+	InternalOwnerGroupID          *string              "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
+	InternalOwnerIdentityHolderID *string              "json:\"internalOwnerIdentityHolderID,omitempty\" graphql:\"internalOwnerIdentityHolderID\""
+	InternalOwnerUserID           *string              "json:\"internalOwnerUserID,omitempty\" graphql:\"internalOwnerUserID\""
+	ManagedBy                     *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
+	ManifestPath                  *string              "json:\"manifestPath,omitempty\" graphql:\"manifestPath\""
+	Metadata                      map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Open                          *bool                "json:\"open,omitempty\" graphql:\"open\""
+	OwnerID                       *string              "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PackageEcosystem              *string              "json:\"packageEcosystem,omitempty\" graphql:\"packageEcosystem\""
+	PackageName                   *string              "json:\"packageName,omitempty\" graphql:\"packageName\""
+	Priority                      *string              "json:\"priority,omitempty\" graphql:\"priority\""
+	Production                    *bool                "json:\"production,omitempty\" graphql:\"production\""
+	Public                        *bool                "json:\"public,omitempty\" graphql:\"public\""
+	PublishedAt                   *models.DateTime     "json:\"publishedAt,omitempty\" graphql:\"publishedAt\""
+	RawPayload                    map[string]any       "json:\"rawPayload,omitempty\" graphql:\"rawPayload\""
+	References                    []string             "json:\"references,omitempty\" graphql:\"references\""
+	RemediationSLA                *int64               "json:\"remediationSLA,omitempty\" graphql:\"remediationSLA\""
+	ReviewedBy                    *string              "json:\"reviewedBy,omitempty\" graphql:\"reviewedBy\""
+	ReviewedByGroupID             *string              "json:\"reviewedByGroupID,omitempty\" graphql:\"reviewedByGroupID\""
+	ReviewedByIdentityHolderID    *string              "json:\"reviewedByIdentityHolderID,omitempty\" graphql:\"reviewedByIdentityHolderID\""
+	ReviewedByUserID              *string              "json:\"reviewedByUserID,omitempty\" graphql:\"reviewedByUserID\""
+	ScopeID                       *string              "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName                     *string              "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Score                         *float64             "json:\"score,omitempty\" graphql:\"score\""
+	SecurityLevel                 *enums.SecurityLevel "json:\"securityLevel,omitempty\" graphql:\"securityLevel\""
+	Severity                      *string              "json:\"severity,omitempty\" graphql:\"severity\""
+	Source                        *string              "json:\"source,omitempty\" graphql:\"source\""
+	SourceDefinitionID            *string              "json:\"sourceDefinitionID,omitempty\" graphql:\"sourceDefinitionID\""
+	SourceDefinitionVersion       *string              "json:\"sourceDefinitionVersion,omitempty\" graphql:\"sourceDefinitionVersion\""
+	SourceInstanceID              *string              "json:\"sourceInstanceID,omitempty\" graphql:\"sourceInstanceID\""
+	SourceUpdatedAt               *models.DateTime     "json:\"sourceUpdatedAt,omitempty\" graphql:\"sourceUpdatedAt\""
+	Summary                       *string              "json:\"summary,omitempty\" graphql:\"summary\""
+	SystemInternalID              *string              "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                   *bool                "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                          []string             "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                     *time.Time           "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                     *string              "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator         *string              "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	Validated                     *bool                "json:\"validated,omitempty\" graphql:\"validated\""
+	Vector                        *string              "json:\"vector,omitempty\" graphql:\"vector\""
+	VulnerabilityStatusID         *string              "json:\"vulnerabilityStatusID,omitempty\" graphql:\"vulnerabilityStatusID\""
+	VulnerabilityStatusName       *string              "json:\"vulnerabilityStatusName,omitempty\" graphql:\"vulnerabilityStatusName\""
+	VulnerableVersionRange        *string              "json:\"vulnerableVersionRange,omitempty\" graphql:\"vulnerableVersionRange\""
+	WorkflowEligibleMarker        *bool                "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
+}
+
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetAssignedTo() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.AssignedTo
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetAssignedToGroupID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.AssignedToGroupID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetAssignedToIdentityHolderID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.AssignedToIdentityHolderID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetAssignedToUserID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.AssignedToUserID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetAutoDismissedAt() *models.DateTime {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.AutoDismissedAt
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetBlocking() *bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Blocking
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetCategory() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Category
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetCveID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.CveID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetCweIds() []string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.CweIds
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetDependencyScope() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.DependencyScope
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetDiscoveredAt() *models.DateTime {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.DiscoveredAt
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetDismissedAt() *models.DateTime {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.DismissedAt
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetDismissedComment() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.DismissedComment
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetDismissedReason() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.DismissedReason
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetDisplayName() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.DisplayName
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetEnvironmentID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.EnvironmentID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetEnvironmentName() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.EnvironmentName
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetExploitability() *float64 {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Exploitability
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetExternalID() string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ExternalID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetExternalOwnerID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ExternalOwnerID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetExternalURI() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ExternalURI
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetFirstPatchedVersion() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.FirstPatchedVersion
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetFixAvailable() *bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.FixAvailable
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetFixedAt() *models.DateTime {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.FixedAt
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetImpact() *float64 {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Impact
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetImpacts() []string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Impacts
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.IntegrationRunID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.InternalNotes
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetInternalOwner() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.InternalOwner
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetInternalOwnerGroupID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.InternalOwnerGroupID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetInternalOwnerIdentityHolderID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.InternalOwnerIdentityHolderID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetInternalOwnerUserID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.InternalOwnerUserID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetManagedBy() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ManagedBy
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetManifestPath() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ManifestPath
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetOpen() *bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Open
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetPackageEcosystem() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.PackageEcosystem
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetPackageName() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.PackageName
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetPriority() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Priority
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetProduction() *bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Production
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetPublic() *bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Public
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetPublishedAt() *models.DateTime {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.PublishedAt
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetRawPayload() map[string]any {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.RawPayload
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetReferences() []string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.References
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetRemediationSLA() *int64 {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.RemediationSLA
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetReviewedBy() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ReviewedBy
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetReviewedByGroupID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ReviewedByGroupID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetReviewedByIdentityHolderID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ReviewedByIdentityHolderID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetReviewedByUserID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ReviewedByUserID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetScopeID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ScopeID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetScopeName() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.ScopeName
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetScore() *float64 {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Score
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSecurityLevel() *enums.SecurityLevel {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.SecurityLevel
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSeverity() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Severity
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSource() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Source
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSourceDefinitionID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.SourceDefinitionID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSourceDefinitionVersion() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.SourceDefinitionVersion
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSourceInstanceID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.SourceInstanceID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSourceUpdatedAt() *models.DateTime {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.SourceUpdatedAt
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSummary() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Summary
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.SystemOwned
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetValidated() *bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Validated
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetVector() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.Vector
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetVulnerabilityStatusID() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.VulnerabilityStatusID
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetVulnerabilityStatusName() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.VulnerabilityStatusName
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetVulnerableVersionRange() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.VulnerableVersionRange
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node) GetWorkflowEligibleMarker() *bool {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node{}
+	}
+	return t.WorkflowEligibleMarker
+}
+
+type GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges struct {
+	Node *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges) GetNode() *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges_Node {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges{}
+	}
+	return t.Node
+}
+
+type GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities struct {
+	Edges      []*GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities) GetEdges() []*GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_Edges {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities{}
+	}
+	return t.Edges
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities) GetPageInfo() *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities_PageInfo {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities{}
+	}
+	return &t.PageInfo
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities{}
+	}
+	return t.TotalCount
+}
+
+type GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node struct {
+	Count           int64                                                                          "json:\"count\" graphql:\"count\""
+	Key             *string                                                                        "json:\"key,omitempty\" graphql:\"key\""
+	Vulnerabilities GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities "json:\"vulnerabilities\" graphql:\"vulnerabilities\""
+}
+
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node) GetCount() int64 {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node{}
+	}
+	return t.Count
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node) GetKey() *string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node{}
+	}
+	return t.Key
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node) GetVulnerabilities() *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node_Vulnerabilities {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node{}
+	}
+	return &t.Vulnerabilities
+}
+
+type GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges struct {
+	Cursor string                                                         "json:\"cursor\" graphql:\"cursor\""
+	Node   GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node "json:\"node\" graphql:\"node\""
+}
+
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges) GetCursor() string {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges{}
+	}
+	return t.Cursor
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges) GetNode() *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges_Node {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges{}
+	}
+	return &t.Node
+}
+
+type GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy struct {
+	Edges      []*GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges "json:\"edges\" graphql:\"edges\""
+	PageInfo   GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy) GetEdges() []*GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_Edges {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy{}
+	}
+	return t.Edges
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy) GetPageInfo() *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy_PageInfo {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy{}
+	}
+	return &t.PageInfo
+}
+func (t *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy{}
+	}
+	return t.TotalCount
+}
+
 type DeleteWebauthn_DeleteWebauthn struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -184006,6 +184726,17 @@ func (t *UpdateVulnerabilityComment) GetUpdateVulnerabilityComment() *UpdateVuln
 		t = &UpdateVulnerabilityComment{}
 	}
 	return &t.UpdateVulnerabilityComment
+}
+
+type GetVulnerabilitiesGroupByCve struct {
+	VulnerabilitiesGroupBy GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy "json:\"vulnerabilitiesGroupBy\" graphql:\"vulnerabilitiesGroupBy\""
+}
+
+func (t *GetVulnerabilitiesGroupByCve) GetVulnerabilitiesGroupBy() *GetVulnerabilitiesGroupByCVE_VulnerabilitiesGroupBy {
+	if t == nil {
+		t = &GetVulnerabilitiesGroupByCve{}
+	}
+	return &t.VulnerabilitiesGroupBy
 }
 
 type DeleteWebauthn struct {
@@ -225657,6 +226388,142 @@ func (c *Client) UpdateVulnerabilityComment(ctx context.Context, updateVulnerabi
 	return &res, nil
 }
 
+const GetVulnerabilitiesGroupByCveDocument = `query GetVulnerabilitiesGroupByCVE ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: VulnerabilityWhereInput, $orderBy: GroupByOrder, $rowsFirst: Int, $rowsAfter: Cursor, $rowsOrderBy: [VulnerabilityOrder!]) {
+	vulnerabilitiesGroupBy(field: CVE_ID, first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			cursor
+			node {
+				key
+				count
+				vulnerabilities(first: $rowsFirst, after: $rowsAfter, orderBy: $rowsOrderBy) {
+					totalCount
+					pageInfo {
+						startCursor
+						endCursor
+						hasPreviousPage
+						hasNextPage
+					}
+					edges {
+						node {
+							assignedTo
+							assignedToGroupID
+							assignedToIdentityHolderID
+							assignedToUserID
+							autoDismissedAt
+							blocking
+							category
+							createdAt
+							createdBy
+							cveID
+							cweIds
+							dependencyScope
+							description
+							discoveredAt
+							dismissedAt
+							dismissedComment
+							dismissedReason
+							displayID
+							displayName
+							environmentID
+							environmentName
+							exploitability
+							externalID
+							externalOwnerID
+							externalURI
+							firstPatchedVersion
+							fixAvailable
+							fixedAt
+							id
+							impact
+							impacts
+							integrationRunID
+							internalNotes
+							internalOwner
+							internalOwnerGroupID
+							internalOwnerIdentityHolderID
+							internalOwnerUserID
+							managedBy
+							manifestPath
+							metadata
+							open
+							ownerID
+							packageEcosystem
+							packageName
+							priority
+							production
+							public
+							publishedAt
+							rawPayload
+							references
+							remediationSLA
+							reviewedBy
+							reviewedByGroupID
+							reviewedByIdentityHolderID
+							reviewedByUserID
+							scopeID
+							scopeName
+							score
+							securityLevel
+							severity
+							source
+							sourceDefinitionID
+							sourceDefinitionVersion
+							sourceInstanceID
+							sourceUpdatedAt
+							summary
+							systemInternalID
+							systemOwned
+							tags
+							updatedAt
+							updatedBy
+							updatedByImpersonator
+							validated
+							vector
+							vulnerabilityStatusID
+							vulnerabilityStatusName
+							vulnerableVersionRange
+							workflowEligibleMarker
+						}
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetVulnerabilitiesGroupByCve(ctx context.Context, first *int64, last *int64, after *string, before *string, where *VulnerabilityWhereInput, orderBy *groupby.Order, rowsFirst *int64, rowsAfter *string, rowsOrderBy []*VulnerabilityOrder, interceptors ...clientv2.RequestInterceptor) (*GetVulnerabilitiesGroupByCve, error) {
+	vars := map[string]any{
+		"first":       first,
+		"last":        last,
+		"after":       after,
+		"before":      before,
+		"where":       where,
+		"orderBy":     orderBy,
+		"rowsFirst":   rowsFirst,
+		"rowsAfter":   rowsAfter,
+		"rowsOrderBy": rowsOrderBy,
+	}
+
+	var res GetVulnerabilitiesGroupByCve
+	if err := c.Client.Post(ctx, "GetVulnerabilitiesGroupByCVE", GetVulnerabilitiesGroupByCveDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const DeleteWebauthnDocument = `mutation DeleteWebauthn ($deleteWebauthnId: ID!) {
 	deleteWebauthn(id: $deleteWebauthnId) {
 		deletedID
@@ -229818,6 +230685,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateBulkVulnerabilityDocument:                     "UpdateBulkVulnerability",
 	UpdateVulnerabilityDocument:                         "UpdateVulnerability",
 	UpdateVulnerabilityCommentDocument:                  "UpdateVulnerabilityComment",
+	GetVulnerabilitiesGroupByCveDocument:                "GetVulnerabilitiesGroupByCVE",
 	DeleteWebauthnDocument:                              "DeleteWebauthn",
 	GetAllWebauthnsDocument:                             "GetAllWebauthns",
 	ApproveWorkflowAssignmentDocument:                   "ApproveWorkflowAssignment",

@@ -1,0 +1,110 @@
+directive @goEnum(value: String) on ENUM_VALUE
+"""
+GroupByOrderField is the field group by buckets are ordered by
+"""
+enum GroupByOrderField @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.OrderField") {
+    COUNT @goEnum(value: "github.com/theopenlane/gqlgen-plugins/groupby.OrderFieldCount")
+    KEY @goEnum(value: "github.com/theopenlane/gqlgen-plugins/groupby.OrderFieldKey")
+}
+"""
+GroupByOrder is the ordering of group by buckets
+"""
+input GroupByOrder @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Order") {
+    """
+    The ordering direction
+    """
+    direction: OrderDirection! = DESC
+    """
+    The field by which to order the groups
+    """
+    field: GroupByOrderField! = COUNT
+}
+"""
+VulnerabilityGroupByField are the Vulnerability fields that can be grouped on
+"""
+enum VulnerabilityGroupByField {
+    EXTERNAL_OWNER_ID
+    CVE_ID
+}
+"""
+VulnerabilityGroupByBucket is a group of vulnerabilities sharing the same value for the grouped field
+"""
+type VulnerabilityGroupByBucket @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Bucket") {
+    """
+    The grouped value, null when the rows have no value
+    """
+    key: String
+    """
+    The number of vulnerabilities in the group
+    """
+    count: Int!
+    """
+    The vulnerabilities in the group
+    """
+    vulnerabilities(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [VulnerabilityOrder!]): VulnerabilityConnection! @goField(forceResolver: true)
+}
+"""
+VulnerabilityGroupByEdge is a Vulnerability group by bucket with its pagination cursor
+"""
+type VulnerabilityGroupByEdge @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Edge") {
+    """
+    The bucket at the end of the edge
+    """
+    node: VulnerabilityGroupByBucket!
+    """
+    A cursor for use in pagination
+    """
+    cursor: Cursor!
+}
+"""
+VulnerabilityGroupByConnection is a paginated list of Vulnerability group by buckets
+"""
+type VulnerabilityGroupByConnection @goModel(model: "github.com/theopenlane/gqlgen-plugins/groupby.Connection") {
+    """
+    A list of edges
+    """
+    edges: [VulnerabilityGroupByEdge!]!
+    """
+    Information to aid in pagination
+    """
+    pageInfo: PageInfo!
+    """
+    Identifies the total count of groups in the connection
+    """
+    totalCount: Int!
+}
+extend type Query {
+    """
+    vulnerabilitiesGroupBy groups vulnerabilities by a field and returns each group with its count and rows
+    """
+    vulnerabilitiesGroupBy(
+        """
+        The field to group by
+        """
+        field: VulnerabilityGroupByField!
+        """
+        Filtering options for vulnerabilities included in the groups
+        """
+        where: VulnerabilityWhereInput
+        """
+        Ordering options for the groups, defaults to count descending
+        """
+        orderBy: GroupByOrder
+        """
+        Returns the groups that come after the specified cursor
+        """
+        after: Cursor
+        """
+        Returns the first _n_ groups
+        """
+        first: Int
+        """
+        Returns the groups that come before the specified cursor
+        """
+        before: Cursor
+        """
+        Returns the last _n_ groups
+        """
+        last: Int
+    ): VulnerabilityGroupByConnection!
+}
