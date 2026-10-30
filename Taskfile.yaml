@@ -457,7 +457,7 @@ tasks:
         TESTS=$(echo "$FILES" | xargs grep -hoE '^func Test[A-Za-z0-9_]+\(t \*testing\.T\)' | sed -E 's/^func (Test[^(]+).*/\1/' | grep -vx TestHandlerTestSuite | sort | awk -v n="$SHARDS" -v i="$SHARD" 'NR % n == i' | paste -sd'|' -)
         SUITE_TESTS=$(echo "$FILES" | xargs grep -hoE '^func \(suite \*HandlerTestSuite\) Test[A-Za-z0-9_]+' | sed -E 's/^.* (Test.*)$/\1/' | sort | awk -v n="$SHARDS" -v i="$SHARD" 'NR % n == i' | paste -sd'|' -)
         echo "handlers shard $SHARD of $SHARDS: $(echo "$TESTS" | tr '|' '\n' | grep -c .) tests, $(echo "$SUITE_TESTS" | tr '|' '\n' | grep -c .) suite tests"
-        go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile "junit-handlers-${SHARD}.xml" --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -run "^(${TESTS}|TestHandlerTestSuite)$" -testify.m "^(${SUITE_TESTS})$" -p 20 -timeout 20m -coverprofile="coverage-handlers-${SHARD}.out" -tags test
+        go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile "junit-handlers-${SHARD}.xml" --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -run "^(${TESTS}|TestHandlerTestSuite)$" -p 20 -timeout 20m -coverprofile="coverage-handlers-${SHARD}.out" -tags test -args -testify.m "^(${SUITE_TESTS})$"
 
   go:testsum:ci:no-api:
     desc: runs tests using gotestsum for CI

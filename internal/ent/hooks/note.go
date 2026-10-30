@@ -9,28 +9,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
-	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 )
-
-// HookNoteFiles runs on note mutations to check for uploaded files
-func HookNoteFiles() ent.Hook {
-	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.NoteFunc(func(ctx context.Context, m *generated.NoteMutation) (generated.Value, error) {
-			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
-			if len(fileIDs) > 0 {
-				var err error
-
-				ctx, err = checkNoteFiles(ctx, m)
-				if err != nil {
-					return nil, err
-				}
-			}
-
-			return next.Mutate(ctx, m)
-		})
-	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
 
 // HookDeleteDiscussionDelete deletes the discussion when the last comment is deleted
 func HookDeleteDiscussion() ent.Hook {
@@ -84,23 +64,4 @@ func HookDeleteDiscussion() ent.Hook {
 			return v, nil
 		})
 	}, ent.OpDeleteOne|ent.OpDelete|ent.OpUpdateOne|ent.OpUpdate)
-}
-
-// checkNoteFiles checks if note files are provided and sets the local file ID(s)
-func checkNoteFiles(ctx context.Context, m *generated.NoteMutation) (context.Context, error) {
-	key := "noteFiles"
-
-	files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
-	if len(files) == 0 {
-		return ctx, nil
-	}
-
-	fileIDs := make([]string, len(files))
-	for i, f := range files {
-		fileIDs[i] = f.ID
-	}
-
-	m.AddFileIDs(fileIDs...)
-
-	return pkgobjects.ProcessFilesForMutation(ctx, m, key)
 }

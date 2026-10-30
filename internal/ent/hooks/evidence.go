@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/objects"
 )
 
@@ -195,29 +194,9 @@ func HookEvidenceFiles() ent.Hook {
 				}
 			}
 
-			// check for uploaded files (e.g. avatar image)
-			fileIDs := objects.GetFileIDsFromContext(ctx)
-			if len(fileIDs) > 0 {
-				var err error
-
-				ctx, err = checkEvidenceFiles(ctx, m)
-				if err != nil {
-					return nil, err
-				}
-
-				m.AddFileIDs(fileIDs...)
-			}
-
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
-}
-
-// checkEvidenceFiles checks if a evidence files are provided and sets the local file ID(s)
-func checkEvidenceFiles[T utils.GenericMutation](ctx context.Context, m T) (context.Context, error) {
-	key := "evidenceFiles"
-
-	return objects.ProcessFilesForMutation(ctx, m, key)
 }
 
 // checkEvidenceHasFiles checks if evidence has any attached files

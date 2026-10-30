@@ -144,6 +144,7 @@ func (c Contact) Edges() []ent.Edge {
 func (Contact) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookContact(),
+		hooks.HookFiles("contactFiles"),
 	}
 }
 

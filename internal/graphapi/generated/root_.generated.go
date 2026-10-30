@@ -3775,7 +3775,7 @@ type ComplexityRoot struct {
 		CreateCampaignWithTargets                func(childComplexity int, input model.CreateCampaignWithTargetsInput) int
 		CreateCampaignWithTargetsCSV             func(childComplexity int, campaign generated.CreateCampaignInput, targets graphql.Upload) int
 		CreateCheckResult                        func(childComplexity int, input generated.CreateCheckResultInput) int
-		CreateContact                            func(childComplexity int, input generated.CreateContactInput) int
+		CreateContact                            func(childComplexity int, input generated.CreateContactInput, contactFiles []*graphql.Upload, contactFilesMetadata []*model.FileMetadataInput) int
 		CreateControl                            func(childComplexity int, input generated.CreateControlInput) int
 		CreateControlImplementation              func(childComplexity int, input generated.CreateControlImplementationInput) int
 		CreateControlObjective                   func(childComplexity int, input generated.CreateControlObjectiveInput) int
@@ -3795,7 +3795,7 @@ type ComplexityRoot struct {
 		CreateEvent                              func(childComplexity int, input generated.CreateEventInput) int
 		CreateEvidence                           func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) int
 		CreateExport                             func(childComplexity int, input generated.CreateExportInput) int
-		CreateFinding                            func(childComplexity int, input generated.CreateFindingInput) int
+		CreateFinding                            func(childComplexity int, input generated.CreateFindingInput, findingFiles []*graphql.Upload, findingFilesMetadata []*model.FileMetadataInput) int
 		CreateFindingControl                     func(childComplexity int, input generated.CreateFindingControlInput) int
 		CreateFullProgram                        func(childComplexity int, input model.CreateFullProgramInput) int
 		CreateGroup                              func(childComplexity int, input generated.CreateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
@@ -3825,13 +3825,13 @@ type ComplexityRoot struct {
 		CreateProgram                            func(childComplexity int, input generated.CreateProgramInput) int
 		CreateProgramMembership                  func(childComplexity int, input generated.CreateProgramMembershipInput) int
 		CreateProgramWithMembers                 func(childComplexity int, input model.CreateProgramWithMembersInput) int
-		CreateRemediation                        func(childComplexity int, input generated.CreateRemediationInput) int
+		CreateRemediation                        func(childComplexity int, input generated.CreateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) int
 		CreateReport                             func(childComplexity int, input generated.CreateReportInput) int
 		CreateReportMembership                   func(childComplexity int, input generated.CreateReportMembershipInput) int
 		CreateReview                             func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
 		CreateRisk                               func(childComplexity int, input generated.CreateRiskInput) int
 		CreateSLADefinition                      func(childComplexity int, input generated.CreateSLADefinitionInput) int
-		CreateScan                               func(childComplexity int, input generated.CreateScanInput) int
+		CreateScan                               func(childComplexity int, input generated.CreateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
 		CreateStandard                           func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateSubcontrol                         func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                       func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
@@ -3853,13 +3853,14 @@ type ComplexityRoot struct {
 		CreateTrustCenterSetting                 func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
 		CreateTrustCenterSubprocessor            func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
 		CreateTrustCenterWatermarkConfig         func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload, watermarkFileMetadata *model.FileMetadataInput) int
+		CreateUploadActionPlan                   func(childComplexity int, actionPlanFile graphql.Upload, actionPlanFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) int
 		CreateUploadInternalPolicy               func(childComplexity int, internalPolicyFile graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) int
 		CreateUploadProcedure                    func(childComplexity int, procedureFile graphql.Upload, procedureFileMetadata *model.FileMetadataInput, ownerID *string, managementMode *enums.DocumentManagementMode) int
 		CreateUser                               func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
 		CreateUserSetting                        func(childComplexity int, input generated.CreateUserSettingInput) int
 		CreateVendorRiskScore                    func(childComplexity int, input generated.CreateVendorRiskScoreInput) int
 		CreateVendorScoringConfig                func(childComplexity int, input generated.CreateVendorScoringConfigInput) int
-		CreateVulnerability                      func(childComplexity int, input generated.CreateVulnerabilityInput) int
+		CreateVulnerability                      func(childComplexity int, input generated.CreateVulnerabilityInput, vulnerabilityFiles []*graphql.Upload, vulnerabilityFilesMetadata []*model.FileMetadataInput) int
 		CreateWorkflowDefinition                 func(childComplexity int, input generated.CreateWorkflowDefinitionInput) int
 		DeleteAPIToken                           func(childComplexity int, id string) int
 		DeleteActionPlan                         func(childComplexity int, id string) int
@@ -4021,7 +4022,7 @@ type ComplexityRoot struct {
 		SubmitWorkflowProposal                   func(childComplexity int, id string) int
 		TransferOrganizationOwnership            func(childComplexity int, newOwnerEmail string) int
 		UpdateAPIToken                           func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
-		UpdateActionPlan                         func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
+		UpdateActionPlan                         func(childComplexity int, id string, input generated.UpdateActionPlanInput, actionPlanFile *graphql.Upload, actionPlanFileMetadata *model.FileMetadataInput) int
 		UpdateAssessment                         func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
 		UpdateAssessmentPolicy                   func(childComplexity int, id string, input generated.UpdateAssessmentPolicyInput) int
 		UpdateAsset                              func(childComplexity int, id string, input generated.UpdateAssetInput) int
@@ -4137,7 +4138,7 @@ type ComplexityRoot struct {
 		UpdateCampaign                           func(childComplexity int, id string, input generated.UpdateCampaignInput) int
 		UpdateCampaignTarget                     func(childComplexity int, id string, input generated.UpdateCampaignTargetInput) int
 		UpdateCheckResult                        func(childComplexity int, id string, input generated.UpdateCheckResultInput) int
-		UpdateContact                            func(childComplexity int, id string, input generated.UpdateContactInput) int
+		UpdateContact                            func(childComplexity int, id string, input generated.UpdateContactInput, contactFiles []*graphql.Upload, contactFilesMetadata []*model.FileMetadataInput) int
 		UpdateControl                            func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlComment                     func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateControlImplementation              func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
@@ -4157,7 +4158,7 @@ type ComplexityRoot struct {
 		UpdateEvidence                           func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload, evidenceFilesMetadata []*model.FileMetadataInput) int
 		UpdateEvidenceComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateExport                             func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload, exportFilesMetadata []*model.FileMetadataInput) int
-		UpdateFinding                            func(childComplexity int, id string, input generated.UpdateFindingInput) int
+		UpdateFinding                            func(childComplexity int, id string, input generated.UpdateFindingInput, findingFiles []*graphql.Upload, findingFilesMetadata []*model.FileMetadataInput) int
 		UpdateFindingComment                     func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateFindingControl                     func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
 		UpdateGroup                              func(childComplexity int, id string, input generated.UpdateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) int
@@ -4184,7 +4185,7 @@ type ComplexityRoot struct {
 		UpdateProcedureComment                   func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateProgram                            func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership                  func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
-		UpdateRemediation                        func(childComplexity int, id string, input generated.UpdateRemediationInput) int
+		UpdateRemediation                        func(childComplexity int, id string, input generated.UpdateRemediationInput, remediationFiles []*graphql.Upload, remediationFilesMetadata []*model.FileMetadataInput) int
 		UpdateReport                             func(childComplexity int, id string, input generated.UpdateReportInput) int
 		UpdateReportMembership                   func(childComplexity int, id string, input generated.UpdateReportMembershipInput) int
 		UpdateReview                             func(childComplexity int, id string, input generated.UpdateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
@@ -4192,7 +4193,7 @@ type ComplexityRoot struct {
 		UpdateRisk                               func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateRiskComment                        func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateSLADefinition                      func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
-		UpdateScan                               func(childComplexity int, id string, input generated.UpdateScanInput) int
+		UpdateScan                               func(childComplexity int, id string, input generated.UpdateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
 		UpdateStandard                           func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateSubcontrol                         func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
@@ -4221,7 +4222,7 @@ type ComplexityRoot struct {
 		UpdateUserSetting                        func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 		UpdateVendorRiskScore                    func(childComplexity int, id string, input generated.UpdateVendorRiskScoreInput) int
 		UpdateVendorScoringConfig                func(childComplexity int, id string, input generated.UpdateVendorScoringConfigInput) int
-		UpdateVulnerability                      func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
+		UpdateVulnerability                      func(childComplexity int, id string, input generated.UpdateVulnerabilityInput, vulnerabilityFiles []*graphql.Upload, vulnerabilityFilesMetadata []*model.FileMetadataInput) int
 		UpdateVulnerabilityComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateWorkflowDefinition                 func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
 		UpdateWorkflowProposalChanges            func(childComplexity int, input model.UpdateWorkflowProposalChangesInput) int
@@ -27234,7 +27235,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateContact(childComplexity, args["input"].(generated.CreateContactInput)), true
+		return e.ComplexityRoot.Mutation.CreateContact(childComplexity, args["input"].(generated.CreateContactInput), args["contactFiles"].([]*graphql.Upload), args["contactFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createControl":
 		if e.ComplexityRoot.Mutation.CreateControl == nil {
 			break
@@ -27454,7 +27455,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateFinding(childComplexity, args["input"].(generated.CreateFindingInput)), true
+		return e.ComplexityRoot.Mutation.CreateFinding(childComplexity, args["input"].(generated.CreateFindingInput), args["findingFiles"].([]*graphql.Upload), args["findingFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createFindingControl":
 		if e.ComplexityRoot.Mutation.CreateFindingControl == nil {
 			break
@@ -27784,7 +27785,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateRemediation(childComplexity, args["input"].(generated.CreateRemediationInput)), true
+		return e.ComplexityRoot.Mutation.CreateRemediation(childComplexity, args["input"].(generated.CreateRemediationInput), args["remediationFiles"].([]*graphql.Upload), args["remediationFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createReport":
 		if e.ComplexityRoot.Mutation.CreateReport == nil {
 			break
@@ -27850,7 +27851,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput)), true
+		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createStandard":
 		if e.ComplexityRoot.Mutation.CreateStandard == nil {
 			break
@@ -28082,6 +28083,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateTrustCenterWatermarkConfig(childComplexity, args["input"].(generated.CreateTrustCenterWatermarkConfigInput), args["watermarkFile"].(*graphql.Upload), args["watermarkFileMetadata"].(*model.FileMetadataInput)), true
+	case "Mutation.createUploadActionPlan":
+		if e.ComplexityRoot.Mutation.CreateUploadActionPlan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createUploadActionPlan_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateUploadActionPlan(childComplexity, args["actionPlanFile"].(graphql.Upload), args["actionPlanFileMetadata"].(*model.FileMetadataInput), args["ownerID"].(*string), args["managementMode"].(*enums.DocumentManagementMode)), true
 	case "Mutation.createUploadInternalPolicy":
 		if e.ComplexityRoot.Mutation.CreateUploadInternalPolicy == nil {
 			break
@@ -28158,7 +28170,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateVulnerability(childComplexity, args["input"].(generated.CreateVulnerabilityInput)), true
+		return e.ComplexityRoot.Mutation.CreateVulnerability(childComplexity, args["input"].(generated.CreateVulnerabilityInput), args["vulnerabilityFiles"].([]*graphql.Upload), args["vulnerabilityFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createWorkflowDefinition":
 		if e.ComplexityRoot.Mutation.CreateWorkflowDefinition == nil {
 			break
@@ -29935,7 +29947,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateActionPlan(childComplexity, args["id"].(string), args["input"].(generated.UpdateActionPlanInput)), true
+		return e.ComplexityRoot.Mutation.UpdateActionPlan(childComplexity, args["id"].(string), args["input"].(generated.UpdateActionPlanInput), args["actionPlanFile"].(*graphql.Upload), args["actionPlanFileMetadata"].(*model.FileMetadataInput)), true
 	case "Mutation.updateAssessment":
 		if e.ComplexityRoot.Mutation.UpdateAssessment == nil {
 			break
@@ -31211,7 +31223,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateContact(childComplexity, args["id"].(string), args["input"].(generated.UpdateContactInput)), true
+		return e.ComplexityRoot.Mutation.UpdateContact(childComplexity, args["id"].(string), args["input"].(generated.UpdateContactInput), args["contactFiles"].([]*graphql.Upload), args["contactFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateControl":
 		if e.ComplexityRoot.Mutation.UpdateControl == nil {
 			break
@@ -31431,7 +31443,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateFinding(childComplexity, args["id"].(string), args["input"].(generated.UpdateFindingInput)), true
+		return e.ComplexityRoot.Mutation.UpdateFinding(childComplexity, args["id"].(string), args["input"].(generated.UpdateFindingInput), args["findingFiles"].([]*graphql.Upload), args["findingFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateFindingComment":
 		if e.ComplexityRoot.Mutation.UpdateFindingComment == nil {
 			break
@@ -31728,7 +31740,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateRemediation(childComplexity, args["id"].(string), args["input"].(generated.UpdateRemediationInput)), true
+		return e.ComplexityRoot.Mutation.UpdateRemediation(childComplexity, args["id"].(string), args["input"].(generated.UpdateRemediationInput), args["remediationFiles"].([]*graphql.Upload), args["remediationFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateReport":
 		if e.ComplexityRoot.Mutation.UpdateReport == nil {
 			break
@@ -31816,7 +31828,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput)), true
+		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateStandard":
 		if e.ComplexityRoot.Mutation.UpdateStandard == nil {
 			break
@@ -32135,7 +32147,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateVulnerability(childComplexity, args["id"].(string), args["input"].(generated.UpdateVulnerabilityInput)), true
+		return e.ComplexityRoot.Mutation.UpdateVulnerability(childComplexity, args["id"].(string), args["input"].(generated.UpdateVulnerabilityInput), args["vulnerabilityFiles"].([]*graphql.Upload), args["vulnerabilityFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateVulnerabilityComment":
 		if e.ComplexityRoot.Mutation.UpdateVulnerabilityComment == nil {
 			break
@@ -54440,6 +54452,26 @@ extend type Mutation{
         input: CreateActionPlanInput!
     ): ActionPlanCreatePayload!
     """
+    Create a new actionPlan via file upload
+    """
+    createUploadActionPlan(
+        """
+        file containing values of the actionPlan
+        """
+        actionPlanFile: Upload!
+        actionPlanFileMetadata: FileMetadataInput
+        """
+        ID of the owner organization
+        """
+        ownerID: ID
+        """
+        How the uploaded actionPlan should be managed: parsed and edited in Openlane
+        (OPENLANE_MANAGED, default) or kept as an external reference file viewed
+        in Openlane (EXTERNAL_REFERENCE, e.g. Word documents managed in Microsoft Word)
+        """
+        managementMode: ActionPlanDocumentManagementMode
+    ): ActionPlanCreatePayload!
+    """
     Create multiple new actionPlans
     """
     createBulkActionPlan(
@@ -54482,6 +54514,11 @@ extend type Mutation{
         New values for the actionPlan
         """
         input: UpdateActionPlanInput!
+        """
+        file containing values of the actionPlan
+        """
+        actionPlanFile: Upload
+        actionPlanFileMetadata: FileMetadataInput
     ): ActionPlanUpdatePayload!
     """
     Delete an existing actionPlan
@@ -56054,6 +56091,11 @@ extend type Mutation{
         values of the contact
         """
         input: CreateContactInput!
+        """
+        Files to attach to the contact
+        """
+        contactFiles: [Upload!]
+        contactFilesMetadata: [FileMetadataInput!]
     ): ContactCreatePayload!
     """
     Create multiple new contacts
@@ -56098,6 +56140,11 @@ extend type Mutation{
         New values for the contact
         """
         input: UpdateContactInput!
+        """
+        Files to attach to the contact
+        """
+        contactFiles: [Upload!]
+        contactFilesMetadata: [FileMetadataInput!]
     ): ContactUpdatePayload!
     """
     Delete an existing contact
@@ -151189,6 +151236,11 @@ extend type Mutation{
         values of the finding
         """
         input: CreateFindingInput!
+        """
+        Files to attach to the finding
+        """
+        findingFiles: [Upload!]
+        findingFilesMetadata: [FileMetadataInput!]
     ): FindingCreatePayload!
     """
     Create multiple new findings
@@ -151220,6 +151272,11 @@ extend type Mutation{
         New values for the finding
         """
         input: UpdateFindingInput!
+        """
+        Files to attach to the finding
+        """
+        findingFiles: [Upload!]
+        findingFilesMetadata: [FileMetadataInput!]
     ): FindingUpdatePayload!
     """
     Delete an existing finding
@@ -156082,6 +156139,11 @@ extend type Mutation{
         values of the remediation
         """
         input: CreateRemediationInput!
+        """
+        Files to attach to the remediation
+        """
+        remediationFiles: [Upload!]
+        remediationFilesMetadata: [FileMetadataInput!]
     ): RemediationCreatePayload!
     """
     Create multiple new remediations
@@ -156113,6 +156175,11 @@ extend type Mutation{
         New values for the remediation
         """
         input: UpdateRemediationInput!
+        """
+        Files to attach to the remediation
+        """
+        remediationFiles: [Upload!]
+        remediationFilesMetadata: [FileMetadataInput!]
     ): RemediationUpdatePayload!
     """
     Delete an existing remediation
@@ -156899,6 +156966,11 @@ extend type Mutation{
         values of the scan
         """
         input: CreateScanInput!
+        """
+        Files to attach to the scan
+        """
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanCreatePayload!
     """
     Create multiple new scans
@@ -156943,6 +157015,11 @@ extend type Mutation{
         New values for the scan
         """
         input: UpdateScanInput!
+        """
+        Files to attach to the scan
+        """
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanUpdatePayload!
     """
     Delete an existing scan
@@ -161874,6 +161951,11 @@ extend type Mutation{
         values of the vulnerability
         """
         input: CreateVulnerabilityInput!
+        """
+        Files to attach to the vulnerability
+        """
+        vulnerabilityFiles: [Upload!]
+        vulnerabilityFilesMetadata: [FileMetadataInput!]
     ): VulnerabilityCreatePayload!
     """
     Create multiple new vulnerabilitys
@@ -161905,6 +161987,11 @@ extend type Mutation{
         New values for the vulnerability
         """
         input: UpdateVulnerabilityInput!
+        """
+        Files to attach to the vulnerability
+        """
+        vulnerabilityFiles: [Upload!]
+        vulnerabilityFilesMetadata: [FileMetadataInput!]
     ): VulnerabilityUpdatePayload!
     """
     Delete an existing vulnerability

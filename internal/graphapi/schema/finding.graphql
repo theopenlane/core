@@ -46,6 +46,11 @@ extend type Mutation{
         values of the finding
         """
         input: CreateFindingInput!
+        """
+        Files to attach to the finding
+        """
+        findingFiles: [Upload!]
+        findingFilesMetadata: [FileMetadataInput!]
     ): FindingCreatePayload!
     """
     Create multiple new findings
@@ -77,6 +82,11 @@ extend type Mutation{
         New values for the finding
         """
         input: UpdateFindingInput!
+        """
+        Files to attach to the finding
+        """
+        findingFiles: [Upload!]
+        findingFilesMetadata: [FileMetadataInput!]
     ): FindingUpdatePayload!
     """
     Delete an existing finding

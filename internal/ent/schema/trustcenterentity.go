@@ -134,7 +134,7 @@ func (TrustCenterEntity) Annotations() []schema.Annotation {
 func (TrustCenterEntity) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTrustCenterEntityCreate(),
-		hooks.HookTrustCenterEntityFiles(),
+		hooks.HookLogoFile(),
 	}
 }
 
