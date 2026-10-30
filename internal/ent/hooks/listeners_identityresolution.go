@@ -109,7 +109,7 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 	if lo.FromPtr(account.CanonicalEmail) != "" {
 		holder, err := client.IdentityHolder.Query().
 			Where(identityholder.OwnerID(ownerID),
-				identityholder.Email(*account.CanonicalEmail)).Only(ctx)
+				identityholder.EmailEqualFold(*account.CanonicalEmail)).Only(ctx)
 		if err == nil {
 			return holder, nil
 		}
@@ -254,7 +254,7 @@ func resolveIsOpenlaneUser(ctx context.Context, client *entgen.Client, orgID, em
 
 	exists, err := client.OrgMembership.Query().Where(
 		orgmembership.OrganizationID(orgID),
-		orgmembership.HasUserWith(user.Email(email)),
+		orgmembership.HasUserWith(user.EmailEqualFold(email)),
 	).Exist(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("email", email).Msg("error determining if users exists in organization")

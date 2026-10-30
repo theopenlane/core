@@ -175,7 +175,7 @@ func (r *mutationResolver) RequestNewTrustCenterToken(ctx context.Context, email
 
 	existing, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Query().Where(
 		trustcenterndarequest.And(
-			trustcenterndarequest.Email(email),
+			trustcenterndarequest.EmailEqualFold(email),
 			trustcenterndarequest.TrustCenterIDEQ(tcID),
 		),
 	).Only(ctx)

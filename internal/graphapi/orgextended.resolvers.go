@@ -107,7 +107,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 
 	// Step 4: Look up user by email to get their ID (if they exist)
 	newOwnerUser, err := c.User.Query().
-		Where(user.Email(newOwnerEmail)).
+		Where(user.EmailEqualFold(newOwnerEmail)).
 		Only(internalCtx)
 
 	// Step 5: Check if new owner is already a member
