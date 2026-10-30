@@ -42,6 +42,13 @@ func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {
 			expectedStatus: http.StatusOK,
 		},
 		{
+			name:           "happy path, mixed case email",
+			email:          "Star.Lord@TheOpenLane.io",
+			tokenSet:       true,
+			emailExpected:  false,
+			expectedStatus: http.StatusOK,
+		},
+		{
 			name:           "expired token",
 			email:          gofakeit.Email(),
 			tokenSet:       true,

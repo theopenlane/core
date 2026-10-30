@@ -34,8 +34,9 @@ func HookSubscriberCreate() ent.Hook {
 					ErrEmailRequired)
 			}
 
-			// lowercase the email for uniqueness
-			m.SetEmail(strings.ToLower(email))
+			// lowercase the email for uniqueness, this needs to be done before the token is created
+			email = strings.ToLower(email)
+			m.SetEmail(email)
 
 			isEmailVerified, _ := m.VerifiedEmail()
 			isPhoneVerified, _ := m.VerifiedPhone()

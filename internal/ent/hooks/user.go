@@ -48,6 +48,9 @@ func HookUser() ent.Hook {
 			}
 
 			if email, ok := m.Email(); ok {
+				// lowercase the email for uniqueness
+				m.SetEmail(strings.ToLower(email))
+
 				// use the email without the domain as the display name, if not provided on creation
 				if m.Op().Is(ent.OpCreate) {
 					displayName, _ := m.DisplayName()
@@ -71,9 +74,6 @@ func HookUser() ent.Hook {
 						url := gravatar.New(displayName, nil)
 						m.SetAvatarRemoteURL(url)
 					}
-
-					// lowercase the email for uniqueness
-					m.SetEmail(strings.ToLower(email))
 				}
 			}
 

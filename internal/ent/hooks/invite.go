@@ -397,7 +397,7 @@ func checkUserAlreadyMember(ctx context.Context, m *generated.InviteMutation, em
 	internalCtx := auth.WithInternalReadContext(ctx)
 
 	user, err := m.Client().User.Query().
-		Where(user.Email(email)).
+		Where(user.EmailEqualFold(email)).
 		Only(internalCtx)
 	if generated.IsNotFound(err) {
 		return nil
