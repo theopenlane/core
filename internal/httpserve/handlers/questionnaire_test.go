@@ -74,14 +74,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
 
-	t.Cleanup(func() {
-		_, err := suite.db.OrganizationBrandingSetting.Update().
-			Where(organizationbrandingsetting.OrganizationID(testUser1.OrganizationID)).
-			SetRemoveAssessmentBranding(false).
-			Save(testUser1.UserCtx)
-		require.NoError(t, err)
-	})
-
 	testEmail := "test@example.com"
 
 	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", testEmail)))
