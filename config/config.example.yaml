@@ -556,10 +556,13 @@ server:
     trustcenterpreviewzoneid: ""
     writetimeout: 15000000000
 sessions:
+    absolutetimeout: 86400000000000
     domain: ""
     encryptionkey: encryptionsecret
     httponly: true
     maxage: 3600
+    renewalgrace: 30000000000
+    renewalinterval: 900000000000
     samesite: Strict
     secure: true
     signingkey: my-signing-secret

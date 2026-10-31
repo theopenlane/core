@@ -388,6 +388,9 @@ coreConfiguration:
     secure: true  # @schema type:boolean; default:true
     httponly: true  # @schema type:boolean; default:true
     samesite: "Strict"  # @schema type:string; default:Strict
+    absolutetimeout: "24h0m0s"  # @schema type:integer; default:24h
+    renewalinterval: "15m0s"  # @schema type:integer; default:15m
+    renewalgrace: "30s"  # @schema type:integer; default:30s
   # -- TOTP contains the configuration for the TOTP provider
   totp:
     enabled: true  # @schema type:boolean; default:true

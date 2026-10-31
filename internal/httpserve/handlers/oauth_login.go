@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/iam/providers/google"
 	oauth "github.com/theopenlane/iam/providers/oauth2"
 	"github.com/theopenlane/iam/providers/webauthn"
+	"github.com/theopenlane/iam/sessions"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
@@ -79,6 +80,24 @@ func (h *Handler) RequireLogin(next http.Handler) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
+const (
+	// oauthStateCookieName is the cookie holding the OAuth state, kept separate from the session cookie
+	oauthStateCookieName = "oauth_state"
+	// oauthStateCookieMaxAge bounds how long an OAuth login flow may take to return to the callback, in seconds
+	oauthStateCookieMaxAge = 600
+)
+
+// oauthStateCookieConfig derives the OAuth state cookie config from the session cookie config; the callback
+// arrives on a cross-site redirect, so the cookie must be SameSite Lax to be sent with it
+func (h *Handler) oauthStateCookieConfig() sessions.CookieConfig {
+	cc := *h.SessionConfig.CookieConfig
+	cc.Name = oauthStateCookieName
+	cc.MaxAge = oauthStateCookieMaxAge
+	cc.SameSite = http.SameSiteLaxMode
+
+	return cc
+}
+
 // IsAuthenticated checks the sessions to a valid session cookie
 func (h *Handler) IsAuthenticated(req *http.Request) bool {
 	if _, err := h.SessionConfig.SessionManager.Get(req, h.SessionConfig.CookieConfig.Name); err == nil {
@@ -103,9 +122,9 @@ func (h *Handler) GetGoogleLoginHandlers() (http.Handler, http.Handler) {
 			}
 		}
 
-		google.StateHandler(*h.SessionConfig.CookieConfig, google.LoginHandler(oauth2Config, nil)).ServeHTTP(w, req)
+		google.StateHandler(h.oauthStateCookieConfig(), google.LoginHandler(oauth2Config, nil)).ServeHTTP(w, req)
 	})
-	callbackHandler := google.StateHandler(*h.SessionConfig.CookieConfig, google.CallbackHandler(oauth2Config, h.issueGoogleSession(), nil))
+	callbackHandler := google.StateHandler(h.oauthStateCookieConfig(), google.CallbackHandler(oauth2Config, h.issueGoogleSession(), nil))
 
 	return loginHandler, callbackHandler
 }
@@ -153,7 +172,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 
 		metrics.Logins.WithLabelValues("true").Inc()
 		// remove cookie
-		h.clearAuthFlowCookies(w, "redirect_to")
+		h.clearAuthFlowCookies(w, "redirect_to", oauthStateCookieName)
 
 		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound) //nolint:gosec
 	}
@@ -176,9 +195,9 @@ func (h *Handler) GetGitHubLoginHandlers() (http.Handler, http.Handler) {
 			}
 		}
 
-		github.StateHandler(*h.SessionConfig.CookieConfig, github.LoginHandler(oauth2Config, nil)).ServeHTTP(w, req)
+		github.StateHandler(h.oauthStateCookieConfig(), github.LoginHandler(oauth2Config, nil)).ServeHTTP(w, req)
 	})
-	callbackHandler := github.StateHandler(*h.SessionConfig.CookieConfig, github.CallbackHandler(oauth2Config, h.issueGitHubSession(), nil))
+	callbackHandler := github.StateHandler(h.oauthStateCookieConfig(), github.CallbackHandler(oauth2Config, h.issueGitHubSession(), nil))
 
 	return loginHandler, callbackHandler
 }
@@ -232,7 +251,7 @@ func (h *Handler) issueGitHubSession() http.Handler {
 		metrics.RecordLogin(true)
 
 		// remove cookie now that its in the context
-		h.clearAuthFlowCookies(w, "redirect_to")
+		h.clearAuthFlowCookies(w, "redirect_to", oauthStateCookieName)
 
 		// redirect with context set
 		http.Redirect(w, req, fmt.Sprintf("%s?session=%s", redirectURI, auth.Session), http.StatusFound) //nolint:gosec
