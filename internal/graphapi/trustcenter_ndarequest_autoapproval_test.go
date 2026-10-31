@@ -102,7 +102,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 	assert.NilError(t, err)
 
 	// create this in the second org, will be needed for cross org isolation tests to make sure
-	// contacts do not apporve across orgs
+	// contacts do not approve across orgs
 	_, err = suite.Client.API.CreateContact(freshOrg.Owner.UserCtx, testclient.CreateContactInput{
 		Email:   &contactInOrg2,
 		OwnerID: &freshOrg.OrganizationID,
@@ -189,7 +189,7 @@ func TestNDAAutoApprovalRules(t *testing.T) {
 		},
 		{
 			ctx:   tcOrg.Owner.UserCtx,
-			name:  "auto approval does not match and fallsback to needing approval",
+			name:  "auto approval does not match and fallback to needing approval",
 			email: gofakeit.LetterN(12) + "@" + unmatchedDomain,
 			options: models.TrustCenterNDARequestSetting{
 				UseDomainAllowlist:      true,

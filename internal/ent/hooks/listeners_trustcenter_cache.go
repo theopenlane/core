@@ -253,6 +253,7 @@ func handleTrustCenterMutationGala(inv entityops.Invocation, _ entityops.Mutatio
 const (
 	cacheRefreshTimeout        = 10 * time.Second
 	cacheRefreshUserAgent      = "Openlane-CacheRefresh/1.0"
+	cacheRefreshAuthHeader     = "X-Openlane-Cache-Refresh"
 	cacheRefreshParam          = "fresh"
 	cacheRefreshValue          = "1"
 	cacheRefreshMaxRetries     = 3
@@ -382,6 +383,10 @@ func triggerCacheRefresh(ctx context.Context, targetURL string) error {
 		httpsling.Get(targetURL),
 		httpsling.QueryParam(cacheRefreshParam, cacheRefreshValue),
 		httpsling.Header(httpsling.HeaderUserAgent, cacheRefreshUserAgent),
+	}
+
+	if secret := trustCenterConfig.CacheRefreshSecret; secret != "" {
+		requestOpts = append(requestOpts, httpsling.Header(cacheRefreshAuthHeader, secret))
 	}
 
 	for attempt := range cacheRefreshMaxRetries {

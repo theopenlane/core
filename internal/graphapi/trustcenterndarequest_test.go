@@ -3,6 +3,7 @@ package graphapi_test
 import (
 	"context"
 	"fmt"
+	"sync"
 	"testing"
 	"time"
 
@@ -18,8 +19,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 func TestQueryTrustCenterNDARequest(t *testing.T) {
@@ -216,6 +220,65 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 	})
 
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+}
+
+func TestMutationCreateTrustCenterNDARequestDuplicateEmailDoesNotEmitCreate(t *testing.T) {
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	defer th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+
+	// record every create emission for NDA requests; the listener that sends the request
+	// email is keyed off this emission, so a second create event for the same row means a
+	// second email
+	var (
+		mu      sync.Mutex
+		created = map[string]int{}
+	)
+
+	listener, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, []gala.Registration{
+		entityops.MutationListener{
+			Schema:     entityops.SchemaTrustCenterNDARequest,
+			Operations: []string{entityops.OpCreate},
+			Handle: func(_ entityops.Invocation, payload entityops.MutationPayload) error {
+				mu.Lock()
+				defer mu.Unlock()
+
+				created[payload.EntityID]++
+
+				return nil
+			},
+		},
+	})
+	assert.NilError(t, err)
+
+	defer listener.Teardown()
+
+	email := gofakeit.Email()
+
+	input := testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         email,
+		TrustCenterID: &tcOrg.TrustCenter.ID,
+	}
+
+	originalRequest, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, input)
+	assert.NilError(t, err)
+	assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
+
+	requestID := originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID
+
+	mu.Lock()
+	assert.Equal(t, 1, created[requestID])
+	mu.Unlock()
+
+	duplicate, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, input)
+	assert.NilError(t, err)
+	assert.Equal(t, requestID, duplicate.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+	assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
+
+	mu.Lock()
+	assert.Equal(t, 1, created[requestID], "duplicate create must not re-emit the create event for the existing request")
+	mu.Unlock()
 }
 
 func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {

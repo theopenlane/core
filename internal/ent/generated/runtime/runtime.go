@@ -8148,6 +8148,8 @@ func init() {
 	trustcentersetting.Hooks[10] = trustcentersettingHooks[3]
 
 	trustcentersetting.Hooks[11] = trustcentersettingHooks[4]
+
+	trustcentersetting.Hooks[12] = trustcentersettingHooks[5]
 	trustcentersettingMixinInters3 := trustcentersettingMixin[3].Interceptors()
 	trustcentersettingMixinInters6 := trustcentersettingMixin[6].Interceptors()
 	trustcentersettingInters := schema.TrustCenterSetting{}.Interceptors()

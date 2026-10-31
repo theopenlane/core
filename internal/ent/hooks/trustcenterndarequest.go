@@ -9,6 +9,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -78,6 +79,10 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				if recordSigned {
 					return recordSignedNDARequest(ctx, queryCtx, m, existingRequest)
 				}
+
+				// nothing was created, veto the create emission so the outer event hook does not
+				// re-dispatch the request email for the existing row
+				entityops.VetoEmission(ctx)
 
 				return existingRequest, nil
 			}

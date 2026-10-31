@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"github.com/microcosm-cc/bluemonday"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -36,10 +37,35 @@ func SetTrustCenterConfig(cfg TrustCenterConfig) {
 
 // TrustCenterConfig holds the trust center configuration
 type TrustCenterConfig struct {
-	CnameTarget              string
-	PreviewZoneID            string
+	// CnameTarget is the CNAME target custom trust center domains point at
+	CnameTarget string
+	// PreviewZoneID is the cloudflare zone id that holds trust center preview domain records
+	PreviewZoneID string
+	// DefaultTrustCenterDomain is the shared domain slugged trust centers are served from
 	DefaultTrustCenterDomain string
-	CacheRefreshScheme       string
+	// CacheRefreshScheme is the URL scheme used for cache refresh requests (http in tests, https otherwise)
+	CacheRefreshScheme string
+	// CacheRefreshSecret is the shared secret sent on cache refresh requests so the trust center
+	// frontend can authenticate the forced-fresh render; no header is sent when empty
+	CacheRefreshSecret string
+}
+
+// trustCenterOverviewPolicy is the HTML sanitization policy applied to the trust center overview,
+// which the public trust center frontend renders as raw HTML
+var trustCenterOverviewPolicy = bluemonday.UGCPolicy()
+
+// HookTrustCenterSettingSanitize strips unsafe HTML from the trust center overview on create and
+// update so a tenant editor cannot store script the public trust center would execute
+func HookTrustCenterSettingSanitize() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.TrustCenterSettingFunc(func(ctx context.Context, m *generated.TrustCenterSettingMutation) (generated.Value, error) {
+			if overview, ok := m.Overview(); ok {
+				m.SetOverview(trustCenterOverviewPolicy.Sanitize(overview))
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
 // HookTrustCenterSetting process files for trust center settings

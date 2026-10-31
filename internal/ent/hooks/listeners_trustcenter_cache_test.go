@@ -91,6 +91,44 @@ func TestTriggerCacheRefresh(t *testing.T) {
 		assert.Equal(t, cacheRefreshUserAgent, receivedUserAgent)
 	})
 
+	t.Run("sends shared secret header when configured", func(t *testing.T) {
+		oldConfig := trustCenterConfig
+		defer func() { SetTrustCenterConfig(oldConfig) }()
+
+		SetTrustCenterConfig(TrustCenterConfig{CacheRefreshSecret: "refresh-secret"})
+
+		var receivedSecret string
+
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			receivedSecret = r.Header.Get(cacheRefreshAuthHeader)
+			w.WriteHeader(http.StatusOK)
+		}))
+		defer server.Close()
+
+		err := triggerCacheRefresh(context.Background(), server.URL)
+		assert.NoError(t, err)
+		assert.Equal(t, "refresh-secret", receivedSecret)
+	})
+
+	t.Run("omits shared secret header when not configured", func(t *testing.T) {
+		oldConfig := trustCenterConfig
+		defer func() { SetTrustCenterConfig(oldConfig) }()
+
+		SetTrustCenterConfig(TrustCenterConfig{})
+
+		var secretHeaderPresent bool
+
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			_, secretHeaderPresent = r.Header[cacheRefreshAuthHeader]
+			w.WriteHeader(http.StatusOK)
+		}))
+		defer server.Close()
+
+		err := triggerCacheRefresh(context.Background(), server.URL)
+		assert.NoError(t, err)
+		assert.False(t, secretHeaderPresent)
+	})
+
 	t.Run("4xx error returns immediately without retry", func(t *testing.T) {
 		var requestCount atomic.Int32
 

@@ -140,3 +140,91 @@ func TestRateLimiterWithDryRunAllowsRequests(t *testing.T) {
 		}
 	}
 }
+
+const (
+	testForwarderSecret = "forwarder-secret"
+	testEdgeIP          = "198.51.100.10"
+)
+
+// newForwarderEcho builds an echo instance with a single-request limiter that trusts testForwarderSecret
+func newForwarderEcho() *echo.Echo {
+	e := echo.New()
+
+	config := &ratelimit.Config{
+		Enabled:         true,
+		Headers:         []string{"CF-Connecting-IP"},
+		ForwarderSecret: testForwarderSecret,
+		Options: []ratelimit.RateOption{
+			{
+				Requests: 1,
+				Window:   time.Minute,
+			},
+		},
+	}
+
+	e.Use(ratelimit.RateLimiterWithConfig(config))
+	e.GET("/", func(c echo.Context) error {
+		return c.NoContent(http.StatusOK)
+	})
+
+	return e
+}
+
+// forwardedRequest issues a request through the shared edge IP carrying the supplied forwarder secret and client IP
+func forwardedRequest(e *echo.Echo, secret, clientIP string) *httptest.ResponseRecorder {
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	req.RemoteAddr = testEdgeIP + ":443"
+	req.Header.Set("CF-Connecting-IP", testEdgeIP)
+	req.Header.Set(ratelimit.ForwarderSecretHeader, secret)
+	req.Header.Set(ratelimit.ForwardedClientIPHeader, clientIP)
+	rec := httptest.NewRecorder()
+	e.ServeHTTP(rec, req)
+
+	return rec
+}
+
+func TestRateLimiterTrustedForwarderKeysOnClientIP(t *testing.T) {
+	t.Parallel()
+
+	e := newForwarderEcho()
+
+	if status := forwardedRequest(e, testForwarderSecret, "203.0.113.1").Code; status != http.StatusOK {
+		t.Fatalf("expected first forwarded client to succeed, got status %d", status)
+	}
+
+	if status := forwardedRequest(e, testForwarderSecret, "203.0.113.2").Code; status != http.StatusOK {
+		t.Fatalf("expected second forwarded client to land in its own bucket, got status %d", status)
+	}
+
+	if status := forwardedRequest(e, testForwarderSecret, "203.0.113.1").Code; status != http.StatusTooManyRequests {
+		t.Fatalf("expected repeat request from the first forwarded client to be rate limited, got status %d", status)
+	}
+}
+
+func TestRateLimiterWrongForwarderSecretIgnoresClientIP(t *testing.T) {
+	t.Parallel()
+
+	e := newForwarderEcho()
+
+	if status := forwardedRequest(e, "wrong-secret", "203.0.113.1").Code; status != http.StatusOK {
+		t.Fatalf("expected first request to succeed, got status %d", status)
+	}
+
+	if status := forwardedRequest(e, "wrong-secret", "203.0.113.2").Code; status != http.StatusTooManyRequests {
+		t.Fatalf("expected requests with a wrong secret to share the CF-Connecting-IP bucket, got status %d", status)
+	}
+}
+
+func TestRateLimiterUnparsableForwardedClientIPFallsThrough(t *testing.T) {
+	t.Parallel()
+
+	e := newForwarderEcho()
+
+	if status := forwardedRequest(e, testForwarderSecret, "not-an-ip").Code; status != http.StatusOK {
+		t.Fatalf("expected first request to succeed, got status %d", status)
+	}
+
+	if status := forwardedRequest(e, testForwarderSecret, "also-not-an-ip").Code; status != http.StatusTooManyRequests {
+		t.Fatalf("expected unparsable client IPs to share the CF-Connecting-IP bucket, got status %d", status)
+	}
+}

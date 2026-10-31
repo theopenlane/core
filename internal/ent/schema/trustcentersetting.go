@@ -282,6 +282,7 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 		hooks.HookSingleFile("logoFile", "logo_local_file_id"),
 		hooks.HookSingleFile("faviconFile", "favicon_local_file_id"),
 		hooks.HookSingleFile("heroImageFile", "hero_image_local_file_id"),
+		hooks.HookTrustCenterSettingSanitize(),
 		hooks.HookTrustCenterSetting(),
 		hooks.HookTrustCenterSettingCreatePreview(),
 	}

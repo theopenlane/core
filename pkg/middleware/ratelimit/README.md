@@ -113,3 +113,14 @@ rateLimiter := ratelimiter.New(FakeDataStore{}, maxLimit, windowSize)
 ### Dry-run mode
 
 When the middleware is configured with `dryRun: true`, limit checks are still executed and logged using `zerolog`, but requests are not blocked. This is useful for validating rate limit settings in production before enforcing them.
+
+### Trusted forwarder headers
+
+Cloudflare rewrites `CF-Connecting-IP` on cross-zone Worker subrequests, so a Worker frontend on another zone (for example the trust center) reaches the origin with every visitor collapsed onto one IP. To keep per-visitor buckets, set `forwardersecret` on the limiter config and have the Worker send two headers on its proxied calls:
+
+| Header | Value |
+| --- | --- |
+| `X-Openlane-Forwarder-Secret` | the configured `forwardersecret` |
+| `X-Openlane-Client-IP` | the visitor IP the Worker observed |
+
+When the presented secret matches (constant-time compare) and the client IP parses, the limiter keys on that IP instead of the `headers` precedence. A missing or wrong secret, or an unparsable IP, never errors or blocks; the request falls through to the normal precedence. The header names are exported as `ratelimit.ForwarderSecretHeader` and `ratelimit.ForwardedClientIPHeader`, and the secret is set via `ratelimit.forwardersecret` (`CORE_RATELIMIT_FORWARDERSECRET`).
