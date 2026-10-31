@@ -193,7 +193,7 @@ func validateTrustCenterNDAJSON(ctx context.Context, document map[string]any, tr
 	}
 
 	if doc.TrustCenterID != trustCenterID ||
-		doc.SignatoryInfo.Email != subjectEmail ||
+		!strings.EqualFold(doc.SignatoryInfo.Email, subjectEmail) ||
 		doc.SignatureMetadata.UserID != subjectID {
 
 		logx.FromContext(ctx).Error().

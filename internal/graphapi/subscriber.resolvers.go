@@ -115,7 +115,7 @@ func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input gr
 func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, input generated.UpdateSubscriberInput) (*model.SubscriberUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Subscriber.Query().
 		Where(
-			subscriber.EmailEQ(email),
+			subscriber.EmailEqualFold(email),
 		).Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subscriber"})

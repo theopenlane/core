@@ -56,7 +56,7 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 		query := h.DBClient.AssessmentResponse.Query().
 			Where(
 				assessmentresponse.AssessmentIDEQ(assessmentID),
-				assessmentresponse.EmailEQ(email),
+				assessmentresponse.EmailEqualFold(email),
 				assessmentresponse.IsTestEQ(isPreview),
 			)
 

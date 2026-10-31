@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
@@ -11,7 +9,6 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 )
 
@@ -144,35 +141,8 @@ func (FindingControl) Policy() ent.Policy {
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			policy.CanCreateObjectsUnderParents([]string{Control{}.PluralName(), Finding{}.PluralName()}),
-			policy.CanEditObjectUnderParents([]string{Control{}.Name(), Finding{}.Name()}, findingControlParentID),
+			policy.CanEditObjectUnderParents([]string{Control{}.Name(), Finding{}.Name()}, policy.ParentIDFromMutation),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
-}
-
-// findingControlParentID returns the value of a parent id field on the finding_control being mutated
-func findingControlParentID(ctx context.Context, m generated.Mutation, field string) (string, error) {
-	fcm, ok := m.(*generated.FindingControlMutation)
-	if !ok {
-		return "", nil
-	}
-
-	id, ok := fcm.ID()
-	if !ok {
-		return "", nil
-	}
-
-	fc, err := fcm.Client().FindingControl.Get(ctx, id)
-	if err != nil {
-		return "", err
-	}
-
-	switch field {
-	case "control_id":
-		return fc.ControlID, nil
-	case "finding_id":
-		return fc.FindingID, nil
-	}
-
-	return "", nil
 }
