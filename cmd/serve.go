@@ -160,6 +160,7 @@ func serve(ctx context.Context) error {
 		CnameTarget:              so.Config.Settings.Server.TrustCenterCnameTarget,
 		PreviewZoneID:            so.Config.Settings.Server.TrustCenterPreviewZoneID,
 		DefaultTrustCenterDomain: so.Config.Settings.Server.DefaultTrustCenterDomain,
+		CacheRefreshSecret:       so.Config.Settings.Server.TrustCenterCacheRefreshSecret,
 	})
 
 	email.SetDefaultTrustCenterDomain(so.Config.Settings.Server.DefaultTrustCenterDomain)

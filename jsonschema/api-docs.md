@@ -248,6 +248,7 @@ Server settings for the echo server
 |**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
 |**assessmentcnametarget**|`string`|AssessmentCnameTarget is the cname target for the assessment domains.<br/>Used for mapping vanity domains for questionnaires<br/>|no|
 |**trustcenterpreviewzoneid**|`string`|TrustCenterPreviewZoneID is the cloudflare zone id that holds trust center preview domain records<br/>|no|
+|**trustcentercacherefreshsecret**|`string`|TrustCenterCacheRefreshSecret is the shared secret sent in the X-Openlane-Cache-Refresh header on trust center<br/>cache refresh requests so the trust center frontend can authenticate forced-fresh renders; no header is sent when empty<br/>|no|
 |**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
 
 **Additional Properties:** not allowed   
@@ -1387,6 +1388,7 @@ Config defines the configuration settings for the rate limiter middleware.
 |[**options**](#defsratelimitrateoption)|`array`|||
 |[**headers**](#defsstring)|`string[]`|||
 |**forwardedindexfrombehind**|`integer`|ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.<br/>0 means the closest client, 1 the proxy behind it, etc.<br/>||
+|**forwardersecret**|`string`|ForwarderSecret is the shared secret a trusted forwarding proxy presents in X-Openlane-Forwarder-Secret<br/>||
 |**includepath**|`boolean`|IncludePath appends the request path to the limiter key when true.<br/>||
 |**includemethod**|`boolean`|IncludeMethod appends the request method to the limiter key when true.<br/>||
 |**keyprefix**|`string`|KeyPrefix allows scoping the limiter key space with a static prefix.<br/>||

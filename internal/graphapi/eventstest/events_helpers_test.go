@@ -201,6 +201,23 @@ func waitForGala(t *testing.T, runtime *gala.Gala) {
 	assert.NilError(t, runtime.WaitIdle(t.Context()))
 }
 
+// resetNDANotificationCooldowns clears the per-request notification windows the NDA listener holds
+// in the integrations redis so a subtest can resend for the same request immediately
+func resetNDANotificationCooldowns(t *testing.T) {
+	t.Helper()
+
+	ctx := t.Context()
+
+	keys, err := suite.IntegrationsRedis.Keys(ctx, "integrations:ratelimit:trustcenter:nda:*").Result()
+	assert.NilError(t, err)
+
+	if len(keys) == 0 {
+		return
+	}
+
+	assert.NilError(t, suite.IntegrationsRedis.Del(ctx, keys...).Err())
+}
+
 // mockEmailSender extracts the mock email sender from the integration runtime
 func mockEmailSender() *mockprovider.EmailSender {
 	rc, ok := suite.IntegrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())

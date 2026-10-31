@@ -20,12 +20,17 @@ func TestGraphRateLimitConfig(t *testing.T) {
 		Enabled:              true,
 		SendRetryAfterHeader: true,
 		DryRun:               true,
+		ForwarderSecret:      "forwarder-secret",
 	}
 
 	cfg := graphRateLimitConfig(in)
 
 	if !cfg.Enabled {
 		t.Fatalf("expected graph rate limit config to be enabled")
+	}
+
+	if cfg.ForwarderSecret != in.ForwarderSecret {
+		t.Fatalf("expected graph rate limit config to inherit ForwarderSecret from the base config, got %q", cfg.ForwarderSecret)
 	}
 
 	if !cfg.SendRetryAfterHeader {

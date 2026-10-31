@@ -450,6 +450,7 @@ ratelimit:
     dryrun: true
     enabled: false
     forwardedindexfrombehind: 0
+    forwardersecret: ""
     headers:
         - CF-Connecting-IP
         - True-Client-IP
@@ -469,6 +470,7 @@ ratelimitunmatched:
     dryrun: true
     enabled: false
     forwardedindexfrombehind: 0
+    forwardersecret: ""
     headers:
         - CF-Connecting-IP
         - True-Client-IP
@@ -552,6 +554,7 @@ server:
         certfile: server.crt
         certkey: server.key
         enabled: false
+    trustcentercacherefreshsecret: ""
     trustcentercnametarget: cname.openlane-dns.com
     trustcenterpreviewzoneid: ""
     writetimeout: 15000000000

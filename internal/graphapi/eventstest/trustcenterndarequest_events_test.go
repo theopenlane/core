@@ -214,11 +214,12 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			// Clear any existing jobs and emails
+			// Clear any existing jobs, emails and notification cooldowns so a repeat request resends
 			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
 			mockEmailSender().Reset()
+			resetNDANotificationCooldowns(t)
 
 			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
 			if tc.expectedErr != "" {
@@ -545,6 +546,61 @@ func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *t
 	th.CleanupOrganizationDataWithContext(trustcenterOrg.Owner.UserCtx, t)
 }
 
+func TestMutationCreateTrustCenterNDARequestDuplicateWithinCooldown(t *testing.T) {
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+
+	input := testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         gofakeit.LetterN(12) + ndaRequestEmailDomain,
+		TrustCenterID: &tcOrg.TrustCenter.ID,
+	}
+
+	err = suite.Client.DB.Job.TruncateRiverTables(tcOrg.Owner.UserCtx)
+	assert.NilError(t, err)
+
+	mockEmailSender().Reset()
+	resetNDANotificationCooldowns(t)
+
+	original, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, input)
+	assert.NilError(t, err)
+
+	waitForEvents()
+
+	msgs := mockEmailSender().Messages()
+	assert.Assert(t, len(msgs) == 1, "expected 1 email after the first request, got %d", len(msgs))
+
+	requestID := original.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID
+
+	// the same request again inside the cooldown returns the existing row and notifies nobody
+	duplicate, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, input)
+	assert.NilError(t, err)
+	assert.Equal(t, requestID, duplicate.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+
+	waitForEvents()
+
+	msgs = mockEmailSender().Messages()
+	assert.Assert(t, len(msgs) == 1, "expected no resend within the cooldown, got %d emails", len(msgs))
+
+	// a status transition is a different notification and is never held back by the cooldown
+	_, err = suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, requestID, testclient.UpdateTrustCenterNDARequestInput{
+		Status: lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+	})
+	assert.NilError(t, err)
+
+	waitForEvents()
+
+	msgs = mockEmailSender().Messages()
+	assert.Assert(t, len(msgs) == 2, "expected the signed transition to email, got %d emails", len(msgs))
+
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+}
+
 func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.NDAAutoApprovalListeners())
 	assert.NilError(t, err)
@@ -805,11 +861,12 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			// Clear any existing jobs and emails
+			// Clear any existing jobs, emails and notification cooldowns so the token request resends
 			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
 			mockEmailSender().Reset()
+			resetNDANotificationCooldowns(t)
 
 			resp, err := tc.client.RequestNewTrustCenterToken(tc.ctx, tc.email)
 			if tc.expectedErr != "" {

@@ -496,6 +496,7 @@ func graphRateLimitConfig(cfg ratelimit.Config) *ratelimit.Config {
 	return &ratelimit.Config{
 		Enabled:              cfg.Enabled,
 		Headers:              ratelimit.DefaultClientIPHeaders,
+		ForwarderSecret:      cfg.ForwarderSecret,
 		Options:              []ratelimit.RateOption{{Requests: graphRateLimitRequests, Window: graphRateLimitWindow}},
 		SendRetryAfterHeader: cfg.SendRetryAfterHeader,
 		DryRun:               cfg.DryRun,
