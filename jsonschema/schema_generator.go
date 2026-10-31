@@ -1064,7 +1064,7 @@ func writeMapField(builder *strings.Builder, key, helmRef string, indent int) {
 func formatScalarFieldLine(key, helmRef string, value reflect.Value, indent int) string {
 	indentStr := strings.Repeat(" ", indent)
 	var builder strings.Builder
-	builder.WriteString(fmt.Sprintf("%s{{- if %s }}\n", indentStr, helmRef))
+	builder.WriteString(fmt.Sprintf("%s{{- if %s }}\n", indentStr, scalarGuard(helmRef, value)))
 	if needsQuotes(value) {
 		builder.WriteString(fmt.Sprintf("%s%s: {{ %s | quote }}\n", indentStr, key, helmRef))
 	} else {
@@ -1072,6 +1072,15 @@ func formatScalarFieldLine(key, helmRef string, value reflect.Value, indent int)
 	}
 	builder.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
 	return builder.String()
+}
+
+// scalarGuard returns the Helm condition that decides whether a scalar is rendered
+func scalarGuard(helmRef string, value reflect.Value) string {
+	if value.Kind() == reflect.Bool {
+		return fmt.Sprintf("not (kindIs %q %s)", "invalid", helmRef)
+	}
+
+	return helmRef
 }
 
 // formatScalarDefaultLiteral converts a scalar value into a Helm-friendly literal.
