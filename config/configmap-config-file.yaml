@@ -757,6 +757,15 @@ data:
       {{- if .Values.openlane.coreConfiguration.sessions.samesite }}
       samesite: {{ .Values.openlane.coreConfiguration.sessions.samesite | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.sessions.absolutetimeout }}
+      absolutetimeout: {{ .Values.openlane.coreConfiguration.sessions.absolutetimeout | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.sessions.renewalinterval }}
+      renewalinterval: {{ .Values.openlane.coreConfiguration.sessions.renewalinterval | quote }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.sessions.renewalgrace }}
+      renewalgrace: {{ .Values.openlane.coreConfiguration.sessions.renewalgrace | quote }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.totp }}
     totp:
