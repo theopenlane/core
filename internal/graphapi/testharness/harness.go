@@ -15,6 +15,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/mcuadros/go-defaults"
+	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -92,6 +93,7 @@ type GraphTestSuite struct {
 	CacheRefreshServer *httptest.Server
 	GalaRuntime        *gala.Gala
 	IntegrationsRT     *intruntime.Runtime
+	IntegrationsRedis  *redis.Client
 	WorkflowEngine     *engine.WorkflowEngine
 	SlackMock          *slackdef.MockSlackRuntime
 	CloudflareMock     *cloudflaredef.MockCloudflareRuntime
@@ -348,11 +350,13 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	)
 	RequireNoError(t, err)
 
+	suite.IntegrationsRedis = coreutils.NewRedisClient()
+
 	rt, err := intruntime.New(intruntime.Config{
 		DB:          c.DB,
 		Gala:        galaInstance,
 		Keystore:    credStore,
-		RedisClient: coreutils.NewRedisClient(),
+		RedisClient: suite.IntegrationsRedis,
 		Registry:    reg,
 	})
 	RequireNoError(t, err)

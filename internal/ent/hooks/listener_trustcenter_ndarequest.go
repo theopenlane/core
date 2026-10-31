@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	emailverifier "github.com/AfterShip/email-verifier"
@@ -23,9 +24,23 @@ import (
 	"github.com/theopenlane/logx"
 
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 )
 
 func init() { registerListeners(NDAAutoApprovalListeners) }
+
+// ndaNotificationCooldown is the window within which a repeat request for the same NDA request and
+// status notifies nobody, so a lost link can be resent after the window while repeat submissions
+// through the anonymous create cannot flood the requester or the approvers
+const ndaNotificationCooldown = 5 * time.Minute
+
+// ndaNotifyingStatuses are the request statuses that notify the requester or the approvers
+var ndaNotifyingStatuses = []enums.TrustCenterNDARequestStatus{
+	enums.TrustCenterNDARequestStatusRequested,
+	enums.TrustCenterNDARequestStatusApproved,
+	enums.TrustCenterNDARequestStatusNeedsApproval,
+	enums.TrustCenterNDARequestStatusSigned,
+}
 
 type ndaApprovalSource struct {
 	SkipNDAApprovalNotification bool `json:"skipNDAApprovalNotification,omitempty"`
@@ -88,6 +103,21 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 		}
 	}
 
+	if !slices.Contains(ndaNotifyingStatuses, req.Status) {
+		return nil
+	}
+
+	allowed, err := allowNDANotification(inv.Context, req)
+	if err != nil {
+		return err
+	}
+
+	if !allowed {
+		logx.FromContext(inv.Context).Debug().Str("status", req.Status.String()).Msg("nda request notification already sent within the cooldown, skipping")
+
+		return nil
+	}
+
 	switch req.Status {
 	// requested status is the default case and we still fall in here if auto approval is not turned on
 	case enums.TrustCenterNDARequestStatusRequested, enums.TrustCenterNDARequestStatusApproved:
@@ -138,6 +168,23 @@ func handleNDARequestApproval(inv entityops.Invocation, payload entityops.Mutati
 	}
 
 	return nil
+}
+
+// allowNDANotification consumes the single notification slot for the request and status within the
+// cooldown; the status is part of the key so a transition always notifies and only a repeat of the
+// same status is held back. Without an integration runtime no email can be sent, so nothing is bounded
+func allowNDANotification(ctx context.Context, req *generated.TrustCenterNDARequest) (bool, error) {
+	rt := intruntime.Default()
+	if rt == nil {
+		return true, nil
+	}
+
+	return rt.AllowN(ctx, ndaNotificationKey(req), 1, 1, ndaNotificationCooldown)
+}
+
+// ndaNotificationKey scopes the notification window to one request and status
+func ndaNotificationKey(req *generated.TrustCenterNDARequest) string {
+	return fmt.Sprintf("trustcenter:nda:%s:%s", req.ID, req.Status)
 }
 
 func processApproval(ctx context.Context, client *generated.Client, request *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
