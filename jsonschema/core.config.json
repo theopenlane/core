@@ -1463,7 +1463,7 @@
         },
         "forwardersecret": {
           "type": "string",
-          "description": "ForwarderSecret is the shared secret a trusted forwarding proxy presents in X-Openlane-Forwarder-Secret.\nWhen set, requests presenting it are keyed on the IP in X-Openlane-Client-IP instead of the normal header\nprecedence; a missing or mismatched secret, or an unparsable client IP, falls through to the normal precedence"
+          "description": "ForwarderSecret is the shared secret a trusted forwarding proxy presents in X-Openlane-Forwarder-Secret"
         },
         "includepath": {
           "type": "boolean",
