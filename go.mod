@@ -17,7 +17,7 @@ require (
 	cloud.google.com/go/storage v1.69.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6
-	github.com/99designs/gqlgen v0.17.97
+	github.com/99designs/gqlgen v0.17.98
 	github.com/AfterShip/email-verifier v1.5.0
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.3
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.15.0
@@ -36,7 +36,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.3
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.85.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.4
-	github.com/brianvoe/gofakeit/v7 v7.18.0
+	github.com/brianvoe/gofakeit/v7 v7.18.1
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v7 v7.11.0
 	github.com/coder/websocket v1.8.15
@@ -74,7 +74,7 @@ require (
 	github.com/labstack/echo/v4 v4.16.2
 	github.com/labstack/gommon v0.5.0
 	github.com/lestrrat-go/httprc/v3 v3.0.6
-	github.com/lestrrat-go/jwx/v4 v4.5.0
+	github.com/lestrrat-go/jwx/v4 v4.6.0
 	github.com/lib/pq v1.12.3
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
@@ -121,14 +121,14 @@ require (
 	github.com/theopenlane/go-client v0.15.0
 	github.com/theopenlane/gqlgen-plugins v0.18.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.40.2
+	github.com/theopenlane/iam v0.41.0
 	github.com/theopenlane/logx v0.1.1
 	github.com/theopenlane/newman v0.6.0
 	github.com/theopenlane/riverboat v0.14.6
 	github.com/theopenlane/utils v0.7.4
 	github.com/tmc/langchaingo v0.1.15
 	github.com/urfave/cli/v3 v3.14.0
-	github.com/vektah/gqlparser/v2 v2.5.63
+	github.com/vektah/gqlparser/v2 v2.5.64
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/yuin/goldmark v1.8.6
 	github.com/zitadel/oidc/v3 v3.49.6
@@ -246,7 +246,7 @@ require (
 	github.com/gofrs/flock v0.13.0 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/go-github/v91 v91.0.0 // indirect
+	github.com/google/go-github/v93 v93.0.0 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/renameio/v2 v2.0.0 // indirect
