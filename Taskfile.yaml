@@ -87,8 +87,8 @@ tasks:
       - task: generate:onboarding:smart
       - task: generate:core
       - task: generate:catalog:smart
-      - task: fga:generate
     cmds:
+      - task: fga:generate
       - task: generate:openapi:smart
       - task: tidy
 
