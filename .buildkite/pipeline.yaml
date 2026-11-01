@@ -76,13 +76,34 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "generate:checksums"]
+              command: ["task", "generate:checksums:ci"]
               propagate-environment: true
               propagate-uid-gid: true
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+              environment:
+                - "CGO_ENABLED=0"
+                - "GOTOOLCHAIN=auto"
+      - label: ":auth0: fga generate"
+        retry: *disk-full-retry
+        key: "generate_fga"
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_STANDARD
+        cancel_on_build_failing: true
+        if_changed:
+          - fga/**
+        plugins:
+          - docker#v5.14.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              command: ["task", "fga:generate"]
+              propagate-environment: true
+              propagate-uid-gid: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
@@ -108,7 +129,6 @@ steps:
               volumes:
                 - $GOCACHE:$GOCACHE
                 - $GOMODCACHE:$GOMODCACHE
-                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
                 - "CGO_ENABLED=0"
                 - "GOTOOLCHAIN=auto"
