@@ -657,7 +657,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 	gm3 := (&th.GroupMemberBuilder{Client: suite.Client, UserID: meowViewerUser.ID, GroupID: blockGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// add add user to the viewer group
-	gm4 := (&th.GroupMemberBuilder{Client: suite.Client, UserID: th.SharedViewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, UserID: th.SharedViewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the program
 	_, err = suite.Client.API.GetProgramByID(th.SharedViewOnlyUser.UserCtx, program.ID)
@@ -1078,7 +1078,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 	// cleanup group
 	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{blockGroup.ID, viewerGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// org member cleanup
-	(&th.Cleanup[*generated.OrgMembershipDeleteOne]{Client: suite.Client.DB.OrgMembership, IDs: []string{om.ID, gm1.Edges.OrgMembership.ID, gm2.Edges.OrgMembership.ID, gm3.Edges.OrgMembership.ID, gm4.Edges.OrgMembership.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.OrgMembershipDeleteOne]{Client: suite.Client.DB.OrgMembership, IDs: []string{om.ID, gm1.Edges.OrgMembership.ID, gm2.Edges.OrgMembership.ID, gm3.Edges.OrgMembership.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteProgram(t *testing.T) {

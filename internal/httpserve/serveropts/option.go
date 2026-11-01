@@ -409,6 +409,9 @@ func WithSessionManager(rc *redis.Client) ServerOption {
 			sessions.WithPersistence(rc),
 			sessions.WithSkipperFunc(authmw.SessionSkipperFunc),
 			sessions.WithFallbackUserID(authmw.SessionFallbackUserID),
+			sessions.WithAbsoluteTimeout(s.Config.Settings.Sessions.AbsoluteTimeout),
+			sessions.WithRenewalInterval(s.Config.Settings.Sessions.RenewalInterval),
+			sessions.WithRenewalGrace(s.Config.Settings.Sessions.RenewalGrace),
 		)
 
 		// set cookie config to be used
