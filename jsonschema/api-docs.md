@@ -1354,6 +1354,9 @@ identity provider configuration, since both authentications must occur together
 |**secure**|`boolean`|||
 |**httponly**|`boolean`|||
 |**samesite**|`string`|||
+|**absolutetimeout**|`integer`|||
+|**renewalinterval**|`integer`|||
+|**renewalgrace**|`integer`|||
 
 **Additional Properties:** not allowed   
    

@@ -261,13 +261,54 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 
 		slid := sessionCookies(second, sc.CookieConfig.Name)
 		require.Len(t, slid, 1)
+		assert.Equal(t, mintedID, sessionIDFromCookie(t, sc, slid[0]))
 
-		slidID := sessionIDFromCookie(t, sc, slid[0])
-		assert.NotEqual(t, mintedID, slidID)
-
-		stored, err := client.Get(ctx, slidID).Result()
+		stored, err := client.Get(ctx, mintedID).Result()
 		require.NoError(t, err)
 		assert.Equal(t, userID, stored)
+
+		ttl, err := client.TTL(ctx, mintedID).Result()
+		require.NoError(t, err)
+		assert.InDelta(t, sc.CookieConfig.MaxAge, ttl.Seconds(), 1)
+	})
+
+	t.Run("minted session is reissued once the renewal interval has elapsed", func(t *testing.T) {
+		client := coreutils.NewRedisClient()
+		defer client.Close()
+
+		sc := graphSessionConfig(t, client)
+		userID := ulids.New().String()
+
+		first, err := runSessionMiddleware(t, sc, jwtCaller(userID))
+		require.NoError(t, err)
+
+		minted := sessionCookies(first, sc.CookieConfig.Name)
+		require.Len(t, minted, 1)
+		mintedID := sessionIDFromCookie(t, sc, minted[0])
+
+		strict := newSessionMiddlewareConfig(t, client,
+			sessions.WithSkipperFunc(auth.SessionSkipperFunc),
+			sessions.WithRenewalInterval(0),
+		)
+		strict.SessionManager = sc.SessionManager
+
+		second, err := runSessionMiddleware(t, strict, jwtCaller(userID), minted[0])
+		require.NoError(t, err)
+		assert.Equal(t, http.StatusOK, second.Code)
+
+		reissued := sessionCookies(second, sc.CookieConfig.Name)
+		require.Len(t, reissued, 1)
+
+		reissuedID := sessionIDFromCookie(t, sc, reissued[0])
+		assert.NotEqual(t, mintedID, reissuedID)
+
+		stored, err := client.Get(ctx, reissuedID).Result()
+		require.NoError(t, err)
+		assert.Equal(t, userID, stored)
+
+		retired, err := client.TTL(ctx, mintedID).Result()
+		require.NoError(t, err)
+		assert.LessOrEqual(t, retired, strict.RenewalGrace)
 	})
 
 	t.Run("rejects an impersonated caller with no session", func(t *testing.T) {

@@ -1754,6 +1754,15 @@
         },
         "samesite": {
           "type": "string"
+        },
+        "absolutetimeout": {
+          "type": "integer"
+        },
+        "renewalinterval": {
+          "type": "integer"
+        },
+        "renewalgrace": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,

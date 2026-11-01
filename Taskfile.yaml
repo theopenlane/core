@@ -79,7 +79,7 @@ tasks:
       - task: go:fmt
 
   generate:checksums:
-    desc: Generate with checksum tracking for CI optimization
+    desc: Generate with checksum tracking optimization
     aliases: [generate]
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
@@ -88,6 +88,19 @@ tasks:
       - task: generate:core
       - task: generate:catalog:smart
       - task: fga:generate
+    cmds:
+      - task: generate:openapi:smart
+      - task: tidy
+
+  generate:checksums:ci:
+    desc: Generate with checksum tracking for CI optimization
+    aliases: [generate]
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    deps:
+      - task: generate:onboarding:smart
+      - task: generate:core
+      - task: generate:catalog:smart
     cmds:
       - task: generate:openapi:smart
       - task: tidy

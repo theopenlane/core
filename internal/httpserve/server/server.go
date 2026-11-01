@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"os"
 
@@ -161,12 +162,13 @@ func localFileRoot(config storage.ProviderConfig) string {
 
 // StartEchoServer creates and starts the echo server with configured middleware and handlers
 func (s *Server) StartEchoServer(ctx context.Context) error {
+	drained := make(chan struct{})
+
 	sc := echo.StartConfig{
 		HideBanner:      true,
 		HidePort:        true,
 		Address:         s.config.Settings.Server.Listen,
-		GracefulTimeout: s.config.Settings.Server.ShutdownGracePeriod,
-		GracefulContext: ctx,
+		BeforeServeFunc: s.shutdownOnCancel(ctx, drained),
 	}
 
 	if s.config.Settings.Server.Debug {
@@ -208,7 +210,7 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 	if s.config.Settings.Server.TLS.Enabled {
 		log.Info().Msg("starting in https mode")
 
-		return sc.StartTLS(s.Router.Echo, s.config.Settings.Server.TLS.CertFile, s.config.Settings.Server.TLS.CertKey)
+		return awaitDrain(sc.StartTLS(s.Router.Echo, s.config.Settings.Server.TLS.CertFile, s.config.Settings.Server.TLS.CertKey), drained)
 	}
 
 	newMetrics := metrics.New(s.config.Settings.Server.MetricsPort)
@@ -230,7 +232,37 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		}
 	}()
 	// otherwise, start without TLS
-	return sc.Start(s.Router.Echo)
+	return awaitDrain(sc.Start(s.Router.Echo), drained)
+}
+
+// shutdownOnCancel returns the echo BeforeServeFunc that drains the http server once ctx is cancelled
+func (s *Server) shutdownOnCancel(ctx context.Context, drained chan<- struct{}) func(*http.Server) error {
+	return func(srv *http.Server) error {
+		go func() {
+			defer close(drained)
+
+			<-ctx.Done()
+
+			shutdownCtx, cancel := context.WithTimeout(context.Background(), s.config.Settings.Server.ShutdownGracePeriod)
+
+			defer cancel()
+
+			if err := srv.Shutdown(shutdownCtx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("server did not drain within the shutdown grace period")
+			}
+		}()
+
+		return nil
+	}
+}
+
+// awaitDrain blocks until the shutdown drain has finished when the server stopped because Shutdown was called
+func awaitDrain(err error, drained <-chan struct{}) error {
+	if errors.Is(err, http.ErrServerClosed) {
+		<-drained
+	}
+
+	return err
 }
 
 var startBlock = `
