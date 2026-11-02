@@ -146,9 +146,6 @@ func parseHeadingLevel(s string) int {
 	return 0
 }
 
-// PDFMimeType is the media type for PDF documents
-const PDFMimeType = pdftext.ContentType
-
 // parsePDF extracts the plain text layer of a PDF for search and summaries. Layout is not
 // preserved and image-only (scanned) PDFs yield no text
 func parsePDF(ctx context.Context, content []byte) (string, error) {

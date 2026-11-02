@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
+	"github.com/theopenlane/core/v2/pkg/pdftext"
 	"github.com/theopenlane/core/v2/pkg/pdftext/pdftest"
 )
 
@@ -191,7 +192,7 @@ func TestParseDocument(t *testing.T) {
 		{
 			name:       "PDF document",
 			data:       string(validPDF),
-			mimeType:   PDFMimeType,
+			mimeType:   pdftext.ContentType,
 			expectType: "string",
 			validate: func(t *testing.T, result any) {
 				str, ok := result.(string)
@@ -202,28 +203,28 @@ func TestParseDocument(t *testing.T) {
 		{
 			name:         "empty PDF",
 			data:         "",
-			mimeType:     PDFMimeType,
+			mimeType:     pdftext.ContentType,
 			expectError:  ErrParseFailed,
 			expectFormat: ParseFormatPDF,
 		},
 		{
 			name:         "not a PDF",
 			data:         "definitely not a pdf",
-			mimeType:     PDFMimeType,
+			mimeType:     pdftext.ContentType,
 			expectError:  ErrParseFailed,
 			expectFormat: ParseFormatPDF,
 		},
 		{
 			name:         "truncated PDF",
 			data:         string(validPDF[:len(validPDF)/2]),
-			mimeType:     PDFMimeType,
+			mimeType:     pdftext.ContentType,
 			expectError:  ErrParseFailed,
 			expectFormat: ParseFormatPDF,
 		},
 		{
 			name:         "PDF header only",
 			data:         "%PDF-1.7\n%%EOF",
-			mimeType:     PDFMimeType,
+			mimeType:     pdftext.ContentType,
 			expectError:  ErrParseFailed,
 			expectFormat: ParseFormatPDF,
 		},

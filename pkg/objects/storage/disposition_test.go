@@ -1,6 +1,10 @@
 package storage
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/theopenlane/core/v2/pkg/pdftext"
+)
 
 func TestDispositionFor(t *testing.T) {
 	tests := []struct {
@@ -8,7 +12,7 @@ func TestDispositionFor(t *testing.T) {
 		contentType string
 		want        string
 	}{
-		{"pdf exact", PDFMimeType, DispositionInline},
+		{"pdf exact", pdftext.ContentType, DispositionInline},
 		{"pdf with charset", "application/pdf; charset=binary", DispositionInline},
 		{"pdf uppercase", "APPLICATION/PDF", DispositionInline},
 		{"pdf with whitespace and params", "  application/pdf ; foo=bar  ", DispositionInline},
