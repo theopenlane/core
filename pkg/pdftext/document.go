@@ -216,13 +216,17 @@ func (f *fontDecoder) decode(raw []byte) []byte {
 // compositeCodeBytes is the width of a character code in a composite font
 const compositeCodeBytes = 2
 
-// codeValue packs one or two bytes into a character code
+// codeValue packs one or two bytes into a character code; an empty code, such as an empty hex
+// string in a malformed CMap, is zero
 func codeValue(b []byte) uint32 {
-	if len(b) == compositeCodeBytes {
+	switch len(b) {
+	case 0:
+		return 0
+	case compositeCodeBytes:
 		return uint32(binary.BigEndian.Uint16(b))
+	default:
+		return uint32(b[0])
 	}
-
-	return uint32(b[0])
 }
 
 // resourceFonts builds a decoder for every font in the resources, keyed by resource name
@@ -457,7 +461,8 @@ func parseBFChar(tokens []token, start int, result *toUnicodeMap) int {
 			return i
 		}
 
-		if tokens[i].kind == tokenHex && tokens[i+1].kind == tokenHex {
+		// an empty source code maps nothing, so it is skipped rather than read as code zero
+		if tokens[i].kind == tokenHex && tokens[i+1].kind == tokenHex && len(tokens[i].raw) > 0 {
 			result.unicode[codeValue(tokens[i].raw)] = utf16Text(tokens[i+1].raw)
 		}
 	}
@@ -482,7 +487,7 @@ func parseBFRange(tokens []token, start int, result *toUnicodeMap) int {
 		}
 
 		lo, hi := codeValue(tokens[i].raw), codeValue(tokens[i+1].raw)
-		if hi < lo || hi-lo > math.MaxUint16 {
+		if len(tokens[i].raw) == 0 || len(tokens[i+1].raw) == 0 || hi < lo || hi-lo > math.MaxUint16 {
 			i += bfRangeArity
 
 			continue

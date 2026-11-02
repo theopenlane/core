@@ -129,6 +129,7 @@ func TestParseToUnicode(t *testing.T) {
 		cmap          string
 		wantCodeBytes int
 		want          map[uint32]string
+		wantUnmapped  []uint32
 	}{
 		{
 			name: "bfchar",
@@ -152,6 +153,31 @@ endbfrange`,
 			wantCodeBytes: 1,
 			want:          map[uint32]string{0x10: "a", 0x11: "b", 0x12: "c", 0x20: "X", 0x21: "Y"},
 		},
+		{
+			name: "bfchar skips an empty source code",
+			cmap: `
+1 begincodespacerange <00> <FF> endcodespacerange
+2 beginbfchar
+<> <0041>
+<03> <0042>
+endbfchar`,
+			wantCodeBytes: 1,
+			want:          map[uint32]string{0x03: "B"},
+			wantUnmapped:  []uint32{0x00},
+		},
+		{
+			name: "bfrange skips entries with an empty low or high code",
+			cmap: `
+1 begincodespacerange <00> <FF> endcodespacerange
+3 beginbfrange
+<> <12> <0061>
+<20> <> <0058>
+<30> <31> <0041>
+endbfrange`,
+			wantCodeBytes: 1,
+			want:          map[uint32]string{0x30: "A", 0x31: "B"},
+			wantUnmapped:  []uint32{0x00, 0x10, 0x12, 0x20},
+		},
 	}
 
 	for _, tt := range tests {
@@ -163,6 +189,30 @@ endbfrange`,
 			for code, want := range tt.want {
 				assert.Check(t, cmap.unicode[code] == want, "code %#x: got %q, want %q", code, cmap.unicode[code], want)
 			}
+
+			for _, code := range tt.wantUnmapped {
+				_, mapped := cmap.unicode[code]
+				assert.Check(t, !mapped, "code %#x should not be mapped", code)
+			}
+		})
+	}
+}
+
+func TestCodeValue(t *testing.T) {
+	tests := []struct {
+		name string
+		code []byte
+		want uint32
+	}{
+		{name: "empty", code: []byte{}, want: 0},
+		{name: "one byte", code: []byte{0x41}, want: 0x41},
+		{name: "two bytes", code: []byte{0x01, 0x02}, want: 0x0102},
+		{name: "longer codes use the first byte", code: []byte{0x07, 0x08, 0x09}, want: 0x07},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Check(t, codeValue(tt.code) == tt.want)
 		})
 	}
 }

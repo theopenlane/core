@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -156,16 +155,8 @@ func IsPDFMimeType(mimeType string) bool {
 }
 
 // parsePDF extracts the plain text layer of a PDF for search and summaries. Layout is not
-// preserved and image-only (scanned) PDFs yield no text. Panics from parsing malformed input
-// are recovered and returned as a ParseError so a bad upload cannot take down the request
-func parsePDF(ctx context.Context, content []byte) (text string, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			text = ""
-			err = newParseError(ParseFormatPDF, fmt.Errorf("panic: %v", r)) //nolint:err113
-		}
-	}()
-
+// preserved and image-only (scanned) PDFs yield no text
+func parsePDF(ctx context.Context, content []byte) (string, error) {
 	doc, err := pdftext.Open(ctx, content)
 	if err != nil {
 		return "", newParseError(ParseFormatPDF, err)
