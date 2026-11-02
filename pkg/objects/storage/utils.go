@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"io"
 	"os"
-	"regexp"
 	"strings"
 	"time"
 
@@ -78,7 +77,7 @@ func ParseDocument(ctx context.Context, reader io.Reader, mimeType string) (*Par
 		}
 
 		return &ParsedDocument{Data: text}, nil
-	case IsPDFMimeType(mimeType):
+	case pdftext.IsContentType(mimeType):
 		text, err := parsePDF(ctx, data)
 		if err != nil {
 			return nil, err
@@ -150,11 +149,6 @@ func parseHeadingLevel(s string) int {
 // PDFMimeType is the media type for PDF documents
 const PDFMimeType = pdftext.ContentType
 
-// IsPDFMimeType reports whether the given mime or content type is a PDF, ignoring parameters and case
-func IsPDFMimeType(mimeType string) bool {
-	return strings.Contains(strings.ToLower(mimeType), PDFMimeType)
-}
-
 // parsePDF extracts the plain text layer of a PDF for search and summaries. Layout is not
 // preserved and image-only (scanned) PDFs yield no text
 func parsePDF(ctx context.Context, content []byte) (string, error) {
@@ -163,34 +157,7 @@ func parsePDF(ctx context.Context, content []byte) (string, error) {
 		return "", newParseError(ParseFormatPDF, err)
 	}
 
-	return normalizePDFText(string(doc.Text(ctx))), nil
-}
-
-var (
-	// pdfDotLeaderPattern matches table of contents dot leaders: four or more dots, optionally separated
-	// by single spaces, which would otherwise be read as runs of empty sentences
-	pdfDotLeaderPattern = regexp.MustCompile(`\.(?: ?\.){3,}`)
-	// pdfSpaceRunPattern matches runs of horizontal whitespace, including non-breaking spaces, that PDF
-	// layouts use for padding
-	pdfSpaceRunPattern = regexp.MustCompile(`[ \t\x{00A0}]{2,}`)
-)
-
-// normalizePDFText removes dot leaders, collapses whitespace padding, trims each line and drops empty
-// lines produced between PDF text objects
-func normalizePDFText(s string) string {
-	lines := strings.Split(s, "\n")
-	kept := lines[:0]
-
-	for _, line := range lines {
-		line = pdfDotLeaderPattern.ReplaceAllString(line, " ")
-		line = pdfSpaceRunPattern.ReplaceAllString(line, " ")
-
-		if line = strings.TrimSpace(line); line != "" {
-			kept = append(kept, line)
-		}
-	}
-
-	return strings.Join(kept, "\n")
+	return string(doc.Text(ctx)), nil
 }
 
 // parseDocx extracts and returns the text content from a DOCX file preserving paragraph structure

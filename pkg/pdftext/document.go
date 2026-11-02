@@ -6,7 +6,9 @@ import (
 	"encoding/binary"
 	"errors"
 	"math"
+	"regexp"
 	"strconv"
+	"strings"
 	"unicode/utf16"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
@@ -16,6 +18,11 @@ import (
 
 // ContentType is the mime type of a pdf
 const ContentType = "application/pdf"
+
+// IsContentType reports whether a mime or content type is a pdf, ignoring parameters and case
+func IsContentType(mimeType string) bool {
+	return strings.Contains(strings.ToLower(mimeType), ContentType)
+}
 
 // Document is an opened pdf with its page count and per-page text extraction
 type Document struct {
@@ -49,7 +56,7 @@ func (d *Document) PageCount() int {
 	return d.ctx.PageCount
 }
 
-// Text returns the text of every page; pages that cannot be read are skipped
+// Text returns the text of every page, cleaned of layout padding; pages that cannot be read are skipped
 func (d *Document) Text(ctx context.Context) []byte {
 	var text bytes.Buffer
 
@@ -76,7 +83,34 @@ func (d *Document) Text(ctx context.Context) []byte {
 		text.WriteByte('\n')
 	}
 
-	return text.Bytes()
+	return []byte(normalizeText(text.String()))
+}
+
+var (
+	// dotLeaderPattern matches table of contents dot leaders: four or more dots, optionally separated
+	// by single spaces, which would otherwise be read as runs of empty sentences
+	dotLeaderPattern = regexp.MustCompile(`\.(?: ?\.){3,}`)
+	// spaceRunPattern matches runs of horizontal whitespace, including non-breaking spaces, that pdf
+	// layouts use for padding
+	spaceRunPattern = regexp.MustCompile(`[ \t\x{00A0}]{2,}`)
+)
+
+// normalizeText removes dot leaders, collapses whitespace padding, trims each line and drops empty
+// lines produced between pdf text objects
+func normalizeText(s string) string {
+	lines := strings.Split(s, "\n")
+	kept := lines[:0]
+
+	for _, line := range lines {
+		line = dotLeaderPattern.ReplaceAllString(line, " ")
+		line = spaceRunPattern.ReplaceAllString(line, " ")
+
+		if line = strings.TrimSpace(line); line != "" {
+			kept = append(kept, line)
+		}
+	}
+
+	return strings.Join(kept, "\n")
 }
 
 // maxFormDepth bounds how deeply nested form xobjects are followed

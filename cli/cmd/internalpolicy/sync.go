@@ -34,7 +34,7 @@ func init() {
 }
 
 // syncValidation validates the required fields for the command
-func syncValidation() (id string, detailsFile *graphql.Upload, document *storage.ParsedDocument, err error) {
+func syncValidation(ctx context.Context) (id string, detailsFile *graphql.Upload, document *storage.ParsedDocument, err error) {
 	detailsFileLoc := cmd.Config.String("file")
 	if detailsFileLoc == "" {
 		return id, nil, nil, cmd.NewRequiredFieldMissingError("file")
@@ -55,7 +55,7 @@ func syncValidation() (id string, detailsFile *graphql.Upload, document *storage
 	id = cmd.Config.String("id")
 	if id == "" {
 		// get the id from the file frontmatter if present
-		document, err = storage.ParseDocument(file.RawFile, file.ContentType)
+		document, err = storage.ParseDocument(ctx, file.RawFile, file.ContentType)
 		if err != nil {
 			return id, nil, document, err
 		}
@@ -92,7 +92,7 @@ func sync(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	id, detailsFile, document, err := syncValidation()
+	id, detailsFile, document, err := syncValidation(ctx)
 	cobra.CheckErr(err)
 
 	if id == "" {
