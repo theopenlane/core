@@ -215,11 +215,11 @@ extend type Query {
     """
     All existing categories or domains used in the organization @deprecated
     """
-    controlCategories: [String!]
+    controlCategories: [String!] @deprecated(reason: "use controlsGroupBy and subcontrolsGroupBy with field: CATEGORY")
     """
     All existing subcategories or domains used in the organization @deprecated
     """
-    controlSubcategories: [String!]
+    controlSubcategories: [String!] @deprecated(reason: "use controlsGroupBy and subcontrolsGroupBy with field: SUBCATEGORY")
     """
     Existing categories or domains for controls used in the organization
     """
@@ -233,7 +233,7 @@ extend type Query {
         Filtering options for APITokens returned from the connection.
         """
         where: ControlWhereInput
-    ): [ControlCategoryEdge!]
+    ): [ControlCategoryEdge!] @deprecated(reason: "use controlsGroupBy with field: CATEGORY")
     """
     Existing subcategories or subdomains for controls used in the organization
     """
@@ -246,7 +246,7 @@ extend type Query {
         Filtering options for APITokens returned from the connection.
         """
         where: ControlWhereInput
-    ): [ControlCategoryEdge!]
+    ): [ControlCategoryEdge!] @deprecated(reason: "use controlsGroupBy with field: SUBCATEGORY")
 
     """
     Get controls grouped by category
@@ -285,7 +285,7 @@ extend type Query {
     Filter by category, used for paginated requests to pull more data per category
     """
     category: String
-  ): ControlGroupConnection!
+  ): ControlGroupConnection! @deprecated(reason: "use controlsGroupBy with field: CATEGORY")
 }
 
 type ControlCategory {

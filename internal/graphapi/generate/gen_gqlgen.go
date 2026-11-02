@@ -82,6 +82,10 @@ func gqlGenerate() {
 		log.Fatal().Err(err).Msg("failed to write catalog schema")
 	}
 
+	if err := resolverPlugin.WriteGroupBySchema("./internal/ent/schema", graphapiSchemaDir); err != nil {
+		log.Fatal().Err(err).Msg("failed to write group by schema")
+	}
+
 	// check if there were schema changes before running full codegen
 	hasChanges, err := genhelpers.HasSchemaChanges(schemaChecksumFile, mainInputPaths...)
 	if err != nil {
