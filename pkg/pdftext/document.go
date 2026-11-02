@@ -18,10 +18,45 @@ import (
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"github.com/samber/lo"
 )
 
 // ContentType is the mime type of a pdf
 const ContentType = "application/pdf"
+
+// pdf name values the decoder compares against
+const (
+	// subtypeForm is the Subtype of a form xobject, a reusable content stream drawn with Do
+	subtypeForm = "Form"
+	// subtypeType0 is the Subtype of a composite font, whose character codes are two bytes
+	subtypeType0 = "Type0"
+	// encodingIdentityH is the composite font encoding where each two byte code is its cid
+	encodingIdentityH = "Identity-H"
+)
+
+// pdf dictionary keys the decoder reads
+const (
+	// keyXObject is the resources entry holding the page's named xobjects
+	keyXObject = "XObject"
+	// keyResources is the resources a page or form xobject draws with
+	keyResources = "Resources"
+	// keyFont is the resources entry holding the named fonts
+	keyFont = "Font"
+	// keyToUnicode is the CMap stream that maps a font's character codes to unicode
+	keyToUnicode = "ToUnicode"
+	// keyFirstChar is the first character code a simple font's Widths covers
+	keyFirstChar = "FirstChar"
+	// keyWidths is the glyph advances of a simple font, starting at FirstChar
+	keyWidths = "Widths"
+	// keyEncoding is how a font's character codes are encoded
+	keyEncoding = "Encoding"
+	// keyDescendantFonts is the cid font a composite font draws its glyphs from
+	keyDescendantFonts = "DescendantFonts"
+	// keyDW is the default glyph advance of a cid font
+	keyDW = "DW"
+	// keyW is the per cid glyph advances of a cid font
+	keyW = "W"
+)
 
 // IsContentType reports whether a mime or content type is a pdf, ignoring parameters and case
 func IsContentType(mimeType string) bool {
@@ -145,7 +180,7 @@ func (s *contentScope) formText(name string) []byte {
 		return nil
 	}
 
-	xobjects, found := s.resources.Find("XObject")
+	xobjects, found := s.resources.Find(keyXObject)
 	if !found {
 		return nil
 	}
@@ -170,7 +205,7 @@ func (s *contentScope) formText(name string) []byte {
 		return nil
 	}
 
-	if subtype := stream.NameEntry("Subtype"); subtype == nil || *subtype != "Form" {
+	if lo.FromPtr(stream.Subtype()) != subtypeForm {
 		return nil
 	}
 
@@ -180,7 +215,7 @@ func (s *contentScope) formText(name string) []byte {
 
 	formResources := s.resources
 
-	if entry, found := stream.Find("Resources"); found {
+	if entry, found := stream.Find(keyResources); found {
 		if dict, err := s.doc.ctx.DereferenceDict(entry); err == nil && dict != nil {
 			formResources = dict
 		}
@@ -287,7 +322,7 @@ func (d *Document) resourceFonts(resources types.Dict) map[string]*fontDecoder {
 		return fonts
 	}
 
-	fontEntry, found := resources.Find("Font")
+	fontEntry, found := resources.Find(keyFont)
 	if !found {
 		return fonts
 	}
@@ -314,14 +349,14 @@ func (d *Document) resourceFonts(resources types.Dict) map[string]*fontDecoder {
 func (d *Document) fontDecoder(fontDict types.Dict) *fontDecoder {
 	decoder := &fontDecoder{codeBytes: 1}
 
-	if subtype := fontDict.NameEntry("Subtype"); subtype != nil && *subtype == "Type0" {
-		decoder.codeBytes = 2
+	if lo.FromPtr(fontDict.Subtype()) == subtypeType0 {
+		decoder.codeBytes = compositeCodeBytes
 		decoder.widths, decoder.defaultWidth = d.compositeWidths(fontDict)
 	} else {
 		decoder.widths = d.simpleWidths(fontDict)
 	}
 
-	toUnicode, found := fontDict.Find("ToUnicode")
+	toUnicode, found := fontDict.Find(keyToUnicode)
 	if !found {
 		return decoder
 	}
@@ -354,9 +389,9 @@ const (
 
 // simpleWidths reads the FirstChar and Widths entries of a simple font, nil when either is missing
 func (d *Document) simpleWidths(fontDict types.Dict) map[uint32]float64 {
-	first := fontDict.IntEntry("FirstChar")
+	first := fontDict.IntEntry(keyFirstChar)
 
-	entry, found := fontDict.Find("Widths")
+	entry, found := fontDict.Find(keyWidths)
 	if first == nil || *first < 0 || !found {
 		return nil
 	}
@@ -383,11 +418,11 @@ func (d *Document) simpleWidths(fontDict types.Dict) map[uint32]float64 {
 // compositeWidths reads the W and DW entries of a Type0 font's descendant. W is keyed by cid, so
 // widths are only returned for Identity-H where a code is its cid
 func (d *Document) compositeWidths(fontDict types.Dict) (map[uint32]float64, float64) {
-	if encoding := fontDict.NameEntry("Encoding"); encoding == nil || *encoding != "Identity-H" {
+	if lo.FromPtr(fontDict.NameEntry(keyEncoding)) != encodingIdentityH {
 		return nil, 0
 	}
 
-	entry, found := fontDict.Find("DescendantFonts")
+	entry, found := fontDict.Find(keyDescendantFonts)
 	if !found {
 		return nil, 0
 	}
@@ -404,7 +439,7 @@ func (d *Document) compositeWidths(fontDict types.Dict) (map[uint32]float64, flo
 
 	defaultWidth := float64(defaultCIDWidth)
 
-	if dw, found := descendant.Find("DW"); found {
+	if dw, found := descendant.Find(keyDW); found {
 		if width, err := d.ctx.DereferenceNumber(dw); err == nil {
 			defaultWidth = width
 		}
@@ -412,7 +447,7 @@ func (d *Document) compositeWidths(fontDict types.Dict) (map[uint32]float64, flo
 
 	widths := map[uint32]float64{}
 
-	if w, found := descendant.Find("W"); found {
+	if w, found := descendant.Find(keyW); found {
 		if widthArray, err := d.ctx.DereferenceArray(w); err == nil {
 			d.cidWidths(widthArray, widths)
 		}
