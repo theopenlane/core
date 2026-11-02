@@ -7,7 +7,7 @@ import (
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 )
 
 // minimalFontSize is the font size of the text MinimalPDF writes
@@ -29,10 +29,10 @@ func MinimalPDF(t *testing.T) []byte {
 	}
 
 	jsonData, err := json.Marshal(page)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	var buf bytes.Buffer
-	require.NoError(t, api.Create(t.Context(), nil, bytes.NewReader(jsonData), &buf, nil))
+	assert.NilError(t, api.Create(t.Context(), nil, bytes.NewReader(jsonData), &buf, nil))
 
 	return buf.Bytes()
 }
@@ -49,7 +49,7 @@ func EncryptPDF(t *testing.T, pdf []byte, userPW string) []byte {
 	conf.Permissions = model.PermissionsNone
 
 	var buf bytes.Buffer
-	require.NoError(t, api.Encrypt(t.Context(), bytes.NewReader(pdf), &buf, conf))
+	assert.NilError(t, api.Encrypt(t.Context(), bytes.NewReader(pdf), &buf, conf))
 
 	return buf.Bytes()
 }

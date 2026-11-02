@@ -6,8 +6,10 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
+	"iter"
 	"math"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode/utf16"
@@ -58,7 +60,7 @@ func (d *Document) PageCount() int {
 	return d.ctx.PageCount
 }
 
-// Text returns the text of every page, cleaned of layout padding; pages that cannot be read are skipped
+// Text returns the text of every page, cleaned of layout padding. Pages that cannot be read are skipped
 func (d *Document) Text(ctx context.Context) []byte {
 	var text bytes.Buffer
 
@@ -100,10 +102,9 @@ var (
 // normalizeText removes dot leaders, collapses whitespace padding, trims each line and drops empty
 // lines produced between pdf text objects
 func normalizeText(s string) string {
-	lines := strings.Split(s, "\n")
-	kept := lines[:0]
+	var kept []string
 
-	for _, line := range lines {
+	for line := range strings.Lines(s) {
 		line = dotLeaderPattern.ReplaceAllString(line, " ")
 		line = spaceRunPattern.ReplaceAllString(line, " ")
 
@@ -211,8 +212,8 @@ func (f *fontDecoder) advance(raw []byte) (float64, bool) {
 
 	var total float64
 
-	for i := 0; i+f.codeBytes <= len(raw); i += f.codeBytes {
-		width, ok := f.widths[codeValue(raw[i:i+f.codeBytes])]
+	for code := range f.codes(raw) {
+		width, ok := f.widths[codeValue(code)]
 		if !ok {
 			width = f.defaultWidth
 		}
@@ -231,10 +232,8 @@ func (f *fontDecoder) decode(raw []byte) []byte {
 
 	var out bytes.Buffer
 
-	for i := 0; i+f.codeBytes <= len(raw); i += f.codeBytes {
-		code := codeValue(raw[i : i+f.codeBytes])
-
-		if mapped, ok := f.unicode[code]; ok {
+	for code := range f.codes(raw) {
+		if mapped, ok := f.unicode[codeValue(code)]; ok {
 			out.WriteString(mapped)
 
 			continue
@@ -242,17 +241,32 @@ func (f *fontDecoder) decode(raw []byte) []byte {
 
 		// an unmapped single byte code reads as latin text
 		if f.codeBytes == 1 {
-			out.WriteRune(rune(raw[i]))
+			out.WriteRune(rune(code[0]))
 		}
 	}
 
 	return out.Bytes()
 }
 
+// codes yields each whole character code in raw, dropping a trailing partial code
+func (f *fontDecoder) codes(raw []byte) iter.Seq[[]byte] {
+	return func(yield func([]byte) bool) {
+		if f.codeBytes < 1 {
+			return
+		}
+
+		for code := range slices.Chunk(raw, f.codeBytes) {
+			if len(code) < f.codeBytes || !yield(code) {
+				return
+			}
+		}
+	}
+}
+
 // compositeCodeBytes is the width of a character code in a composite font
 const compositeCodeBytes = 2
 
-// codeValue packs one or two bytes into a character code; an empty code, such as an empty hex
+// codeValue packs one or two bytes into a character code. An empty code, such as an empty hex
 // string in a malformed CMap, is zero
 func codeValue(b []byte) uint32 {
 	switch len(b) {
@@ -366,7 +380,7 @@ func (d *Document) simpleWidths(fontDict types.Dict) map[uint32]float64 {
 	return widths
 }
 
-// compositeWidths reads the W and DW entries of a Type0 font's descendant; W is keyed by cid, so
+// compositeWidths reads the W and DW entries of a Type0 font's descendant. W is keyed by cid, so
 // widths are only returned for Identity-H where a code is its cid
 func (d *Document) compositeWidths(fontDict types.Dict) (map[uint32]float64, float64) {
 	if encoding := fontDict.NameEntry("Encoding"); encoding == nil || *encoding != "Identity-H" {
@@ -477,13 +491,13 @@ func parseToUnicode(cmap []byte) toUnicodeMap {
 
 // parseCodespace records the code width from the first codespace range and returns the index of its end keyword
 func parseCodespace(tokens []token, start int, result *toUnicodeMap) int {
-	for i := start; i < len(tokens); i++ {
-		if tokens[i].kind == tokenKeyword {
-			return i
+	for i, tok := range tokens[start:] {
+		if tok.kind == tokenKeyword {
+			return start + i
 		}
 
-		if tokens[i].kind == tokenHex && result.codeBytes == 0 {
-			result.codeBytes = len(tokens[i].raw)
+		if tok.kind == tokenHex && result.codeBytes == 0 {
+			result.codeBytes = len(tok.raw)
 		}
 	}
 
@@ -566,8 +580,7 @@ func offsetUTF16(base []byte, delta uint16) []byte {
 		return base
 	}
 
-	shifted := make([]byte, len(base))
-	copy(shifted, base)
+	shifted := slices.Clone(base)
 
 	last := binary.BigEndian.Uint16(shifted[len(shifted)-utf16UnitBytes:]) + delta
 	binary.BigEndian.PutUint16(shifted[len(shifted)-utf16UnitBytes:], last)
@@ -586,8 +599,10 @@ func utf16Text(raw []byte) string {
 
 	units := make([]uint16, 0, len(raw)/utf16UnitBytes)
 
-	for i := 0; i+1 < len(raw); i += utf16UnitBytes {
-		units = append(units, binary.BigEndian.Uint16(raw[i:]))
+	for unit := range slices.Chunk(raw, utf16UnitBytes) {
+		if len(unit) == utf16UnitBytes {
+			units = append(units, binary.BigEndian.Uint16(unit))
+		}
 	}
 
 	return string(utf16.Decode(units))
@@ -707,7 +722,7 @@ func newTextCursor() textCursor {
 	return textCursor{ctm: matrix.IdentMatrix, tm: matrix.IdentMatrix, tlm: matrix.IdentMatrix}
 }
 
-// show writes the decoded text of a string operand and adds its advance; a font without widths
+// show writes the decoded text of a string operand and adds its advance. A font without widths
 // falls back to ending every run with a space
 func (c *textCursor) show(text *bytes.Buffer, raw []byte) {
 	if c.pending {
@@ -842,7 +857,7 @@ func writeTJ(text *bytes.Buffer, operands []token, current *fontDecoder) {
 
 // writeBreak writes a word break unless the text already ends in one
 func writeBreak(text *bytes.Buffer) {
-	if b := text.Bytes(); len(b) > 0 && b[len(b)-1] == ' ' {
+	if bytes.HasSuffix(text.Bytes(), []byte{' '}) {
 		return
 	}
 
@@ -851,8 +866,8 @@ func writeBreak(text *bytes.Buffer) {
 
 // lastString returns the last string operand, which is what Tj and its quote variants show
 func lastString(operands []token) *token {
-	for i := len(operands) - 1; i >= 0; i-- {
-		if operands[i].kind == tokenString || operands[i].kind == tokenHex {
+	for i, operand := range slices.Backward(operands) {
+		if operand.kind == tokenString || operand.kind == tokenHex {
 			return &operands[i]
 		}
 	}
@@ -875,7 +890,7 @@ const (
 	tokenDictClose
 )
 
-// token is one lexical token; raw holds decoded string bytes, text holds names and keywords
+// token is one lexical token. raw holds decoded string bytes and text holds names and keywords
 type token struct {
 	kind   tokenKind
 	text   string
@@ -931,18 +946,12 @@ func tokenize(input []byte) []token {
 		case c == '{' || c == '}' || c == ')' || c == '>':
 			i++
 		case c == '/':
-			end := i + 1
-			for end < len(input) && !isDelimiter(input[end]) {
-				end++
-			}
+			end := wordEnd(input, i+1)
 
 			tokens = append(tokens, token{kind: tokenName, text: string(input[i+1 : end])})
 			i = end
 		default:
-			end := i
-			for end < len(input) && !isDelimiter(input[end]) {
-				end++
-			}
+			end := wordEnd(input, i)
 
 			if end == i {
 				i++
@@ -962,6 +971,17 @@ func tokenize(input []byte) []token {
 	}
 
 	return tokens
+}
+
+// wordEnd returns the index of the first delimiter at or after start, or the end of the input
+func wordEnd(input []byte, start int) int {
+	for end := start; end < len(input); end++ {
+		if isDelimiter(input[end]) {
+			return end
+		}
+	}
+
+	return len(input)
 }
 
 // readLiteralString decodes a parenthesised string starting after the opening paren, handling
@@ -1038,27 +1058,20 @@ func octalEscape(input []byte) (byte, int) {
 
 // isWhitespace reports whether c separates tokens
 func isWhitespace(c byte) bool {
-	switch c {
-	case ' ', '\t', '\n', '\r', '\f', 0:
-		return true
-	default:
-		return false
-	}
+	return strings.IndexByte(whitespaceChars, c) >= 0
 }
 
 // isDelimiter reports whether c ends a bare word
 func isDelimiter(c byte) bool {
-	if isWhitespace(c) {
-		return true
-	}
-
-	switch c {
-	case '(', ')', '<', '>', '[', ']', '{', '}', '/', '%':
-		return true
-	default:
-		return false
-	}
+	return isWhitespace(c) || strings.IndexByte(delimiterChars, c) >= 0
 }
+
+const (
+	// whitespaceChars are the bytes pdf syntax treats as whitespace
+	whitespaceChars = " \t\n\r\f\x00"
+	// delimiterChars are the bytes besides whitespace that end a bare word
+	delimiterChars = "()<>[]{}/%"
+)
 
 // hexDigitsPerByte is how many hex digits encode one byte
 const hexDigitsPerByte = 2
@@ -1066,13 +1079,13 @@ const hexDigitsPerByte = 2
 // decodeHex turns a hex pdf string into bytes, ignoring anything that is not hex and padding an
 // odd final digit with zero, as the pdf spec requires
 func decodeHex(hexText []byte) []byte {
-	cleaned := make([]byte, 0, len(hexText)+1)
-
-	for _, c := range hexText {
-		if (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') {
-			cleaned = append(cleaned, c)
+	cleaned := bytes.Map(func(r rune) rune {
+		if (r >= '0' && r <= '9') || (r >= 'a' && r <= 'f') || (r >= 'A' && r <= 'F') {
+			return r
 		}
-	}
+
+		return -1
+	}, hexText)
 
 	if len(cleaned)%hexDigitsPerByte == 1 {
 		cleaned = append(cleaned, '0')

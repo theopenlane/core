@@ -4,11 +4,12 @@ package pdftest
 import (
 	"bytes"
 	"fmt"
+	"slices"
 	"strings"
 )
 
 const (
-	// firstPageObject is the object number of the first page; 1 is the catalog and 2 the page tree
+	// firstPageObject is the object number of the first page, after the catalog (1) and the page tree (2)
 	firstPageObject = 3
 	// objectsPerPage is the page dict plus its content stream
 	objectsPerPage = 2
@@ -41,7 +42,7 @@ const (
 	glyphSpaceUnits = 1000
 )
 
-// Build writes a pdf with one page per entry, each line of text on its own row; composite
+// Build writes a pdf with one page per entry, each line of text on its own row. composite
 // selects a Type0 font with a ToUnicode map so the text is encoded as two byte glyph ids
 func Build(pages [][]string, composite bool) []byte {
 	if composite {
@@ -113,8 +114,8 @@ func build(pages [][]string, mode layout) []byte {
 func Repeat(lines []string, count int) []byte {
 	pages := make([][]string, 0, count)
 
-	for i := 1; i <= count; i++ {
-		pages = append(pages, append(append([]string{}, lines...), fmt.Sprintf("Page %d of %d", i, count)))
+	for i := range count {
+		pages = append(pages, append(slices.Clone(lines), fmt.Sprintf("Page %d of %d", i+1, count)))
 	}
 
 	return Build(pages, false)
@@ -149,6 +150,9 @@ func compositeFontObjects(fontObject int) []string {
 	}
 }
 
+// literalEscaper escapes the characters a pdf literal string treats specially
+var literalEscaper = strings.NewReplacer(`\`, `\\`, "(", `\(`, ")", `\)`)
+
 func contentStream(lines []string, mode layout) string {
 	var stream strings.Builder
 
@@ -161,7 +165,7 @@ func contentStream(lines []string, mode layout) string {
 		case layoutGlyphs:
 			fmt.Fprintf(&stream, "%sT*\n", glyphLine(line))
 		default:
-			fmt.Fprintf(&stream, "(%s) Tj T*\n", strings.NewReplacer(`\`, `\\`, "(", `\(`, ")", `\)`).Replace(line))
+			fmt.Fprintf(&stream, "(%s) Tj T*\n", literalEscaper.Replace(line))
 		}
 	}
 

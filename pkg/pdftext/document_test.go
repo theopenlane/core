@@ -332,6 +332,18 @@ endbfchar`))
 			input:   []byte{0x00, 0x01, 0x00, 0x09},
 			want:    "H",
 		},
+		{
+			name:    "composite font drops a trailing partial code",
+			decoder: &fontDecoder{codeBytes: 2, unicode: map[uint32]string{0x0001: "H"}},
+			input:   []byte{0x00, 0x01, 0x00},
+			want:    "H",
+		},
+		{
+			name:    "zero code width decodes nothing",
+			decoder: &fontDecoder{codeBytes: 0},
+			input:   []byte("AB"),
+			want:    "",
+		},
 	}
 
 	for _, tt := range tests {
@@ -428,6 +440,69 @@ func TestMatrixOperands(t *testing.T) {
 				assert.Check(t, got == tt.want, "got %v, want %v", got, tt.want)
 				// the origin of a cm or Tm is its translation
 				assert.Check(t, origin(got) == types.Point{X: tt.want[2][0], Y: tt.want[2][1]})
+			}
+		})
+	}
+}
+
+func TestUTF16Text(t *testing.T) {
+	tests := []struct {
+		name string
+		raw  []byte
+		want string
+	}{
+		{name: "empty", raw: []byte{}, want: ""},
+		{name: "lone byte is one unit", raw: []byte{0x41}, want: "A"},
+		{name: "big endian units", raw: []byte{0x00, 0x41, 0x00, 0xE9}, want: "Aé"},
+		{name: "trailing partial unit is dropped", raw: []byte{0x00, 0x41, 0x00}, want: "A"},
+		{name: "surrogate pair", raw: []byte{0xD8, 0x3D, 0xDE, 0x00}, want: "\U0001F600"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Check(t, utf16Text(tt.raw) == tt.want, "got %q, want %q", utf16Text(tt.raw), tt.want)
+		})
+	}
+}
+
+func TestWordEnd(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+		start int
+		want  int
+	}{
+		{name: "stops at whitespace", input: "Tj ET", start: 0, want: 2},
+		{name: "stops at a delimiter", input: "/F1[", start: 1, want: 3},
+		{name: "runs to the end of the input", input: "12.5", start: 0, want: 4},
+		{name: "starting on a delimiter returns start", input: "(a)", start: 0, want: 0},
+		{name: "start at the end", input: "abc", start: 3, want: 3},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Check(t, wordEnd([]byte(tt.input), tt.start) == tt.want)
+		})
+	}
+}
+
+func TestIsDelimiter(t *testing.T) {
+	tests := []struct {
+		name          string
+		chars         string
+		wantSpace     bool
+		wantDelimiter bool
+	}{
+		{name: "whitespace", chars: " \t\n\r\f\x00", wantSpace: true, wantDelimiter: true},
+		{name: "delimiters", chars: "()<>[]{}/%", wantSpace: false, wantDelimiter: true},
+		{name: "word characters", chars: "aZ09.-_*'\"\\", wantSpace: false, wantDelimiter: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			for _, c := range []byte(tt.chars) {
+				assert.Check(t, isWhitespace(c) == tt.wantSpace, "isWhitespace(%q)", c)
+				assert.Check(t, isDelimiter(c) == tt.wantDelimiter, "isDelimiter(%q)", c)
 			}
 		})
 	}
