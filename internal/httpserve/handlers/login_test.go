@@ -444,13 +444,18 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	// Should succeed but indicate TFA is required
+	// Should succeed but requires TFA validation
 	require.Equal(t, http.StatusOK, rec.Code)
 	var out apimodels.LoginResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
-	assert.False(t, out.TFAEnabled)      // User doesn't have TFA enabled
-	assert.True(t, out.TFASetupRequired) // But org requires TFA
+	assert.True(t, out.TFAEnabled)
+	assert.False(t, out.TFASetupRequired)
+
+	// verify no session generated
+	assert.Empty(t, out.AccessToken)
+	assert.Empty(t, out.RefreshToken)
+	assert.Empty(t, out.Session)
 }
 
 func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
