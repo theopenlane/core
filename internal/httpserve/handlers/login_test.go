@@ -445,18 +445,27 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	// Should succeed but requires TFA validation
+	// Should succeed with an enrollment-only session so the user can set up TFA
 	require.Equal(t, http.StatusOK, rec.Code)
 	var out apimodels.LoginResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
-	assert.True(t, out.TFAEnabled)
-	assert.False(t, out.TFASetupRequired)
+	assert.False(t, out.TFAEnabled)
+	assert.True(t, out.TFASetupRequired)
+	assert.Equal(t, "2fa enrollment required", out.Message)
 
-	// verify no session generated
-	assert.Empty(t, out.AccessToken)
-	assert.Empty(t, out.RefreshToken)
-	assert.Empty(t, out.Session)
+	require.NotEmpty(t, out.AccessToken)
+	assert.NotEmpty(t, out.RefreshToken)
+	assert.NotEmpty(t, out.Session)
+
+	token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
+	require.NoError(t, err)
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	require.True(t, ok)
+
+	assert.Equal(t, org.ID, claims["org"])
+	assert.Equal(t, true, claims["tfa_enrollment_required"])
 }
 
 func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {

@@ -6,18 +6,132 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"testing"
 
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	models "github.com/theopenlane/core/common/openapi"
+
+	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
+	"github.com/theopenlane/utils/ulids"
+
+	models "github.com/theopenlane/core/common/openapi"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	authmiddleware "github.com/theopenlane/core/v2/pkg/middleware/auth"
 )
+
+const (
+	tfaLoginPath         = "/login"
+	tfaLoginValidatePath = "/login/2fa/validate"
+	tfaValidatePath      = "/2fa/validate"
+	tfaBlockedPath       = "/enrollment-blocked"
+)
+
+// postLogin posts the credentials to the login handler and decodes the login response
+func (suite *HandlerTestSuite) postLogin(t *testing.T, email, password string) (*http.Response, models.LoginResponse) {
+	t.Helper()
+
+	reqBody, err := json.Marshal(models.LoginRequest{Username: email, Password: password})
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, tfaLoginPath, strings.NewReader(string(reqBody)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	res := recorder.Result()
+	defer res.Body.Close()
+
+	require.Equal(t, http.StatusOK, res.StatusCode, recorder.Body.String())
+
+	var out models.LoginResponse
+	require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
+
+	return res, out
+}
+
+// postTFAValidate posts the second factor to the given path with the pending cookies and bearer token and decodes the login response
+func (suite *HandlerTestSuite) postTFAValidate(t *testing.T, path string, in models.TFARequest, cookies []*http.Cookie, bearer string) (*http.Response, models.LoginResponse) {
+	t.Helper()
+
+	reqBody, err := json.Marshal(in)
+	require.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, path, strings.NewReader(string(reqBody)))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+	for _, cookie := range cookies {
+		req.AddCookie(cookie)
+	}
+
+	if bearer != "" {
+		req.Header.Set(echo.HeaderAuthorization, "Bearer "+bearer)
+	}
+
+	recorder := httptest.NewRecorder()
+	suite.e.ServeHTTP(recorder, req)
+
+	res := recorder.Result()
+	defer res.Body.Close()
+
+	var out models.LoginResponse
+	require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
+
+	return res, out
+}
+
+// tfaEnforcedUser creates a confirmed user without TFA whose default org enforces two factor authentication
+func (suite *HandlerTestSuite) tfaEnforcedUser(ctx context.Context, password string) testUserDetails {
+	testUser := suite.userBuilderWithInput(ctx, &userInput{
+		password:      password,
+		confirmedUser: true,
+	})
+
+	testCtx := auth.WithInternalOperationContext(testUser.UserCtx)
+	testCtx = ent.NewContext(testCtx, suite.db)
+
+	setting := suite.db.OrganizationSetting.Create().SetInput(ent.CreateOrganizationSettingInput{
+		MultifactorAuthEnforced: lo.ToPtr(true),
+	}).SaveX(testCtx)
+
+	org := suite.db.Organization.Create().SetInput(ent.CreateOrganizationInput{
+		Name:      ulids.New().String(),
+		SettingID: &setting.ID,
+	}).SaveX(testCtx)
+
+	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		SetOrganizationID(org.ID).
+		ExecX(testCtx)
+
+	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testCtx)
+
+	return testUser
+}
+
+// accessTokenClaims parses the access token without verifying it so the claims can be asserted on
+func accessTokenClaims(t *testing.T, accessToken string) jwt.MapClaims {
+	t.Helper()
+
+	token, _, err := new(jwt.Parser).ParseUnverified(accessToken, jwt.MapClaims{})
+	require.NoError(t, err)
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	require.True(t, ok)
+
+	return claims
+}
 
 func (suite *HandlerTestSuite) TestTFALogin() {
 	t := suite.T()
 
-	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
-	suite.registerTestHandler("POST", "login/2fa/validate", suite.h.ValidateLoginTOTP)
+	suite.registerTestHandler(http.MethodPost, tfaLoginPath, suite.h.LoginHandler)
+	suite.registerTestHandler(http.MethodPost, tfaLoginValidatePath, suite.h.ValidateLoginTOTP)
 
 	validPassword := "ssw444up3rs3cu7e!"
 
@@ -35,25 +149,7 @@ func (suite *HandlerTestSuite) TestTFALogin() {
 
 	require.NotNil(t, setting.TfaSecret)
 
-	reqBody, err := json.Marshal(models.LoginRequest{
-		Username: user.UserInfo.Email,
-		Password: validPassword,
-	})
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(reqBody)))
-	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-
-	recorder := httptest.NewRecorder()
-	suite.e.ServeHTTP(recorder, req)
-
-	res := recorder.Result()
-	defer res.Body.Close()
-
-	require.Equal(t, http.StatusOK, recorder.Code, recorder.Body.String())
-
-	var out models.LoginResponse
-	require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
+	res, out := suite.postLogin(t, user.UserInfo.Email, validPassword)
 
 	// no auth data should be generated but we want to make sure tfa is enforced
 	assert.True(t, out.Success)
@@ -61,26 +157,161 @@ func (suite *HandlerTestSuite) TestTFALogin() {
 	assert.Empty(t, out.AuthData)
 
 	cookies := res.Cookies()
+	require.NotEmpty(t, cookies)
 
-	code, err := totpGenerator(*setting.TfaSecret)
-	require.NoError(t, err)
-	reqBody, err = json.Marshal(models.TFARequest{TOTPCode: code})
-	require.NoError(t, err)
+	t.Run("missing pending cookie", func(t *testing.T) {
+		code, err := totpGenerator(*setting.TfaSecret)
+		require.NoError(t, err)
 
-	req = httptest.NewRequest(http.MethodPost, "/login/2fa/validate", strings.NewReader(string(reqBody)))
-	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
-	for _, cookie := range cookies {
-		req.AddCookie(cookie)
-	}
-	recorder = httptest.NewRecorder()
-	suite.e.ServeHTTP(recorder, req)
+		res, out := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{TOTPCode: code}, nil, "")
+		assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
+		assert.False(t, out.Success)
+	})
 
-	res = recorder.Result()
-	defer res.Body.Close()
+	t.Run("wrong code keeps the pending login", func(t *testing.T) {
+		res, out := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{TOTPCode: "000000"}, cookies, "")
+		assert.Equal(t, http.StatusBadRequest, res.StatusCode)
+		assert.False(t, out.Success)
+		assert.Empty(t, out.AccessToken)
+	})
 
-	require.Equal(t, http.StatusOK, recorder.Code, recorder.Body.String())
+	t.Run("correct code completes the login", func(t *testing.T) {
+		code, err := totpGenerator(*setting.TfaSecret)
+		require.NoError(t, err)
 
-	require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
+		res, out := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{TOTPCode: code}, cookies, "")
+		require.Equal(t, http.StatusOK, res.StatusCode)
+		assert.True(t, out.Success)
+		assert.True(t, out.TFAEnabled)
+		assert.NotEmpty(t, out.AccessToken)
+		assert.NotEmpty(t, out.RefreshToken)
+		assert.NotEmpty(t, out.Session)
+
+		_, enrollment := accessTokenClaims(t, out.AccessToken)["tfa_enrollment_required"]
+		assert.False(t, enrollment)
+	})
+
+	t.Run("replayed cookie is rejected without spending a recovery code", func(t *testing.T) {
+		require.NotEmpty(t, setting.RecoveryCodes)
+
+		res, out := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{RecoveryCode: setting.RecoveryCodes[0]}, cookies, "")
+		assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
+		assert.False(t, out.Success)
+		assert.Empty(t, out.AccessToken)
+
+		current := suite.db.TFASetting.GetX(user.UserCtx, setting.ID)
+		assert.Contains(t, current.RecoveryCodes, setting.RecoveryCodes[0])
+	})
+}
+
+func (suite *HandlerTestSuite) TestTFALoginRecoveryCode() {
+	t := suite.T()
+
+	suite.registerTestHandler(http.MethodPost, tfaLoginPath, suite.h.LoginHandler)
+	suite.registerTestHandler(http.MethodPost, tfaLoginValidatePath, suite.h.ValidateLoginTOTP)
+
+	validPassword := "r3c0v3ryC0d3sRul3!"
+
+	user := suite.userBuilderWithInput(context.Background(), &userInput{
+		password:      validPassword,
+		confirmedUser: true,
+		tfaEnabled:    true,
+	})
+
+	setting := suite.db.TFASetting.Create().
+		SetTotpAllowed(true).
+		SetOwnerID(user.ID).
+		SetVerified(true).
+		SaveX(user.UserCtx)
+
+	require.NotEmpty(t, setting.RecoveryCodes)
+	recoveryCode := setting.RecoveryCodes[0]
+
+	res, out := suite.postLogin(t, user.UserInfo.Email, validPassword)
+	assert.True(t, out.TFAEnabled)
+	assert.Empty(t, out.AuthData)
+
+	res, out = suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{RecoveryCode: recoveryCode}, res.Cookies(), "")
+	require.Equal(t, http.StatusOK, res.StatusCode)
 	assert.True(t, out.Success)
+	assert.NotEmpty(t, out.AccessToken)
 	assert.NotEmpty(t, out.Session)
+
+	current := suite.db.TFASetting.GetX(user.UserCtx, setting.ID)
+	assert.NotContains(t, current.RecoveryCodes, recoveryCode)
+	assert.Len(t, current.RecoveryCodes, len(setting.RecoveryCodes)-1)
+}
+
+func (suite *HandlerTestSuite) TestTFAEnrollmentSession() {
+	t := suite.T()
+
+	suite.registerTestHandler(http.MethodPost, tfaLoginPath, suite.h.LoginHandler)
+	suite.registerAuthenticatedTestHandler(http.MethodPost, tfaValidatePath, suite.h.ValidateTOTP)
+
+	// an authenticated route that, like every route outside the enrollment allow list, rejects enrollment-only sessions
+	suite.e.Add(http.MethodGet, tfaBlockedPath, func(c echo.Context) error {
+		return c.JSON(http.StatusOK, rout.Reply{Success: true})
+	}, suite.sharedAuthMiddleware, authmiddleware.BlockAnonymous(), authmiddleware.BlockTFAEnrollmentRequired())
+
+	ctx := echocontext.NewTestEchoContext().Request().Context()
+	ctx = auth.WithInternalOperationContext(ctx)
+
+	validPassword := "3nr0llM3N0w!"
+	user := suite.tfaEnforcedUser(ctx, validPassword)
+
+	_, out := suite.postLogin(t, user.UserInfo.Email, validPassword)
+	assert.True(t, out.Success)
+	assert.True(t, out.TFASetupRequired)
+	assert.False(t, out.TFAEnabled)
+	require.NotEmpty(t, out.AccessToken)
+	assert.NotEmpty(t, out.Session)
+	assert.Equal(t, true, accessTokenClaims(t, out.AccessToken)["tfa_enrollment_required"])
+
+	enrollmentToken := out.AccessToken
+
+	getBlocked := func(bearer string) int {
+		req := httptest.NewRequest(http.MethodGet, tfaBlockedPath, nil)
+		req.Header.Set(echo.HeaderAuthorization, "Bearer "+bearer)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		return recorder.Code
+	}
+
+	t.Run("enrollment session is rejected on other authenticated routes", func(t *testing.T) {
+		assert.Equal(t, http.StatusUnauthorized, getBlocked(enrollmentToken))
+	})
+
+	// enroll the user so there is a secret to validate against
+	setting := suite.db.TFASetting.Create().
+		SetTotpAllowed(true).
+		SetOwnerID(user.ID).
+		SaveX(user.UserCtx)
+
+	require.NotNil(t, setting.TfaSecret)
+
+	t.Run("wrong code keeps the enrollment session", func(t *testing.T) {
+		res, out := suite.postTFAValidate(t, tfaValidatePath, models.TFARequest{TOTPCode: "000000"}, nil, enrollmentToken)
+		assert.Equal(t, http.StatusBadRequest, res.StatusCode)
+		assert.False(t, out.Success)
+		assert.Empty(t, out.AccessToken)
+	})
+
+	t.Run("correct code upgrades to a full session", func(t *testing.T) {
+		code, err := totpGenerator(*setting.TfaSecret)
+		require.NoError(t, err)
+
+		res, out := suite.postTFAValidate(t, tfaValidatePath, models.TFARequest{TOTPCode: code}, nil, enrollmentToken)
+		require.Equal(t, http.StatusOK, res.StatusCode)
+		assert.True(t, out.Success)
+		require.NotEmpty(t, out.AccessToken)
+		assert.NotEmpty(t, out.RefreshToken)
+		assert.NotEmpty(t, out.Session)
+
+		_, enrollment := accessTokenClaims(t, out.AccessToken)["tfa_enrollment_required"]
+		assert.False(t, enrollment)
+
+		assert.Equal(t, http.StatusOK, getBlocked(out.AccessToken))
+	})
 }

@@ -591,7 +591,9 @@ subscription:
 totp:
     codelength: 6
     enabled: true
+    failurewindow: 900000000000
     issuer: ""
+    maxfailedattempts: 5
     recoverycodecount: 16
     recoverycodelength: 8
     redis: true

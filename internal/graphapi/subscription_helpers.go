@@ -34,6 +34,10 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 		return nil, fmt.Errorf("notifications are not available to anonymous callers: %w", auth.ErrNoAuthUser)
 	}
 
+	if caller.TFAEnrollmentRequired {
+		return nil, auth.ErrTFAEnrollmentRequired
+	}
+
 	userID := caller.SubjectID
 	if userID == "" {
 		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)

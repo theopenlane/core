@@ -27,18 +27,20 @@ func registerLoginHandler(router *Router) error {
 	return router.AddV1HandlerRoute(config)
 }
 
+// registerLogin2FAHandler registers the handler that completes a pending login with a second factor
 func registerLogin2FAHandler(router *Router) error {
 	config := Config{
-		Path:        "/login/2fa/validate",
-		Method:      http.MethodPost,
-		Name:        "LoginTFAValidation",
-		Description: "Complete a pending login by validating a TOTP or recovery code",
-		Tags:        []string{"Authentication"},
-		OperationID: "ValidateLoginTOTP",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *unauthenticatedEndpoint,
-		RateLimit:   authRateLimit,
-		Handler:     router.Handler.ValidateLoginTOTP,
+		Path:         "/login/2fa/validate",
+		Method:       http.MethodPost,
+		Name:         "LoginTFAValidation",
+		Description:  "Complete a pending login by validating a TOTP or recovery code",
+		Tags:         []string{"Authentication"},
+		OperationID:  "ValidateLoginTOTP",
+		Security:     handlers.PublicSecurity,
+		Middlewares:  *unauthenticatedEndpoint,
+		RateLimit:    authRateLimit,
+		IncludeInOAS: true,
+		Handler:      router.Handler.ValidateLoginTOTP,
 	}
 
 	return router.AddV1HandlerRoute(config)

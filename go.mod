@@ -121,7 +121,7 @@ require (
 	github.com/theopenlane/go-client v0.15.0
 	github.com/theopenlane/gqlgen-plugins v0.18.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.41.1
+	github.com/theopenlane/iam v0.41.2
 	github.com/theopenlane/logx v0.1.1
 	github.com/theopenlane/newman v0.6.0
 	github.com/theopenlane/riverboat v0.14.6

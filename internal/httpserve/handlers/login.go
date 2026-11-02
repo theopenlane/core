@@ -7,8 +7,6 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/utils/passwd"
@@ -65,6 +63,8 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgStatus.OrganizationID))
 	}
 
+	orgTFAEnforced := orgStatus != nil && orgStatus.OrgTFAEnforced
+
 	if user.Password == nil {
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("no password set for user")
@@ -88,44 +88,51 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, fmt.Errorf("%w: please check your email and verify your account", auth.ErrUnverifiedUser))
 	}
 
-	if user.Edges.Setting.IsTfaEnabled || orgStatus.OrgTFAEnforced {
+	switch {
+	case user.Edges.Setting.IsTfaEnabled:
 		return h.startTFAAuthentication(ctx, user.ID)
+	case orgTFAEnforced:
+		return h.startTFAEnrollment(ctx, user)
 	}
 
-	auth, err := h.generateAuthSession(ctx, user)
+	authData, err := h.generateAuthSession(ctx, user, false)
 	if err != nil {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	// check if orgStatus is enforced, but user has not yet configured
-	// if not yet configured we want to direct to the setup first
-	tfaSetupRequired := false
+	metrics.RecordLogin(true)
 
-	if orgStatus != nil && orgStatus.OrgTFAEnforced {
-		// Check if user has TFA enabled
-		if user.Edges.Setting == nil || !user.Edges.Setting.IsTfaEnabled {
-			tfaSetupRequired = true
-		}
-	}
+	return h.Success(ctx, models.LoginResponse{
+		Success:  true,
+		Message:  "success",
+		AuthData: *authData,
+	})
+}
 
-	out := models.LoginResponse{
-		Reply:            rout.Reply{Success: true},
-		TFAEnabled:       user.Edges.Setting.IsTfaEnabled,
-		TFASetupRequired: tfaSetupRequired,
-		Message:          "success",
-		AuthData:         *auth,
+// startTFAEnrollment issues an enrollment-only session when the organization enforces two factor authentication
+// and the user has not enrolled yet
+func (h *Handler) startTFAEnrollment(ctx echo.Context, user *ent.User) error {
+	authData, err := h.generateAuthSession(ctx, user, true)
+	if err != nil {
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	metrics.RecordLogin(true)
 
-	return h.Success(ctx, out)
+	return h.Success(ctx, models.LoginResponse{
+		Success:          true,
+		TFASetupRequired: true,
+		Message:          "2fa enrollment required",
+		AuthData:         *authData,
+	})
 }
 
-func (h *Handler) generateAuthSession(ctx echo.Context, user *ent.User) (*models.AuthData, error) {
+// generateAuthSession mints the session for the user in their default organization, enrollment-only when tfaEnrollmentRequired is set
+func (h *Handler) generateAuthSession(ctx echo.Context, user *ent.User, tfaEnrollmentRequired bool) (*models.AuthData, error) {
 	reqCtx := ctx.Request().Context()
 	userCtx := setAuthenticatedContext(reqCtx, user)
 
-	authData, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, user)
+	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(userCtx, ctx.Response().Writer, user, "", tfaEnrollmentRequired)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
