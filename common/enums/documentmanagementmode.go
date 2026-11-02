@@ -14,7 +14,7 @@ var (
 	// DocumentManagementModeOpenlaneManaged indicates the document is parsed and edited in Openlane.
 	DocumentManagementModeOpenlaneManaged DocumentManagementMode = "OPENLANE_MANAGED"
 	// DocumentManagementModeExternalReference indicates the document is uploaded as a viewable
-	// reference while being managed in an external editor (such as Microsoft Word).
+	// reference while being managed in an external editor (such as Microsoft Word), or kept as an uploaded PDF.
 	DocumentManagementModeExternalReference DocumentManagementMode = "EXTERNAL_REFERENCE"
 	// DocumentManagementModeIntegration is used when the document is managed by an external system integrated with Openlane.
 	DocumentManagementModeIntegration DocumentManagementMode = "INTEGRATION"

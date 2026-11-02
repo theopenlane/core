@@ -37,28 +37,28 @@ func TestCreateAttestationCertificate(t *testing.T) {
 		},
 	}
 
-	pdfBytes, err := createAttestationCertificate(data)
+	pdfBytes, err := createAttestationCertificate(t.Context(), data)
 	require.NoError(t, err)
 	require.NotEmpty(t, pdfBytes)
 
 	assert.Equal(t, "%PDF", string(pdfBytes[:4]))
 
-	pageCount, err := api.PageCount(bytes.NewReader(pdfBytes), conf)
+	pageCount, err := api.PageCount(t.Context(), bytes.NewReader(pdfBytes), conf)
 	require.NoError(t, err)
 	assert.Equal(t, 1, pageCount)
 
-	err = api.Validate(bytes.NewReader(pdfBytes), nil)
+	err = api.Validate(t.Context(), bytes.NewReader(pdfBytes), nil, nil)
 	assert.NoError(t, err)
 }
 
 func TestCreateAttestationCertificate_EmptyFields(t *testing.T) {
 	data := &signedNDADocumentData{}
 
-	pdfBytes, err := createAttestationCertificate(data)
+	pdfBytes, err := createAttestationCertificate(t.Context(), data)
 	require.NoError(t, err)
 	require.NotEmpty(t, pdfBytes)
 
-	err = api.Validate(bytes.NewReader(pdfBytes), conf)
+	err = api.Validate(t.Context(), bytes.NewReader(pdfBytes), conf, nil)
 	assert.NoError(t, err)
 }
 
@@ -85,29 +85,29 @@ func TestAppendAttestationPage(t *testing.T) {
 
 	assert.Equal(t, "%PDF", string(merged[:4]))
 
-	pageCount, err := api.PageCount(bytes.NewReader(merged), conf)
+	pageCount, err := api.PageCount(t.Context(), bytes.NewReader(merged), conf)
 	require.NoError(t, err)
 	assert.Equal(t, 2, pageCount)
 
-	err = api.Validate(bytes.NewReader(merged), conf)
+	err = api.Validate(t.Context(), bytes.NewReader(merged), conf, nil)
 	assert.NoError(t, err)
 }
 
 func TestAppendAttestationPage_OwnerLockedSource(t *testing.T) {
 	encryptedPDF := pdftest.EncryptPDF(t, pdftest.MinimalPDF(t), "")
 
-	info, err := api.PDFInfo(bytes.NewReader(encryptedPDF), "", nil, false, model.NewDefaultConfiguration())
+	info, err := api.PDFInfo(t.Context(), bytes.NewReader(encryptedPDF), "", nil, false, model.NewDefaultConfiguration())
 	require.NoError(t, err)
 	require.True(t, info.Encrypted)
 
 	attested, err := appendAttestationPage(t.Context(), bytes.NewReader(encryptedPDF), testSignedNDAData())
 	require.NoError(t, err)
 
-	pageCount, err := api.PageCount(bytes.NewReader(attested), conf)
+	pageCount, err := api.PageCount(t.Context(), bytes.NewReader(attested), conf)
 	require.NoError(t, err)
 	assert.Equal(t, info.PageCount+1, pageCount)
 
-	require.NoError(t, api.Validate(bytes.NewReader(attested), conf))
+	require.NoError(t, api.Validate(t.Context(), bytes.NewReader(attested), conf, nil))
 }
 
 func TestAppendAttestationPage_PasswordProtectedSource(t *testing.T) {
@@ -353,11 +353,11 @@ func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, attestedPDF)
 
-	pageCount, err := api.PageCount(bytes.NewReader(attestedPDF), conf)
+	pageCount, err := api.PageCount(t.Context(), bytes.NewReader(attestedPDF), conf)
 	require.NoError(t, err)
 	assert.Equal(t, 2, pageCount)
 
-	err = api.Validate(bytes.NewReader(attestedPDF), conf)
+	err = api.Validate(t.Context(), bytes.NewReader(attestedPDF), conf, nil)
 	assert.NoError(t, err)
 
 	// attestation fields should reflect the computed hash

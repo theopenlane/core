@@ -2,6 +2,7 @@ package storage
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,6 +13,8 @@ import (
 	"github.com/fumiama/go-docx"
 	"github.com/gabriel-vasile/mimetype"
 	"gopkg.in/yaml.v3"
+
+	"github.com/theopenlane/core/v2/pkg/pdftext"
 )
 
 const (
@@ -49,7 +52,7 @@ type ParsedDocument struct {
 }
 
 // ParseDocument parses a document based on its MIME type
-func ParseDocument(reader io.Reader, mimeType string) (*ParsedDocument, error) {
+func ParseDocument(ctx context.Context, reader io.Reader, mimeType string) (*ParsedDocument, error) {
 	data, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err
@@ -59,17 +62,24 @@ func ParseDocument(reader io.Reader, mimeType string) (*ParsedDocument, error) {
 	case strings.Contains(mimeType, "json"):
 		var result any
 		if err := json.Unmarshal(data, &result); err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrJSONParseFailed, err)
+			return nil, newParseError(ParseFormatJSON, err)
 		}
 		return &ParsedDocument{Data: result}, nil
 	case strings.Contains(mimeType, "yaml") || strings.Contains(mimeType, "yml"):
 		var result any
 		if err := yaml.Unmarshal(data, &result); err != nil {
-			return nil, fmt.Errorf("%w: %w", ErrYAMLParseFailed, err)
+			return nil, newParseError(ParseFormatYAML, err)
 		}
 		return &ParsedDocument{Data: result}, nil
 	case strings.Contains(mimeType, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"):
 		text, err := parseDocx(data)
+		if err != nil {
+			return nil, err
+		}
+
+		return &ParsedDocument{Data: text}, nil
+	case IsPDFMimeType(mimeType):
+		text, err := parsePDF(ctx, data)
 		if err != nil {
 			return nil, err
 		}
@@ -137,13 +147,54 @@ func parseHeadingLevel(s string) int {
 	return 0
 }
 
+// PDFMimeType is the media type for PDF documents
+const PDFMimeType = pdftext.ContentType
+
+// IsPDFMimeType reports whether the given mime or content type is a PDF, ignoring parameters and case
+func IsPDFMimeType(mimeType string) bool {
+	return strings.Contains(strings.ToLower(mimeType), PDFMimeType)
+}
+
+// parsePDF extracts the plain text layer of a PDF for search and summaries. Layout is not
+// preserved and image-only (scanned) PDFs yield no text. Panics from parsing malformed input
+// are recovered and returned as a ParseError so a bad upload cannot take down the request
+func parsePDF(ctx context.Context, content []byte) (text string, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			text = ""
+			err = newParseError(ParseFormatPDF, fmt.Errorf("panic: %v", r)) //nolint:err113
+		}
+	}()
+
+	doc, err := pdftext.Open(ctx, content)
+	if err != nil {
+		return "", newParseError(ParseFormatPDF, err)
+	}
+
+	return normalizePDFText(string(doc.Text(ctx))), nil
+}
+
+// normalizePDFText trims each line and drops empty lines produced between PDF text objects
+func normalizePDFText(s string) string {
+	lines := strings.Split(s, "\n")
+	kept := lines[:0]
+
+	for _, line := range lines {
+		if line = strings.TrimSpace(line); line != "" {
+			kept = append(kept, line)
+		}
+	}
+
+	return strings.Join(kept, "\n")
+}
+
 // parseDocx extracts and returns the text content from a DOCX file preserving paragraph structure
 func parseDocx(content []byte) (string, error) {
 	reader := bytes.NewReader(content)
 
 	doc, err := docx.Parse(reader, int64(len(content)))
 	if err != nil {
-		return "", fmt.Errorf("%w: %w", ErrDOCXParseFailed, err)
+		return "", newParseError(ParseFormatDOCX, err)
 	}
 
 	var paragraphs []string

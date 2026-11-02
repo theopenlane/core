@@ -49,7 +49,7 @@ var validMimeTypes = map[string][]string{
 	"evidenceFiles":      append(sharedMimeTypes, evidenceMimeTypes...),
 	"exportFiles":        {"text/csv", "text/plain", "application/json", "application/zip", pdfMimeType, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "text/markdown", "text/x-markdown"},
 	"procedureFile":      importSchemaMimeTypes,
-	"internalPolicyFile": importSchemaMimeTypes,
+	"internalPolicyFile": append(importSchemaMimeTypes, pdfMimeType),
 	"actionPlanFile":     importSchemaMimeTypes,
 	"trustCenterDocFile": {"image/jpeg", "image/png", "image/webp", pdfMimeType, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"},
 	"documentDataFile":   {pdfMimeType},

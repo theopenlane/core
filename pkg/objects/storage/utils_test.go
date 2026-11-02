@@ -12,6 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
+
+	"github.com/theopenlane/core/v2/internal/testutils/pdftest"
 )
 
 func TestDetectContentType(t *testing.T) {
@@ -93,13 +95,16 @@ func TestDetectContentType_SeekError(t *testing.T) {
 }
 
 func TestParseDocument(t *testing.T) {
+	validPDF := pdftest.MinimalPDF(t)
+
 	tests := []struct {
-		name        string
-		data        string
-		mimeType    string
-		expectType  string
-		expectError error
-		validate    func(t *testing.T, result any)
+		name         string
+		data         string
+		mimeType     string
+		expectType   string
+		expectError  error
+		expectFormat string
+		validate     func(t *testing.T, result any)
 	}{
 		{
 			name:       "JSON document",
@@ -125,10 +130,11 @@ func TestParseDocument(t *testing.T) {
 			},
 		},
 		{
-			name:        "invalid JSON",
-			data:        `{invalid json}`,
-			mimeType:    "application/json",
-			expectError: ErrJSONParseFailed,
+			name:         "invalid JSON",
+			data:         `{invalid json}`,
+			mimeType:     "application/json",
+			expectError:  ErrParseFailed,
+			expectFormat: ParseFormatJSON,
 		},
 		{
 			name:       "YAML document",
@@ -154,10 +160,11 @@ func TestParseDocument(t *testing.T) {
 			},
 		},
 		{
-			name:        "invalid YAML",
-			data:        "key: [unclosed",
-			mimeType:    "application/yaml",
-			expectError: ErrYAMLParseFailed,
+			name:         "invalid YAML",
+			data:         "key: [unclosed",
+			mimeType:     "application/yaml",
+			expectError:  ErrParseFailed,
+			expectFormat: ParseFormatYAML,
 		},
 		{
 			name:       "plain text",
@@ -182,6 +189,45 @@ func TestParseDocument(t *testing.T) {
 			},
 		},
 		{
+			name:       "PDF document",
+			data:       string(validPDF),
+			mimeType:   "application/pdf",
+			expectType: "string",
+			validate: func(t *testing.T, result any) {
+				str, ok := result.(string)
+				require.True(t, ok, fmt.Sprintf("expected string, got %T", result))
+				assert.Contains(t, str, "Original NDA")
+			},
+		},
+		{
+			name:         "empty PDF",
+			data:         "",
+			mimeType:     "application/pdf",
+			expectError:  ErrParseFailed,
+			expectFormat: ParseFormatPDF,
+		},
+		{
+			name:         "not a PDF",
+			data:         "definitely not a pdf",
+			mimeType:     "application/pdf",
+			expectError:  ErrParseFailed,
+			expectFormat: ParseFormatPDF,
+		},
+		{
+			name:         "truncated PDF",
+			data:         string(validPDF[:len(validPDF)/2]),
+			mimeType:     "application/pdf",
+			expectError:  ErrParseFailed,
+			expectFormat: ParseFormatPDF,
+		},
+		{
+			name:         "PDF header only",
+			data:         "%PDF-1.7\n%%EOF",
+			mimeType:     "application/pdf",
+			expectError:  ErrParseFailed,
+			expectFormat: ParseFormatPDF,
+		},
+		{
 			name:       "unknown mime type returns raw data",
 			data:       "some data",
 			mimeType:   "application/octet-stream",
@@ -197,11 +243,17 @@ func TestParseDocument(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			reader := strings.NewReader(tt.data)
-			result, err := ParseDocument(reader, tt.mimeType)
+			result, err := ParseDocument(t.Context(), reader, tt.mimeType)
 
 			if tt.expectError != nil {
 				require.Error(t, err)
 				assert.ErrorIs(t, err, tt.expectError)
+
+				if tt.expectFormat != "" {
+					var parseErr *ParseError
+					require.ErrorAs(t, err, &parseErr)
+					assert.Equal(t, tt.expectFormat, parseErr.Format)
+				}
 			} else {
 				require.NoError(t, err)
 				if tt.validate != nil {
@@ -225,7 +277,7 @@ func TestParseDocument_ComplexStructures(t *testing.T) {
 			}
 		}`
 
-		result, err := ParseDocument(strings.NewReader(data), "application/json")
+		result, err := ParseDocument(t.Context(), strings.NewReader(data), "application/json")
 		require.NoError(t, err)
 
 		m, ok := result.Data.(map[string]any)
@@ -250,7 +302,7 @@ user:
     - reading
     - coding
 `
-		result, err := ParseDocument(strings.NewReader(data), "application/yaml")
+		result, err := ParseDocument(t.Context(), strings.NewReader(data), "application/yaml")
 		require.NoError(t, err)
 
 		m, ok := result.Data.(map[string]any)
@@ -459,7 +511,7 @@ func TestParseDocument_EmptyContent(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			reader := strings.NewReader(tt.data)
-			result, err := ParseDocument(reader, tt.mimeType)
+			result, err := ParseDocument(t.Context(), reader, tt.mimeType)
 
 			if strings.Contains(tt.mimeType, "json") {
 				require.Error(t, err)
@@ -473,6 +525,42 @@ func TestParseDocument_EmptyContent(t *testing.T) {
 				require.NoError(t, err)
 				assert.Equal(t, []byte{}, result.Data)
 			}
+		})
+	}
+}
+
+func TestIsPDFMimeType(t *testing.T) {
+	tests := []struct {
+		name     string
+		mimeType string
+		want     bool
+	}{
+		{name: "pdf", mimeType: "application/pdf", want: true},
+		{name: "mixed case with parameters", mimeType: "Application/PDF; charset=binary", want: true},
+		{name: "word document", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", want: false},
+		{name: "empty", mimeType: "", want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, IsPDFMimeType(tt.mimeType))
+		})
+	}
+}
+
+func TestNormalizePDFText(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+		want  string
+	}{
+		{name: "trims lines and drops blanks", input: "\n  Title  \n\n\nBody line\n", want: "Title\nBody line"},
+		{name: "only whitespace", input: "\n \n", want: ""},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.want, normalizePDFText(tt.input))
 		})
 	}
 }

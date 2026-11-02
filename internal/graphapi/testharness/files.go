@@ -4,6 +4,7 @@ package testharness
 
 import (
 	"bytes"
+	"context"
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
@@ -89,7 +90,7 @@ func TestPDFBytes() []byte {
 	jsonData, _ := json.Marshal(page)
 
 	var buf bytes.Buffer
-	_ = api.Create(nil, bytes.NewReader(jsonData), &buf, nil)
+	_ = api.Create(context.Background(), nil, bytes.NewReader(jsonData), &buf, nil)
 
 	return buf.Bytes()
 }
@@ -134,14 +135,12 @@ func ExpectAttestedUpload(t *testing.T, mockProvider *mock_shared.MockProvider) 
 	mockProvider.On("GetScheme").Return(&mockScheme).Once()
 	mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
 	mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
-		FileMetadata: pkgobjects.FileMetadata{
-			Key:          "test-key-attested",
-			Folder:       "test-folder",
-			Bucket:       "test-bucket",
-			ContentType:  "application/pdf",
-			ProviderType: storage.DiskProvider,
-			FullURI:      "file:///tmp/test-file-attested",
-		},
+		Key:          "test-key-attested",
+		Folder:       "test-folder",
+		Bucket:       "test-bucket",
+		ContentType:  "application/pdf",
+		ProviderType: storage.DiskProvider,
+		FullURI:      "file:///tmp/test-file-attested",
 	}, nil).Once()
 }
 

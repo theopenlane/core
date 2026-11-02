@@ -11,10 +11,8 @@ import (
 func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 	t.Run("allows configured avatar file types", func(t *testing.T) {
 		file := storage.File{
-			FieldName: "avatarFile",
-			FileMetadata: storage.FileMetadata{
-				ContentType: "image/png",
-			},
+			FieldName:   "avatarFile",
+			ContentType: "image/png",
 		}
 
 		assert.NoError(t, mimeTypeValidator(file))
@@ -22,10 +20,8 @@ func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 
 	t.Run("rejects disallowed avatar mime types", func(t *testing.T) {
 		file := storage.File{
-			FieldName: "avatarFile",
-			FileMetadata: storage.FileMetadata{
-				ContentType: "text/plain",
-			},
+			FieldName:   "avatarFile",
+			ContentType: "text/plain",
 		}
 
 		assert.Error(t, mimeTypeValidator(file))
@@ -35,10 +31,8 @@ func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 	t.Run("uses shared defaults for unknown fields", func(t *testing.T) {
 		file := storage.File{
-			FieldName: "customUpload",
-			FileMetadata: storage.FileMetadata{
-				ContentType: "application/pdf",
-			},
+			FieldName:   "customUpload",
+			ContentType: pdfMimeType,
 		}
 
 		assert.NoError(t, mimeTypeValidator(file))
@@ -46,10 +40,8 @@ func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 
 	t.Run("shared defaults reject unsupported types", func(t *testing.T) {
 		file := storage.File{
-			FieldName: "customUpload",
-			FileMetadata: storage.FileMetadata{
-				ContentType: "application/x-malware",
-			},
+			FieldName:   "customUpload",
+			ContentType: "application/x-malware",
 		}
 
 		assert.Error(t, mimeTypeValidator(file))
@@ -61,11 +53,15 @@ func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 // actionPlanFile). The validator is one defense among others — it relies on the
 // caller supplying a sniffed ContentType — but accidentally widening the list
 // here would let upstream code pipe formats the import path cannot safely process.
+// Only internal policies additionally accept PDFs.
 func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
-	importSchemaFields := []string{
-		"internalPolicyFile",
-		"procedureFile",
-		"actionPlanFile",
+	importSchemaFields := []struct {
+		field    string
+		allowPDF bool
+	}{
+		{field: "internalPolicyFile", allowPDF: true},
+		{field: "procedureFile", allowPDF: false},
+		{field: "actionPlanFile", allowPDF: false},
 	}
 
 	// allowedTypes mixes bare and parameterized forms because MIME sniffers
@@ -81,7 +77,6 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 	}
 
 	rejectedTypes := []string{
-		"application/pdf",
 		"application/javascript",
 		"application/x-msdownload",
 		"application/x-sh",
@@ -89,8 +84,17 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 		"application/zip",
 	}
 
-	for _, field := range importSchemaFields {
-		for _, mime := range allowedTypes {
+	for _, tc := range importSchemaFields {
+		field := tc.field
+
+		allowed, rejected := allowedTypes, rejectedTypes
+		if tc.allowPDF {
+			allowed = append(append([]string{}, allowedTypes...), pdfMimeType)
+		} else {
+			rejected = append(append([]string{}, rejectedTypes...), pdfMimeType)
+		}
+
+		for _, mime := range allowed {
 			t.Run(field+" allows "+mime, func(t *testing.T) {
 				file := storage.File{
 					FieldName: field,
@@ -102,7 +106,7 @@ func TestMimeTypeValidatorImportSchemaFields(t *testing.T) {
 			})
 		}
 
-		for _, mime := range rejectedTypes {
+		for _, mime := range rejected {
 			t.Run(field+" rejects "+mime, func(t *testing.T) {
 				file := storage.File{
 					FieldName: field,

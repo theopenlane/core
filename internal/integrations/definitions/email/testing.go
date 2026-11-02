@@ -2,6 +2,7 @@ package email
 
 import (
 	"bytes"
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
@@ -267,7 +268,7 @@ func testAttestedNDAPDF() []byte {
 
 	var buf bytes.Buffer
 
-	if err := api.MergeRaw([]io.ReadSeeker{
+	if err := api.MergeRaw(context.Background(), []io.ReadSeeker{
 		bytes.NewReader(page1),
 		bytes.NewReader(page2),
 	}, &buf, false, nil); err != nil {
@@ -300,7 +301,7 @@ func testMinimalPDF(title string) []byte {
 
 	var buf bytes.Buffer
 
-	_ = api.Create(nil, bytes.NewReader(jsonData), &buf, nil)
+	_ = api.Create(context.Background(), nil, bytes.NewReader(jsonData), &buf, nil)
 
 	return buf.Bytes()
 }
