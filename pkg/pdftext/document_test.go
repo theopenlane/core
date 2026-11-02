@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/pkg/pdftext/pdftest"
@@ -379,6 +381,54 @@ func TestIsContentType(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			assert.Check(t, IsContentType(tt.mimeType) == tt.want)
+		})
+	}
+}
+
+func TestDecodeHex(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+		want  []byte
+	}{
+		{name: "empty", input: "", want: []byte{}},
+		{name: "upper and lower case", input: "4a6B", want: []byte{0x4a, 0x6b}},
+		{name: "whitespace between digits", input: "41 42\n43", want: []byte("ABC")},
+		{name: "odd digit is padded with zero", input: "414", want: []byte{0x41, 0x40}},
+		{name: "non hex characters are ignored", input: "4zx1", want: []byte{0x41}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.DeepEqual(t, decodeHex([]byte(tt.input)), tt.want)
+		})
+	}
+}
+
+func TestMatrixOperands(t *testing.T) {
+	tests := []struct {
+		name    string
+		content string
+		wantOK  bool
+		want    matrix.Matrix
+	}{
+		{name: "six numbers", content: "1 2 3 4 5 6", wantOK: true, want: matrix.Matrix{{1, 2, 0}, {3, 4, 0}, {5, 6, 1}}},
+		{name: "uses the last six operands", content: "9 1 0 0 1 10 20", wantOK: true, want: matrix.Matrix{{1, 0, 0}, {0, 1, 0}, {10, 20, 1}}},
+		{name: "too few operands", content: "1 0 0 1 10"},
+		{name: "non number operand", content: "1 0 0 1 /F1 20"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, ok := matrixOperands(tokenize([]byte(tt.content)))
+
+			assert.Check(t, ok == tt.wantOK)
+
+			if tt.wantOK {
+				assert.Check(t, got == tt.want, "got %v, want %v", got, tt.want)
+				// the origin of a cm or Tm is its translation
+				assert.Check(t, origin(got) == types.Point{X: tt.want[2][0], Y: tt.want[2][1]})
+			}
 		})
 	}
 }

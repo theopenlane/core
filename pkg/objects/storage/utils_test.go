@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
-	"github.com/theopenlane/core/v2/internal/testutils/pdftest"
+	"github.com/theopenlane/core/v2/pkg/pdftext/pdftest"
 )
 
 func TestDetectContentType(t *testing.T) {

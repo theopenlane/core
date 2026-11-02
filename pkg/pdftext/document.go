@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"encoding/hex"
 	"errors"
 	"math"
 	"regexp"
@@ -12,6 +13,7 @@ import (
 	"unicode/utf16"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 )
@@ -644,10 +646,10 @@ func (s *contentScope) decode(content []byte) []byte {
 			}
 		case "cm":
 			if m, ok := matrixOperands(operands); ok {
-				cursor.ctm = m.multiply(cursor.ctm)
+				cursor.ctm = m.Multiply(cursor.ctm)
 			}
 		case "BT":
-			cursor.tm, cursor.tlm = identityMatrix, identityMatrix
+			cursor.tm, cursor.tlm = matrix.IdentMatrix, matrix.IdentMatrix
 			cursor.reset()
 			cursor.pending = true
 		case "Tm":
@@ -685,31 +687,31 @@ type textCursor struct {
 	// measured is false when a glyph since the last positioning operator had no known width
 	measured bool
 	// ctm is the current transformation matrix, saved by q and restored by Q
-	ctm matrix
+	ctm matrix.Matrix
 	// saved is the stack of transformation matrices q pushed
-	saved []matrix
+	saved []matrix.Matrix
 	// tm and tlm are the text and text line matrices
-	tm, tlm matrix
+	tm, tlm matrix.Matrix
 	// pending is set when a Tm, BT, or ET may have started a new word, decided by where the next glyph lands
 	pending bool
 	// placed is true when end and height locate the last glyph drawn on the page
 	placed bool
 	// end is where the last glyph drawn ended on the page
-	end point
+	end types.Point
 	// height is the font size of the last glyph drawn, on the page
 	height float64
 }
 
 // newTextCursor starts a cursor with no transformation
 func newTextCursor() textCursor {
-	return textCursor{ctm: identityMatrix, tm: identityMatrix, tlm: identityMatrix}
+	return textCursor{ctm: matrix.IdentMatrix, tm: matrix.IdentMatrix, tlm: matrix.IdentMatrix}
 }
 
 // show writes the decoded text of a string operand and adds its advance; a font without widths
 // falls back to ending every run with a space
 func (c *textCursor) show(text *bytes.Buffer, raw []byte) {
 	if c.pending {
-		if !c.continues(c.tm.multiply(c.ctm).apply(0, 0)) {
+		if !c.continues(origin(c.tm.Multiply(c.ctm))) {
 			writeBreak(text)
 		}
 
@@ -730,22 +732,22 @@ func (c *textCursor) show(text *bytes.Buffer, raw []byte) {
 
 	advance := width / glyphSpaceUnits * c.size
 	c.drawn += advance
-	c.tm = translation(advance, 0).multiply(c.tm)
+	c.tm = translation(advance, 0).Multiply(c.tm)
 
-	render := c.tm.multiply(c.ctm)
-	c.end, c.height, c.placed = render.apply(0, 0), math.Abs(c.size)*render.yScale(), true
+	render := c.tm.Multiply(c.ctm)
+	c.end, c.height, c.placed = origin(render), math.Abs(c.size)*yScale(render), true
 }
 
 // continues reports whether a glyph starting at start carries on the word the last glyph drawn ended: on the
 // same baseline, not jumping back, and no further on than a kerning gap
-func (c *textCursor) continues(start point) bool {
+func (c *textCursor) continues(start types.Point) bool {
 	if !c.placed || c.height == 0 {
 		return false
 	}
 
-	gap := start.x - c.end.x
+	gap := start.X - c.end.X
 
-	return math.Abs(start.y-c.end.y) <= c.height/2 && gap >= -c.height/4 && gap <= wordGapThreshold*c.height/glyphSpaceUnits
+	return math.Abs(start.Y-c.end.Y) <= c.height/2 && gap >= -c.height/4 && gap <= wordGapThreshold*c.height/glyphSpaceUnits
 }
 
 // move handles Td and TD, writing a space when the move starts a new line or leaves a gap wider
@@ -759,70 +761,47 @@ func (c *textCursor) move(text *bytes.Buffer, operands []token) {
 	}
 
 	if ok {
-		c.tlm = translation(tx, ty).multiply(c.tlm)
+		c.tlm = translation(tx, ty).Multiply(c.tlm)
 		c.tm = c.tlm
 	}
 
 	c.reset()
 }
 
-// matrix is a pdf transformation matrix [a b c d e f]
-type matrix [6]float64
-
-// point is a position on the page
-type point struct {
-	x, y float64
-}
-
-// identityMatrix leaves positions unchanged
-var identityMatrix = matrix{1, 0, 0, 1, 0, 0}
-
 // translation moves positions by tx and ty
-func translation(tx, ty float64) matrix {
-	return matrix{1, 0, 0, 1, tx, ty}
+func translation(tx, ty float64) matrix.Matrix {
+	return matrix.Matrix{{1, 0, 0}, {0, 1, 0}, {tx, ty, 1}}
 }
 
-// multiply returns m applied before n, the order pdf concatenates matrices in
-func (m matrix) multiply(n matrix) matrix {
-	return matrix{
-		m[0]*n[0] + m[1]*n[2],
-		m[0]*n[1] + m[1]*n[3],
-		m[2]*n[0] + m[3]*n[2],
-		m[2]*n[1] + m[3]*n[3],
-		m[4]*n[0] + m[5]*n[2] + n[4],
-		m[4]*n[1] + m[5]*n[3] + n[5],
-	}
-}
-
-// apply maps x and y through the matrix
-func (m matrix) apply(x, y float64) point {
-	return point{x: x*m[0] + y*m[2] + m[4], y: x*m[1] + y*m[3] + m[5]}
+// origin is where a matrix maps the start of the current glyph
+func origin(m matrix.Matrix) types.Point {
+	return m.Transform(types.Point{})
 }
 
 // yScale is how much the matrix stretches a unit of height
-func (m matrix) yScale() float64 {
-	return math.Hypot(m[2], m[3])
+func yScale(m matrix.Matrix) float64 {
+	return math.Hypot(m[1][0], m[1][1])
 }
 
-// matrixOperands returns the six numbers of a cm or Tm
-func matrixOperands(operands []token) (matrix, bool) {
+// matrixOperands returns the matrix [a b c d e f] given by the six numbers of a cm or Tm
+func matrixOperands(operands []token) (matrix.Matrix, bool) {
 	const size = 6
 
 	if len(operands) < size {
-		return matrix{}, false
+		return matrix.Matrix{}, false
 	}
 
-	var m matrix
+	var n [size]float64
 
 	for i, operand := range operands[len(operands)-size:] {
 		if operand.kind != tokenNumber {
-			return matrix{}, false
+			return matrix.Matrix{}, false
 		}
 
-		m[i] = operand.number
+		n[i] = operand.number
 	}
 
-	return m, true
+	return matrix.Matrix{{n[0], n[1], 0}, {n[2], n[3], 0}, {n[4], n[5], 1}}, true
 }
 
 // reset starts measuring from a fresh position
@@ -1081,13 +1060,16 @@ func isDelimiter(c byte) bool {
 	}
 }
 
-// decodeHex turns a hex pdf string into bytes, ignoring anything that is not hex
+// hexDigitsPerByte is how many hex digits encode one byte
+const hexDigitsPerByte = 2
+
+// decodeHex turns a hex pdf string into bytes, ignoring anything that is not hex and padding an
+// odd final digit with zero, as the pdf spec requires
 func decodeHex(hexText []byte) []byte {
-	cleaned := make([]byte, 0, len(hexText))
+	cleaned := make([]byte, 0, len(hexText)+1)
 
 	for _, c := range hexText {
-		switch {
-		case c >= '0' && c <= '9', c >= 'a' && c <= 'f', c >= 'A' && c <= 'F':
+		if (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') {
 			cleaned = append(cleaned, c)
 		}
 	}
@@ -1096,32 +1078,10 @@ func decodeHex(hexText []byte) []byte {
 		cleaned = append(cleaned, '0')
 	}
 
-	decoded := make([]byte, len(cleaned)/hexDigitsPerByte)
+	decoded := make([]byte, hex.DecodedLen(len(cleaned)))
 
-	for i := range decoded {
-		decoded[i] = hexNibble(cleaned[hexDigitsPerByte*i])<<nibbleBits | hexNibble(cleaned[hexDigitsPerByte*i+1])
-	}
+	// cleaned holds only hex digits in pairs, so decoding cannot fail
+	n, _ := hex.Decode(decoded, cleaned)
 
-	return decoded
-}
-
-const (
-	// hexDigitsPerByte is how many hex digits encode one byte
-	hexDigitsPerByte = 2
-	// nibbleBits is the width of one hex digit in bits
-	nibbleBits = 4
-	// hexLetterOffset is the value of the first hex letter digit
-	hexLetterOffset = 10
-)
-
-// hexNibble converts one hex digit to its value
-func hexNibble(c byte) byte {
-	switch {
-	case c >= '0' && c <= '9':
-		return c - '0'
-	case c >= 'a' && c <= 'f':
-		return c - 'a' + hexLetterOffset
-	default:
-		return c - 'A' + hexLetterOffset
-	}
+	return decoded[:n]
 }

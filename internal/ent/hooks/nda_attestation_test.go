@@ -15,7 +15,7 @@ import (
 	storagetypes "github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
-	"github.com/theopenlane/core/v2/internal/testutils/pdftest"
+	"github.com/theopenlane/core/v2/pkg/pdftext/pdftest"
 )
 
 var (
