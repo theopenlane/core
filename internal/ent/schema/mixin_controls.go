@@ -19,6 +19,8 @@ import (
 
 	"github.com/theopenlane/entx/accessmap"
 
+	"github.com/theopenlane/gqlgen-plugins/groupby"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -363,6 +365,7 @@ var controlFields = []ent.Field{
 			entgql.OrderField("category"),
 			entx.FieldWorkflowEligible(),
 			directives.ExternalSourceDirectiveAnnotation,
+			groupby.Groupable(),
 		).
 		Comment("category of the control"),
 	field.String("category_id").
@@ -379,6 +382,7 @@ var controlFields = []ent.Field{
 			entgql.OrderField("subcategory"),
 			directives.ExternalSourceDirectiveAnnotation,
 			entx.FieldWorkflowEligible(),
+			groupby.Groupable(),
 		).
 		Comment("subcategory of the control"),
 	field.Strings("mapped_categories").

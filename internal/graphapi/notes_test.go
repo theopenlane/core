@@ -649,7 +649,7 @@ func TestQueryNote(t *testing.T) {
 const ownerCommentText = "comment from the owner"
 
 func TestMutationCommentsForVulnerability(t *testing.T) {
-	vuln := createVulnerability(t, th.SharedTestUser1.UserCtx, "Commentable Vulnerability")
+	vuln := createVulnerability(t, th.SharedTestUser1.UserCtx, "Commentable Vulnerability", nil)
 
 	testCases := []struct {
 		name        string

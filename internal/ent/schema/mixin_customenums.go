@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/gqlgen-plugins/groupby"
 )
 
 // CustomEnumMixin holds the schema definition for the custom enums
@@ -28,6 +29,8 @@ type CustomEnumMixin struct {
 	GlobalEnum bool
 	// DisableAutoCreate disables auto-creation of the enum if it doesn't exist
 	DisableAutoCreate bool
+	// GroupBy adds the enum name field to the schema's generated group by query
+	GroupBy bool
 }
 
 // newCustomEnumMixin creates a new CustomEnumMixin with the given schema type and options
@@ -68,16 +71,26 @@ func withGlobalEnum() customEnumOptions {
 	}
 }
 
+// withGroupByEnum makes the enum name field groupable in the schema's group by query
+func withGroupByEnum() customEnumOptions {
+	return func(c *CustomEnumMixin) {
+		c.GroupBy = true
+	}
+}
+
 // Fields of the CustomEnumMixin.
 func (c CustomEnumMixin) Fields() []ent.Field {
+	nameAnnotations := []schema.Annotation{entx.FieldCaseInsensitive()}
+	if c.GroupBy {
+		nameAnnotations = append(nameAnnotations, groupby.Groupable())
+	}
+
 	schema := toSchemaFuncs(c.schemaType)
 	fields := []ent.Field{
 		field.String(c.getEnumFieldName()).
 			Comment("the " + c.fieldName + " of the " + schema.Name()).
 			Optional().
-			Annotations(
-				entx.FieldCaseInsensitive(),
-			),
+			Annotations(nameAnnotations...),
 		field.String(c.getEnumEdgeName() + "_id").
 			Comment("the " + c.fieldName + " of the " + schema.Name()).
 			Optional(),
