@@ -18,6 +18,7 @@ import (
 
 	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
+	"github.com/theopenlane/iam/auth"
 )
 
 type registerResponse struct {
@@ -103,6 +104,10 @@ func LoginUser(ctx context.Context, baseURL *url.URL, email, password string) (*
 	resp, err := client.Login(ctx, &loginInput)
 	if err != nil {
 		return nil, fmt.Errorf("login request: %w", err)
+	}
+
+	if resp.TFAEnabled || resp.TFASetupRequired {
+		return nil, fmt.Errorf("%w: use a user without two factor authentication", auth.ErrSecondFactorRequired)
 	}
 
 	session, err := client.GetSessionFromCookieJar()
