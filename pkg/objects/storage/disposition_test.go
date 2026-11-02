@@ -8,7 +8,7 @@ func TestDispositionFor(t *testing.T) {
 		contentType string
 		want        string
 	}{
-		{"pdf exact", "application/pdf", DispositionInline},
+		{"pdf exact", PDFMimeType, DispositionInline},
 		{"pdf with charset", "application/pdf; charset=binary", DispositionInline},
 		{"pdf uppercase", "APPLICATION/PDF", DispositionInline},
 		{"pdf with whitespace and params", "  application/pdf ; foo=bar  ", DispositionInline},

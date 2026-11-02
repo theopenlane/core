@@ -143,7 +143,7 @@ func TestR2Provider_OrganizationFolderStructure(t *testing.T) {
 	uploadedFile, err := provider.Upload(ctx, bytes.NewReader(fileContent), &storagetypes.UploadFileOptions{
 		FileName:          fileName,
 		FolderDestination: folder,
-		ContentType:       "application/pdf",
+		ContentType:       storage.PDFMimeType,
 	})
 	require.NoError(t, err)
 	require.NotNil(t, uploadedFile)
@@ -206,7 +206,7 @@ func TestR2Provider_WithoutOrganizationFolder(t *testing.T) {
 	uploadedFile, err := provider.Upload(ctx, bytes.NewReader(fileContent), &storagetypes.UploadFileOptions{
 		FileName:          fileName,
 		FolderDestination: "",
-		ContentType:       "application/pdf",
+		ContentType:       storage.PDFMimeType,
 	})
 	require.NoError(t, err)
 	require.NotNil(t, uploadedFile)

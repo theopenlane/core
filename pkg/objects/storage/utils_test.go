@@ -191,7 +191,7 @@ func TestParseDocument(t *testing.T) {
 		{
 			name:       "PDF document",
 			data:       string(validPDF),
-			mimeType:   "application/pdf",
+			mimeType:   PDFMimeType,
 			expectType: "string",
 			validate: func(t *testing.T, result any) {
 				str, ok := result.(string)
@@ -202,28 +202,28 @@ func TestParseDocument(t *testing.T) {
 		{
 			name:         "empty PDF",
 			data:         "",
-			mimeType:     "application/pdf",
+			mimeType:     PDFMimeType,
 			expectError:  ErrParseFailed,
 			expectFormat: ParseFormatPDF,
 		},
 		{
 			name:         "not a PDF",
 			data:         "definitely not a pdf",
-			mimeType:     "application/pdf",
+			mimeType:     PDFMimeType,
 			expectError:  ErrParseFailed,
 			expectFormat: ParseFormatPDF,
 		},
 		{
 			name:         "truncated PDF",
 			data:         string(validPDF[:len(validPDF)/2]),
-			mimeType:     "application/pdf",
+			mimeType:     PDFMimeType,
 			expectError:  ErrParseFailed,
 			expectFormat: ParseFormatPDF,
 		},
 		{
 			name:         "PDF header only",
 			data:         "%PDF-1.7\n%%EOF",
-			mimeType:     "application/pdf",
+			mimeType:     PDFMimeType,
 			expectError:  ErrParseFailed,
 			expectFormat: ParseFormatPDF,
 		},
@@ -535,7 +535,7 @@ func TestIsPDFMimeType(t *testing.T) {
 		mimeType string
 		want     bool
 	}{
-		{name: "pdf", mimeType: "application/pdf", want: true},
+		{name: "pdf", mimeType: PDFMimeType, want: true},
 		{name: "mixed case with parameters", mimeType: "Application/PDF; charset=binary", want: true},
 		{name: "word document", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document", want: false},
 		{name: "empty", mimeType: "", want: false},
@@ -556,6 +556,14 @@ func TestNormalizePDFText(t *testing.T) {
 	}{
 		{name: "trims lines and drops blanks", input: "\n  Title  \n\n\nBody line\n", want: "Title\nBody line"},
 		{name: "only whitespace", input: "\n \n", want: ""},
+		{
+			name:  "removes table of contents dot leaders",
+			input: "1. INTRODUCTION  ................................ .......................  3 2. SCOPE ....11",
+			want:  "1. INTRODUCTION 3 2. SCOPE 11",
+		},
+		{name: "collapses padding and non-breaking spaces", input: "Example Company        Policy\u00a0\u00a0Handbook", want: "Example Company Policy Handbook"},
+		{name: "keeps ellipses and abbreviations", input: "Controls, e.g. access... and more.", want: "Controls, e.g. access... and more."},
+		{name: "keeps single spaces between sentences", input: "First sentence. Second sentence.", want: "First sentence. Second sentence."},
 	}
 
 	for _, tt := range tests {

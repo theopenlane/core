@@ -34,15 +34,15 @@ func TestBuild(t *testing.T) {
 		},
 		{
 			name:      "composite font",
-			pdf:       Build([][]string{{"Composite font text", "SOC 2 Type II"}}, true),
+			pdf:       Build([][]string{{"Composite font text", "Section 2 Part II"}}, true),
 			wantPages: 1,
-			wantText:  []string{"Composite font text", "SOC 2 Type II"},
+			wantText:  []string{"Composite font text", "Section 2 Part II"},
 		},
 		{
 			name:      "positioned glyphs",
-			pdf:       BuildGlyphs([][]string{{"SOC 2 Type 1 Report"}, {"Independent Service Auditor's Report"}}),
+			pdf:       BuildGlyphs([][]string{{"Part 1 Section 2 Overview"}, {"Reviewer's Notes and Index"}}),
 			wantPages: 2,
-			wantText:  []string{"SOC 2 Type 1 Report", "Independent Service Auditor's Report"},
+			wantText:  []string{"Part 1 Section 2 Overview", "Reviewer's Notes and Index"},
 		},
 		{
 			name:      "repeated pages are numbered",

@@ -3,9 +3,10 @@ package validators
 import (
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/pdftext"
 )
 
-const pdfMimeType = "application/pdf"
+const pdfMimeType = pdftext.ContentType
 
 // importSchemaMimeTypes is a list of mime-types that are accepted for files uploaded as part of the import schema process (e.g. procedure, internal policy, action plan).
 // Parameter suffixes (e.g. "; charset=utf-8") are normalized away by MimeTypeValidator, so each

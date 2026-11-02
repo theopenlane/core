@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -165,12 +166,25 @@ func parsePDF(ctx context.Context, content []byte) (string, error) {
 	return normalizePDFText(string(doc.Text(ctx))), nil
 }
 
-// normalizePDFText trims each line and drops empty lines produced between PDF text objects
+var (
+	// pdfDotLeaderPattern matches table of contents dot leaders: four or more dots, optionally separated
+	// by single spaces, which would otherwise be read as runs of empty sentences
+	pdfDotLeaderPattern = regexp.MustCompile(`\.(?: ?\.){3,}`)
+	// pdfSpaceRunPattern matches runs of horizontal whitespace, including non-breaking spaces, that PDF
+	// layouts use for padding
+	pdfSpaceRunPattern = regexp.MustCompile(`[ \t\x{00A0}]{2,}`)
+)
+
+// normalizePDFText removes dot leaders, collapses whitespace padding, trims each line and drops empty
+// lines produced between PDF text objects
 func normalizePDFText(s string) string {
 	lines := strings.Split(s, "\n")
 	kept := lines[:0]
 
 	for _, line := range lines {
+		line = pdfDotLeaderPattern.ReplaceAllString(line, " ")
+		line = pdfSpaceRunPattern.ReplaceAllString(line, " ")
+
 		if line = strings.TrimSpace(line); line != "" {
 			kept = append(kept, line)
 		}

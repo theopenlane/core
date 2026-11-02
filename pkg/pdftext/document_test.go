@@ -26,14 +26,14 @@ func TestOpen(t *testing.T) {
 		},
 		{
 			name:      "composite font",
-			pdf:       pdftest.Build([][]string{{"Composite font text", "SOC 2 Type II"}}, true),
+			pdf:       pdftest.Build([][]string{{"Composite font text", "Section 2 Part II"}}, true),
 			wantPages: 1,
-			wantText:  []string{"Composite font text", "SOC 2 Type II"},
+			wantText:  []string{"Composite font text", "Section 2 Part II"},
 		},
 		{
 			name:     "positioned glyphs",
-			pdf:      pdftest.BuildGlyphs([][]string{{"SOC 2 Type 1 Report", "Independent Service Auditor's Report"}}),
-			wantText: []string{"SOC 2 Type 1 Report", "Independent Service Auditor's Report"},
+			pdf:      pdftest.BuildGlyphs([][]string{{"Part 1 Section 2 Overview", "Reviewer's Notes and Index"}}),
+			wantText: []string{"Part 1 Section 2 Overview", "Reviewer's Notes and Index"},
 		},
 		{
 			name:    "not a pdf",
@@ -241,21 +241,21 @@ func TestDecodeContent(t *testing.T) {
 		{
 			name:     "TJ kerning gaps become word breaks",
 			fonts:    simpleFont(),
-			content:  `BT /F1 10 Tf [(SO) -20 (C 2) -400 (report)] TJ ET`,
-			contains: []string{"SOC 2 report"},
+			content:  `BT /F1 10 Tf [(AB) -20 (C 2) -400 (notes)] TJ ET`,
+			contains: []string{"ABC 2 notes"},
 		},
 		{
 			name:     "small Td step is not a word break",
 			fonts:    widthFont(),
-			content:  `BT /F1 10 Tf (S) Tj 5 0 Td (O) Tj 5.2 0 Td (C) Tj 8 0 Td (2) Tj 5 -12 Td (x) Tj ET`,
-			contains: []string{"SOC 2 x"},
+			content:  `BT /F1 10 Tf (A) Tj 5 0 Td (B) Tj 5.2 0 Td (C) Tj 8 0 Td (2) Tj 5 -12 Td (x) Tj ET`,
+			contains: []string{"ABC 2 x"},
 		},
 		{
 			name:        "glyph per block joins words",
 			fonts:       widthFont(),
-			content:     quartzGlyph(700, 48, "S") + quartzGlyph(700, 72, "O") + quartzGlyph(700, 96, "C") + quartzGlyph(700, 140, "2"),
-			contains:    []string{"SOC 2"},
-			notContains: []string{"S O"},
+			content:     quartzGlyph(700, 48, "A") + quartzGlyph(700, 72, "B") + quartzGlyph(700, 96, "C") + quartzGlyph(700, 140, "2"),
+			contains:    []string{"ABC 2"},
+			notContains: []string{"A B"},
 		},
 		{
 			name:     "glyph per block breaks lines",

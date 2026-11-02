@@ -18,11 +18,11 @@ const DispositionAttachment = "attachment"
 // HTML, JavaScript, and CSS are excluded for the same reason. Adding a new
 // entry here is a security decision and should be reviewed accordingly.
 var inlineSafeMIMEs = map[string]struct{}{
-	"application/pdf": {},
-	"image/png":       {},
-	"image/jpeg":      {},
-	"image/gif":       {},
-	"image/webp":      {},
+	PDFMimeType:  {},
+	"image/png":  {},
+	"image/jpeg": {},
+	"image/gif":  {},
+	"image/webp": {},
 }
 
 // DispositionFor returns the Content-Disposition value that is appropriate
