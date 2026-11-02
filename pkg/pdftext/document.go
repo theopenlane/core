@@ -19,6 +19,7 @@ import (
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 	"github.com/samber/lo"
+	"golang.org/x/text/encoding/charmap"
 )
 
 // ContentType is the mime type of a pdf
@@ -32,6 +33,11 @@ const (
 	subtypeType0 = "Type0"
 	// encodingIdentityH is the composite font encoding where each two byte code is its cid
 	encodingIdentityH = "Identity-H"
+	// encodingMacRoman is the base encoding of fonts in pdfs written on macOS, whose curly quotes and
+	// symbols sit above 0x7F where latin-1 would misread them
+	encodingMacRoman = "MacRomanEncoding"
+	// encodingWinAnsi is the Windows code page 1252 base encoding
+	encodingWinAnsi = "WinAnsiEncoding"
 )
 
 // pdf dictionary keys the decoder reads
@@ -50,6 +56,8 @@ const (
 	keyWidths = "Widths"
 	// keyEncoding is how a font's character codes are encoded
 	keyEncoding = "Encoding"
+	// keyBaseEncoding is the named encoding an Encoding dictionary starts from
+	keyBaseEncoding = "BaseEncoding"
 	// keyDescendantFonts is the cid font a composite font draws its glyphs from
 	keyDescendantFonts = "DescendantFonts"
 	// keyDW is the default glyph advance of a cid font
@@ -237,6 +245,8 @@ type fontDecoder struct {
 	widths map[uint32]float64
 	// defaultWidth is the advance of a code missing from widths
 	defaultWidth float64
+	// charset decodes the single byte codes of a simple font that has no unicode mapping, nil reads them as latin-1
+	charset *charmap.Charmap
 }
 
 // advance returns the width of a raw string operand in glyph space, false when the font gives no widths
@@ -274,13 +284,57 @@ func (f *fontDecoder) decode(raw []byte) []byte {
 			continue
 		}
 
-		// an unmapped single byte code reads as latin text
+		// an unmapped single byte code reads through the font's encoding, or as latin-1 without one
 		if f.codeBytes == 1 {
-			out.WriteRune(rune(code[0]))
+			out.WriteRune(f.decodeByte(code[0]))
 		}
 	}
 
 	return out.Bytes()
+}
+
+// decodeByte maps a single byte code to its character through the font's encoding
+func (f *fontDecoder) decodeByte(b byte) rune {
+	if f.charset == nil {
+		return rune(b)
+	}
+
+	return f.charset.DecodeByte(b)
+}
+
+// encodingName returns the named encoding of a simple font, either the Encoding name itself or the
+// BaseEncoding of an Encoding dictionary, empty when the font names none
+func (d *Document) encodingName(fontDict types.Dict) string {
+	entry, found := fontDict.Find(keyEncoding)
+	if !found {
+		return ""
+	}
+
+	encoding, err := d.ctx.Dereference(entry)
+	if err != nil {
+		return ""
+	}
+
+	switch v := encoding.(type) {
+	case types.Name:
+		return v.Value()
+	case types.Dict:
+		return lo.FromPtr(v.NameEntry(keyBaseEncoding))
+	default:
+		return ""
+	}
+}
+
+// charsetForEncoding maps a pdf base encoding name to its character set, nil for encodings read as latin-1
+func charsetForEncoding(name string) *charmap.Charmap {
+	switch name {
+	case encodingMacRoman:
+		return charmap.Macintosh
+	case encodingWinAnsi:
+		return charmap.Windows1252
+	default:
+		return nil
+	}
 }
 
 // codes yields each whole character code in raw, dropping a trailing partial code
@@ -354,6 +408,7 @@ func (d *Document) fontDecoder(fontDict types.Dict) *fontDecoder {
 		decoder.widths, decoder.defaultWidth = d.compositeWidths(fontDict)
 	} else {
 		decoder.widths = d.simpleWidths(fontDict)
+		decoder.charset = charsetForEncoding(d.encodingName(fontDict))
 	}
 
 	toUnicode, found := fontDict.Find(keyToUnicode)

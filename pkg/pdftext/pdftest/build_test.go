@@ -103,7 +103,7 @@ func TestContentStream(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			stream := contentStream(tt.lines, tt.mode)
+			stream := contentStream(tt.lines, tt.mode, nil)
 
 			assert.Check(t, strings.HasPrefix(stream, "<< /Length "))
 			assert.Check(t, strings.Contains(stream, "BT /F1 11 Tf 72 740 Td 14 TL"))

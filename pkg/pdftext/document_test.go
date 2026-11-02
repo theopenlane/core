@@ -7,6 +7,7 @@ import (
 
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/matrix"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
+	"golang.org/x/text/encoding/charmap"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/pkg/pdftext/pdftest"
@@ -36,6 +37,18 @@ func TestOpen(t *testing.T) {
 			name:     "positioned glyphs",
 			pdf:      pdftest.BuildGlyphs([][]string{{"Part 1 Section 2 Overview", "Reviewer's Notes and Index"}}),
 			wantText: []string{"Part 1 Section 2 Overview", "Reviewer's Notes and Index"},
+		},
+		{
+			name:      "mac roman encoded simple font",
+			pdf:       pdftest.BuildEncoded([][]string{{"Company’s “Policy” Handbook®"}}, encodingMacRoman, charmap.Macintosh),
+			wantPages: 1,
+			wantText:  []string{"Company’s “Policy” Handbook®"},
+		},
+		{
+			name:      "win ansi encoded simple font",
+			pdf:       pdftest.BuildEncoded([][]string{{"Company’s “Policy” – Handbook"}}, encodingWinAnsi, charmap.Windows1252),
+			wantPages: 1,
+			wantText:  []string{"Company’s “Policy” – Handbook"},
 		},
 		{
 			name:    "not a pdf",
@@ -339,6 +352,24 @@ endbfchar`))
 			want:    "H",
 		},
 		{
+			name:    "mac roman bytes decode through the charset",
+			decoder: &fontDecoder{codeBytes: 1, charset: charmap.Macintosh},
+			input:   []byte{'A', 0xD5, 0xD2, 0xD3, 0xA8},
+			want:    "A’“”®",
+		},
+		{
+			name:    "win ansi bytes decode through the charset",
+			decoder: &fontDecoder{codeBytes: 1, charset: charmap.Windows1252},
+			input:   []byte{0x92, 0x93, 0x94, 0x96},
+			want:    "’“”–",
+		},
+		{
+			name:    "to unicode map wins over the charset",
+			decoder: &fontDecoder{codeBytes: 1, charset: charmap.Macintosh, unicode: map[uint32]string{0xD5: "'"}},
+			input:   []byte{0xD5},
+			want:    "'",
+		},
+		{
 			name:    "zero code width decodes nothing",
 			decoder: &fontDecoder{codeBytes: 0},
 			input:   []byte("AB"),
@@ -504,6 +535,25 @@ func TestIsDelimiter(t *testing.T) {
 				assert.Check(t, isWhitespace(c) == tt.wantSpace, "isWhitespace(%q)", c)
 				assert.Check(t, isDelimiter(c) == tt.wantDelimiter, "isDelimiter(%q)", c)
 			}
+		})
+	}
+}
+
+func TestCharsetForEncoding(t *testing.T) {
+	tests := []struct {
+		name     string
+		encoding string
+		want     *charmap.Charmap
+	}{
+		{name: "mac roman", encoding: encodingMacRoman, want: charmap.Macintosh},
+		{name: "win ansi", encoding: encodingWinAnsi, want: charmap.Windows1252},
+		{name: "standard encoding reads as latin-1", encoding: "StandardEncoding", want: nil},
+		{name: "no encoding", encoding: "", want: nil},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Check(t, charsetForEncoding(tt.encoding) == tt.want)
 		})
 	}
 }

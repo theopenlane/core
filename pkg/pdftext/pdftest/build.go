@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+
+	"golang.org/x/text/encoding/charmap"
 )
 
 const (
@@ -46,19 +48,31 @@ const (
 // selects a Type0 font with a ToUnicode map so the text is encoded as two byte glyph ids
 func Build(pages [][]string, composite bool) []byte {
 	if composite {
-		return build(pages, layoutComposite)
+		return build(pages, layoutComposite, encoding{})
 	}
 
-	return build(pages, layoutSimple)
+	return build(pages, layoutSimple, encoding{})
 }
 
 // BuildGlyphs writes a pdf in the composite font that places every glyph on its own, leaving word
 // gaps only in the Td distance, the way some html to pdf renderers lay out text
 func BuildGlyphs(pages [][]string) []byte {
-	return build(pages, layoutGlyphs)
+	return build(pages, layoutGlyphs, encoding{})
 }
 
-func build(pages [][]string, mode layout) []byte {
+// BuildEncoded writes a pdf in a simple font that declares the named base encoding, such as
+// MacRomanEncoding, with every line encoded through charset the way that encoding stores it
+func BuildEncoded(pages [][]string, name string, charset *charmap.Charmap) []byte {
+	return build(pages, layoutSimple, encoding{name: name, charset: charset})
+}
+
+// encoding is the base encoding a simple font declares, empty for none
+type encoding struct {
+	name    string
+	charset *charmap.Charmap
+}
+
+func build(pages [][]string, mode layout, enc encoding) []byte {
 	var objects []string
 
 	kids := make([]string, 0, len(pages))
@@ -71,14 +85,14 @@ func build(pages [][]string, mode layout) []byte {
 
 		objects = append(objects,
 			fmt.Sprintf("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 %d 0 R >> >> /Contents %d 0 R >>", fontObject, contentObject),
-			contentStream(pages[i], mode),
+			contentStream(pages[i], mode, enc.charset),
 		)
 	}
 
 	if mode != layoutSimple {
 		objects = append(objects, compositeFontObjects(fontObject)...)
 	} else {
-		objects = append(objects, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>")
+		objects = append(objects, simpleFontObject(enc.name))
 	}
 
 	objects = append([]string{
@@ -153,7 +167,16 @@ func compositeFontObjects(fontObject int) []string {
 // literalEscaper escapes the characters a pdf literal string treats specially
 var literalEscaper = strings.NewReplacer(`\`, `\\`, "(", `\(`, ")", `\)`)
 
-func contentStream(lines []string, mode layout) string {
+// simpleFontObject is a Type1 Helvetica font, declaring the named base encoding when one is given
+func simpleFontObject(encodingName string) string {
+	if encodingName == "" {
+		return "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"
+	}
+
+	return fmt.Sprintf("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /%s >>", encodingName)
+}
+
+func contentStream(lines []string, mode layout, charset *charmap.Charmap) string {
 	var stream strings.Builder
 
 	fmt.Fprintf(&stream, "BT /F1 %d Tf 72 740 Td 14 TL\n", fontSize)
@@ -165,13 +188,27 @@ func contentStream(lines []string, mode layout) string {
 		case layoutGlyphs:
 			fmt.Fprintf(&stream, "%sT*\n", glyphLine(line))
 		default:
-			fmt.Fprintf(&stream, "(%s) Tj T*\n", literalEscaper.Replace(line))
+			fmt.Fprintf(&stream, "(%s) Tj T*\n", literalEscaper.Replace(encodeLine(line, charset)))
 		}
 	}
 
 	stream.WriteString("ET")
 
 	return fmt.Sprintf("<< /Length %d >>\nstream\n%s\nendstream", stream.Len(), stream.String())
+}
+
+// encodeLine stores a line in the font's encoding, leaving it as is without one
+func encodeLine(line string, charset *charmap.Charmap) string {
+	if charset == nil {
+		return line
+	}
+
+	encoded, err := charset.NewEncoder().String(line)
+	if err != nil {
+		return line
+	}
+
+	return encoded
 }
 
 // glyphLine draws each glyph of a line with its own Tj, stepping past the previous glyph with Td
