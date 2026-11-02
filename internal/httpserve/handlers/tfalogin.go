@@ -3,7 +3,6 @@ package handlers
 import (
 	"time"
 
-	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -91,21 +90,8 @@ func (h *Handler) completeTFALogin(ctx echo.Context, state, subjectID string) er
 		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
-	if user.Edges.Setting == nil || user.Edges.Setting.Status != enums.UserStatusActive || !user.Edges.Setting.EmailConfirmed || !user.Edges.Setting.IsTfaEnabled {
-		return h.BadRequest(ctx, ErrLoginFailed)
-	}
-
-	userCtx := setAuthenticatedContext(reqCtx, user)
-	authData, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, user)
+	authData, err := h.generateAuthSession(ctx, user)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest)
-	}
-
-	if err := h.updateUserLastSeen(userCtx, user.ID, enums.AuthProviderCredentials); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update last seen")
-
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 

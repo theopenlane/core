@@ -17,6 +17,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/logx"
 
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
@@ -91,20 +92,8 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.startTFAAuthentication(ctx, user.ID)
 	}
 
-	// set context for remaining request based on logged in user
-	userCtx := setAuthenticatedContext(reqCtx, user)
-
-	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, user)
+	auth, err := h.generateAuthSession(ctx, user)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
-
-		return h.InternalServerError(ctx, ErrProcessingRequest)
-	}
-
-	if err := h.updateUserLastSeen(userCtx, user.ID, enums.AuthProviderCredentials); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update last seen")
-
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
@@ -130,4 +119,24 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 	metrics.RecordLogin(true)
 
 	return h.Success(ctx, out)
+}
+
+func (h *Handler) generateAuthSession(ctx echo.Context, user *ent.User) (*models.AuthData, error) {
+	reqCtx := ctx.Request().Context()
+	userCtx := setAuthenticatedContext(reqCtx, user)
+
+	authData, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, user)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
+
+		return nil, err
+	}
+
+	if err := h.updateUserLastSeen(userCtx, user.ID, enums.AuthProviderCredentials); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update last seen")
+
+		return nil, err
+	}
+
+	return authData, nil
 }
