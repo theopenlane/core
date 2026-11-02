@@ -9,12 +9,20 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // ValidateTOTP validates a user's TOTP code
 // this currently only supports TOTP and not OTP codes via email and SMS
 func (h *Handler) ValidateTOTP(ctx echo.Context) error {
+	subjectID, err := auth.GetSubjectIDFromContext(ctx.Request().Context())
+	if err != nil {
+		return h.BadRequest(ctx, auth.ErrNoAuthUser)
+	}
+
+	return h.validateTOTP(ctx, subjectID, "")
+}
+
+func (h *Handler) validateTOTP(ctx echo.Context, subjectID, state string) error {
 	in, err := BindAndValidate[models.TFARequest](ctx)
 	if err != nil {
 		return h.InvalidInput(ctx, err)
@@ -22,19 +30,22 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 
 	reqCtx := ctx.Request().Context()
 
-	subjectID, err := auth.GetSubjectIDFromContext(reqCtx)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
-
-		return h.BadRequest(ctx, auth.ErrNoAuthUser)
+	lookupCtx := reqCtx
+	if state != "" {
+		lookupCtx = auth.WithInternalReadContext(reqCtx)
 	}
 
 	// get user from database by subject
-	user, err := h.getUserTFASettings(reqCtx, subjectID)
+	user, err := h.getUserTFASettings(lookupCtx, subjectID)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user")
 
 		return h.BadRequest(ctx, err)
+	}
+
+	if state != "" {
+		// user not authenticated here
+		reqCtx = setAuthenticatedContext(reqCtx, user)
 	}
 
 	if user.Edges.TfaSettings == nil || len(user.Edges.TfaSettings) != 1 || user.Edges.TfaSettings[0].TfaSecret == nil {
@@ -58,9 +69,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 				return h.BadRequest(ctx, err)
 			}
 
-			return h.Success(ctx, models.TFAResponse{
-				Reply: rout.Reply{Success: true},
-			})
+			return h.completeTFALogin(ctx, state, subjectID)
 		}
 
 		return h.BadRequest(ctx, ErrInvalidRecoveryCode)
@@ -79,7 +88,5 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	return h.Success(ctx, models.TFAResponse{
-		Reply: rout.Reply{Success: true},
-	})
+	return h.completeTFALogin(ctx, state, subjectID)
 }

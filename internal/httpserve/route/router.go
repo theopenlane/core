@@ -400,6 +400,7 @@ func RegisterRoutes(router *Router) error {
 		registerFaviconHandler,
 		registerOpenAPIHandler,
 		registerLoginHandler,
+		registerLogin2FAHandler,
 		registerAccountAccessHandler,
 		registerAccountRolesHandler,
 		registerAccountRolesMeHandler,

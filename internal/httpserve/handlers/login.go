@@ -15,9 +15,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/logx"
+
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
-	"github.com/theopenlane/logx"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie
@@ -84,6 +85,10 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("user email not verified, unable to login")
 
 		return h.BadRequest(ctx, fmt.Errorf("%w: please check your email and verify your account", auth.ErrUnverifiedUser))
+	}
+
+	if user.Edges.Setting.IsTfaEnabled || orgStatus.OrgTFAEnforced {
+		return h.startTFAAuthentication(ctx, user.ID)
 	}
 
 	// set context for remaining request based on logged in user

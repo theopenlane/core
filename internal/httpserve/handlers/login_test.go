@@ -45,38 +45,31 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	// create users in the database
 	validPassword := "sup3rs3cu7e!"
 
-	tfaTrue := true
-	tfaFalse := false
 	validConfirmedUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	validConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
 		email:         fmt.Sprintf("meow+%s@example.com", strings.ToLower(ulids.New().String())),
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	invalidConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
 		email:         fmt.Sprintf("meow+%s@foobar.com", strings.ToLower(ulids.New().String())),
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	validUnconfirmedUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: false,
-		tfaEnabled:    tfaFalse,
 	})
 
 	userWithInactiveDefaultOrg := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaFalse,
 	})
 
 	orgSetting := suite.db.OrganizationSetting.Create().SetInput(
@@ -106,14 +99,12 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		email:         "ssomember+" + strings.ToLower(ulids.New().String()) + "@examples.com", // ensure the email is allowed by the org setting
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	auditorUser := suite.userBuilderWithInput(ctx, &userInput{
 		email:         "auditor+" + strings.ToLower(ulids.New().String()) + "@examples.com",
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	// setup allow context with the client in the context which is required for hooks that run
@@ -280,8 +271,10 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 			if tc.expectedStatus == http.StatusOK {
 				assert.True(t, out.Success)
-				assert.True(t, out.TFAEnabled)
-				require.NotNil(t, out.AccessToken)
+				assert.False(t, out.TFAEnabled)
+				require.NotEmpty(t, out.AccessToken)
+				assert.NotEmpty(t, out.RefreshToken)
+				assert.NotEmpty(t, out.Session)
 
 				// check the claims to ensure the user is in the correct org
 				token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
