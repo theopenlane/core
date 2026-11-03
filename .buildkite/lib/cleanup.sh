@@ -9,10 +9,14 @@ GOLANGCI_LINT_CACHE_DIR="${GOLANGCI_LINT_CACHE:-}"
 # disk usage percent a job must start under
 CACHE_CLEANUP_THRESHOLD="${CACHE_CLEANUP_THRESHOLD:-65}"
 # disk usage percent at which a job gives up and exits with DISK_RETRY_EXIT_CODE for the pipeline to retry
-DISK_RETRY_THRESHOLD="${DISK_RETRY_THRESHOLD:-90}"
+DISK_RETRY_THRESHOLD="${DISK_RETRY_THRESHOLD:-80}"
 DISK_RETRY_EXIT_CODE=75
 # cache files modified within this many minutes may be in use by another job on the runner
-CACHE_IN_USE_MINUTES=30
+if [[ "${BUILDKITE_AGENT_META_DATA_SPAWN:-}" == "1" ]]; then
+    CACHE_IN_USE_MINUTES=5
+else
+    CACHE_IN_USE_MINUTES=20
+fi
 
 # caches_configured reports whether the pipeline env set every cache path, skipping cache work for jobs like the pipeline upload
 caches_configured() {
