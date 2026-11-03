@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
+	"github.com/theopenlane/core/v2/pkg/pdftext"
 )
 
 // TestS3Provider_OrganizationFolderStructure verifies that files are stored under organization-specific directories
@@ -53,7 +54,7 @@ func TestS3Provider_OrganizationFolderStructure(t *testing.T) {
 	uploadedFile, err := provider.Upload(ctx, bytes.NewReader(fileContent), &storagetypes.UploadFileOptions{
 		FileName:          fileName,
 		FolderDestination: folder,
-		ContentType:       "application/pdf",
+		ContentType:       pdftext.ContentType,
 	})
 	require.NoError(t, err)
 	require.NotNil(t, uploadedFile)
@@ -114,7 +115,7 @@ func TestS3Provider_WithoutOrganizationFolder(t *testing.T) {
 	uploadedFile, err := provider.Upload(ctx, bytes.NewReader(fileContent), &storagetypes.UploadFileOptions{
 		FileName:          fileName,
 		FolderDestination: "",
-		ContentType:       "application/pdf",
+		ContentType:       pdftext.ContentType,
 	})
 	require.NoError(t, err)
 	require.NotNil(t, uploadedFile)

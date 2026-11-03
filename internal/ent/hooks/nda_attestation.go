@@ -168,11 +168,9 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 			ID:   docData.ID,
 			Type: generated.TypeDocumentData,
 		},
-		FileMetadata: pkgobjects.FileMetadata{
-			ContentType: "application/pdf",
-			Size:        int64(len(attestedPDF)),
-			Key:         "documentDataFile",
-		},
+		ContentType: "application/pdf",
+		Size:        int64(len(attestedPDF)),
+		Key:         "documentDataFile",
 	}
 
 	uploadCtx, uploadedFiles, err := upload.HandleUploads(ctx, client.ObjectManager, []pkgobjects.File{file})
@@ -245,7 +243,7 @@ func fetchNDATemplateFile(ctx context.Context, client *generated.Client, templat
 
 // appendAttestationPage merges the original PDF with a generated attestation certificate page
 func appendAttestationPage(ctx context.Context, originalPDF io.ReadSeeker, data *signedNDADocumentData) ([]byte, error) {
-	certPage, err := createAttestationCertificate(data)
+	certPage, err := createAttestationCertificate(ctx, data)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create attestation certificate page")
 
@@ -270,7 +268,7 @@ func appendAttestationPage(ctx context.Context, originalPDF io.ReadSeeker, data 
 func mergePDFs(ctx context.Context, readers ...io.ReadSeeker) ([]byte, error) {
 	var buf bytes.Buffer
 
-	if err := api.MergeRaw(readers, &buf, false, nil); err != nil {
+	if err := api.MergeRaw(ctx, readers, &buf, false, nil); err != nil {
 		if errors.Is(err, pdfcpu.ErrEncrypted) {
 			return nil, err
 		}
@@ -291,7 +289,7 @@ func decryptPDF(ctx context.Context, encrypted io.ReadSeeker) ([]byte, error) {
 
 	var buf bytes.Buffer
 
-	if err := api.Decrypt(encrypted, &buf, model.NewDefaultConfiguration()); err != nil {
+	if err := api.Decrypt(ctx, encrypted, &buf, model.NewDefaultConfiguration()); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("pdfcpu decrypt failed")
 
 		return nil, ErrFailedToDecryptNDAPDF
@@ -397,12 +395,12 @@ type attestationRowLayout struct {
 
 // createAttestationCertificate generates a single-page PDF with the signature certification details
 // rendered as a visible table with labeled rows, cell backgrounds, and grid lines
-func createAttestationCertificate(data *signedNDADocumentData) ([]byte, error) {
-	rows, tableHeight := layoutAttestationRows(attestationFieldsFrom(data))
-	textBoxes := buildAttestationText(rows)
+func createAttestationCertificate(ctx context.Context, data *signedNDADocumentData) ([]byte, error) {
+	rows, tableHeight := layoutAttestationRows(ctx, attestationFieldsFrom(data))
+	textBoxes := buildAttestationText(ctx, rows)
 	boxes := buildAttestationBoxes(rows, tableHeight)
 
-	return renderAttestationPage(textBoxes, boxes)
+	return renderAttestationPage(ctx, textBoxes, boxes)
 }
 
 // attestationFieldsFrom extracts the label-value pairs from signed NDA metadata
@@ -419,7 +417,7 @@ func attestationFieldsFrom(data *signedNDADocumentData) []attestationField {
 }
 
 // layoutAttestationRows wraps field values and computes row heights and y positions
-func layoutAttestationRows(fields []attestationField) ([]attestationRowLayout, float64) {
+func layoutAttestationRows(ctx context.Context, fields []attestationField) ([]attestationRowLayout, float64) {
 	valueTextWidth := attestContentWidth - attestLabelColWidth - attestCellPadSides
 
 	var rows []attestationRowLayout
@@ -427,7 +425,7 @@ func layoutAttestationRows(fields []attestationField) ([]attestationRowLayout, f
 	y := attestFieldStartY
 
 	for _, f := range fields {
-		wrapped := wrapText(f.Value, attestFontRegular, attestFieldSize, valueTextWidth)
+		wrapped := wrapText(ctx, f.Value, attestFontRegular, attestFieldSize, valueTextWidth)
 		lineCount := strings.Count(wrapped, "\n") + 1
 		height := float64(lineCount)*attestTextLineHeight + attestCellPadEnds
 		rows = append(rows, attestationRowLayout{field: f, wrapped: wrapped, height: height, y: y})
@@ -438,8 +436,8 @@ func layoutAttestationRows(fields []attestationField) ([]attestationRowLayout, f
 }
 
 // buildAttestationText creates the header and per-row text elements for the attestation table
-func buildAttestationText(rows []attestationRowLayout) []attestationTextBox {
-	baselinePad := attestCellPadY + fontAscent(attestFontRegular, attestFieldSize)
+func buildAttestationText(ctx context.Context, rows []attestationRowLayout) []attestationTextBox {
+	baselinePad := attestCellPadY + fontAscent(ctx, attestFontRegular, attestFieldSize)
 
 	textBoxes := []attestationTextBox{
 		{
@@ -524,7 +522,7 @@ func buildAttestationBoxes(rows []attestationRowLayout, tableHeight float64) []a
 }
 
 // renderAttestationPage assembles the page JSON structure and calls pdfcpu's Create API
-func renderAttestationPage(textBoxes []attestationTextBox, boxes []attestationSimpleBox) ([]byte, error) {
+func renderAttestationPage(ctx context.Context, textBoxes []attestationTextBox, boxes []attestationSimpleBox) ([]byte, error) {
 	page := attestationPage{
 		Paper:  "A4P",
 		Origin: "UpperLeft",
@@ -550,7 +548,7 @@ func renderAttestationPage(textBoxes []attestationTextBox, boxes []attestationSi
 	}
 
 	var buf bytes.Buffer
-	if err := api.Create(nil, bytes.NewReader(jsonData), &buf, nil); err != nil {
+	if err := api.Create(ctx, nil, bytes.NewReader(jsonData), &buf, nil); err != nil {
 		log.Error().Err(err).Msg("pdfcpu create failed")
 
 		return nil, ErrFailedToGenerateAttestationPDF
@@ -561,8 +559,8 @@ func renderAttestationPage(textBoxes []attestationTextBox, boxes []attestationSi
 
 // fontAscent returns fontName's ascent at fontSize, falling back to zero when the font has no
 // known metrics, which only happens for a font pdfcpu doesn't know about
-func fontAscent(fontName string, fontSize int) float64 {
-	ascent, err := font.Ascent(fontName, fontSize)
+func fontAscent(ctx context.Context, fontName string, fontSize int) float64 {
+	ascent, err := font.Ascent(ctx, fontName, fontSize)
 	if err != nil {
 		log.Error().Err(err).Str("font", fontName).Msg("failed to measure font ascent")
 
@@ -574,8 +572,8 @@ func fontAscent(fontName string, fontSize int) float64 {
 
 // textWidth measures text in fontName at fontSize, falling back to zero when a character isn't
 // mappable in the font; an unmeasurable string is treated as fitting rather than failing the render
-func textWidth(text, fontName string, fontSize int) float64 {
-	w, err := font.TextWidth(text, fontName, fontSize)
+func textWidth(ctx context.Context, text, fontName string, fontSize int) float64 {
+	w, err := font.TextWidth(ctx, text, fontName, fontSize)
 	if err != nil {
 		log.Error().Err(err).Str("font", fontName).Msg("failed to measure text width")
 
@@ -588,8 +586,8 @@ func textWidth(text, fontName string, fontSize int) float64 {
 // wrapText breaks s into lines that fit within maxWidth points for the given core font and size.
 // pdfcpu's WriteColumn scales fonts down instead of wrapping, so we pre-insert newlines.
 // Words that exceed maxWidth on their own (e.g. hex hashes) are broken at character boundaries
-func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
-	if textWidth(s, fontName, fontSize) <= maxWidth {
+func wrapText(ctx context.Context, s, fontName string, fontSize int, maxWidth float64) string {
+	if textWidth(ctx, s, fontName, fontSize) <= maxWidth {
 		return s
 	}
 
@@ -599,7 +597,7 @@ func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
 
 	for word := range strings.FieldsSeq(s) {
 		if line.Len() > 0 {
-			if textWidth(line.String()+" "+word, fontName, fontSize) <= maxWidth {
+			if textWidth(ctx, line.String()+" "+word, fontName, fontSize) <= maxWidth {
 				line.WriteString(" ")
 				line.WriteString(word)
 
@@ -610,13 +608,13 @@ func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
 			line.Reset()
 		}
 
-		if textWidth(word, fontName, fontSize) <= maxWidth {
+		if textWidth(ctx, word, fontName, fontSize) <= maxWidth {
 			line.WriteString(word)
 
 			continue
 		}
 
-		broken := breakWord(word, fontName, fontSize, maxWidth)
+		broken := breakWord(ctx, word, fontName, fontSize, maxWidth)
 		lines = append(lines, broken[:len(broken)-1]...)
 		line.WriteString(broken[len(broken)-1])
 	}
@@ -629,14 +627,14 @@ func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
 }
 
 // breakWord splits a single word into lines at character boundaries when it exceeds maxWidth
-func breakWord(word, fontName string, fontSize int, maxWidth float64) []string {
+func breakWord(ctx context.Context, word, fontName string, fontSize int, maxWidth float64) []string {
 	var lines []string
 
 	var chunk strings.Builder
 
 	for _, r := range word {
 		test := chunk.String() + string(r)
-		if textWidth(test, fontName, fontSize) > maxWidth && chunk.Len() > 0 {
+		if textWidth(ctx, test, fontName, fontSize) > maxWidth && chunk.Len() > 0 {
 			lines = append(lines, chunk.String())
 			chunk.Reset()
 		}

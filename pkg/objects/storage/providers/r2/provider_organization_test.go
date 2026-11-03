@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
+	"github.com/theopenlane/core/v2/pkg/pdftext"
 )
 
 func TestR2Provider_UploadAndDownload_EmptyFile(t *testing.T) {
@@ -143,7 +144,7 @@ func TestR2Provider_OrganizationFolderStructure(t *testing.T) {
 	uploadedFile, err := provider.Upload(ctx, bytes.NewReader(fileContent), &storagetypes.UploadFileOptions{
 		FileName:          fileName,
 		FolderDestination: folder,
-		ContentType:       "application/pdf",
+		ContentType:       pdftext.ContentType,
 	})
 	require.NoError(t, err)
 	require.NotNil(t, uploadedFile)
@@ -206,7 +207,7 @@ func TestR2Provider_WithoutOrganizationFolder(t *testing.T) {
 	uploadedFile, err := provider.Upload(ctx, bytes.NewReader(fileContent), &storagetypes.UploadFileOptions{
 		FileName:          fileName,
 		FolderDestination: "",
-		ContentType:       "application/pdf",
+		ContentType:       pdftext.ContentType,
 	})
 	require.NoError(t, err)
 	require.NotNil(t, uploadedFile)
