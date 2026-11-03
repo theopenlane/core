@@ -10,13 +10,15 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/jobspec"
+	"github.com/theopenlane/logx"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/urlx"
-	"github.com/theopenlane/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterDomain is the resolver for the createTrustCenterDomain field.
@@ -109,5 +111,41 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 
 	return &model.TrustCenterDomainCreatePayload{
 		CustomDomain: customDomain,
+	}, nil
+}
+
+// CreateTrustCenterPreviewDomain is the resolver for the createTrustCenterPreviewDomain field.
+func (r *mutationResolver) CreateTrustCenterPreviewDomain(ctx context.Context, trustCenterID string) (*model.TrustCenterPreviewDomainCreatePayload, error) {
+	trustCenter, err := withTransactionalMutation(ctx).TrustCenter.Get(ctx, trustCenterID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenter"})
+	}
+
+	ctx, err = common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.ErrPermissionDenied
+	}
+
+	if err := r.validateTrustcenterAccess(ctx, trustCenter); err != nil {
+		return nil, err
+	}
+
+	if trustCenter.PreviewDomainID != "" {
+		return nil, parseRequestError(ctx, common.ErrTrustCenterDomainAlreadyExists, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
+	}
+
+	_, err = r.db.Job.Insert(ctx, jobspec.CreatePreviewDomainArgs{
+		TrustCenterID:            trustCenter.ID,
+		TrustCenterPreviewZoneID: r.trustCenterPreviewZoneID,
+		TrustCenterCnameTarget:   r.trustCenterCnameTarget,
+	}, nil)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterpreviewdomain"})
+	}
+
+	return &model.TrustCenterPreviewDomainCreatePayload{
+		Success: true,
 	}, nil
 }

@@ -21,6 +21,12 @@ func (r Resolver) WithTrustCenterCnameTarget(cname string) *Resolver {
 	return &r
 }
 
+func (r Resolver) WithTrustCenterPreviewZoneID(zoneID string) *Resolver {
+	r.trustCenterPreviewZoneID = zoneID
+
+	return &r
+}
+
 func (r Resolver) WithAssessmentCnameTarget(cname string) *Resolver {
 	r.assessmentCnameTarget = cname
 

@@ -1,19 +1,99 @@
 package graphapi_test
 
 import (
+	"context"
 	"testing"
 
+	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/jobspec"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/testutils"
 )
+
+func TestMutationCreatePreviewDomain(t *testing.T) {
+	org := th.CreateFreshOrgWithTrustCenter(t, th.WithAllUserTypes(), th.WithSupportUser())
+	secondOrg := th.CreateFreshOrgWithTrustCenter(t)
+
+	defer func() {
+		th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(secondOrg.Owner.UserCtx, t)
+	}()
+
+	tt := []struct {
+		name          string
+		ctx           context.Context
+		trustCenterID string
+		expectedErr   string
+	}{
+		{
+			name:          "owner can create a preview domain",
+			ctx:           org.Owner.UserCtx,
+			trustCenterID: org.TrustCenter.ID,
+		},
+		{
+			name:          "support user can create a preview domain",
+			ctx:           org.SupportCtx,
+			trustCenterID: org.TrustCenter.ID,
+		},
+		{
+			name:          "view only user can create a preview domain",
+			ctx:           org.Member.UserCtx,
+			trustCenterID: org.TrustCenter.ID,
+			expectedErr:   th.NotAuthorizedErrorMsg,
+		},
+
+		{
+			name:          "no access to another organization",
+			ctx:           secondOrg.Owner.UserCtx,
+			trustCenterID: org.TrustCenter.ID,
+			expectedErr:   th.NotFoundErrorMsg,
+		},
+		{
+			name:          "cannot create preview domain for non existent trustcenter",
+			ctx:           org.Owner.UserCtx,
+			trustCenterID: ulids.New().String(),
+			expectedErr:   th.NotFoundErrorMsg,
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			assert.NilError(t, suite.Client.DB.Job.TruncateRiverTables(tc.ctx))
+
+			_, err := suite.Client.API.CreateTrustCenterPreviewDomain(tc.ctx, tc.trustCenterID)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.Client.DB.Job.GetPool()), &jobspec.CreatePreviewDomainArgs{}, nil)
+				return
+			}
+
+			assert.NilError(t, err)
+
+			rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.Client.DB.Job.GetPool()), []rivertest.ExpectedJob{
+				{
+					Args: jobspec.CreatePreviewDomainArgs{
+						TrustCenterID:            tc.trustCenterID,
+						TrustCenterPreviewZoneID: testutils.TrustCenterPreviewZoneID,
+						TrustCenterCnameTarget:   testutils.TrustCenterCnameTarget,
+					},
+				},
+			})
+		})
+	}
+}
 
 func TestMutationCreateTrustCenterDomain(t *testing.T) {
 	t.Parallel()

@@ -37726,6 +37726,11 @@ type TrustCenterOrder struct {
 	Field TrustCenterOrderField `json:"field"`
 }
 
+// Return response for createTrustCenterPreviewDomain mutation
+type TrustCenterPreviewDomainCreatePayload struct {
+	Success bool `json:"success"`
+}
+
 // Return response for createTrustCenterPreviewSetting mutation
 type TrustCenterPreviewSettingCreatePayload struct {
 	// Created preview trust center setting

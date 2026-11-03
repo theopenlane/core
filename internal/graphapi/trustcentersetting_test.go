@@ -205,7 +205,6 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
-		expectJob   bool
 	}{
 		{
 			name:      "happy path - update title by admin user",
@@ -222,9 +221,8 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			input: testclient.UpdateTrustCenterSettingInput{
 				Title: lo.ToPtr("Updated Title Preview"),
 			},
-			client:    suite.Client.API,
-			ctx:       tcOrg.SuperAdmin.UserCtx,
-			expectJob: true, // updating preview setting should enqueue a job to create preview domain
+			client: suite.Client.API,
+			ctx:    tcOrg.SuperAdmin.UserCtx,
 		},
 		{
 			name:      "happy path - update multiple fields",
@@ -312,22 +310,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 				assert.Check(t, is.Equal(strings.ToLower(*tc.input.SecurityContact), *resp.UpdateTrustCenterSetting.TrustCenterSetting.SecurityContact))
 			}
 
-			if tc.expectJob {
-				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.Client.DB.Job.GetPool()),
-					[]rivertest.ExpectedJob{
-						{
-							Args: jobspec.CreatePreviewDomainArgs{
-								TrustCenterID:            *resp.UpdateTrustCenterSetting.TrustCenterSetting.TrustCenterID,
-								TrustCenterPreviewZoneID: th.MappableDomainZoneTestID,
-								TrustCenterCnameTarget:   th.CnameTargetTest,
-							},
-						},
-					})
-				assert.Assert(t, jobs != nil)
-				assert.Assert(t, is.Len(jobs, 1))
-			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.Client.DB.Job.GetPool()), &jobspec.CreatePreviewDomainArgs{}, nil)
-			}
+			rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.Client.DB.Job.GetPool()), &jobspec.CreatePreviewDomainArgs{}, nil)
 		})
 	}
 

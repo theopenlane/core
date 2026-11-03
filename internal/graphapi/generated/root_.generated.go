@@ -3849,6 +3849,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterFaq                     func(childComplexity int, input generated.CreateTrustCenterFAQInput) int
 		CreateTrustCenterNDARequest              func(childComplexity int, input generated.CreateTrustCenterNDARequestInput) int
 		CreateTrustCenterNda                     func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload, templateFilesMetadata []*model.FileMetadataInput) int
+		CreateTrustCenterPreviewDomain           func(childComplexity int, trustCenterID string) int
 		CreateTrustCenterPreviewSetting          func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
 		CreateTrustCenterSetting                 func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *model.FileMetadataInput, heroImageFile *graphql.Upload, heroImageFileMetadata *model.FileMetadataInput) int
 		CreateTrustCenterSubprocessor            func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
@@ -7428,6 +7429,10 @@ type ComplexityRoot struct {
 
 	TrustCenterNDAUpdatePayload struct {
 		Template func(childComplexity int) int
+	}
+
+	TrustCenterPreviewDomainCreatePayload struct {
+		Success func(childComplexity int) int
 	}
 
 	TrustCenterPreviewSettingCreatePayload struct {
@@ -28040,6 +28045,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateTrustCenterNda(childComplexity, args["input"].(model.CreateTrustCenterNDAInput), args["templateFiles"].([]*graphql.Upload), args["templateFilesMetadata"].([]*model.FileMetadataInput)), true
+	case "Mutation.createTrustCenterPreviewDomain":
+		if e.ComplexityRoot.Mutation.CreateTrustCenterPreviewDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterPreviewDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateTrustCenterPreviewDomain(childComplexity, args["trustCenterID"].(string)), true
 	case "Mutation.createTrustCenterPreviewSetting":
 		if e.ComplexityRoot.Mutation.CreateTrustCenterPreviewSetting == nil {
 			break
@@ -48954,6 +48970,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterNDAUpdatePayload.Template(childComplexity), true
+
+	case "TrustCenterPreviewDomainCreatePayload.success":
+		if e.ComplexityRoot.TrustCenterPreviewDomainCreatePayload.Success == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterPreviewDomainCreatePayload.Success(childComplexity), true
 
 	case "TrustCenterPreviewSettingCreatePayload.trustCenterSetting":
 		if e.ComplexityRoot.TrustCenterPreviewSettingCreatePayload.TrustCenterSetting == nil {
@@ -160284,6 +160307,22 @@ type TrustCenterDocBulkUpdatePayload {
         """
         input: CreateTrustCenterDomainInput!
     ): TrustCenterDomainCreatePayload!
+    """
+    enqueues the creation of a preview domain for the trustcenter
+    """
+    createTrustCenterPreviewDomain(
+        """
+        trust center ID
+        """
+        trustCenterID: ID!
+    ): TrustCenterPreviewDomainCreatePayload!
+}
+
+"""
+Return response for createTrustCenterPreviewDomain mutation
+"""
+type TrustCenterPreviewDomainCreatePayload {
+    success: Boolean!
 }
 
 """
@@ -175860,6 +175899,14 @@ func (ec *executionContext) childFields_TrustCenterNDAUpdatePayload(ctx context.
 		return ec.fieldContext_TrustCenterNDAUpdatePayload_template(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDAUpdatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterPreviewDomainCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "success":
+		return ec.fieldContext_TrustCenterPreviewDomainCreatePayload_success(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterPreviewDomainCreatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_TrustCenterPreviewSettingCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

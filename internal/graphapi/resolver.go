@@ -61,6 +61,8 @@ type trustCenterSettings struct {
 	trustCenterCnameTarget string
 	// defaultTrustCenterDomain is the default domain for trust center
 	defaultTrustCenterDomain string
+
+	trustCenterPreviewZoneID string
 }
 
 // subscriptionSettings holds the settings for subscriptions

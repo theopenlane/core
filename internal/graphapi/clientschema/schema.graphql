@@ -50867,6 +50867,15 @@ type Mutation {
 		input: CreateTrustCenterDomainInput!
 	): TrustCenterDomainCreatePayload!
 	"""
+	enqueues the creation of a preview domain for the trustcenter
+	"""
+	createTrustCenterPreviewDomain(
+		"""
+		trust center ID
+		"""
+		trustCenterID: ID!
+	): TrustCenterPreviewDomainCreatePayload!
+	"""
 	Create a new trustCenterEntity
 	"""
 	createTrustCenterEntity(
@@ -88211,6 +88220,12 @@ Properties by which TrustCenter connections can be ordered.
 enum TrustCenterOrderField {
 	created_at
 	updated_at
+}
+"""
+Return response for createTrustCenterPreviewDomain mutation
+"""
+type TrustCenterPreviewDomainCreatePayload {
+	success: Boolean!
 }
 """
 Return response for createTrustCenterPreviewSetting mutation

@@ -56,6 +56,29 @@ func (ec *executionContext) fieldContext_TrustCenterDomainCreatePayload_customDo
 	return fc, nil
 }
 
+func (ec *executionContext) _TrustCenterPreviewDomainCreatePayload_success(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterPreviewDomainCreatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterPreviewDomainCreatePayload_success(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterPreviewDomainCreatePayload_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterPreviewDomainCreatePayload", field, false, false, "Boolean")
+}
+
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -157,6 +180,39 @@ func (ec *executionContext) _TrustCenterDomainCreatePayload(ctx context.Context,
 	return out
 }
 
+var trustCenterPreviewDomainCreatePayloadImplementors = []string{"TrustCenterPreviewDomainCreatePayload"}
+
+func (ec *executionContext) _TrustCenterPreviewDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustCenterPreviewDomainCreatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterPreviewDomainCreatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TrustCenterPreviewDomainCreatePayload")
+		case "success":
+			out.Values[i] = ec._TrustCenterPreviewDomainCreatePayload_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
@@ -172,6 +228,14 @@ func (ec *executionContext) marshalNTrustCenterDomainCreatePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._TrustCenterDomainCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTrustCenterPreviewDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterPreviewDomainCreatePayload) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "TrustCenterPreviewDomainCreatePayload!")
+		return graphql.Null
+	}
+	return ec._TrustCenterPreviewDomainCreatePayload(ctx, sel, v)
 }
 
 // endregion ***************************** type.gotpl *****************************
