@@ -251,12 +251,12 @@ func handleTrustCenterMutationGala(inv entityops.Invocation, _ entityops.Mutatio
 }
 
 const (
-	cacheRefreshTimeout        = 10 * time.Second
-	cacheRefreshUserAgent      = "Openlane-CacheRefresh/1.0"
-	cacheRefreshAuthHeader     = "X-Openlane-Cache-Refresh"
-	cacheRefreshParam          = "fresh"
-	cacheRefreshValue          = "1"
-	cacheRefreshMaxRetries     = 3
+	cacheRefreshTimeout    = 10 * time.Second
+	cacheRefreshUserAgent  = "Openlane-CacheRefresh/1.0"
+	cacheRefreshAuthHeader = "X-Openlane-Cache-Refresh"
+	cacheRefreshParam      = "fresh"
+	cacheRefreshValue      = "1"
+	cacheRefreshMaxRetries = 3
 )
 
 // cache refresh retry backoff, variables so tests can shorten the waits
