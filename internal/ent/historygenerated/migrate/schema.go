@@ -2965,6 +2965,7 @@ var (
 		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "enable_auto_approval", Type: field.TypeBool, Nullable: true},
 		{Name: "auto_approval_rules", Type: field.TypeJSON, Nullable: true},
+		{Name: "disable_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{

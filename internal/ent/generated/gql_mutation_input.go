@@ -28188,6 +28188,7 @@ type CreateTrustCenterSettingInput struct {
 	NoindexDefaultDomain                  *bool                                `json:"noindex_default_domain,omitempty"`
 	EnableAutoApproval                    *bool                                `json:"enable_auto_approval,omitempty"`
 	AutoApprovalRules                     *models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`
+	DisableDefaultDomain                  *bool                                `json:"disable_default_domain,omitempty"`
 	BlockedGroupIDs                       []string                             `json:"blocked_group_ids,omitempty"`
 	EditorIDs                             []string                             `json:"editor_ids,omitempty"`
 	LogoFileID                            *string                              `json:"logo_file_id,omitempty"`
@@ -28273,6 +28274,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.AutoApprovalRules; v != nil {
 		m.SetAutoApprovalRules(*v)
 	}
+	if v := i.DisableDefaultDomain; v != nil {
+		m.SetDisableDefaultDomain(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -28347,6 +28351,8 @@ type UpdateTrustCenterSettingInput struct {
 	EnableAutoApproval                         *bool `json:"enable_auto_approval,omitempty"`
 	ClearAutoApprovalRules                     bool
 	AutoApprovalRules                          *models.TrustCenterNDARequestSetting `json:"auto_approval_rules,omitempty"`
+	ClearDisableDefaultDomain                  bool
+	DisableDefaultDomain                       *bool `json:"disable_default_domain,omitempty"`
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs                      []string `json:"remove_blocked_group_ids,omitempty"`
@@ -28502,6 +28508,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.AutoApprovalRules; v != nil {
 		m.SetAutoApprovalRules(*v)
+	}
+	if i.ClearDisableDefaultDomain {
+		m.ClearDisableDefaultDomain()
+	}
+	if v := i.DisableDefaultDomain; v != nil {
+		m.SetDisableDefaultDomain(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

@@ -2811,6 +2811,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNoindexDefaultDomain},
 			trustcentersettinghistory.FieldEnableAutoApproval:                    {Type: field.TypeBool, Column: trustcentersettinghistory.FieldEnableAutoApproval},
 			trustcentersettinghistory.FieldAutoApprovalRules:                     {Type: field.TypeJSON, Column: trustcentersettinghistory.FieldAutoApprovalRules},
+			trustcentersettinghistory.FieldDisableDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersettinghistory.FieldDisableDefaultDomain},
 		},
 	}
 	graph.Nodes[60] = &sqlgraph.Node{
@@ -15379,6 +15380,11 @@ func (f *TrustCenterSettingHistoryFilter) WhereEnableAutoApproval(p entql.BoolP)
 // WhereAutoApprovalRules applies the entql json.RawMessage predicate on the auto_approval_rules field.
 func (f *TrustCenterSettingHistoryFilter) WhereAutoApprovalRules(p entql.BytesP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldAutoApprovalRules))
+}
+
+// WhereDisableDefaultDomain applies the entql bool predicate on the disable_default_domain field.
+func (f *TrustCenterSettingHistoryFilter) WhereDisableDefaultDomain(p entql.BoolP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldDisableDefaultDomain))
 }
 
 // addPredicate implements the predicateAdder interface.

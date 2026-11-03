@@ -70844,6 +70844,12 @@ type TrustCenterSettingHistoryWhereInput struct {
 	EnableAutoApprovalNEQ    *bool `json:"enableAutoApprovalNEQ,omitempty"`
 	EnableAutoApprovalIsNil  bool  `json:"enableAutoApprovalIsNil,omitempty"`
 	EnableAutoApprovalNotNil bool  `json:"enableAutoApprovalNotNil,omitempty"`
+
+	// "disable_default_domain" field predicates.
+	DisableDefaultDomain       *bool `json:"disableDefaultDomain,omitempty"`
+	DisableDefaultDomainNEQ    *bool `json:"disableDefaultDomainNEQ,omitempty"`
+	DisableDefaultDomainIsNil  bool  `json:"disableDefaultDomainIsNil,omitempty"`
+	DisableDefaultDomainNotNil bool  `json:"disableDefaultDomainNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -71957,6 +71963,18 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	}
 	if i.EnableAutoApprovalNotNil {
 		predicates = append(predicates, trustcentersettinghistory.EnableAutoApprovalNotNil())
+	}
+	if i.DisableDefaultDomain != nil {
+		predicates = append(predicates, trustcentersettinghistory.DisableDefaultDomainEQ(*i.DisableDefaultDomain))
+	}
+	if i.DisableDefaultDomainNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.DisableDefaultDomainNEQ(*i.DisableDefaultDomainNEQ))
+	}
+	if i.DisableDefaultDomainIsNil {
+		predicates = append(predicates, trustcentersettinghistory.DisableDefaultDomainIsNil())
+	}
+	if i.DisableDefaultDomainNotNil {
+		predicates = append(predicates, trustcentersettinghistory.DisableDefaultDomainNotNil())
 	}
 
 	switch len(predicates) {

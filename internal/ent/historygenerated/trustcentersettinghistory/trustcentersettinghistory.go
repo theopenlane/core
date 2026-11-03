@@ -103,6 +103,8 @@ const (
 	FieldEnableAutoApproval = "enable_auto_approval"
 	// FieldAutoApprovalRules holds the string denoting the auto_approval_rules field in the database.
 	FieldAutoApprovalRules = "auto_approval_rules"
+	// FieldDisableDefaultDomain holds the string denoting the disable_default_domain field in the database.
+	FieldDisableDefaultDomain = "disable_default_domain"
 	// Table holds the table name of the trustcentersettinghistory in the database.
 	Table = "trust_center_setting_history"
 )
@@ -151,6 +153,7 @@ var Columns = []string{
 	FieldNoindexDefaultDomain,
 	FieldEnableAutoApproval,
 	FieldAutoApprovalRules,
+	FieldDisableDefaultDomain,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -190,6 +193,8 @@ var (
 	DefaultNoindexDefaultDomain bool
 	// DefaultAutoApprovalRules holds the default value on creation for the "auto_approval_rules" field.
 	DefaultAutoApprovalRules models.TrustCenterNDARequestSetting
+	// DefaultDisableDefaultDomain holds the default value on creation for the "disable_default_domain" field.
+	DefaultDisableDefaultDomain bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -434,6 +439,11 @@ func ByNoindexDefaultDomain(opts ...sql.OrderTermOption) OrderOption {
 // ByEnableAutoApproval orders the results by the enable_auto_approval field.
 func ByEnableAutoApproval(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEnableAutoApproval, opts...).ToFunc()
+}
+
+// ByDisableDefaultDomain orders the results by the disable_default_domain field.
+func ByDisableDefaultDomain(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDisableDefaultDomain, opts...).ToFunc()
 }
 
 var (

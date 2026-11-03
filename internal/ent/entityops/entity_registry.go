@@ -9707,6 +9707,7 @@ func init() {
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "disable_default_domain", Label: "DisableDefaultDomain", Type: "bool", Clearable: true},
 		{Name: "enable_auto_approval", Label: "EnableAutoApproval", Type: "bool", Clearable: true},
 		{Name: "environment", Label: "Environment", Type: "enums.TrustCenterEnvironment", Clearable: true},
 		{Name: "favicon_local_file_id", Label: "FaviconLocalFileID", Type: "string", MatchKey: true, Clearable: true},

@@ -88844,6 +88844,11 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldAutoApprovalRules)
 				fieldSeen[trustcentersetting.FieldAutoApprovalRules] = struct{}{}
 			}
+		case "disableDefaultDomain":
+			if _, ok := fieldSeen[trustcentersetting.FieldDisableDefaultDomain]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldDisableDefaultDomain)
+				fieldSeen[trustcentersetting.FieldDisableDefaultDomain] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

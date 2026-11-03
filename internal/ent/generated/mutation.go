@@ -277172,6 +277172,7 @@ type TrustCenterSettingMutation struct {
 	noindex_default_domain                    *bool
 	enable_auto_approval                      *bool
 	auto_approval_rules                       *models.TrustCenterNDARequestSetting
+	disable_default_domain                    *bool
 	clearedFields                             map[string]struct{}
 	blocked_groups                            map[string]struct{}
 	removedblocked_groups                     map[string]struct{}
@@ -279158,6 +279159,55 @@ func (m *TrustCenterSettingMutation) ResetAutoApprovalRules() {
 	delete(m.clearedFields, trustcentersetting.FieldAutoApprovalRules)
 }
 
+// SetDisableDefaultDomain sets the "disable_default_domain" field.
+func (m *TrustCenterSettingMutation) SetDisableDefaultDomain(b bool) {
+	m.disable_default_domain = &b
+}
+
+// DisableDefaultDomain returns the value of the "disable_default_domain" field in the mutation.
+func (m *TrustCenterSettingMutation) DisableDefaultDomain() (r bool, exists bool) {
+	v := m.disable_default_domain
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisableDefaultDomain returns the old "disable_default_domain" field's value of the TrustCenterSetting entity.
+// If the TrustCenterSetting object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterSettingMutation) OldDisableDefaultDomain(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisableDefaultDomain is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisableDefaultDomain requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisableDefaultDomain: %w", err)
+	}
+	return oldValue.DisableDefaultDomain, nil
+}
+
+// ClearDisableDefaultDomain clears the value of the "disable_default_domain" field.
+func (m *TrustCenterSettingMutation) ClearDisableDefaultDomain() {
+	m.disable_default_domain = nil
+	m.clearedFields[trustcentersetting.FieldDisableDefaultDomain] = struct{}{}
+}
+
+// DisableDefaultDomainCleared returns if the "disable_default_domain" field was cleared in this mutation.
+func (m *TrustCenterSettingMutation) DisableDefaultDomainCleared() bool {
+	_, ok := m.clearedFields[trustcentersetting.FieldDisableDefaultDomain]
+	return ok
+}
+
+// ResetDisableDefaultDomain resets all changes to the "disable_default_domain" field.
+func (m *TrustCenterSettingMutation) ResetDisableDefaultDomain() {
+	m.disable_default_domain = nil
+	delete(m.clearedFields, trustcentersetting.FieldDisableDefaultDomain)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by ids.
 func (m *TrustCenterSettingMutation) AddBlockedGroupIDs(ids ...string) {
 	if m.blocked_groups == nil {
@@ -279447,7 +279497,7 @@ func (m *TrustCenterSettingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrustCenterSettingMutation) Fields() []string {
-	fields := make([]string, 0, 38)
+	fields := make([]string, 0, 39)
 	if m.created_at != nil {
 		fields = append(fields, trustcentersetting.FieldCreatedAt)
 	}
@@ -279562,6 +279612,9 @@ func (m *TrustCenterSettingMutation) Fields() []string {
 	if m.auto_approval_rules != nil {
 		fields = append(fields, trustcentersetting.FieldAutoApprovalRules)
 	}
+	if m.disable_default_domain != nil {
+		fields = append(fields, trustcentersetting.FieldDisableDefaultDomain)
+	}
 	return fields
 }
 
@@ -279646,6 +279699,8 @@ func (m *TrustCenterSettingMutation) Field(name string) (ent.Value, bool) {
 		return m.EnableAutoApproval()
 	case trustcentersetting.FieldAutoApprovalRules:
 		return m.AutoApprovalRules()
+	case trustcentersetting.FieldDisableDefaultDomain:
+		return m.DisableDefaultDomain()
 	}
 	return nil, false
 }
@@ -279731,6 +279786,8 @@ func (m *TrustCenterSettingMutation) OldField(ctx context.Context, name string) 
 		return m.OldEnableAutoApproval(ctx)
 	case trustcentersetting.FieldAutoApprovalRules:
 		return m.OldAutoApprovalRules(ctx)
+	case trustcentersetting.FieldDisableDefaultDomain:
+		return m.OldDisableDefaultDomain(ctx)
 	}
 	return nil, fmt.Errorf("unknown TrustCenterSetting field %s", name)
 }
@@ -280006,6 +280063,13 @@ func (m *TrustCenterSettingMutation) SetField(name string, value ent.Value) erro
 		}
 		m.SetAutoApprovalRules(v)
 		return nil
+	case trustcentersetting.FieldDisableDefaultDomain:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisableDefaultDomain(v)
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSetting field %s", name)
 }
@@ -280150,6 +280214,9 @@ func (m *TrustCenterSettingMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcentersetting.FieldAutoApprovalRules) {
 		fields = append(fields, trustcentersetting.FieldAutoApprovalRules)
 	}
+	if m.FieldCleared(trustcentersetting.FieldDisableDefaultDomain) {
+		fields = append(fields, trustcentersetting.FieldDisableDefaultDomain)
+	}
 	return fields
 }
 
@@ -280278,6 +280345,9 @@ func (m *TrustCenterSettingMutation) ClearField(name string) error {
 	case trustcentersetting.FieldAutoApprovalRules:
 		m.ClearAutoApprovalRules()
 		return nil
+	case trustcentersetting.FieldDisableDefaultDomain:
+		m.ClearDisableDefaultDomain()
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSetting nullable field %s", name)
 }
@@ -280399,6 +280469,9 @@ func (m *TrustCenterSettingMutation) ResetField(name string) error {
 		return nil
 	case trustcentersetting.FieldAutoApprovalRules:
 		m.ResetAutoApprovalRules()
+		return nil
+	case trustcentersetting.FieldDisableDefaultDomain:
+		m.ResetDisableDefaultDomain()
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSetting field %s", name)

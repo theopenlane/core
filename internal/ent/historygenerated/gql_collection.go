@@ -14198,6 +14198,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldAutoApprovalRules)
 				fieldSeen[trustcentersettinghistory.FieldAutoApprovalRules] = struct{}{}
 			}
+		case "disableDefaultDomain":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldDisableDefaultDomain]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldDisableDefaultDomain)
+				fieldSeen[trustcentersettinghistory.FieldDisableDefaultDomain] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
