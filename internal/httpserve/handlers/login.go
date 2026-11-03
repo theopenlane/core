@@ -7,17 +7,17 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/utils/passwd"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/logx"
+
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
-	"github.com/theopenlane/logx"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie
@@ -63,6 +63,8 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return ctx.Redirect(http.StatusFound, sso.SSOLogin(ctx.Echo(), orgStatus.OrganizationID))
 	}
 
+	orgTFAEnforced := orgStatus != nil && orgStatus.OrgTFAEnforced
+
 	if user.Password == nil {
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("no password set for user")
@@ -86,43 +88,62 @@ func (h *Handler) LoginHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, fmt.Errorf("%w: please check your email and verify your account", auth.ErrUnverifiedUser))
 	}
 
-	// set context for remaining request based on logged in user
+	switch {
+	case user.Edges.Setting.IsTfaEnabled:
+		return h.startTFAAuthentication(ctx, user.ID)
+	case orgTFAEnforced:
+		return h.startTFAEnrollment(ctx, user)
+	}
+
+	authData, err := h.generateAuthSession(ctx, user, false)
+	if err != nil {
+		return h.InternalServerError(ctx, ErrProcessingRequest)
+	}
+
+	metrics.RecordLogin(true)
+
+	return h.Success(ctx, models.LoginResponse{
+		Success:  true,
+		Message:  "success",
+		AuthData: *authData,
+	})
+}
+
+// startTFAEnrollment issues an enrollment-only session when the organization enforces two factor authentication
+// and the user has not enrolled yet
+func (h *Handler) startTFAEnrollment(ctx echo.Context, user *ent.User) error {
+	authData, err := h.generateAuthSession(ctx, user, true)
+	if err != nil {
+		return h.InternalServerError(ctx, ErrProcessingRequest)
+	}
+
+	metrics.RecordLogin(true)
+
+	return h.Success(ctx, models.LoginResponse{
+		Success:          true,
+		TFASetupRequired: true,
+		Message:          "2fa enrollment required",
+		AuthData:         *authData,
+	})
+}
+
+// generateAuthSession mints the session for the user in their default organization, enrollment-only when tfaEnrollmentRequired is set
+func (h *Handler) generateAuthSession(ctx echo.Context, user *ent.User, tfaEnrollmentRequired bool) (*models.AuthData, error) {
+	reqCtx := ctx.Request().Context()
 	userCtx := setAuthenticatedContext(reqCtx, user)
 
-	// create new claims for the user
-	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, user)
+	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(userCtx, ctx.Response().Writer, user, "", tfaEnrollmentRequired)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest)
+		return nil, err
 	}
 
 	if err := h.updateUserLastSeen(userCtx, user.ID, enums.AuthProviderCredentials); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update last seen")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest)
+		return nil, err
 	}
 
-	// check if orgStatus is enforced, but user has not yet configured
-	// if not yet configured we want to direct to the setup first
-	tfaSetupRequired := false
-
-	if orgStatus != nil && orgStatus.OrgTFAEnforced {
-		// Check if user has TFA enabled
-		if user.Edges.Setting == nil || !user.Edges.Setting.IsTfaEnabled {
-			tfaSetupRequired = true
-		}
-	}
-
-	out := models.LoginResponse{
-		Reply:            rout.Reply{Success: true},
-		TFAEnabled:       user.Edges.Setting.IsTfaEnabled,
-		TFASetupRequired: tfaSetupRequired,
-		Message:          "success",
-		AuthData:         *auth,
-	}
-
-	metrics.RecordLogin(true)
-
-	return h.Success(ctx, out)
+	return authData, nil
 }

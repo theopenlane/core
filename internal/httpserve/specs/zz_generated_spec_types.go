@@ -48,6 +48,7 @@ var SpecInstances = map[string]any{
 	"github.com/theopenlane/core/common/openapi.SubmitQuestionnaireResponse":                  pkg0.SubmitQuestionnaireResponse{},
 	"github.com/theopenlane/core/common/openapi.SwitchOrganizationRequest":                    pkg0.SwitchOrganizationRequest{},
 	"github.com/theopenlane/core/common/openapi.SwitchOrganizationResponse":                   pkg0.SwitchOrganizationResponse{},
+	"github.com/theopenlane/core/common/openapi.TFARequest":                                   pkg0.TFARequest{},
 	"github.com/theopenlane/core/common/openapi.UnsubscribeRequest":                           pkg0.UnsubscribeRequest{},
 	"github.com/theopenlane/core/common/openapi.UnsubscribeResponse":                          pkg0.UnsubscribeResponse{},
 	"github.com/theopenlane/core/common/openapi.VerifyRequest":                                pkg0.VerifyRequest{},

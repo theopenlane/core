@@ -88,6 +88,8 @@ var (
 	authMW = []echo.MiddlewareFunc{}
 	// questionnaireMW is authMW that also accepts anonymous questionnaire respondents
 	questionnaireMW = []echo.MiddlewareFunc{}
+	// tfaEnrollmentMW is authMW that also accepts enrollment-only sessions
+	tfaEnrollmentMW = []echo.MiddlewareFunc{}
 )
 
 // Middleware Semantic Names for better readability
@@ -96,6 +98,8 @@ var (
 	authenticatedEndpoint = &authMW
 	// questionnaireEndpoint for authenticated endpoints that also serve anonymous questionnaire respondents
 	questionnaireEndpoint = &questionnaireMW
+	// tfaEnrollmentEndpoint for authenticated endpoints that also serve callers still enrolling in two factor authentication
+	tfaEnrollmentEndpoint = &tfaEnrollmentMW
 	// publicEndpoint for standard public endpoints
 	publicEndpoint = &mw
 	// unauthenticatedEndpoint for basic endpoints with minimal middleware
@@ -356,6 +360,7 @@ func RegisterRoutes(router *Router) error {
 	// Middleware for authenticated endpoints
 	authMW = authMiddleware(router)
 	questionnaireMW = authMiddleware(router, auth.CapQuestionnaireAnonymous)
+	tfaEnrollmentMW = tfaEnrollmentMiddleware(router)
 	// Default middleware for other routes which includes additional middleware
 	mw = defaultMiddleware(router)
 
@@ -400,6 +405,7 @@ func RegisterRoutes(router *Router) error {
 		registerFaviconHandler,
 		registerOpenAPIHandler,
 		registerLoginHandler,
+		registerLogin2FAHandler,
 		registerAccountAccessHandler,
 		registerAccountRolesHandler,
 		registerAccountRolesMeHandler,
@@ -479,15 +485,25 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 
 // authMiddleware returns the middleware for the router that is used on authenticated routes
 // it includes the transaction middleware, the auth middleware, and any additional middleware
-// after the auth middleware
+// after the auth middleware; enrollment-only sessions are rejected
 func authMiddleware(router *Router, allowedAnonymous ...auth.Capability) []echo.MiddlewareFunc {
+	return callerMiddleware(router, authmw.BlockAnonymous(allowedAnonymous...), authmw.BlockTFAEnrollmentRequired())
+}
+
+// tfaEnrollmentMiddleware returns the authenticated route middleware that also admits enrollment-only sessions
+func tfaEnrollmentMiddleware(router *Router) []echo.MiddlewareFunc {
+	return callerMiddleware(router, authmw.BlockAnonymous())
+}
+
+// callerMiddleware builds the authenticated route middleware with the given caller gates placed after authentication
+func callerMiddleware(router *Router, gates ...echo.MiddlewareFunc) []echo.MiddlewareFunc {
 	mw := baseMW
 	// add the impersonation middleware to identify and validate impersonated requests
 	mw = append(mw, impersonationMiddleware(router))
 	// add the auth middleware
 	mw = append(mw, router.Handler.AuthMiddleware...)
-	// reject anonymous callers unless the route accepts their capability
-	mw = append(mw, authmw.BlockAnonymous(allowedAnonymous...))
+	// reject callers the route does not serve (anonymous, enrollment-only)
+	mw = append(mw, gates...)
 	// add system admin user context middleware (after auth, so we know if user is system admin)
 	mw = append(mw, impersonation.SystemAdminUserContextMiddleware())
 	// append any additional middleware after the auth middleware (includes csrf)

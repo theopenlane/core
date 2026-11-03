@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
@@ -45,38 +46,31 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 	// create users in the database
 	validPassword := "sup3rs3cu7e!"
 
-	tfaTrue := true
-	tfaFalse := false
 	validConfirmedUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	validConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
 		email:         fmt.Sprintf("meow+%s@example.com", strings.ToLower(ulids.New().String())),
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	invalidConfirmedUserRestrictedOrg := suite.userBuilderWithInput(ctx, &userInput{
 		email:         fmt.Sprintf("meow+%s@foobar.com", strings.ToLower(ulids.New().String())),
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	validUnconfirmedUser := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: false,
-		tfaEnabled:    tfaFalse,
 	})
 
 	userWithInactiveDefaultOrg := suite.userBuilderWithInput(ctx, &userInput{
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaFalse,
 	})
 
 	orgSetting := suite.db.OrganizationSetting.Create().SetInput(
@@ -106,14 +100,12 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		email:         "ssomember+" + strings.ToLower(ulids.New().String()) + "@examples.com", // ensure the email is allowed by the org setting
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	auditorUser := suite.userBuilderWithInput(ctx, &userInput{
 		email:         "auditor+" + strings.ToLower(ulids.New().String()) + "@examples.com",
 		password:      validPassword,
 		confirmedUser: true,
-		tfaEnabled:    tfaTrue,
 	})
 
 	// setup allow context with the client in the context which is required for hooks that run
@@ -280,8 +272,10 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 			if tc.expectedStatus == http.StatusOK {
 				assert.True(t, out.Success)
-				assert.True(t, out.TFAEnabled)
-				require.NotNil(t, out.AccessToken)
+				assert.False(t, out.TFAEnabled)
+				require.NotEmpty(t, out.AccessToken)
+				assert.NotEmpty(t, out.RefreshToken)
+				assert.NotEmpty(t, out.Session)
 
 				// check the claims to ensure the user is in the correct org
 				token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
@@ -451,13 +445,27 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	// Should succeed but indicate TFA is required
+	// Should succeed with an enrollment-only session so the user can set up TFA
 	require.Equal(t, http.StatusOK, rec.Code)
 	var out apimodels.LoginResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
-	assert.False(t, out.TFAEnabled)      // User doesn't have TFA enabled
-	assert.True(t, out.TFASetupRequired) // But org requires TFA
+	assert.False(t, out.TFAEnabled)
+	assert.True(t, out.TFASetupRequired)
+	assert.Equal(t, "2fa enrollment required", out.Message)
+
+	require.NotEmpty(t, out.AccessToken)
+	assert.NotEmpty(t, out.RefreshToken)
+	assert.NotEmpty(t, out.Session)
+
+	token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
+	require.NoError(t, err)
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	require.True(t, ok)
+
+	assert.Equal(t, org.ID, claims["org"])
+	assert.Equal(t, true, claims["tfa_enrollment_required"])
 }
 
 func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {

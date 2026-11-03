@@ -48,7 +48,7 @@ func updateUserAuthSession(ctx context.Context, am *authmanager.Client, newOrgID
 
 	// generate a new auth session with the new org ID
 	// this will also set the session cookie
-	out, err := am.GenerateUserAuthSessionWithOrg(ctx, ec.Response().Writer, user, newOrgID)
+	out, err := am.GenerateUserAuthSessionWithOrg(ctx, ec.Response().Writer, user, newOrgID, false)
 	if err != nil {
 		return ctx, err
 	}

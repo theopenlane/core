@@ -113,15 +113,15 @@ require (
 	github.com/stripe/stripe-go/v86 v86.2.0
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
 	github.com/testcontainers/testcontainers-go v0.44.0
-	github.com/theopenlane/core/common v1.2.0
+	github.com/theopenlane/core/common v1.2.2
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
 	github.com/theopenlane/entx v0.36.3
-	github.com/theopenlane/go-client v0.15.0
+	github.com/theopenlane/go-client v0.15.1
 	github.com/theopenlane/gqlgen-plugins v0.18.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.41.1
+	github.com/theopenlane/iam v0.41.3
 	github.com/theopenlane/logx v0.1.1
 	github.com/theopenlane/newman v0.6.0
 	github.com/theopenlane/riverboat v0.14.6
@@ -140,6 +140,7 @@ require (
 	golang.org/x/net v0.61.0
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/sync v0.24.0
+	golang.org/x/term v0.47.0
 	golang.org/x/text v0.43.0
 	golang.org/x/tools v0.52.0
 	google.golang.org/api v0.309.0
@@ -414,7 +415,6 @@ require (
 	golang.org/x/exp v0.0.0-20261014143641-f0251eb4aa3e // indirect
 	golang.org/x/image v0.45.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
-	golang.org/x/term v0.47.0 // indirect
 	golang.org/x/time v0.16.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect

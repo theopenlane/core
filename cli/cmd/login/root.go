@@ -43,23 +43,9 @@ func login(ctx context.Context) (*oauth2.Token, error) {
 
 	status, err := fetchSSOStatus(ctx, client, username)
 	if err == nil && status.Enforced && status.OrganizationID != "" {
-		// Check if 2FA is required but user hasn't enabled it for SSO
-		if status.OrgTFAEnforced && !status.UserTFAEnabled {
-			fmt.Println("\nTwo-factor authentication is required by your organization.")
-			fmt.Println("Please login to the Openlane console and enable 2FA on your profile page before using the CLI.")
-			return nil, fmt.Errorf("2FA required but not enabled on user account")
-		}
-
 		tokens, err := ssoAuth(ctx, client, status.OrganizationID)
 		if err != nil {
 			return nil, err
-		}
-
-		// If 2FA is enabled for the user, require verification after SSO login
-		if status.UserTFAEnabled {
-			if err := handle2FAVerification(ctx, client); err != nil {
-				return nil, err
-			}
 		}
 
 		fmt.Println("\nAuthentication Successful!")
@@ -117,25 +103,23 @@ func passwordAuth(ctx context.Context, client *openlane.Client, username string)
 		return nil, fmt.Errorf("2FA required but not enabled on user account")
 	}
 
-	// Extract tokens from initial login response
-	tokens := &oauth2.Token{
-		AccessToken:  resp.AccessToken,
-		RefreshToken: resp.RefreshToken,
-		TokenType:    resp.TokenType,
-	}
-
-	// If 2FA is enabled, require verification before allowing CLI usage
+	// If 2FA is enabled, the session is only issued after verification
 	if resp.TFAEnabled {
-		if err := handle2FAVerification(ctx, client); err != nil {
+		resp, err = handle2FAVerification(ctx, client)
+		if err != nil {
 			return nil, err
 		}
 	}
 
-	return tokens, nil
+	return &oauth2.Token{
+		AccessToken:  resp.AccessToken,
+		RefreshToken: resp.RefreshToken,
+		TokenType:    resp.TokenType,
+	}, nil
 }
 
-// handle2FAVerification prompts the user for their 2FA code and validates it
-func handle2FAVerification(ctx context.Context, client *openlane.Client) error {
+// handle2FAVerification prompts the user for their 2FA code and validates it, returning the issued session
+func handle2FAVerification(ctx context.Context, client *openlane.Client) (*models.LoginResponse, error) {
 	const maxAttempts = 3
 
 	for attempt := 1; attempt <= maxAttempts; attempt++ {
@@ -143,7 +127,7 @@ func handle2FAVerification(ctx context.Context, client *openlane.Client) error {
 
 		code, err := term.ReadPassword(int(syscall.Stdin))
 		if err != nil {
-			return fmt.Errorf("failed to read 2FA code: %w", err)
+			return nil, fmt.Errorf("failed to read 2FA code: %w", err)
 		}
 
 		codeStr := string(code)
@@ -160,10 +144,10 @@ func handle2FAVerification(ctx context.Context, client *openlane.Client) error {
 		}
 
 		// Validate the code
-		tfaResp, err := client.ValidateTOTP(ctx, tfaReq)
+		tfaResp, err := client.ValidateLoginTOTP(ctx, tfaReq)
 		if err != nil {
 			if attempt == maxAttempts {
-				return fmt.Errorf("2FA verification failed after %d attempts: %w", maxAttempts, err)
+				return nil, fmt.Errorf("2FA verification failed after %d attempts: %w", maxAttempts, err)
 			}
 
 			fmt.Printf("Invalid 2FA code: %v\n", err)
@@ -173,7 +157,7 @@ func handle2FAVerification(ctx context.Context, client *openlane.Client) error {
 
 		if !tfaResp.Success {
 			if attempt == maxAttempts {
-				return fmt.Errorf("2FA verification failed after %d attempts", maxAttempts)
+				return nil, fmt.Errorf("2FA verification failed after %d attempts", maxAttempts)
 			}
 
 			fmt.Println("Invalid 2FA code")
@@ -181,11 +165,15 @@ func handle2FAVerification(ctx context.Context, client *openlane.Client) error {
 			continue
 		}
 
+		if tfaResp.AccessToken == "" {
+			return nil, ErrNoSessionIssued
+		}
+
 		// 2FA verification successful
 		fmt.Println("2FA verification successful")
 
-		return nil
+		return tfaResp, nil
 	}
 
-	return fmt.Errorf("2FA verification failed after %d attempts", maxAttempts)
+	return nil, fmt.Errorf("2FA verification failed after %d attempts", maxAttempts)
 }

@@ -454,6 +454,8 @@ func WithOTP() ServerOption {
 				}),
 				totp.WithRecoveryCodeLength(s.Config.Settings.TOTP.RecoveryCodeLength),
 				totp.WithRecoveryCodeCount(s.Config.Settings.TOTP.RecoveryCodeCount),
+				totp.WithMaxFailedAttempts(s.Config.Settings.TOTP.MaxFailedAttempts),
+				totp.WithFailureWindow(s.Config.Settings.TOTP.FailureWindow),
 			}
 
 			// append redis client if enabled

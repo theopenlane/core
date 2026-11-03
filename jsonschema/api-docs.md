@@ -1374,6 +1374,8 @@ identity provider configuration, since both authentications must occur together
 |**secret**|`string`|||
 |**recoverycodecount**|`integer`|||
 |**recoverycodelength**|`integer`|||
+|**maxfailedattempts**|`integer`|||
+|**failurewindow**|`integer`|||
 
 **Additional Properties:** not allowed   
    
