@@ -24,7 +24,7 @@ import (
 const disconnectTestDefinitionID = "def_01K0TESTDISC0000000000001"
 
 func TestDisconnectIntegration(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", suite.h.DisconnectIntegration)
 

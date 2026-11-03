@@ -12,7 +12,7 @@ import (
 )
 
 func TestAccountRolesOrganizationHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// add handler
 	suite.registerTestHandler("GET", "account/roles/organization", suite.h.AccountRolesOrganizationHandler)
@@ -30,7 +30,7 @@ func TestAccountRolesOrganizationHandler(t *testing.T) {
 		},
 		{
 			name:   "happy path, id provided",
-			target: "/account/roles/organization/" + testUser1.OrganizationID,
+			target: "/account/roles/organization/" + suite.testUser1.OrganizationID,
 		},
 		{
 			name:   "org not authorized",
@@ -47,7 +47,7 @@ func TestAccountRolesOrganizationHandler(t *testing.T) {
 			recorder := httptest.NewRecorder()
 
 			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
+			suite.e.ServeHTTP(recorder, req.WithContext(suite.testUser1.UserCtx))
 
 			res := recorder.Result()
 			defer res.Body.Close()
@@ -75,7 +75,7 @@ func TestAccountRolesOrganizationHandler(t *testing.T) {
 				assert.Check(t, is.Contains(out.Roles, r))
 			}
 
-			assert.Check(t, is.DeepEqual(testUser1.OrganizationID, out.OrganizationID))
+			assert.Check(t, is.DeepEqual(suite.testUser1.OrganizationID, out.OrganizationID))
 		})
 	}
 }

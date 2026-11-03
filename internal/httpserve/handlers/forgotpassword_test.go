@@ -21,7 +21,7 @@ import (
 )
 
 func TestForgotPasswordHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "forgot-password", suite.h.ForgotPassword)

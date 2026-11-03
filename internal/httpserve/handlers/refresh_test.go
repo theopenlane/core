@@ -28,12 +28,12 @@ import (
 )
 
 func TestRefreshHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// add modules for the user
 	modulesEnabled := []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule}
 
-	suite.enableModules(testUser1.ID, testUser1.OrganizationID, modulesEnabled)
+	suite.enableModules(suite.testUser1.ID, suite.testUser1.OrganizationID, modulesEnabled)
 
 	// add handler
 	suite.registerTestHandler("POST", "refresh", suite.h.RefreshHandler)
@@ -77,7 +77,7 @@ func TestRefreshHandler(t *testing.T) {
 			Subject: user.ID,
 		},
 		UserID: user.ID,
-		OrgID:  testUser1.OrganizationID,
+		OrgID:  suite.testUser1.OrganizationID,
 	}
 
 	access, refresh, err := tm.CreateTokenPair(claims)

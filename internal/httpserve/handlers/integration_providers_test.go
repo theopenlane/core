@@ -18,7 +18,7 @@ import (
 )
 
 func TestListIntegrationProvidersIncludesSchemas(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", suite.h.ListIntegrationProviders)
 

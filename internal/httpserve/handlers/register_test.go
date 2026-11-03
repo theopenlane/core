@@ -28,7 +28,7 @@ import (
 )
 
 func TestRegisterHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "register", suite.h.RegisterHandler)
@@ -184,7 +184,7 @@ func TestRegisterHandler(t *testing.T) {
 			email := tc.email
 			if tc.expectedErrorCode == handlers.UserExistsErrCode {
 				email = ulids.New().String() + "@theopenlane.io"
-				ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+				ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 				exists, err := suite.db.User.Query().Where(user.Email(email)).Exist(ctx)
 				assert.NilError(t, err)
 				if !exists {
@@ -199,7 +199,7 @@ func TestRegisterHandler(t *testing.T) {
 			var inviteToken *string
 
 			if tc.invitationType == "invitation" {
-				ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+				ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 				invite := suite.db.Invite.Create().
 					SetRecipient(email).
 					SetRole(enums.RoleMember).
@@ -207,7 +207,7 @@ func TestRegisterHandler(t *testing.T) {
 				inviteToken = &invite.Token
 			} else if tc.invitationType == "invalid_invitation" {
 
-				ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+				ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 				_ = suite.db.Invite.Create().
 					SetRecipient(email).
 					SetRole(enums.RoleMember).
@@ -217,7 +217,7 @@ func TestRegisterHandler(t *testing.T) {
 				invalidToken := "invalid-token-123"
 				inviteToken = &invalidToken
 			} else if tc.invitationType == "email_mismatch_invitation" {
-				ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+				ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 				invite := suite.db.Invite.Create().
 					SetRecipient("correctemail@theopenlane.io").
 					SetRole(enums.RoleMember).
@@ -280,15 +280,15 @@ func TestRegisterHandler(t *testing.T) {
 				assert.Assert(t, len(u.Edges.DefaultOrg.ID) > 0)
 
 				if tc.invitationType == "invitation" {
-					// The user should be added to the organization that sent the invite (testUser1's org)
-					assert.Check(t, is.DeepEqual(testUser1.OrganizationID, u.Edges.DefaultOrg.ID))
+					// The user should be added to the organization that sent the invite (suite.testUser1's org)
+					assert.Check(t, is.DeepEqual(suite.testUser1.OrganizationID, u.Edges.DefaultOrg.ID))
 
 					// setup context with the joined org
-					ctx = auth.NewTestContextWithOrgID(out.ID, testUser1.OrganizationID)
+					ctx = auth.NewTestContextWithOrgID(out.ID, suite.testUser1.OrganizationID)
 
 					// make sure user is a member of the organization they were invited to
 					orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &testclient.OrgMembershipWhereInput{
-						OrganizationID: &testUser1.OrganizationID,
+						OrganizationID: &suite.testUser1.OrganizationID,
 					})
 					assert.NilError(t, err)
 
@@ -376,7 +376,7 @@ func TestRegisterHandler(t *testing.T) {
 }
 
 func TestRegisterHandler_EmailVerification(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	// enable email verification for this test
 	config := &validator.EmailVerificationConfig{

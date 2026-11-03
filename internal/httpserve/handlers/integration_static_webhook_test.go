@@ -37,7 +37,7 @@ func postStaticWebhook(suite *HandlerTestSuite, path, signature string, payload 
 }
 
 func TestIntegrationStaticWebhookHandlerRejectsMissingVerifier(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerStaticWebhookTestRoutes()
 
@@ -48,7 +48,7 @@ func TestIntegrationStaticWebhookHandlerRejectsMissingVerifier(t *testing.T) {
 }
 
 func TestIntegrationStaticWebhookHandlerRejectsInvalidSignature(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerStaticWebhookTestRoutes()
 
@@ -64,7 +64,7 @@ func TestIntegrationStaticWebhookHandlerRejectsInvalidSignature(t *testing.T) {
 }
 
 func TestIntegrationStaticWebhookHandlerSkipsUnregisteredEvent(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerStaticWebhookTestRoutes()
 
@@ -76,7 +76,7 @@ func TestIntegrationStaticWebhookHandlerSkipsUnregisteredEvent(t *testing.T) {
 }
 
 func TestIntegrationStaticWebhookHandlerDispatchesRegisteredEvent(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerStaticWebhookTestRoutes()
 
@@ -86,7 +86,7 @@ func TestIntegrationStaticWebhookHandlerDispatchesRegisteredEvent(t *testing.T) 
 }
 
 func TestConfigureIntegrationProviderSkipsRuntimeOwnedWebhooks(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -116,7 +116,7 @@ func TestConfigureIntegrationProviderSkipsRuntimeOwnedWebhooks(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderRejectsOperatorOnlyDefinition(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -132,7 +132,7 @@ func TestConfigureIntegrationProviderRejectsOperatorOnlyDefinition(t *testing.T)
 }
 
 func TestRunIntegrationOperationRejectsHiddenOperation(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)

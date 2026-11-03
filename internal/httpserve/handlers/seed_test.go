@@ -16,11 +16,6 @@ import (
 	"gotest.tools/v3/assert"
 )
 
-var (
-	testUser1 testUserDetails
-	testUser2 testUserDetails
-)
-
 // testUserDetails is a struct that holds the details of a test user
 type testUserDetails struct {
 	// ID is the ID of the user
@@ -171,6 +166,6 @@ func (suite *HandlerTestSuite) enableModules(userID, orgID string, features []mo
 // setupTestData creates test users and sets up the clients with the necessary tokens
 func (suite *HandlerTestSuite) setupTestData(ctx context.Context) {
 	// create test users
-	testUser1 = suite.userBuilder(ctx)
-	testUser2 = suite.userBuilder(ctx)
+	suite.testUser1 = suite.userBuilder(ctx)
+	suite.testUser2 = suite.userBuilder(ctx)
 }

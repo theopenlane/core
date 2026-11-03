@@ -19,29 +19,29 @@ import (
 )
 
 func TestResendQuestionnaireEmail(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "/questionnaire/resend", suite.h.ResendQuestionnaireEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := auth.WithInternalOperationContext(ec)
 
-	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", "")))
+	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(suite.testUser1.OrganizationID, suite.testUser1.ID, "", "")))
 
 	template, err := suite.db.Template.Create().
 		SetName("Resend Test Template").
 		SetTemplateType(enums.Document).
 		SetJsonconfig(map[string]any{"title": "Resend Test"}).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessmentObj, err := suite.db.Assessment.Create().
 		SetName("Resend Test Assessment").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	send := func(t *testing.T, email, assessmentID string) (*httptest.ResponseRecorder, map[string]interface{}) {
@@ -79,7 +79,7 @@ func TestResendQuestionnaireEmail(t *testing.T) {
 		assessmentResp, err := suite.db.AssessmentResponse.Create().
 			SetAssessmentID(assessmentObj.ID).
 			SetEmail(testEmail).
-			SetOwnerID(testUser1.OrganizationID).
+			SetOwnerID(suite.testUser1.OrganizationID).
 			SetStatus(enums.AssessmentResponseStatusSent).
 			Save(questionnaireCtx)
 		assert.NilError(t, err)
@@ -139,7 +139,7 @@ func TestResendQuestionnaireEmail(t *testing.T) {
 		completedResp, err := suite.db.AssessmentResponse.Create().
 			SetAssessmentID(assessmentObj.ID).
 			SetEmail(completedEmail).
-			SetOwnerID(testUser1.OrganizationID).
+			SetOwnerID(suite.testUser1.OrganizationID).
 			Save(questionnaireCtx)
 		assert.NilError(t, err)
 
@@ -172,7 +172,7 @@ func TestResendQuestionnaireEmail(t *testing.T) {
 		overdueResp, err := suite.db.AssessmentResponse.Create().
 			SetAssessmentID(assessmentObj.ID).
 			SetEmail(overdueEmail).
-			SetOwnerID(testUser1.OrganizationID).
+			SetOwnerID(suite.testUser1.OrganizationID).
 			SetStatus(enums.AssessmentResponseStatusSent).
 			SetDueDate(time.Now().Add(24 * time.Hour)).
 			Save(questionnaireCtx)
@@ -206,7 +206,7 @@ func TestResendQuestionnaireEmail(t *testing.T) {
 		maxResp, err := suite.db.AssessmentResponse.Create().
 			SetAssessmentID(assessmentObj.ID).
 			SetEmail(maxEmail).
-			SetOwnerID(testUser1.OrganizationID).
+			SetOwnerID(suite.testUser1.OrganizationID).
 			SetStatus(enums.AssessmentResponseStatusSent).
 			SetSendAttempts(5).
 			Save(questionnaireCtx)

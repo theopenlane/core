@@ -19,14 +19,14 @@ import (
 )
 
 func TestACMESolverHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// setup handler
 	suite.registerTestHandler("GET", "/.well-known/acme-challenge/:path", suite.h.ACMESolverHandler)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
-	ctx := auth.WithOrgInternalCaller(ec, testUser1.OrganizationID)
+	ctx := auth.WithOrgInternalCaller(ec, suite.testUser1.OrganizationID)
 
 	// Test data
 	testPath := gofakeit.UUID()
@@ -42,7 +42,7 @@ func TestACMESolverHandler(t *testing.T) {
 		SetAcmeChallengePath(testPath).
 		SetExpectedAcmeChallengeValue(testValue).
 		SetAcmeChallengeStatus(enums.SSLVerificationStatusInitializing).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Exec(ctx)
 	assert.NilError(t, err)
 
@@ -55,7 +55,7 @@ func TestACMESolverHandler(t *testing.T) {
 		SetAcmeChallengePath("deleted-path").
 		SetExpectedAcmeChallengeValue("deleted-value").
 		SetAcmeChallengeStatus(enums.SSLVerificationStatusInitializing).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetDeletedAt(time.Now()).
 		SetDeletedBy("test").
 		Exec(ctx)

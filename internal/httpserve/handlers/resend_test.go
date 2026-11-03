@@ -22,7 +22,7 @@ import (
 )
 
 func TestResendHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// add handler
 	suite.registerTestHandler("POST", "resend", suite.h.ResendEmail)

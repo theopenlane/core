@@ -25,7 +25,7 @@ import (
 const testTokenIssuer = "http://localhost:17608"
 
 func TestDatabaseFileDownloadHandler_Success(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	restore := suite.swapObjectStoreToDatabase()
 	t.Cleanup(restore)
@@ -92,7 +92,7 @@ func TestDatabaseFileDownloadHandler_Success(t *testing.T) {
 }
 
 func TestDatabaseFileDownloadHandler_WithUserID(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	restore := suite.swapObjectStoreToDatabase()
 	t.Cleanup(restore)
@@ -163,7 +163,7 @@ func TestDatabaseFileDownloadHandler_WithUserID(t *testing.T) {
 }
 
 func TestDatabaseFileDownloadHandler_PresignedURLGeneration(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	baseURL := "https://api.theopenlane.io"
 

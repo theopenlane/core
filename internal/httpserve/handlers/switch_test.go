@@ -21,7 +21,7 @@ import (
 )
 
 func TestSwitchHandlerSSOEnforced(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
@@ -79,7 +79,7 @@ func TestSwitchHandlerSSOEnforced(t *testing.T) {
 }
 
 func TestSwitchHandlerTFAEnforced(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
@@ -143,7 +143,7 @@ func TestSwitchHandlerTFAEnforced(t *testing.T) {
 }
 
 func TestSwitchHandlerTFAEnforcedUserHasTFA(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
@@ -208,7 +208,7 @@ func TestSwitchHandlerTFAEnforcedUserHasTFA(t *testing.T) {
 }
 
 func TestSwitchHandlerRequiresInteractiveUser(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 

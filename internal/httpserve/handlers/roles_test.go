@@ -20,14 +20,14 @@ import (
 )
 
 func TestOrganizationRolesHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce("GET", "account/organization-roles", suite.h.RolesHandler)
 
 	req := httptest.NewRequest(http.MethodGet, "/account/organization-roles", nil)
 	recorder := httptest.NewRecorder()
 
-	suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
+	suite.e.ServeHTTP(recorder, req.WithContext(suite.testUser1.UserCtx))
 
 	response := recorder.Result()
 	defer response.Body.Close()
@@ -51,20 +51,20 @@ func TestOrganizationRolesHandler(t *testing.T) {
 }
 
 func TestOrganizationRolesAssignmentHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce("POST", "account/organization-roles", suite.h.AssignOrganizationRolesHandler)
 	suite.registerRouteOnce("DELETE", "account/organization-roles", suite.h.DeleteOrganizationRolesHandler)
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
-	ownerCtx := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID, auth.WithOrganizationRole(auth.OwnerRole))
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
+	ownerCtx := auth.NewTestContextWithOrgID(suite.testUser1.ID, suite.testUser1.OrganizationID, auth.WithOrganizationRole(auth.OwnerRole))
 	ownerCtx = auth.WithInternalOperationContext(ownerCtx)
 	ownerCtx = generated.NewContext(ownerCtx, suite.db)
 
 	group, err := suite.db.Group.Create().
-		SetName("Role Test Group " + testUser2.ID).
+		SetName("Role Test Group " + suite.testUser2.ID).
 		SetDescription("Group for organization role assignment tests").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Save(ctx)
 	assert.NilError(t, err)
 
@@ -72,12 +72,12 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 	memberRole := enums.RoleMember
 	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		UserID:         member.ID,
-		OrganizationID: testUser1.OrganizationID,
+		OrganizationID: suite.testUser1.OrganizationID,
 		Role:           &memberRole,
 	}).Exec(ctx)
 	assert.NilError(t, err)
 
-	memberCtx := auth.NewTestContextWithOrgID(member.ID, testUser1.OrganizationID, auth.WithOrganizationRole(auth.MemberRole))
+	memberCtx := auth.NewTestContextWithOrgID(member.ID, suite.testUser1.OrganizationID, auth.WithOrganizationRole(auth.MemberRole))
 	memberCtx = auth.WithInternalOperationContext(memberCtx)
 	memberCtx = generated.NewContext(memberCtx, suite.db)
 
@@ -93,9 +93,9 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "assign new role to a user",
 			method: http.MethodPost,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser1.OrganizationID,
+				OrganizationID: suite.testUser1.OrganizationID,
 				Role:           "policy_manager",
-				UserIDs:        []string{testUser2.ID},
+				UserIDs:        []string{suite.testUser2.ID},
 			},
 			ctx:        ownerCtx,
 			statusCode: http.StatusOK,
@@ -105,9 +105,9 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "assign existing role to a user",
 			method: http.MethodPost,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser1.OrganizationID,
+				OrganizationID: suite.testUser1.OrganizationID,
 				Role:           "policy_manager",
-				UserIDs:        []string{testUser2.ID},
+				UserIDs:        []string{suite.testUser2.ID},
 			},
 			ctx:        ownerCtx,
 			statusCode: http.StatusOK,
@@ -117,7 +117,7 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "assign new role to a group",
 			method: http.MethodPost,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser1.OrganizationID,
+				OrganizationID: suite.testUser1.OrganizationID,
 				Role:           "risk_manager",
 				GroupIDs:       []string{group.ID},
 			},
@@ -129,7 +129,7 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "delete role from a group",
 			method: http.MethodDelete,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser1.OrganizationID,
+				OrganizationID: suite.testUser1.OrganizationID,
 				Role:           "risk_manager",
 				GroupIDs:       []string{group.ID},
 			},
@@ -141,9 +141,9 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "delete role from a user",
 			method: http.MethodDelete,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser1.OrganizationID,
+				OrganizationID: suite.testUser1.OrganizationID,
 				Role:           "policy_manager",
-				UserIDs:        []string{testUser2.ID},
+				UserIDs:        []string{suite.testUser2.ID},
 			},
 			ctx:        ownerCtx,
 			statusCode: http.StatusOK,
@@ -153,9 +153,9 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "invalid role",
 			method: http.MethodPost,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser1.OrganizationID,
+				OrganizationID: suite.testUser1.OrganizationID,
 				Role:           "not_a_role",
-				UserIDs:        []string{testUser2.ID},
+				UserIDs:        []string{suite.testUser2.ID},
 			},
 			ctx:        ownerCtx,
 			statusCode: http.StatusBadRequest,
@@ -164,7 +164,7 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "missing subjects to apply roles to",
 			method: http.MethodPost,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser1.OrganizationID,
+				OrganizationID: suite.testUser1.OrganizationID,
 				Role:           "policy_manager",
 			},
 			ctx:        ownerCtx,
@@ -174,9 +174,9 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "assign role to user from unauthorized organization",
 			method: http.MethodPost,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser2.OrganizationID,
+				OrganizationID: suite.testUser2.OrganizationID,
 				Role:           "policy_manager",
-				UserIDs:        []string{testUser2.ID},
+				UserIDs:        []string{suite.testUser2.ID},
 			},
 			ctx:        ownerCtx,
 			statusCode: http.StatusBadRequest,
@@ -185,9 +185,9 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "member cannot assign role to a user",
 			method: http.MethodPost,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser1.OrganizationID,
+				OrganizationID: suite.testUser1.OrganizationID,
 				Role:           "policy_manager",
-				UserIDs:        []string{testUser2.ID},
+				UserIDs:        []string{suite.testUser2.ID},
 			},
 			ctx:        memberCtx,
 			statusCode: http.StatusBadRequest,
@@ -196,7 +196,7 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 			name:   "member cannot assign role to a group",
 			method: http.MethodPost,
 			request: models.OrganizationRolesRequest{
-				OrganizationID: testUser1.OrganizationID,
+				OrganizationID: suite.testUser1.OrganizationID,
 				Role:           "risk_manager",
 				GroupIDs:       []string{group.ID},
 			},
@@ -237,37 +237,37 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 }
 
 func TestAccountRolesMeHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce("GET", "account/roles/me", suite.h.AccountRolesMeHandler)
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	group, err := suite.db.Group.Create().
-		SetName("Role Me Test Group " + testUser1.ID).
+		SetName("Role Me Test Group " + suite.testUser1.ID).
 		SetDescription("Group for account roles me tests").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Save(ctx)
 	assert.NilError(t, err)
 
 	_, err = suite.db.GroupMembership.Create().
 		SetGroupID(group.ID).
-		SetUserID(testUser1.ID).
+		SetUserID(suite.testUser1.ID).
 		Save(ctx)
 	assert.NilError(t, err)
 
 	tuple := fgax.TupleKey{
 		Subject: fgax.Entity{
 			Kind:       fgax.Kind(generated.TypeUser),
-			Identifier: testUser1.ID,
+			Identifier: suite.testUser1.ID,
 		},
 		Object: fgax.Entity{
 			Kind:       fgax.Kind(generated.TypeOrganization),
-			Identifier: testUser1.OrganizationID,
+			Identifier: suite.testUser1.OrganizationID,
 		},
 		Relation: fgax.Relation("policy_manager"),
 	}
 
-	_, err = suite.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil)
+	_, err = suite.db.Authz.WriteTupleKeys(suite.testUser1.UserCtx, []fgax.TupleKey{tuple}, nil)
 	assert.NilError(t, err)
 
 	groupTuple := fgax.TupleKey{
@@ -278,18 +278,18 @@ func TestAccountRolesMeHandler(t *testing.T) {
 		},
 		Object: fgax.Entity{
 			Kind:       fgax.Kind(generated.TypeOrganization),
-			Identifier: testUser1.OrganizationID,
+			Identifier: suite.testUser1.OrganizationID,
 		},
 		Relation: fgax.Relation("risk_manager"),
 	}
 
-	_, err = suite.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{groupTuple}, nil)
+	_, err = suite.db.Authz.WriteTupleKeys(suite.testUser1.UserCtx, []fgax.TupleKey{groupTuple}, nil)
 	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodGet, "/account/roles/me", nil)
 	recorder := httptest.NewRecorder()
 
-	suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
+	suite.e.ServeHTTP(recorder, req.WithContext(suite.testUser1.UserCtx))
 
 	res := recorder.Result()
 	defer res.Body.Close()
@@ -299,7 +299,7 @@ func TestAccountRolesMeHandler(t *testing.T) {
 
 	assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
 	assert.Check(t, out.Success)
-	assert.Check(t, is.DeepEqual(testUser1.OrganizationID, out.OrganizationID))
+	assert.Check(t, is.DeepEqual(suite.testUser1.OrganizationID, out.OrganizationID))
 	expectedRoles := []models.OrganizationRole{
 		{
 			ID:          "policy_manager",

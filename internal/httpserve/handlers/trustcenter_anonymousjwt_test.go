@@ -18,7 +18,7 @@ import (
 )
 
 func TestCreateTrustCenterAnonymousJWT(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// setup handler
 	suite.registerTestHandler("POST", "trustcenter/auth/anonymous", suite.h.CreateTrustCenterAnonymousJWT)
@@ -39,8 +39,8 @@ func TestCreateTrustCenterAnonymousJWT(t *testing.T) {
 		SetPurpose(enums.DomainPurposeTrustcenter).
 		SetDomainType(enums.CustomDomainTypeExternal).
 		SetMappableDomainID(mappableDomain.ID).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	previewDomain, err := suite.db.CustomDomain.Create().
@@ -48,27 +48,27 @@ func TestCreateTrustCenterAnonymousJWT(t *testing.T) {
 		SetPurpose(enums.DomainPurposeTrustcenter).
 		SetDomainType(enums.CustomDomainTypePreview).
 		SetMappableDomainID(mappableDomain.ID).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 	slug := "meow"
 
 	trustCenterWithCD, err := suite.db.TrustCenter.Create().
 		SetSlug(slug).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetCustomDomainID(customDomain.ID).
-		Save(testUser1.UserCtx)
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	err = suite.db.TrustCenter.UpdateOneID(trustCenterWithCD.ID).
 		SetPreviewDomainID(previewDomain.ID).
-		Exec(testUser1.UserCtx)
+		Exec(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	trustCenterNoCD, err := suite.db.TrustCenter.Create().
 		SetSlug(slug).
-		SetOwnerID(testUser2.OrganizationID).
-		Save(testUser2.UserCtx)
+		SetOwnerID(suite.testUser2.OrganizationID).
+		Save(suite.testUser2.UserCtx)
 	assert.NilError(t, err)
 
 	testCases := []struct {

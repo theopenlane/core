@@ -30,7 +30,7 @@ import (
 )
 
 func TestConfigureIntegrationProviderRequiresOrgEdit(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -127,7 +127,7 @@ func TestConfigureIntegrationProviderRequiresOrgEdit(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderLinksExistingVendor(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -159,7 +159,7 @@ func TestConfigureIntegrationProviderLinksExistingVendor(t *testing.T) {
 }
 
 func TestCheckIntegrationHealth(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:integrationID/health", suite.h.CheckIntegrationHealth)
@@ -264,7 +264,7 @@ func (suite *HandlerTestSuite) checkIntegrationHealthAsUser(t *testing.T, user t
 }
 
 func TestConfigureIntegrationProviderSuccess(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -306,7 +306,7 @@ func TestConfigureIntegrationProviderSuccess(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderStoresOperationConfig(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -334,7 +334,7 @@ func TestConfigureIntegrationProviderStoresOperationConfig(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderRejectsInvalidOperationConfig(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -362,7 +362,7 @@ func TestConfigureIntegrationProviderRejectsInvalidOperationConfig(t *testing.T)
 }
 
 func TestConfigureIntegrationProviderRejectsInvalidFilterExpr(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -391,7 +391,7 @@ func TestConfigureIntegrationProviderRejectsInvalidFilterExpr(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderReturnsSCIMEndpointDetails(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -438,7 +438,7 @@ func TestConfigureIntegrationProviderReturnsSCIMEndpointDetails(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderAcceptsDefinitionID(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -458,7 +458,7 @@ func TestConfigureIntegrationProviderAcceptsDefinitionID(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderInvalidPayload(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -478,7 +478,7 @@ func TestConfigureIntegrationProviderInvalidPayload(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderRejectsCredentialsForAuthFlowConnection(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -505,7 +505,7 @@ func TestConfigureIntegrationProviderRejectsCredentialsForAuthFlowConnection(t *
 }
 
 func TestConfigureIntegrationProviderRejectsNonObjectPayload(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -525,7 +525,7 @@ func TestConfigureIntegrationProviderRejectsNonObjectPayload(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderUnauthorized(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -542,7 +542,7 @@ func TestConfigureIntegrationProviderUnauthorized(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderUpdateExisting(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -578,7 +578,7 @@ func TestConfigureIntegrationProviderUpdateExisting(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderUpdateExistingUserInputOnly(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -617,7 +617,7 @@ func TestConfigureIntegrationProviderUpdateExistingUserInputOnly(t *testing.T) {
 }
 
 func TestConfigureIntegrationProviderUpdateExistingUserInputOnlyWithEmptyObjectBody(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -658,7 +658,7 @@ func TestConfigureIntegrationProviderUpdateExistingUserInputOnlyWithEmptyObjectB
 }
 
 func TestConfigureIntegrationProviderAllowsUserInputOnlyUpdateWithoutCredentialSchema(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	const definitionID = "def_01K0TESTUIONLY000000000001"
 
@@ -692,7 +692,7 @@ func TestConfigureIntegrationProviderAllowsUserInputOnlyUpdateWithoutCredentialS
 }
 
 func TestConfigureIntegrationProviderRejectsInstallationDefinitionMismatch(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
@@ -722,7 +722,7 @@ func TestConfigureIntegrationProviderRejectsInstallationDefinitionMismatch(t *te
 }
 
 func TestConfigureIntegrationProviderHealthFailureDoesNotPersistCredential(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 

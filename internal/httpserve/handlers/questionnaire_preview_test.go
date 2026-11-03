@@ -19,7 +19,7 @@ import (
 )
 
 func TestGetQuestionnairePreviewAndRealResponse(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
@@ -37,21 +37,21 @@ func TestGetQuestionnairePreviewAndRealResponse(t *testing.T) {
 		SetName("Preview vs Real Template").
 		SetTemplateType(enums.Document).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Preview vs Real Assessment").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	testEmail := "preview-vs-real@example.com"
 
-	anonUser := auth.NewQuestionnaireCaller(testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", assessment.ID), "", testEmail)
+	anonUser := auth.NewQuestionnaireCaller(suite.testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", assessment.ID), "", testEmail)
 	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, anonUser))
 	questionnaireCtx = auth.ActiveAssessmentIDKey.Set(questionnaireCtx, assessment.ID)
 
@@ -116,7 +116,7 @@ func (suite *HandlerTestSuite) createResponseWithData(createCtx, internalCtx con
 	create := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessmentID).
 		SetEmail(email).
-		SetOwnerID(testUser1.OrganizationID)
+		SetOwnerID(suite.testUser1.OrganizationID)
 
 	if isTest {
 		create.SetIsTest(true)
@@ -127,7 +127,7 @@ func (suite *HandlerTestSuite) createResponseWithData(createCtx, internalCtx con
 
 	documentData, err := suite.db.DocumentData.Create().
 		SetTemplateID(templateID).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetData(map[string]any{"q1": marker}).
 		Save(internalCtx)
 	assert.NilError(t, err)

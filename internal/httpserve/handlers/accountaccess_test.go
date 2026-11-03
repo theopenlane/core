@@ -15,7 +15,7 @@ import (
 )
 
 func TestAccountAccessHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// add handler
 	suite.registerTestHandler("POST", "account/access", suite.h.AccountAccessHandler)
@@ -29,7 +29,7 @@ func TestAccountAccessHandler(t *testing.T) {
 		{
 			name: "happy path, allow access",
 			request: models.AccountAccessRequest{
-				ObjectID:   testUser1.OrganizationID,
+				ObjectID:   suite.testUser1.OrganizationID,
 				ObjectType: "organization",
 				Relation:   "can_view",
 			},
@@ -86,7 +86,7 @@ func TestAccountAccessHandler(t *testing.T) {
 			recorder := httptest.NewRecorder()
 
 			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
+			suite.e.ServeHTTP(recorder, req.WithContext(suite.testUser1.UserCtx))
 
 			res := recorder.Result()
 			defer res.Body.Close()

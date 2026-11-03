@@ -14,7 +14,7 @@ import (
 )
 
 func TestProductCatalogHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// add handler
 	suite.registerTestHandler(http.MethodGet, "products", suite.h.ProductCatalogHandler)

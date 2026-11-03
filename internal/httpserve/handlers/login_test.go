@@ -32,7 +32,7 @@ import (
 )
 
 func TestLoginHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
@@ -307,7 +307,7 @@ func TestLoginHandler(t *testing.T) {
 }
 
 func TestLoginHandlerSSOEnforced(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
@@ -367,7 +367,7 @@ func TestLoginHandlerSSOEnforced(t *testing.T) {
 }
 
 func TestLoginHandlerSSOEnforcedOwnerBypass(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
@@ -411,7 +411,7 @@ func TestLoginHandlerSSOEnforcedOwnerBypass(t *testing.T) {
 }
 
 func TestLoginHandlerTFAEnforced(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
@@ -476,7 +476,7 @@ func TestLoginHandlerTFAEnforced(t *testing.T) {
 }
 
 func TestLoginHandlerTFAEnforcedUserHasTFA(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)

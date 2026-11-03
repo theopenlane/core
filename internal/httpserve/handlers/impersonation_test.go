@@ -22,7 +22,7 @@ import (
 )
 
 func TestStartImpersonation(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "impersonation/start", suite.h.StartImpersonation)
@@ -198,7 +198,7 @@ func TestStartImpersonation(t *testing.T) {
 }
 
 func TestEndImpersonation(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "impersonation/end", suite.h.EndImpersonation)
@@ -309,7 +309,7 @@ func TestEndImpersonation(t *testing.T) {
 }
 
 func TestExtractSessionIDFromToken(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "impersonation/start", suite.h.StartImpersonation)

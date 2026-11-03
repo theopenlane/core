@@ -18,11 +18,11 @@ import (
 // TestUnsubscribeHandler verifies the unsubscribe endpoint marks the subscriber unsubscribed (which the
 // update hook also deactivates) on a valid token, and rejects a request without a token
 func TestUnsubscribeHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "unsubscribe", suite.h.UnsubscribeHandler)
 
-	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 	t.Run("happy path unsubscribes an active subscriber", func(t *testing.T) {
 		suite.ClearTestData()
@@ -56,8 +56,8 @@ func TestUnsubscribeHandler(t *testing.T) {
 		// the create hook provisions the trust center's live setting (allow_subscribers defaults true)
 		tc, err := suite.db.TrustCenter.Create().
 			SetSlug("audit-unsub").
-			SetOwnerID(testUser1.OrganizationID).
-			Save(testUser1.UserCtx)
+			SetOwnerID(suite.testUser1.OrganizationID).
+			Save(suite.testUser1.UserCtx)
 		assert.NilError(t, err)
 		t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(internalCtx) })
 

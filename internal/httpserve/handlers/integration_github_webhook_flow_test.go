@@ -41,7 +41,7 @@ func (suite *HandlerTestSuite) registerGitHubAppWebhookRoute() {
 }
 
 func TestGitHubAppWebhookDoesNotRequireCaller(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -72,7 +72,7 @@ func TestGitHubAppWebhookDoesNotRequireCaller(t *testing.T) {
 }
 
 func TestGitHubWebhookPingUpdatesIntegrationMetadata(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -114,7 +114,7 @@ func TestGitHubWebhookPingUpdatesIntegrationMetadata(t *testing.T) {
 }
 
 func TestGitHubWebhookInstallationDeletedRemovesIntegration(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	t.Cleanup(restore)
@@ -152,7 +152,7 @@ func TestGitHubWebhookInstallationDeletedRemovesIntegration(t *testing.T) {
 }
 
 func TestGitHubWebhookPingRejectsInvalidSignature(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -189,7 +189,7 @@ func TestGitHubWebhookPingRejectsInvalidSignature(t *testing.T) {
 }
 
 func TestGitHubWebhookDuplicateDeliveryIsIgnored(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -310,7 +310,7 @@ func (r *slackWebhookRecorder) Close() {
 }
 
 func TestGitHubWebhookMultiOrgInstallationRoutesToCorrectIntegration(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -381,7 +381,7 @@ func TestGitHubWebhookMultiOrgInstallationRoutesToCorrectIntegration(t *testing.
 }
 
 func TestGitHubWebhookDependabotAlertIngestsVulnerability(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -464,7 +464,7 @@ func TestGitHubWebhookDependabotAlertIngestsVulnerability(t *testing.T) {
 }
 
 func TestGitHubWebhookDependabotAlertUpsertsExistingVulnerability(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -574,7 +574,7 @@ func TestGitHubWebhookDependabotAlertUpsertsExistingVulnerability(t *testing.T) 
 }
 
 func TestGitHubWebhookMultiOrgInstallationIngestsVulnerabilitiesToSameOrg(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()

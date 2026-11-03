@@ -13,7 +13,7 @@ import (
 )
 
 func TestUserInfoHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", "oauth/userinfo", suite.h.UserInfo)
 
@@ -24,7 +24,7 @@ func TestUserInfoHandler(t *testing.T) {
 	}{
 		{
 			name:    "happy path",
-			ctx:     testUser1.UserCtx,
+			ctx:     suite.testUser1.UserCtx,
 			wantErr: false,
 		},
 		{
@@ -63,7 +63,7 @@ func TestUserInfoHandler(t *testing.T) {
 			assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
 			assert.Assert(t, out != nil)
 
-			assert.Check(t, is.DeepEqual(testUser1.ID, out.ID))
+			assert.Check(t, is.DeepEqual(suite.testUser1.ID, out.ID))
 		})
 	}
 }

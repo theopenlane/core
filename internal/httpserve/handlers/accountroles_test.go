@@ -15,7 +15,7 @@ import (
 )
 
 func TestAccountRolesHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// add handler
 	suite.registerTestHandler("POST", "account/roles", suite.h.AccountRolesHandler)
@@ -29,21 +29,21 @@ func TestAccountRolesHandler(t *testing.T) {
 		{
 			name: "happy path, default roles access",
 			request: models.AccountRolesRequest{
-				ObjectID:   testUser1.OrganizationID,
+				ObjectID:   suite.testUser1.OrganizationID,
 				ObjectType: "organization",
 			},
 		},
 		{
 			name: "happy path, default roles access",
 			request: models.AccountRolesRequest{
-				ObjectIDs:  []string{testUser1.OrganizationID, testUser1.PersonalOrgID, testUser2.OrganizationID},
+				ObjectIDs:  []string{suite.testUser1.OrganizationID, suite.testUser1.PersonalOrgID, suite.testUser2.OrganizationID},
 				ObjectType: "organization",
 			},
 		},
 		{
 			name: "happy path, provide roles",
 			request: models.AccountRolesRequest{
-				ObjectID:   testUser1.OrganizationID,
+				ObjectID:   suite.testUser1.OrganizationID,
 				ObjectType: "organization",
 				Relations:  []string{"owner"},
 			},
@@ -81,7 +81,7 @@ func TestAccountRolesHandler(t *testing.T) {
 			recorder := httptest.NewRecorder()
 
 			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
+			suite.e.ServeHTTP(recorder, req.WithContext(suite.testUser1.UserCtx))
 
 			res := recorder.Result()
 			defer res.Body.Close()
@@ -110,9 +110,9 @@ func TestAccountRolesHandler(t *testing.T) {
 				assert.Check(t, len(out.Roles) > 5)
 			} else if len(tc.request.ObjectIDs) > 0 {
 				assert.Check(t, is.Len(out.ObjectRoles, len(tc.request.ObjectIDs)))
-				assert.Check(t, is.Len(out.ObjectRoles[testUser2.OrganizationID], 0))
-				assert.Check(t, len(out.ObjectRoles[testUser1.OrganizationID]) > 5)
-				assert.Check(t, len(out.ObjectRoles[testUser1.PersonalOrgID]) > 5)
+				assert.Check(t, is.Len(out.ObjectRoles[suite.testUser2.OrganizationID], 0))
+				assert.Check(t, len(out.ObjectRoles[suite.testUser1.OrganizationID]) > 5)
+				assert.Check(t, len(out.ObjectRoles[suite.testUser1.PersonalOrgID]) > 5)
 			} else {
 				assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values(tc.expectedRoles)), slices.Sorted(slices.Values(out.Roles))))
 			}

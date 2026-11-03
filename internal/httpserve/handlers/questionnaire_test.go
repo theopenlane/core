@@ -27,7 +27,7 @@ import (
 )
 
 func TestGetQuestionnaire(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
@@ -56,31 +56,31 @@ func TestGetQuestionnaire(t *testing.T) {
 		SetName("Test Assessment Template").
 		SetTemplateType(templateType).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Test Assessment").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	_, err = suite.db.OrganizationBrandingSetting.Update().
-		Where(organizationbrandingsetting.OrganizationID(testUser1.OrganizationID)).
+		Where(organizationbrandingsetting.OrganizationID(suite.testUser1.OrganizationID)).
 		SetRemoveAssessmentBranding(true).
-		Save(testUser1.UserCtx)
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	testEmail := "test@example.com"
 
-	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", testEmail)))
+	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(suite.testUser1.OrganizationID, suite.testUser1.ID, "", testEmail)))
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Save(questionnaireCtx)
 	assert.NilError(t, err)
 
@@ -180,7 +180,7 @@ func TestGetQuestionnaire(t *testing.T) {
 }
 
 func TestGetQuestionnaireNoTemplate(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
@@ -205,28 +205,28 @@ func TestGetQuestionnaireNoTemplate(t *testing.T) {
 		SetTemplateType(templateType).
 		SetJsonconfig(jsonConfig).
 		SetKind(enums.TemplateKindQuestionnaire).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Test Assessment No Template").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
-	err = suite.db.Template.DeleteOneID(template.ID).Exec(testUser1.UserCtx)
+	err = suite.db.Template.DeleteOneID(template.ID).Exec(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	testEmail := "notemplate@example.com"
 
-	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(testUser1.OrganizationID, testUser1.ID, "", testEmail)))
+	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, auth.NewQuestionnaireCaller(suite.testUser1.OrganizationID, suite.testUser1.ID, "", testEmail)))
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Save(questionnaireCtx)
 	assert.NilError(t, err)
 
@@ -259,7 +259,7 @@ func TestGetQuestionnaireNoTemplate(t *testing.T) {
 }
 
 func TestGetQuestionnaireAlreadyCompleted(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 
@@ -283,28 +283,28 @@ func TestGetQuestionnaireAlreadyCompleted(t *testing.T) {
 		SetName("Test Assessment Template Already Completed").
 		SetTemplateType(templateType).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Test Assessment Already Completed").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	testEmail := "completed-get@example.com"
 	completedAt := time.Now().Add(-1 * time.Hour)
 
-	anonUser := auth.NewQuestionnaireCaller(testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()), "", testEmail)
+	anonUser := auth.NewQuestionnaireCaller(suite.testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()), "", testEmail)
 	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, anonUser))
 	questionnaireCtx = auth.ActiveAssessmentIDKey.Set(questionnaireCtx, assessment.ID)
 
 	documentData, err := suite.db.DocumentData.Create().
 		SetTemplateID(template.ID).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetData(map[string]any{"q1": "previous answer"}).
 		Save(questionnaireCtx)
 	assert.NilError(t, err)
@@ -312,7 +312,7 @@ func TestGetQuestionnaireAlreadyCompleted(t *testing.T) {
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Save(questionnaireCtx)
 	assert.NilError(t, err)
 
@@ -373,7 +373,7 @@ func TestGetQuestionnaireAlreadyCompleted(t *testing.T) {
 }
 
 func TestQuestionnaireWithCampaign(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
@@ -392,28 +392,28 @@ func TestQuestionnaireWithCampaign(t *testing.T) {
 		SetName("Campaign Questionnaire Template").
 		SetTemplateType(enums.Document).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Campaign Questionnaire Assessment").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	campaign, err := suite.db.Campaign.Create().
 		SetName("Campaign Questionnaire Campaign").
 		SetAssessmentID(assessment.ID).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	testEmail := "campaign@theopenlane.io"
 
-	anonUser := auth.NewQuestionnaireCaller(testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", assessment.ID), "", testEmail)
+	anonUser := auth.NewQuestionnaireCaller(suite.testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", assessment.ID), "", testEmail)
 
 	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, anonUser))
 	questionnaireCtx = auth.ActiveAssessmentIDKey.Set(questionnaireCtx, assessment.ID)
@@ -422,7 +422,7 @@ func TestQuestionnaireWithCampaign(t *testing.T) {
 		create := suite.db.AssessmentResponse.Create().
 			SetAssessmentID(assessment.ID).
 			SetEmail(testEmail).
-			SetOwnerID(testUser1.OrganizationID)
+			SetOwnerID(suite.testUser1.OrganizationID)
 
 		if campaignID != "" {
 			create = create.SetCampaignID(campaignID)
@@ -433,7 +433,7 @@ func TestQuestionnaireWithCampaign(t *testing.T) {
 
 		documentData, err := suite.db.DocumentData.Create().
 			SetTemplateID(template.ID).
-			SetOwnerID(testUser1.OrganizationID).
+			SetOwnerID(suite.testUser1.OrganizationID).
 			SetData(map[string]any{"q1": marker}).
 			Save(questionnaireCtx)
 		assert.NilError(t, err)
@@ -527,7 +527,7 @@ func TestQuestionnaireWithCampaign(t *testing.T) {
 }
 
 func TestAnonymousQuestionnaireRejectsDraft(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
@@ -546,16 +546,16 @@ func TestAnonymousQuestionnaireRejectsDraft(t *testing.T) {
 		SetName("Draft Rejection Template").
 		SetTemplateType(enums.Document).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Draft Rejection Assessment").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	// truly anonymous token — no email, like a shareable system-owned assessment link
@@ -605,7 +605,7 @@ func TestAnonymousQuestionnaireRejectsDraft(t *testing.T) {
 }
 
 func TestIdentifiedQuestionnaireAllowsDraft(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
@@ -625,29 +625,29 @@ func TestIdentifiedQuestionnaireAllowsDraft(t *testing.T) {
 		SetName("Identified Draft Template").
 		SetTemplateType(enums.Document).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Identified Draft Assessment").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	testEmail := "identified-draft@example.com"
 	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 
-	anonUser := auth.NewQuestionnaireCaller(testUser1.OrganizationID, anonUserID, "", testEmail)
+	anonUser := auth.NewQuestionnaireCaller(suite.testUser1.OrganizationID, anonUserID, "", testEmail)
 	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, anonUser))
 	questionnaireCtx = auth.ActiveAssessmentIDKey.Set(questionnaireCtx, assessment.ID)
 
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetStatus(enums.AssessmentResponseStatusSent).
 		Save(questionnaireCtx)
 	assert.NilError(t, err)
@@ -750,7 +750,7 @@ func TestIdentifiedQuestionnaireAllowsDraft(t *testing.T) {
 }
 
 func TestSubmitQuestionnaire(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
@@ -779,16 +779,16 @@ func TestSubmitQuestionnaire(t *testing.T) {
 		SetName("Test Assessment Template For Submit").
 		SetTemplateType(templateType).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Test Assessment For Submit").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	testEmail := "test@example.com"
@@ -818,7 +818,7 @@ func TestSubmitQuestionnaire(t *testing.T) {
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetStatus(enums.AssessmentResponseStatusSent).
 		Save(questionnaireCtx)
 	assert.NilError(t, err)
@@ -945,7 +945,7 @@ func TestSubmitQuestionnaire(t *testing.T) {
 }
 
 func TestSubmitQuestionnaireAlreadyCompleted(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
@@ -961,28 +961,28 @@ func TestSubmitQuestionnaireAlreadyCompleted(t *testing.T) {
 		SetName("Test Assessment Template Already Completed").
 		SetTemplateType(templateType).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Test Assessment Already Completed").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	testEmail := "completed@example.com"
 	completedAt := time.Now().Add(-1 * time.Hour)
 
-	anonUser := auth.NewQuestionnaireCaller(testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()), "", testEmail)
+	anonUser := auth.NewQuestionnaireCaller(suite.testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", ulids.New().String()), "", testEmail)
 	questionnaireCtx := auth.WithInternalOperationContext(auth.WithCaller(ctx, anonUser))
 	questionnaireCtx = auth.ActiveAssessmentIDKey.Set(questionnaireCtx, assessment.ID)
 
 	documentData, err := suite.db.DocumentData.Create().
 		SetTemplateID(template.ID).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetData(map[string]any{"q1": "previous answer"}).
 		Save(questionnaireCtx)
 	assert.NilError(t, err)
@@ -990,7 +990,7 @@ func TestSubmitQuestionnaireAlreadyCompleted(t *testing.T) {
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Save(questionnaireCtx)
 	assert.NilError(t, err)
 
@@ -1068,7 +1068,7 @@ func TestSubmitQuestionnaireAlreadyCompleted(t *testing.T) {
 }
 
 func TestSubmitQuestionnaireCaller(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
@@ -1089,24 +1089,24 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 		SetName("Test Assessment Template Auth User").
 		SetTemplateType(templateType).
 		SetJsonconfig(jsonConfig).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Test Assessment Auth User").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
-		SetEmail(testUser1.UserInfo.Email).
-		SetOwnerID(testUser1.OrganizationID).
+		SetEmail(suite.testUser1.UserInfo.Email).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetStatus(enums.AssessmentResponseStatusSent).
-		Save(testUser1.UserCtx)
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	submissionData := models.SubmitQuestionnaireRequest{
@@ -1126,8 +1126,8 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 		SetName("Other Org Assessment").
 		SetAssessmentType(enums.AssessmentTypeExternal).
 		SetJsonconfig(map[string]any{"title": "Other Org Assessment"}).
-		SetOwnerID(testUser2.OrganizationID).
-		Save(testUser2.UserCtx)
+		SetOwnerID(suite.testUser2.OrganizationID).
+		Save(suite.testUser2.UserCtx)
 	assert.NilError(t, err)
 
 	testCases := []struct {
@@ -1189,11 +1189,11 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 			req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
 			req.Header.Set("Content-Type", "application/json")
 
-			reqCtx := testUser1.UserCtx
+			reqCtx := suite.testUser1.UserCtx
 			reqCtx = auth.WithCaller(reqCtx, &auth.Caller{
-				SubjectID:      testUser1.ID,
-				SubjectEmail:   testUser1.UserInfo.Email,
-				OrganizationID: testUser1.OrganizationID,
+				SubjectID:      suite.testUser1.ID,
+				SubjectEmail:   suite.testUser1.UserInfo.Email,
+				OrganizationID: suite.testUser1.OrganizationID,
 			})
 
 			recorder := httptest.NewRecorder()
@@ -1216,12 +1216,12 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 					tc.validateJSON(t, out)
 				}
 
-				documentData, err := suite.db.DocumentData.Get(testUser1.UserCtx, out.DocumentDataID)
+				documentData, err := suite.db.DocumentData.Get(suite.testUser1.UserCtx, out.DocumentDataID)
 				assert.NilError(t, err)
 				assert.Check(t, documentData != nil)
 				assert.Check(t, is.DeepEqual(assessment.OwnerID, documentData.OwnerID))
 
-				updatedResponse, err := suite.db.AssessmentResponse.Get(testUser1.UserCtx, assessmentResponse.ID)
+				updatedResponse, err := suite.db.AssessmentResponse.Get(suite.testUser1.UserCtx, assessmentResponse.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.DeepEqual(enums.AssessmentResponseStatusCompleted, updatedResponse.Status))
 				assert.Check(t, is.DeepEqual(documentData.ID, updatedResponse.DocumentDataID))
@@ -1245,22 +1245,22 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 		member := suite.userBuilder(context.Background())
 
 		err := suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
-			OrganizationID: testUser1.OrganizationID,
+			OrganizationID: suite.testUser1.OrganizationID,
 			UserID:         member.ID,
 			Role:           &enums.RoleMember,
-		}).Exec(testUser1.UserCtx)
+		}).Exec(suite.testUser1.UserCtx)
 		assert.NilError(t, err)
 
 		memberResponse, err := suite.db.AssessmentResponse.Create().
 			SetAssessmentID(assessment.ID).
 			SetEmail(member.UserInfo.Email).
-			SetOwnerID(testUser1.OrganizationID).
+			SetOwnerID(suite.testUser1.OrganizationID).
 			SetStatus(enums.AssessmentResponseStatusSent).
-			Save(testUser1.UserCtx)
+			Save(suite.testUser1.UserCtx)
 		assert.NilError(t, err)
 
 		t.Cleanup(func() {
-			assert.NilError(t, suite.db.AssessmentResponse.DeleteOneID(memberResponse.ID).Exec(testUser1.UserCtx))
+			assert.NilError(t, suite.db.AssessmentResponse.DeleteOneID(memberResponse.ID).Exec(suite.testUser1.UserCtx))
 		})
 
 		bodyBytes, err := json.Marshal(submissionData)
@@ -1272,7 +1272,7 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 		reqCtx := auth.WithCaller(member.UserCtx, &auth.Caller{
 			SubjectID:      member.ID,
 			SubjectEmail:   member.UserInfo.Email,
-			OrganizationID: testUser1.OrganizationID,
+			OrganizationID: suite.testUser1.OrganizationID,
 		})
 
 		recorder := httptest.NewRecorder()
@@ -1280,7 +1280,7 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 
 		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
 
-		updatedResponse, err := suite.db.AssessmentResponse.Get(testUser1.UserCtx, memberResponse.ID)
+		updatedResponse, err := suite.db.AssessmentResponse.Get(suite.testUser1.UserCtx, memberResponse.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.DeepEqual(enums.AssessmentResponseStatusCompleted, updatedResponse.Status))
 
@@ -1297,7 +1297,7 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 			name: "anonymous trust center caller cannot submit",
 			caller: &auth.Caller{
 				SubjectID:        "anon_trustcenter_" + ulids.New().String(),
-				OrganizationID:   testUser1.OrganizationID,
+				OrganizationID:   suite.testUser1.OrganizationID,
 				OrganizationRole: auth.AnonymousRole,
 				Capabilities:     auth.CapTrustCenterAnonymous,
 			},
@@ -1306,8 +1306,8 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 			name: "api token cannot submit",
 			caller: &auth.Caller{
 				SubjectID:          ulids.New().String(),
-				OrganizationID:     testUser1.OrganizationID,
-				OrganizationIDs:    []string{testUser1.OrganizationID},
+				OrganizationID:     suite.testUser1.OrganizationID,
+				OrganizationIDs:    []string{suite.testUser1.OrganizationID},
 				AuthenticationType: auth.APITokenAuthentication,
 			},
 		},
@@ -1315,8 +1315,8 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 			name: "support access caller cannot submit",
 			caller: &auth.Caller{
 				SubjectID:          ulids.New().String(),
-				OrganizationID:     testUser1.OrganizationID,
-				OrganizationIDs:    []string{testUser1.OrganizationID},
+				OrganizationID:     suite.testUser1.OrganizationID,
+				OrganizationIDs:    []string{suite.testUser1.OrganizationID},
 				AuthenticationType: auth.JWTAuthentication,
 				Capabilities:       auth.CapOrgSupport,
 			},
@@ -1325,7 +1325,7 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 
 	for _, rc := range rejectedCallers {
 		t.Run(rc.name, func(t *testing.T) {
-			before, err := suite.db.AssessmentResponse.Query().Where(assessmentresponse.AssessmentIDEQ(assessment.ID)).Count(testUser1.UserCtx)
+			before, err := suite.db.AssessmentResponse.Query().Where(assessmentresponse.AssessmentIDEQ(assessment.ID)).Count(suite.testUser1.UserCtx)
 			assert.NilError(t, err)
 
 			bodyBytes, err := json.Marshal(submissionData)
@@ -1339,29 +1339,29 @@ func TestSubmitQuestionnaireCaller(t *testing.T) {
 
 			assert.Check(t, is.Equal(http.StatusUnauthorized, recorder.Code))
 
-			after, err := suite.db.AssessmentResponse.Query().Where(assessmentresponse.AssessmentIDEQ(assessment.ID)).Count(testUser1.UserCtx)
+			after, err := suite.db.AssessmentResponse.Query().Where(assessmentresponse.AssessmentIDEQ(assessment.ID)).Count(suite.testUser1.UserCtx)
 			assert.NilError(t, err)
 			assert.Check(t, is.DeepEqual(before, after))
 		})
 	}
 
 	for _, docID := range documentDataIDs {
-		err := suite.db.DocumentData.DeleteOneID(docID).Exec(testUser1.UserCtx)
+		err := suite.db.DocumentData.DeleteOneID(docID).Exec(suite.testUser1.UserCtx)
 		assert.NilError(t, err)
 	}
 
-	err = suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(testUser1.UserCtx)
+	err = suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
-	err = suite.db.Assessment.DeleteOneID(assessment.ID).Exec(testUser1.UserCtx)
+	err = suite.db.Assessment.DeleteOneID(assessment.ID).Exec(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
-	err = suite.db.Template.DeleteOneID(template.ID).Exec(testUser1.UserCtx)
+	err = suite.db.Template.DeleteOneID(template.ID).Exec(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
-	err = suite.db.Assessment.DeleteOneID(otherOrgAssessment.ID).Exec(testUser2.UserCtx)
+	err = suite.db.Assessment.DeleteOneID(otherOrgAssessment.ID).Exec(suite.testUser2.UserCtx)
 	assert.NilError(t, err)
 }
 
 func TestSubmitQuestionnaireDraft(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
@@ -1372,30 +1372,30 @@ func TestSubmitQuestionnaireDraft(t *testing.T) {
 		SetName("Test Assessment Template Draft").
 		SetTemplateType(enums.Document).
 		SetJsonconfig(map[string]any{"title": "Draft Test"}).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Test Assessment Draft").
 		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
-		SetEmail(testUser1.UserInfo.Email).
-		SetOwnerID(testUser1.OrganizationID).
+		SetEmail(suite.testUser1.UserInfo.Email).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetStatus(enums.AssessmentResponseStatusSent).
-		Save(testUser1.UserCtx)
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 
 	reqCtx := auth.WithCaller(ctx, &auth.Caller{
-		SubjectID:      testUser1.ID,
-		SubjectEmail:   testUser1.UserInfo.Email,
-		OrganizationID: testUser1.OrganizationID,
+		SubjectID:      suite.testUser1.ID,
+		SubjectEmail:   suite.testUser1.UserInfo.Email,
+		OrganizationID: suite.testUser1.OrganizationID,
 	})
 
 	var documentDataID string
@@ -1428,7 +1428,7 @@ func TestSubmitQuestionnaireDraft(t *testing.T) {
 
 		documentDataID = out.DocumentDataID
 
-		updated, err := suite.db.AssessmentResponse.Get(testUser1.UserCtx, assessmentResponse.ID)
+		updated, err := suite.db.AssessmentResponse.Get(suite.testUser1.UserCtx, assessmentResponse.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.DeepEqual(enums.AssessmentResponseStatusDraft, updated.Status))
 		assert.Check(t, is.DeepEqual(documentDataID, updated.DocumentDataID))
@@ -1459,7 +1459,7 @@ func TestSubmitQuestionnaireDraft(t *testing.T) {
 		assert.Check(t, is.DeepEqual(documentDataID, out.DocumentDataID))
 		assert.Check(t, is.Equal("DRAFT", out.Status))
 
-		docData, err := suite.db.DocumentData.Get(testUser1.UserCtx, documentDataID)
+		docData, err := suite.db.DocumentData.Get(suite.testUser1.UserCtx, documentDataID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal("updated partial answer", docData.Data["q1"]))
 		assert.Check(t, is.Equal("new field", docData.Data["q2"]))
@@ -1490,12 +1490,12 @@ func TestSubmitQuestionnaireDraft(t *testing.T) {
 		assert.Check(t, is.Equal("COMPLETED", out.Status))
 		assert.Check(t, len(out.CompletedAt) > 0)
 
-		updated, err := suite.db.AssessmentResponse.Get(testUser1.UserCtx, assessmentResponse.ID)
+		updated, err := suite.db.AssessmentResponse.Get(suite.testUser1.UserCtx, assessmentResponse.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.DeepEqual(enums.AssessmentResponseStatusCompleted, updated.Status))
 		assert.Check(t, !updated.CompletedAt.IsZero())
 
-		docData, err := suite.db.DocumentData.Get(testUser1.UserCtx, documentDataID)
+		docData, err := suite.db.DocumentData.Get(suite.testUser1.UserCtx, documentDataID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal("final answer", docData.Data["q1"]))
 	})
@@ -1520,10 +1520,10 @@ func TestSubmitQuestionnaireDraft(t *testing.T) {
 	})
 
 	if documentDataID != "" {
-		suite.db.DocumentData.DeleteOneID(documentDataID).Exec(testUser1.UserCtx)
+		suite.db.DocumentData.DeleteOneID(documentDataID).Exec(suite.testUser1.UserCtx)
 	}
 
-	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(testUser1.UserCtx)
-	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(testUser1.UserCtx)
-	suite.db.Template.DeleteOneID(template.ID).Exec(testUser1.UserCtx)
+	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(suite.testUser1.UserCtx)
+	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(suite.testUser1.UserCtx)
+	suite.db.Template.DeleteOneID(template.ID).Exec(suite.testUser1.UserCtx)
 }

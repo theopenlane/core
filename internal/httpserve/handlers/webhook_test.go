@@ -68,7 +68,7 @@ func (b *webhookBinder) Bind(c echo.Context, i interface{}) error {
 }
 
 func TestWebhookReceiverHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	ensureSecret := func(version string) {
 		if version == "" {
@@ -83,9 +83,9 @@ func TestWebhookReceiverHandler(t *testing.T) {
 	suite.db.OrgSubscription.Create().
 		SetStripeSubscriptionStatus("active").
 		SetStripeSubscriptionID("PENDING_UPDATE").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetStripeSubscriptionID(seedStripeSubscriptionID).
-		ExecX(testUser1.UserCtx)
+		ExecX(suite.testUser1.UserCtx)
 
 	moduleUser := suite.userBuilderWithInput(context.Background(), &userInput{
 		confirmedUser: true,
@@ -484,7 +484,7 @@ func TestWebhookReceiverHandler(t *testing.T) {
 			suite.orgSubscriptionMocks()
 
 			// internalCtx to skip checks on updating subs
-			internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+			internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 			suite.db.OrgSubscription.Update().
 				Where(orgsubscription.StripeSubscriptionID(seedStripeSubscriptionID)).
@@ -499,14 +499,14 @@ func TestWebhookReceiverHandler(t *testing.T) {
 
 			if tc.expectRevocation {
 				apiToken := suite.db.APIToken.Create().
-					SetOwnerID(testUser1.OrganizationID).
+					SetOwnerID(suite.testUser1.OrganizationID).
 					SetName("test_token").
 					SaveX(internalCtx)
 				apiTokenID = apiToken.ID
 
 				pat := suite.db.PersonalAccessToken.Create().
-					SetOwnerID(testUser1.ID).
-					AddOrganizationIDs(testUser1.OrganizationID).
+					SetOwnerID(suite.testUser1.ID).
+					AddOrganizationIDs(suite.testUser1.OrganizationID).
 					SetName("test_token").
 					SaveX(internalCtx)
 				patID = pat.ID
@@ -589,11 +589,11 @@ func TestWebhookReceiverHandler(t *testing.T) {
 			if tc.expectRevocation && tc.expectedStatus == http.StatusOK {
 				sub, err := suite.db.OrgSubscription.Query().
 					Where(orgsubscription.StripeSubscriptionID(seedStripeSubscriptionID)).
-					Only(testUser1.UserCtx)
+					Only(suite.testUser1.UserCtx)
 				assert.NilError(t, err)
 				assert.Check(t, !sub.Active)
 
-				apiToken, err := suite.db.APIToken.Get(testUser1.UserCtx, apiTokenID)
+				apiToken, err := suite.db.APIToken.Get(suite.testUser1.UserCtx, apiTokenID)
 				assert.NilError(t, err)
 				assert.Assert(t, !apiToken.IsActive)
 				assert.Assert(t, apiToken.RevokedBy != nil && *apiToken.RevokedBy != "")
@@ -602,7 +602,7 @@ func TestWebhookReceiverHandler(t *testing.T) {
 				// Allow for clock granularity; avoid flaking on exact timestamp equality.
 				assert.Check(t, apiToken.ExpiresAt.Before(time.Now().Add(time.Second)))
 
-				pat, err := suite.db.PersonalAccessToken.Get(testUser1.UserCtx, patID)
+				pat, err := suite.db.PersonalAccessToken.Get(suite.testUser1.UserCtx, patID)
 				assert.NilError(t, err)
 				assert.Assert(t, is.Len(pat.Edges.Organizations, 0))
 			}
@@ -610,7 +610,7 @@ func TestWebhookReceiverHandler(t *testing.T) {
 			if tc.expectProcessed != nil {
 				exists, err := suite.db.Event.Query().
 					Where(entEvent.IDEQ(tc.payload.ID)).
-					Exist(testUser1.UserCtx)
+					Exist(suite.testUser1.UserCtx)
 				assert.NilError(t, err)
 				assert.Check(t, is.DeepEqual(*tc.expectProcessed, exists))
 			}

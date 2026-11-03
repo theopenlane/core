@@ -106,9 +106,11 @@ type HandlerTestSuite struct {
 	sharedSlackRecorder  *slackWebhookRecorder
 	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
+	testUser1            testUserDetails
+	testUser2            testUserDetails
 }
 
-// suite is the shared handler test state, set up once in TestMain and reset per test by setupTest
+// suite is the shared handler test state set up once in TestMain, each test works on its own copy from setupTest
 var suite = &HandlerTestSuite{}
 
 func TestMain(m *testing.M) {
@@ -312,6 +314,15 @@ func (suite *HandlerTestSuite) setupSuite() {
 	entitlementsClient, err := suite.mockStripeClient()
 	coreutils.RequireNoError(suite.T(), err)
 
+	if entitlementsClient.Config.StripeWebhookSecrets == nil {
+		entitlementsClient.Config.StripeWebhookSecrets = map[string]string{}
+	}
+
+	entitlementsClient.Config.StripeWebhookSecrets[stripe.APIVersion] = webhookSecret
+
+	// wire integration runtime so email dispatch works
+	runtime.SetDefault(suite.sharedIntegrationsRT)
+
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
 		ent.TokenManager(suite.sharedTokenManager),
@@ -336,65 +347,77 @@ func (suite *HandlerTestSuite) setupSuite() {
 	coreutils.RequireNoError(suite.T(), err)
 }
 
-func (suite *HandlerTestSuite) setupTest(t *testing.T) {
-	suite.t = t
-
-	suite.registeredRoutes = make(map[string]struct{})
-
-	ctx := context.Background()
+// setupTest returns a per-test copy of the suite for tests that assert on shared state
+// (email sender, stripe mock, river jobs, gala), resetting that state first
+func (suite *HandlerTestSuite) setupTest(t *testing.T) *HandlerTestSuite {
+	ts := suite.newTestSuite(t)
 
 	// reset the stripe mock so expectations don't bleed across tests
-	suite.stripeMockBackend.ExpectedCalls = nil
-	suite.stripeMockBackend.Calls = nil
-	suite.orgSubscriptionMocks()
+	ts.stripeMockBackend.ExpectedCalls = nil
+	ts.stripeMockBackend.Calls = nil
+	ts.orgSubscriptionMocks()
+
+	// truncate river tables
+	assert.NilError(t, ts.db.Job.TruncateRiverTables(context.Background()))
+
+	// reset mock email sender so messages don't bleed across tests
+	ts.mockEmailSender().Reset()
+
+	ts.setupTestData(context.Background())
+
+	return ts
+}
+
+// setupParallelTest marks the test parallel and returns a per-test copy of the suite,
+// leaving shared state untouched
+func (suite *HandlerTestSuite) setupParallelTest(t *testing.T) *HandlerTestSuite {
+	t.Parallel()
+
+	ts := suite.newTestSuite(t)
+	ts.setupTestData(context.Background())
+
+	return ts
+}
+
+// newTestSuite copies the shared suite and builds the per-test router, handler, and clients
+func (suite *HandlerTestSuite) newTestSuite(t *testing.T) *HandlerTestSuite {
+	ts := *suite
+	ts.t = t
+	ts.registeredRoutes = make(map[string]struct{})
 
 	var err error
 
-	suite.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
+	ts.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
 	assert.NilError(t, err)
-
-	// truncate river tables
-	err = suite.db.Job.TruncateRiverTables(ctx)
-	assert.NilError(t, err)
-
-	// reset mock email sender so messages don't bleed across tests
-	suite.mockEmailSender().Reset()
-
-	// wire integration runtime so email dispatch works
-	runtime.SetDefault(suite.sharedIntegrationsRT)
 
 	// add the client
-	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
+	ts.api, err = coreutils.TestClient(ts.db, ts.objectStore)
 	assert.NilError(t, err)
 
 	// setup runtime router
-	suite.router = setupRouter()
+	ts.router = setupRouter()
 
 	// setup handler
-	suite.h = handlerSetup(suite.db)
-	suite.configureIntegrationOAuthRuntime()
-	if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
-		suite.h.Entitlements.Config.StripeWebhookSecrets = map[string]string{}
-	}
-	suite.h.Entitlements.Config.StripeWebhookSecrets[stripe.APIVersion] = webhookSecret
+	ts.h = handlerSetup(ts.db)
+	ts.configureIntegrationOAuthRuntime()
 
 	// use shared OTP manager
-	suite.h.OTPManager = suite.sharedOTPManager
+	ts.h.OTPManager = ts.sharedOTPManager
 
 	// setup echo router with transaction middleware
-	suite.e = suite.router.Echo
+	ts.e = ts.router.Echo
 
 	// Add transaction middleware to router's echo instance for tests
 	transactionConfig := transaction.Client{
-		EntDBClient: suite.db,
+		EntDBClient: ts.db,
 	}
-	suite.e.Use(transactionConfig.Middleware)
+	ts.e.Use(transactionConfig.Middleware)
 
 	// shared auth middleware once per test to avoid JWK cache causing
 	// an infinite hanging
-	suite.sharedAuthMiddleware = suite.createAuthMiddleware()
+	ts.sharedAuthMiddleware = ts.createAuthMiddleware()
 
-	suite.setupTestData(ctx)
+	return &ts
 }
 
 // registerAuthenticatedTestHandler registers a handler with authentication middleware for testing authenticated endpoints

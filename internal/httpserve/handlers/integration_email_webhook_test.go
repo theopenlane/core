@@ -88,7 +88,7 @@ func postmarkWebhookRequest(password string, payload []byte) *http.Request {
 }
 
 func TestEmailResendWebhookRejectsUnsigned(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "resend")
 	defer restore()
@@ -105,7 +105,7 @@ func TestEmailResendWebhookRejectsUnsigned(t *testing.T) {
 }
 
 func TestEmailResendWebhookRejectsWrongSecret(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "resend")
 	defer restore()
@@ -121,7 +121,7 @@ func TestEmailResendWebhookRejectsWrongSecret(t *testing.T) {
 }
 
 func TestEmailResendWebhookAcceptsSignedEvents(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "resend")
 	defer restore()
@@ -138,7 +138,7 @@ func TestEmailResendWebhookAcceptsSignedEvents(t *testing.T) {
 }
 
 func TestEmailPostmarkWebhookRejectsMissingAuth(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "postmark")
 	defer restore()
@@ -153,7 +153,7 @@ func TestEmailPostmarkWebhookRejectsMissingAuth(t *testing.T) {
 }
 
 func TestEmailPostmarkWebhookRejectsWrongPassword(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "postmark")
 	defer restore()
@@ -167,7 +167,7 @@ func TestEmailPostmarkWebhookRejectsWrongPassword(t *testing.T) {
 }
 
 func TestEmailPostmarkWebhookAcceptsAuthenticatedEvents(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "postmark")
 	defer restore()
@@ -187,7 +187,7 @@ func TestEmailPostmarkWebhookAcceptsAuthenticatedEvents(t *testing.T) {
 }
 
 func TestEmailWebhookOnlySelectedProviderRouteIsConfigured(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "resend")
 	defer restore()

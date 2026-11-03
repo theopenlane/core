@@ -26,7 +26,7 @@ const (
 )
 
 func TestStartOAuthFlow_SetsCookiesAndReturnsURL(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -50,7 +50,7 @@ func TestStartOAuthFlow_SetsCookiesAndReturnsURL(t *testing.T) {
 }
 
 func TestStartOAuthFlow_InvalidProvider(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -70,7 +70,7 @@ func TestStartOAuthFlow_InvalidProvider(t *testing.T) {
 }
 
 func TestStartOAuthFlow_UndeclaredOperationConfig(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -94,7 +94,7 @@ func TestStartOAuthFlow_UndeclaredOperationConfig(t *testing.T) {
 }
 
 func TestStartOAuthFlow_Unauthorized(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -111,7 +111,7 @@ func TestStartOAuthFlow_Unauthorized(t *testing.T) {
 }
 
 func TestHandleOAuthCallback_Success(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
@@ -154,7 +154,7 @@ func TestHandleOAuthCallback_Success(t *testing.T) {
 }
 
 func TestHandleOAuthCallback_StateMismatch(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
@@ -190,7 +190,7 @@ func TestHandleOAuthCallback_StateMismatch(t *testing.T) {
 }
 
 func TestHandleOAuthCallback_MissingCookies(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
@@ -205,7 +205,7 @@ func TestHandleOAuthCallback_MissingCookies(t *testing.T) {
 }
 
 func TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -219,7 +219,7 @@ func TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie(t *testing.T) {
 }
 
 func TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie_WithTrailingSlashConsoleURL(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.h.ConsoleURL = "http://console.example/"
 
@@ -235,7 +235,7 @@ func TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie_WithTrailingSlashConso
 }
 
 func TestStartOAuthFlow_MissingProvider(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -255,7 +255,7 @@ func TestStartOAuthFlow_MissingProvider(t *testing.T) {
 }
 
 func TestHandleOAuthCallback_MissingState(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
@@ -270,7 +270,7 @@ func TestHandleOAuthCallback_MissingState(t *testing.T) {
 }
 
 func TestHandleOAuthCallback_MissingCode(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
@@ -304,7 +304,7 @@ func TestHandleOAuthCallback_MissingCode(t *testing.T) {
 }
 
 func TestHandleOAuthCallback_MissingProviderState(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
@@ -334,7 +334,7 @@ func TestHandleOAuthCallback_MissingProviderState(t *testing.T) {
 }
 
 func TestHandleOAuthCallback_InvalidCookieOrgID(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)

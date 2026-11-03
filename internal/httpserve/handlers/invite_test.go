@@ -25,19 +25,19 @@ import (
 )
 
 func TestOrgInviteAcceptHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	// add handler
 	suite.registerTestHandler("GET", "invite", suite.h.OrganizationInviteAccept)
 
 	// bypass auth
 	ctx := context.Background()
-	ctx = auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx = auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 	group, err := suite.db.Group.Create().
 		SetName("Test Group").
 		SetDescription("This is a test group").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Save(ctx)
 	assert.NilError(t, err)
 
@@ -141,7 +141,7 @@ func TestOrgInviteAcceptHandler(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			suite.ClearTestData()
 
-			ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+			ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 			target := "/invite"
 			if tc.tokenSet {
@@ -189,11 +189,11 @@ func TestOrgInviteAcceptHandler(t *testing.T) {
 			}
 
 			assert.Check(t, is.Equal(http.StatusCreated, recorder.Code))
-			assert.Check(t, is.DeepEqual(testUser1.OrganizationID, out.JoinedOrgID))
+			assert.Check(t, is.DeepEqual(suite.testUser1.OrganizationID, out.JoinedOrgID))
 			assert.Check(t, is.Equal(strings.ToLower(tc.email), out.Email))
 
 			// update context to reflect the joined org for subsequent queries
-			recipientCtx := auth.NewTestContextWithOrgID(tc.recipientID, testUser1.OrganizationID)
+			recipientCtx := auth.NewTestContextWithOrgID(tc.recipientID, suite.testUser1.OrganizationID)
 
 			// Test the default org is updated
 			user, err := suite.api.GetUserByID(recipientCtx, tc.recipientID)
@@ -201,7 +201,7 @@ func TestOrgInviteAcceptHandler(t *testing.T) {
 			assert.Assert(t, user != nil)
 			assert.Assert(t, user.User.Setting.DefaultOrg != nil)
 
-			assert.Check(t, is.DeepEqual(testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID))
+			assert.Check(t, is.DeepEqual(suite.testUser1.OrganizationID, user.User.Setting.DefaultOrg.ID))
 
 			// test the user was added to the group
 			group, err := suite.api.GetGroupByID(recipientCtx, group.ID)
@@ -250,7 +250,7 @@ func TestOrgInviteAcceptHandler(t *testing.T) {
 }
 
 func TestOrgInviteAcceptHandler_ExistingMemberNoReInvitation(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", "invite", suite.h.OrganizationInviteAccept)
 
@@ -308,11 +308,11 @@ func TestOrgInviteAcceptHandler_ExistingMemberNoReInvitation(t *testing.T) {
 }
 
 func TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperAdmin(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler(http.MethodGet, "invite", suite.h.OrganizationInviteAccept)
 
-	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 	email := "newowner@theopenlane.io"
 
@@ -352,8 +352,8 @@ func TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperAdmin(t *testing.T) {
 
 	membership, err := suite.db.OrgMembership.Query().
 		Where(
-			orgmembership.OrganizationID(testUser1.OrganizationID),
-			orgmembership.UserID(testUser1.ID),
+			orgmembership.OrganizationID(suite.testUser1.OrganizationID),
+			orgmembership.UserID(suite.testUser1.ID),
 		).
 		Only(internalCtx)
 	assert.NilError(t, err)
@@ -361,7 +361,7 @@ func TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperAdmin(t *testing.T) {
 
 	newOwner, err := suite.db.OrgMembership.Query().
 		Where(
-			orgmembership.OrganizationID(testUser1.OrganizationID),
+			orgmembership.OrganizationID(suite.testUser1.OrganizationID),
 			orgmembership.UserID(recipient.ID),
 		).
 		Only(internalCtx)

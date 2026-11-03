@@ -24,7 +24,7 @@ import (
 )
 
 func TestResetPasswordHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	// setup request request
 	suite.registerTestHandler("POST", "password-reset", suite.h.ResetPassword)

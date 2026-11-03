@@ -24,7 +24,7 @@ import (
 )
 
 func TestOauthRegister(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	// add login handler
 	suite.registerTestHandler("POST", "oauth/register", suite.h.OauthRegister)
@@ -32,7 +32,7 @@ func TestOauthRegister(t *testing.T) {
 	ensureUserAbsent := func(t *testing.T, email string) {
 		t.Helper()
 
-		ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+		ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 		_, _ = suite.db.User.Delete().Where(user.Email(email)).Exec(ctx)
 	}
 
@@ -207,7 +207,7 @@ func TestOauthRegister(t *testing.T) {
 
 		org := suite.ssoEnforcedOrg()
 
-		antman, err := suite.db.User.Query().Where(user.Email(email)).WithSetting().Only(auth.WithInternalOperationContext(testUser1.UserCtx))
+		antman, err := suite.db.User.Query().Where(user.Email(email)).WithSetting().Only(auth.WithInternalOperationContext(suite.testUser1.UserCtx))
 		assert.NilError(t, err)
 
 		memberCtx := generated.NewContext(auth.WithInternalOperationContext(auth.NewTestContextWithOrgID(antman.ID, org.ID)), suite.db)

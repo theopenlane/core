@@ -20,7 +20,7 @@ import (
 )
 
 func TestHandlerCheckAndCreateUser(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	// add login handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)

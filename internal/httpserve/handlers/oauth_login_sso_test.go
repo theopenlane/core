@@ -20,7 +20,7 @@ import (
 func ptr[T any](v T) *T { return &v }
 
 func TestGoogleLoginHandlerSSOEnforced(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	login, _ := suite.h.GetGoogleLoginHandlers()
 	suite.e.GET("google/login", echo.WrapHandler(login))
@@ -77,7 +77,7 @@ func TestGoogleLoginHandlerSSOEnforced(t *testing.T) {
 	assert.Check(t, is.DeepEqual("/v1/sso/login?organization_id="+org.ID, rec.Header().Get("Location")))
 }
 func TestGoogleLoginHandlerSSOEnforcedOwnerBypass(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	login, _ := suite.h.GetGoogleLoginHandlers()
 	suite.e.GET("google/login", echo.WrapHandler(login))
@@ -120,7 +120,7 @@ func TestGoogleLoginHandlerSSOEnforcedOwnerBypass(t *testing.T) {
 }
 
 func TestGoogleLoginHandlerTFAEnforced(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	login, _ := suite.h.GetGoogleLoginHandlers()
 	suite.e.GET("google/login", echo.WrapHandler(login))
@@ -184,7 +184,7 @@ func TestGoogleLoginHandlerTFAEnforced(t *testing.T) {
 }
 
 func TestGithubLoginHandlerTFAEnforced(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	login, _ := suite.h.GetGitHubLoginHandlers()
 	suite.e.GET("github/login", echo.WrapHandler(login))

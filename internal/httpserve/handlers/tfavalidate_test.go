@@ -24,7 +24,7 @@ import (
 )
 
 func TestTFAValidate(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// add login handler
 	suite.registerTestHandler("POST", "2fa/validate", suite.h.ValidateTOTP)

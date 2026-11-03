@@ -29,7 +29,7 @@ import (
 )
 
 func TestRunIntegrationOperationHealthCheckInline(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -66,7 +66,7 @@ func TestRunIntegrationOperationHealthCheckInline(t *testing.T) {
 }
 
 func TestRunIntegrationOperationInlinePolicy(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -103,7 +103,7 @@ func TestRunIntegrationOperationInlinePolicy(t *testing.T) {
 }
 
 func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -141,7 +141,7 @@ func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
 }
 
 func TestRunIntegrationOperationUnauthorized(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -162,7 +162,7 @@ func TestRunIntegrationOperationUnauthorized(t *testing.T) {
 }
 
 func TestRunIntegrationOperationInvalidProvider(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -186,7 +186,7 @@ func TestRunIntegrationOperationInvalidProvider(t *testing.T) {
 }
 
 func TestRunIntegrationOperationMissingOperationName(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -211,7 +211,7 @@ func TestRunIntegrationOperationMissingOperationName(t *testing.T) {
 }
 
 func TestRunIntegrationOperationUnknownOperation(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -238,7 +238,7 @@ func TestRunIntegrationOperationUnknownOperation(t *testing.T) {
 }
 
 func TestRunIntegrationOperationInvalidConfig(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -269,7 +269,7 @@ func TestRunIntegrationOperationInvalidConfig(t *testing.T) {
 }
 
 func TestRunIntegrationOperationInstallationNotFound(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -296,7 +296,7 @@ func TestRunIntegrationOperationInstallationNotFound(t *testing.T) {
 }
 
 func TestRunIntegrationOperationOtherOrgInstallationNotFound(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -328,7 +328,7 @@ func TestRunIntegrationOperationOtherOrgInstallationNotFound(t *testing.T) {
 }
 
 func TestRunIntegrationOperationNoActiveOrgUnauthorized(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -362,7 +362,7 @@ func TestRunIntegrationOperationNoActiveOrgUnauthorized(t *testing.T) {
 }
 
 func TestRunIntegrationOperationAnonymousTokenUnauthorized(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerAuthenticatedTestHandler(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -428,7 +428,7 @@ func TestRunIntegrationOperationAnonymousTokenUnauthorized(t *testing.T) {
 }
 
 func TestRunIntegrationOperationSystemDefinitionNotInvocable(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -462,7 +462,7 @@ func TestRunIntegrationOperationSystemDefinitionNotInvocable(t *testing.T) {
 }
 
 func TestRunIntegrationOperationSystemOwnedInstallationNotFound(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 

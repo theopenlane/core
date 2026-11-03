@@ -76,7 +76,7 @@ func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
 }
 
 func TestLoginHandlerSSOExemptMember(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
@@ -113,7 +113,7 @@ func TestLoginHandlerSSOExemptMember(t *testing.T) {
 }
 
 func TestLoginHandlerSSOExemptDomain(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
@@ -157,7 +157,7 @@ func TestLoginHandlerSSOExemptDomain(t *testing.T) {
 }
 
 func TestWebfingerHandlerExemptMember(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
@@ -199,9 +199,9 @@ func TestWebfingerHandlerExemptMember(t *testing.T) {
 }
 
 func TestOrgOwnerSeededSSOExempt(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
@@ -210,7 +210,7 @@ func TestOrgOwnerSeededSSOExempt(t *testing.T) {
 	assert.NilError(t, err)
 
 	member, err := suite.db.OrgMembership.Query().
-		Where(orgmembership.OrganizationID(org.ID), orgmembership.UserID(testUser1.ID)).
+		Where(orgmembership.OrganizationID(org.ID), orgmembership.UserID(suite.testUser1.ID)).
 		Only(ctx)
 	assert.NilError(t, err)
 
@@ -221,7 +221,7 @@ func TestOrgOwnerSeededSSOExempt(t *testing.T) {
 }
 
 func TestSwitchHandlerSSOExemptMember(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
@@ -255,12 +255,12 @@ func TestSwitchHandlerSSOExemptMember(t *testing.T) {
 }
 
 func TestInviteGrantsSSOExempt(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
-	orgID := testUser1.OrganizationID
+	orgID := suite.testUser1.OrganizationID
 
 	recipientEmail := "auditor" + strings.ToLower(ulids.New().String()) + "@partner.example.com"
 	recipient, err := suite.db.User.Create().
@@ -303,15 +303,15 @@ func TestInviteGrantsSSOExempt(t *testing.T) {
 // record the acting individual in updated_by_impersonator, while the standard audit fields continue to
 // reflect the impersonated identity
 func TestImpersonatorAttributionStamped(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
-	base := testUser1.UserCtx
+	base := suite.testUser1.UserCtx
 
 	caller := &auth.Caller{
-		SubjectID:       testUser1.ID,
-		SubjectEmail:    testUser1.UserInfo.Email,
-		OrganizationID:  testUser1.OrganizationID,
-		OrganizationIDs: []string{testUser1.OrganizationID},
+		SubjectID:       suite.testUser1.ID,
+		SubjectEmail:    suite.testUser1.UserInfo.Email,
+		OrganizationID:  suite.testUser1.OrganizationID,
+		OrganizationIDs: []string{suite.testUser1.OrganizationID},
 		Impersonation: &auth.ImpersonationContext{
 			Type:              auth.SupportImpersonation,
 			ImpersonatorID:    "engineer@theopenlane.io",
@@ -325,7 +325,7 @@ func TestImpersonatorAttributionStamped(t *testing.T) {
 
 	group, err := suite.db.Group.Create().
 		SetName("Support Touched " + ulids.New().String()).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Save(impCtx)
 	assert.NilError(t, err)
 
@@ -337,7 +337,7 @@ func TestImpersonatorAttributionStamped(t *testing.T) {
 // allowed email domains lists; the two are independent because allowed email domains only govern auto-join
 // when SSO is not enforced, while exempt domains only affect the SSO redirect when it is enforced
 func TestExemptDomainAllowedDomainOverlap(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = auth.WithInternalOperationContext(ctx)
@@ -361,10 +361,10 @@ func TestExemptDomainAllowedDomainOverlap(t *testing.T) {
 // organization that enforces SSO; for enforced organizations membership comes through the identity
 // provider (JIT) instead
 func TestAutoJoinSuppressedWhenSSOEnforced(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// a real caller is required so the organization create hook can assign the owner membership
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	const allowedDomain = "enforced-autojoin.com"

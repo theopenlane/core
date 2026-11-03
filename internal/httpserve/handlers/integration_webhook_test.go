@@ -26,7 +26,7 @@ func webhookHMACSHA256(secret string, payload []byte) string {
 }
 
 func TestIntegrationWebhookHandlerSuccess(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -49,7 +49,7 @@ func TestIntegrationWebhookHandlerSuccess(t *testing.T) {
 }
 
 func TestIntegrationWebhookHandlerMissingEndpointID(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/webhooks/", suite.h.IntegrationWebhookHandler)
 
@@ -64,7 +64,7 @@ func TestIntegrationWebhookHandlerMissingEndpointID(t *testing.T) {
 }
 
 func TestIntegrationWebhookHandlerEmptyPayload(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -78,7 +78,7 @@ func TestIntegrationWebhookHandlerEmptyPayload(t *testing.T) {
 }
 
 func TestIntegrationWebhookHandlerInvalidSignature(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -101,7 +101,7 @@ func TestIntegrationWebhookHandlerInvalidSignature(t *testing.T) {
 }
 
 func TestIntegrationWebhookHandlerMissingSignature(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -123,7 +123,7 @@ func TestIntegrationWebhookHandlerMissingSignature(t *testing.T) {
 }
 
 func TestIntegrationWebhookHandlerEndpointNotFound(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -142,7 +142,7 @@ func TestIntegrationWebhookHandlerEndpointNotFound(t *testing.T) {
 }
 
 func TestIntegrationWebhookHandlerEmptyEventNameReturnsSuccess(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 

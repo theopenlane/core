@@ -37,11 +37,11 @@ import (
 )
 
 func TestWebfingerHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
@@ -55,7 +55,7 @@ func TestWebfingerHandler(t *testing.T) {
 
 	suite.enforceSSOOnSetting(ctx, setting.ID)
 
-	suite.db.UserSetting.Update().Where(usersetting.UserID(testUser1.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
+	suite.db.UserSetting.Update().Where(usersetting.UserID(suite.testUser1.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
 
 	req := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=org:"+org.ID, nil)
 	rec := httptest.NewRecorder()
@@ -70,13 +70,13 @@ func TestWebfingerHandler(t *testing.T) {
 	assert.Check(t, out.OrgTFAEnforced)
 	assert.Check(t, is.DeepEqual(org.ID, out.OrganizationID))
 
-	emailReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+testUser1.UserInfo.Email, nil)
+	emailReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+suite.testUser1.UserInfo.Email, nil)
 	emailRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(emailRec, emailReq)
 	assert.Check(t, is.Equal(http.StatusOK, emailRec.Code))
 	var emailOut models.SSOStatusResponse
 	assert.Check(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
-	// testUser1 is the organization owner, so the per-account lookup reflects the owner SSO exemption;
+	// suite.testUser1 is the organization owner, so the per-account lookup reflects the owner SSO exemption;
 	// the org level lookup above still reports enforcement. TFA enforcement is independent of exemption
 	assert.Check(t, !emailOut.Enforced)
 	assert.Check(t, emailOut.OrgTFAEnforced)
@@ -85,11 +85,11 @@ func TestWebfingerHandler(t *testing.T) {
 }
 
 func TestWebfingerHandlerTFAOnly(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	// Create organization setting with only TFA enforced, not SSO
@@ -102,7 +102,7 @@ func TestWebfingerHandlerTFAOnly(t *testing.T) {
 		SettingID: &setting.ID,
 	}).SaveX(ctx)
 
-	suite.db.UserSetting.Update().Where(usersetting.UserID(testUser1.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
+	suite.db.UserSetting.Update().Where(usersetting.UserID(suite.testUser1.ID)).SetDefaultOrgID(org.ID).ExecX(ctx)
 
 	req := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=org:"+org.ID, nil)
 	rec := httptest.NewRecorder()
@@ -118,7 +118,7 @@ func TestWebfingerHandlerTFAOnly(t *testing.T) {
 }
 
 func TestWebfingerHandlerNotFound(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
 	req := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+gofakeit.Email(), nil)
@@ -294,14 +294,14 @@ func (m *mockOIDCServer) Close() { m.server.Close() }
 // the identity provider redirect URL, and sets the state/nonce/organization_id cookies the callback needs,
 // without requiring the caller to be authenticated or a member
 func TestSSOInitiateHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", "v1/orgs/:slug_name/sso", suite.h.SSOInitiateHandler)
 
 	oidc := newMockOIDCServer(t)
 	defer oidc.Close()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	discovery := oidc.server.URL + "/.well-known/openid-configuration"
@@ -352,7 +352,7 @@ func TestSSOInitiateHandler(t *testing.T) {
 }
 
 func TestSSOLoginAndCallback(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", "v1/sso/login", suite.h.SSOLoginHandler)
 	suite.registerTestHandler("GET", "v1/sso/callback", suite.h.SSOCallbackHandler)
@@ -364,7 +364,7 @@ func TestSSOLoginAndCallback(t *testing.T) {
 	)
 	defer oidc.Close()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	ssoUser := suite.db.User.Create().
@@ -413,13 +413,13 @@ func TestSSOLoginAndCallback(t *testing.T) {
 
 	otherUserPAT, err := suite.db.PersonalAccessToken.Create().
 		SetName(ulids.New().String()).
-		AddOrganizationIDs(testUser1.OrganizationID).
+		AddOrganizationIDs(suite.testUser1.OrganizationID).
 		Save(ctx)
 	assert.NilError(t, err)
 
 	otherOrgAPIToken, err := suite.db.APIToken.Create().
 		SetName(ulids.New().String()).
-		Save(ent.NewContext(auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID), suite.db))
+		Save(ent.NewContext(auth.NewTestContextWithOrgID(suite.testUser1.ID, suite.testUser1.OrganizationID), suite.db))
 	assert.NilError(t, err)
 
 	testCases := []struct {
@@ -531,7 +531,7 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, sc ssoScenario) (boo
 	)
 	defer oidc.Close()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	if sc.preexisting {
@@ -613,7 +613,7 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, sc ssoScenario) (boo
 // TestSSOCallbackJITPermutations covers the JIT provisioning conditions: the domain allowlist (in-list vs
 // not-in-list) and that JIT is skipped when the toggle is off or SSO is not enforced
 func TestSSOCallbackJITPermutations(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", "v1/sso/login", suite.h.SSOLoginHandler)
 	suite.registerTestHandler("GET", "v1/sso/callback", suite.h.SSOCallbackHandler)
@@ -648,7 +648,7 @@ func TestSSOCallbackJITPermutations(t *testing.T) {
 }
 
 func TestSSOCallbackJITProvisioning(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", "v1/sso/login", suite.h.SSOLoginHandler)
 	suite.registerTestHandler("GET", "v1/sso/callback", suite.h.SSOCallbackHandler)
@@ -660,7 +660,7 @@ func TestSSOCallbackJITProvisioning(t *testing.T) {
 	)
 	defer oidc.Close()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	discovery := oidc.server.URL + "/.well-known/openid-configuration"

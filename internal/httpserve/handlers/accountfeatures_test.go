@@ -16,7 +16,7 @@ import (
 )
 
 func TestAccountFeaturesHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	// add handler
 	suite.registerTestHandler("POST", "account/features", suite.h.AccountFeaturesHandler)
@@ -29,7 +29,7 @@ func TestAccountFeaturesHandler(t *testing.T) {
 		featuresExpected = append(featuresExpected, m.String())
 	}
 
-	suite.enableModules(testUser1.ID, testUser1.OrganizationID, modulesEnabled)
+	suite.enableModules(suite.testUser1.ID, suite.testUser1.OrganizationID, modulesEnabled)
 
 	testCases := []struct {
 		name             string
@@ -40,7 +40,7 @@ func TestAccountFeaturesHandler(t *testing.T) {
 		{
 			name: "happy path, feature access",
 			request: apimodels.AccountFeaturesRequest{
-				ID: testUser1.OrganizationID,
+				ID: suite.testUser1.OrganizationID,
 			},
 			expectedFeatures: featuresExpected,
 		},
@@ -67,7 +67,7 @@ func TestAccountFeaturesHandler(t *testing.T) {
 			recorder := httptest.NewRecorder()
 
 			// Using the ServerHTTP on echo will trigger the router and middleware
-			suite.e.ServeHTTP(recorder, req.WithContext(testUser1.UserCtx))
+			suite.e.ServeHTTP(recorder, req.WithContext(suite.testUser1.UserCtx))
 
 			res := recorder.Result()
 			defer res.Body.Close()

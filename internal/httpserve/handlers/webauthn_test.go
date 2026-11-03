@@ -46,7 +46,7 @@ type testPasskey struct {
 }
 
 func TestBeginWebauthnRegistration(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.enableTestWebauthn(t)
 	suite.registerTestHandler("POST", "registration/options", suite.h.BeginWebauthnRegistration)
@@ -150,7 +150,7 @@ func TestBeginWebauthnRegistration(t *testing.T) {
 }
 
 func TestFinishWebauthnRegistration(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.enableTestWebauthn(t)
 	suite.registerTestHandler("POST", "registration/options", suite.h.BeginWebauthnRegistration)
@@ -210,7 +210,7 @@ func TestFinishWebauthnRegistration(t *testing.T) {
 }
 
 func TestFinishWebauthnLogin(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.enableTestWebauthn(t)
 	suite.registerTestHandler("POST", "authentication/options", suite.h.BeginWebauthnLogin)
@@ -308,7 +308,7 @@ func TestPasskeysRespectTFAEnforcement(t *testing.T) {
 }
 
 func TestHasValidSSOSession(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 	ctx := echo.New().NewContext(httptest.NewRequest("GET", "/", nil), httptest.NewRecorder())
 
 	user := suite.userBuilder(ctx.Request().Context())
@@ -331,7 +331,7 @@ func TestHasValidSSOSession(t *testing.T) {
 }
 
 func TestHasValidSSOSessionInvalid(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 	ctx := echo.New().NewContext(httptest.NewRequest("GET", "/", nil), httptest.NewRecorder())
 
 	user := suite.userBuilder(ctx.Request().Context())

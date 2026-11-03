@@ -25,7 +25,7 @@ import (
 )
 
 func TestVerifyHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	// add handler
 	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
@@ -177,7 +177,7 @@ func TestVerifyHandler(t *testing.T) {
 }
 
 func TestVerifyHandler_AutoJoinMarksPendingInvitesAsAccepted(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
 

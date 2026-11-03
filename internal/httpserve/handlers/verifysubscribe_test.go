@@ -20,7 +20,7 @@ import (
 )
 
 func TestVerifySubscribeHandler(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	// add handler
 	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
@@ -117,13 +117,13 @@ func TestVerifySubscribeHandler(t *testing.T) {
 // who unsubscribed is rejected and does NOT re-subscribe them. Re-subscription must go through the
 // createSubscriber mutation (covered in the graphapi tests), not the verify endpoint
 func TestVerifySubscribeDoesNotResurrectUnsubscribed(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
-	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
 
 	// opted out before confirming: token unused, but the unsubscribed guard still refuses to activate them
@@ -148,20 +148,20 @@ func TestVerifySubscribeDoesNotResurrectUnsubscribed(t *testing.T) {
 // center: the org caller set in the handler resolves to the trust center's owning org, satisfying the
 // org-ownership pre-policy on the update
 func TestVerifySubscribeTrustCenterSubscriber(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
-	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 	// creating the trust center provisions its live setting (allow_subscribers defaults true), so a
 	// subscriber scoped to it is permitted
 	tc, err := suite.db.TrustCenter.Create().
 		SetSlug("audit-verify").
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(internalCtx) })
 
@@ -184,7 +184,7 @@ func TestVerifySubscribeTrustCenterSubscriber(t *testing.T) {
 
 // TestVerifySubscribeUnknownToken rejects a verify request whose token matches no subscriber
 func TestVerifySubscribeUnknownToken(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
@@ -200,13 +200,13 @@ func TestVerifySubscribeUnknownToken(t *testing.T) {
 // TestVerifySubscribeTokenSingleUse confirms a verify token works once (200) and a replay is rejected
 // (400) with no further change to the subscriber
 func TestVerifySubscribeTokenSingleUse(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
-	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	sub := suite.createTestSubscriber(t, "", gofakeit.Email(), "")
 
 	target := fmt.Sprintf("/subscribe/verify?token=%s", sub.Token)
@@ -240,18 +240,18 @@ func TestVerifySubscribeTokenSingleUse(t *testing.T) {
 // TestVerifySubscribeTrustCenterExpiredResend confirms the auto-resent verification email for a trust
 // center subscriber carries the rotated token in its links, not the token it just replaced
 func TestVerifySubscribeTrustCenterExpiredResend(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "subscribe/verify", suite.h.VerifySubscriptionHandler)
 
 	suite.ClearTestData()
 
-	internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 	tc, err := suite.db.TrustCenter.Create().
 		SetSlug("expired-resend").
-		SetOwnerID(testUser1.OrganizationID).
-		Save(testUser1.UserCtx)
+		SetOwnerID(suite.testUser1.OrganizationID).
+		Save(suite.testUser1.UserCtx)
 	assert.NilError(t, err)
 	t.Cleanup(func() { _ = suite.db.TrustCenter.DeleteOneID(tc.ID).Exec(internalCtx) })
 
@@ -298,7 +298,7 @@ func (suite *HandlerTestSuite) createTestSubscriber(t *testing.T, trustCenterID,
 
 	// set privacy allow in order to allow the creation of the users without
 	// authentication in the tests
-	reqCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	reqCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 	// store token in db
 	builder := suite.db.Subscriber.Create().

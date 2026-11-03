@@ -64,7 +64,7 @@ func (suite *HandlerTestSuite) createConsentingOrg(ctx context.Context) *ent.Org
 }
 
 func TestSupportAccessLoginAndCallback(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 	suite.registerTestHandler("POST", "v1/support/callback", suite.h.SupportCallbackHandler)
@@ -91,17 +91,17 @@ func TestSupportAccessLoginAndCallback(t *testing.T) {
 			oidc := newMockOIDCServer(t,
 				withExpectedCode("code123"),
 				withClientSecret("secret"),
-				withUserInfo(testUser1.UserInfo.Email, "Support Engineer", ""),
+				withUserInfo(suite.testUser1.UserInfo.Email, "Support Engineer", ""),
 			)
 			defer oidc.Close()
 
 			// configure support access on the handler and restore afterwards so other tests are unaffected
 			original := suite.h.SupportAccessConfig
 			suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
-			suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(testUser1.UserInfo.Email, "@", 2)[1]
+			suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(suite.testUser1.UserInfo.Email, "@", 2)[1]
 			defer func() { suite.h.SupportAccessConfig = original }()
 
-			ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+			ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 			ctx = ent.NewContext(ctx, suite.db)
 
 			org := suite.createConsentingOrg(ctx)
@@ -156,13 +156,13 @@ func TestSupportAccessLoginAndCallback(t *testing.T) {
 			assert.Check(t, cbOut.Success)
 			assert.Check(t, len(cbOut.Token) > 0)
 			assert.Check(t, is.DeepEqual(org.ID, cbOut.OrganizationID))
-			assert.Check(t, is.DeepEqual(testUser1.UserInfo.Email, cbOut.Impersonator))
+			assert.Check(t, is.DeepEqual(suite.testUser1.UserInfo.Email, cbOut.Impersonator))
 
 			// the minted token must carry both identities: the virtual support user and the individual
 			claims, err := suite.h.TokenManager.ValidateImpersonationToken(context.Background(), cbOut.Token)
 			assert.NilError(t, err)
 			assert.Check(t, is.DeepEqual(auth.SupportSubjectID, claims.UserID), "target is the virtual support identity")
-			assert.Check(t, is.DeepEqual(testUser1.ID, claims.ImpersonatorID), "impersonator is the individual from the IdP")
+			assert.Check(t, is.DeepEqual(suite.testUser1.ID, claims.ImpersonatorID), "impersonator is the individual from the IdP")
 			assert.Check(t, is.Equal("support", claims.Type))
 			assert.Check(t, is.DeepEqual(org.ID, claims.OrgID))
 			assert.Check(t, is.DeepEqual(tc.expectedReason, claims.Reason))
@@ -171,7 +171,7 @@ func TestSupportAccessLoginAndCallback(t *testing.T) {
 }
 
 func TestSupportAccessRejectsWrongPassword(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 
@@ -182,7 +182,7 @@ func TestSupportAccessRejectsWrongPassword(t *testing.T) {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -202,7 +202,7 @@ func TestSupportAccessRejectsWrongPassword(t *testing.T) {
 }
 
 func TestSupportAccessRejectsNonConsentingOrg(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 
@@ -213,7 +213,7 @@ func TestSupportAccessRejectsNonConsentingOrg(t *testing.T) {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	// org that has NOT consented to support access
@@ -246,7 +246,7 @@ func TestSupportAccessRejectsNonConsentingOrg(t *testing.T) {
 // TestSupportAccessRejectsDomainMismatch ensures the second factor rejects an individual outside the
 // configured domain even when the first factor and consent succeed
 func TestSupportAccessRejectsDomainMismatch(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 	suite.registerTestHandler("POST", "v1/support/callback", suite.h.SupportCallbackHandler)
@@ -263,7 +263,7 @@ func TestSupportAccessRejectsDomainMismatch(t *testing.T) {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -331,14 +331,14 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 	oidc := newMockOIDCServer(t,
 		withExpectedCode("code123"),
 		withClientSecret("secret"),
-		withUserInfo(testUser1.UserInfo.Email, "Support Engineer", ""),
+		withUserInfo(suite.testUser1.UserInfo.Email, "Support Engineer", ""),
 	)
 	defer oidc.Close()
 
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
-	suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(testUser1.UserInfo.Email, "@", 2)[1]
+	suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(suite.testUser1.UserInfo.Email, "@", 2)[1]
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -384,7 +384,7 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 // TestSupportAccessCanQueryOrgData confirms the issued support token can read org-scoped data within the
 // consented organization, without any privacy bypass in the request context
 func TestSupportAccessCanQueryOrgData(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	original := suite.h.SupportAccessConfig
 	defer func() { suite.h.SupportAccessConfig = original }()
@@ -403,7 +403,7 @@ func TestSupportAccessCanQueryOrgData(t *testing.T) {
 // TestSupportAccessCanUpdateOrgData confirms the issued support token can mutate org-scoped data within
 // the consented organization, without any privacy bypass in the request context
 func TestSupportAccessCanUpdateOrgData(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupTest(t)
 
 	original := suite.h.SupportAccessConfig
 	defer func() { suite.h.SupportAccessConfig = original }()

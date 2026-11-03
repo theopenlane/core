@@ -95,7 +95,7 @@ func (suite *HandlerTestSuite) newSCIMRequest(method, path, secret string, paylo
 }
 
 func TestSCIMUserHandlerCreate(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 	ctx := context.Background()
 	scimTestUser := suite.userBuilderWithInput(ctx, &userInput{
 		email: ulids.New().String() + "@example.com",
@@ -226,7 +226,7 @@ func (suite *HandlerTestSuite) getStringField(data map[string]any, key string) s
 }
 
 func TestSCIMUserHandlerPatchActiveToggle(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 	ctx := context.Background()
 	scimTestUser := suite.userBuilderWithInput(ctx, &userInput{
 		email: ulids.New().String() + "@example.com",
@@ -314,7 +314,7 @@ func TestSCIMUserHandlerPatchActiveToggle(t *testing.T) {
 }
 
 func TestSCIMGroupHandlerCreateDeduplicatesMembers(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 	ctx := context.Background()
 	scimTestUser := suite.userBuilderWithInput(ctx, &userInput{
 		email: ulids.New().String() + "@example.com",
@@ -392,7 +392,7 @@ func TestSCIMGroupHandlerCreateDeduplicatesMembers(t *testing.T) {
 }
 
 func TestSCIMRouteRejectsPendingAndDisabledInstallations(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 	restore := suite.registerSCIMRoutesWithAuth()
 	defer restore()
 
@@ -434,7 +434,7 @@ func TestSCIMRouteRejectsPendingAndDisabledInstallations(t *testing.T) {
 }
 
 func TestSCIMRouteRejectsNonSCIMIntegration(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 	restore := suite.registerSCIMRoutesWithAuth()
 	defer restore()
 
