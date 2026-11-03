@@ -3,7 +3,8 @@ package enums
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestToStandardStatus(t *testing.T) {
@@ -24,10 +25,10 @@ func TestToStandardStatus(t *testing.T) {
 	for _, test := range tests {
 		result := ToStandardStatus(test.input)
 		if test.expected == nil {
-			assert.Nil(t, result, "ToStandardStatus(%q) should be nil", test.input)
+			assert.Check(t, is.Nil(result), "ToStandardStatus(%q) should be nil", test.input)
 		} else {
-			assert.NotNil(t, result, "ToStandardStatus(%q) should not be nil", test.input)
-			assert.Equal(t, *test.expected, *result, "ToStandardStatus(%q) should be %q", test.input, *test.expected)
+			assert.Check(t, result != nil, "ToStandardStatus(%q) should not be nil", test.input)
+			assert.Check(t, is.Equal(*test.expected, *result), "ToStandardStatus(%q) should be %q", test.input, *test.expected)
 		}
 	}
 }

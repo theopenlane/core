@@ -3,7 +3,7 @@ package rule_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -77,17 +77,17 @@ func TestCustomDomainRule(t *testing.T) {
 			err := rule.DenyIfMissingCustomDomainFeature().EvalMutation(ctx, m)
 
 			if tt.isAllowed {
-				require.ErrorIs(t, err, privacy.Skip)
+				assert.ErrorIs(t, err, privacy.Skip)
 				return
 			}
 
-			require.ErrorIs(t, err, privacy.Deny)
+			assert.ErrorIs(t, err, privacy.Deny)
 			feature := models.CatalogTrustCenterModule
 			if tt.purpose == enums.DomainPurposeAssessment {
 				feature = models.CatalogAssessmentCustomDomainAddon
 			}
 
-			require.ErrorContains(t, err, feature.String())
+			assert.ErrorContains(t, err, feature.String())
 		})
 	}
 }

@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -14,26 +15,26 @@ func TestWorkflowContexts(t *testing.T) {
 	base := context.Background()
 
 	bypass := WithContext(base)
-	assert.True(t, IsWorkflowBypass(bypass))
+	assert.Check(t, IsWorkflowBypass(bypass))
 
-	assert.True(t, auth.IsInternalRequest(auth.WithInternalCrossOrgContext(base)))
+	assert.Check(t, auth.IsInternalRequest(auth.WithInternalCrossOrgContext(base)))
 
 	orgID := ulids.New().String()
 	orgCtx := auth.NewTestContextWithOrgID(ulids.New().String(), orgID)
 
 	allowCtx, resolvedOrg, err := AllowContextWithOrg(orgCtx)
-	assert.NoError(t, err)
-	assert.Equal(t, orgID, resolvedOrg)
-	assert.True(t, auth.IsInternalRequest(allowCtx))
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(orgID, resolvedOrg))
+	assert.Check(t, auth.IsInternalRequest(allowCtx))
 
 	bypassCtx, resolvedOrg, err := AllowBypassContextWithOrg(orgCtx)
-	assert.NoError(t, err)
-	assert.Equal(t, orgID, resolvedOrg)
-	assert.True(t, IsWorkflowBypass(bypassCtx))
-	assert.True(t, auth.IsInternalRequest(bypassCtx))
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(orgID, resolvedOrg))
+	assert.Check(t, IsWorkflowBypass(bypassCtx))
+	assert.Check(t, auth.IsInternalRequest(bypassCtx))
 
 	_, _, err = AllowContextWithOrg(base)
-	assert.Error(t, err)
+	assert.Check(t, err != nil)
 }
 
 func TestAllowContextWithOrg_SingleAuthorizedOrgFallback(t *testing.T) {
@@ -44,9 +45,9 @@ func TestAllowContextWithOrg_SingleAuthorizedOrgFallback(t *testing.T) {
 	})
 
 	allowCtx, resolvedOrg, err := AllowContextWithOrg(ctx)
-	assert.NoError(t, err)
-	assert.Equal(t, orgID, resolvedOrg)
-	assert.True(t, auth.IsInternalRequest(allowCtx))
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(orgID, resolvedOrg))
+	assert.Check(t, auth.IsInternalRequest(allowCtx))
 }
 
 func TestAllowContextWithOrg_MultipleAuthorizedOrgsWithoutSelection(t *testing.T) {
@@ -56,7 +57,7 @@ func TestAllowContextWithOrg_MultipleAuthorizedOrgsWithoutSelection(t *testing.T
 	})
 
 	_, _, err := AllowContextWithOrg(ctx)
-	assert.Error(t, err)
+	assert.Check(t, err != nil)
 }
 
 func TestAllowContextWithOrg_EmptyAuthorizedOrgs(t *testing.T) {
@@ -66,7 +67,7 @@ func TestAllowContextWithOrg_EmptyAuthorizedOrgs(t *testing.T) {
 	})
 
 	_, _, err := AllowContextWithOrg(ctx)
-	assert.Error(t, err)
+	assert.Check(t, err != nil)
 }
 
 func TestAllowContextForOrgSeedsCaller(t *testing.T) {
@@ -75,9 +76,9 @@ func TestAllowContextForOrgSeedsCaller(t *testing.T) {
 	allowCtx := AllowContextForOrg(context.Background(), orgID)
 
 	caller, ok := auth.CallerFromContext(allowCtx)
-	assert.True(t, ok)
-	assert.NotNil(t, caller)
-	assert.Equal(t, orgID, caller.OrganizationID)
-	assert.Contains(t, caller.OrganizationIDs, orgID)
-	assert.True(t, caller.Has(auth.CapInternalOperation))
+	assert.Check(t, ok)
+	assert.Check(t, caller != nil)
+	assert.Check(t, is.Equal(orgID, caller.OrganizationID))
+	assert.Check(t, is.Contains(caller.OrganizationIDs, orgID))
+	assert.Check(t, caller.Has(auth.CapInternalOperation))
 }

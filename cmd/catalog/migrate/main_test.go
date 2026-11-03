@@ -8,9 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // mockClient is a mock implementation of the stripeClient interface
@@ -63,11 +64,11 @@ func TestPriceMigrateDryRun(t *testing.T) {
 
 	app := migrationApp()
 	err := app.Run(context.Background(), []string{"pricemigrate", "--old-price", "old", "--new-price", "new", "--customers", "cus_1", "--dry-run"})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.Empty(t, client.taggedFrom)
-	require.Contains(t, buf.String(), "cus_1")
-	require.Contains(t, buf.String(), "sub_old")
+	assert.Assert(t, is.Equal(client.taggedFrom, ""))
+	assert.Assert(t, is.Contains(buf.String(), "cus_1"))
+	assert.Assert(t, is.Contains(buf.String(), "sub_old"))
 }
 
 // TestPriceMigrateApply tests the price migration command when it applies changes
@@ -93,10 +94,10 @@ func TestPriceMigrateApply(t *testing.T) {
 
 	app := migrationApp()
 	err := app.Run(context.Background(), []string{"pricemigrate", "--old-price", "old", "--new-price", "new", "--customers", "cus_1", "--dry-run=false"})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.Equal(t, "old", client.taggedFrom)
-	require.Equal(t, "new", client.taggedTo)
-	require.Len(t, client.migrated, 1)
-	require.Equal(t, "sub_old", client.migrated[0])
+	assert.Assert(t, is.Equal("old", client.taggedFrom))
+	assert.Assert(t, is.Equal("new", client.taggedTo))
+	assert.Assert(t, is.Len(client.migrated, 1))
+	assert.Assert(t, is.Equal("sub_old", client.migrated[0]))
 }

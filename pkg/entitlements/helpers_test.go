@@ -5,9 +5,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestGetUpdatedFields(t *testing.T) {
@@ -63,7 +64,9 @@ func TestGetUpdatedFields(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			params := entitlements.GetUpdatedFields(tt.props, tt.stripeCustomer)
-			assert.Equal(t, tt.expectedParams, params)
+			assert.Check(t, is.DeepEqual(tt.expectedParams.Email, params.Email))
+			assert.Check(t, is.DeepEqual(tt.expectedParams.Phone, params.Phone))
+			assert.Check(t, is.DeepEqual(tt.expectedParams.Address, params.Address))
 		})
 	}
 }
@@ -74,10 +77,10 @@ func TestWriteYAMLHelpers(t *testing.T) {
 	dir := t.TempDir()
 	plansFile := filepath.Join(dir, "plans.yaml")
 
-	assert.NoError(t, entitlements.WritePlansToYAML(plans, plansFile))
+	assert.Check(t, entitlements.WritePlansToYAML(plans, plansFile))
 
 	pData, err := os.ReadFile(plansFile)
-	assert.NoError(t, err)
-	assert.Contains(t, string(pData), "Test")
+	assert.Check(t, err)
+	assert.Check(t, is.Contains(string(pData), "Test"))
 
 }

@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -19,19 +20,20 @@ func (*workflowTestNode) IsNode() {}
 // TestCELValue verifies CEL value construction for objects
 func TestCELValue(t *testing.T) {
 	var nilObj *Object
-	assert.Nil(t, nilObj.CELValue())
+	assert.Check(t, is.Nil(nilObj.CELValue()))
 
 	obj := &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}
 	value := obj.CELValue()
-	assert.IsType(t, map[string]any{}, value)
+	_, isMap := value.(map[string]any)
+	assert.Check(t, isMap)
 
 	mapped := value.(map[string]any)
-	assert.Equal(t, "obj1", mapped["id"])
-	assert.Equal(t, enums.WorkflowObjectTypeControl, mapped["type"])
+	assert.Check(t, is.Equal("obj1", mapped["id"]))
+	assert.Check(t, is.Equal(enums.WorkflowObjectTypeControl, mapped["type"]))
 
 	node := &workflowTestNode{}
 	obj.Node = node
-	assert.Equal(t, node, obj.CELValue())
+	assert.Check(t, is.Equal(node, obj.CELValue()))
 }
 
 // TestBuildCELVarsDefault verifies default CEL variable building
@@ -44,14 +46,14 @@ func TestBuildCELVarsDefault(t *testing.T) {
 	proposed := map[string]any{"status": "APPROVED"}
 	vars := BuildCELVars(obj, []string{"status"}, []string{"edge"}, map[string][]string{"a": []string{"1"}}, map[string][]string{"b": []string{"2"}}, "UPDATE", "user1", proposed)
 
-	assert.Equal(t, obj.CELValue(), vars["object"])
-	assert.Equal(t, []string{"status"}, vars["changed_fields"])
-	assert.Equal(t, []string{"edge"}, vars["changed_edges"])
-	assert.Equal(t, map[string][]string{"a": []string{"1"}}, vars["added_ids"])
-	assert.Equal(t, map[string][]string{"b": []string{"2"}}, vars["removed_ids"])
-	assert.Equal(t, "UPDATE", vars["event_type"])
-	assert.Equal(t, "user1", vars["user_id"])
-	assert.Equal(t, proposed, vars["proposed_changes"])
+	assert.Check(t, is.DeepEqual(obj.CELValue(), vars["object"]))
+	assert.Check(t, is.DeepEqual([]string{"status"}, vars["changed_fields"]))
+	assert.Check(t, is.DeepEqual([]string{"edge"}, vars["changed_edges"]))
+	assert.Check(t, is.DeepEqual(map[string][]string{"a": []string{"1"}}, vars["added_ids"]))
+	assert.Check(t, is.DeepEqual(map[string][]string{"b": []string{"2"}}, vars["removed_ids"]))
+	assert.Check(t, is.Equal("UPDATE", vars["event_type"]))
+	assert.Check(t, is.Equal("user1", vars["user_id"]))
+	assert.Check(t, is.DeepEqual(proposed, vars["proposed_changes"]))
 }
 
 // TestBuildCELVarsCustomBuilder verifies custom CEL context builders
@@ -66,17 +68,17 @@ func TestBuildCELVarsCustomBuilder(t *testing.T) {
 	})
 
 	vars := BuildCELVars(nil, nil, nil, nil, nil, "", "", nil)
-	assert.Equal(t, expected, vars)
+	assert.Check(t, is.DeepEqual(expected, vars))
 }
 
 // TestObjectFromRef verifies object lookup from references
 func TestObjectFromRef(t *testing.T) {
 	_, err := ObjectFromRef(&generated.WorkflowObjectRef{})
-	assert.ErrorIs(t, err, ErrMissingObjectID)
+	assert.Check(t, is.ErrorIs(err, ErrMissingObjectID))
 
 	obj, err := ObjectFromRef(&generated.WorkflowObjectRef{ControlID: "obj1"})
-	assert.NoError(t, err)
-	assert.Equal(t, &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}, obj)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(&Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}, obj))
 }
 
 // TestBuildAssignmentContext verifies assignment context construction
@@ -87,16 +89,16 @@ func TestBuildAssignmentContext(t *testing.T) {
 
 	ctx := context.Background()
 	vars, err := BuildAssignmentContext(ctx, nil, "")
-	assert.NoError(t, err)
-	assert.Nil(t, vars)
+	assert.Check(t, err)
+	assert.Check(t, is.Nil(vars))
 
 	assignmentContextBuilder = func(_ context.Context, _ *generated.Client, instanceID string) (map[string]any, error) {
 		return map[string]any{"instance_id": instanceID}, nil
 	}
 
 	vars, err = BuildAssignmentContext(ctx, nil, "instance-1")
-	assert.NoError(t, err)
-	assert.Equal(t, map[string]any{"instance_id": "instance-1"}, vars)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(map[string]any{"instance_id": "instance-1"}, vars))
 }
 
 func TestRegisterAssignmentContextBuilder(t *testing.T) {
@@ -108,13 +110,13 @@ func TestRegisterAssignmentContextBuilder(t *testing.T) {
 	})
 
 	out, err := BuildAssignmentContext(context.Background(), nil, "instance-2")
-	assert.NoError(t, err)
-	assert.Equal(t, map[string]any{"instance_id": "instance-2"}, out)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(map[string]any{"instance_id": "instance-2"}, out))
 }
 
 func TestObservabilityFields(t *testing.T) {
 	var nilObj *Object
-	assert.Nil(t, nilObj.ObservabilityFields())
+	assert.Check(t, is.Nil(nilObj.ObservabilityFields()))
 
 	// Register an observability fields builder that matches the expected behavior
 	old := observabilityFieldsBuilder
@@ -155,12 +157,12 @@ func TestObservabilityFields(t *testing.T) {
 	for objectType, fieldName := range cases {
 		obj := &Object{ID: "obj", Type: objectType}
 		fields := obj.ObservabilityFields()
-		assert.Equal(t, objectType.String(), fields[observability.FieldObjectType])
-		assert.Equal(t, "obj", fields[fieldName])
+		assert.Check(t, is.Equal(objectType.String(), fields[observability.FieldObjectType]))
+		assert.Check(t, is.Equal("obj", fields[fieldName]))
 	}
 
 	obj := &Object{ID: "obj", Type: enums.WorkflowObjectTypeCampaign}
 	fields := obj.ObservabilityFields()
-	assert.Equal(t, obj.Type.String(), fields[observability.FieldObjectType])
-	assert.Len(t, fields, 1)
+	assert.Check(t, is.Equal(obj.Type.String(), fields[observability.FieldObjectType]))
+	assert.Check(t, is.Len(fields, 1))
 }

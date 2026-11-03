@@ -6,7 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/models"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
@@ -33,13 +34,13 @@ func TestBuildUploadOptionsInitialisesHints(t *testing.T) {
 	})
 
 	opts := BuildUploadOptions(ctx, file)
-	assert.NotNil(t, opts)
-	assert.Equal(t, file.OriginalName, opts.FileName)
-	assert.Equal(t, file.FieldName, opts.FileMetadata.Key)
-	assert.NotNil(t, opts.ProviderHints)
+	assert.Check(t, opts != nil)
+	assert.Check(t, is.Equal(file.OriginalName, opts.FileName))
+	assert.Check(t, is.Equal(file.FieldName, opts.FileMetadata.Key))
+	assert.Check(t, opts.ProviderHints != nil)
 	moduleValue, ok := opts.ProviderHints.Module.(models.OrgModule)
-	assert.True(t, ok)
-	assert.Equal(t, models.CatalogTrustCenterModule, moduleValue)
+	assert.Check(t, ok)
+	assert.Check(t, is.Equal(models.CatalogTrustCenterModule, moduleValue))
 }
 
 func TestBuildUploadOptionsDetectsContentType(t *testing.T) {
@@ -52,8 +53,8 @@ func TestBuildUploadOptionsDetectsContentType(t *testing.T) {
 	}
 
 	opts := BuildUploadOptions(context.Background(), file)
-	assert.Equal(t, "text/plain; charset=utf-8", opts.ContentType)
-	assert.Equal(t, "text/plain; charset=utf-8", file.ContentType)
+	assert.Check(t, is.Equal("text/plain; charset=utf-8", opts.ContentType))
+	assert.Check(t, is.Equal("text/plain; charset=utf-8", file.ContentType))
 }
 
 func TestBuildUploadOptionsBufferedDetection(t *testing.T) {
@@ -65,16 +66,16 @@ func TestBuildUploadOptionsBufferedDetection(t *testing.T) {
 	}
 
 	opts := BuildUploadOptions(context.Background(), file)
-	assert.NotNil(t, opts)
-	assert.Equal(t, file.OriginalName, opts.FileName)
-	assert.NotNil(t, opts.ProviderHints)
+	assert.Check(t, opts != nil)
+	assert.Check(t, is.Equal(file.OriginalName, opts.FileName))
+	assert.Check(t, opts.ProviderHints != nil)
 }
 
 func TestBuildUploadOptionsNilFile(t *testing.T) {
 	opts := BuildUploadOptions(context.Background(), nil)
-	assert.NotNil(t, opts)
-	assert.Empty(t, opts.FileName)
-	assert.Empty(t, opts.ContentType)
+	assert.Check(t, opts != nil)
+	assert.Check(t, is.Equal(opts.FileName, ""))
+	assert.Check(t, is.Equal(opts.ContentType, ""))
 }
 
 func TestBuildUploadOptionsPreservesExplicitContentType(t *testing.T) {
@@ -85,16 +86,16 @@ func TestBuildUploadOptionsPreservesExplicitContentType(t *testing.T) {
 	}
 
 	opts := BuildUploadOptions(context.Background(), file)
-	assert.Equal(t, "image/jpeg", opts.ContentType)
-	assert.Equal(t, "image/jpeg", file.ContentType)
+	assert.Check(t, is.Equal("image/jpeg", opts.ContentType))
+	assert.Check(t, is.Equal("image/jpeg", file.ContentType))
 }
 
 func TestHandleUploadsNoFiles(t *testing.T) {
 	ctx := context.Background()
 	newCtx, files, err := HandleUploads(ctx, nil, nil)
-	assert.NoError(t, err)
-	assert.Equal(t, ctx, newCtx)
-	assert.Nil(t, files)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(ctx, newCtx))
+	assert.Check(t, is.Nil(files))
 }
 
 func TestMergeUploadedFileMetadata(t *testing.T) {
@@ -114,10 +115,10 @@ func TestMergeUploadedFileMetadata(t *testing.T) {
 
 	mergeUploadedFileMetadata(dest, "file-id", src)
 
-	assert.Equal(t, "file-id", dest.ID)
-	assert.Equal(t, src.FieldName, dest.FieldName)
-	assert.Equal(t, src.Parent, dest.Parent)
-	assert.Equal(t, src.CorrelatedObjectID, dest.CorrelatedObjectID)
-	assert.Equal(t, src.CorrelatedObjectType, dest.CorrelatedObjectType)
-	assert.NotEmpty(t, dest.Metadata)
+	assert.Check(t, is.Equal("file-id", dest.ID))
+	assert.Check(t, is.Equal(src.FieldName, dest.FieldName))
+	assert.Check(t, is.Equal(src.Parent, dest.Parent))
+	assert.Check(t, is.Equal(src.CorrelatedObjectID, dest.CorrelatedObjectID))
+	assert.Check(t, is.Equal(src.CorrelatedObjectType, dest.CorrelatedObjectType))
+	assert.Check(t, len(dest.Metadata) > 0)
 }

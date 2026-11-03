@@ -2,11 +2,12 @@ package gcs_test
 
 import (
 	"context"
+	"slices"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"google.golang.org/api/option"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -15,7 +16,7 @@ import (
 
 func TestNewBuilder(t *testing.T) {
 	builder := gcs.NewBuilder()
-	assert.NotNil(t, builder)
+	assert.Check(t, builder != nil)
 }
 
 func TestBuilderBuild(t *testing.T) {
@@ -45,15 +46,15 @@ func TestBuilderBuild(t *testing.T) {
 			provider, err := builder.Build(context.Background(), storage.ProviderCredentials{}, tt.options)
 
 			if tt.expectError {
-				assert.ErrorIs(t, err, gcs.ErrBucketRequired)
-				assert.Nil(t, provider)
+				assert.Check(t, is.ErrorIs(err, gcs.ErrBucketRequired))
+				assert.Check(t, is.Nil(provider))
 			} else {
 				if err != nil {
 					t.Skip("Skipping test due to missing GCS environment")
 				}
-				assert.NoError(t, err)
-				assert.NotNil(t, provider)
-				assert.Equal(t, storage.GCSProvider, provider.ProviderType())
+				assert.Check(t, err)
+				assert.Check(t, provider != nil)
+				assert.Check(t, is.Equal(storage.GCSProvider, provider.ProviderType()))
 			}
 		})
 	}
@@ -64,34 +65,34 @@ func TestBuilderWithOptions(t *testing.T) {
 
 	builder := gcs.NewBuilder().WithOptions(fakeClientOptions(server, option.WithoutAuthentication()))
 	provider, err := builder.Build(context.Background(), storage.ProviderCredentials{}, gcsOptions())
-	require.NoError(t, err)
-	require.NotNil(t, provider)
+	assert.NilError(t, err)
+	assert.Assert(t, provider != nil)
 	t.Cleanup(func() { _ = provider.Close() })
 
 	exists, err := provider.Exists(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "seeded.txt"}})
-	require.NoError(t, err)
-	assert.True(t, exists)
+	assert.NilError(t, err)
+	assert.Check(t, exists)
 
 	buckets, err := provider.ListBuckets()
-	require.NoError(t, err)
-	assert.ElementsMatch(t, []string{testBucket, otherBucket}, buckets)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values([]string{testBucket, otherBucket})), slices.Sorted(slices.Values(buckets))))
 }
 
 func TestWithServiceAccountKey(t *testing.T) {
 	opt, err := gcs.WithServiceAccountKey(context.Background(), serviceAccountJSON(t))
-	require.NoError(t, err)
-	assert.NotNil(t, opt)
+	assert.NilError(t, err)
+	assert.Check(t, opt != nil)
 
 	opt, err = gcs.WithServiceAccountKey(context.Background(), []byte(`{"type":"authorized_user"}`))
-	assert.ErrorIs(t, err, gcs.ErrServiceAccountKeyInvalid)
-	assert.Nil(t, opt)
+	assert.Check(t, is.ErrorIs(err, gcs.ErrServiceAccountKeyInvalid))
+	assert.Check(t, is.Nil(opt))
 
 	opt, err = gcs.WithServiceAccountKey(context.Background(), nil)
-	assert.ErrorIs(t, err, gcs.ErrServiceAccountKeyInvalid)
-	assert.Nil(t, opt)
+	assert.Check(t, is.ErrorIs(err, gcs.ErrServiceAccountKeyInvalid))
+	assert.Check(t, is.Nil(opt))
 }
 
 func TestBuilderProviderType(t *testing.T) {
 	builder := gcs.NewBuilder()
-	assert.Equal(t, string(storage.GCSProvider), builder.ProviderType())
+	assert.Check(t, is.Equal(string(storage.GCSProvider), builder.ProviderType()))
 }

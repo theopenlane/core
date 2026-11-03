@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
@@ -24,8 +25,8 @@ func TestAddFilePermissionsMissingParent(t *testing.T) {
 	})
 
 	_, err := AddFilePermissions(ctx)
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, ErrMissingParent)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, ErrMissingParent))
 }
 
 func TestAddFilePermissionsAvatarMissingOrg(t *testing.T) {
@@ -45,8 +46,8 @@ func TestAddFilePermissionsAvatarMissingOrg(t *testing.T) {
 	})
 
 	_, err := AddFilePermissions(ctx)
-	assert.Error(t, err)
-	assert.ErrorContains(t, err, "organization ID is required for file upload")
+	assert.Check(t, err != nil)
+	assert.Check(t, is.ErrorContains(err, "organization ID is required for file upload"))
 }
 
 func TestGetOrgOwnerIDWithUserType(t *testing.T) {
@@ -54,8 +55,8 @@ func TestGetOrgOwnerIDWithUserType(t *testing.T) {
 		CorrelatedObjectType: "user",
 	})
 
-	assert.NoError(t, err)
-	assert.Empty(t, orgID)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(orgID, ""))
 }
 
 func TestGetOrgOwnerIDUsesAuthContext(t *testing.T) {
@@ -68,31 +69,31 @@ func TestGetOrgOwnerIDUsesAuthContext(t *testing.T) {
 		CorrelatedObjectType: "program",
 	})
 
-	assert.NoError(t, err)
-	assert.Equal(t, user.OrganizationID, orgID)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(user.OrganizationID, orgID))
 }
 
 func TestTxHelpersReturnClients(t *testing.T) {
 	client := &ent.Client{}
 	ctx := ent.NewContext(context.Background(), client)
 
-	assert.Equal(t, client, txClientFromContext(ctx))
-	assert.Nil(t, txFileClientFromContext(ctx))
+	assert.Check(t, is.Equal(client, txClientFromContext(ctx)))
+	assert.Check(t, is.Nil(txFileClientFromContext(ctx)))
 
 	fileClient := &ent.FileClient{}
 	client.File = fileClient
 
-	assert.Equal(t, fileClient, txFileClientFromContext(ent.NewContext(context.Background(), client)))
+	assert.Check(t, is.Equal(fileClient, txFileClientFromContext(ent.NewContext(context.Background(), client))))
 }
 
 func TestAddFilePermissionsNoFiles(t *testing.T) {
 	ctx := context.Background()
 	updated, err := AddFilePermissions(ctx)
-	assert.NoError(t, err)
-	assert.Equal(t, ctx, updated)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(ctx, updated))
 }
 
 func TestTxClientFromContextEmpty(t *testing.T) {
-	assert.Nil(t, txClientFromContext(context.Background()))
-	assert.Nil(t, txFileClientFromContext(context.Background()))
+	assert.Check(t, is.Nil(txClientFromContext(context.Background())))
+	assert.Check(t, is.Nil(txFileClientFromContext(context.Background())))
 }

@@ -3,7 +3,8 @@ package notifications
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestOldestRevision(t *testing.T) {
@@ -26,7 +27,7 @@ func TestOldestRevision(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, v1, pickOldestRevision(controls))
+	assert.Check(t, is.Equal(v1, pickOldestRevision(controls)))
 }
 
 func TestSubcontrolsForControls(t *testing.T) {
@@ -45,9 +46,9 @@ func TestSubcontrolsForControls(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, []standardSubcontrol{
+	assert.Check(t, is.DeepEqual([]standardSubcontrol{
 		{ID: "subcontrol-1", ControlID: "control-1"},
 		{ID: "subcontrol-2", ControlID: "control-2"},
 		{ID: "subcontrol-3", ControlID: "control-2"},
-	}, fetchSubcontrolsOwnedByControl(controls, grouped))
+	}, fetchSubcontrolsOwnedByControl(controls, grouped)))
 }

@@ -7,7 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/iam/tokens"
 )
@@ -26,7 +27,7 @@ func testTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 
 	key, err := rsa.GenerateKey(rand.Reader, testRSAKeySize)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	manager, err := tokens.NewWithKey(key, tokens.Config{
 		Audience:        "https://api.theopenlane.io",
@@ -35,17 +36,14 @@ func testTokenManager(t *testing.T) *tokens.TokenManager {
 		RefreshDuration: 2 * time.Hour,
 		RefreshOverlap:  -15 * time.Minute,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return manager
 }
 
 // TestWorkloadIdentityAudience verifies the provider resource name construction
 func TestWorkloadIdentityAudience(t *testing.T) {
-	require.Equal(t,
-		"//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/openlane/providers/openlane",
-		workloadIdentityAudience(testProjectNumber),
-	)
+	assert.Assert(t, is.Equal("//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/openlane/providers/openlane", workloadIdentityAudience(testProjectNumber)))
 }
 
 // TestFederationSource verifies the workload identity token source construction
@@ -54,8 +52,8 @@ func TestFederationSource(t *testing.T) {
 		source, err := federationSource(context.Background(), testTokenManager(t), testOrganizationID, WorkloadIdentityCredentialSchema{
 			ProjectNumber: testProjectNumber,
 		})
-		require.NoError(t, err)
-		require.NotNil(t, source)
+		assert.NilError(t, err)
+		assert.Assert(t, source != nil)
 	})
 
 	t.Run("builds an impersonated source when a service account is configured", func(t *testing.T) {
@@ -63,12 +61,12 @@ func TestFederationSource(t *testing.T) {
 			ProjectNumber:       testProjectNumber,
 			ServiceAccountEmail: "collector@project-123.iam.gserviceaccount.com",
 		})
-		require.NoError(t, err)
-		require.NotNil(t, source)
+		assert.NilError(t, err)
+		assert.Assert(t, source != nil)
 	})
 
 	t.Run("requires a project number", func(t *testing.T) {
 		_, err := federationSource(context.Background(), testTokenManager(t), testOrganizationID, WorkloadIdentityCredentialSchema{})
-		require.ErrorIs(t, err, ErrProjectNumberRequired)
+		assert.ErrorIs(t, err, ErrProjectNumberRequired)
 	})
 }

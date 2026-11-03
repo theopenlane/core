@@ -14,7 +14,6 @@ import (
 	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
-	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -323,7 +322,7 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 
 			// Generate expected slug: remove non-alphanumeric chars and lowercase
 			expectedSlug := strcase.KebabCase(org.Name)
-			require.NotNil(t, resp.CreateTrustCenter.TrustCenter.Slug)
+			assert.Assert(t, resp.CreateTrustCenter.TrustCenter.Slug != nil)
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)
 			setting := resp.CreateTrustCenter.TrustCenter.GetSetting()
 			assert.Equal(t, fmt.Sprintf("%s Trust Center", org.Name), *setting.Title)

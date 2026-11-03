@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
@@ -24,7 +24,7 @@ func TestValidateDomains(t *testing.T) {
 		t.Run(fmt.Sprintf("valid domain: %s", d), func(t *testing.T) {
 			funcCheck := validator.ValidateDomains()
 			err := funcCheck([]string{d})
-			assert.Empty(t, err)
+			assert.Check(t, err)
 		})
 	}
 
@@ -40,7 +40,7 @@ func TestValidateDomains(t *testing.T) {
 		t.Run(fmt.Sprintf("invalid domain: %s", d), func(t *testing.T) {
 			funcCheck := validator.ValidateDomains()
 			err := funcCheck([]string{d})
-			assert.NotEmpty(t, err)
+			assert.Check(t, err != nil)
 		})
 	}
 }
@@ -61,7 +61,7 @@ func TestValidateURL(t *testing.T) {
 		t.Run(fmt.Sprintf("valid url: %s", d), func(t *testing.T) {
 			funcCheck := validator.ValidateURL()
 			err := funcCheck(d)
-			assert.Empty(t, err)
+			assert.Check(t, err)
 		})
 	}
 
@@ -77,7 +77,7 @@ func TestValidateURL(t *testing.T) {
 		t.Run(fmt.Sprintf("invalid url: %s", d), func(t *testing.T) {
 			funcCheck := validator.ValidateURL()
 			err := funcCheck(d)
-			assert.NotEmpty(t, err)
+			assert.Check(t, err != nil)
 		})
 	}
 }

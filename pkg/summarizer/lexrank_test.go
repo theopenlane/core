@@ -1,10 +1,10 @@
 package summarizer
 
 import (
+	"gotest.tools/v3/assert"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/require"
 )
 
 func TestNewLexRankSummarizer_Summarize(t *testing.T) {
@@ -45,12 +45,12 @@ func TestNewLexRankSummarizer_Summarize(t *testing.T) {
 
 			summarized, err := summarizer.Summarize(t.Context(), v.sentence)
 			if v.hasError {
-				require.Error(t, err)
+				assert.Assert(t, err != nil)
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotEmpty(t, summarized)
+			assert.NilError(t, err)
+			assert.Assert(t, summarized != "")
 		})
 	}
 }

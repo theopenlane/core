@@ -8,7 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -25,10 +26,10 @@ func runLifecycleSweep(t *testing.T, ctx context.Context, config json.RawMessage
 	t.Helper()
 
 	raw, err := suite.IntegrationsRT.ExecuteRuntimeOperation(ctx, systemdef.DefinitionID.ID(), systemdef.IntegrationLifecycleOp.Name(), config)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	var result integrationtypes.ScheduledCycleResult
-	require.NoError(t, json.Unmarshal(raw, &result))
+	assert.NilError(t, json.Unmarshal(raw, &result))
 
 	return result.Processed
 }
@@ -42,7 +43,7 @@ func integrationVisible(t *testing.T, ctx context.Context, id string) bool {
 		return false
 	}
 
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return true
 }
@@ -52,10 +53,10 @@ func installationCredentialIDs(t *testing.T, ctx context.Context, integrationID 
 	t.Helper()
 
 	installation, err := suite.Client.DB.Integration.Get(ctx, integrationID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	ids, err := installation.QuerySecrets().IDs(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return ids
 }
@@ -70,8 +71,8 @@ func TestIntegrationLifecycleSweep(t *testing.T) {
 
 	expiredPending, _ := newHarnessInstallation(t, internalCtx, testint.ModeRecurring)
 	expiredCredentialIDs := installationCredentialIDs(t, internalCtx, expiredPending.ID)
-	require.NotEmpty(t, expiredCredentialIDs)
-	require.NoError(t, suite.Client.DB.Integration.UpdateOneID(expiredPending.ID).
+	assert.Assert(t, len(expiredCredentialIDs) > 0)
+	assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(expiredPending.ID).
 		SetStatus(enums.IntegrationStatusPending).
 		SetExpiresAt(time.Now().Add(-time.Hour)).
 		Exec(internalCtx))
@@ -82,58 +83,58 @@ func TestIntegrationLifecycleSweep(t *testing.T) {
 		SetDefinitionID(testint.DefinitionID.ID()).
 		SetExpiresAt(time.Now().Add(time.Hour)).
 		Save(internalCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	connected, connectedFragment := seedHarnessLoop(t, internalCtx)
 
 	errored, _ := newHarnessInstallation(t, internalCtx, testint.ModeRecurring)
-	require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, errored, "credentials revoked"))
+	assert.NilError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, errored, "credentials revoked"))
 
 	erroredStray, _ := newHarnessInstallation(t, internalCtx, testint.ModeRecurring)
 	strayCredentialIDs := installationCredentialIDs(t, internalCtx, erroredStray.ID)
-	require.NotEmpty(t, strayCredentialIDs)
-	require.NoError(t, suite.Client.DB.Integration.UpdateOneID(erroredStray.ID).
+	assert.Assert(t, len(strayCredentialIDs) > 0)
+	assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(erroredStray.ID).
 		SetStatus(enums.IntegrationStatusPending).
 		SetExpiresAt(time.Now().Add(-time.Hour)).
 		Exec(internalCtx))
-	require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, reloadIntegration(t, internalCtx, erroredStray.ID), "connection check failed"))
+	assert.NilError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(internalCtx, reloadIntegration(t, internalCtx, erroredStray.ID), "connection check failed"))
 
 	flippedStray := reloadIntegration(t, internalCtx, erroredStray.ID)
-	require.Equal(t, enums.IntegrationStatusErrored, flippedStray.Status)
-	require.NotNil(t, flippedStray.ExpiresAt)
+	assert.Assert(t, is.Equal(enums.IntegrationStatusErrored, flippedStray.Status))
+	assert.Assert(t, flippedStray.ExpiresAt != nil)
 
 	waitForEvents()
 
 	t.Run("dry run dispatches nothing", func(t *testing.T) {
 		processed := runLifecycleSweep(t, internalCtx, json.RawMessage(`{"dryRun":true}`))
-		require.GreaterOrEqual(t, processed, 2)
+		assert.Assert(t, processed >= 2)
 
-		require.True(t, integrationVisible(t, internalCtx, expiredPending.ID))
-		require.True(t, integrationVisible(t, internalCtx, erroredStray.ID))
+		assert.Assert(t, integrationVisible(t, internalCtx, expiredPending.ID))
+		assert.Assert(t, integrationVisible(t, internalCtx, erroredStray.ID))
 	})
 
 	t.Run("sweep reaps expired never-connected only", func(t *testing.T) {
 		processed := runLifecycleSweep(t, internalCtx, nil)
-		require.GreaterOrEqual(t, processed, 2)
+		assert.Assert(t, processed >= 2)
 
 		waitForEvents()
 
-		require.False(t, integrationVisible(t, internalCtx, expiredPending.ID))
-		require.False(t, integrationVisible(t, internalCtx, erroredStray.ID))
+		assert.Assert(t, !integrationVisible(t, internalCtx, expiredPending.ID))
+		assert.Assert(t, !integrationVisible(t, internalCtx, erroredStray.ID))
 
 		credentialCount, err := suite.Client.DB.Hush.Query().
 			Where(hush.IDIn(append(expiredCredentialIDs, strayCredentialIDs...)...)).
 			Count(internalCtx)
-		require.NoError(t, err)
-		require.Zero(t, credentialCount)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Equal(credentialCount, 0))
 
-		require.True(t, integrationVisible(t, internalCtx, freshPending.ID))
-		require.Equal(t, enums.IntegrationStatusPending, reloadIntegration(t, internalCtx, freshPending.ID).Status)
+		assert.Assert(t, integrationVisible(t, internalCtx, freshPending.ID))
+		assert.Assert(t, is.Equal(enums.IntegrationStatusPending, reloadIntegration(t, internalCtx, freshPending.ID).Status))
 
-		require.Equal(t, enums.IntegrationStatusConnected, reloadIntegration(t, internalCtx, connected.ID).Status)
-		require.Equal(t, 1, activeReconcileJobs(t, connectedFragment))
+		assert.Assert(t, is.Equal(enums.IntegrationStatusConnected, reloadIntegration(t, internalCtx, connected.ID).Status))
+		assert.Assert(t, is.Equal(1, activeReconcileJobs(t, connectedFragment)))
 
-		require.Equal(t, enums.IntegrationStatusErrored, reloadIntegration(t, internalCtx, errored.ID).Status)
-		require.Equal(t, 0, integrationNotificationCount(t, ownerCtx, errored.OwnerID, integrationReconnectedObjectType))
+		assert.Assert(t, is.Equal(enums.IntegrationStatusErrored, reloadIntegration(t, internalCtx, errored.ID).Status))
+		assert.Assert(t, is.Equal(0, integrationNotificationCount(t, ownerCtx, errored.OwnerID, integrationReconnectedObjectType)))
 	})
 }

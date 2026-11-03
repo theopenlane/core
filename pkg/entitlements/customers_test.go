@@ -3,9 +3,10 @@ package entitlements_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestMapStripeCustomer(t *testing.T) {
@@ -80,7 +81,7 @@ func TestMapStripeCustomer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			customer := entitlements.MapStripeCustomer(tt.stripeCustomer)
 
-			assert.Equal(t, tt.expected, customer)
+			assert.Check(t, is.DeepEqual(tt.expected, customer))
 		})
 	}
 }

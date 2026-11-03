@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 )
@@ -18,7 +18,7 @@ func testDispatcher[T Recipient](t *testing.T, key string) Operation[T] {
 	t.Helper()
 
 	d, ok := DispatcherByKey(key)
-	require.True(t, ok, "dispatcher %q not registered", key)
+	assert.Assert(t, ok, "dispatcher %q not registered", key)
 
 	return d.(Operation[T])
 }
@@ -153,9 +153,9 @@ func TestSystemEmailSubjects(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			require.NotEmpty(t, tc.subject)
+			assert.Assert(t, len(tc.subject) > 0)
 			for _, s := range tc.contains {
-				assert.Contains(t, tc.subject, s)
+				assert.Check(t, is.Contains(tc.subject, s))
 			}
 		})
 	}
@@ -175,10 +175,10 @@ func TestVerifyEmailURLConstruction(t *testing.T) {
 
 	body := testDispatcher[VerifyEmailRequest](t, "VerifyEmailRequest").Build(cfg, req)
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/verify?token=abc123", body.Actions[0].Button.Link)
-	assert.Equal(t, "Confirm Email", body.Actions[0].Button.Text)
-	assert.Equal(t, "Alice", body.Name)
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal("https://app.testco.com/verify?token=abc123", body.Actions[0].Button.Link))
+	assert.Check(t, is.Equal("Confirm Email", body.Actions[0].Button.Text))
+	assert.Check(t, is.Equal("Alice", body.Name))
 }
 
 // TestInviteEmailURLConstruction verifies the invite email content builds the correct URL
@@ -198,9 +198,9 @@ func TestInviteEmailURLConstruction(t *testing.T) {
 
 	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/invite?token=inv-tok-456&email=bob%40example.com", body.Actions[0].Button.Link)
-	assert.Equal(t, "Accept Invite", body.Actions[0].Button.Text)
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal("https://app.testco.com/invite?token=inv-tok-456&email=bob%40example.com", body.Actions[0].Button.Link))
+	assert.Check(t, is.Equal("Accept Invite", body.Actions[0].Button.Text))
 }
 
 // TestInviteEmailRoleInIntro verifies the role appears in the intro
@@ -219,7 +219,7 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 
 	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
-	require.NotEmpty(t, body.Intros.Paragraphs)
+	assert.Assert(t, len(body.Intros.Paragraphs) > 0)
 	found := false
 
 	for _, intro := range body.Intros.Paragraphs {
@@ -228,14 +228,14 @@ func TestInviteEmailRoleInIntro(t *testing.T) {
 		}
 	}
 
-	assert.True(t, found, "expected role in intro")
+	assert.Check(t, found, "expected role in intro")
 }
 
 // TestInviteIntroEscapesUnsafeInputs verifies user-controlled fields are HTML-escaped in the rendered
 // email, so the plain-text intro paragraphs cannot inject markup
 func TestInviteIntroEscapesUnsafeInputs(t *testing.T) {
 	dispatcher, ok := DispatcherByKey(InviteOp.Name())
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	client := &Client{Config: RuntimeEmailConfig{CompanyName: "TestCo <script>", ProductURL: "https://app.testco.com"}}
 
@@ -245,18 +245,18 @@ func TestInviteIntroEscapesUnsafeInputs(t *testing.T) {
 		Role:        "admin<script>",
 		Token:       "tok",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	msg, err := dispatcher.RenderMessage(context.Background(), client, payload)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	html := msg.GetHTML()
 
-	assert.NotContains(t, html, "<img src=x onerror=alert(1)>")
-	assert.NotContains(t, html, "admin<script>")
-	assert.Contains(t, html, "Alice &lt;img src=x onerror=alert(1)&gt;")
-	assert.Contains(t, html, "Eng &amp; &lt;Ops&gt;")
-	assert.Contains(t, html, "admin&lt;script&gt;")
+	assert.Check(t, !strings.Contains(html, "<img src=x onerror=alert(1)>"))
+	assert.Check(t, !strings.Contains(html, "admin<script>"))
+	assert.Check(t, is.Contains(html, "Alice &lt;img src=x onerror=alert(1)&gt;"))
+	assert.Check(t, is.Contains(html, "Eng &amp; &lt;Ops&gt;"))
+	assert.Check(t, is.Contains(html, "admin&lt;script&gt;"))
 }
 
 // TestInviteEmailNoRole verifies the intro omits role text when empty
@@ -274,9 +274,9 @@ func TestInviteEmailNoRole(t *testing.T) {
 
 	body := testDispatcher[InviteRequest](t, "InviteRequest").Build(cfg, req)
 
-	require.NotEmpty(t, body.Intros.Paragraphs)
+	assert.Assert(t, len(body.Intros.Paragraphs) > 0)
 	for _, intro := range body.Intros.Paragraphs {
-		assert.NotContains(t, intro, "role of")
+		assert.Check(t, !strings.Contains(intro, "role of"))
 	}
 }
 
@@ -294,8 +294,8 @@ func TestPasswordResetURLConstruction(t *testing.T) {
 
 	body := testDispatcher[PasswordResetEmailRequest](t, "PasswordResetEmailRequest").Build(cfg, req)
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/password-reset?token=reset-xyz", body.Actions[0].Button.Link)
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal("https://app.testco.com/password-reset?token=reset-xyz", body.Actions[0].Button.Link))
 }
 
 // TestSubscribeVerifyURLTrustCenterDomain verifies the confirm button uses the caller-supplied trust
@@ -316,8 +316,8 @@ func TestSubscribeVerifyURLTrustCenterDomain(t *testing.T) {
 
 	body := testDispatcher[SubscribeRequest](t, "SubscribeRequest").Build(cfg, req)
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://trust.suborg.com/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal("https://trust.suborg.com/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link))
 }
 
 // TestSubscribeVerifyURLFallback verifies that an organization-level subscriber with no trust center to
@@ -337,8 +337,8 @@ func TestSubscribeVerifyURLFallback(t *testing.T) {
 
 	body := testDispatcher[SubscribeRequest](t, "SubscribeRequest").Build(cfg, req)
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://api.testco.com/v1/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link)
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal("https://api.testco.com/v1/subscribe/verify?token=sub-tok", body.Actions[0].Button.Link))
 }
 
 // TestVerifyBillingURLConstruction verifies the billing verification URL
@@ -354,8 +354,8 @@ func TestVerifyBillingURLConstruction(t *testing.T) {
 
 	body := testDispatcher[VerifyBillingRequest](t, "VerifyBillingRequest").Build(cfg, req)
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com/billing/verify?token=bill-tok", body.Actions[0].Button.Link)
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal("https://app.testco.com/billing/verify?token=bill-tok", body.Actions[0].Button.Link))
 }
 
 // TestTrustCenterNDARequestButtonColor verifies the NDA request uses trust center theme colors
@@ -367,10 +367,10 @@ func TestTrustCenterNDARequestButtonColor(t *testing.T) {
 		NDAURL:  "https://trust.securecorp.com/sign",
 	})
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, tcButtonColor, body.Actions[0].Button.Color)
-	assert.Equal(t, tcButtonTextColor, body.Actions[0].Button.TextColor)
-	assert.Equal(t, "https://trust.securecorp.com/sign", body.Actions[0].Button.Link)
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal(tcButtonColor, body.Actions[0].Button.Color))
+	assert.Check(t, is.Equal(tcButtonTextColor, body.Actions[0].Button.TextColor))
+	assert.Check(t, is.Equal("https://trust.securecorp.com/sign", body.Actions[0].Button.Link))
 }
 
 // TestTrustCenterNDASignedContent verifies the NDA signed confirmation content
@@ -382,10 +382,10 @@ func TestTrustCenterNDASignedContent(t *testing.T) {
 		TrustCenterURL: "https://trust.securecorp.com",
 	})
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "Visit Trust Center", body.Actions[0].Button.Text)
-	assert.Equal(t, "https://trust.securecorp.com", body.Actions[0].Button.Link)
-	assert.Contains(t, body.Intros.Paragraphs[0], "SecureCorp")
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal("Visit Trust Center", body.Actions[0].Button.Text))
+	assert.Check(t, is.Equal("https://trust.securecorp.com", body.Actions[0].Button.Link))
+	assert.Check(t, is.Contains(body.Intros.Paragraphs[0], "SecureCorp"))
 }
 
 // TestTrustCenterNDASignedAttachment verifies attachment options are returned when data is present
@@ -397,7 +397,7 @@ func TestTrustCenterNDASignedAttachment(t *testing.T) {
 		AttachmentData:     []byte("pdf-content"),
 	})
 
-	require.Len(t, opts, 1)
+	assert.Assert(t, is.Len(opts, 1))
 }
 
 // TestTrustCenterNDASignedNoAttachment verifies nil options when no attachment
@@ -406,7 +406,7 @@ func TestTrustCenterNDASignedNoAttachment(t *testing.T) {
 
 	opts := op.MessageOptions(RuntimeEmailConfig{}, TrustCenterNDASignedEmail{})
 
-	assert.Nil(t, opts)
+	assert.Check(t, is.Nil(opts))
 }
 
 // TestQuestionnaireAuthContent verifies questionnaire auth email content
@@ -423,10 +423,10 @@ func TestQuestionnaireAuthContent(t *testing.T) {
 
 	body := testDispatcher[QuestionnaireAuthEmail](t, "QuestionnaireAuthEmail").Build(cfg, req)
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://q.auditco.com/auth?tok=abc", body.Actions[0].Button.Link)
-	assert.Contains(t, body.Title, "AuditCo")
-	assert.Contains(t, body.Intros.Paragraphs[0], "SOC2 Review")
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal("https://q.auditco.com/auth?tok=abc", body.Actions[0].Button.Link))
+	assert.Check(t, is.Contains(body.Title, "AuditCo"))
+	assert.Check(t, is.Contains(body.Intros.Paragraphs[0], "SOC2 Review"))
 }
 
 // TestQuestionnaireFromOverride verifies the from address override when configured
@@ -438,7 +438,7 @@ func TestQuestionnaireFromOverride(t *testing.T) {
 	op := testDispatcher[QuestionnaireAuthEmail](t, "QuestionnaireAuthEmail")
 	opts := op.MessageOptions(cfg, QuestionnaireAuthEmail{})
 
-	require.Len(t, opts, 1)
+	assert.Assert(t, is.Len(opts, 1))
 }
 
 // TestQuestionnaireNoFromOverride verifies nil when no questionnaire email configured
@@ -446,7 +446,7 @@ func TestQuestionnaireNoFromOverride(t *testing.T) {
 	op := testDispatcher[QuestionnaireAuthEmail](t, "QuestionnaireAuthEmail")
 	opts := op.MessageOptions(RuntimeEmailConfig{}, QuestionnaireAuthEmail{})
 
-	assert.Nil(t, opts)
+	assert.Check(t, is.Nil(opts))
 }
 
 // TestBillingChangedContent verifies billing change notification content
@@ -465,12 +465,12 @@ func TestBillingChangedContent(t *testing.T) {
 
 	body := testDispatcher[BillingEmailChangedEmail](t, "BillingEmailChangedEmail").Build(cfg, req)
 
-	assert.Equal(t, "Billing Email Changed", body.Title)
-	assert.Contains(t, body.Intros.Paragraphs[0], "BillOrg")
+	assert.Check(t, is.Equal("Billing Email Changed", body.Title))
+	assert.Check(t, is.Contains(body.Intros.Paragraphs[0], "BillOrg"))
 
-	require.NotEmpty(t, body.Dictionary.Cells)
-	assert.Equal(t, "old@billing.com", body.Dictionary.Cells[0].Value)
-	assert.Equal(t, "new@billing.com", body.Dictionary.Cells[1].Value)
+	assert.Assert(t, len(body.Dictionary.Cells) > 0)
+	assert.Check(t, is.Equal("old@billing.com", body.Dictionary.Cells[0].Value))
+	assert.Check(t, is.Equal("new@billing.com", body.Dictionary.Cells[1].Value))
 }
 
 // TestOrgDeletionNoticeContent verifies org deletion notice content
@@ -488,39 +488,39 @@ func TestOrgDeletionNoticeContent(t *testing.T) {
 
 	body := testDispatcher[OrgDeletionNoticeEmail](t, "OrgDeletionNoticeEmail").Build(cfg, req)
 
-	assert.Equal(t, "Organization Deletion Notice", body.Title)
-	assert.Contains(t, body.Intros.Paragraphs[0], "DeadOrg")
+	assert.Check(t, is.Equal("Organization Deletion Notice", body.Title))
+	assert.Check(t, is.Contains(body.Intros.Paragraphs[0], "DeadOrg"))
 
-	require.NotEmpty(t, body.Dictionary.Cells)
-	assert.Equal(t, "July 1, 2025", body.Dictionary.Cells[0].Value)
+	assert.Assert(t, len(body.Dictionary.Cells) > 0)
+	assert.Check(t, is.Equal("July 1, 2025", body.Dictionary.Cells[0].Value))
 
-	require.Len(t, body.Actions, 1)
-	assert.Equal(t, "https://app.testco.com"+billingPath, body.Actions[0].Button.Link)
-	assert.Equal(t, "Add Payment Method", body.Actions[0].Button.Text)
+	assert.Assert(t, is.Len(body.Actions, 1))
+	assert.Check(t, is.Equal("https://app.testco.com"+billingPath, body.Actions[0].Button.Link))
+	assert.Check(t, is.Equal("Add Payment Method", body.Actions[0].Button.Text))
 	// matches the questionnaire email treatment: trust center teal button on the base theme
-	assert.Equal(t, tcButtonColor, body.Actions[0].Button.Color)
-	assert.Equal(t, tcButtonTextColor, body.Actions[0].Button.TextColor)
+	assert.Check(t, is.Equal(tcButtonColor, body.Actions[0].Button.Color))
+	assert.Check(t, is.Equal(tcButtonTextColor, body.Actions[0].Button.TextColor))
 }
 
 // TestAllEmailOperationsCount verifies every dispatcher surfaces exactly one registration
 func TestAllEmailOperationsCount(t *testing.T) {
 	ops := AllEmailOperations()
 
-	assert.Len(t, ops, len(dispatchers))
+	assert.Check(t, is.Len(ops, len(dispatchers)))
 }
 
 // TestAllEmailOperationsHaveNames verifies each operation registration has a non-empty name, a handler, and a topic stamped by the registry
 func TestAllEmailOperationsHaveNames(t *testing.T) {
 	reg := registry.New()
-	require.NoError(t, reg.RegisterAll(Builder(&RuntimeEmailConfig{}, false)))
+	assert.NilError(t, reg.RegisterAll(Builder(&RuntimeEmailConfig{}, false)))
 
 	for _, op := range AllEmailOperations() {
-		assert.NotEmpty(t, op.Name, "operation should have a name")
-		assert.NotNil(t, op.Handle, "operation should have a handler")
+		assert.Check(t, len(op.Name) > 0, "operation should have a name")
+		assert.Check(t, op.Handle != nil, "operation should have a handler")
 
 		registered, err := reg.Operation(DefinitionID.ID(), op.Name)
-		require.NoError(t, err)
-		assert.NotEmpty(t, registered.Topic, "operation should have a topic once registered")
+		assert.NilError(t, err)
+		assert.Check(t, len(registered.Topic) > 0, "operation should have a topic once registered")
 	}
 }
 
@@ -531,7 +531,7 @@ func TestAllEmailOperationsUniqueNames(t *testing.T) {
 	seen := make(map[string]struct{}, len(ops))
 	for _, op := range ops {
 		_, duplicate := seen[op.Name]
-		assert.False(t, duplicate, "duplicate operation name: %s", op.Name)
+		assert.Check(t, !duplicate, "duplicate operation name: %s", op.Name)
 		seen[op.Name] = struct{}{}
 	}
 }

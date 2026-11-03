@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/catalog"
 )
@@ -60,8 +61,8 @@ func TestLookupKeyConflicts(t *testing.T) {
 	prod := &stripe.Product{ID: "m1", Name: "mod1"}
 
 	conflicts, err := cat.LookupKeyConflicts(context.Background(), &fakeLookup{price: price, feature: feat, product: prod, products: []*stripe.Product{prod}})
-	assert.NoError(t, err)
-	assert.Len(t, conflicts, 3)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(conflicts, 3))
 }
 
 func TestLookupKeyConflictsByName(t *testing.T) {
@@ -78,6 +79,6 @@ func TestLookupKeyConflictsByName(t *testing.T) {
 	prod := &stripe.Product{ID: "prod_x", Name: "mod2"}
 
 	conflicts, err := cat.LookupKeyConflicts(context.Background(), &fakeLookup{products: []*stripe.Product{prod}})
-	assert.NoError(t, err)
-	assert.Len(t, conflicts, 1)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(conflicts, 1))
 }

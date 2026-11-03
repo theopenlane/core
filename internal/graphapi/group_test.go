@@ -1379,6 +1379,7 @@ func TestManagedGroupMembership_AdminGroup(t *testing.T) {
 }
 
 func TestMutationGroup_ReportSelfAccess(t *testing.T) {
+	t.Parallel()
 
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 

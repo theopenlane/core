@@ -3,7 +3,7 @@ package validator_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
@@ -25,12 +25,12 @@ func TestValidateName(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			err := validator.SpecialCharValidator(tt.input)
 			if tt.expectErr {
-				require.Error(t, err)
+				assert.Assert(t, err != nil)
 
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 		})
 	}
 }

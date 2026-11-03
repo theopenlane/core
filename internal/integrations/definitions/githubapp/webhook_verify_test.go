@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -60,12 +60,12 @@ func TestAppVerify(t *testing.T) {
 			})
 
 			if tc.wantErr == nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				return
 			}
 
-			require.ErrorIs(t, err, tc.wantErr)
+			assert.ErrorIs(t, err, tc.wantErr)
 		})
 	}
 }

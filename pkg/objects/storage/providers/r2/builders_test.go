@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -13,7 +14,7 @@ import (
 
 func TestNewR2Builder(t *testing.T) {
 	builder := r2provider.NewR2Builder()
-	assert.NotNil(t, builder)
+	assert.Check(t, builder != nil)
 }
 
 func TestR2BuilderBuild(t *testing.T) {
@@ -53,14 +54,14 @@ func TestR2BuilderBuild(t *testing.T) {
 			provider, err := builder.Build(context.Background(), tt.credentials, tt.options)
 
 			if tt.expectError {
-				assert.Error(t, err)
-				assert.Nil(t, provider)
+				assert.Check(t, err != nil)
+				assert.Check(t, is.Nil(provider))
 			} else {
 				if err != nil {
 					t.Skip("Skipping test due to missing R2-compatible environment")
 				}
-				assert.NoError(t, err)
-				assert.NotNil(t, provider)
+				assert.Check(t, err)
+				assert.Check(t, provider != nil)
 			}
 		})
 	}
@@ -68,5 +69,5 @@ func TestR2BuilderBuild(t *testing.T) {
 
 func TestR2BuilderProviderType(t *testing.T) {
 	builder := r2provider.NewR2Builder()
-	assert.Equal(t, string(storagetypes.R2Provider), builder.ProviderType())
+	assert.Check(t, is.Equal(string(storagetypes.R2Provider), builder.ProviderType()))
 }

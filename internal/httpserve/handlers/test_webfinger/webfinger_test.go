@@ -9,7 +9,8 @@ import (
 	"testing"
 
 	"github.com/labstack/echo/v4"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // --- Mock structs used in Webfinger ---
@@ -117,16 +118,17 @@ func TestWebfingerHandler(t *testing.T) {
 			err := h.WebfingerHandler(c)
 
 			if tc.status == http.StatusOK {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 				var resp map[string]interface{}
-				require.NoError(t, json.NewDecoder(rec.Body).Decode(&resp))
-				require.Equal(t, tc.resource, resp["subject"])
-				require.NotEmpty(t, resp["links"])
+				assert.NilError(t, json.NewDecoder(rec.Body).Decode(&resp))
+				assert.Assert(t, is.Equal(tc.resource, resp["subject"]))
+				links, _ := resp["links"].([]interface{})
+				assert.Assert(t, len(links) > 0)
 			} else {
-				require.Error(t, err)
+				assert.Assert(t, err != nil)
 				httpErr, ok := err.(*echo.HTTPError)
-				require.True(t, ok)
-				require.Equal(t, tc.status, httpErr.Code)
+				assert.Assert(t, ok)
+				assert.Assert(t, is.Equal(tc.status, httpErr.Code))
 			}
 		})
 	}

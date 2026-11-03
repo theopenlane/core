@@ -1,11 +1,12 @@
 package summarizer
 
 import (
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 	"os"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/require"
 )
 
 func TestLLM_Summarize(t *testing.T) {
@@ -52,20 +53,20 @@ func TestLLM_Summarize(t *testing.T) {
 		},
 	})
 
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	for _, v := range tt {
 		t.Run("Test "+v.name, func(t *testing.T) {
 
 			summarized, err := summarizer.Summarize(t.Context(), v.sentence)
 			if v.hasError {
-				require.Error(t, err)
+				assert.Assert(t, err != nil)
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotEmpty(t, summarized)
-			require.NotEqual(t, summarized, v.sentence)
+			assert.NilError(t, err)
+			assert.Assert(t, summarized != "")
+			assert.Assert(t, summarized != v.sentence)
 		})
 	}
 }
@@ -155,13 +156,13 @@ func TestNewLLMSummarizer(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			summarizer, err := newLLMSummarizer(tt.cfg)
 			if tt.wantErr {
-				require.Error(t, err)
-				require.Nil(t, summarizer)
+				assert.Assert(t, err != nil)
+				assert.Assert(t, is.Nil(summarizer))
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, summarizer)
+			assert.NilError(t, err)
+			assert.Assert(t, summarizer != nil)
 		})
 	}
 }

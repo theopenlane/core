@@ -26,8 +26,7 @@ func TestQueryStandard(t *testing.T) {
 
 	numControls := 20
 	controlIDs := []string{}
-	for range numControls {
-		control := (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	for _, control := range (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNewBulk(th.SharedSystemAdminUser.UserCtx, t, numControls) {
 		controlIDs = append(controlIDs, control.ID)
 	}
 
@@ -329,15 +328,13 @@ func TestMutationCreateStandard(t *testing.T) {
 
 	numControls := 20
 	controlIDs := []string{}
-	for range numControls {
-		control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	for _, control := range (&th.ControlBuilder{Client: suite.Client}).MustNewBulk(th.SharedAdminUser.UserCtx, t, numControls) {
 		controlIDs = append(controlIDs, control.ID)
 	}
 
 	numAdminControls := 32
 	adminControlIDs := []string{}
-	for range numAdminControls {
-		control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	for _, control := range (&th.ControlBuilder{Client: suite.Client}).MustNewBulk(th.SharedSystemAdminUser.UserCtx, t, numAdminControls) {
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 

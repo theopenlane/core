@@ -2,10 +2,12 @@ package ratelimit
 
 import (
 	"context"
+	"math"
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestRateLimiter(t *testing.T) {
@@ -43,13 +45,13 @@ func TestRateLimiter(t *testing.T) {
 
 		for i := 0; i < tt.incNumber; i++ {
 			err := r.Inc("key")
-			assert.NoError(t, err, tt.name)
+			assert.Check(t, err, tt.name)
 		}
 
 		limitStatus, err := r.Check("key")
-		assert.NoError(t, err, tt.name)
-		assert.Equal(t, tt.wantLimitStatus.IsLimited, limitStatus.IsLimited, tt.name)
-		assert.Equal(t, tt.wantLimitStatus.CurrentRate, limitStatus.CurrentRate, tt.name)
+		assert.Check(t, err, tt.name)
+		assert.Check(t, is.Equal(tt.wantLimitStatus.IsLimited, limitStatus.IsLimited), tt.name)
+		assert.Check(t, is.Equal(tt.wantLimitStatus.CurrentRate, limitStatus.CurrentRate), tt.name)
 	}
 }
 
@@ -86,7 +88,7 @@ func TestCalcDuration(t *testing.T) {
 		store := NewMapLimitStore(context.Background(), 1*time.Hour, 1*time.Hour)
 		r := New(store, tt.requestsLimit, tt.windowSize)
 		dur := r.calcLimitDuration(tt.prevValue, tt.currValue, tt.timeFromCurrWindow)
-		assert.InDelta(t, tt.want, dur, 3)
+		assert.Check(t, math.Abs(float64(tt.want)-float64(dur)) <= 3)
 	}
 }
 
@@ -141,6 +143,6 @@ func TestCalcRate(t *testing.T) {
 		store := NewMapLimitStore(context.Background(), 1*time.Hour, 1*time.Hour)
 		r := New(store, tt.requestsLimit, tt.windowSize)
 		rate := r.calcRate(tt.timeFromCurrWindow, tt.prevValue, tt.currentValue)
-		assert.Equal(t, tt.want, rate)
+		assert.Check(t, is.Equal(tt.want, rate))
 	}
 }

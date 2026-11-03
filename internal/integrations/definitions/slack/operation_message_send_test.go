@@ -10,7 +10,8 @@ import (
 	"testing"
 
 	slackgo "github.com/slack-go/slack"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
@@ -30,16 +31,16 @@ func TestMessageSendRunDestinations(t *testing.T) {
 		Destinations: []string{"C11111", "C22222"},
 		Text:         "hello from destinations",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	var result operations.MessageSendResult
-	require.NoError(t, json.Unmarshal(resultBytes, &result))
-	require.Len(t, result.Deliveries, 2)
-	require.Equal(t, "C11111", result.Channel)
-	require.Equal(t, "C11111", result.Deliveries[0].Channel)
-	require.Equal(t, "C22222", result.Deliveries[1].Channel)
-	require.Equal(t, []string{"C11111", "C22222"}, recorded.channelValues())
-	require.Equal(t, []string{"hello from destinations", "hello from destinations"}, recorded.texts())
+	assert.NilError(t, json.Unmarshal(resultBytes, &result))
+	assert.Assert(t, is.Len(result.Deliveries, 2))
+	assert.Assert(t, is.Equal("C11111", result.Channel))
+	assert.Assert(t, is.Equal("C11111", result.Deliveries[0].Channel))
+	assert.Assert(t, is.Equal("C22222", result.Deliveries[1].Channel))
+	assert.Assert(t, is.DeepEqual([]string{"C11111", "C22222"}, recorded.channelValues()))
+	assert.Assert(t, is.DeepEqual([]string{"hello from destinations", "hello from destinations"}, recorded.texts()))
 }
 
 func TestMessageSendRunDedupesChannelAndDestinations(t *testing.T) {
@@ -56,12 +57,12 @@ func TestMessageSendRunDedupesChannelAndDestinations(t *testing.T) {
 		Destinations: []string{"C11111", "C22222", "C22222"},
 		Text:         "hello dedupe",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	var result operations.MessageSendResult
-	require.NoError(t, json.Unmarshal(resultBytes, &result))
-	require.Len(t, result.Deliveries, 2)
-	require.Equal(t, []string{"C11111", "C22222"}, recorded.channelValues())
+	assert.NilError(t, json.Unmarshal(resultBytes, &result))
+	assert.Assert(t, is.Len(result.Deliveries, 2))
+	assert.Assert(t, is.DeepEqual([]string{"C11111", "C22222"}, recorded.channelValues()))
 }
 
 func TestResolveOperationTemplateNoop(t *testing.T) {
@@ -73,9 +74,9 @@ func TestResolveOperationTemplateNoop(t *testing.T) {
 	}
 
 	err := cfg.ResolveTemplate(context.Background(), types.OperationRequest{}, &cfg)
-	require.NoError(t, err)
-	require.Equal(t, "C11111", cfg.Channel)
-	require.Equal(t, "hello", cfg.Text)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal("C11111", cfg.Channel))
+	assert.Assert(t, is.Equal("hello", cfg.Text))
 }
 
 func TestResolveOperationTemplateBothRefsUseResolutionPath(t *testing.T) {
@@ -89,7 +90,7 @@ func TestResolveOperationTemplateBothRefsUseResolutionPath(t *testing.T) {
 	}
 
 	err := cfg.ResolveTemplate(context.Background(), types.OperationRequest{}, &cfg)
-	require.ErrorIs(t, err, templatekit.ErrTemplateNotFound)
+	assert.ErrorIs(t, err, templatekit.ErrTemplateNotFound)
 }
 
 // slackPostMessageRecorder captures chat.postMessage requests made against a test HTTP server

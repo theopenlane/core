@@ -5,7 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -20,11 +21,11 @@ func TestBuildDispatchPayload_EmptyDefaultsSingleOverlay(t *testing.T) {
 	}
 
 	result, err := BuildDispatchPayload(nil, overlay{Name: "test"})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	var out map[string]any
-	require.NoError(t, json.Unmarshal(result, &out))
-	require.Equal(t, "test", out["name"])
+	assert.NilError(t, json.Unmarshal(result, &out))
+	assert.Assert(t, is.Equal("test", out["name"]))
 }
 
 func TestBuildDispatchPayload_DefaultsWithOverlayMerge(t *testing.T) {
@@ -40,12 +41,12 @@ func TestBuildDispatchPayload_DefaultsWithOverlayMerge(t *testing.T) {
 	}
 
 	result, err := BuildDispatchPayload(defaults, overlay{Subject: "override"})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	var out map[string]any
-	require.NoError(t, json.Unmarshal(result, &out))
-	require.Equal(t, "override", out["subject"])
-	require.Equal(t, "default body", out["body"])
+	assert.NilError(t, json.Unmarshal(result, &out))
+	assert.Assert(t, is.Equal("override", out["subject"]))
+	assert.Assert(t, is.Equal("default body", out["body"]))
 }
 
 func TestBuildDispatchPayload_MultipleOverlaysInOrder(t *testing.T) {
@@ -62,28 +63,28 @@ func TestBuildDispatchPayload_MultipleOverlaysInOrder(t *testing.T) {
 	}
 
 	result, err := BuildDispatchPayload(defaults, first{Key: "first", Extra: "added"}, second{Key: "second"})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	var out map[string]any
-	require.NoError(t, json.Unmarshal(result, &out))
-	require.Equal(t, "second", out["key"])
-	require.Equal(t, "added", out["extra"])
+	assert.NilError(t, json.Unmarshal(result, &out))
+	assert.Assert(t, is.Equal("second", out["key"]))
+	assert.Assert(t, is.Equal("added", out["extra"]))
 }
 
 func TestBuildDispatchPayload_NilDefaults(t *testing.T) {
 	t.Parallel()
 
 	result, err := BuildDispatchPayload(nil)
-	require.NoError(t, err)
-	require.Equal(t, json.RawMessage(`{}`), result)
+	assert.NilError(t, err)
+	assert.Assert(t, is.DeepEqual(json.RawMessage(`{}`), result))
 }
 
 func TestBuildDispatchPayload_EmptyDefaults(t *testing.T) {
 	t.Parallel()
 
 	result, err := BuildDispatchPayload(map[string]any{})
-	require.NoError(t, err)
-	require.NotNil(t, result)
+	assert.NilError(t, err)
+	assert.Assert(t, result != nil)
 }
 
 func TestResolveOperationTemplate_NoopWhenEmpty(t *testing.T) {
@@ -97,8 +98,8 @@ func TestResolveOperationTemplate_NoopWhenEmpty(t *testing.T) {
 
 	c := cfg{Channel: "C-ORIGINAL"}
 	err := ResolveOperationTemplate(t.Context(), types.OperationRequest{}, "", "", &c)
-	require.NoError(t, err)
-	require.Equal(t, "C-ORIGINAL", c.Channel)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal("C-ORIGINAL", c.Channel))
 }
 
 func TestResolveOperationTemplate_BothIDAndKeyUsesResolutionPath(t *testing.T) {
@@ -111,7 +112,7 @@ func TestResolveOperationTemplate_BothIDAndKeyUsesResolutionPath(t *testing.T) {
 
 	c := cfg{}
 	err := ResolveOperationTemplate(t.Context(), types.OperationRequest{}, "id", "key", &c)
-	require.ErrorIs(t, err, ErrTemplateNotFound)
+	assert.ErrorIs(t, err, ErrTemplateNotFound)
 }
 
 func TestOperationOwnerID_FromRequestIntegration(t *testing.T) {
@@ -120,7 +121,7 @@ func TestOperationOwnerID_FromRequestIntegration(t *testing.T) {
 	ownerID := operationOwnerID(context.Background(), types.OperationRequest{
 		Integration: &generated.Integration{OwnerID: "org-request"},
 	})
-	require.Equal(t, "org-request", ownerID)
+	assert.Assert(t, is.Equal("org-request", ownerID))
 }
 
 func TestOperationOwnerID_FromOperationContext(t *testing.T) {
@@ -128,5 +129,5 @@ func TestOperationOwnerID_FromOperationContext(t *testing.T) {
 
 	ctx := gala.WithOperationContext(context.Background(), gala.OperationContext{OwnerID: "org-meta"})
 	ownerID := operationOwnerID(ctx, types.OperationRequest{})
-	require.Equal(t, "org-meta", ownerID)
+	assert.Assert(t, is.Equal("org-meta", ownerID))
 }

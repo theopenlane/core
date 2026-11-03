@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/entitlements/mocks"
@@ -42,8 +43,8 @@ func TestFindPriceForProductByLookupKey(t *testing.T) {
 	sc, _ := setupPriceClient([]*stripe.Price{price}, nil)
 
 	found, err := sc.FindPriceForProduct(ctx, "prod_1", "", 0, "", "", "", "basic", nil)
-	assert.NoError(t, err)
-	assert.Equal(t, price, found)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(price, found))
 }
 
 func TestFindPriceForProductByAttributes(t *testing.T) {
@@ -61,8 +62,8 @@ func TestFindPriceForProductByAttributes(t *testing.T) {
 	sc, _ := setupPriceClient([]*stripe.Price{price}, nil)
 
 	found, err := sc.FindPriceForProduct(ctx, "prod_1", "", 1000, "usd", "month", "basic", "", map[string]string{"managed_by": "openlane"})
-	assert.NoError(t, err)
-	assert.Equal(t, price, found)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(price, found))
 }
 
 func TestFindPriceForProductNoMatch(t *testing.T) {
@@ -71,15 +72,15 @@ func TestFindPriceForProductNoMatch(t *testing.T) {
 	sc, _ := setupPriceClient([]*stripe.Price{price}, nil)
 
 	found, err := sc.FindPriceForProduct(ctx, "prod_1", "", 2000, "usd", "month", "", "", nil)
-	assert.NoError(t, err)
-	assert.Nil(t, found)
+	assert.Check(t, err)
+	assert.Check(t, is.Nil(found))
 }
 
 func TestFindPriceForProductListError(t *testing.T) {
-	sc, _ := setupPriceClient(nil, assert.AnError)
+	sc, _ := setupPriceClient(nil, errMock)
 	found, err := sc.FindPriceForProduct(context.Background(), "prod_1", "", 0, "", "", "", "", nil)
-	assert.Error(t, err)
-	assert.Nil(t, found)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Nil(found))
 }
 
 func TestUpdatePriceMetadata(t *testing.T) {
@@ -93,7 +94,7 @@ func TestUpdatePriceMetadata(t *testing.T) {
 
 	backend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
 		params := args.Get(3).(*stripe.PriceUpdateParams)
-		assert.Equal(t, metadata, params.Metadata)
+		assert.Check(t, is.DeepEqual(metadata, params.Metadata))
 		resp := args.Get(4).(*stripe.Price)
 		*resp = *expected
 	}).Return(nil)
@@ -101,6 +102,6 @@ func TestUpdatePriceMetadata(t *testing.T) {
 	sc := entitlements.StripeClient{Client: stripe.NewClient("sk_test", stripe.WithBackends(backends))}
 
 	p, err := sc.UpdatePriceMetadata(ctx, "price_1", metadata)
-	assert.NoError(t, err)
-	assert.Equal(t, expected, p)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual(expected, p))
 }

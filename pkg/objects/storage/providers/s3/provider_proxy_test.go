@@ -8,7 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -26,7 +27,7 @@ func TestProvider_GetPresignedURL_Proxy(t *testing.T) {
 
 	secret := make([]byte, 128)
 	_, err := rand.Read(secret)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	file := &storagetypes.File{
 		ID: "01HZZTESTFILE00000000000000",
@@ -38,15 +39,15 @@ func TestProvider_GetPresignedURL_Proxy(t *testing.T) {
 	}
 
 	url, err := proxy.GenerateDownloadURLWithSecret(file, secret, time.Minute, cfg)
-	require.NoError(t, err)
-	require.NotEmpty(t, url)
+	assert.NilError(t, err)
+	assert.Assert(t, len(url) > 0)
 
-	require.True(t, strings.HasPrefix(url, baseURL), "URL should start with BaseURL, got %q", url)
-	require.Contains(t, url, file.ID, "URL should contain file ID")
-	require.Contains(t, url, "token=", "URL should contain token parameter")
+	assert.Assert(t, strings.HasPrefix(url, baseURL), "URL should start with BaseURL, got %q", url)
+	assert.Assert(t, is.Contains(url, file.ID), "URL should contain file ID")
+	assert.Assert(t, is.Contains(url, "token="), "URL should contain token parameter")
 
 	parts := strings.Split(url, "token=")
-	require.Len(t, parts, 2)
+	assert.Assert(t, is.Len(parts, 2))
 	tokenParam := parts[1]
 
 	unescaped := strings.ReplaceAll(tokenParam, "%2B", "+")
@@ -54,7 +55,7 @@ func TestProvider_GetPresignedURL_Proxy(t *testing.T) {
 	unescaped = strings.ReplaceAll(unescaped, "%3D", "=")
 
 	_, err = base64.RawURLEncoding.DecodeString(unescaped)
-	require.NoError(t, err, "token should be valid base64")
+	assert.NilError(t, err, "token should be valid base64")
 }
 
 func TestProvider_GetPresignedURL_FallbackToNative(t *testing.T) {
@@ -76,8 +77,8 @@ func TestProvider_GetPresignedURL_FallbackToNative(t *testing.T) {
 	)
 
 	provider, err := NewS3Provider(opts)
-	require.NoError(t, err)
-	require.NotNil(t, provider)
+	assert.NilError(t, err)
+	assert.Assert(t, provider != nil)
 
 	url, err := provider.GetPresignedURL(t.Context(), &storagetypes.File{
 		ID: "01HZZTESTFILE00000000000000",
@@ -87,15 +88,15 @@ func TestProvider_GetPresignedURL_FallbackToNative(t *testing.T) {
 		},
 	}, &storagetypes.PresignedURLOptions{Duration: time.Minute})
 
-	require.NoError(t, err, "with proxy presign enabled but no ent client, should fall back to native S3 presigning")
-	require.NotEmpty(t, url)
-	require.Contains(t, url, "X-Amz-Algorithm=AWS4-HMAC-SHA256")
+	assert.NilError(t, err, "with proxy presign enabled but no ent client, should fall back to native S3 presigning")
+	assert.Assert(t, len(url) > 0)
+	assert.Assert(t, is.Contains(url, "X-Amz-Algorithm=AWS4-HMAC-SHA256"))
 }
 
 func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	t.Helper()
 	_, key, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	conf := tokens.Config{
 		Audience:        "http://localhost:17608",
@@ -106,6 +107,6 @@ func newTestTokenManager(t *testing.T) *tokens.TokenManager {
 	}
 
 	tm, err := tokens.NewWithKey(key, conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	return tm
 }

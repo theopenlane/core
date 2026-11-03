@@ -8,7 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestBuildTrustCenterURL(t *testing.T) {
@@ -61,7 +62,7 @@ func TestBuildTrustCenterURL(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			oldConfig := trustCenterConfig
-			defer func() { SetTrustCenterConfig(oldConfig) }()
+			t.Cleanup(func() { SetTrustCenterConfig(oldConfig) })
 
 			SetTrustCenterConfig(TrustCenterConfig{
 				DefaultTrustCenterDomain: tt.defaultDomain,
@@ -69,7 +70,7 @@ func TestBuildTrustCenterURL(t *testing.T) {
 			})
 
 			result := buildTrustCenterURL(tt.customDomain, tt.slug)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -88,17 +89,17 @@ func TestTriggerCacheRefresh(t *testing.T) {
 			receivedUserAgent = r.Header.Get("User-Agent")
 			w.WriteHeader(http.StatusOK)
 		}))
-		defer server.Close()
+		t.Cleanup(server.Close)
 
 		err := triggerCacheRefresh(context.Background(), server.URL)
-		assert.NoError(t, err)
-		assert.Equal(t, cacheRefreshValue, receivedFresh)
-		assert.Equal(t, cacheRefreshUserAgent, receivedUserAgent)
+		assert.Check(t, err)
+		assert.Check(t, is.Equal(cacheRefreshValue, receivedFresh))
+		assert.Check(t, is.Equal(cacheRefreshUserAgent, receivedUserAgent))
 	})
 
 	t.Run("sends shared secret header when configured", func(t *testing.T) {
 		oldConfig := trustCenterConfig
-		defer func() { SetTrustCenterConfig(oldConfig) }()
+		t.Cleanup(func() { SetTrustCenterConfig(oldConfig) })
 
 		SetTrustCenterConfig(TrustCenterConfig{CacheRefreshSecret: "refresh-secret"})
 
@@ -108,16 +109,16 @@ func TestTriggerCacheRefresh(t *testing.T) {
 			receivedSecret = r.Header.Get(cacheRefreshAuthHeader)
 			w.WriteHeader(http.StatusOK)
 		}))
-		defer server.Close()
+		t.Cleanup(server.Close)
 
 		err := triggerCacheRefresh(context.Background(), server.URL)
-		assert.NoError(t, err)
-		assert.Equal(t, "refresh-secret", receivedSecret)
+		assert.Check(t, err)
+		assert.Check(t, is.Equal("refresh-secret", receivedSecret))
 	})
 
 	t.Run("omits shared secret header when not configured", func(t *testing.T) {
 		oldConfig := trustCenterConfig
-		defer func() { SetTrustCenterConfig(oldConfig) }()
+		t.Cleanup(func() { SetTrustCenterConfig(oldConfig) })
 
 		SetTrustCenterConfig(TrustCenterConfig{})
 
@@ -127,11 +128,11 @@ func TestTriggerCacheRefresh(t *testing.T) {
 			_, secretHeaderPresent = r.Header[cacheRefreshAuthHeader]
 			w.WriteHeader(http.StatusOK)
 		}))
-		defer server.Close()
+		t.Cleanup(server.Close)
 
 		err := triggerCacheRefresh(context.Background(), server.URL)
-		assert.NoError(t, err)
-		assert.False(t, secretHeaderPresent)
+		assert.Check(t, err)
+		assert.Check(t, !secretHeaderPresent)
 	})
 
 	t.Run("4xx error returns immediately without retry", func(t *testing.T) {
@@ -141,12 +142,12 @@ func TestTriggerCacheRefresh(t *testing.T) {
 			requestCount.Add(1)
 			w.WriteHeader(http.StatusNotFound)
 		}))
-		defer server.Close()
+		t.Cleanup(server.Close)
 
 		err := triggerCacheRefresh(context.Background(), server.URL)
-		assert.Error(t, err)
-		assert.ErrorIs(t, err, ErrCacheRefreshFailed)
-		assert.Equal(t, int32(1), requestCount.Load())
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, ErrCacheRefreshFailed))
+		assert.Check(t, is.Equal(int32(1), requestCount.Load()))
 	})
 
 	t.Run("5xx error retries", func(t *testing.T) {
@@ -156,12 +157,12 @@ func TestTriggerCacheRefresh(t *testing.T) {
 			requestCount.Add(1)
 			w.WriteHeader(http.StatusInternalServerError)
 		}))
-		defer server.Close()
+		t.Cleanup(server.Close)
 
 		err := triggerCacheRefresh(context.Background(), server.URL)
-		assert.Error(t, err)
-		assert.ErrorIs(t, err, ErrCacheRefreshFailed)
-		assert.Equal(t, int32(cacheRefreshMaxRetries), requestCount.Load())
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, ErrCacheRefreshFailed))
+		assert.Check(t, is.Equal(int32(cacheRefreshMaxRetries), requestCount.Load()))
 	})
 
 	t.Run("retry succeeds on second attempt", func(t *testing.T) {
@@ -175,10 +176,10 @@ func TestTriggerCacheRefresh(t *testing.T) {
 			}
 			w.WriteHeader(http.StatusOK)
 		}))
-		defer server.Close()
+		t.Cleanup(server.Close)
 
 		err := triggerCacheRefresh(context.Background(), server.URL)
-		assert.NoError(t, err)
-		assert.Equal(t, int32(2), requestCount.Load())
+		assert.Check(t, err)
+		assert.Check(t, is.Equal(int32(2), requestCount.Load()))
 	})
 }

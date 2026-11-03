@@ -9,7 +9,8 @@ import (
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
@@ -43,14 +44,14 @@ func TestReconcileLoopExhaustsToUnhealthy(t *testing.T) {
 
 	installation, fragment := newHarnessInstallation(t, internalCtx, testint.ModeExhausting)
 
-	require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, installation))
+	assert.NilError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, installation))
 
 	waitForInstallationErrored(t, internalCtx, installation.ID)
 
 	waitForEvents()
 
-	require.Equal(t, 0, activeReconcileJobs(t, fragment))
-	require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
+	assert.Assert(t, is.Equal(0, activeReconcileJobs(t, fragment)))
+	assert.Assert(t, is.Equal(1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType)))
 }
 
 // TestReconcileLoopUnresolvableClientMarksUnhealthy asserts a loop whose client cannot be built
@@ -62,13 +63,13 @@ func TestReconcileLoopUnresolvableClientMarksUnhealthy(t *testing.T) {
 
 	installation, fragment := newHarnessInstallation(t, internalCtx, testint.ModeUnresolvable)
 
-	require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, installation))
+	assert.NilError(t, suite.IntegrationsRT.ResetReconcileLoops(internalCtx, installation))
 
 	waitForEvents()
 
-	require.Equal(t, 0, activeReconcileJobs(t, fragment))
+	assert.Assert(t, is.Equal(0, activeReconcileJobs(t, fragment)))
 
 	reloaded := reloadIntegration(t, internalCtx, installation.ID)
-	require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
-	require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
+	assert.Assert(t, is.Equal(enums.IntegrationStatusErrored, reloaded.Status))
+	assert.Assert(t, is.Equal(1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType)))
 }
