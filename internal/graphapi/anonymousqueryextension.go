@@ -6,8 +6,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
@@ -23,14 +23,13 @@ type anonymousQueryExtension struct {
 
 // newAnonymousQueryExtension builds the ent schema query names from the entityops schema registry
 func newAnonymousQueryExtension() anonymousQueryExtension {
-	plural := pluralize.NewClient()
 	schemaQueries := map[string]string{}
 
 	for _, schema := range entityops.AllSchemas() {
 		name := strings.ToLower(schema.Name)
 
 		// like ent, a name with no distinct plural gets a slice suffix for its list query (e.g. documentDataSlice)
-		list := plural.Plural(name)
+		list := utils.Plural(name)
 		if list == name {
 			list += "slice"
 		}

@@ -16,7 +16,6 @@ import (
 	"entgo.io/ent/schema/index"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/gertd/go-pluralize"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
@@ -366,7 +365,7 @@ func queryForSystemOwned(ctx context.Context, m utils.SystemOwnedMutation, ids [
 		return false, nil
 	}
 
-	table := strcase.SnakeCase(pluralize.NewClient().Plural(m.Type()))
+	table := strcase.SnakeCase(utils.Plural(m.Type()))
 
 	// Build placeholders for IN clause: $1, $2, $3, ...
 	placeholders := make([]string, len(ids))
@@ -385,7 +384,7 @@ func queryForSystemOwned(ctx context.Context, m utils.SystemOwnedMutation, ids [
 
 	defer rows.Close()
 
-	if rows.Next() {
+	for rows.Next() {
 		var systemOwned bool
 		if err := rows.Scan(&systemOwned); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to scan system owned field")
@@ -398,5 +397,5 @@ func queryForSystemOwned(ctx context.Context, m utils.SystemOwnedMutation, ids [
 		}
 	}
 
-	return false, nil
+	return false, rows.Err()
 }
