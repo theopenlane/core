@@ -78,7 +78,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context) error {
 	}
 
 	// create new claims for the user
-	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctxWithToken, ctx.Response().Writer, user, invitedUser.OwnerID)
+	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctxWithToken, ctx.Response().Writer, user, invitedUser.OwnerID, false)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 

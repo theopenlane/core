@@ -2435,6 +2435,12 @@
         },
         "recoverycodelength": {
           "type": "integer"
+        },
+        "maxfailedattempts": {
+          "type": "integer"
+        },
+        "failurewindow": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,

@@ -4,9 +4,13 @@ package openlane
 
 import (
 	"context"
+	"fmt"
 	"strings"
+	"syscall"
 
 	openlaneclient "github.com/theopenlane/go-client"
+	"github.com/theopenlane/iam/auth"
+	"golang.org/x/term"
 
 	api "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/integrations/cli/config"
@@ -72,6 +76,16 @@ func loginWithCredentials(ctx context.Context, host, email, password string) (*o
 		return nil, ErrLogin
 	}
 
+	switch {
+	case resp.TFASetupRequired:
+		return nil, fmt.Errorf("%w: enroll in the console or use auth-mode=token", auth.ErrTFAEnrollmentRequired)
+	case resp.TFAEnabled:
+		resp, err = completeSecondFactor(ctx, client)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	session := strings.TrimSpace(resp.Session)
 	if session == "" {
 		if jarSession, jarErr := client.GetSessionFromCookieJar(); jarErr == nil {
@@ -86,6 +100,30 @@ func loginWithCredentials(ctx context.Context, host, email, password string) (*o
 			Session:     session,
 		}),
 	)
+}
+
+// completeSecondFactor reads the TOTP code from the terminal and completes the pending login
+func completeSecondFactor(ctx context.Context, client *openlaneclient.Client) (*api.LoginResponse, error) {
+	if !term.IsTerminal(int(syscall.Stdin)) {
+		return nil, fmt.Errorf("%w: no terminal to read the code, use auth-mode=token", auth.ErrSecondFactorRequired)
+	}
+
+	fmt.Print("2FA code: ")
+
+	code, err := term.ReadPassword(int(syscall.Stdin))
+
+	fmt.Println()
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := client.ValidateLoginTOTP(ctx, &api.TFARequest{TOTPCode: string(code)})
+	if err != nil || resp.AccessToken == "" {
+		return nil, ErrLogin
+	}
+
+	return resp, nil
 }
 
 // firstNonEmpty returns the first non-empty string from values

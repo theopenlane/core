@@ -14,4 +14,7 @@ func WithCallerExtensions(srv *handler.Server) {
 
 	// anonymous callers may only run root queries from the ent generated schema
 	WithAnonymousQueryBlock(srv)
+
+	// enrollment-only sessions may only run the tfa setting root fields
+	WithTFAEnrollmentBlock(srv)
 }

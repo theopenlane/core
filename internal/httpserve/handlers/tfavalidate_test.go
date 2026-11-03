@@ -142,6 +142,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 
 			if tc.expectedStatus == http.StatusOK {
 				assert.True(t, out.Success)
+				assert.Empty(t, res.Cookies())
 			} else {
 				require.NotNil(t, out.Error)
 				assert.Contains(t, out.Error, tc.expectedErr)

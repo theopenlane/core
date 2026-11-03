@@ -83,7 +83,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context) error {
 	}
 
 	// create new claims for the user
-	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(reqCtx, ctx.Response().Writer, user, in.TargetOrganizationID)
+	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(reqCtx, ctx.Response().Writer, user, in.TargetOrganizationID, false)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 

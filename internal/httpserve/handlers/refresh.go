@@ -40,6 +40,13 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrUnableToVerifyToken)
 	}
 
+	// an enrollment-only session is never exchanged for a full one
+	if claims.TFAEnrollmentRequired {
+		logx.FromContext(reqCtx).Info().Str("userID", claims.Subject).Msg("token presented for refresh belongs to an enrollment-only session")
+
+		return h.Unauthorized(ctx, auth.ErrTFAEnrollmentRequired)
+	}
+
 	// check user in the database, sub == claims subject and ensure only one record is returned
 	// the refresh token is verified but there is no caller yet, the lookup is pinned to the token subject
 	user, err := h.getUserDetailsByID(auth.WithInternalReadContext(reqCtx), claims.Subject)
