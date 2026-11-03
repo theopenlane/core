@@ -2802,6 +2802,7 @@ type ComplexityRoot struct {
 		CompanyName                           func(childComplexity int) int
 		CreatedAt                             func(childComplexity int) int
 		CreatedBy                             func(childComplexity int) int
+		DisableDefaultDomain                  func(childComplexity int) int
 		EnableAutoApproval                    func(childComplexity int) int
 		Environment                           func(childComplexity int) int
 		FaviconLocalFileID                    func(childComplexity int) int
@@ -17181,6 +17182,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.CreatedBy(childComplexity), true
+	case "TrustCenterSettingHistory.disableDefaultDomain":
+		if e.ComplexityRoot.TrustCenterSettingHistory.DisableDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.DisableDefaultDomain(childComplexity), true
 	case "TrustCenterSettingHistory.enableAutoApproval":
 		if e.ComplexityRoot.TrustCenterSettingHistory.EnableAutoApproval == nil {
 			break
@@ -53516,6 +53523,10 @@ type TrustCenterSettingHistory implements Node {
   rules for approving trust center NDA requests
   """
   autoApprovalRules: TrustCenterNDARequestSetting
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
 }
 """
 A connection to a list of items.
@@ -54062,6 +54073,13 @@ input TrustCenterSettingHistoryWhereInput {
   enableAutoApprovalNEQ: Boolean
   enableAutoApprovalIsNil: Boolean
   enableAutoApprovalNotNil: Boolean
+  """
+  disable_default_domain field predicates
+  """
+  disableDefaultDomain: Boolean
+  disableDefaultDomainNEQ: Boolean
+  disableDefaultDomainIsNil: Boolean
+  disableDefaultDomainNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!
@@ -64078,6 +64096,8 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_enableAutoApproval(ctx, field)
 	case "autoApprovalRules":
 		return ec.fieldContext_TrustCenterSettingHistory_autoApprovalRules(ctx, field)
+	case "disableDefaultDomain":
+		return ec.fieldContext_TrustCenterSettingHistory_disableDefaultDomain(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistory", field.Name)
 }

@@ -150153,6 +150153,7 @@ type GetTrustCenterSettingByID_TrustCenterSetting struct {
 	CompanyName                           *string                                                     "json:\"companyName,omitempty\" graphql:\"companyName\""
 	CreatedAt                             *time.Time                                                  "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                             *string                                                     "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisableDefaultDomain                  *bool                                                       "json:\"disableDefaultDomain,omitempty\" graphql:\"disableDefaultDomain\""
 	EnableAutoApproval                    *bool                                                       "json:\"enableAutoApproval,omitempty\" graphql:\"enableAutoApproval\""
 	Environment                           *enums.TrustCenterEnvironment                               "json:\"environment,omitempty\" graphql:\"environment\""
 	FaviconFile                           *GetTrustCenterSettingByID_TrustCenterSetting_FaviconFile   "json:\"faviconFile,omitempty\" graphql:\"faviconFile\""
@@ -150239,6 +150240,12 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetCreatedBy() *string {
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.CreatedBy
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetDisableDefaultDomain() *bool {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.DisableDefaultDomain
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetEnableAutoApproval() *bool {
 	if t == nil {
@@ -222300,6 +222307,7 @@ const GetTrustCenterSettingByIDDocument = `query GetTrustCenterSettingByID ($tru
 		companyName
 		createdAt
 		createdBy
+		disableDefaultDomain
 		enableAutoApproval
 		environment
 		faviconLocalFileID

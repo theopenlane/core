@@ -33900,6 +33900,10 @@ type TrustCenterSettingHistory implements Node {
 	rules for approving trust center NDA requests
 	"""
 	autoApprovalRules: TrustCenterNDARequestSetting
+	"""
+	if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+	"""
+	disableDefaultDomain: Boolean
 }
 """
 A connection to a list of items.
@@ -34446,6 +34450,13 @@ input TrustCenterSettingHistoryWhereInput {
 	enableAutoApprovalNEQ: Boolean
 	enableAutoApprovalIsNil: Boolean
 	enableAutoApprovalNotNil: Boolean
+	"""
+	disable_default_domain field predicates
+	"""
+	disableDefaultDomain: Boolean
+	disableDefaultDomainNEQ: Boolean
+	disableDefaultDomainIsNil: Boolean
+	disableDefaultDomainNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
 	id: ID!

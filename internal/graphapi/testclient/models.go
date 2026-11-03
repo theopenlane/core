@@ -10329,13 +10329,15 @@ type CreateTrustCenterSettingInput struct {
 	// enable auto approval rules provides configurable settings to skip manual approvals
 	EnableAutoApproval *bool `json:"enableAutoApproval,omitempty"`
 	// rules for approving trust center NDA requests
-	AutoApprovalRules  *models.TrustCenterNDARequestSetting `json:"autoApprovalRules,omitempty"`
-	BlockedGroupIDs    []string                             `json:"blockedGroupIDs,omitempty"`
-	EditorIDs          []string                             `json:"editorIDs,omitempty"`
-	LogoFileID         *string                              `json:"logoFileID,omitempty"`
-	FaviconFileID      *string                              `json:"faviconFileID,omitempty"`
-	HeroImageFileID    *string                              `json:"heroImageFileID,omitempty"`
-	NdaApproverGroupID *string                              `json:"ndaApproverGroupID,omitempty"`
+	AutoApprovalRules *models.TrustCenterNDARequestSetting `json:"autoApprovalRules,omitempty"`
+	// if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+	DisableDefaultDomain *bool    `json:"disableDefaultDomain,omitempty"`
+	BlockedGroupIDs      []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs            []string `json:"editorIDs,omitempty"`
+	LogoFileID           *string  `json:"logoFileID,omitempty"`
+	FaviconFileID        *string  `json:"faviconFileID,omitempty"`
+	HeroImageFileID      *string  `json:"heroImageFileID,omitempty"`
+	NdaApproverGroupID   *string  `json:"ndaApproverGroupID,omitempty"`
 }
 
 // CreateTrustCenterSubprocessorInput is used for create TrustCenterSubprocessor object.
@@ -37800,12 +37802,14 @@ type TrustCenterSetting struct {
 	EnableAutoApproval *bool `json:"enableAutoApproval,omitempty"`
 	// rules for approving trust center NDA requests
 	AutoApprovalRules *models.TrustCenterNDARequestSetting `json:"autoApprovalRules,omitempty"`
-	BlockedGroups     *GroupConnection                     `json:"blockedGroups"`
-	Editors           *GroupConnection                     `json:"editors"`
-	LogoFile          *File                                `json:"logoFile,omitempty"`
-	FaviconFile       *File                                `json:"faviconFile,omitempty"`
-	HeroImageFile     *File                                `json:"heroImageFile,omitempty"`
-	NdaApproverGroup  *Group                               `json:"ndaApproverGroup,omitempty"`
+	// if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+	DisableDefaultDomain *bool            `json:"disableDefaultDomain,omitempty"`
+	BlockedGroups        *GroupConnection `json:"blockedGroups"`
+	Editors              *GroupConnection `json:"editors"`
+	LogoFile             *File            `json:"logoFile,omitempty"`
+	FaviconFile          *File            `json:"faviconFile,omitempty"`
+	HeroImageFile        *File            `json:"heroImageFile,omitempty"`
+	NdaApproverGroup     *Group           `json:"ndaApproverGroup,omitempty"`
 }
 
 func (TrustCenterSetting) IsNode() {}
@@ -38229,6 +38233,11 @@ type TrustCenterSettingWhereInput struct {
 	EnableAutoApprovalNeq    *bool `json:"enableAutoApprovalNEQ,omitempty"`
 	EnableAutoApprovalIsNil  *bool `json:"enableAutoApprovalIsNil,omitempty"`
 	EnableAutoApprovalNotNil *bool `json:"enableAutoApprovalNotNil,omitempty"`
+	// disable_default_domain field predicates
+	DisableDefaultDomain       *bool `json:"disableDefaultDomain,omitempty"`
+	DisableDefaultDomainNeq    *bool `json:"disableDefaultDomainNEQ,omitempty"`
+	DisableDefaultDomainIsNil  *bool `json:"disableDefaultDomainIsNil,omitempty"`
+	DisableDefaultDomainNotNil *bool `json:"disableDefaultDomainNotNil,omitempty"`
 	// blocked_groups edge predicates
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -44887,20 +44896,23 @@ type UpdateTrustCenterSettingInput struct {
 	// rules for approving trust center NDA requests
 	AutoApprovalRules      *models.TrustCenterNDARequestSetting `json:"autoApprovalRules,omitempty"`
 	ClearAutoApprovalRules *bool                                `json:"clearAutoApprovalRules,omitempty"`
-	AddBlockedGroupIDs     []string                             `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs  []string                             `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups     *bool                                `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs           []string                             `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs        []string                             `json:"removeEditorIDs,omitempty"`
-	ClearEditors           *bool                                `json:"clearEditors,omitempty"`
-	LogoFileID             *string                              `json:"logoFileID,omitempty"`
-	ClearLogoFile          *bool                                `json:"clearLogoFile,omitempty"`
-	FaviconFileID          *string                              `json:"faviconFileID,omitempty"`
-	ClearFaviconFile       *bool                                `json:"clearFaviconFile,omitempty"`
-	HeroImageFileID        *string                              `json:"heroImageFileID,omitempty"`
-	ClearHeroImageFile     *bool                                `json:"clearHeroImageFile,omitempty"`
-	NdaApproverGroupID     *string                              `json:"ndaApproverGroupID,omitempty"`
-	ClearNdaApproverGroup  *bool                                `json:"clearNdaApproverGroup,omitempty"`
+	// if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+	DisableDefaultDomain      *bool    `json:"disableDefaultDomain,omitempty"`
+	ClearDisableDefaultDomain *bool    `json:"clearDisableDefaultDomain,omitempty"`
+	AddBlockedGroupIDs        []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs     []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups        *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs              []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs           []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors              *bool    `json:"clearEditors,omitempty"`
+	LogoFileID                *string  `json:"logoFileID,omitempty"`
+	ClearLogoFile             *bool    `json:"clearLogoFile,omitempty"`
+	FaviconFileID             *string  `json:"faviconFileID,omitempty"`
+	ClearFaviconFile          *bool    `json:"clearFaviconFile,omitempty"`
+	HeroImageFileID           *string  `json:"heroImageFileID,omitempty"`
+	ClearHeroImageFile        *bool    `json:"clearHeroImageFile,omitempty"`
+	NdaApproverGroupID        *string  `json:"ndaApproverGroupID,omitempty"`
+	ClearNdaApproverGroup     *bool    `json:"clearNdaApproverGroup,omitempty"`
 }
 
 // UpdateTrustCenterSubprocessorInput is used for update TrustCenterSubprocessor object.

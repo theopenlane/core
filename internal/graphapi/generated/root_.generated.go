@@ -7445,6 +7445,7 @@ type ComplexityRoot struct {
 		CompanyName                           func(childComplexity int) int
 		CreatedAt                             func(childComplexity int) int
 		CreatedBy                             func(childComplexity int) int
+		DisableDefaultDomain                  func(childComplexity int) int
 		Editors                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EnableAutoApproval                    func(childComplexity int) int
 		Environment                           func(childComplexity int) int
@@ -49026,6 +49027,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSetting.CreatedBy(childComplexity), true
+	case "TrustCenterSetting.disableDefaultDomain":
+		if e.ComplexityRoot.TrustCenterSetting.DisableDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.DisableDefaultDomain(childComplexity), true
 	case "TrustCenterSetting.editors":
 		if e.ComplexityRoot.TrustCenterSetting.Editors == nil {
 			break
@@ -76619,6 +76626,10 @@ input CreateTrustCenterSettingInput {
   rules for approving trust center NDA requests
   """
   autoApprovalRules: TrustCenterNDARequestSetting
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -132063,6 +132074,10 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
   rules for approving trust center NDA requests
   """
   autoApprovalRules: TrustCenterNDARequestSetting
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -132637,6 +132652,13 @@ input TrustCenterSettingWhereInput {
   enableAutoApprovalNEQ: Boolean
   enableAutoApprovalIsNil: Boolean
   enableAutoApprovalNotNil: Boolean
+  """
+  disable_default_domain field predicates
+  """
+  disableDefaultDomain: Boolean
+  disableDefaultDomainNEQ: Boolean
+  disableDefaultDomainIsNil: Boolean
+  disableDefaultDomainNotNil: Boolean
   """
   blocked_groups edge predicates
   """
@@ -141550,6 +141572,11 @@ input UpdateTrustCenterSettingInput {
   """
   autoApprovalRules: TrustCenterNDARequestSetting
   clearAutoApprovalRules: Boolean
+  """
+  if disabled, the default domain will not work and your trustcenter will not be viewable with the slug based routing
+  """
+  disableDefaultDomain: Boolean
+  clearDisableDefaultDomain: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -175919,6 +175946,8 @@ func (ec *executionContext) childFields_TrustCenterSetting(ctx context.Context, 
 		return ec.fieldContext_TrustCenterSetting_enableAutoApproval(ctx, field)
 	case "autoApprovalRules":
 		return ec.fieldContext_TrustCenterSetting_autoApprovalRules(ctx, field)
+	case "disableDefaultDomain":
+		return ec.fieldContext_TrustCenterSetting_disableDefaultDomain(ctx, field)
 	case "blockedGroups":
 		return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 	case "editors":
