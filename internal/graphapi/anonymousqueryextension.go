@@ -6,8 +6,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
@@ -25,17 +24,9 @@ type anonymousQueryExtension struct {
 func newAnonymousQueryExtension() anonymousQueryExtension {
 	schemaQueries := map[string]string{}
 
-	for _, schema := range entityops.AllSchemas() {
-		name := strings.ToLower(schema.Name)
-
-		// like ent, a name with no distinct plural gets a slice suffix for its list query (e.g. documentDataSlice)
-		list := utils.Plural(name)
-		if list == name {
-			list += "slice"
-		}
-
-		schemaQueries[name] = schema.Name
-		schemaQueries[list] = schema.Name + "Connection"
+	for name, query := range interceptors.SchemaQueries() {
+		schemaQueries[strings.ToLower(query.Single)] = name
+		schemaQueries[strings.ToLower(query.List)] = name + "Connection"
 	}
 
 	return anonymousQueryExtension{schemaQueries: schemaQueries}

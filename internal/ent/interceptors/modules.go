@@ -2,7 +2,6 @@ package interceptors
 
 import (
 	"context"
-	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -11,7 +10,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	entintercept "github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	features "github.com/theopenlane/core/v2/internal/entitlements/features"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/logx"
@@ -82,7 +80,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				s.Where(sql.ExprP("1=0"))
 			})
 
-			entity := utils.Plural(strings.ToLower(q.Type()))
+			entity := listQueryName(q.Type())
 
 			path := graphql.GetPath(ctx)
 
