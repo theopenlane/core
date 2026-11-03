@@ -16,6 +16,8 @@ tasks:
   generate:
     desc: generates the organization level crud definitions based on the schema
     dir: ../
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go run fga/generate/main.go
       - task: generate:version

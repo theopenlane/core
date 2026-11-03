@@ -3,8 +3,8 @@
 package engine_test
 
 import (
-	"testing"
 	"github.com/oklog/ulid/v2"
+	"testing"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"

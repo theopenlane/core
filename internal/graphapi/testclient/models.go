@@ -157,7 +157,6 @@ type APITokenWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -169,7 +168,6 @@ type APITokenWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -181,7 +179,6 @@ type APITokenWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -205,7 +202,6 @@ type APITokenWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -236,7 +232,6 @@ type APITokenWhereInput struct {
 	RevokedReasonIn           []string `json:"revokedReasonIn,omitempty"`
 	RevokedReasonNotIn        []string `json:"revokedReasonNotIn,omitempty"`
 	RevokedReasonContains     *string  `json:"revokedReasonContains,omitempty"`
-	RevokedReasonHasPrefix    *string  `json:"revokedReasonHasPrefix,omitempty"`
 	RevokedReasonHasSuffix    *string  `json:"revokedReasonHasSuffix,omitempty"`
 	RevokedReasonIsNil        *bool    `json:"revokedReasonIsNil,omitempty"`
 	RevokedReasonNotNil       *bool    `json:"revokedReasonNotNil,omitempty"`
@@ -248,7 +243,6 @@ type APITokenWhereInput struct {
 	RevokedByIn           []string `json:"revokedByIn,omitempty"`
 	RevokedByNotIn        []string `json:"revokedByNotIn,omitempty"`
 	RevokedByContains     *string  `json:"revokedByContains,omitempty"`
-	RevokedByHasPrefix    *string  `json:"revokedByHasPrefix,omitempty"`
 	RevokedByHasSuffix    *string  `json:"revokedByHasSuffix,omitempty"`
 	RevokedByIsNil        *bool    `json:"revokedByIsNil,omitempty"`
 	RevokedByNotNil       *bool    `json:"revokedByNotNil,omitempty"`
@@ -530,7 +524,6 @@ type ActionPlanWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -542,7 +535,6 @@ type ActionPlanWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -554,7 +546,6 @@ type ActionPlanWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -566,7 +557,6 @@ type ActionPlanWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
@@ -578,7 +568,6 @@ type ActionPlanWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -590,7 +579,6 @@ type ActionPlanWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -602,7 +590,6 @@ type ActionPlanWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -614,7 +601,6 @@ type ActionPlanWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -626,7 +612,6 @@ type ActionPlanWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -638,7 +623,6 @@ type ActionPlanWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -650,7 +634,6 @@ type ActionPlanWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -674,7 +657,6 @@ type ActionPlanWhereInput struct {
 	DetailsIn           []string `json:"detailsIn,omitempty"`
 	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
 	DetailsContains     *string  `json:"detailsContains,omitempty"`
-	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
 	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
 	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
@@ -730,7 +712,6 @@ type ActionPlanWhereInput struct {
 	URLIn           []string `json:"urlIn,omitempty"`
 	URLNotIn        []string `json:"urlNotIn,omitempty"`
 	URLContains     *string  `json:"urlContains,omitempty"`
-	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
 	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
 	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
@@ -754,7 +735,6 @@ type ActionPlanWhereInput struct {
 	ExternalFileIDIn           []string `json:"externalFileIDIn,omitempty"`
 	ExternalFileIDNotIn        []string `json:"externalFileIDNotIn,omitempty"`
 	ExternalFileIDContains     *string  `json:"externalFileIDContains,omitempty"`
-	ExternalFileIDHasPrefix    *string  `json:"externalFileIDHasPrefix,omitempty"`
 	ExternalFileIDHasSuffix    *string  `json:"externalFileIDHasSuffix,omitempty"`
 	ExternalFileIDIsNil        *bool    `json:"externalFileIDIsNil,omitempty"`
 	ExternalFileIDNotNil       *bool    `json:"externalFileIDNotNil,omitempty"`
@@ -766,7 +746,6 @@ type ActionPlanWhereInput struct {
 	ExternalContentsIn           []string `json:"externalContentsIn,omitempty"`
 	ExternalContentsNotIn        []string `json:"externalContentsNotIn,omitempty"`
 	ExternalContentsContains     *string  `json:"externalContentsContains,omitempty"`
-	ExternalContentsHasPrefix    *string  `json:"externalContentsHasPrefix,omitempty"`
 	ExternalContentsHasSuffix    *string  `json:"externalContentsHasSuffix,omitempty"`
 	ExternalContentsIsNil        *bool    `json:"externalContentsIsNil,omitempty"`
 	ExternalContentsNotNil       *bool    `json:"externalContentsNotNil,omitempty"`
@@ -795,7 +774,6 @@ type ActionPlanWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -807,7 +785,6 @@ type ActionPlanWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -819,7 +796,6 @@ type ActionPlanWhereInput struct {
 	ActionPlanKindNameIn           []string `json:"actionPlanKindNameIn,omitempty"`
 	ActionPlanKindNameNotIn        []string `json:"actionPlanKindNameNotIn,omitempty"`
 	ActionPlanKindNameContains     *string  `json:"actionPlanKindNameContains,omitempty"`
-	ActionPlanKindNameHasPrefix    *string  `json:"actionPlanKindNameHasPrefix,omitempty"`
 	ActionPlanKindNameHasSuffix    *string  `json:"actionPlanKindNameHasSuffix,omitempty"`
 	ActionPlanKindNameIsNil        *bool    `json:"actionPlanKindNameIsNil,omitempty"`
 	ActionPlanKindNameNotNil       *bool    `json:"actionPlanKindNameNotNil,omitempty"`
@@ -848,7 +824,6 @@ type ActionPlanWhereInput struct {
 	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
 	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
 	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
-	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
 	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
 	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
 	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
@@ -896,7 +871,6 @@ type ActionPlanWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
@@ -906,7 +880,6 @@ type ActionPlanWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -947,7 +920,6 @@ type ActionPlanWhereInput struct {
 	BlockerReasonIn           []string `json:"blockerReasonIn,omitempty"`
 	BlockerReasonNotIn        []string `json:"blockerReasonNotIn,omitempty"`
 	BlockerReasonContains     *string  `json:"blockerReasonContains,omitempty"`
-	BlockerReasonHasPrefix    *string  `json:"blockerReasonHasPrefix,omitempty"`
 	BlockerReasonHasSuffix    *string  `json:"blockerReasonHasSuffix,omitempty"`
 	BlockerReasonIsNil        *bool    `json:"blockerReasonIsNil,omitempty"`
 	BlockerReasonNotNil       *bool    `json:"blockerReasonNotNil,omitempty"`
@@ -959,7 +931,6 @@ type ActionPlanWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
@@ -1332,7 +1303,6 @@ type AssessmentPolicyWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -1344,7 +1314,6 @@ type AssessmentPolicyWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -1356,7 +1325,6 @@ type AssessmentPolicyWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -1368,7 +1336,6 @@ type AssessmentPolicyWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -1380,7 +1347,6 @@ type AssessmentPolicyWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -1392,7 +1358,6 @@ type AssessmentPolicyWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -1404,7 +1369,6 @@ type AssessmentPolicyWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -1416,7 +1380,6 @@ type AssessmentPolicyWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -1428,7 +1391,6 @@ type AssessmentPolicyWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -1440,7 +1402,6 @@ type AssessmentPolicyWhereInput struct {
 	PolicyRevisionIn           []string `json:"policyRevisionIn,omitempty"`
 	PolicyRevisionNotIn        []string `json:"policyRevisionNotIn,omitempty"`
 	PolicyRevisionContains     *string  `json:"policyRevisionContains,omitempty"`
-	PolicyRevisionHasPrefix    *string  `json:"policyRevisionHasPrefix,omitempty"`
 	PolicyRevisionHasSuffix    *string  `json:"policyRevisionHasSuffix,omitempty"`
 	PolicyRevisionIsNil        *bool    `json:"policyRevisionIsNil,omitempty"`
 	PolicyRevisionNotNil       *bool    `json:"policyRevisionNotNil,omitempty"`
@@ -1597,7 +1558,6 @@ type AssessmentResponseWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -1609,7 +1569,6 @@ type AssessmentResponseWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -1621,7 +1580,6 @@ type AssessmentResponseWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -1699,7 +1657,6 @@ type AssessmentResponseWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
 	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
@@ -1711,7 +1668,6 @@ type AssessmentResponseWhereInput struct {
 	EmailIn           []string `json:"emailIn,omitempty"`
 	EmailNotIn        []string `json:"emailNotIn,omitempty"`
 	EmailContains     *string  `json:"emailContains,omitempty"`
-	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
 	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
 	EmailIsNil        *bool    `json:"emailIsNil,omitempty"`
 	EmailNotNil       *bool    `json:"emailNotNil,omitempty"`
@@ -1883,7 +1839,6 @@ type AssessmentWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -1895,7 +1850,6 @@ type AssessmentWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -1907,7 +1861,6 @@ type AssessmentWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -1919,7 +1872,6 @@ type AssessmentWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -1931,7 +1883,6 @@ type AssessmentWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -1943,7 +1894,6 @@ type AssessmentWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -1955,7 +1905,6 @@ type AssessmentWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -1967,7 +1916,6 @@ type AssessmentWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -1979,7 +1927,6 @@ type AssessmentWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -2008,7 +1955,6 @@ type AssessmentWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -2020,7 +1966,6 @@ type AssessmentWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -2037,7 +1982,6 @@ type AssessmentWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -2362,7 +2306,6 @@ type AssetWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -2374,7 +2317,6 @@ type AssetWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -2386,7 +2328,6 @@ type AssetWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -2398,7 +2339,6 @@ type AssetWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -2410,7 +2350,6 @@ type AssetWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -2422,7 +2361,6 @@ type AssetWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -2434,7 +2372,6 @@ type AssetWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -2446,7 +2383,6 @@ type AssetWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -2458,7 +2394,6 @@ type AssetWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -2482,7 +2417,6 @@ type AssetWhereInput struct {
 	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
 	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
 	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
-	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
 	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
 	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
 	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
@@ -2530,7 +2464,6 @@ type AssetWhereInput struct {
 	AssetSubtypeNameIn           []string `json:"assetSubtypeNameIn,omitempty"`
 	AssetSubtypeNameNotIn        []string `json:"assetSubtypeNameNotIn,omitempty"`
 	AssetSubtypeNameContains     *string  `json:"assetSubtypeNameContains,omitempty"`
-	AssetSubtypeNameHasPrefix    *string  `json:"assetSubtypeNameHasPrefix,omitempty"`
 	AssetSubtypeNameHasSuffix    *string  `json:"assetSubtypeNameHasSuffix,omitempty"`
 	AssetSubtypeNameIsNil        *bool    `json:"assetSubtypeNameIsNil,omitempty"`
 	AssetSubtypeNameNotNil       *bool    `json:"assetSubtypeNameNotNil,omitempty"`
@@ -2554,7 +2487,6 @@ type AssetWhereInput struct {
 	AssetDataClassificationNameIn           []string `json:"assetDataClassificationNameIn,omitempty"`
 	AssetDataClassificationNameNotIn        []string `json:"assetDataClassificationNameNotIn,omitempty"`
 	AssetDataClassificationNameContains     *string  `json:"assetDataClassificationNameContains,omitempty"`
-	AssetDataClassificationNameHasPrefix    *string  `json:"assetDataClassificationNameHasPrefix,omitempty"`
 	AssetDataClassificationNameHasSuffix    *string  `json:"assetDataClassificationNameHasSuffix,omitempty"`
 	AssetDataClassificationNameIsNil        *bool    `json:"assetDataClassificationNameIsNil,omitempty"`
 	AssetDataClassificationNameNotNil       *bool    `json:"assetDataClassificationNameNotNil,omitempty"`
@@ -2578,7 +2510,6 @@ type AssetWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -2602,7 +2533,6 @@ type AssetWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -2626,7 +2556,6 @@ type AssetWhereInput struct {
 	AccessModelNameIn           []string `json:"accessModelNameIn,omitempty"`
 	AccessModelNameNotIn        []string `json:"accessModelNameNotIn,omitempty"`
 	AccessModelNameContains     *string  `json:"accessModelNameContains,omitempty"`
-	AccessModelNameHasPrefix    *string  `json:"accessModelNameHasPrefix,omitempty"`
 	AccessModelNameHasSuffix    *string  `json:"accessModelNameHasSuffix,omitempty"`
 	AccessModelNameIsNil        *bool    `json:"accessModelNameIsNil,omitempty"`
 	AccessModelNameNotNil       *bool    `json:"accessModelNameNotNil,omitempty"`
@@ -2650,7 +2579,6 @@ type AssetWhereInput struct {
 	EncryptionStatusNameIn           []string `json:"encryptionStatusNameIn,omitempty"`
 	EncryptionStatusNameNotIn        []string `json:"encryptionStatusNameNotIn,omitempty"`
 	EncryptionStatusNameContains     *string  `json:"encryptionStatusNameContains,omitempty"`
-	EncryptionStatusNameHasPrefix    *string  `json:"encryptionStatusNameHasPrefix,omitempty"`
 	EncryptionStatusNameHasSuffix    *string  `json:"encryptionStatusNameHasSuffix,omitempty"`
 	EncryptionStatusNameIsNil        *bool    `json:"encryptionStatusNameIsNil,omitempty"`
 	EncryptionStatusNameNotNil       *bool    `json:"encryptionStatusNameNotNil,omitempty"`
@@ -2674,7 +2602,6 @@ type AssetWhereInput struct {
 	SecurityTierNameIn           []string `json:"securityTierNameIn,omitempty"`
 	SecurityTierNameNotIn        []string `json:"securityTierNameNotIn,omitempty"`
 	SecurityTierNameContains     *string  `json:"securityTierNameContains,omitempty"`
-	SecurityTierNameHasPrefix    *string  `json:"securityTierNameHasPrefix,omitempty"`
 	SecurityTierNameHasSuffix    *string  `json:"securityTierNameHasSuffix,omitempty"`
 	SecurityTierNameIsNil        *bool    `json:"securityTierNameIsNil,omitempty"`
 	SecurityTierNameNotNil       *bool    `json:"securityTierNameNotNil,omitempty"`
@@ -2698,7 +2625,6 @@ type AssetWhereInput struct {
 	CriticalityNameIn           []string `json:"criticalityNameIn,omitempty"`
 	CriticalityNameNotIn        []string `json:"criticalityNameNotIn,omitempty"`
 	CriticalityNameContains     *string  `json:"criticalityNameContains,omitempty"`
-	CriticalityNameHasPrefix    *string  `json:"criticalityNameHasPrefix,omitempty"`
 	CriticalityNameHasSuffix    *string  `json:"criticalityNameHasSuffix,omitempty"`
 	CriticalityNameIsNil        *bool    `json:"criticalityNameIsNil,omitempty"`
 	CriticalityNameNotNil       *bool    `json:"criticalityNameNotNil,omitempty"`
@@ -2727,7 +2653,6 @@ type AssetWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -2739,7 +2664,6 @@ type AssetWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -2756,7 +2680,6 @@ type AssetWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -2766,7 +2689,6 @@ type AssetWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
 	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
@@ -2778,7 +2700,6 @@ type AssetWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -2790,7 +2711,6 @@ type AssetWhereInput struct {
 	IdentifierIn           []string `json:"identifierIn,omitempty"`
 	IdentifierNotIn        []string `json:"identifierNotIn,omitempty"`
 	IdentifierContains     *string  `json:"identifierContains,omitempty"`
-	IdentifierHasPrefix    *string  `json:"identifierHasPrefix,omitempty"`
 	IdentifierHasSuffix    *string  `json:"identifierHasSuffix,omitempty"`
 	IdentifierIsNil        *bool    `json:"identifierIsNil,omitempty"`
 	IdentifierNotNil       *bool    `json:"identifierNotNil,omitempty"`
@@ -2802,7 +2722,6 @@ type AssetWhereInput struct {
 	WebsiteIn           []string `json:"websiteIn,omitempty"`
 	WebsiteNotIn        []string `json:"websiteNotIn,omitempty"`
 	WebsiteContains     *string  `json:"websiteContains,omitempty"`
-	WebsiteHasPrefix    *string  `json:"websiteHasPrefix,omitempty"`
 	WebsiteHasSuffix    *string  `json:"websiteHasSuffix,omitempty"`
 	WebsiteIsNil        *bool    `json:"websiteIsNil,omitempty"`
 	WebsiteNotNil       *bool    `json:"websiteNotNil,omitempty"`
@@ -2814,7 +2733,6 @@ type AssetWhereInput struct {
 	PhysicalLocationIn           []string `json:"physicalLocationIn,omitempty"`
 	PhysicalLocationNotIn        []string `json:"physicalLocationNotIn,omitempty"`
 	PhysicalLocationContains     *string  `json:"physicalLocationContains,omitempty"`
-	PhysicalLocationHasPrefix    *string  `json:"physicalLocationHasPrefix,omitempty"`
 	PhysicalLocationHasSuffix    *string  `json:"physicalLocationHasSuffix,omitempty"`
 	PhysicalLocationIsNil        *bool    `json:"physicalLocationIsNil,omitempty"`
 	PhysicalLocationNotNil       *bool    `json:"physicalLocationNotNil,omitempty"`
@@ -2826,7 +2744,6 @@ type AssetWhereInput struct {
 	RegionIn           []string `json:"regionIn,omitempty"`
 	RegionNotIn        []string `json:"regionNotIn,omitempty"`
 	RegionContains     *string  `json:"regionContains,omitempty"`
-	RegionHasPrefix    *string  `json:"regionHasPrefix,omitempty"`
 	RegionHasSuffix    *string  `json:"regionHasSuffix,omitempty"`
 	RegionIsNil        *bool    `json:"regionIsNil,omitempty"`
 	RegionNotNil       *bool    `json:"regionNotNil,omitempty"`
@@ -2860,7 +2777,6 @@ type AssetWhereInput struct {
 	SourceIdentifierIn           []string `json:"sourceIdentifierIn,omitempty"`
 	SourceIdentifierNotIn        []string `json:"sourceIdentifierNotIn,omitempty"`
 	SourceIdentifierContains     *string  `json:"sourceIdentifierContains,omitempty"`
-	SourceIdentifierHasPrefix    *string  `json:"sourceIdentifierHasPrefix,omitempty"`
 	SourceIdentifierHasSuffix    *string  `json:"sourceIdentifierHasSuffix,omitempty"`
 	SourceIdentifierIsNil        *bool    `json:"sourceIdentifierIsNil,omitempty"`
 	SourceIdentifierNotNil       *bool    `json:"sourceIdentifierNotNil,omitempty"`
@@ -2872,7 +2788,6 @@ type AssetWhereInput struct {
 	CostCenterIn           []string `json:"costCenterIn,omitempty"`
 	CostCenterNotIn        []string `json:"costCenterNotIn,omitempty"`
 	CostCenterContains     *string  `json:"costCenterContains,omitempty"`
-	CostCenterHasPrefix    *string  `json:"costCenterHasPrefix,omitempty"`
 	CostCenterHasSuffix    *string  `json:"costCenterHasSuffix,omitempty"`
 	CostCenterIsNil        *bool    `json:"costCenterIsNil,omitempty"`
 	CostCenterNotNil       *bool    `json:"costCenterNotNil,omitempty"`
@@ -3354,7 +3269,6 @@ type CampaignTargetWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -3366,7 +3280,6 @@ type CampaignTargetWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -3378,7 +3291,6 @@ type CampaignTargetWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -3467,7 +3379,6 @@ type CampaignTargetWhereInput struct {
 	EmailIn           []string `json:"emailIn,omitempty"`
 	EmailNotIn        []string `json:"emailNotIn,omitempty"`
 	EmailContains     *string  `json:"emailContains,omitempty"`
-	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
 	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
 	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
 	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
@@ -3477,7 +3388,6 @@ type CampaignTargetWhereInput struct {
 	FullNameIn           []string `json:"fullNameIn,omitempty"`
 	FullNameNotIn        []string `json:"fullNameNotIn,omitempty"`
 	FullNameContains     *string  `json:"fullNameContains,omitempty"`
-	FullNameHasPrefix    *string  `json:"fullNameHasPrefix,omitempty"`
 	FullNameHasSuffix    *string  `json:"fullNameHasSuffix,omitempty"`
 	FullNameIsNil        *bool    `json:"fullNameIsNil,omitempty"`
 	FullNameNotNil       *bool    `json:"fullNameNotNil,omitempty"`
@@ -3578,7 +3488,6 @@ type CampaignWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -3590,7 +3499,6 @@ type CampaignWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -3602,7 +3510,6 @@ type CampaignWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -3614,7 +3521,6 @@ type CampaignWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -3624,7 +3530,6 @@ type CampaignWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -3636,7 +3541,6 @@ type CampaignWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -3648,7 +3552,6 @@ type CampaignWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -3660,7 +3563,6 @@ type CampaignWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -3672,7 +3574,6 @@ type CampaignWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -3684,7 +3585,6 @@ type CampaignWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -3708,7 +3608,6 @@ type CampaignWhereInput struct {
 	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
 	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
 	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
-	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
 	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
 	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
 	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
@@ -3761,7 +3660,6 @@ type CampaignWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -3771,7 +3669,6 @@ type CampaignWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -3847,7 +3744,6 @@ type CampaignWhereInput struct {
 	RecurrenceTimezoneIn           []string `json:"recurrenceTimezoneIn,omitempty"`
 	RecurrenceTimezoneNotIn        []string `json:"recurrenceTimezoneNotIn,omitempty"`
 	RecurrenceTimezoneContains     *string  `json:"recurrenceTimezoneContains,omitempty"`
-	RecurrenceTimezoneHasPrefix    *string  `json:"recurrenceTimezoneHasPrefix,omitempty"`
 	RecurrenceTimezoneHasSuffix    *string  `json:"recurrenceTimezoneHasSuffix,omitempty"`
 	RecurrenceTimezoneIsNil        *bool    `json:"recurrenceTimezoneIsNil,omitempty"`
 	RecurrenceTimezoneNotNil       *bool    `json:"recurrenceTimezoneNotNil,omitempty"`
@@ -3969,7 +3865,6 @@ type CampaignWhereInput struct {
 	EmailBrandingIDIn           []string `json:"emailBrandingIDIn,omitempty"`
 	EmailBrandingIDNotIn        []string `json:"emailBrandingIDNotIn,omitempty"`
 	EmailBrandingIDContains     *string  `json:"emailBrandingIDContains,omitempty"`
-	EmailBrandingIDHasPrefix    *string  `json:"emailBrandingIDHasPrefix,omitempty"`
 	EmailBrandingIDHasSuffix    *string  `json:"emailBrandingIDHasSuffix,omitempty"`
 	EmailBrandingIDIsNil        *bool    `json:"emailBrandingIDIsNil,omitempty"`
 	EmailBrandingIDNotNil       *bool    `json:"emailBrandingIDNotNil,omitempty"`
@@ -4213,7 +4108,6 @@ type CheckResultWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -4225,7 +4119,6 @@ type CheckResultWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -4237,7 +4130,6 @@ type CheckResultWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -4249,7 +4141,6 @@ type CheckResultWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -4261,7 +4152,6 @@ type CheckResultWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -4273,7 +4163,6 @@ type CheckResultWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -4285,7 +4174,6 @@ type CheckResultWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -4297,7 +4185,6 @@ type CheckResultWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -4326,7 +4213,6 @@ type CheckResultWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
 	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
@@ -4344,7 +4230,6 @@ type CheckResultWhereInput struct {
 	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
 	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
 	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
-	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
 	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
 	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
 	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
@@ -4356,7 +4241,6 @@ type CheckResultWhereInput struct {
 	DetailsIn           []string `json:"detailsIn,omitempty"`
 	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
 	DetailsContains     *string  `json:"detailsContains,omitempty"`
-	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
 	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
 	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
@@ -4368,7 +4252,6 @@ type CheckResultWhereInput struct {
 	ParentExternalIDIn           []string `json:"parentExternalIDIn,omitempty"`
 	ParentExternalIDNotIn        []string `json:"parentExternalIDNotIn,omitempty"`
 	ParentExternalIDContains     *string  `json:"parentExternalIDContains,omitempty"`
-	ParentExternalIDHasPrefix    *string  `json:"parentExternalIDHasPrefix,omitempty"`
 	ParentExternalIDHasSuffix    *string  `json:"parentExternalIDHasSuffix,omitempty"`
 	ParentExternalIDIsNil        *bool    `json:"parentExternalIDIsNil,omitempty"`
 	ParentExternalIDNotNil       *bool    `json:"parentExternalIDNotNil,omitempty"`
@@ -4625,7 +4508,6 @@ type ContactWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -4637,7 +4519,6 @@ type ContactWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -4649,7 +4530,6 @@ type ContactWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -4661,7 +4541,6 @@ type ContactWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -4673,7 +4552,6 @@ type ContactWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -4685,7 +4563,6 @@ type ContactWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -4697,7 +4574,6 @@ type ContactWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -4709,7 +4585,6 @@ type ContactWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -4721,7 +4596,6 @@ type ContactWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -4745,7 +4619,6 @@ type ContactWhereInput struct {
 	FullNameIn           []string `json:"fullNameIn,omitempty"`
 	FullNameNotIn        []string `json:"fullNameNotIn,omitempty"`
 	FullNameContains     *string  `json:"fullNameContains,omitempty"`
-	FullNameHasPrefix    *string  `json:"fullNameHasPrefix,omitempty"`
 	FullNameHasSuffix    *string  `json:"fullNameHasSuffix,omitempty"`
 	FullNameIsNil        *bool    `json:"fullNameIsNil,omitempty"`
 	FullNameNotNil       *bool    `json:"fullNameNotNil,omitempty"`
@@ -4757,7 +4630,6 @@ type ContactWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
 	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
@@ -4769,7 +4641,6 @@ type ContactWhereInput struct {
 	CompanyIn           []string `json:"companyIn,omitempty"`
 	CompanyNotIn        []string `json:"companyNotIn,omitempty"`
 	CompanyContains     *string  `json:"companyContains,omitempty"`
-	CompanyHasPrefix    *string  `json:"companyHasPrefix,omitempty"`
 	CompanyHasSuffix    *string  `json:"companyHasSuffix,omitempty"`
 	CompanyIsNil        *bool    `json:"companyIsNil,omitempty"`
 	CompanyNotNil       *bool    `json:"companyNotNil,omitempty"`
@@ -4781,7 +4652,6 @@ type ContactWhereInput struct {
 	EmailIn           []string `json:"emailIn,omitempty"`
 	EmailNotIn        []string `json:"emailNotIn,omitempty"`
 	EmailContains     *string  `json:"emailContains,omitempty"`
-	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
 	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
 	EmailIsNil        *bool    `json:"emailIsNil,omitempty"`
 	EmailNotNil       *bool    `json:"emailNotNil,omitempty"`
@@ -4793,7 +4663,6 @@ type ContactWhereInput struct {
 	PhoneNumberIn           []string `json:"phoneNumberIn,omitempty"`
 	PhoneNumberNotIn        []string `json:"phoneNumberNotIn,omitempty"`
 	PhoneNumberContains     *string  `json:"phoneNumberContains,omitempty"`
-	PhoneNumberHasPrefix    *string  `json:"phoneNumberHasPrefix,omitempty"`
 	PhoneNumberHasSuffix    *string  `json:"phoneNumberHasSuffix,omitempty"`
 	PhoneNumberIsNil        *bool    `json:"phoneNumberIsNil,omitempty"`
 	PhoneNumberNotNil       *bool    `json:"phoneNumberNotNil,omitempty"`
@@ -4805,7 +4674,6 @@ type ContactWhereInput struct {
 	AddressIn           []string `json:"addressIn,omitempty"`
 	AddressNotIn        []string `json:"addressNotIn,omitempty"`
 	AddressContains     *string  `json:"addressContains,omitempty"`
-	AddressHasPrefix    *string  `json:"addressHasPrefix,omitempty"`
 	AddressHasSuffix    *string  `json:"addressHasSuffix,omitempty"`
 	AddressIsNil        *bool    `json:"addressIsNil,omitempty"`
 	AddressNotNil       *bool    `json:"addressNotNil,omitempty"`
@@ -4822,7 +4690,6 @@ type ContactWhereInput struct {
 	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
 	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
 	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
-	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
 	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
 	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
 	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
@@ -5350,7 +5217,6 @@ type ControlImplementationWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -5362,7 +5228,6 @@ type ControlImplementationWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -5374,7 +5239,6 @@ type ControlImplementationWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -5386,7 +5250,6 @@ type ControlImplementationWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -5398,7 +5261,6 @@ type ControlImplementationWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -5410,7 +5272,6 @@ type ControlImplementationWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -5422,7 +5283,6 @@ type ControlImplementationWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -5434,7 +5294,6 @@ type ControlImplementationWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -5446,7 +5305,6 @@ type ControlImplementationWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -5475,7 +5333,6 @@ type ControlImplementationWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -5487,7 +5344,6 @@ type ControlImplementationWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -5527,7 +5383,6 @@ type ControlImplementationWhereInput struct {
 	DetailsIn           []string `json:"detailsIn,omitempty"`
 	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
 	DetailsContains     *string  `json:"detailsContains,omitempty"`
-	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
 	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
 	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
@@ -5766,7 +5621,6 @@ type ControlObjectiveWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -5778,7 +5632,6 @@ type ControlObjectiveWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -5790,7 +5643,6 @@ type ControlObjectiveWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -5802,7 +5654,6 @@ type ControlObjectiveWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -5812,7 +5663,6 @@ type ControlObjectiveWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
@@ -5824,7 +5674,6 @@ type ControlObjectiveWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -5836,7 +5685,6 @@ type ControlObjectiveWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -5848,7 +5696,6 @@ type ControlObjectiveWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -5860,7 +5707,6 @@ type ControlObjectiveWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -5872,7 +5718,6 @@ type ControlObjectiveWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -5884,7 +5729,6 @@ type ControlObjectiveWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -5913,7 +5757,6 @@ type ControlObjectiveWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -5925,7 +5768,6 @@ type ControlObjectiveWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -5937,7 +5779,6 @@ type ControlObjectiveWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -5947,7 +5788,6 @@ type ControlObjectiveWhereInput struct {
 	DesiredOutcomeIn           []string `json:"desiredOutcomeIn,omitempty"`
 	DesiredOutcomeNotIn        []string `json:"desiredOutcomeNotIn,omitempty"`
 	DesiredOutcomeContains     *string  `json:"desiredOutcomeContains,omitempty"`
-	DesiredOutcomeHasPrefix    *string  `json:"desiredOutcomeHasPrefix,omitempty"`
 	DesiredOutcomeHasSuffix    *string  `json:"desiredOutcomeHasSuffix,omitempty"`
 	DesiredOutcomeIsNil        *bool    `json:"desiredOutcomeIsNil,omitempty"`
 	DesiredOutcomeNotNil       *bool    `json:"desiredOutcomeNotNil,omitempty"`
@@ -5973,7 +5813,6 @@ type ControlObjectiveWhereInput struct {
 	ControlObjectiveTypeIn           []string `json:"controlObjectiveTypeIn,omitempty"`
 	ControlObjectiveTypeNotIn        []string `json:"controlObjectiveTypeNotIn,omitempty"`
 	ControlObjectiveTypeContains     *string  `json:"controlObjectiveTypeContains,omitempty"`
-	ControlObjectiveTypeHasPrefix    *string  `json:"controlObjectiveTypeHasPrefix,omitempty"`
 	ControlObjectiveTypeHasSuffix    *string  `json:"controlObjectiveTypeHasSuffix,omitempty"`
 	ControlObjectiveTypeIsNil        *bool    `json:"controlObjectiveTypeIsNil,omitempty"`
 	ControlObjectiveTypeNotNil       *bool    `json:"controlObjectiveTypeNotNil,omitempty"`
@@ -5985,7 +5824,6 @@ type ControlObjectiveWhereInput struct {
 	CategoryIn           []string `json:"categoryIn,omitempty"`
 	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
 	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
 	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
 	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
 	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
@@ -5997,7 +5835,6 @@ type ControlObjectiveWhereInput struct {
 	SubcategoryIn           []string `json:"subcategoryIn,omitempty"`
 	SubcategoryNotIn        []string `json:"subcategoryNotIn,omitempty"`
 	SubcategoryContains     *string  `json:"subcategoryContains,omitempty"`
-	SubcategoryHasPrefix    *string  `json:"subcategoryHasPrefix,omitempty"`
 	SubcategoryHasSuffix    *string  `json:"subcategoryHasSuffix,omitempty"`
 	SubcategoryIsNil        *bool    `json:"subcategoryIsNil,omitempty"`
 	SubcategoryNotNil       *bool    `json:"subcategoryNotNil,omitempty"`
@@ -6177,7 +6014,6 @@ type ControlWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -6189,7 +6025,6 @@ type ControlWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -6201,7 +6036,6 @@ type ControlWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -6213,7 +6047,6 @@ type ControlWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -6223,7 +6056,6 @@ type ControlWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -6235,7 +6067,6 @@ type ControlWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -6247,7 +6078,6 @@ type ControlWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -6259,7 +6089,6 @@ type ControlWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -6271,7 +6100,6 @@ type ControlWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -6283,7 +6111,6 @@ type ControlWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -6295,7 +6122,6 @@ type ControlWhereInput struct {
 	ExternalUUIDIn           []string `json:"externalUUIDIn,omitempty"`
 	ExternalUUIDNotIn        []string `json:"externalUUIDNotIn,omitempty"`
 	ExternalUUIDContains     *string  `json:"externalUUIDContains,omitempty"`
-	ExternalUUIDHasPrefix    *string  `json:"externalUUIDHasPrefix,omitempty"`
 	ExternalUUIDHasSuffix    *string  `json:"externalUUIDHasSuffix,omitempty"`
 	ExternalUUIDIsNil        *bool    `json:"externalUUIDIsNil,omitempty"`
 	ExternalUUIDNotNil       *bool    `json:"externalUUIDNotNil,omitempty"`
@@ -6307,7 +6133,6 @@ type ControlWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
 	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
@@ -6319,7 +6144,6 @@ type ControlWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -6331,7 +6155,6 @@ type ControlWhereInput struct {
 	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
 	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
 	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
-	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
 	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
 	ReferenceIDIsNil        *bool    `json:"referenceIDIsNil,omitempty"`
 	ReferenceIDNotNil       *bool    `json:"referenceIDNotNil,omitempty"`
@@ -6343,7 +6166,6 @@ type ControlWhereInput struct {
 	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
 	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
 	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
-	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
 	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
 	AuditorReferenceIDIsNil        *bool    `json:"auditorReferenceIDIsNil,omitempty"`
 	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
@@ -6381,7 +6203,6 @@ type ControlWhereInput struct {
 	ImplementationDescriptionIn           []string `json:"implementationDescriptionIn,omitempty"`
 	ImplementationDescriptionNotIn        []string `json:"implementationDescriptionNotIn,omitempty"`
 	ImplementationDescriptionContains     *string  `json:"implementationDescriptionContains,omitempty"`
-	ImplementationDescriptionHasPrefix    *string  `json:"implementationDescriptionHasPrefix,omitempty"`
 	ImplementationDescriptionHasSuffix    *string  `json:"implementationDescriptionHasSuffix,omitempty"`
 	ImplementationDescriptionIsNil        *bool    `json:"implementationDescriptionIsNil,omitempty"`
 	ImplementationDescriptionNotNil       *bool    `json:"implementationDescriptionNotNil,omitempty"`
@@ -6393,7 +6214,6 @@ type ControlWhereInput struct {
 	PublicRepresentationIn           []string `json:"publicRepresentationIn,omitempty"`
 	PublicRepresentationNotIn        []string `json:"publicRepresentationNotIn,omitempty"`
 	PublicRepresentationContains     *string  `json:"publicRepresentationContains,omitempty"`
-	PublicRepresentationHasPrefix    *string  `json:"publicRepresentationHasPrefix,omitempty"`
 	PublicRepresentationHasSuffix    *string  `json:"publicRepresentationHasSuffix,omitempty"`
 	PublicRepresentationIsNil        *bool    `json:"publicRepresentationIsNil,omitempty"`
 	PublicRepresentationNotNil       *bool    `json:"publicRepresentationNotNil,omitempty"`
@@ -6412,7 +6232,6 @@ type ControlWhereInput struct {
 	SourceNameIn           []string `json:"sourceNameIn,omitempty"`
 	SourceNameNotIn        []string `json:"sourceNameNotIn,omitempty"`
 	SourceNameContains     *string  `json:"sourceNameContains,omitempty"`
-	SourceNameHasPrefix    *string  `json:"sourceNameHasPrefix,omitempty"`
 	SourceNameHasSuffix    *string  `json:"sourceNameHasSuffix,omitempty"`
 	SourceNameIsNil        *bool    `json:"sourceNameIsNil,omitempty"`
 	SourceNameNotNil       *bool    `json:"sourceNameNotNil,omitempty"`
@@ -6424,7 +6243,6 @@ type ControlWhereInput struct {
 	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
 	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
 	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
-	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
 	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
 	ReferenceFrameworkIsNil        *bool    `json:"referenceFrameworkIsNil,omitempty"`
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
@@ -6436,7 +6254,6 @@ type ControlWhereInput struct {
 	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
 	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
 	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
-	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
 	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
 	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
 	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
@@ -6448,7 +6265,6 @@ type ControlWhereInput struct {
 	CategoryIn           []string `json:"categoryIn,omitempty"`
 	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
 	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
 	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
 	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
 	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
@@ -6460,7 +6276,6 @@ type ControlWhereInput struct {
 	CategoryIDIn           []string `json:"categoryIDIn,omitempty"`
 	CategoryIDNotIn        []string `json:"categoryIDNotIn,omitempty"`
 	CategoryIDContains     *string  `json:"categoryIDContains,omitempty"`
-	CategoryIDHasPrefix    *string  `json:"categoryIDHasPrefix,omitempty"`
 	CategoryIDHasSuffix    *string  `json:"categoryIDHasSuffix,omitempty"`
 	CategoryIDIsNil        *bool    `json:"categoryIDIsNil,omitempty"`
 	CategoryIDNotNil       *bool    `json:"categoryIDNotNil,omitempty"`
@@ -6472,7 +6287,6 @@ type ControlWhereInput struct {
 	SubcategoryIn           []string `json:"subcategoryIn,omitempty"`
 	SubcategoryNotIn        []string `json:"subcategoryNotIn,omitempty"`
 	SubcategoryContains     *string  `json:"subcategoryContains,omitempty"`
-	SubcategoryHasPrefix    *string  `json:"subcategoryHasPrefix,omitempty"`
 	SubcategoryHasSuffix    *string  `json:"subcategoryHasSuffix,omitempty"`
 	SubcategoryIsNil        *bool    `json:"subcategoryIsNil,omitempty"`
 	SubcategoryNotNil       *bool    `json:"subcategoryNotNil,omitempty"`
@@ -6525,7 +6339,6 @@ type ControlWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -6537,7 +6350,6 @@ type ControlWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -6549,7 +6361,6 @@ type ControlWhereInput struct {
 	ControlKindNameIn           []string `json:"controlKindNameIn,omitempty"`
 	ControlKindNameNotIn        []string `json:"controlKindNameNotIn,omitempty"`
 	ControlKindNameContains     *string  `json:"controlKindNameContains,omitempty"`
-	ControlKindNameHasPrefix    *string  `json:"controlKindNameHasPrefix,omitempty"`
 	ControlKindNameHasSuffix    *string  `json:"controlKindNameHasSuffix,omitempty"`
 	ControlKindNameIsNil        *bool    `json:"controlKindNameIsNil,omitempty"`
 	ControlKindNameNotNil       *bool    `json:"controlKindNameNotNil,omitempty"`
@@ -6573,7 +6384,6 @@ type ControlWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -6597,7 +6407,6 @@ type ControlWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -6626,7 +6435,6 @@ type ControlWhereInput struct {
 	RefCodeIn           []string `json:"refCodeIn,omitempty"`
 	RefCodeNotIn        []string `json:"refCodeNotIn,omitempty"`
 	RefCodeContains     *string  `json:"refCodeContains,omitempty"`
-	RefCodeHasPrefix    *string  `json:"refCodeHasPrefix,omitempty"`
 	RefCodeHasSuffix    *string  `json:"refCodeHasSuffix,omitempty"`
 	RefCodeEqualFold    *string  `json:"refCodeEqualFold,omitempty"`
 	RefCodeContainsFold *string  `json:"refCodeContainsFold,omitempty"`
@@ -10841,7 +10649,6 @@ type CustomDomainWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -10853,7 +10660,6 @@ type CustomDomainWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -10865,7 +10671,6 @@ type CustomDomainWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -10894,7 +10699,6 @@ type CustomDomainWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -10906,7 +10710,6 @@ type CustomDomainWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -10918,7 +10721,6 @@ type CustomDomainWhereInput struct {
 	CnameRecordIn           []string `json:"cnameRecordIn,omitempty"`
 	CnameRecordNotIn        []string `json:"cnameRecordNotIn,omitempty"`
 	CnameRecordContains     *string  `json:"cnameRecordContains,omitempty"`
-	CnameRecordHasPrefix    *string  `json:"cnameRecordHasPrefix,omitempty"`
 	CnameRecordHasSuffix    *string  `json:"cnameRecordHasSuffix,omitempty"`
 	CnameRecordEqualFold    *string  `json:"cnameRecordEqualFold,omitempty"`
 	CnameRecordContainsFold *string  `json:"cnameRecordContainsFold,omitempty"`
@@ -10950,7 +10752,6 @@ type CustomDomainWhereInput struct {
 	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
 	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
 	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
-	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
 	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
 	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
 	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
@@ -11122,7 +10923,6 @@ type CustomTypeEnumWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -11134,7 +10934,6 @@ type CustomTypeEnumWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -11146,7 +10945,6 @@ type CustomTypeEnumWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -11158,7 +10956,6 @@ type CustomTypeEnumWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -11170,7 +10967,6 @@ type CustomTypeEnumWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -11182,7 +10978,6 @@ type CustomTypeEnumWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -11194,7 +10989,6 @@ type CustomTypeEnumWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -11206,7 +11000,6 @@ type CustomTypeEnumWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -11218,7 +11011,6 @@ type CustomTypeEnumWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -11247,7 +11039,6 @@ type CustomTypeEnumWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -11259,7 +11050,6 @@ type CustomTypeEnumWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -11271,7 +11061,6 @@ type CustomTypeEnumWhereInput struct {
 	ObjectTypeIn           []string `json:"objectTypeIn,omitempty"`
 	ObjectTypeNotIn        []string `json:"objectTypeNotIn,omitempty"`
 	ObjectTypeContains     *string  `json:"objectTypeContains,omitempty"`
-	ObjectTypeHasPrefix    *string  `json:"objectTypeHasPrefix,omitempty"`
 	ObjectTypeHasSuffix    *string  `json:"objectTypeHasSuffix,omitempty"`
 	ObjectTypeEqualFold    *string  `json:"objectTypeEqualFold,omitempty"`
 	ObjectTypeContainsFold *string  `json:"objectTypeContainsFold,omitempty"`
@@ -11281,7 +11070,6 @@ type CustomTypeEnumWhereInput struct {
 	FieldIn           []string `json:"fieldIn,omitempty"`
 	FieldNotIn        []string `json:"fieldNotIn,omitempty"`
 	FieldContains     *string  `json:"fieldContains,omitempty"`
-	FieldHasPrefix    *string  `json:"fieldHasPrefix,omitempty"`
 	FieldHasSuffix    *string  `json:"fieldHasSuffix,omitempty"`
 	FieldEqualFold    *string  `json:"fieldEqualFold,omitempty"`
 	FieldContainsFold *string  `json:"fieldContainsFold,omitempty"`
@@ -11291,7 +11079,6 @@ type CustomTypeEnumWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -11301,7 +11088,6 @@ type CustomTypeEnumWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -11313,7 +11099,6 @@ type CustomTypeEnumWhereInput struct {
 	ColorIn           []string `json:"colorIn,omitempty"`
 	ColorNotIn        []string `json:"colorNotIn,omitempty"`
 	ColorContains     *string  `json:"colorContains,omitempty"`
-	ColorHasPrefix    *string  `json:"colorHasPrefix,omitempty"`
 	ColorHasSuffix    *string  `json:"colorHasSuffix,omitempty"`
 	ColorIsNil        *bool    `json:"colorIsNil,omitempty"`
 	ColorNotNil       *bool    `json:"colorNotNil,omitempty"`
@@ -11325,7 +11110,6 @@ type CustomTypeEnumWhereInput struct {
 	IconIn           []string `json:"iconIn,omitempty"`
 	IconNotIn        []string `json:"iconNotIn,omitempty"`
 	IconContains     *string  `json:"iconContains,omitempty"`
-	IconHasPrefix    *string  `json:"iconHasPrefix,omitempty"`
 	IconHasSuffix    *string  `json:"iconHasSuffix,omitempty"`
 	IconIsNil        *bool    `json:"iconIsNil,omitempty"`
 	IconNotNil       *bool    `json:"iconNotNil,omitempty"`
@@ -11512,7 +11296,6 @@ type DNSVerificationWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -11524,7 +11307,6 @@ type DNSVerificationWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -11536,7 +11318,6 @@ type DNSVerificationWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -11560,7 +11341,6 @@ type DNSVerificationWhereInput struct {
 	CloudflareHostnameIDIn           []string `json:"cloudflareHostnameIDIn,omitempty"`
 	CloudflareHostnameIDNotIn        []string `json:"cloudflareHostnameIDNotIn,omitempty"`
 	CloudflareHostnameIDContains     *string  `json:"cloudflareHostnameIDContains,omitempty"`
-	CloudflareHostnameIDHasPrefix    *string  `json:"cloudflareHostnameIDHasPrefix,omitempty"`
 	CloudflareHostnameIDHasSuffix    *string  `json:"cloudflareHostnameIDHasSuffix,omitempty"`
 	CloudflareHostnameIDEqualFold    *string  `json:"cloudflareHostnameIDEqualFold,omitempty"`
 	CloudflareHostnameIDContainsFold *string  `json:"cloudflareHostnameIDContainsFold,omitempty"`
@@ -11570,7 +11350,6 @@ type DNSVerificationWhereInput struct {
 	DNSTxtRecordIn           []string `json:"dnsTxtRecordIn,omitempty"`
 	DNSTxtRecordNotIn        []string `json:"dnsTxtRecordNotIn,omitempty"`
 	DNSTxtRecordContains     *string  `json:"dnsTxtRecordContains,omitempty"`
-	DNSTxtRecordHasPrefix    *string  `json:"dnsTxtRecordHasPrefix,omitempty"`
 	DNSTxtRecordHasSuffix    *string  `json:"dnsTxtRecordHasSuffix,omitempty"`
 	DNSTxtRecordEqualFold    *string  `json:"dnsTxtRecordEqualFold,omitempty"`
 	DNSTxtRecordContainsFold *string  `json:"dnsTxtRecordContainsFold,omitempty"`
@@ -11580,7 +11359,6 @@ type DNSVerificationWhereInput struct {
 	DNSTxtValueIn           []string `json:"dnsTxtValueIn,omitempty"`
 	DNSTxtValueNotIn        []string `json:"dnsTxtValueNotIn,omitempty"`
 	DNSTxtValueContains     *string  `json:"dnsTxtValueContains,omitempty"`
-	DNSTxtValueHasPrefix    *string  `json:"dnsTxtValueHasPrefix,omitempty"`
 	DNSTxtValueHasSuffix    *string  `json:"dnsTxtValueHasSuffix,omitempty"`
 	DNSTxtValueEqualFold    *string  `json:"dnsTxtValueEqualFold,omitempty"`
 	DNSTxtValueContainsFold *string  `json:"dnsTxtValueContainsFold,omitempty"`
@@ -11595,7 +11373,6 @@ type DNSVerificationWhereInput struct {
 	DNSVerificationStatusReasonIn           []string `json:"dnsVerificationStatusReasonIn,omitempty"`
 	DNSVerificationStatusReasonNotIn        []string `json:"dnsVerificationStatusReasonNotIn,omitempty"`
 	DNSVerificationStatusReasonContains     *string  `json:"dnsVerificationStatusReasonContains,omitempty"`
-	DNSVerificationStatusReasonHasPrefix    *string  `json:"dnsVerificationStatusReasonHasPrefix,omitempty"`
 	DNSVerificationStatusReasonHasSuffix    *string  `json:"dnsVerificationStatusReasonHasSuffix,omitempty"`
 	DNSVerificationStatusReasonIsNil        *bool    `json:"dnsVerificationStatusReasonIsNil,omitempty"`
 	DNSVerificationStatusReasonNotNil       *bool    `json:"dnsVerificationStatusReasonNotNil,omitempty"`
@@ -11607,7 +11384,6 @@ type DNSVerificationWhereInput struct {
 	AcmeChallengePathIn           []string `json:"acmeChallengePathIn,omitempty"`
 	AcmeChallengePathNotIn        []string `json:"acmeChallengePathNotIn,omitempty"`
 	AcmeChallengePathContains     *string  `json:"acmeChallengePathContains,omitempty"`
-	AcmeChallengePathHasPrefix    *string  `json:"acmeChallengePathHasPrefix,omitempty"`
 	AcmeChallengePathHasSuffix    *string  `json:"acmeChallengePathHasSuffix,omitempty"`
 	AcmeChallengePathIsNil        *bool    `json:"acmeChallengePathIsNil,omitempty"`
 	AcmeChallengePathNotNil       *bool    `json:"acmeChallengePathNotNil,omitempty"`
@@ -11619,7 +11395,6 @@ type DNSVerificationWhereInput struct {
 	ExpectedAcmeChallengeValueIn           []string `json:"expectedAcmeChallengeValueIn,omitempty"`
 	ExpectedAcmeChallengeValueNotIn        []string `json:"expectedAcmeChallengeValueNotIn,omitempty"`
 	ExpectedAcmeChallengeValueContains     *string  `json:"expectedAcmeChallengeValueContains,omitempty"`
-	ExpectedAcmeChallengeValueHasPrefix    *string  `json:"expectedAcmeChallengeValueHasPrefix,omitempty"`
 	ExpectedAcmeChallengeValueHasSuffix    *string  `json:"expectedAcmeChallengeValueHasSuffix,omitempty"`
 	ExpectedAcmeChallengeValueIsNil        *bool    `json:"expectedAcmeChallengeValueIsNil,omitempty"`
 	ExpectedAcmeChallengeValueNotNil       *bool    `json:"expectedAcmeChallengeValueNotNil,omitempty"`
@@ -11636,7 +11411,6 @@ type DNSVerificationWhereInput struct {
 	AcmeChallengeStatusReasonIn           []string `json:"acmeChallengeStatusReasonIn,omitempty"`
 	AcmeChallengeStatusReasonNotIn        []string `json:"acmeChallengeStatusReasonNotIn,omitempty"`
 	AcmeChallengeStatusReasonContains     *string  `json:"acmeChallengeStatusReasonContains,omitempty"`
-	AcmeChallengeStatusReasonHasPrefix    *string  `json:"acmeChallengeStatusReasonHasPrefix,omitempty"`
 	AcmeChallengeStatusReasonHasSuffix    *string  `json:"acmeChallengeStatusReasonHasSuffix,omitempty"`
 	AcmeChallengeStatusReasonIsNil        *bool    `json:"acmeChallengeStatusReasonIsNil,omitempty"`
 	AcmeChallengeStatusReasonNotNil       *bool    `json:"acmeChallengeStatusReasonNotNil,omitempty"`
@@ -11849,7 +11623,6 @@ type DirectoryAccountWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -11861,7 +11634,6 @@ type DirectoryAccountWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -11873,7 +11645,6 @@ type DirectoryAccountWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -11885,7 +11656,6 @@ type DirectoryAccountWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -11895,7 +11665,6 @@ type DirectoryAccountWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -11907,7 +11676,6 @@ type DirectoryAccountWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -11919,7 +11687,6 @@ type DirectoryAccountWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -11931,7 +11698,6 @@ type DirectoryAccountWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -11943,7 +11709,6 @@ type DirectoryAccountWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -11955,7 +11720,6 @@ type DirectoryAccountWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
 	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
@@ -11977,7 +11741,6 @@ type DirectoryAccountWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -12001,7 +11764,6 @@ type DirectoryAccountWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -12061,7 +11823,6 @@ type DirectoryAccountWhereInput struct {
 	DirectoryNameIn           []string `json:"directoryNameIn,omitempty"`
 	DirectoryNameNotIn        []string `json:"directoryNameNotIn,omitempty"`
 	DirectoryNameContains     *string  `json:"directoryNameContains,omitempty"`
-	DirectoryNameHasPrefix    *string  `json:"directoryNameHasPrefix,omitempty"`
 	DirectoryNameHasSuffix    *string  `json:"directoryNameHasSuffix,omitempty"`
 	DirectoryNameIsNil        *bool    `json:"directoryNameIsNil,omitempty"`
 	DirectoryNameNotNil       *bool    `json:"directoryNameNotNil,omitempty"`
@@ -12073,7 +11834,6 @@ type DirectoryAccountWhereInput struct {
 	SecondaryKeyIn           []string `json:"secondaryKeyIn,omitempty"`
 	SecondaryKeyNotIn        []string `json:"secondaryKeyNotIn,omitempty"`
 	SecondaryKeyContains     *string  `json:"secondaryKeyContains,omitempty"`
-	SecondaryKeyHasPrefix    *string  `json:"secondaryKeyHasPrefix,omitempty"`
 	SecondaryKeyHasSuffix    *string  `json:"secondaryKeyHasSuffix,omitempty"`
 	SecondaryKeyIsNil        *bool    `json:"secondaryKeyIsNil,omitempty"`
 	SecondaryKeyNotNil       *bool    `json:"secondaryKeyNotNil,omitempty"`
@@ -12085,7 +11845,6 @@ type DirectoryAccountWhereInput struct {
 	CanonicalEmailIn           []string `json:"canonicalEmailIn,omitempty"`
 	CanonicalEmailNotIn        []string `json:"canonicalEmailNotIn,omitempty"`
 	CanonicalEmailContains     *string  `json:"canonicalEmailContains,omitempty"`
-	CanonicalEmailHasPrefix    *string  `json:"canonicalEmailHasPrefix,omitempty"`
 	CanonicalEmailHasSuffix    *string  `json:"canonicalEmailHasSuffix,omitempty"`
 	CanonicalEmailIsNil        *bool    `json:"canonicalEmailIsNil,omitempty"`
 	CanonicalEmailNotNil       *bool    `json:"canonicalEmailNotNil,omitempty"`
@@ -12097,7 +11856,6 @@ type DirectoryAccountWhereInput struct {
 	PhoneNumberIn           []string `json:"phoneNumberIn,omitempty"`
 	PhoneNumberNotIn        []string `json:"phoneNumberNotIn,omitempty"`
 	PhoneNumberContains     *string  `json:"phoneNumberContains,omitempty"`
-	PhoneNumberHasPrefix    *string  `json:"phoneNumberHasPrefix,omitempty"`
 	PhoneNumberHasSuffix    *string  `json:"phoneNumberHasSuffix,omitempty"`
 	PhoneNumberIsNil        *bool    `json:"phoneNumberIsNil,omitempty"`
 	PhoneNumberNotNil       *bool    `json:"phoneNumberNotNil,omitempty"`
@@ -12109,7 +11867,6 @@ type DirectoryAccountWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
 	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
@@ -12121,7 +11878,6 @@ type DirectoryAccountWhereInput struct {
 	AvatarRemoteURLIn           []string `json:"avatarRemoteURLIn,omitempty"`
 	AvatarRemoteURLNotIn        []string `json:"avatarRemoteURLNotIn,omitempty"`
 	AvatarRemoteURLContains     *string  `json:"avatarRemoteURLContains,omitempty"`
-	AvatarRemoteURLHasPrefix    *string  `json:"avatarRemoteURLHasPrefix,omitempty"`
 	AvatarRemoteURLHasSuffix    *string  `json:"avatarRemoteURLHasSuffix,omitempty"`
 	AvatarRemoteURLIsNil        *bool    `json:"avatarRemoteURLIsNil,omitempty"`
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
@@ -12153,7 +11909,6 @@ type DirectoryAccountWhereInput struct {
 	GivenNameIn           []string `json:"givenNameIn,omitempty"`
 	GivenNameNotIn        []string `json:"givenNameNotIn,omitempty"`
 	GivenNameContains     *string  `json:"givenNameContains,omitempty"`
-	GivenNameHasPrefix    *string  `json:"givenNameHasPrefix,omitempty"`
 	GivenNameHasSuffix    *string  `json:"givenNameHasSuffix,omitempty"`
 	GivenNameIsNil        *bool    `json:"givenNameIsNil,omitempty"`
 	GivenNameNotNil       *bool    `json:"givenNameNotNil,omitempty"`
@@ -12165,7 +11920,6 @@ type DirectoryAccountWhereInput struct {
 	FamilyNameIn           []string `json:"familyNameIn,omitempty"`
 	FamilyNameNotIn        []string `json:"familyNameNotIn,omitempty"`
 	FamilyNameContains     *string  `json:"familyNameContains,omitempty"`
-	FamilyNameHasPrefix    *string  `json:"familyNameHasPrefix,omitempty"`
 	FamilyNameHasSuffix    *string  `json:"familyNameHasSuffix,omitempty"`
 	FamilyNameIsNil        *bool    `json:"familyNameIsNil,omitempty"`
 	FamilyNameNotNil       *bool    `json:"familyNameNotNil,omitempty"`
@@ -12177,7 +11931,6 @@ type DirectoryAccountWhereInput struct {
 	JobTitleIn           []string `json:"jobTitleIn,omitempty"`
 	JobTitleNotIn        []string `json:"jobTitleNotIn,omitempty"`
 	JobTitleContains     *string  `json:"jobTitleContains,omitempty"`
-	JobTitleHasPrefix    *string  `json:"jobTitleHasPrefix,omitempty"`
 	JobTitleHasSuffix    *string  `json:"jobTitleHasSuffix,omitempty"`
 	JobTitleIsNil        *bool    `json:"jobTitleIsNil,omitempty"`
 	JobTitleNotNil       *bool    `json:"jobTitleNotNil,omitempty"`
@@ -12189,7 +11942,6 @@ type DirectoryAccountWhereInput struct {
 	DepartmentIn           []string `json:"departmentIn,omitempty"`
 	DepartmentNotIn        []string `json:"departmentNotIn,omitempty"`
 	DepartmentContains     *string  `json:"departmentContains,omitempty"`
-	DepartmentHasPrefix    *string  `json:"departmentHasPrefix,omitempty"`
 	DepartmentHasSuffix    *string  `json:"departmentHasSuffix,omitempty"`
 	DepartmentIsNil        *bool    `json:"departmentIsNil,omitempty"`
 	DepartmentNotNil       *bool    `json:"departmentNotNil,omitempty"`
@@ -12201,7 +11953,6 @@ type DirectoryAccountWhereInput struct {
 	OrganizationUnitIn           []string `json:"organizationUnitIn,omitempty"`
 	OrganizationUnitNotIn        []string `json:"organizationUnitNotIn,omitempty"`
 	OrganizationUnitContains     *string  `json:"organizationUnitContains,omitempty"`
-	OrganizationUnitHasPrefix    *string  `json:"organizationUnitHasPrefix,omitempty"`
 	OrganizationUnitHasSuffix    *string  `json:"organizationUnitHasSuffix,omitempty"`
 	OrganizationUnitIsNil        *bool    `json:"organizationUnitIsNil,omitempty"`
 	OrganizationUnitNotNil       *bool    `json:"organizationUnitNotNil,omitempty"`
@@ -12230,7 +11981,6 @@ type DirectoryAccountWhereInput struct {
 	LastSeenIPIn           []string `json:"lastSeenIPIn,omitempty"`
 	LastSeenIPNotIn        []string `json:"lastSeenIPNotIn,omitempty"`
 	LastSeenIPContains     *string  `json:"lastSeenIPContains,omitempty"`
-	LastSeenIPHasPrefix    *string  `json:"lastSeenIPHasPrefix,omitempty"`
 	LastSeenIPHasSuffix    *string  `json:"lastSeenIPHasSuffix,omitempty"`
 	LastSeenIPIsNil        *bool    `json:"lastSeenIPIsNil,omitempty"`
 	LastSeenIPNotNil       *bool    `json:"lastSeenIPNotNil,omitempty"`
@@ -12264,7 +12014,6 @@ type DirectoryAccountWhereInput struct {
 	SourceVersionIn           []string `json:"sourceVersionIn,omitempty"`
 	SourceVersionNotIn        []string `json:"sourceVersionNotIn,omitempty"`
 	SourceVersionContains     *string  `json:"sourceVersionContains,omitempty"`
-	SourceVersionHasPrefix    *string  `json:"sourceVersionHasPrefix,omitempty"`
 	SourceVersionHasSuffix    *string  `json:"sourceVersionHasSuffix,omitempty"`
 	SourceVersionIsNil        *bool    `json:"sourceVersionIsNil,omitempty"`
 	SourceVersionNotNil       *bool    `json:"sourceVersionNotNil,omitempty"`
@@ -12483,7 +12232,6 @@ type DirectoryGroupWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -12495,7 +12243,6 @@ type DirectoryGroupWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -12507,7 +12254,6 @@ type DirectoryGroupWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -12519,7 +12265,6 @@ type DirectoryGroupWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -12529,7 +12274,6 @@ type DirectoryGroupWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -12541,7 +12285,6 @@ type DirectoryGroupWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -12553,7 +12296,6 @@ type DirectoryGroupWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -12565,7 +12307,6 @@ type DirectoryGroupWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -12577,7 +12318,6 @@ type DirectoryGroupWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -12589,7 +12329,6 @@ type DirectoryGroupWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
 	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
@@ -12611,7 +12350,6 @@ type DirectoryGroupWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -12635,7 +12373,6 @@ type DirectoryGroupWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -12681,7 +12418,6 @@ type DirectoryGroupWhereInput struct {
 	EmailIn           []string `json:"emailIn,omitempty"`
 	EmailNotIn        []string `json:"emailNotIn,omitempty"`
 	EmailContains     *string  `json:"emailContains,omitempty"`
-	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
 	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
 	EmailIsNil        *bool    `json:"emailIsNil,omitempty"`
 	EmailNotNil       *bool    `json:"emailNotNil,omitempty"`
@@ -12693,7 +12429,6 @@ type DirectoryGroupWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
 	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
@@ -12751,7 +12486,6 @@ type DirectoryGroupWhereInput struct {
 	SourceVersionIn           []string `json:"sourceVersionIn,omitempty"`
 	SourceVersionNotIn        []string `json:"sourceVersionNotIn,omitempty"`
 	SourceVersionContains     *string  `json:"sourceVersionContains,omitempty"`
-	SourceVersionHasPrefix    *string  `json:"sourceVersionHasPrefix,omitempty"`
 	SourceVersionHasSuffix    *string  `json:"sourceVersionHasSuffix,omitempty"`
 	SourceVersionIsNil        *bool    `json:"sourceVersionIsNil,omitempty"`
 	SourceVersionNotNil       *bool    `json:"sourceVersionNotNil,omitempty"`
@@ -12763,7 +12497,6 @@ type DirectoryGroupWhereInput struct {
 	DirectoryNameIn           []string `json:"directoryNameIn,omitempty"`
 	DirectoryNameNotIn        []string `json:"directoryNameNotIn,omitempty"`
 	DirectoryNameContains     *string  `json:"directoryNameContains,omitempty"`
-	DirectoryNameHasPrefix    *string  `json:"directoryNameHasPrefix,omitempty"`
 	DirectoryNameHasSuffix    *string  `json:"directoryNameHasSuffix,omitempty"`
 	DirectoryNameIsNil        *bool    `json:"directoryNameIsNil,omitempty"`
 	DirectoryNameNotNil       *bool    `json:"directoryNameNotNil,omitempty"`
@@ -12953,7 +12686,6 @@ type DirectoryMembershipWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -12965,7 +12697,6 @@ type DirectoryMembershipWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -12977,7 +12708,6 @@ type DirectoryMembershipWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -12989,7 +12719,6 @@ type DirectoryMembershipWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -12999,7 +12728,6 @@ type DirectoryMembershipWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -13011,7 +12739,6 @@ type DirectoryMembershipWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -13023,7 +12750,6 @@ type DirectoryMembershipWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -13035,7 +12761,6 @@ type DirectoryMembershipWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -13047,7 +12772,6 @@ type DirectoryMembershipWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -13059,7 +12783,6 @@ type DirectoryMembershipWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -13071,7 +12794,6 @@ type DirectoryMembershipWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -13090,7 +12812,6 @@ type DirectoryMembershipWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
@@ -13102,7 +12823,6 @@ type DirectoryMembershipWhereInput struct {
 	DirectoryNameIn           []string `json:"directoryNameIn,omitempty"`
 	DirectoryNameNotIn        []string `json:"directoryNameNotIn,omitempty"`
 	DirectoryNameContains     *string  `json:"directoryNameContains,omitempty"`
-	DirectoryNameHasPrefix    *string  `json:"directoryNameHasPrefix,omitempty"`
 	DirectoryNameHasSuffix    *string  `json:"directoryNameHasSuffix,omitempty"`
 	DirectoryNameIsNil        *bool    `json:"directoryNameIsNil,omitempty"`
 	DirectoryNameNotNil       *bool    `json:"directoryNameNotNil,omitempty"`
@@ -13242,7 +12962,6 @@ type DiscussionWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -13254,7 +12973,6 @@ type DiscussionWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -13266,7 +12984,6 @@ type DiscussionWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -13290,7 +13007,6 @@ type DiscussionWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -13463,7 +13179,6 @@ type DocumentDataWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -13475,7 +13190,6 @@ type DocumentDataWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -13487,7 +13201,6 @@ type DocumentDataWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -13511,7 +13224,6 @@ type DocumentDataWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -13535,7 +13247,6 @@ type DocumentDataWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -13804,7 +13515,6 @@ type EmailTemplateWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -13816,7 +13526,6 @@ type EmailTemplateWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -13828,7 +13537,6 @@ type EmailTemplateWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -13840,7 +13548,6 @@ type EmailTemplateWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
@@ -13852,7 +13559,6 @@ type EmailTemplateWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -13864,7 +13570,6 @@ type EmailTemplateWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -13876,7 +13581,6 @@ type EmailTemplateWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -13888,7 +13592,6 @@ type EmailTemplateWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -13900,7 +13603,6 @@ type EmailTemplateWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -13912,7 +13614,6 @@ type EmailTemplateWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -13941,7 +13642,6 @@ type EmailTemplateWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -13953,7 +13653,6 @@ type EmailTemplateWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -13965,7 +13664,6 @@ type EmailTemplateWhereInput struct {
 	KeyIn           []string `json:"keyIn,omitempty"`
 	KeyNotIn        []string `json:"keyNotIn,omitempty"`
 	KeyContains     *string  `json:"keyContains,omitempty"`
-	KeyHasPrefix    *string  `json:"keyHasPrefix,omitempty"`
 	KeyHasSuffix    *string  `json:"keyHasSuffix,omitempty"`
 	KeyEqualFold    *string  `json:"keyEqualFold,omitempty"`
 	KeyContainsFold *string  `json:"keyContainsFold,omitempty"`
@@ -13975,7 +13673,6 @@ type EmailTemplateWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -13985,7 +13682,6 @@ type EmailTemplateWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -14004,7 +13700,6 @@ type EmailTemplateWhereInput struct {
 	LocaleIn           []string `json:"localeIn,omitempty"`
 	LocaleNotIn        []string `json:"localeNotIn,omitempty"`
 	LocaleContains     *string  `json:"localeContains,omitempty"`
-	LocaleHasPrefix    *string  `json:"localeHasPrefix,omitempty"`
 	LocaleHasSuffix    *string  `json:"localeHasSuffix,omitempty"`
 	LocaleEqualFold    *string  `json:"localeEqualFold,omitempty"`
 	LocaleContainsFold *string  `json:"localeContainsFold,omitempty"`
@@ -14014,7 +13709,6 @@ type EmailTemplateWhereInput struct {
 	SubjectTemplateIn           []string `json:"subjectTemplateIn,omitempty"`
 	SubjectTemplateNotIn        []string `json:"subjectTemplateNotIn,omitempty"`
 	SubjectTemplateContains     *string  `json:"subjectTemplateContains,omitempty"`
-	SubjectTemplateHasPrefix    *string  `json:"subjectTemplateHasPrefix,omitempty"`
 	SubjectTemplateHasSuffix    *string  `json:"subjectTemplateHasSuffix,omitempty"`
 	SubjectTemplateIsNil        *bool    `json:"subjectTemplateIsNil,omitempty"`
 	SubjectTemplateNotNil       *bool    `json:"subjectTemplateNotNil,omitempty"`
@@ -14026,7 +13720,6 @@ type EmailTemplateWhereInput struct {
 	PreheaderTemplateIn           []string `json:"preheaderTemplateIn,omitempty"`
 	PreheaderTemplateNotIn        []string `json:"preheaderTemplateNotIn,omitempty"`
 	PreheaderTemplateContains     *string  `json:"preheaderTemplateContains,omitempty"`
-	PreheaderTemplateHasPrefix    *string  `json:"preheaderTemplateHasPrefix,omitempty"`
 	PreheaderTemplateHasSuffix    *string  `json:"preheaderTemplateHasSuffix,omitempty"`
 	PreheaderTemplateIsNil        *bool    `json:"preheaderTemplateIsNil,omitempty"`
 	PreheaderTemplateNotNil       *bool    `json:"preheaderTemplateNotNil,omitempty"`
@@ -14038,7 +13731,6 @@ type EmailTemplateWhereInput struct {
 	BodyTemplateIn           []string `json:"bodyTemplateIn,omitempty"`
 	BodyTemplateNotIn        []string `json:"bodyTemplateNotIn,omitempty"`
 	BodyTemplateContains     *string  `json:"bodyTemplateContains,omitempty"`
-	BodyTemplateHasPrefix    *string  `json:"bodyTemplateHasPrefix,omitempty"`
 	BodyTemplateHasSuffix    *string  `json:"bodyTemplateHasSuffix,omitempty"`
 	BodyTemplateIsNil        *bool    `json:"bodyTemplateIsNil,omitempty"`
 	BodyTemplateNotNil       *bool    `json:"bodyTemplateNotNil,omitempty"`
@@ -14050,7 +13742,6 @@ type EmailTemplateWhereInput struct {
 	TextTemplateIn           []string `json:"textTemplateIn,omitempty"`
 	TextTemplateNotIn        []string `json:"textTemplateNotIn,omitempty"`
 	TextTemplateContains     *string  `json:"textTemplateContains,omitempty"`
-	TextTemplateHasPrefix    *string  `json:"textTemplateHasPrefix,omitempty"`
 	TextTemplateHasSuffix    *string  `json:"textTemplateHasSuffix,omitempty"`
 	TextTemplateIsNil        *bool    `json:"textTemplateIsNil,omitempty"`
 	TextTemplateNotNil       *bool    `json:"textTemplateNotNil,omitempty"`
@@ -14555,7 +14246,6 @@ type EntityTypeWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -14567,7 +14257,6 @@ type EntityTypeWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -14579,7 +14268,6 @@ type EntityTypeWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -14608,7 +14296,6 @@ type EntityTypeWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -14620,7 +14307,6 @@ type EntityTypeWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -14632,7 +14318,6 @@ type EntityTypeWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -14687,7 +14372,6 @@ type EntityWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -14699,7 +14383,6 @@ type EntityWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -14711,7 +14394,6 @@ type EntityWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -14723,7 +14405,6 @@ type EntityWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -14735,7 +14416,6 @@ type EntityWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -14747,7 +14427,6 @@ type EntityWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -14759,7 +14438,6 @@ type EntityWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -14771,7 +14449,6 @@ type EntityWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -14783,7 +14460,6 @@ type EntityWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -14807,7 +14483,6 @@ type EntityWhereInput struct {
 	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
 	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
 	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
-	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
 	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
 	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
 	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
@@ -14855,7 +14530,6 @@ type EntityWhereInput struct {
 	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
 	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
 	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
-	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
 	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
 	ReviewedByIsNil        *bool    `json:"reviewedByIsNil,omitempty"`
 	ReviewedByNotNil       *bool    `json:"reviewedByNotNil,omitempty"`
@@ -14916,7 +14590,6 @@ type EntityWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -14928,7 +14601,6 @@ type EntityWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -14957,7 +14629,6 @@ type EntityWhereInput struct {
 	CatalogKeyIn           []string `json:"catalogKeyIn,omitempty"`
 	CatalogKeyNotIn        []string `json:"catalogKeyNotIn,omitempty"`
 	CatalogKeyContains     *string  `json:"catalogKeyContains,omitempty"`
-	CatalogKeyHasPrefix    *string  `json:"catalogKeyHasPrefix,omitempty"`
 	CatalogKeyHasSuffix    *string  `json:"catalogKeyHasSuffix,omitempty"`
 	CatalogKeyIsNil        *bool    `json:"catalogKeyIsNil,omitempty"`
 	CatalogKeyNotNil       *bool    `json:"catalogKeyNotNil,omitempty"`
@@ -14969,7 +14640,6 @@ type EntityWhereInput struct {
 	EntityRelationshipStateNameIn           []string `json:"entityRelationshipStateNameIn,omitempty"`
 	EntityRelationshipStateNameNotIn        []string `json:"entityRelationshipStateNameNotIn,omitempty"`
 	EntityRelationshipStateNameContains     *string  `json:"entityRelationshipStateNameContains,omitempty"`
-	EntityRelationshipStateNameHasPrefix    *string  `json:"entityRelationshipStateNameHasPrefix,omitempty"`
 	EntityRelationshipStateNameHasSuffix    *string  `json:"entityRelationshipStateNameHasSuffix,omitempty"`
 	EntityRelationshipStateNameIsNil        *bool    `json:"entityRelationshipStateNameIsNil,omitempty"`
 	EntityRelationshipStateNameNotNil       *bool    `json:"entityRelationshipStateNameNotNil,omitempty"`
@@ -14993,7 +14663,6 @@ type EntityWhereInput struct {
 	EntitySecurityQuestionnaireStatusNameIn           []string `json:"entitySecurityQuestionnaireStatusNameIn,omitempty"`
 	EntitySecurityQuestionnaireStatusNameNotIn        []string `json:"entitySecurityQuestionnaireStatusNameNotIn,omitempty"`
 	EntitySecurityQuestionnaireStatusNameContains     *string  `json:"entitySecurityQuestionnaireStatusNameContains,omitempty"`
-	EntitySecurityQuestionnaireStatusNameHasPrefix    *string  `json:"entitySecurityQuestionnaireStatusNameHasPrefix,omitempty"`
 	EntitySecurityQuestionnaireStatusNameHasSuffix    *string  `json:"entitySecurityQuestionnaireStatusNameHasSuffix,omitempty"`
 	EntitySecurityQuestionnaireStatusNameIsNil        *bool    `json:"entitySecurityQuestionnaireStatusNameIsNil,omitempty"`
 	EntitySecurityQuestionnaireStatusNameNotNil       *bool    `json:"entitySecurityQuestionnaireStatusNameNotNil,omitempty"`
@@ -15017,7 +14686,6 @@ type EntityWhereInput struct {
 	EntitySourceTypeNameIn           []string `json:"entitySourceTypeNameIn,omitempty"`
 	EntitySourceTypeNameNotIn        []string `json:"entitySourceTypeNameNotIn,omitempty"`
 	EntitySourceTypeNameContains     *string  `json:"entitySourceTypeNameContains,omitempty"`
-	EntitySourceTypeNameHasPrefix    *string  `json:"entitySourceTypeNameHasPrefix,omitempty"`
 	EntitySourceTypeNameHasSuffix    *string  `json:"entitySourceTypeNameHasSuffix,omitempty"`
 	EntitySourceTypeNameIsNil        *bool    `json:"entitySourceTypeNameIsNil,omitempty"`
 	EntitySourceTypeNameNotNil       *bool    `json:"entitySourceTypeNameNotNil,omitempty"`
@@ -15041,7 +14709,6 @@ type EntityWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -15065,7 +14732,6 @@ type EntityWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -15089,7 +14755,6 @@ type EntityWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameIsNil        *bool    `json:"nameIsNil,omitempty"`
 	NameNotNil       *bool    `json:"nameNotNil,omitempty"`
@@ -15101,7 +14766,6 @@ type EntityWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
 	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
@@ -15113,7 +14777,6 @@ type EntityWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -15203,7 +14866,6 @@ type EntityWhereInput struct {
 	SpendCurrencyIn           []string `json:"spendCurrencyIn,omitempty"`
 	SpendCurrencyNotIn        []string `json:"spendCurrencyNotIn,omitempty"`
 	SpendCurrencyContains     *string  `json:"spendCurrencyContains,omitempty"`
-	SpendCurrencyHasPrefix    *string  `json:"spendCurrencyHasPrefix,omitempty"`
 	SpendCurrencyHasSuffix    *string  `json:"spendCurrencyHasSuffix,omitempty"`
 	SpendCurrencyIsNil        *bool    `json:"spendCurrencyIsNil,omitempty"`
 	SpendCurrencyNotNil       *bool    `json:"spendCurrencyNotNil,omitempty"`
@@ -15215,7 +14877,6 @@ type EntityWhereInput struct {
 	BillingModelIn           []string `json:"billingModelIn,omitempty"`
 	BillingModelNotIn        []string `json:"billingModelNotIn,omitempty"`
 	BillingModelContains     *string  `json:"billingModelContains,omitempty"`
-	BillingModelHasPrefix    *string  `json:"billingModelHasPrefix,omitempty"`
 	BillingModelHasSuffix    *string  `json:"billingModelHasSuffix,omitempty"`
 	BillingModelIsNil        *bool    `json:"billingModelIsNil,omitempty"`
 	BillingModelNotNil       *bool    `json:"billingModelNotNil,omitempty"`
@@ -15227,7 +14888,6 @@ type EntityWhereInput struct {
 	RenewalRiskIn           []string `json:"renewalRiskIn,omitempty"`
 	RenewalRiskNotIn        []string `json:"renewalRiskNotIn,omitempty"`
 	RenewalRiskContains     *string  `json:"renewalRiskContains,omitempty"`
-	RenewalRiskHasPrefix    *string  `json:"renewalRiskHasPrefix,omitempty"`
 	RenewalRiskHasSuffix    *string  `json:"renewalRiskHasSuffix,omitempty"`
 	RenewalRiskIsNil        *bool    `json:"renewalRiskIsNil,omitempty"`
 	RenewalRiskNotNil       *bool    `json:"renewalRiskNotNil,omitempty"`
@@ -15254,7 +14914,6 @@ type EntityWhereInput struct {
 	StatusPageURLIn           []string `json:"statusPageURLIn,omitempty"`
 	StatusPageURLNotIn        []string `json:"statusPageURLNotIn,omitempty"`
 	StatusPageURLContains     *string  `json:"statusPageURLContains,omitempty"`
-	StatusPageURLHasPrefix    *string  `json:"statusPageURLHasPrefix,omitempty"`
 	StatusPageURLHasSuffix    *string  `json:"statusPageURLHasSuffix,omitempty"`
 	StatusPageURLIsNil        *bool    `json:"statusPageURLIsNil,omitempty"`
 	StatusPageURLNotNil       *bool    `json:"statusPageURLNotNil,omitempty"`
@@ -15266,7 +14925,6 @@ type EntityWhereInput struct {
 	RiskRatingIn           []string `json:"riskRatingIn,omitempty"`
 	RiskRatingNotIn        []string `json:"riskRatingNotIn,omitempty"`
 	RiskRatingContains     *string  `json:"riskRatingContains,omitempty"`
-	RiskRatingHasPrefix    *string  `json:"riskRatingHasPrefix,omitempty"`
 	RiskRatingHasSuffix    *string  `json:"riskRatingHasSuffix,omitempty"`
 	RiskRatingIsNil        *bool    `json:"riskRatingIsNil,omitempty"`
 	RiskRatingNotNil       *bool    `json:"riskRatingNotNil,omitempty"`
@@ -15326,7 +14984,6 @@ type EntityWhereInput struct {
 	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
 	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
 	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
-	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
 	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
 	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
 	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
@@ -15633,7 +15290,6 @@ type EventWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -15645,7 +15301,6 @@ type EventWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -15657,7 +15312,6 @@ type EventWhereInput struct {
 	EventIDIn           []string `json:"eventIDIn,omitempty"`
 	EventIDNotIn        []string `json:"eventIDNotIn,omitempty"`
 	EventIDContains     *string  `json:"eventIDContains,omitempty"`
-	EventIDHasPrefix    *string  `json:"eventIDHasPrefix,omitempty"`
 	EventIDHasSuffix    *string  `json:"eventIDHasSuffix,omitempty"`
 	EventIDIsNil        *bool    `json:"eventIDIsNil,omitempty"`
 	EventIDNotNil       *bool    `json:"eventIDNotNil,omitempty"`
@@ -15669,7 +15323,6 @@ type EventWhereInput struct {
 	CorrelationIDIn           []string `json:"correlationIDIn,omitempty"`
 	CorrelationIDNotIn        []string `json:"correlationIDNotIn,omitempty"`
 	CorrelationIDContains     *string  `json:"correlationIDContains,omitempty"`
-	CorrelationIDHasPrefix    *string  `json:"correlationIDHasPrefix,omitempty"`
 	CorrelationIDHasSuffix    *string  `json:"correlationIDHasSuffix,omitempty"`
 	CorrelationIDIsNil        *bool    `json:"correlationIDIsNil,omitempty"`
 	CorrelationIDNotNil       *bool    `json:"correlationIDNotNil,omitempty"`
@@ -15681,7 +15334,6 @@ type EventWhereInput struct {
 	EventTypeIn           []string `json:"eventTypeIn,omitempty"`
 	EventTypeNotIn        []string `json:"eventTypeNotIn,omitempty"`
 	EventTypeContains     *string  `json:"eventTypeContains,omitempty"`
-	EventTypeHasPrefix    *string  `json:"eventTypeHasPrefix,omitempty"`
 	EventTypeHasSuffix    *string  `json:"eventTypeHasSuffix,omitempty"`
 	EventTypeEqualFold    *string  `json:"eventTypeEqualFold,omitempty"`
 	EventTypeContainsFold *string  `json:"eventTypeContainsFold,omitempty"`
@@ -15929,7 +15581,6 @@ type EvidenceWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -15941,7 +15592,6 @@ type EvidenceWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -15953,7 +15603,6 @@ type EvidenceWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -15965,7 +15614,6 @@ type EvidenceWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -15975,7 +15623,6 @@ type EvidenceWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -15987,7 +15634,6 @@ type EvidenceWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -15999,7 +15645,6 @@ type EvidenceWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -16011,7 +15656,6 @@ type EvidenceWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -16023,7 +15667,6 @@ type EvidenceWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -16035,7 +15678,6 @@ type EvidenceWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -16059,7 +15701,6 @@ type EvidenceWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -16083,7 +15724,6 @@ type EvidenceWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -16112,7 +15752,6 @@ type EvidenceWhereInput struct {
 	ExternalUUIDIn           []string `json:"externalUUIDIn,omitempty"`
 	ExternalUUIDNotIn        []string `json:"externalUUIDNotIn,omitempty"`
 	ExternalUUIDContains     *string  `json:"externalUUIDContains,omitempty"`
-	ExternalUUIDHasPrefix    *string  `json:"externalUUIDHasPrefix,omitempty"`
 	ExternalUUIDHasSuffix    *string  `json:"externalUUIDHasSuffix,omitempty"`
 	ExternalUUIDIsNil        *bool    `json:"externalUUIDIsNil,omitempty"`
 	ExternalUUIDNotNil       *bool    `json:"externalUUIDNotNil,omitempty"`
@@ -16124,7 +15763,6 @@ type EvidenceWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -16134,7 +15772,6 @@ type EvidenceWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -16146,7 +15783,6 @@ type EvidenceWhereInput struct {
 	CollectionProcedureIn           []string `json:"collectionProcedureIn,omitempty"`
 	CollectionProcedureNotIn        []string `json:"collectionProcedureNotIn,omitempty"`
 	CollectionProcedureContains     *string  `json:"collectionProcedureContains,omitempty"`
-	CollectionProcedureHasPrefix    *string  `json:"collectionProcedureHasPrefix,omitempty"`
 	CollectionProcedureHasSuffix    *string  `json:"collectionProcedureHasSuffix,omitempty"`
 	CollectionProcedureIsNil        *bool    `json:"collectionProcedureIsNil,omitempty"`
 	CollectionProcedureNotNil       *bool    `json:"collectionProcedureNotNil,omitempty"`
@@ -16172,7 +15808,6 @@ type EvidenceWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
@@ -16189,7 +15824,6 @@ type EvidenceWhereInput struct {
 	URLIn           []string `json:"urlIn,omitempty"`
 	URLNotIn        []string `json:"urlNotIn,omitempty"`
 	URLContains     *string  `json:"urlContains,omitempty"`
-	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
 	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
 	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
@@ -16215,7 +15849,6 @@ type EvidenceWhereInput struct {
 	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
 	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
 	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
-	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
 	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
 	AuditorReferenceIDIsNil        *bool    `json:"auditorReferenceIDIsNil,omitempty"`
 	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
@@ -16406,7 +16039,6 @@ type ExportWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -16418,7 +16050,6 @@ type ExportWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -16430,7 +16061,6 @@ type ExportWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -16442,7 +16072,6 @@ type ExportWhereInput struct {
 	RequestorIDIn           []string `json:"requestorIDIn,omitempty"`
 	RequestorIDNotIn        []string `json:"requestorIDNotIn,omitempty"`
 	RequestorIDContains     *string  `json:"requestorIDContains,omitempty"`
-	RequestorIDHasPrefix    *string  `json:"requestorIDHasPrefix,omitempty"`
 	RequestorIDHasSuffix    *string  `json:"requestorIDHasSuffix,omitempty"`
 	RequestorIDIsNil        *bool    `json:"requestorIDIsNil,omitempty"`
 	RequestorIDNotNil       *bool    `json:"requestorIDNotNil,omitempty"`
@@ -16481,7 +16110,6 @@ type ExportWhereInput struct {
 	FiltersIn           []string `json:"filtersIn,omitempty"`
 	FiltersNotIn        []string `json:"filtersNotIn,omitempty"`
 	FiltersContains     *string  `json:"filtersContains,omitempty"`
-	FiltersHasPrefix    *string  `json:"filtersHasPrefix,omitempty"`
 	FiltersHasSuffix    *string  `json:"filtersHasSuffix,omitempty"`
 	FiltersIsNil        *bool    `json:"filtersIsNil,omitempty"`
 	FiltersNotNil       *bool    `json:"filtersNotNil,omitempty"`
@@ -16493,7 +16121,6 @@ type ExportWhereInput struct {
 	ErrorMessageIn           []string `json:"errorMessageIn,omitempty"`
 	ErrorMessageNotIn        []string `json:"errorMessageNotIn,omitempty"`
 	ErrorMessageContains     *string  `json:"errorMessageContains,omitempty"`
-	ErrorMessageHasPrefix    *string  `json:"errorMessageHasPrefix,omitempty"`
 	ErrorMessageHasSuffix    *string  `json:"errorMessageHasSuffix,omitempty"`
 	ErrorMessageIsNil        *bool    `json:"errorMessageIsNil,omitempty"`
 	ErrorMessageNotNil       *bool    `json:"errorMessageNotNil,omitempty"`
@@ -16678,7 +16305,6 @@ type FileWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -16690,7 +16316,6 @@ type FileWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -16702,7 +16327,6 @@ type FileWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -16719,7 +16343,6 @@ type FileWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -16731,7 +16354,6 @@ type FileWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -16743,7 +16365,6 @@ type FileWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -16767,7 +16388,6 @@ type FileWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -16791,7 +16411,6 @@ type FileWhereInput struct {
 	CategoryNameIn           []string `json:"categoryNameIn,omitempty"`
 	CategoryNameNotIn        []string `json:"categoryNameNotIn,omitempty"`
 	CategoryNameContains     *string  `json:"categoryNameContains,omitempty"`
-	CategoryNameHasPrefix    *string  `json:"categoryNameHasPrefix,omitempty"`
 	CategoryNameHasSuffix    *string  `json:"categoryNameHasSuffix,omitempty"`
 	CategoryNameIsNil        *bool    `json:"categoryNameIsNil,omitempty"`
 	CategoryNameNotNil       *bool    `json:"categoryNameNotNil,omitempty"`
@@ -16815,7 +16434,6 @@ type FileWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameIsNil        *bool    `json:"nameIsNil,omitempty"`
 	NameNotNil       *bool    `json:"nameNotNil,omitempty"`
@@ -16827,7 +16445,6 @@ type FileWhereInput struct {
 	ProvidedFileNameIn           []string `json:"providedFileNameIn,omitempty"`
 	ProvidedFileNameNotIn        []string `json:"providedFileNameNotIn,omitempty"`
 	ProvidedFileNameContains     *string  `json:"providedFileNameContains,omitempty"`
-	ProvidedFileNameHasPrefix    *string  `json:"providedFileNameHasPrefix,omitempty"`
 	ProvidedFileNameHasSuffix    *string  `json:"providedFileNameHasSuffix,omitempty"`
 	ProvidedFileNameEqualFold    *string  `json:"providedFileNameEqualFold,omitempty"`
 	ProvidedFileNameContainsFold *string  `json:"providedFileNameContainsFold,omitempty"`
@@ -16837,7 +16454,6 @@ type FileWhereInput struct {
 	ProvidedFileExtensionIn           []string `json:"providedFileExtensionIn,omitempty"`
 	ProvidedFileExtensionNotIn        []string `json:"providedFileExtensionNotIn,omitempty"`
 	ProvidedFileExtensionContains     *string  `json:"providedFileExtensionContains,omitempty"`
-	ProvidedFileExtensionHasPrefix    *string  `json:"providedFileExtensionHasPrefix,omitempty"`
 	ProvidedFileExtensionHasSuffix    *string  `json:"providedFileExtensionHasSuffix,omitempty"`
 	ProvidedFileExtensionEqualFold    *string  `json:"providedFileExtensionEqualFold,omitempty"`
 	ProvidedFileExtensionContainsFold *string  `json:"providedFileExtensionContainsFold,omitempty"`
@@ -16865,7 +16481,6 @@ type FileWhereInput struct {
 	DetectedMimeTypeIn           []string `json:"detectedMimeTypeIn,omitempty"`
 	DetectedMimeTypeNotIn        []string `json:"detectedMimeTypeNotIn,omitempty"`
 	DetectedMimeTypeContains     *string  `json:"detectedMimeTypeContains,omitempty"`
-	DetectedMimeTypeHasPrefix    *string  `json:"detectedMimeTypeHasPrefix,omitempty"`
 	DetectedMimeTypeHasSuffix    *string  `json:"detectedMimeTypeHasSuffix,omitempty"`
 	DetectedMimeTypeIsNil        *bool    `json:"detectedMimeTypeIsNil,omitempty"`
 	DetectedMimeTypeNotNil       *bool    `json:"detectedMimeTypeNotNil,omitempty"`
@@ -16877,7 +16492,6 @@ type FileWhereInput struct {
 	Md5HashIn           []string `json:"md5HashIn,omitempty"`
 	Md5HashNotIn        []string `json:"md5HashNotIn,omitempty"`
 	Md5HashContains     *string  `json:"md5HashContains,omitempty"`
-	Md5HashHasPrefix    *string  `json:"md5HashHasPrefix,omitempty"`
 	Md5HashHasSuffix    *string  `json:"md5HashHasSuffix,omitempty"`
 	Md5HashIsNil        *bool    `json:"md5HashIsNil,omitempty"`
 	Md5HashNotNil       *bool    `json:"md5HashNotNil,omitempty"`
@@ -16889,7 +16503,6 @@ type FileWhereInput struct {
 	DetectedContentTypeIn           []string `json:"detectedContentTypeIn,omitempty"`
 	DetectedContentTypeNotIn        []string `json:"detectedContentTypeNotIn,omitempty"`
 	DetectedContentTypeContains     *string  `json:"detectedContentTypeContains,omitempty"`
-	DetectedContentTypeHasPrefix    *string  `json:"detectedContentTypeHasPrefix,omitempty"`
 	DetectedContentTypeHasSuffix    *string  `json:"detectedContentTypeHasSuffix,omitempty"`
 	DetectedContentTypeEqualFold    *string  `json:"detectedContentTypeEqualFold,omitempty"`
 	DetectedContentTypeContainsFold *string  `json:"detectedContentTypeContainsFold,omitempty"`
@@ -16899,7 +16512,6 @@ type FileWhereInput struct {
 	StoreKeyIn           []string `json:"storeKeyIn,omitempty"`
 	StoreKeyNotIn        []string `json:"storeKeyNotIn,omitempty"`
 	StoreKeyContains     *string  `json:"storeKeyContains,omitempty"`
-	StoreKeyHasPrefix    *string  `json:"storeKeyHasPrefix,omitempty"`
 	StoreKeyHasSuffix    *string  `json:"storeKeyHasSuffix,omitempty"`
 	StoreKeyIsNil        *bool    `json:"storeKeyIsNil,omitempty"`
 	StoreKeyNotNil       *bool    `json:"storeKeyNotNil,omitempty"`
@@ -16911,7 +16523,6 @@ type FileWhereInput struct {
 	URIIn           []string `json:"uriIn,omitempty"`
 	URINotIn        []string `json:"uriNotIn,omitempty"`
 	URIContains     *string  `json:"uriContains,omitempty"`
-	URIHasPrefix    *string  `json:"uriHasPrefix,omitempty"`
 	URIHasSuffix    *string  `json:"uriHasSuffix,omitempty"`
 	URIIsNil        *bool    `json:"uriIsNil,omitempty"`
 	URINotNil       *bool    `json:"uriNotNil,omitempty"`
@@ -16923,7 +16534,6 @@ type FileWhereInput struct {
 	StorageSchemeIn           []string `json:"storageSchemeIn,omitempty"`
 	StorageSchemeNotIn        []string `json:"storageSchemeNotIn,omitempty"`
 	StorageSchemeContains     *string  `json:"storageSchemeContains,omitempty"`
-	StorageSchemeHasPrefix    *string  `json:"storageSchemeHasPrefix,omitempty"`
 	StorageSchemeHasSuffix    *string  `json:"storageSchemeHasSuffix,omitempty"`
 	StorageSchemeIsNil        *bool    `json:"storageSchemeIsNil,omitempty"`
 	StorageSchemeNotNil       *bool    `json:"storageSchemeNotNil,omitempty"`
@@ -16935,7 +16545,6 @@ type FileWhereInput struct {
 	StorageVolumeIn           []string `json:"storageVolumeIn,omitempty"`
 	StorageVolumeNotIn        []string `json:"storageVolumeNotIn,omitempty"`
 	StorageVolumeContains     *string  `json:"storageVolumeContains,omitempty"`
-	StorageVolumeHasPrefix    *string  `json:"storageVolumeHasPrefix,omitempty"`
 	StorageVolumeHasSuffix    *string  `json:"storageVolumeHasSuffix,omitempty"`
 	StorageVolumeIsNil        *bool    `json:"storageVolumeIsNil,omitempty"`
 	StorageVolumeNotNil       *bool    `json:"storageVolumeNotNil,omitempty"`
@@ -16947,7 +16556,6 @@ type FileWhereInput struct {
 	StoragePathIn           []string `json:"storagePathIn,omitempty"`
 	StoragePathNotIn        []string `json:"storagePathNotIn,omitempty"`
 	StoragePathContains     *string  `json:"storagePathContains,omitempty"`
-	StoragePathHasPrefix    *string  `json:"storagePathHasPrefix,omitempty"`
 	StoragePathHasSuffix    *string  `json:"storagePathHasSuffix,omitempty"`
 	StoragePathIsNil        *bool    `json:"storagePathIsNil,omitempty"`
 	StoragePathNotNil       *bool    `json:"storagePathNotNil,omitempty"`
@@ -16959,7 +16567,6 @@ type FileWhereInput struct {
 	StorageRegionIn           []string `json:"storageRegionIn,omitempty"`
 	StorageRegionNotIn        []string `json:"storageRegionNotIn,omitempty"`
 	StorageRegionContains     *string  `json:"storageRegionContains,omitempty"`
-	StorageRegionHasPrefix    *string  `json:"storageRegionHasPrefix,omitempty"`
 	StorageRegionHasSuffix    *string  `json:"storageRegionHasSuffix,omitempty"`
 	StorageRegionIsNil        *bool    `json:"storageRegionIsNil,omitempty"`
 	StorageRegionNotNil       *bool    `json:"storageRegionNotNil,omitempty"`
@@ -16971,7 +16578,6 @@ type FileWhereInput struct {
 	StorageProviderIn           []string `json:"storageProviderIn,omitempty"`
 	StorageProviderNotIn        []string `json:"storageProviderNotIn,omitempty"`
 	StorageProviderContains     *string  `json:"storageProviderContains,omitempty"`
-	StorageProviderHasPrefix    *string  `json:"storageProviderHasPrefix,omitempty"`
 	StorageProviderHasSuffix    *string  `json:"storageProviderHasSuffix,omitempty"`
 	StorageProviderIsNil        *bool    `json:"storageProviderIsNil,omitempty"`
 	StorageProviderNotNil       *bool    `json:"storageProviderNotNil,omitempty"`
@@ -17411,7 +17017,6 @@ type FindingControlWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -17423,7 +17028,6 @@ type FindingControlWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -17435,7 +17039,6 @@ type FindingControlWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -17447,7 +17050,6 @@ type FindingControlWhereInput struct {
 	ExternalStandardIn           []string `json:"externalStandardIn,omitempty"`
 	ExternalStandardNotIn        []string `json:"externalStandardNotIn,omitempty"`
 	ExternalStandardContains     *string  `json:"externalStandardContains,omitempty"`
-	ExternalStandardHasPrefix    *string  `json:"externalStandardHasPrefix,omitempty"`
 	ExternalStandardHasSuffix    *string  `json:"externalStandardHasSuffix,omitempty"`
 	ExternalStandardIsNil        *bool    `json:"externalStandardIsNil,omitempty"`
 	ExternalStandardNotNil       *bool    `json:"externalStandardNotNil,omitempty"`
@@ -17459,7 +17061,6 @@ type FindingControlWhereInput struct {
 	ExternalStandardVersionIn           []string `json:"externalStandardVersionIn,omitempty"`
 	ExternalStandardVersionNotIn        []string `json:"externalStandardVersionNotIn,omitempty"`
 	ExternalStandardVersionContains     *string  `json:"externalStandardVersionContains,omitempty"`
-	ExternalStandardVersionHasPrefix    *string  `json:"externalStandardVersionHasPrefix,omitempty"`
 	ExternalStandardVersionHasSuffix    *string  `json:"externalStandardVersionHasSuffix,omitempty"`
 	ExternalStandardVersionIsNil        *bool    `json:"externalStandardVersionIsNil,omitempty"`
 	ExternalStandardVersionNotNil       *bool    `json:"externalStandardVersionNotNil,omitempty"`
@@ -17471,7 +17072,6 @@ type FindingControlWhereInput struct {
 	ExternalControlIDIn           []string `json:"externalControlIDIn,omitempty"`
 	ExternalControlIDNotIn        []string `json:"externalControlIDNotIn,omitempty"`
 	ExternalControlIDContains     *string  `json:"externalControlIDContains,omitempty"`
-	ExternalControlIDHasPrefix    *string  `json:"externalControlIDHasPrefix,omitempty"`
 	ExternalControlIDHasSuffix    *string  `json:"externalControlIDHasSuffix,omitempty"`
 	ExternalControlIDIsNil        *bool    `json:"externalControlIDIsNil,omitempty"`
 	ExternalControlIDNotNil       *bool    `json:"externalControlIDNotNil,omitempty"`
@@ -17483,7 +17083,6 @@ type FindingControlWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
@@ -17568,7 +17167,6 @@ type FindingWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -17580,7 +17178,6 @@ type FindingWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -17592,7 +17189,6 @@ type FindingWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -17604,7 +17200,6 @@ type FindingWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -17614,7 +17209,6 @@ type FindingWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -17626,7 +17220,6 @@ type FindingWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -17638,7 +17231,6 @@ type FindingWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -17650,7 +17242,6 @@ type FindingWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -17662,7 +17253,6 @@ type FindingWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -17674,7 +17264,6 @@ type FindingWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -17698,7 +17287,6 @@ type FindingWhereInput struct {
 	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
 	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
 	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
-	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
 	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
 	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
 	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
@@ -17746,7 +17334,6 @@ type FindingWhereInput struct {
 	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
 	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
 	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
-	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
 	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
 	ReviewedByIsNil        *bool    `json:"reviewedByIsNil,omitempty"`
 	ReviewedByNotNil       *bool    `json:"reviewedByNotNil,omitempty"`
@@ -17794,7 +17381,6 @@ type FindingWhereInput struct {
 	AssignedToIn           []string `json:"assignedToIn,omitempty"`
 	AssignedToNotIn        []string `json:"assignedToNotIn,omitempty"`
 	AssignedToContains     *string  `json:"assignedToContains,omitempty"`
-	AssignedToHasPrefix    *string  `json:"assignedToHasPrefix,omitempty"`
 	AssignedToHasSuffix    *string  `json:"assignedToHasSuffix,omitempty"`
 	AssignedToIsNil        *bool    `json:"assignedToIsNil,omitempty"`
 	AssignedToNotNil       *bool    `json:"assignedToNotNil,omitempty"`
@@ -17847,7 +17433,6 @@ type FindingWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -17859,7 +17444,6 @@ type FindingWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -17871,7 +17455,6 @@ type FindingWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -17895,7 +17478,6 @@ type FindingWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -17919,7 +17501,6 @@ type FindingWhereInput struct {
 	FindingStatusNameIn           []string `json:"findingStatusNameIn,omitempty"`
 	FindingStatusNameNotIn        []string `json:"findingStatusNameNotIn,omitempty"`
 	FindingStatusNameContains     *string  `json:"findingStatusNameContains,omitempty"`
-	FindingStatusNameHasPrefix    *string  `json:"findingStatusNameHasPrefix,omitempty"`
 	FindingStatusNameHasSuffix    *string  `json:"findingStatusNameHasSuffix,omitempty"`
 	FindingStatusNameIsNil        *bool    `json:"findingStatusNameIsNil,omitempty"`
 	FindingStatusNameNotNil       *bool    `json:"findingStatusNameNotNil,omitempty"`
@@ -17955,7 +17536,6 @@ type FindingWhereInput struct {
 	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
 	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
 	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
-	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
 	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
 	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
 	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
@@ -17967,7 +17547,6 @@ type FindingWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
@@ -17979,7 +17558,6 @@ type FindingWhereInput struct {
 	ResourceNameIn           []string `json:"resourceNameIn,omitempty"`
 	ResourceNameNotIn        []string `json:"resourceNameNotIn,omitempty"`
 	ResourceNameContains     *string  `json:"resourceNameContains,omitempty"`
-	ResourceNameHasPrefix    *string  `json:"resourceNameHasPrefix,omitempty"`
 	ResourceNameHasSuffix    *string  `json:"resourceNameHasSuffix,omitempty"`
 	ResourceNameIsNil        *bool    `json:"resourceNameIsNil,omitempty"`
 	ResourceNameNotNil       *bool    `json:"resourceNameNotNil,omitempty"`
@@ -17991,7 +17569,6 @@ type FindingWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
 	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
@@ -18003,7 +17580,6 @@ type FindingWhereInput struct {
 	StateIn           []string `json:"stateIn,omitempty"`
 	StateNotIn        []string `json:"stateNotIn,omitempty"`
 	StateContains     *string  `json:"stateContains,omitempty"`
-	StateHasPrefix    *string  `json:"stateHasPrefix,omitempty"`
 	StateHasSuffix    *string  `json:"stateHasSuffix,omitempty"`
 	StateIsNil        *bool    `json:"stateIsNil,omitempty"`
 	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
@@ -18015,7 +17591,6 @@ type FindingWhereInput struct {
 	CategoryIn           []string `json:"categoryIn,omitempty"`
 	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
 	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
 	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
 	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
 	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
@@ -18027,7 +17602,6 @@ type FindingWhereInput struct {
 	FindingClassIn           []string `json:"findingClassIn,omitempty"`
 	FindingClassNotIn        []string `json:"findingClassNotIn,omitempty"`
 	FindingClassContains     *string  `json:"findingClassContains,omitempty"`
-	FindingClassHasPrefix    *string  `json:"findingClassHasPrefix,omitempty"`
 	FindingClassHasSuffix    *string  `json:"findingClassHasSuffix,omitempty"`
 	FindingClassIsNil        *bool    `json:"findingClassIsNil,omitempty"`
 	FindingClassNotNil       *bool    `json:"findingClassNotNil,omitempty"`
@@ -18039,7 +17613,6 @@ type FindingWhereInput struct {
 	SeverityIn           []string `json:"severityIn,omitempty"`
 	SeverityNotIn        []string `json:"severityNotIn,omitempty"`
 	SeverityContains     *string  `json:"severityContains,omitempty"`
-	SeverityHasPrefix    *string  `json:"severityHasPrefix,omitempty"`
 	SeverityHasSuffix    *string  `json:"severityHasSuffix,omitempty"`
 	SeverityIsNil        *bool    `json:"severityIsNil,omitempty"`
 	SeverityNotNil       *bool    `json:"severityNotNil,omitempty"`
@@ -18095,7 +17668,6 @@ type FindingWhereInput struct {
 	PriorityIn           []string `json:"priorityIn,omitempty"`
 	PriorityNotIn        []string `json:"priorityNotIn,omitempty"`
 	PriorityContains     *string  `json:"priorityContains,omitempty"`
-	PriorityHasPrefix    *string  `json:"priorityHasPrefix,omitempty"`
 	PriorityHasSuffix    *string  `json:"priorityHasSuffix,omitempty"`
 	PriorityIsNil        *bool    `json:"priorityIsNil,omitempty"`
 	PriorityNotNil       *bool    `json:"priorityNotNil,omitempty"`
@@ -18132,7 +17704,6 @@ type FindingWhereInput struct {
 	AssessmentIDIn           []string `json:"assessmentIDIn,omitempty"`
 	AssessmentIDNotIn        []string `json:"assessmentIDNotIn,omitempty"`
 	AssessmentIDContains     *string  `json:"assessmentIDContains,omitempty"`
-	AssessmentIDHasPrefix    *string  `json:"assessmentIDHasPrefix,omitempty"`
 	AssessmentIDHasSuffix    *string  `json:"assessmentIDHasSuffix,omitempty"`
 	AssessmentIDIsNil        *bool    `json:"assessmentIDIsNil,omitempty"`
 	AssessmentIDNotNil       *bool    `json:"assessmentIDNotNil,omitempty"`
@@ -18144,7 +17715,6 @@ type FindingWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -18156,7 +17726,6 @@ type FindingWhereInput struct {
 	RecommendationIn           []string `json:"recommendationIn,omitempty"`
 	RecommendationNotIn        []string `json:"recommendationNotIn,omitempty"`
 	RecommendationContains     *string  `json:"recommendationContains,omitempty"`
-	RecommendationHasPrefix    *string  `json:"recommendationHasPrefix,omitempty"`
 	RecommendationHasSuffix    *string  `json:"recommendationHasSuffix,omitempty"`
 	RecommendationIsNil        *bool    `json:"recommendationIsNil,omitempty"`
 	RecommendationNotNil       *bool    `json:"recommendationNotNil,omitempty"`
@@ -18168,7 +17737,6 @@ type FindingWhereInput struct {
 	RecommendedActionsIn           []string `json:"recommendedActionsIn,omitempty"`
 	RecommendedActionsNotIn        []string `json:"recommendedActionsNotIn,omitempty"`
 	RecommendedActionsContains     *string  `json:"recommendedActionsContains,omitempty"`
-	RecommendedActionsHasPrefix    *string  `json:"recommendedActionsHasPrefix,omitempty"`
 	RecommendedActionsHasSuffix    *string  `json:"recommendedActionsHasSuffix,omitempty"`
 	RecommendedActionsIsNil        *bool    `json:"recommendedActionsIsNil,omitempty"`
 	RecommendedActionsNotNil       *bool    `json:"recommendedActionsNotNil,omitempty"`
@@ -18180,7 +17748,6 @@ type FindingWhereInput struct {
 	VectorIn           []string `json:"vectorIn,omitempty"`
 	VectorNotIn        []string `json:"vectorNotIn,omitempty"`
 	VectorContains     *string  `json:"vectorContains,omitempty"`
-	VectorHasPrefix    *string  `json:"vectorHasPrefix,omitempty"`
 	VectorHasSuffix    *string  `json:"vectorHasSuffix,omitempty"`
 	VectorIsNil        *bool    `json:"vectorIsNil,omitempty"`
 	VectorNotNil       *bool    `json:"vectorNotNil,omitempty"`
@@ -18225,7 +17792,6 @@ type FindingWhereInput struct {
 	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
 	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
 	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
-	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
 	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
 	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
 	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
@@ -18660,7 +18226,6 @@ type GroupMembershipWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -18672,7 +18237,6 @@ type GroupMembershipWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -18684,7 +18248,6 @@ type GroupMembershipWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -18934,7 +18497,6 @@ type GroupSettingWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -18946,7 +18508,6 @@ type GroupSettingWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -18958,7 +18519,6 @@ type GroupSettingWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -19042,7 +18602,6 @@ type GroupWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -19054,7 +18613,6 @@ type GroupWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -19066,7 +18624,6 @@ type GroupWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -19078,7 +18635,6 @@ type GroupWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -19088,7 +18644,6 @@ type GroupWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -19100,7 +18655,6 @@ type GroupWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -19112,7 +18666,6 @@ type GroupWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -19124,7 +18677,6 @@ type GroupWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -19136,7 +18688,6 @@ type GroupWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -19148,7 +18699,6 @@ type GroupWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -19172,7 +18722,6 @@ type GroupWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -19199,7 +18748,6 @@ type GroupWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
@@ -19209,7 +18757,6 @@ type GroupWhereInput struct {
 	OscalRoleIn           []string `json:"oscalRoleIn,omitempty"`
 	OscalRoleNotIn        []string `json:"oscalRoleNotIn,omitempty"`
 	OscalRoleContains     *string  `json:"oscalRoleContains,omitempty"`
-	OscalRoleHasPrefix    *string  `json:"oscalRoleHasPrefix,omitempty"`
 	OscalRoleHasSuffix    *string  `json:"oscalRoleHasSuffix,omitempty"`
 	OscalRoleIsNil        *bool    `json:"oscalRoleIsNil,omitempty"`
 	OscalRoleNotNil       *bool    `json:"oscalRoleNotNil,omitempty"`
@@ -19221,7 +18768,6 @@ type GroupWhereInput struct {
 	OscalPartyUUIDIn           []string `json:"oscalPartyUUIDIn,omitempty"`
 	OscalPartyUUIDNotIn        []string `json:"oscalPartyUUIDNotIn,omitempty"`
 	OscalPartyUUIDContains     *string  `json:"oscalPartyUUIDContains,omitempty"`
-	OscalPartyUUIDHasPrefix    *string  `json:"oscalPartyUUIDHasPrefix,omitempty"`
 	OscalPartyUUIDHasSuffix    *string  `json:"oscalPartyUUIDHasSuffix,omitempty"`
 	OscalPartyUUIDIsNil        *bool    `json:"oscalPartyUUIDIsNil,omitempty"`
 	OscalPartyUUIDNotNil       *bool    `json:"oscalPartyUUIDNotNil,omitempty"`
@@ -19233,7 +18779,6 @@ type GroupWhereInput struct {
 	ScimExternalIDIn           []string `json:"scimExternalIDIn,omitempty"`
 	ScimExternalIDNotIn        []string `json:"scimExternalIDNotIn,omitempty"`
 	ScimExternalIDContains     *string  `json:"scimExternalIDContains,omitempty"`
-	ScimExternalIDHasPrefix    *string  `json:"scimExternalIDHasPrefix,omitempty"`
 	ScimExternalIDHasSuffix    *string  `json:"scimExternalIDHasSuffix,omitempty"`
 	ScimExternalIDIsNil        *bool    `json:"scimExternalIDIsNil,omitempty"`
 	ScimExternalIDNotNil       *bool    `json:"scimExternalIDNotNil,omitempty"`
@@ -19245,7 +18790,6 @@ type GroupWhereInput struct {
 	ScimDisplayNameIn           []string `json:"scimDisplayNameIn,omitempty"`
 	ScimDisplayNameNotIn        []string `json:"scimDisplayNameNotIn,omitempty"`
 	ScimDisplayNameContains     *string  `json:"scimDisplayNameContains,omitempty"`
-	ScimDisplayNameHasPrefix    *string  `json:"scimDisplayNameHasPrefix,omitempty"`
 	ScimDisplayNameHasSuffix    *string  `json:"scimDisplayNameHasSuffix,omitempty"`
 	ScimDisplayNameIsNil        *bool    `json:"scimDisplayNameIsNil,omitempty"`
 	ScimDisplayNameNotNil       *bool    `json:"scimDisplayNameNotNil,omitempty"`
@@ -19262,7 +18806,6 @@ type GroupWhereInput struct {
 	ScimGroupMailingIn           []string `json:"scimGroupMailingIn,omitempty"`
 	ScimGroupMailingNotIn        []string `json:"scimGroupMailingNotIn,omitempty"`
 	ScimGroupMailingContains     *string  `json:"scimGroupMailingContains,omitempty"`
-	ScimGroupMailingHasPrefix    *string  `json:"scimGroupMailingHasPrefix,omitempty"`
 	ScimGroupMailingHasSuffix    *string  `json:"scimGroupMailingHasSuffix,omitempty"`
 	ScimGroupMailingIsNil        *bool    `json:"scimGroupMailingIsNil,omitempty"`
 	ScimGroupMailingNotNil       *bool    `json:"scimGroupMailingNotNil,omitempty"`
@@ -19589,7 +19132,6 @@ type HushWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -19601,7 +19143,6 @@ type HushWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -19613,7 +19154,6 @@ type HushWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -19642,7 +19182,6 @@ type HushWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -19654,7 +19193,6 @@ type HushWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -19666,7 +19204,6 @@ type HushWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -19676,7 +19213,6 @@ type HushWhereInput struct {
 	KindIn           []string `json:"kindIn,omitempty"`
 	KindNotIn        []string `json:"kindNotIn,omitempty"`
 	KindContains     *string  `json:"kindContains,omitempty"`
-	KindHasPrefix    *string  `json:"kindHasPrefix,omitempty"`
 	KindHasSuffix    *string  `json:"kindHasSuffix,omitempty"`
 	KindIsNil        *bool    `json:"kindIsNil,omitempty"`
 	KindNotNil       *bool    `json:"kindNotNil,omitempty"`
@@ -19688,7 +19224,6 @@ type HushWhereInput struct {
 	SecretNameIn           []string `json:"secretNameIn,omitempty"`
 	SecretNameNotIn        []string `json:"secretNameNotIn,omitempty"`
 	SecretNameContains     *string  `json:"secretNameContains,omitempty"`
-	SecretNameHasPrefix    *string  `json:"secretNameHasPrefix,omitempty"`
 	SecretNameHasSuffix    *string  `json:"secretNameHasSuffix,omitempty"`
 	SecretNameIsNil        *bool    `json:"secretNameIsNil,omitempty"`
 	SecretNameNotNil       *bool    `json:"secretNameNotNil,omitempty"`
@@ -19957,7 +19492,6 @@ type IdentityHolderWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -19969,7 +19503,6 @@ type IdentityHolderWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -19981,7 +19514,6 @@ type IdentityHolderWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -19993,7 +19525,6 @@ type IdentityHolderWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -20003,7 +19534,6 @@ type IdentityHolderWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -20015,7 +19545,6 @@ type IdentityHolderWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -20027,7 +19556,6 @@ type IdentityHolderWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -20039,7 +19567,6 @@ type IdentityHolderWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -20051,7 +19578,6 @@ type IdentityHolderWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -20063,7 +19589,6 @@ type IdentityHolderWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -20087,7 +19612,6 @@ type IdentityHolderWhereInput struct {
 	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
 	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
 	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
-	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
 	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
 	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
 	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
@@ -20135,7 +19659,6 @@ type IdentityHolderWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -20159,7 +19682,6 @@ type IdentityHolderWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -20188,7 +19710,6 @@ type IdentityHolderWhereInput struct {
 	FullNameIn           []string `json:"fullNameIn,omitempty"`
 	FullNameNotIn        []string `json:"fullNameNotIn,omitempty"`
 	FullNameContains     *string  `json:"fullNameContains,omitempty"`
-	FullNameHasPrefix    *string  `json:"fullNameHasPrefix,omitempty"`
 	FullNameHasSuffix    *string  `json:"fullNameHasSuffix,omitempty"`
 	FullNameEqualFold    *string  `json:"fullNameEqualFold,omitempty"`
 	FullNameContainsFold *string  `json:"fullNameContainsFold,omitempty"`
@@ -20198,7 +19719,6 @@ type IdentityHolderWhereInput struct {
 	EmailIn           []string `json:"emailIn,omitempty"`
 	EmailNotIn        []string `json:"emailNotIn,omitempty"`
 	EmailContains     *string  `json:"emailContains,omitempty"`
-	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
 	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
 	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
 	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
@@ -20208,7 +19728,6 @@ type IdentityHolderWhereInput struct {
 	AlternateEmailIn           []string `json:"alternateEmailIn,omitempty"`
 	AlternateEmailNotIn        []string `json:"alternateEmailNotIn,omitempty"`
 	AlternateEmailContains     *string  `json:"alternateEmailContains,omitempty"`
-	AlternateEmailHasPrefix    *string  `json:"alternateEmailHasPrefix,omitempty"`
 	AlternateEmailHasSuffix    *string  `json:"alternateEmailHasSuffix,omitempty"`
 	AlternateEmailIsNil        *bool    `json:"alternateEmailIsNil,omitempty"`
 	AlternateEmailNotNil       *bool    `json:"alternateEmailNotNil,omitempty"`
@@ -20220,7 +19739,6 @@ type IdentityHolderWhereInput struct {
 	PhoneNumberIn           []string `json:"phoneNumberIn,omitempty"`
 	PhoneNumberNotIn        []string `json:"phoneNumberNotIn,omitempty"`
 	PhoneNumberContains     *string  `json:"phoneNumberContains,omitempty"`
-	PhoneNumberHasPrefix    *string  `json:"phoneNumberHasPrefix,omitempty"`
 	PhoneNumberHasSuffix    *string  `json:"phoneNumberHasSuffix,omitempty"`
 	PhoneNumberIsNil        *bool    `json:"phoneNumberIsNil,omitempty"`
 	PhoneNumberNotNil       *bool    `json:"phoneNumberNotNil,omitempty"`
@@ -20262,7 +19780,6 @@ type IdentityHolderWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
 	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
@@ -20274,7 +19791,6 @@ type IdentityHolderWhereInput struct {
 	DepartmentIn           []string `json:"departmentIn,omitempty"`
 	DepartmentNotIn        []string `json:"departmentNotIn,omitempty"`
 	DepartmentContains     *string  `json:"departmentContains,omitempty"`
-	DepartmentHasPrefix    *string  `json:"departmentHasPrefix,omitempty"`
 	DepartmentHasSuffix    *string  `json:"departmentHasSuffix,omitempty"`
 	DepartmentIsNil        *bool    `json:"departmentIsNil,omitempty"`
 	DepartmentNotNil       *bool    `json:"departmentNotNil,omitempty"`
@@ -20286,7 +19802,6 @@ type IdentityHolderWhereInput struct {
 	TeamIn           []string `json:"teamIn,omitempty"`
 	TeamNotIn        []string `json:"teamNotIn,omitempty"`
 	TeamContains     *string  `json:"teamContains,omitempty"`
-	TeamHasPrefix    *string  `json:"teamHasPrefix,omitempty"`
 	TeamHasSuffix    *string  `json:"teamHasSuffix,omitempty"`
 	TeamIsNil        *bool    `json:"teamIsNil,omitempty"`
 	TeamNotNil       *bool    `json:"teamNotNil,omitempty"`
@@ -20298,7 +19813,6 @@ type IdentityHolderWhereInput struct {
 	LocationIn           []string `json:"locationIn,omitempty"`
 	LocationNotIn        []string `json:"locationNotIn,omitempty"`
 	LocationContains     *string  `json:"locationContains,omitempty"`
-	LocationHasPrefix    *string  `json:"locationHasPrefix,omitempty"`
 	LocationHasSuffix    *string  `json:"locationHasSuffix,omitempty"`
 	LocationIsNil        *bool    `json:"locationIsNil,omitempty"`
 	LocationNotNil       *bool    `json:"locationNotNil,omitempty"`
@@ -20338,7 +19852,6 @@ type IdentityHolderWhereInput struct {
 	ExternalUserIDIn           []string `json:"externalUserIDIn,omitempty"`
 	ExternalUserIDNotIn        []string `json:"externalUserIDNotIn,omitempty"`
 	ExternalUserIDContains     *string  `json:"externalUserIDContains,omitempty"`
-	ExternalUserIDHasPrefix    *string  `json:"externalUserIDHasPrefix,omitempty"`
 	ExternalUserIDHasSuffix    *string  `json:"externalUserIDHasSuffix,omitempty"`
 	ExternalUserIDIsNil        *bool    `json:"externalUserIDIsNil,omitempty"`
 	ExternalUserIDNotNil       *bool    `json:"externalUserIDNotNil,omitempty"`
@@ -20350,7 +19863,6 @@ type IdentityHolderWhereInput struct {
 	ExternalReferenceIDIn           []string `json:"externalReferenceIDIn,omitempty"`
 	ExternalReferenceIDNotIn        []string `json:"externalReferenceIDNotIn,omitempty"`
 	ExternalReferenceIDContains     *string  `json:"externalReferenceIDContains,omitempty"`
-	ExternalReferenceIDHasPrefix    *string  `json:"externalReferenceIDHasPrefix,omitempty"`
 	ExternalReferenceIDHasSuffix    *string  `json:"externalReferenceIDHasSuffix,omitempty"`
 	ExternalReferenceIDIsNil        *bool    `json:"externalReferenceIDIsNil,omitempty"`
 	ExternalReferenceIDNotNil       *bool    `json:"externalReferenceIDNotNil,omitempty"`
@@ -20362,7 +19874,6 @@ type IdentityHolderWhereInput struct {
 	AvatarRemoteURLIn           []string `json:"avatarRemoteURLIn,omitempty"`
 	AvatarRemoteURLNotIn        []string `json:"avatarRemoteURLNotIn,omitempty"`
 	AvatarRemoteURLContains     *string  `json:"avatarRemoteURLContains,omitempty"`
-	AvatarRemoteURLHasPrefix    *string  `json:"avatarRemoteURLHasPrefix,omitempty"`
 	AvatarRemoteURLHasSuffix    *string  `json:"avatarRemoteURLHasSuffix,omitempty"`
 	AvatarRemoteURLIsNil        *bool    `json:"avatarRemoteURLIsNil,omitempty"`
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
@@ -20805,7 +20316,6 @@ type IntegrationRunWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -20817,7 +20327,6 @@ type IntegrationRunWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -20829,7 +20338,6 @@ type IntegrationRunWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -20865,7 +20373,6 @@ type IntegrationRunWhereInput struct {
 	OperationNameIn           []string `json:"operationNameIn,omitempty"`
 	OperationNameNotIn        []string `json:"operationNameNotIn,omitempty"`
 	OperationNameContains     *string  `json:"operationNameContains,omitempty"`
-	OperationNameHasPrefix    *string  `json:"operationNameHasPrefix,omitempty"`
 	OperationNameHasSuffix    *string  `json:"operationNameHasSuffix,omitempty"`
 	OperationNameIsNil        *bool    `json:"operationNameIsNil,omitempty"`
 	OperationNameNotNil       *bool    `json:"operationNameNotNil,omitempty"`
@@ -20919,7 +20426,6 @@ type IntegrationRunWhereInput struct {
 	SummaryIn           []string `json:"summaryIn,omitempty"`
 	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
 	SummaryContains     *string  `json:"summaryContains,omitempty"`
-	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
 	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
 	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
 	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
@@ -20931,7 +20437,6 @@ type IntegrationRunWhereInput struct {
 	ErrorIn           []string `json:"errorIn,omitempty"`
 	ErrorNotIn        []string `json:"errorNotIn,omitempty"`
 	ErrorContains     *string  `json:"errorContains,omitempty"`
-	ErrorHasPrefix    *string  `json:"errorHasPrefix,omitempty"`
 	ErrorHasSuffix    *string  `json:"errorHasSuffix,omitempty"`
 	ErrorIsNil        *bool    `json:"errorIsNil,omitempty"`
 	ErrorNotNil       *bool    `json:"errorNotNil,omitempty"`
@@ -21019,7 +20524,6 @@ type IntegrationWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -21031,7 +20535,6 @@ type IntegrationWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -21043,7 +20546,6 @@ type IntegrationWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -21072,7 +20574,6 @@ type IntegrationWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -21084,7 +20585,6 @@ type IntegrationWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -21096,7 +20596,6 @@ type IntegrationWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -21120,7 +20619,6 @@ type IntegrationWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -21144,7 +20642,6 @@ type IntegrationWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -21154,7 +20651,6 @@ type IntegrationWhereInput struct {
 	KindIn           []string `json:"kindIn,omitempty"`
 	KindNotIn        []string `json:"kindNotIn,omitempty"`
 	KindContains     *string  `json:"kindContains,omitempty"`
-	KindHasPrefix    *string  `json:"kindHasPrefix,omitempty"`
 	KindHasSuffix    *string  `json:"kindHasSuffix,omitempty"`
 	KindIsNil        *bool    `json:"kindIsNil,omitempty"`
 	KindNotNil       *bool    `json:"kindNotNil,omitempty"`
@@ -21166,7 +20662,6 @@ type IntegrationWhereInput struct {
 	IntegrationTypeIn           []string `json:"integrationTypeIn,omitempty"`
 	IntegrationTypeNotIn        []string `json:"integrationTypeNotIn,omitempty"`
 	IntegrationTypeContains     *string  `json:"integrationTypeContains,omitempty"`
-	IntegrationTypeHasPrefix    *string  `json:"integrationTypeHasPrefix,omitempty"`
 	IntegrationTypeHasSuffix    *string  `json:"integrationTypeHasSuffix,omitempty"`
 	IntegrationTypeIsNil        *bool    `json:"integrationTypeIsNil,omitempty"`
 	IntegrationTypeNotNil       *bool    `json:"integrationTypeNotNil,omitempty"`
@@ -21190,7 +20685,6 @@ type IntegrationWhereInput struct {
 	DefinitionIDIn           []string `json:"definitionIDIn,omitempty"`
 	DefinitionIDNotIn        []string `json:"definitionIDNotIn,omitempty"`
 	DefinitionIDContains     *string  `json:"definitionIDContains,omitempty"`
-	DefinitionIDHasPrefix    *string  `json:"definitionIDHasPrefix,omitempty"`
 	DefinitionIDHasSuffix    *string  `json:"definitionIDHasSuffix,omitempty"`
 	DefinitionIDIsNil        *bool    `json:"definitionIDIsNil,omitempty"`
 	DefinitionIDNotNil       *bool    `json:"definitionIDNotNil,omitempty"`
@@ -21202,7 +20696,6 @@ type IntegrationWhereInput struct {
 	DefinitionVersionIn           []string `json:"definitionVersionIn,omitempty"`
 	DefinitionVersionNotIn        []string `json:"definitionVersionNotIn,omitempty"`
 	DefinitionVersionContains     *string  `json:"definitionVersionContains,omitempty"`
-	DefinitionVersionHasPrefix    *string  `json:"definitionVersionHasPrefix,omitempty"`
 	DefinitionVersionHasSuffix    *string  `json:"definitionVersionHasSuffix,omitempty"`
 	DefinitionVersionIsNil        *bool    `json:"definitionVersionIsNil,omitempty"`
 	DefinitionVersionNotNil       *bool    `json:"definitionVersionNotNil,omitempty"`
@@ -21214,7 +20707,6 @@ type IntegrationWhereInput struct {
 	DefinitionSlugIn           []string `json:"definitionSlugIn,omitempty"`
 	DefinitionSlugNotIn        []string `json:"definitionSlugNotIn,omitempty"`
 	DefinitionSlugContains     *string  `json:"definitionSlugContains,omitempty"`
-	DefinitionSlugHasPrefix    *string  `json:"definitionSlugHasPrefix,omitempty"`
 	DefinitionSlugHasSuffix    *string  `json:"definitionSlugHasSuffix,omitempty"`
 	DefinitionSlugIsNil        *bool    `json:"definitionSlugIsNil,omitempty"`
 	DefinitionSlugNotNil       *bool    `json:"definitionSlugNotNil,omitempty"`
@@ -21226,7 +20718,6 @@ type IntegrationWhereInput struct {
 	FamilyIn           []string `json:"familyIn,omitempty"`
 	FamilyNotIn        []string `json:"familyNotIn,omitempty"`
 	FamilyContains     *string  `json:"familyContains,omitempty"`
-	FamilyHasPrefix    *string  `json:"familyHasPrefix,omitempty"`
 	FamilyHasSuffix    *string  `json:"familyHasSuffix,omitempty"`
 	FamilyIsNil        *bool    `json:"familyIsNil,omitempty"`
 	FamilyNotNil       *bool    `json:"familyNotNil,omitempty"`
@@ -21571,7 +21062,6 @@ type InternalPolicyWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -21583,7 +21073,6 @@ type InternalPolicyWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -21595,7 +21084,6 @@ type InternalPolicyWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -21607,7 +21095,6 @@ type InternalPolicyWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -21617,7 +21104,6 @@ type InternalPolicyWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
@@ -21629,7 +21115,6 @@ type InternalPolicyWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -21641,7 +21126,6 @@ type InternalPolicyWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -21653,7 +21137,6 @@ type InternalPolicyWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -21665,7 +21148,6 @@ type InternalPolicyWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -21677,7 +21159,6 @@ type InternalPolicyWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -21689,7 +21170,6 @@ type InternalPolicyWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -21718,7 +21198,6 @@ type InternalPolicyWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -21730,7 +21209,6 @@ type InternalPolicyWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -21742,7 +21220,6 @@ type InternalPolicyWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -21766,7 +21243,6 @@ type InternalPolicyWhereInput struct {
 	DetailsIn           []string `json:"detailsIn,omitempty"`
 	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
 	DetailsContains     *string  `json:"detailsContains,omitempty"`
-	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
 	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
 	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
@@ -21822,7 +21298,6 @@ type InternalPolicyWhereInput struct {
 	URLIn           []string `json:"urlIn,omitempty"`
 	URLNotIn        []string `json:"urlNotIn,omitempty"`
 	URLContains     *string  `json:"urlContains,omitempty"`
-	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
 	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
 	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
@@ -21846,7 +21321,6 @@ type InternalPolicyWhereInput struct {
 	ExternalFileIDIn           []string `json:"externalFileIDIn,omitempty"`
 	ExternalFileIDNotIn        []string `json:"externalFileIDNotIn,omitempty"`
 	ExternalFileIDContains     *string  `json:"externalFileIDContains,omitempty"`
-	ExternalFileIDHasPrefix    *string  `json:"externalFileIDHasPrefix,omitempty"`
 	ExternalFileIDHasSuffix    *string  `json:"externalFileIDHasSuffix,omitempty"`
 	ExternalFileIDIsNil        *bool    `json:"externalFileIDIsNil,omitempty"`
 	ExternalFileIDNotNil       *bool    `json:"externalFileIDNotNil,omitempty"`
@@ -21858,7 +21332,6 @@ type InternalPolicyWhereInput struct {
 	ExternalContentsIn           []string `json:"externalContentsIn,omitempty"`
 	ExternalContentsNotIn        []string `json:"externalContentsNotIn,omitempty"`
 	ExternalContentsContains     *string  `json:"externalContentsContains,omitempty"`
-	ExternalContentsHasPrefix    *string  `json:"externalContentsHasPrefix,omitempty"`
 	ExternalContentsHasSuffix    *string  `json:"externalContentsHasSuffix,omitempty"`
 	ExternalContentsIsNil        *bool    `json:"externalContentsIsNil,omitempty"`
 	ExternalContentsNotNil       *bool    `json:"externalContentsNotNil,omitempty"`
@@ -21870,7 +21343,6 @@ type InternalPolicyWhereInput struct {
 	InternalPolicyKindNameIn           []string `json:"internalPolicyKindNameIn,omitempty"`
 	InternalPolicyKindNameNotIn        []string `json:"internalPolicyKindNameNotIn,omitempty"`
 	InternalPolicyKindNameContains     *string  `json:"internalPolicyKindNameContains,omitempty"`
-	InternalPolicyKindNameHasPrefix    *string  `json:"internalPolicyKindNameHasPrefix,omitempty"`
 	InternalPolicyKindNameHasSuffix    *string  `json:"internalPolicyKindNameHasSuffix,omitempty"`
 	InternalPolicyKindNameIsNil        *bool    `json:"internalPolicyKindNameIsNil,omitempty"`
 	InternalPolicyKindNameNotNil       *bool    `json:"internalPolicyKindNameNotNil,omitempty"`
@@ -21894,7 +21366,6 @@ type InternalPolicyWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -21918,7 +21389,6 @@ type InternalPolicyWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -21947,7 +21417,6 @@ type InternalPolicyWhereInput struct {
 	ExternalUUIDIn           []string `json:"externalUUIDIn,omitempty"`
 	ExternalUUIDNotIn        []string `json:"externalUUIDNotIn,omitempty"`
 	ExternalUUIDContains     *string  `json:"externalUUIDContains,omitempty"`
-	ExternalUUIDHasPrefix    *string  `json:"externalUUIDHasPrefix,omitempty"`
 	ExternalUUIDHasSuffix    *string  `json:"externalUUIDHasSuffix,omitempty"`
 	ExternalUUIDIsNil        *bool    `json:"externalUUIDIsNil,omitempty"`
 	ExternalUUIDNotNil       *bool    `json:"externalUUIDNotNil,omitempty"`
@@ -22195,7 +21664,6 @@ type InviteWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -22207,7 +21675,6 @@ type InviteWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -22219,7 +21686,6 @@ type InviteWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -22231,7 +21697,6 @@ type InviteWhereInput struct {
 	RequestorIDIn           []string `json:"requestorIDIn,omitempty"`
 	RequestorIDNotIn        []string `json:"requestorIDNotIn,omitempty"`
 	RequestorIDContains     *string  `json:"requestorIDContains,omitempty"`
-	RequestorIDHasPrefix    *string  `json:"requestorIDHasPrefix,omitempty"`
 	RequestorIDHasSuffix    *string  `json:"requestorIDHasSuffix,omitempty"`
 	RequestorIDIsNil        *bool    `json:"requestorIDIsNil,omitempty"`
 	RequestorIDNotNil       *bool    `json:"requestorIDNotNil,omitempty"`
@@ -22263,7 +21728,6 @@ type InviteWhereInput struct {
 	RecipientIn           []string `json:"recipientIn,omitempty"`
 	RecipientNotIn        []string `json:"recipientNotIn,omitempty"`
 	RecipientContains     *string  `json:"recipientContains,omitempty"`
-	RecipientHasPrefix    *string  `json:"recipientHasPrefix,omitempty"`
 	RecipientHasSuffix    *string  `json:"recipientHasSuffix,omitempty"`
 	RecipientEqualFold    *string  `json:"recipientEqualFold,omitempty"`
 	RecipientContainsFold *string  `json:"recipientContainsFold,omitempty"`
@@ -22441,7 +21905,6 @@ type MappableDomainWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -22453,7 +21916,6 @@ type MappableDomainWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -22465,7 +21927,6 @@ type MappableDomainWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -22477,7 +21938,6 @@ type MappableDomainWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -22487,7 +21947,6 @@ type MappableDomainWhereInput struct {
 	ZoneIDIn           []string `json:"zoneIDIn,omitempty"`
 	ZoneIDNotIn        []string `json:"zoneIDNotIn,omitempty"`
 	ZoneIDContains     *string  `json:"zoneIDContains,omitempty"`
-	ZoneIDHasPrefix    *string  `json:"zoneIDHasPrefix,omitempty"`
 	ZoneIDHasSuffix    *string  `json:"zoneIDHasSuffix,omitempty"`
 	ZoneIDEqualFold    *string  `json:"zoneIDEqualFold,omitempty"`
 	ZoneIDContainsFold *string  `json:"zoneIDContainsFold,omitempty"`
@@ -22655,7 +22114,6 @@ type MappedControlWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -22667,7 +22125,6 @@ type MappedControlWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -22679,7 +22136,6 @@ type MappedControlWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -22691,7 +22147,6 @@ type MappedControlWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -22703,7 +22158,6 @@ type MappedControlWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -22715,7 +22169,6 @@ type MappedControlWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -22727,7 +22180,6 @@ type MappedControlWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -22739,7 +22191,6 @@ type MappedControlWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -22751,7 +22202,6 @@ type MappedControlWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -22768,7 +22218,6 @@ type MappedControlWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -22780,7 +22229,6 @@ type MappedControlWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -22809,7 +22257,6 @@ type MappedControlWhereInput struct {
 	RelationIn           []string `json:"relationIn,omitempty"`
 	RelationNotIn        []string `json:"relationNotIn,omitempty"`
 	RelationContains     *string  `json:"relationContains,omitempty"`
-	RelationHasPrefix    *string  `json:"relationHasPrefix,omitempty"`
 	RelationHasSuffix    *string  `json:"relationHasSuffix,omitempty"`
 	RelationIsNil        *bool    `json:"relationIsNil,omitempty"`
 	RelationNotNil       *bool    `json:"relationNotNil,omitempty"`
@@ -23020,7 +22467,6 @@ type NarrativeWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -23032,7 +22478,6 @@ type NarrativeWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -23044,7 +22489,6 @@ type NarrativeWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -23056,7 +22500,6 @@ type NarrativeWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -23066,7 +22509,6 @@ type NarrativeWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -23078,7 +22520,6 @@ type NarrativeWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -23090,7 +22531,6 @@ type NarrativeWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -23102,7 +22542,6 @@ type NarrativeWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -23114,7 +22553,6 @@ type NarrativeWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -23126,7 +22564,6 @@ type NarrativeWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -23155,7 +22592,6 @@ type NarrativeWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -23167,7 +22603,6 @@ type NarrativeWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -23179,7 +22614,6 @@ type NarrativeWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -23189,7 +22623,6 @@ type NarrativeWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -23201,7 +22634,6 @@ type NarrativeWhereInput struct {
 	DetailsIn           []string `json:"detailsIn,omitempty"`
 	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
 	DetailsContains     *string  `json:"detailsContains,omitempty"`
-	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
 	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
 	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
@@ -23354,7 +22786,6 @@ type NoteWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -23366,7 +22797,6 @@ type NoteWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -23378,7 +22808,6 @@ type NoteWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -23390,7 +22819,6 @@ type NoteWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -23412,7 +22840,6 @@ type NoteWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
 	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
@@ -23424,7 +22851,6 @@ type NoteWhereInput struct {
 	TextIn           []string `json:"textIn,omitempty"`
 	TextNotIn        []string `json:"textNotIn,omitempty"`
 	TextContains     *string  `json:"textContains,omitempty"`
-	TextHasPrefix    *string  `json:"textHasPrefix,omitempty"`
 	TextHasSuffix    *string  `json:"textHasSuffix,omitempty"`
 	TextEqualFold    *string  `json:"textEqualFold,omitempty"`
 	TextContainsFold *string  `json:"textContainsFold,omitempty"`
@@ -23434,7 +22860,6 @@ type NoteWhereInput struct {
 	NoteRefIn           []string `json:"noteRefIn,omitempty"`
 	NoteRefNotIn        []string `json:"noteRefNotIn,omitempty"`
 	NoteRefContains     *string  `json:"noteRefContains,omitempty"`
-	NoteRefHasPrefix    *string  `json:"noteRefHasPrefix,omitempty"`
 	NoteRefHasSuffix    *string  `json:"noteRefHasSuffix,omitempty"`
 	NoteRefIsNil        *bool    `json:"noteRefIsNil,omitempty"`
 	NoteRefNotNil       *bool    `json:"noteRefNotNil,omitempty"`
@@ -23763,7 +23188,6 @@ type NotificationPreferenceWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -23775,7 +23199,6 @@ type NotificationPreferenceWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -23787,7 +23210,6 @@ type NotificationPreferenceWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -23831,7 +23253,6 @@ type NotificationPreferenceWhereInput struct {
 	ProviderIn           []string `json:"providerIn,omitempty"`
 	ProviderNotIn        []string `json:"providerNotIn,omitempty"`
 	ProviderContains     *string  `json:"providerContains,omitempty"`
-	ProviderHasPrefix    *string  `json:"providerHasPrefix,omitempty"`
 	ProviderHasSuffix    *string  `json:"providerHasSuffix,omitempty"`
 	ProviderIsNil        *bool    `json:"providerIsNil,omitempty"`
 	ProviderNotNil       *bool    `json:"providerNotNil,omitempty"`
@@ -23843,7 +23264,6 @@ type NotificationPreferenceWhereInput struct {
 	DestinationIn           []string `json:"destinationIn,omitempty"`
 	DestinationNotIn        []string `json:"destinationNotIn,omitempty"`
 	DestinationContains     *string  `json:"destinationContains,omitempty"`
-	DestinationHasPrefix    *string  `json:"destinationHasPrefix,omitempty"`
 	DestinationHasSuffix    *string  `json:"destinationHasSuffix,omitempty"`
 	DestinationIsNil        *bool    `json:"destinationIsNil,omitempty"`
 	DestinationNotNil       *bool    `json:"destinationNotNil,omitempty"`
@@ -23890,7 +23310,6 @@ type NotificationPreferenceWhereInput struct {
 	QuietHoursStartIn           []string `json:"quietHoursStartIn,omitempty"`
 	QuietHoursStartNotIn        []string `json:"quietHoursStartNotIn,omitempty"`
 	QuietHoursStartContains     *string  `json:"quietHoursStartContains,omitempty"`
-	QuietHoursStartHasPrefix    *string  `json:"quietHoursStartHasPrefix,omitempty"`
 	QuietHoursStartHasSuffix    *string  `json:"quietHoursStartHasSuffix,omitempty"`
 	QuietHoursStartIsNil        *bool    `json:"quietHoursStartIsNil,omitempty"`
 	QuietHoursStartNotNil       *bool    `json:"quietHoursStartNotNil,omitempty"`
@@ -23902,7 +23321,6 @@ type NotificationPreferenceWhereInput struct {
 	QuietHoursEndIn           []string `json:"quietHoursEndIn,omitempty"`
 	QuietHoursEndNotIn        []string `json:"quietHoursEndNotIn,omitempty"`
 	QuietHoursEndContains     *string  `json:"quietHoursEndContains,omitempty"`
-	QuietHoursEndHasPrefix    *string  `json:"quietHoursEndHasPrefix,omitempty"`
 	QuietHoursEndHasSuffix    *string  `json:"quietHoursEndHasSuffix,omitempty"`
 	QuietHoursEndIsNil        *bool    `json:"quietHoursEndIsNil,omitempty"`
 	QuietHoursEndNotNil       *bool    `json:"quietHoursEndNotNil,omitempty"`
@@ -23914,7 +23332,6 @@ type NotificationPreferenceWhereInput struct {
 	TimezoneIn           []string `json:"timezoneIn,omitempty"`
 	TimezoneNotIn        []string `json:"timezoneNotIn,omitempty"`
 	TimezoneContains     *string  `json:"timezoneContains,omitempty"`
-	TimezoneHasPrefix    *string  `json:"timezoneHasPrefix,omitempty"`
 	TimezoneHasSuffix    *string  `json:"timezoneHasSuffix,omitempty"`
 	TimezoneIsNil        *bool    `json:"timezoneIsNil,omitempty"`
 	TimezoneNotNil       *bool    `json:"timezoneNotNil,omitempty"`
@@ -23945,7 +23362,6 @@ type NotificationPreferenceWhereInput struct {
 	LastErrorIn           []string `json:"lastErrorIn,omitempty"`
 	LastErrorNotIn        []string `json:"lastErrorNotIn,omitempty"`
 	LastErrorContains     *string  `json:"lastErrorContains,omitempty"`
-	LastErrorHasPrefix    *string  `json:"lastErrorHasPrefix,omitempty"`
 	LastErrorHasSuffix    *string  `json:"lastErrorHasSuffix,omitempty"`
 	LastErrorIsNil        *bool    `json:"lastErrorIsNil,omitempty"`
 	LastErrorNotNil       *bool    `json:"lastErrorNotNil,omitempty"`
@@ -24142,7 +23558,6 @@ type NotificationTemplateWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -24154,7 +23569,6 @@ type NotificationTemplateWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -24166,7 +23580,6 @@ type NotificationTemplateWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -24178,7 +23591,6 @@ type NotificationTemplateWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
@@ -24207,7 +23619,6 @@ type NotificationTemplateWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -24219,7 +23630,6 @@ type NotificationTemplateWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -24231,7 +23641,6 @@ type NotificationTemplateWhereInput struct {
 	KeyIn           []string `json:"keyIn,omitempty"`
 	KeyNotIn        []string `json:"keyNotIn,omitempty"`
 	KeyContains     *string  `json:"keyContains,omitempty"`
-	KeyHasPrefix    *string  `json:"keyHasPrefix,omitempty"`
 	KeyHasSuffix    *string  `json:"keyHasSuffix,omitempty"`
 	KeyEqualFold    *string  `json:"keyEqualFold,omitempty"`
 	KeyContainsFold *string  `json:"keyContainsFold,omitempty"`
@@ -24241,7 +23650,6 @@ type NotificationTemplateWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -24251,7 +23659,6 @@ type NotificationTemplateWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -24275,7 +23682,6 @@ type NotificationTemplateWhereInput struct {
 	LocaleIn           []string `json:"localeIn,omitempty"`
 	LocaleNotIn        []string `json:"localeNotIn,omitempty"`
 	LocaleContains     *string  `json:"localeContains,omitempty"`
-	LocaleHasPrefix    *string  `json:"localeHasPrefix,omitempty"`
 	LocaleHasSuffix    *string  `json:"localeHasSuffix,omitempty"`
 	LocaleEqualFold    *string  `json:"localeEqualFold,omitempty"`
 	LocaleContainsFold *string  `json:"localeContainsFold,omitempty"`
@@ -24285,7 +23691,6 @@ type NotificationTemplateWhereInput struct {
 	TopicPatternIn           []string `json:"topicPatternIn,omitempty"`
 	TopicPatternNotIn        []string `json:"topicPatternNotIn,omitempty"`
 	TopicPatternContains     *string  `json:"topicPatternContains,omitempty"`
-	TopicPatternHasPrefix    *string  `json:"topicPatternHasPrefix,omitempty"`
 	TopicPatternHasSuffix    *string  `json:"topicPatternHasSuffix,omitempty"`
 	TopicPatternEqualFold    *string  `json:"topicPatternEqualFold,omitempty"`
 	TopicPatternContainsFold *string  `json:"topicPatternContainsFold,omitempty"`
@@ -24331,7 +23736,6 @@ type NotificationTemplateWhereInput struct {
 	TitleTemplateIn           []string `json:"titleTemplateIn,omitempty"`
 	TitleTemplateNotIn        []string `json:"titleTemplateNotIn,omitempty"`
 	TitleTemplateContains     *string  `json:"titleTemplateContains,omitempty"`
-	TitleTemplateHasPrefix    *string  `json:"titleTemplateHasPrefix,omitempty"`
 	TitleTemplateHasSuffix    *string  `json:"titleTemplateHasSuffix,omitempty"`
 	TitleTemplateIsNil        *bool    `json:"titleTemplateIsNil,omitempty"`
 	TitleTemplateNotNil       *bool    `json:"titleTemplateNotNil,omitempty"`
@@ -24343,7 +23747,6 @@ type NotificationTemplateWhereInput struct {
 	SubjectTemplateIn           []string `json:"subjectTemplateIn,omitempty"`
 	SubjectTemplateNotIn        []string `json:"subjectTemplateNotIn,omitempty"`
 	SubjectTemplateContains     *string  `json:"subjectTemplateContains,omitempty"`
-	SubjectTemplateHasPrefix    *string  `json:"subjectTemplateHasPrefix,omitempty"`
 	SubjectTemplateHasSuffix    *string  `json:"subjectTemplateHasSuffix,omitempty"`
 	SubjectTemplateIsNil        *bool    `json:"subjectTemplateIsNil,omitempty"`
 	SubjectTemplateNotNil       *bool    `json:"subjectTemplateNotNil,omitempty"`
@@ -24355,7 +23758,6 @@ type NotificationTemplateWhereInput struct {
 	BodyTemplateIn           []string `json:"bodyTemplateIn,omitempty"`
 	BodyTemplateNotIn        []string `json:"bodyTemplateNotIn,omitempty"`
 	BodyTemplateContains     *string  `json:"bodyTemplateContains,omitempty"`
-	BodyTemplateHasPrefix    *string  `json:"bodyTemplateHasPrefix,omitempty"`
 	BodyTemplateHasSuffix    *string  `json:"bodyTemplateHasSuffix,omitempty"`
 	BodyTemplateIsNil        *bool    `json:"bodyTemplateIsNil,omitempty"`
 	BodyTemplateNotNil       *bool    `json:"bodyTemplateNotNil,omitempty"`
@@ -24454,7 +23856,6 @@ type OnboardingWhereInput struct {
 	CompanyNameIn           []string `json:"companyNameIn,omitempty"`
 	CompanyNameNotIn        []string `json:"companyNameNotIn,omitempty"`
 	CompanyNameContains     *string  `json:"companyNameContains,omitempty"`
-	CompanyNameHasPrefix    *string  `json:"companyNameHasPrefix,omitempty"`
 	CompanyNameHasSuffix    *string  `json:"companyNameHasSuffix,omitempty"`
 	CompanyNameEqualFold    *string  `json:"companyNameEqualFold,omitempty"`
 	CompanyNameContainsFold *string  `json:"companyNameContainsFold,omitempty"`
@@ -24619,7 +24020,6 @@ type OrgMembershipWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -24631,7 +24031,6 @@ type OrgMembershipWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -24643,7 +24042,6 @@ type OrgMembershipWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -24665,7 +24063,6 @@ type OrgMembershipWhereInput struct {
 	SsoExemptReasonIn           []string `json:"ssoExemptReasonIn,omitempty"`
 	SsoExemptReasonNotIn        []string `json:"ssoExemptReasonNotIn,omitempty"`
 	SsoExemptReasonContains     *string  `json:"ssoExemptReasonContains,omitempty"`
-	SsoExemptReasonHasPrefix    *string  `json:"ssoExemptReasonHasPrefix,omitempty"`
 	SsoExemptReasonHasSuffix    *string  `json:"ssoExemptReasonHasSuffix,omitempty"`
 	SsoExemptReasonIsNil        *bool    `json:"ssoExemptReasonIsNil,omitempty"`
 	SsoExemptReasonNotNil       *bool    `json:"ssoExemptReasonNotNil,omitempty"`
@@ -24677,7 +24074,6 @@ type OrgMembershipWhereInput struct {
 	SsoExemptGrantedByIn           []string `json:"ssoExemptGrantedByIn,omitempty"`
 	SsoExemptGrantedByNotIn        []string `json:"ssoExemptGrantedByNotIn,omitempty"`
 	SsoExemptGrantedByContains     *string  `json:"ssoExemptGrantedByContains,omitempty"`
-	SsoExemptGrantedByHasPrefix    *string  `json:"ssoExemptGrantedByHasPrefix,omitempty"`
 	SsoExemptGrantedByHasSuffix    *string  `json:"ssoExemptGrantedByHasSuffix,omitempty"`
 	SsoExemptGrantedByIsNil        *bool    `json:"ssoExemptGrantedByIsNil,omitempty"`
 	SsoExemptGrantedByNotNil       *bool    `json:"ssoExemptGrantedByNotNil,omitempty"`
@@ -24702,7 +24098,6 @@ type OrgMembershipWhereInput struct {
 	TfaEnforcedReasonIn           []string `json:"tfaEnforcedReasonIn,omitempty"`
 	TfaEnforcedReasonNotIn        []string `json:"tfaEnforcedReasonNotIn,omitempty"`
 	TfaEnforcedReasonContains     *string  `json:"tfaEnforcedReasonContains,omitempty"`
-	TfaEnforcedReasonHasPrefix    *string  `json:"tfaEnforcedReasonHasPrefix,omitempty"`
 	TfaEnforcedReasonHasSuffix    *string  `json:"tfaEnforcedReasonHasSuffix,omitempty"`
 	TfaEnforcedReasonIsNil        *bool    `json:"tfaEnforcedReasonIsNil,omitempty"`
 	TfaEnforcedReasonNotNil       *bool    `json:"tfaEnforcedReasonNotNil,omitempty"`
@@ -24714,7 +24109,6 @@ type OrgMembershipWhereInput struct {
 	TfaEnforcedByIn           []string `json:"tfaEnforcedByIn,omitempty"`
 	TfaEnforcedByNotIn        []string `json:"tfaEnforcedByNotIn,omitempty"`
 	TfaEnforcedByContains     *string  `json:"tfaEnforcedByContains,omitempty"`
-	TfaEnforcedByHasPrefix    *string  `json:"tfaEnforcedByHasPrefix,omitempty"`
 	TfaEnforcedByHasSuffix    *string  `json:"tfaEnforcedByHasSuffix,omitempty"`
 	TfaEnforcedByIsNil        *bool    `json:"tfaEnforcedByIsNil,omitempty"`
 	TfaEnforcedByNotNil       *bool    `json:"tfaEnforcedByNotNil,omitempty"`
@@ -24825,7 +24219,6 @@ type OrgSubscriptionWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -24837,7 +24230,6 @@ type OrgSubscriptionWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -24849,7 +24241,6 @@ type OrgSubscriptionWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -24873,7 +24264,6 @@ type OrgSubscriptionWhereInput struct {
 	StripeSubscriptionIDIn           []string `json:"stripeSubscriptionIDIn,omitempty"`
 	StripeSubscriptionIDNotIn        []string `json:"stripeSubscriptionIDNotIn,omitempty"`
 	StripeSubscriptionIDContains     *string  `json:"stripeSubscriptionIDContains,omitempty"`
-	StripeSubscriptionIDHasPrefix    *string  `json:"stripeSubscriptionIDHasPrefix,omitempty"`
 	StripeSubscriptionIDHasSuffix    *string  `json:"stripeSubscriptionIDHasSuffix,omitempty"`
 	StripeSubscriptionIDIsNil        *bool    `json:"stripeSubscriptionIDIsNil,omitempty"`
 	StripeSubscriptionIDNotNil       *bool    `json:"stripeSubscriptionIDNotNil,omitempty"`
@@ -24885,7 +24275,6 @@ type OrgSubscriptionWhereInput struct {
 	StripeSubscriptionStatusIn           []string `json:"stripeSubscriptionStatusIn,omitempty"`
 	StripeSubscriptionStatusNotIn        []string `json:"stripeSubscriptionStatusNotIn,omitempty"`
 	StripeSubscriptionStatusContains     *string  `json:"stripeSubscriptionStatusContains,omitempty"`
-	StripeSubscriptionStatusHasPrefix    *string  `json:"stripeSubscriptionStatusHasPrefix,omitempty"`
 	StripeSubscriptionStatusHasSuffix    *string  `json:"stripeSubscriptionStatusHasSuffix,omitempty"`
 	StripeSubscriptionStatusIsNil        *bool    `json:"stripeSubscriptionStatusIsNil,omitempty"`
 	StripeSubscriptionStatusNotNil       *bool    `json:"stripeSubscriptionStatusNotNil,omitempty"`
@@ -24916,7 +24305,6 @@ type OrgSubscriptionWhereInput struct {
 	DaysUntilDueIn           []string `json:"daysUntilDueIn,omitempty"`
 	DaysUntilDueNotIn        []string `json:"daysUntilDueNotIn,omitempty"`
 	DaysUntilDueContains     *string  `json:"daysUntilDueContains,omitempty"`
-	DaysUntilDueHasPrefix    *string  `json:"daysUntilDueHasPrefix,omitempty"`
 	DaysUntilDueHasSuffix    *string  `json:"daysUntilDueHasSuffix,omitempty"`
 	DaysUntilDueIsNil        *bool    `json:"daysUntilDueIsNil,omitempty"`
 	DaysUntilDueNotNil       *bool    `json:"daysUntilDueNotNil,omitempty"`
@@ -25189,7 +24577,6 @@ type OrganizationBrandingSettingWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -25201,7 +24588,6 @@ type OrganizationBrandingSettingWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -25213,7 +24599,6 @@ type OrganizationBrandingSettingWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -25242,7 +24627,6 @@ type OrganizationBrandingSettingWhereInput struct {
 	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
 	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
 	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
-	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
 	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
 	PrimaryColorIsNil        *bool    `json:"primaryColorIsNil,omitempty"`
 	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
@@ -25254,7 +24638,6 @@ type OrganizationBrandingSettingWhereInput struct {
 	SecondaryColorIn           []string `json:"secondaryColorIn,omitempty"`
 	SecondaryColorNotIn        []string `json:"secondaryColorNotIn,omitempty"`
 	SecondaryColorContains     *string  `json:"secondaryColorContains,omitempty"`
-	SecondaryColorHasPrefix    *string  `json:"secondaryColorHasPrefix,omitempty"`
 	SecondaryColorHasSuffix    *string  `json:"secondaryColorHasSuffix,omitempty"`
 	SecondaryColorIsNil        *bool    `json:"secondaryColorIsNil,omitempty"`
 	SecondaryColorNotNil       *bool    `json:"secondaryColorNotNil,omitempty"`
@@ -25266,7 +24649,6 @@ type OrganizationBrandingSettingWhereInput struct {
 	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
 	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
 	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
-	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
 	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
 	BackgroundColorIsNil        *bool    `json:"backgroundColorIsNil,omitempty"`
 	BackgroundColorNotNil       *bool    `json:"backgroundColorNotNil,omitempty"`
@@ -25278,7 +24660,6 @@ type OrganizationBrandingSettingWhereInput struct {
 	TextColorIn           []string `json:"textColorIn,omitempty"`
 	TextColorNotIn        []string `json:"textColorNotIn,omitempty"`
 	TextColorContains     *string  `json:"textColorContains,omitempty"`
-	TextColorHasPrefix    *string  `json:"textColorHasPrefix,omitempty"`
 	TextColorHasSuffix    *string  `json:"textColorHasSuffix,omitempty"`
 	TextColorIsNil        *bool    `json:"textColorIsNil,omitempty"`
 	TextColorNotNil       *bool    `json:"textColorNotNil,omitempty"`
@@ -25290,7 +24671,6 @@ type OrganizationBrandingSettingWhereInput struct {
 	FontFamilyIn           []string `json:"fontFamilyIn,omitempty"`
 	FontFamilyNotIn        []string `json:"fontFamilyNotIn,omitempty"`
 	FontFamilyContains     *string  `json:"fontFamilyContains,omitempty"`
-	FontFamilyHasPrefix    *string  `json:"fontFamilyHasPrefix,omitempty"`
 	FontFamilyHasSuffix    *string  `json:"fontFamilyHasSuffix,omitempty"`
 	FontFamilyIsNil        *bool    `json:"fontFamilyIsNil,omitempty"`
 	FontFamilyNotNil       *bool    `json:"fontFamilyNotNil,omitempty"`
@@ -25526,7 +24906,6 @@ type OrganizationSettingWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -25538,7 +24917,6 @@ type OrganizationSettingWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -25550,7 +24928,6 @@ type OrganizationSettingWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -25562,7 +24939,6 @@ type OrganizationSettingWhereInput struct {
 	BillingContactIn           []string `json:"billingContactIn,omitempty"`
 	BillingContactNotIn        []string `json:"billingContactNotIn,omitempty"`
 	BillingContactContains     *string  `json:"billingContactContains,omitempty"`
-	BillingContactHasPrefix    *string  `json:"billingContactHasPrefix,omitempty"`
 	BillingContactHasSuffix    *string  `json:"billingContactHasSuffix,omitempty"`
 	BillingContactIsNil        *bool    `json:"billingContactIsNil,omitempty"`
 	BillingContactNotNil       *bool    `json:"billingContactNotNil,omitempty"`
@@ -25574,7 +24950,6 @@ type OrganizationSettingWhereInput struct {
 	BillingEmailIn           []string `json:"billingEmailIn,omitempty"`
 	BillingEmailNotIn        []string `json:"billingEmailNotIn,omitempty"`
 	BillingEmailContains     *string  `json:"billingEmailContains,omitempty"`
-	BillingEmailHasPrefix    *string  `json:"billingEmailHasPrefix,omitempty"`
 	BillingEmailHasSuffix    *string  `json:"billingEmailHasSuffix,omitempty"`
 	BillingEmailIsNil        *bool    `json:"billingEmailIsNil,omitempty"`
 	BillingEmailNotNil       *bool    `json:"billingEmailNotNil,omitempty"`
@@ -25586,7 +24961,6 @@ type OrganizationSettingWhereInput struct {
 	BillingPhoneIn           []string `json:"billingPhoneIn,omitempty"`
 	BillingPhoneNotIn        []string `json:"billingPhoneNotIn,omitempty"`
 	BillingPhoneContains     *string  `json:"billingPhoneContains,omitempty"`
-	BillingPhoneHasPrefix    *string  `json:"billingPhoneHasPrefix,omitempty"`
 	BillingPhoneHasSuffix    *string  `json:"billingPhoneHasSuffix,omitempty"`
 	BillingPhoneIsNil        *bool    `json:"billingPhoneIsNil,omitempty"`
 	BillingPhoneNotNil       *bool    `json:"billingPhoneNotNil,omitempty"`
@@ -25598,7 +24972,6 @@ type OrganizationSettingWhereInput struct {
 	TaxIdentifierIn           []string `json:"taxIdentifierIn,omitempty"`
 	TaxIdentifierNotIn        []string `json:"taxIdentifierNotIn,omitempty"`
 	TaxIdentifierContains     *string  `json:"taxIdentifierContains,omitempty"`
-	TaxIdentifierHasPrefix    *string  `json:"taxIdentifierHasPrefix,omitempty"`
 	TaxIdentifierHasSuffix    *string  `json:"taxIdentifierHasSuffix,omitempty"`
 	TaxIdentifierIsNil        *bool    `json:"taxIdentifierIsNil,omitempty"`
 	TaxIdentifierNotNil       *bool    `json:"taxIdentifierNotNil,omitempty"`
@@ -25644,7 +25017,6 @@ type OrganizationSettingWhereInput struct {
 	IdentityProviderClientIDIn           []string `json:"identityProviderClientIDIn,omitempty"`
 	IdentityProviderClientIDNotIn        []string `json:"identityProviderClientIDNotIn,omitempty"`
 	IdentityProviderClientIDContains     *string  `json:"identityProviderClientIDContains,omitempty"`
-	IdentityProviderClientIDHasPrefix    *string  `json:"identityProviderClientIDHasPrefix,omitempty"`
 	IdentityProviderClientIDHasSuffix    *string  `json:"identityProviderClientIDHasSuffix,omitempty"`
 	IdentityProviderClientIDIsNil        *bool    `json:"identityProviderClientIDIsNil,omitempty"`
 	IdentityProviderClientIDNotNil       *bool    `json:"identityProviderClientIDNotNil,omitempty"`
@@ -25656,7 +25028,6 @@ type OrganizationSettingWhereInput struct {
 	IdentityProviderMetadataEndpointIn           []string `json:"identityProviderMetadataEndpointIn,omitempty"`
 	IdentityProviderMetadataEndpointNotIn        []string `json:"identityProviderMetadataEndpointNotIn,omitempty"`
 	IdentityProviderMetadataEndpointContains     *string  `json:"identityProviderMetadataEndpointContains,omitempty"`
-	IdentityProviderMetadataEndpointHasPrefix    *string  `json:"identityProviderMetadataEndpointHasPrefix,omitempty"`
 	IdentityProviderMetadataEndpointHasSuffix    *string  `json:"identityProviderMetadataEndpointHasSuffix,omitempty"`
 	IdentityProviderMetadataEndpointIsNil        *bool    `json:"identityProviderMetadataEndpointIsNil,omitempty"`
 	IdentityProviderMetadataEndpointNotNil       *bool    `json:"identityProviderMetadataEndpointNotNil,omitempty"`
@@ -25671,7 +25042,6 @@ type OrganizationSettingWhereInput struct {
 	IdentityProviderEntityIDIn           []string `json:"identityProviderEntityIDIn,omitempty"`
 	IdentityProviderEntityIDNotIn        []string `json:"identityProviderEntityIDNotIn,omitempty"`
 	IdentityProviderEntityIDContains     *string  `json:"identityProviderEntityIDContains,omitempty"`
-	IdentityProviderEntityIDHasPrefix    *string  `json:"identityProviderEntityIDHasPrefix,omitempty"`
 	IdentityProviderEntityIDHasSuffix    *string  `json:"identityProviderEntityIDHasSuffix,omitempty"`
 	IdentityProviderEntityIDIsNil        *bool    `json:"identityProviderEntityIDIsNil,omitempty"`
 	IdentityProviderEntityIDNotNil       *bool    `json:"identityProviderEntityIDNotNil,omitempty"`
@@ -25683,7 +25053,6 @@ type OrganizationSettingWhereInput struct {
 	OidcDiscoveryEndpointIn           []string `json:"oidcDiscoveryEndpointIn,omitempty"`
 	OidcDiscoveryEndpointNotIn        []string `json:"oidcDiscoveryEndpointNotIn,omitempty"`
 	OidcDiscoveryEndpointContains     *string  `json:"oidcDiscoveryEndpointContains,omitempty"`
-	OidcDiscoveryEndpointHasPrefix    *string  `json:"oidcDiscoveryEndpointHasPrefix,omitempty"`
 	OidcDiscoveryEndpointHasSuffix    *string  `json:"oidcDiscoveryEndpointHasSuffix,omitempty"`
 	OidcDiscoveryEndpointIsNil        *bool    `json:"oidcDiscoveryEndpointIsNil,omitempty"`
 	OidcDiscoveryEndpointNotNil       *bool    `json:"oidcDiscoveryEndpointNotNil,omitempty"`
@@ -25695,7 +25064,6 @@ type OrganizationSettingWhereInput struct {
 	SamlSigninURLIn           []string `json:"samlSigninURLIn,omitempty"`
 	SamlSigninURLNotIn        []string `json:"samlSigninURLNotIn,omitempty"`
 	SamlSigninURLContains     *string  `json:"samlSigninURLContains,omitempty"`
-	SamlSigninURLHasPrefix    *string  `json:"samlSigninURLHasPrefix,omitempty"`
 	SamlSigninURLHasSuffix    *string  `json:"samlSigninURLHasSuffix,omitempty"`
 	SamlSigninURLIsNil        *bool    `json:"samlSigninURLIsNil,omitempty"`
 	SamlSigninURLNotNil       *bool    `json:"samlSigninURLNotNil,omitempty"`
@@ -25707,7 +25075,6 @@ type OrganizationSettingWhereInput struct {
 	SamlIssuerIn           []string `json:"samlIssuerIn,omitempty"`
 	SamlIssuerNotIn        []string `json:"samlIssuerNotIn,omitempty"`
 	SamlIssuerContains     *string  `json:"samlIssuerContains,omitempty"`
-	SamlIssuerHasPrefix    *string  `json:"samlIssuerHasPrefix,omitempty"`
 	SamlIssuerHasSuffix    *string  `json:"samlIssuerHasSuffix,omitempty"`
 	SamlIssuerIsNil        *bool    `json:"samlIssuerIsNil,omitempty"`
 	SamlIssuerNotNil       *bool    `json:"samlIssuerNotNil,omitempty"`
@@ -25719,7 +25086,6 @@ type OrganizationSettingWhereInput struct {
 	SamlCertIn           []string `json:"samlCertIn,omitempty"`
 	SamlCertNotIn        []string `json:"samlCertNotIn,omitempty"`
 	SamlCertContains     *string  `json:"samlCertContains,omitempty"`
-	SamlCertHasPrefix    *string  `json:"samlCertHasPrefix,omitempty"`
 	SamlCertHasSuffix    *string  `json:"samlCertHasSuffix,omitempty"`
 	SamlCertIsNil        *bool    `json:"samlCertIsNil,omitempty"`
 	SamlCertNotNil       *bool    `json:"samlCertNotNil,omitempty"`
@@ -25819,7 +25185,6 @@ type OrganizationWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -25831,7 +25196,6 @@ type OrganizationWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -25843,7 +25207,6 @@ type OrganizationWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -25855,7 +25218,6 @@ type OrganizationWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
@@ -25882,7 +25244,6 @@ type OrganizationWhereInput struct {
 	AvatarRemoteURLIn           []string `json:"avatarRemoteURLIn,omitempty"`
 	AvatarRemoteURLNotIn        []string `json:"avatarRemoteURLNotIn,omitempty"`
 	AvatarRemoteURLContains     *string  `json:"avatarRemoteURLContains,omitempty"`
-	AvatarRemoteURLHasPrefix    *string  `json:"avatarRemoteURLHasPrefix,omitempty"`
 	AvatarRemoteURLHasSuffix    *string  `json:"avatarRemoteURLHasSuffix,omitempty"`
 	AvatarRemoteURLIsNil        *bool    `json:"avatarRemoteURLIsNil,omitempty"`
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
@@ -25914,7 +25275,6 @@ type OrganizationWhereInput struct {
 	SlugNameIn           []string `json:"slugNameIn,omitempty"`
 	SlugNameNotIn        []string `json:"slugNameNotIn,omitempty"`
 	SlugNameContains     *string  `json:"slugNameContains,omitempty"`
-	SlugNameHasPrefix    *string  `json:"slugNameHasPrefix,omitempty"`
 	SlugNameHasSuffix    *string  `json:"slugNameHasSuffix,omitempty"`
 	SlugNameIsNil        *bool    `json:"slugNameIsNil,omitempty"`
 	SlugNameNotNil       *bool    `json:"slugNameNotNil,omitempty"`
@@ -26325,7 +25685,6 @@ type PersonalAccessTokenWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -26337,7 +25696,6 @@ type PersonalAccessTokenWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -26349,7 +25707,6 @@ type PersonalAccessTokenWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -26361,7 +25718,6 @@ type PersonalAccessTokenWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -26392,7 +25748,6 @@ type PersonalAccessTokenWhereInput struct {
 	RevokedReasonIn           []string `json:"revokedReasonIn,omitempty"`
 	RevokedReasonNotIn        []string `json:"revokedReasonNotIn,omitempty"`
 	RevokedReasonContains     *string  `json:"revokedReasonContains,omitempty"`
-	RevokedReasonHasPrefix    *string  `json:"revokedReasonHasPrefix,omitempty"`
 	RevokedReasonHasSuffix    *string  `json:"revokedReasonHasSuffix,omitempty"`
 	RevokedReasonIsNil        *bool    `json:"revokedReasonIsNil,omitempty"`
 	RevokedReasonNotNil       *bool    `json:"revokedReasonNotNil,omitempty"`
@@ -26404,7 +25759,6 @@ type PersonalAccessTokenWhereInput struct {
 	RevokedByIn           []string `json:"revokedByIn,omitempty"`
 	RevokedByNotIn        []string `json:"revokedByNotIn,omitempty"`
 	RevokedByContains     *string  `json:"revokedByContains,omitempty"`
-	RevokedByHasPrefix    *string  `json:"revokedByHasPrefix,omitempty"`
 	RevokedByHasSuffix    *string  `json:"revokedByHasSuffix,omitempty"`
 	RevokedByIsNil        *bool    `json:"revokedByIsNil,omitempty"`
 	RevokedByNotNil       *bool    `json:"revokedByNotNil,omitempty"`
@@ -26711,7 +26065,6 @@ type PlatformWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -26723,7 +26076,6 @@ type PlatformWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -26735,7 +26087,6 @@ type PlatformWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -26747,7 +26098,6 @@ type PlatformWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -26757,7 +26107,6 @@ type PlatformWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -26769,7 +26118,6 @@ type PlatformWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -26781,7 +26129,6 @@ type PlatformWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -26793,7 +26140,6 @@ type PlatformWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -26805,7 +26151,6 @@ type PlatformWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -26817,7 +26162,6 @@ type PlatformWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -26841,7 +26185,6 @@ type PlatformWhereInput struct {
 	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
 	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
 	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
-	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
 	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
 	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
 	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
@@ -26889,7 +26232,6 @@ type PlatformWhereInput struct {
 	BusinessOwnerIn           []string `json:"businessOwnerIn,omitempty"`
 	BusinessOwnerNotIn        []string `json:"businessOwnerNotIn,omitempty"`
 	BusinessOwnerContains     *string  `json:"businessOwnerContains,omitempty"`
-	BusinessOwnerHasPrefix    *string  `json:"businessOwnerHasPrefix,omitempty"`
 	BusinessOwnerHasSuffix    *string  `json:"businessOwnerHasSuffix,omitempty"`
 	BusinessOwnerIsNil        *bool    `json:"businessOwnerIsNil,omitempty"`
 	BusinessOwnerNotNil       *bool    `json:"businessOwnerNotNil,omitempty"`
@@ -26937,7 +26279,6 @@ type PlatformWhereInput struct {
 	TechnicalOwnerIn           []string `json:"technicalOwnerIn,omitempty"`
 	TechnicalOwnerNotIn        []string `json:"technicalOwnerNotIn,omitempty"`
 	TechnicalOwnerContains     *string  `json:"technicalOwnerContains,omitempty"`
-	TechnicalOwnerHasPrefix    *string  `json:"technicalOwnerHasPrefix,omitempty"`
 	TechnicalOwnerHasSuffix    *string  `json:"technicalOwnerHasSuffix,omitempty"`
 	TechnicalOwnerIsNil        *bool    `json:"technicalOwnerIsNil,omitempty"`
 	TechnicalOwnerNotNil       *bool    `json:"technicalOwnerNotNil,omitempty"`
@@ -26985,7 +26326,6 @@ type PlatformWhereInput struct {
 	SecurityOwnerIn           []string `json:"securityOwnerIn,omitempty"`
 	SecurityOwnerNotIn        []string `json:"securityOwnerNotIn,omitempty"`
 	SecurityOwnerContains     *string  `json:"securityOwnerContains,omitempty"`
-	SecurityOwnerHasPrefix    *string  `json:"securityOwnerHasPrefix,omitempty"`
 	SecurityOwnerHasSuffix    *string  `json:"securityOwnerHasSuffix,omitempty"`
 	SecurityOwnerIsNil        *bool    `json:"securityOwnerIsNil,omitempty"`
 	SecurityOwnerNotNil       *bool    `json:"securityOwnerNotNil,omitempty"`
@@ -27033,7 +26373,6 @@ type PlatformWhereInput struct {
 	PlatformKindNameIn           []string `json:"platformKindNameIn,omitempty"`
 	PlatformKindNameNotIn        []string `json:"platformKindNameNotIn,omitempty"`
 	PlatformKindNameContains     *string  `json:"platformKindNameContains,omitempty"`
-	PlatformKindNameHasPrefix    *string  `json:"platformKindNameHasPrefix,omitempty"`
 	PlatformKindNameHasSuffix    *string  `json:"platformKindNameHasSuffix,omitempty"`
 	PlatformKindNameIsNil        *bool    `json:"platformKindNameIsNil,omitempty"`
 	PlatformKindNameNotNil       *bool    `json:"platformKindNameNotNil,omitempty"`
@@ -27057,7 +26396,6 @@ type PlatformWhereInput struct {
 	PlatformDataClassificationNameIn           []string `json:"platformDataClassificationNameIn,omitempty"`
 	PlatformDataClassificationNameNotIn        []string `json:"platformDataClassificationNameNotIn,omitempty"`
 	PlatformDataClassificationNameContains     *string  `json:"platformDataClassificationNameContains,omitempty"`
-	PlatformDataClassificationNameHasPrefix    *string  `json:"platformDataClassificationNameHasPrefix,omitempty"`
 	PlatformDataClassificationNameHasSuffix    *string  `json:"platformDataClassificationNameHasSuffix,omitempty"`
 	PlatformDataClassificationNameIsNil        *bool    `json:"platformDataClassificationNameIsNil,omitempty"`
 	PlatformDataClassificationNameNotNil       *bool    `json:"platformDataClassificationNameNotNil,omitempty"`
@@ -27081,7 +26419,6 @@ type PlatformWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -27105,7 +26442,6 @@ type PlatformWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -27129,7 +26465,6 @@ type PlatformWhereInput struct {
 	AccessModelNameIn           []string `json:"accessModelNameIn,omitempty"`
 	AccessModelNameNotIn        []string `json:"accessModelNameNotIn,omitempty"`
 	AccessModelNameContains     *string  `json:"accessModelNameContains,omitempty"`
-	AccessModelNameHasPrefix    *string  `json:"accessModelNameHasPrefix,omitempty"`
 	AccessModelNameHasSuffix    *string  `json:"accessModelNameHasSuffix,omitempty"`
 	AccessModelNameIsNil        *bool    `json:"accessModelNameIsNil,omitempty"`
 	AccessModelNameNotNil       *bool    `json:"accessModelNameNotNil,omitempty"`
@@ -27153,7 +26488,6 @@ type PlatformWhereInput struct {
 	EncryptionStatusNameIn           []string `json:"encryptionStatusNameIn,omitempty"`
 	EncryptionStatusNameNotIn        []string `json:"encryptionStatusNameNotIn,omitempty"`
 	EncryptionStatusNameContains     *string  `json:"encryptionStatusNameContains,omitempty"`
-	EncryptionStatusNameHasPrefix    *string  `json:"encryptionStatusNameHasPrefix,omitempty"`
 	EncryptionStatusNameHasSuffix    *string  `json:"encryptionStatusNameHasSuffix,omitempty"`
 	EncryptionStatusNameIsNil        *bool    `json:"encryptionStatusNameIsNil,omitempty"`
 	EncryptionStatusNameNotNil       *bool    `json:"encryptionStatusNameNotNil,omitempty"`
@@ -27177,7 +26511,6 @@ type PlatformWhereInput struct {
 	SecurityTierNameIn           []string `json:"securityTierNameIn,omitempty"`
 	SecurityTierNameNotIn        []string `json:"securityTierNameNotIn,omitempty"`
 	SecurityTierNameContains     *string  `json:"securityTierNameContains,omitempty"`
-	SecurityTierNameHasPrefix    *string  `json:"securityTierNameHasPrefix,omitempty"`
 	SecurityTierNameHasSuffix    *string  `json:"securityTierNameHasSuffix,omitempty"`
 	SecurityTierNameIsNil        *bool    `json:"securityTierNameIsNil,omitempty"`
 	SecurityTierNameNotNil       *bool    `json:"securityTierNameNotNil,omitempty"`
@@ -27201,7 +26534,6 @@ type PlatformWhereInput struct {
 	CriticalityNameIn           []string `json:"criticalityNameIn,omitempty"`
 	CriticalityNameNotIn        []string `json:"criticalityNameNotIn,omitempty"`
 	CriticalityNameContains     *string  `json:"criticalityNameContains,omitempty"`
-	CriticalityNameHasPrefix    *string  `json:"criticalityNameHasPrefix,omitempty"`
 	CriticalityNameHasSuffix    *string  `json:"criticalityNameHasSuffix,omitempty"`
 	CriticalityNameIsNil        *bool    `json:"criticalityNameIsNil,omitempty"`
 	CriticalityNameNotNil       *bool    `json:"criticalityNameNotNil,omitempty"`
@@ -27230,7 +26562,6 @@ type PlatformWhereInput struct {
 	ExternalUUIDIn           []string `json:"externalUUIDIn,omitempty"`
 	ExternalUUIDNotIn        []string `json:"externalUUIDNotIn,omitempty"`
 	ExternalUUIDContains     *string  `json:"externalUUIDContains,omitempty"`
-	ExternalUUIDHasPrefix    *string  `json:"externalUUIDHasPrefix,omitempty"`
 	ExternalUUIDHasSuffix    *string  `json:"externalUUIDHasSuffix,omitempty"`
 	ExternalUUIDIsNil        *bool    `json:"externalUUIDIsNil,omitempty"`
 	ExternalUUIDNotNil       *bool    `json:"externalUUIDNotNil,omitempty"`
@@ -27242,7 +26573,6 @@ type PlatformWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -27252,7 +26582,6 @@ type PlatformWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -27264,7 +26593,6 @@ type PlatformWhereInput struct {
 	BusinessPurposeIn           []string `json:"businessPurposeIn,omitempty"`
 	BusinessPurposeNotIn        []string `json:"businessPurposeNotIn,omitempty"`
 	BusinessPurposeContains     *string  `json:"businessPurposeContains,omitempty"`
-	BusinessPurposeHasPrefix    *string  `json:"businessPurposeHasPrefix,omitempty"`
 	BusinessPurposeHasSuffix    *string  `json:"businessPurposeHasSuffix,omitempty"`
 	BusinessPurposeIsNil        *bool    `json:"businessPurposeIsNil,omitempty"`
 	BusinessPurposeNotNil       *bool    `json:"businessPurposeNotNil,omitempty"`
@@ -27281,7 +26609,6 @@ type PlatformWhereInput struct {
 	PhysicalLocationIn           []string `json:"physicalLocationIn,omitempty"`
 	PhysicalLocationNotIn        []string `json:"physicalLocationNotIn,omitempty"`
 	PhysicalLocationContains     *string  `json:"physicalLocationContains,omitempty"`
-	PhysicalLocationHasPrefix    *string  `json:"physicalLocationHasPrefix,omitempty"`
 	PhysicalLocationHasSuffix    *string  `json:"physicalLocationHasSuffix,omitempty"`
 	PhysicalLocationIsNil        *bool    `json:"physicalLocationIsNil,omitempty"`
 	PhysicalLocationNotNil       *bool    `json:"physicalLocationNotNil,omitempty"`
@@ -27293,7 +26620,6 @@ type PlatformWhereInput struct {
 	RegionIn           []string `json:"regionIn,omitempty"`
 	RegionNotIn        []string `json:"regionNotIn,omitempty"`
 	RegionContains     *string  `json:"regionContains,omitempty"`
-	RegionHasPrefix    *string  `json:"regionHasPrefix,omitempty"`
 	RegionHasSuffix    *string  `json:"regionHasSuffix,omitempty"`
 	RegionIsNil        *bool    `json:"regionIsNil,omitempty"`
 	RegionNotNil       *bool    `json:"regionNotNil,omitempty"`
@@ -27315,7 +26641,6 @@ type PlatformWhereInput struct {
 	SourceIdentifierIn           []string `json:"sourceIdentifierIn,omitempty"`
 	SourceIdentifierNotIn        []string `json:"sourceIdentifierNotIn,omitempty"`
 	SourceIdentifierContains     *string  `json:"sourceIdentifierContains,omitempty"`
-	SourceIdentifierHasPrefix    *string  `json:"sourceIdentifierHasPrefix,omitempty"`
 	SourceIdentifierHasSuffix    *string  `json:"sourceIdentifierHasSuffix,omitempty"`
 	SourceIdentifierIsNil        *bool    `json:"sourceIdentifierIsNil,omitempty"`
 	SourceIdentifierNotNil       *bool    `json:"sourceIdentifierNotNil,omitempty"`
@@ -27327,7 +26652,6 @@ type PlatformWhereInput struct {
 	CostCenterIn           []string `json:"costCenterIn,omitempty"`
 	CostCenterNotIn        []string `json:"costCenterNotIn,omitempty"`
 	CostCenterContains     *string  `json:"costCenterContains,omitempty"`
-	CostCenterHasPrefix    *string  `json:"costCenterHasPrefix,omitempty"`
 	CostCenterHasSuffix    *string  `json:"costCenterHasSuffix,omitempty"`
 	CostCenterIsNil        *bool    `json:"costCenterIsNil,omitempty"`
 	CostCenterNotNil       *bool    `json:"costCenterNotNil,omitempty"`
@@ -27370,7 +26694,6 @@ type PlatformWhereInput struct {
 	ExternalReferenceIDIn           []string `json:"externalReferenceIDIn,omitempty"`
 	ExternalReferenceIDNotIn        []string `json:"externalReferenceIDNotIn,omitempty"`
 	ExternalReferenceIDContains     *string  `json:"externalReferenceIDContains,omitempty"`
-	ExternalReferenceIDHasPrefix    *string  `json:"externalReferenceIDHasPrefix,omitempty"`
 	ExternalReferenceIDHasSuffix    *string  `json:"externalReferenceIDHasSuffix,omitempty"`
 	ExternalReferenceIDIsNil        *bool    `json:"externalReferenceIDIsNil,omitempty"`
 	ExternalReferenceIDNotNil       *bool    `json:"externalReferenceIDNotNil,omitempty"`
@@ -27777,7 +27100,6 @@ type ProcedureWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -27789,7 +27111,6 @@ type ProcedureWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -27801,7 +27122,6 @@ type ProcedureWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -27813,7 +27133,6 @@ type ProcedureWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -27823,7 +27142,6 @@ type ProcedureWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
@@ -27835,7 +27153,6 @@ type ProcedureWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -27847,7 +27164,6 @@ type ProcedureWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -27859,7 +27175,6 @@ type ProcedureWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -27871,7 +27186,6 @@ type ProcedureWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -27883,7 +27197,6 @@ type ProcedureWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -27895,7 +27208,6 @@ type ProcedureWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -27919,7 +27231,6 @@ type ProcedureWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -27943,7 +27254,6 @@ type ProcedureWhereInput struct {
 	DetailsIn           []string `json:"detailsIn,omitempty"`
 	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
 	DetailsContains     *string  `json:"detailsContains,omitempty"`
-	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
 	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
 	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
@@ -27999,7 +27309,6 @@ type ProcedureWhereInput struct {
 	URLIn           []string `json:"urlIn,omitempty"`
 	URLNotIn        []string `json:"urlNotIn,omitempty"`
 	URLContains     *string  `json:"urlContains,omitempty"`
-	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
 	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
 	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
@@ -28023,7 +27332,6 @@ type ProcedureWhereInput struct {
 	ExternalFileIDIn           []string `json:"externalFileIDIn,omitempty"`
 	ExternalFileIDNotIn        []string `json:"externalFileIDNotIn,omitempty"`
 	ExternalFileIDContains     *string  `json:"externalFileIDContains,omitempty"`
-	ExternalFileIDHasPrefix    *string  `json:"externalFileIDHasPrefix,omitempty"`
 	ExternalFileIDHasSuffix    *string  `json:"externalFileIDHasSuffix,omitempty"`
 	ExternalFileIDIsNil        *bool    `json:"externalFileIDIsNil,omitempty"`
 	ExternalFileIDNotNil       *bool    `json:"externalFileIDNotNil,omitempty"`
@@ -28035,7 +27343,6 @@ type ProcedureWhereInput struct {
 	ExternalContentsIn           []string `json:"externalContentsIn,omitempty"`
 	ExternalContentsNotIn        []string `json:"externalContentsNotIn,omitempty"`
 	ExternalContentsContains     *string  `json:"externalContentsContains,omitempty"`
-	ExternalContentsHasPrefix    *string  `json:"externalContentsHasPrefix,omitempty"`
 	ExternalContentsHasSuffix    *string  `json:"externalContentsHasSuffix,omitempty"`
 	ExternalContentsIsNil        *bool    `json:"externalContentsIsNil,omitempty"`
 	ExternalContentsNotNil       *bool    `json:"externalContentsNotNil,omitempty"`
@@ -28052,7 +27359,6 @@ type ProcedureWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -28064,7 +27370,6 @@ type ProcedureWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -28076,7 +27381,6 @@ type ProcedureWhereInput struct {
 	ProcedureKindNameIn           []string `json:"procedureKindNameIn,omitempty"`
 	ProcedureKindNameNotIn        []string `json:"procedureKindNameNotIn,omitempty"`
 	ProcedureKindNameContains     *string  `json:"procedureKindNameContains,omitempty"`
-	ProcedureKindNameHasPrefix    *string  `json:"procedureKindNameHasPrefix,omitempty"`
 	ProcedureKindNameHasSuffix    *string  `json:"procedureKindNameHasSuffix,omitempty"`
 	ProcedureKindNameIsNil        *bool    `json:"procedureKindNameIsNil,omitempty"`
 	ProcedureKindNameNotNil       *bool    `json:"procedureKindNameNotNil,omitempty"`
@@ -28100,7 +27404,6 @@ type ProcedureWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -28124,7 +27427,6 @@ type ProcedureWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -28501,7 +27803,6 @@ type ProgramMembershipWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -28513,7 +27814,6 @@ type ProgramMembershipWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -28525,7 +27825,6 @@ type ProgramMembershipWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -28589,7 +27888,6 @@ type ProgramWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -28601,7 +27899,6 @@ type ProgramWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -28613,7 +27910,6 @@ type ProgramWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -28625,7 +27921,6 @@ type ProgramWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -28635,7 +27930,6 @@ type ProgramWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -28647,7 +27941,6 @@ type ProgramWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -28659,7 +27952,6 @@ type ProgramWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -28671,7 +27963,6 @@ type ProgramWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -28683,7 +27974,6 @@ type ProgramWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -28695,7 +27985,6 @@ type ProgramWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -28719,7 +28008,6 @@ type ProgramWhereInput struct {
 	ProgramKindNameIn           []string `json:"programKindNameIn,omitempty"`
 	ProgramKindNameNotIn        []string `json:"programKindNameNotIn,omitempty"`
 	ProgramKindNameContains     *string  `json:"programKindNameContains,omitempty"`
-	ProgramKindNameHasPrefix    *string  `json:"programKindNameHasPrefix,omitempty"`
 	ProgramKindNameHasSuffix    *string  `json:"programKindNameHasSuffix,omitempty"`
 	ProgramKindNameIsNil        *bool    `json:"programKindNameIsNil,omitempty"`
 	ProgramKindNameNotNil       *bool    `json:"programKindNameNotNil,omitempty"`
@@ -28743,7 +28031,6 @@ type ProgramWhereInput struct {
 	ExternalUUIDIn           []string `json:"externalUUIDIn,omitempty"`
 	ExternalUUIDNotIn        []string `json:"externalUUIDNotIn,omitempty"`
 	ExternalUUIDContains     *string  `json:"externalUUIDContains,omitempty"`
-	ExternalUUIDHasPrefix    *string  `json:"externalUUIDHasPrefix,omitempty"`
 	ExternalUUIDHasSuffix    *string  `json:"externalUUIDHasSuffix,omitempty"`
 	ExternalUUIDIsNil        *bool    `json:"externalUUIDIsNil,omitempty"`
 	ExternalUUIDNotNil       *bool    `json:"externalUUIDNotNil,omitempty"`
@@ -28755,7 +28042,6 @@ type ProgramWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -28765,7 +28051,6 @@ type ProgramWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -28782,7 +28067,6 @@ type ProgramWhereInput struct {
 	FrameworkNameIn           []string `json:"frameworkNameIn,omitempty"`
 	FrameworkNameNotIn        []string `json:"frameworkNameNotIn,omitempty"`
 	FrameworkNameContains     *string  `json:"frameworkNameContains,omitempty"`
-	FrameworkNameHasPrefix    *string  `json:"frameworkNameHasPrefix,omitempty"`
 	FrameworkNameHasSuffix    *string  `json:"frameworkNameHasSuffix,omitempty"`
 	FrameworkNameIsNil        *bool    `json:"frameworkNameIsNil,omitempty"`
 	FrameworkNameNotNil       *bool    `json:"frameworkNameNotNil,omitempty"`
@@ -28851,7 +28135,6 @@ type ProgramWhereInput struct {
 	AuditFirmIn           []string `json:"auditFirmIn,omitempty"`
 	AuditFirmNotIn        []string `json:"auditFirmNotIn,omitempty"`
 	AuditFirmContains     *string  `json:"auditFirmContains,omitempty"`
-	AuditFirmHasPrefix    *string  `json:"auditFirmHasPrefix,omitempty"`
 	AuditFirmHasSuffix    *string  `json:"auditFirmHasSuffix,omitempty"`
 	AuditFirmIsNil        *bool    `json:"auditFirmIsNil,omitempty"`
 	AuditFirmNotNil       *bool    `json:"auditFirmNotNil,omitempty"`
@@ -28863,7 +28146,6 @@ type ProgramWhereInput struct {
 	AuditorIn           []string `json:"auditorIn,omitempty"`
 	AuditorNotIn        []string `json:"auditorNotIn,omitempty"`
 	AuditorContains     *string  `json:"auditorContains,omitempty"`
-	AuditorHasPrefix    *string  `json:"auditorHasPrefix,omitempty"`
 	AuditorHasSuffix    *string  `json:"auditorHasSuffix,omitempty"`
 	AuditorIsNil        *bool    `json:"auditorIsNil,omitempty"`
 	AuditorNotNil       *bool    `json:"auditorNotNil,omitempty"`
@@ -28875,7 +28157,6 @@ type ProgramWhereInput struct {
 	AuditorEmailIn           []string `json:"auditorEmailIn,omitempty"`
 	AuditorEmailNotIn        []string `json:"auditorEmailNotIn,omitempty"`
 	AuditorEmailContains     *string  `json:"auditorEmailContains,omitempty"`
-	AuditorEmailHasPrefix    *string  `json:"auditorEmailHasPrefix,omitempty"`
 	AuditorEmailHasSuffix    *string  `json:"auditorEmailHasSuffix,omitempty"`
 	AuditorEmailIsNil        *bool    `json:"auditorEmailIsNil,omitempty"`
 	AuditorEmailNotNil       *bool    `json:"auditorEmailNotNil,omitempty"`
@@ -29235,7 +28516,6 @@ type RemediationWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -29247,7 +28527,6 @@ type RemediationWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -29259,7 +28538,6 @@ type RemediationWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -29271,7 +28549,6 @@ type RemediationWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -29281,7 +28558,6 @@ type RemediationWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -29293,7 +28569,6 @@ type RemediationWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -29305,7 +28580,6 @@ type RemediationWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -29317,7 +28591,6 @@ type RemediationWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -29329,7 +28602,6 @@ type RemediationWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -29341,7 +28613,6 @@ type RemediationWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -29370,7 +28641,6 @@ type RemediationWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -29382,7 +28652,6 @@ type RemediationWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -29394,7 +28663,6 @@ type RemediationWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -29418,7 +28686,6 @@ type RemediationWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -29447,7 +28714,6 @@ type RemediationWhereInput struct {
 	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
 	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
 	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
-	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
 	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
 	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
 	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
@@ -29459,7 +28725,6 @@ type RemediationWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
 	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
@@ -29478,7 +28743,6 @@ type RemediationWhereInput struct {
 	StateIn           []string `json:"stateIn,omitempty"`
 	StateNotIn        []string `json:"stateNotIn,omitempty"`
 	StateContains     *string  `json:"stateContains,omitempty"`
-	StateHasPrefix    *string  `json:"stateHasPrefix,omitempty"`
 	StateHasSuffix    *string  `json:"stateHasSuffix,omitempty"`
 	StateIsNil        *bool    `json:"stateIsNil,omitempty"`
 	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
@@ -29490,7 +28754,6 @@ type RemediationWhereInput struct {
 	IntentIn           []string `json:"intentIn,omitempty"`
 	IntentNotIn        []string `json:"intentNotIn,omitempty"`
 	IntentContains     *string  `json:"intentContains,omitempty"`
-	IntentHasPrefix    *string  `json:"intentHasPrefix,omitempty"`
 	IntentHasSuffix    *string  `json:"intentHasSuffix,omitempty"`
 	IntentIsNil        *bool    `json:"intentIsNil,omitempty"`
 	IntentNotNil       *bool    `json:"intentNotNil,omitempty"`
@@ -29502,7 +28765,6 @@ type RemediationWhereInput struct {
 	SummaryIn           []string `json:"summaryIn,omitempty"`
 	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
 	SummaryContains     *string  `json:"summaryContains,omitempty"`
-	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
 	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
 	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
 	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
@@ -29514,7 +28776,6 @@ type RemediationWhereInput struct {
 	ExplanationIn           []string `json:"explanationIn,omitempty"`
 	ExplanationNotIn        []string `json:"explanationNotIn,omitempty"`
 	ExplanationContains     *string  `json:"explanationContains,omitempty"`
-	ExplanationHasPrefix    *string  `json:"explanationHasPrefix,omitempty"`
 	ExplanationHasSuffix    *string  `json:"explanationHasSuffix,omitempty"`
 	ExplanationIsNil        *bool    `json:"explanationIsNil,omitempty"`
 	ExplanationNotNil       *bool    `json:"explanationNotNil,omitempty"`
@@ -29526,7 +28787,6 @@ type RemediationWhereInput struct {
 	InstructionsIn           []string `json:"instructionsIn,omitempty"`
 	InstructionsNotIn        []string `json:"instructionsNotIn,omitempty"`
 	InstructionsContains     *string  `json:"instructionsContains,omitempty"`
-	InstructionsHasPrefix    *string  `json:"instructionsHasPrefix,omitempty"`
 	InstructionsHasSuffix    *string  `json:"instructionsHasSuffix,omitempty"`
 	InstructionsIsNil        *bool    `json:"instructionsIsNil,omitempty"`
 	InstructionsNotNil       *bool    `json:"instructionsNotNil,omitempty"`
@@ -29538,7 +28798,6 @@ type RemediationWhereInput struct {
 	OwnerReferenceIn           []string `json:"ownerReferenceIn,omitempty"`
 	OwnerReferenceNotIn        []string `json:"ownerReferenceNotIn,omitempty"`
 	OwnerReferenceContains     *string  `json:"ownerReferenceContains,omitempty"`
-	OwnerReferenceHasPrefix    *string  `json:"ownerReferenceHasPrefix,omitempty"`
 	OwnerReferenceHasSuffix    *string  `json:"ownerReferenceHasSuffix,omitempty"`
 	OwnerReferenceIsNil        *bool    `json:"ownerReferenceIsNil,omitempty"`
 	OwnerReferenceNotNil       *bool    `json:"ownerReferenceNotNil,omitempty"`
@@ -29550,7 +28809,6 @@ type RemediationWhereInput struct {
 	RepositoryURIIn           []string `json:"repositoryURIIn,omitempty"`
 	RepositoryURINotIn        []string `json:"repositoryURINotIn,omitempty"`
 	RepositoryURIContains     *string  `json:"repositoryURIContains,omitempty"`
-	RepositoryURIHasPrefix    *string  `json:"repositoryURIHasPrefix,omitempty"`
 	RepositoryURIHasSuffix    *string  `json:"repositoryURIHasSuffix,omitempty"`
 	RepositoryURIIsNil        *bool    `json:"repositoryURIIsNil,omitempty"`
 	RepositoryURINotNil       *bool    `json:"repositoryURINotNil,omitempty"`
@@ -29562,7 +28820,6 @@ type RemediationWhereInput struct {
 	PullRequestURIIn           []string `json:"pullRequestURIIn,omitempty"`
 	PullRequestURINotIn        []string `json:"pullRequestURINotIn,omitempty"`
 	PullRequestURIContains     *string  `json:"pullRequestURIContains,omitempty"`
-	PullRequestURIHasPrefix    *string  `json:"pullRequestURIHasPrefix,omitempty"`
 	PullRequestURIHasSuffix    *string  `json:"pullRequestURIHasSuffix,omitempty"`
 	PullRequestURIIsNil        *bool    `json:"pullRequestURIIsNil,omitempty"`
 	PullRequestURINotNil       *bool    `json:"pullRequestURINotNil,omitempty"`
@@ -29574,7 +28831,6 @@ type RemediationWhereInput struct {
 	TicketReferenceIn           []string `json:"ticketReferenceIn,omitempty"`
 	TicketReferenceNotIn        []string `json:"ticketReferenceNotIn,omitempty"`
 	TicketReferenceContains     *string  `json:"ticketReferenceContains,omitempty"`
-	TicketReferenceHasPrefix    *string  `json:"ticketReferenceHasPrefix,omitempty"`
 	TicketReferenceHasSuffix    *string  `json:"ticketReferenceHasSuffix,omitempty"`
 	TicketReferenceIsNil        *bool    `json:"ticketReferenceIsNil,omitempty"`
 	TicketReferenceNotNil       *bool    `json:"ticketReferenceNotNil,omitempty"`
@@ -29610,7 +28866,6 @@ type RemediationWhereInput struct {
 	ErrorIn           []string `json:"errorIn,omitempty"`
 	ErrorNotIn        []string `json:"errorNotIn,omitempty"`
 	ErrorContains     *string  `json:"errorContains,omitempty"`
-	ErrorHasPrefix    *string  `json:"errorHasPrefix,omitempty"`
 	ErrorHasSuffix    *string  `json:"errorHasSuffix,omitempty"`
 	ErrorIsNil        *bool    `json:"errorIsNil,omitempty"`
 	ErrorNotNil       *bool    `json:"errorNotNil,omitempty"`
@@ -29622,7 +28877,6 @@ type RemediationWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
@@ -29634,7 +28888,6 @@ type RemediationWhereInput struct {
 	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
 	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
 	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
-	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
 	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
 	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
 	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
@@ -29906,7 +29159,6 @@ type ReportMembershipWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -29918,7 +29170,6 @@ type ReportMembershipWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -29930,7 +29181,6 @@ type ReportMembershipWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -29992,7 +29242,6 @@ type ReportWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -30004,7 +29253,6 @@ type ReportWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -30016,7 +29264,6 @@ type ReportWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -30028,7 +29275,6 @@ type ReportWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -30038,7 +29284,6 @@ type ReportWhereInput struct {
 	RequestorIDIn           []string `json:"requestorIDIn,omitempty"`
 	RequestorIDNotIn        []string `json:"requestorIDNotIn,omitempty"`
 	RequestorIDContains     *string  `json:"requestorIDContains,omitempty"`
-	RequestorIDHasPrefix    *string  `json:"requestorIDHasPrefix,omitempty"`
 	RequestorIDHasSuffix    *string  `json:"requestorIDHasSuffix,omitempty"`
 	RequestorIDIsNil        *bool    `json:"requestorIDIsNil,omitempty"`
 	RequestorIDNotNil       *bool    `json:"requestorIDNotNil,omitempty"`
@@ -30062,7 +29307,6 @@ type ReportWhereInput struct {
 	ReportKindNameIn           []string `json:"reportKindNameIn,omitempty"`
 	ReportKindNameNotIn        []string `json:"reportKindNameNotIn,omitempty"`
 	ReportKindNameContains     *string  `json:"reportKindNameContains,omitempty"`
-	ReportKindNameHasPrefix    *string  `json:"reportKindNameHasPrefix,omitempty"`
 	ReportKindNameHasSuffix    *string  `json:"reportKindNameHasSuffix,omitempty"`
 	ReportKindNameIsNil        *bool    `json:"reportKindNameIsNil,omitempty"`
 	ReportKindNameNotNil       *bool    `json:"reportKindNameNotNil,omitempty"`
@@ -30086,7 +29330,6 @@ type ReportWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -30096,7 +29339,6 @@ type ReportWhereInput struct {
 	QueryIn           []string `json:"queryIn,omitempty"`
 	QueryNotIn        []string `json:"queryNotIn,omitempty"`
 	QueryContains     *string  `json:"queryContains,omitempty"`
-	QueryHasPrefix    *string  `json:"queryHasPrefix,omitempty"`
 	QueryHasSuffix    *string  `json:"queryHasSuffix,omitempty"`
 	QueryEqualFold    *string  `json:"queryEqualFold,omitempty"`
 	QueryContainsFold *string  `json:"queryContainsFold,omitempty"`
@@ -30386,7 +29628,6 @@ type ReviewWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -30398,7 +29639,6 @@ type ReviewWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -30410,7 +29650,6 @@ type ReviewWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -30422,7 +29661,6 @@ type ReviewWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -30434,7 +29672,6 @@ type ReviewWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -30446,7 +29683,6 @@ type ReviewWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -30458,7 +29694,6 @@ type ReviewWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -30470,7 +29705,6 @@ type ReviewWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -30482,7 +29716,6 @@ type ReviewWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -30511,7 +29744,6 @@ type ReviewWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -30523,7 +29755,6 @@ type ReviewWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -30535,7 +29766,6 @@ type ReviewWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -30559,7 +29789,6 @@ type ReviewWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -30583,7 +29812,6 @@ type ReviewWhereInput struct {
 	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
 	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
 	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
-	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
 	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
 	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
 	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
@@ -30595,7 +29823,6 @@ type ReviewWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
@@ -30605,7 +29832,6 @@ type ReviewWhereInput struct {
 	StateIn           []string `json:"stateIn,omitempty"`
 	StateNotIn        []string `json:"stateNotIn,omitempty"`
 	StateContains     *string  `json:"stateContains,omitempty"`
-	StateHasPrefix    *string  `json:"stateHasPrefix,omitempty"`
 	StateHasSuffix    *string  `json:"stateHasSuffix,omitempty"`
 	StateIsNil        *bool    `json:"stateIsNil,omitempty"`
 	StateNotNil       *bool    `json:"stateNotNil,omitempty"`
@@ -30624,7 +29850,6 @@ type ReviewWhereInput struct {
 	CategoryIn           []string `json:"categoryIn,omitempty"`
 	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
 	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
 	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
 	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
 	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
@@ -30636,7 +29861,6 @@ type ReviewWhereInput struct {
 	ClassificationIn           []string `json:"classificationIn,omitempty"`
 	ClassificationNotIn        []string `json:"classificationNotIn,omitempty"`
 	ClassificationContains     *string  `json:"classificationContains,omitempty"`
-	ClassificationHasPrefix    *string  `json:"classificationHasPrefix,omitempty"`
 	ClassificationHasSuffix    *string  `json:"classificationHasSuffix,omitempty"`
 	ClassificationIsNil        *bool    `json:"classificationIsNil,omitempty"`
 	ClassificationNotNil       *bool    `json:"classificationNotNil,omitempty"`
@@ -30648,7 +29872,6 @@ type ReviewWhereInput struct {
 	SummaryIn           []string `json:"summaryIn,omitempty"`
 	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
 	SummaryContains     *string  `json:"summaryContains,omitempty"`
-	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
 	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
 	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
 	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
@@ -30660,7 +29883,6 @@ type ReviewWhereInput struct {
 	DetailsIn           []string `json:"detailsIn,omitempty"`
 	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
 	DetailsContains     *string  `json:"detailsContains,omitempty"`
-	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
 	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
 	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
@@ -30672,7 +29894,6 @@ type ReviewWhereInput struct {
 	ReporterIn           []string `json:"reporterIn,omitempty"`
 	ReporterNotIn        []string `json:"reporterNotIn,omitempty"`
 	ReporterContains     *string  `json:"reporterContains,omitempty"`
-	ReporterHasPrefix    *string  `json:"reporterHasPrefix,omitempty"`
 	ReporterHasSuffix    *string  `json:"reporterHasSuffix,omitempty"`
 	ReporterIsNil        *bool    `json:"reporterIsNil,omitempty"`
 	ReporterNotNil       *bool    `json:"reporterNotNil,omitempty"`
@@ -30725,7 +29946,6 @@ type ReviewWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
@@ -30737,7 +29957,6 @@ type ReviewWhereInput struct {
 	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
 	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
 	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
-	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
 	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
 	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
 	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
@@ -31076,7 +30295,6 @@ type RiskWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -31088,7 +30306,6 @@ type RiskWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -31100,7 +30317,6 @@ type RiskWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -31112,7 +30328,6 @@ type RiskWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -31122,7 +30337,6 @@ type RiskWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -31134,7 +30348,6 @@ type RiskWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -31146,7 +30359,6 @@ type RiskWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -31158,7 +30370,6 @@ type RiskWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -31170,7 +30381,6 @@ type RiskWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -31182,7 +30392,6 @@ type RiskWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -31206,7 +30415,6 @@ type RiskWhereInput struct {
 	StakeholderNameIn           []string `json:"stakeholderNameIn,omitempty"`
 	StakeholderNameNotIn        []string `json:"stakeholderNameNotIn,omitempty"`
 	StakeholderNameContains     *string  `json:"stakeholderNameContains,omitempty"`
-	StakeholderNameHasPrefix    *string  `json:"stakeholderNameHasPrefix,omitempty"`
 	StakeholderNameHasSuffix    *string  `json:"stakeholderNameHasSuffix,omitempty"`
 	StakeholderNameIsNil        *bool    `json:"stakeholderNameIsNil,omitempty"`
 	StakeholderNameNotNil       *bool    `json:"stakeholderNameNotNil,omitempty"`
@@ -31254,7 +30462,6 @@ type RiskWhereInput struct {
 	DelegateNameIn           []string `json:"delegateNameIn,omitempty"`
 	DelegateNameNotIn        []string `json:"delegateNameNotIn,omitempty"`
 	DelegateNameContains     *string  `json:"delegateNameContains,omitempty"`
-	DelegateNameHasPrefix    *string  `json:"delegateNameHasPrefix,omitempty"`
 	DelegateNameHasSuffix    *string  `json:"delegateNameHasSuffix,omitempty"`
 	DelegateNameIsNil        *bool    `json:"delegateNameIsNil,omitempty"`
 	DelegateNameNotNil       *bool    `json:"delegateNameNotNil,omitempty"`
@@ -31302,7 +30509,6 @@ type RiskWhereInput struct {
 	RiskKindNameIn           []string `json:"riskKindNameIn,omitempty"`
 	RiskKindNameNotIn        []string `json:"riskKindNameNotIn,omitempty"`
 	RiskKindNameContains     *string  `json:"riskKindNameContains,omitempty"`
-	RiskKindNameHasPrefix    *string  `json:"riskKindNameHasPrefix,omitempty"`
 	RiskKindNameHasSuffix    *string  `json:"riskKindNameHasSuffix,omitempty"`
 	RiskKindNameIsNil        *bool    `json:"riskKindNameIsNil,omitempty"`
 	RiskKindNameNotNil       *bool    `json:"riskKindNameNotNil,omitempty"`
@@ -31326,7 +30532,6 @@ type RiskWhereInput struct {
 	RiskCategoryNameIn           []string `json:"riskCategoryNameIn,omitempty"`
 	RiskCategoryNameNotIn        []string `json:"riskCategoryNameNotIn,omitempty"`
 	RiskCategoryNameContains     *string  `json:"riskCategoryNameContains,omitempty"`
-	RiskCategoryNameHasPrefix    *string  `json:"riskCategoryNameHasPrefix,omitempty"`
 	RiskCategoryNameHasSuffix    *string  `json:"riskCategoryNameHasSuffix,omitempty"`
 	RiskCategoryNameIsNil        *bool    `json:"riskCategoryNameIsNil,omitempty"`
 	RiskCategoryNameNotNil       *bool    `json:"riskCategoryNameNotNil,omitempty"`
@@ -31350,7 +30555,6 @@ type RiskWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -31374,7 +30578,6 @@ type RiskWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -31403,7 +30606,6 @@ type RiskWhereInput struct {
 	IntegrationIDIn           []string `json:"integrationIDIn,omitempty"`
 	IntegrationIDNotIn        []string `json:"integrationIDNotIn,omitempty"`
 	IntegrationIDContains     *string  `json:"integrationIDContains,omitempty"`
-	IntegrationIDHasPrefix    *string  `json:"integrationIDHasPrefix,omitempty"`
 	IntegrationIDHasSuffix    *string  `json:"integrationIDHasSuffix,omitempty"`
 	IntegrationIDIsNil        *bool    `json:"integrationIDIsNil,omitempty"`
 	IntegrationIDNotNil       *bool    `json:"integrationIDNotNil,omitempty"`
@@ -31423,7 +30625,6 @@ type RiskWhereInput struct {
 	ExternalUUIDIn           []string `json:"externalUUIDIn,omitempty"`
 	ExternalUUIDNotIn        []string `json:"externalUUIDNotIn,omitempty"`
 	ExternalUUIDContains     *string  `json:"externalUUIDContains,omitempty"`
-	ExternalUUIDHasPrefix    *string  `json:"externalUUIDHasPrefix,omitempty"`
 	ExternalUUIDHasSuffix    *string  `json:"externalUUIDHasSuffix,omitempty"`
 	ExternalUUIDIsNil        *bool    `json:"externalUUIDIsNil,omitempty"`
 	ExternalUUIDNotNil       *bool    `json:"externalUUIDNotNil,omitempty"`
@@ -31435,7 +30636,6 @@ type RiskWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -31475,7 +30675,6 @@ type RiskWhereInput struct {
 	MitigationIn           []string `json:"mitigationIn,omitempty"`
 	MitigationNotIn        []string `json:"mitigationNotIn,omitempty"`
 	MitigationContains     *string  `json:"mitigationContains,omitempty"`
-	MitigationHasPrefix    *string  `json:"mitigationHasPrefix,omitempty"`
 	MitigationHasSuffix    *string  `json:"mitigationHasSuffix,omitempty"`
 	MitigationIsNil        *bool    `json:"mitigationIsNil,omitempty"`
 	MitigationNotNil       *bool    `json:"mitigationNotNil,omitempty"`
@@ -31487,7 +30686,6 @@ type RiskWhereInput struct {
 	DetailsIn           []string `json:"detailsIn,omitempty"`
 	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
 	DetailsContains     *string  `json:"detailsContains,omitempty"`
-	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
 	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
 	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
@@ -31499,7 +30697,6 @@ type RiskWhereInput struct {
 	BusinessCostsIn           []string `json:"businessCostsIn,omitempty"`
 	BusinessCostsNotIn        []string `json:"businessCostsNotIn,omitempty"`
 	BusinessCostsContains     *string  `json:"businessCostsContains,omitempty"`
-	BusinessCostsHasPrefix    *string  `json:"businessCostsHasPrefix,omitempty"`
 	BusinessCostsHasSuffix    *string  `json:"businessCostsHasSuffix,omitempty"`
 	BusinessCostsIsNil        *bool    `json:"businessCostsIsNil,omitempty"`
 	BusinessCostsNotNil       *bool    `json:"businessCostsNotNil,omitempty"`
@@ -31830,7 +31027,6 @@ type SLADefinitionWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -31842,7 +31038,6 @@ type SLADefinitionWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -31854,7 +31049,6 @@ type SLADefinitionWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -31866,7 +31060,6 @@ type SLADefinitionWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -32123,7 +31316,6 @@ type ScanWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -32135,7 +31327,6 @@ type ScanWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -32147,7 +31338,6 @@ type ScanWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -32159,7 +31349,6 @@ type ScanWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -32171,7 +31360,6 @@ type ScanWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -32183,7 +31371,6 @@ type ScanWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -32195,7 +31382,6 @@ type ScanWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -32207,7 +31393,6 @@ type ScanWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -32219,7 +31404,6 @@ type ScanWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -32248,7 +31432,6 @@ type ScanWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -32260,7 +31443,6 @@ type ScanWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -32272,7 +31454,6 @@ type ScanWhereInput struct {
 	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
 	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
 	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
-	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
 	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
 	ReviewedByIsNil        *bool    `json:"reviewedByIsNil,omitempty"`
 	ReviewedByNotNil       *bool    `json:"reviewedByNotNil,omitempty"`
@@ -32320,7 +31501,6 @@ type ScanWhereInput struct {
 	AssignedToIn           []string `json:"assignedToIn,omitempty"`
 	AssignedToNotIn        []string `json:"assignedToNotIn,omitempty"`
 	AssignedToContains     *string  `json:"assignedToContains,omitempty"`
-	AssignedToHasPrefix    *string  `json:"assignedToHasPrefix,omitempty"`
 	AssignedToHasSuffix    *string  `json:"assignedToHasSuffix,omitempty"`
 	AssignedToIsNil        *bool    `json:"assignedToIsNil,omitempty"`
 	AssignedToNotNil       *bool    `json:"assignedToNotNil,omitempty"`
@@ -32368,7 +31548,6 @@ type ScanWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -32392,7 +31571,6 @@ type ScanWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -32416,7 +31594,6 @@ type ScanWhereInput struct {
 	TargetIn           []string `json:"targetIn,omitempty"`
 	TargetNotIn        []string `json:"targetNotIn,omitempty"`
 	TargetContains     *string  `json:"targetContains,omitempty"`
-	TargetHasPrefix    *string  `json:"targetHasPrefix,omitempty"`
 	TargetHasSuffix    *string  `json:"targetHasSuffix,omitempty"`
 	TargetEqualFold    *string  `json:"targetEqualFold,omitempty"`
 	TargetContainsFold *string  `json:"targetContainsFold,omitempty"`
@@ -32447,7 +31624,6 @@ type ScanWhereInput struct {
 	PerformedByIn           []string `json:"performedByIn,omitempty"`
 	PerformedByNotIn        []string `json:"performedByNotIn,omitempty"`
 	PerformedByContains     *string  `json:"performedByContains,omitempty"`
-	PerformedByHasPrefix    *string  `json:"performedByHasPrefix,omitempty"`
 	PerformedByHasSuffix    *string  `json:"performedByHasSuffix,omitempty"`
 	PerformedByIsNil        *bool    `json:"performedByIsNil,omitempty"`
 	PerformedByNotNil       *bool    `json:"performedByNotNil,omitempty"`
@@ -32800,7 +31976,6 @@ type StandardWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -32812,7 +31987,6 @@ type StandardWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -32824,7 +31998,6 @@ type StandardWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -32836,7 +32009,6 @@ type StandardWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
-	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        *bool    `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       *bool    `json:"revisionNotNil,omitempty"`
@@ -32865,7 +32037,6 @@ type StandardWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -32877,7 +32048,6 @@ type StandardWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -32889,7 +32059,6 @@ type StandardWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -32899,7 +32068,6 @@ type StandardWhereInput struct {
 	ShortNameIn           []string `json:"shortNameIn,omitempty"`
 	ShortNameNotIn        []string `json:"shortNameNotIn,omitempty"`
 	ShortNameContains     *string  `json:"shortNameContains,omitempty"`
-	ShortNameHasPrefix    *string  `json:"shortNameHasPrefix,omitempty"`
 	ShortNameHasSuffix    *string  `json:"shortNameHasSuffix,omitempty"`
 	ShortNameIsNil        *bool    `json:"shortNameIsNil,omitempty"`
 	ShortNameNotNil       *bool    `json:"shortNameNotNil,omitempty"`
@@ -32911,7 +32079,6 @@ type StandardWhereInput struct {
 	FrameworkIn           []string `json:"frameworkIn,omitempty"`
 	FrameworkNotIn        []string `json:"frameworkNotIn,omitempty"`
 	FrameworkContains     *string  `json:"frameworkContains,omitempty"`
-	FrameworkHasPrefix    *string  `json:"frameworkHasPrefix,omitempty"`
 	FrameworkHasSuffix    *string  `json:"frameworkHasSuffix,omitempty"`
 	FrameworkIsNil        *bool    `json:"frameworkIsNil,omitempty"`
 	FrameworkNotNil       *bool    `json:"frameworkNotNil,omitempty"`
@@ -32923,7 +32090,6 @@ type StandardWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -32935,7 +32101,6 @@ type StandardWhereInput struct {
 	GoverningBodyLogoURLIn           []string `json:"governingBodyLogoURLIn,omitempty"`
 	GoverningBodyLogoURLNotIn        []string `json:"governingBodyLogoURLNotIn,omitempty"`
 	GoverningBodyLogoURLContains     *string  `json:"governingBodyLogoURLContains,omitempty"`
-	GoverningBodyLogoURLHasPrefix    *string  `json:"governingBodyLogoURLHasPrefix,omitempty"`
 	GoverningBodyLogoURLHasSuffix    *string  `json:"governingBodyLogoURLHasSuffix,omitempty"`
 	GoverningBodyLogoURLIsNil        *bool    `json:"governingBodyLogoURLIsNil,omitempty"`
 	GoverningBodyLogoURLNotNil       *bool    `json:"governingBodyLogoURLNotNil,omitempty"`
@@ -32947,7 +32112,6 @@ type StandardWhereInput struct {
 	GoverningBodyIn           []string `json:"governingBodyIn,omitempty"`
 	GoverningBodyNotIn        []string `json:"governingBodyNotIn,omitempty"`
 	GoverningBodyContains     *string  `json:"governingBodyContains,omitempty"`
-	GoverningBodyHasPrefix    *string  `json:"governingBodyHasPrefix,omitempty"`
 	GoverningBodyHasSuffix    *string  `json:"governingBodyHasSuffix,omitempty"`
 	GoverningBodyIsNil        *bool    `json:"governingBodyIsNil,omitempty"`
 	GoverningBodyNotNil       *bool    `json:"governingBodyNotNil,omitempty"`
@@ -32959,7 +32123,6 @@ type StandardWhereInput struct {
 	LinkIn           []string `json:"linkIn,omitempty"`
 	LinkNotIn        []string `json:"linkNotIn,omitempty"`
 	LinkContains     *string  `json:"linkContains,omitempty"`
-	LinkHasPrefix    *string  `json:"linkHasPrefix,omitempty"`
 	LinkHasSuffix    *string  `json:"linkHasSuffix,omitempty"`
 	LinkIsNil        *bool    `json:"linkIsNil,omitempty"`
 	LinkNotNil       *bool    `json:"linkNotNil,omitempty"`
@@ -32988,7 +32151,6 @@ type StandardWhereInput struct {
 	StandardTypeIn           []string `json:"standardTypeIn,omitempty"`
 	StandardTypeNotIn        []string `json:"standardTypeNotIn,omitempty"`
 	StandardTypeContains     *string  `json:"standardTypeContains,omitempty"`
-	StandardTypeHasPrefix    *string  `json:"standardTypeHasPrefix,omitempty"`
 	StandardTypeHasSuffix    *string  `json:"standardTypeHasSuffix,omitempty"`
 	StandardTypeIsNil        *bool    `json:"standardTypeIsNil,omitempty"`
 	StandardTypeNotNil       *bool    `json:"standardTypeNotNil,omitempty"`
@@ -33000,7 +32162,6 @@ type StandardWhereInput struct {
 	VersionIn           []string `json:"versionIn,omitempty"`
 	VersionNotIn        []string `json:"versionNotIn,omitempty"`
 	VersionContains     *string  `json:"versionContains,omitempty"`
-	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
 	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
 	VersionIsNil        *bool    `json:"versionIsNil,omitempty"`
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
@@ -33295,7 +32456,6 @@ type SubcontrolWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -33307,7 +32467,6 @@ type SubcontrolWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -33319,7 +32478,6 @@ type SubcontrolWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -33331,7 +32489,6 @@ type SubcontrolWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -33341,7 +32498,6 @@ type SubcontrolWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -33353,7 +32509,6 @@ type SubcontrolWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -33365,7 +32520,6 @@ type SubcontrolWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -33377,7 +32531,6 @@ type SubcontrolWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -33389,7 +32542,6 @@ type SubcontrolWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -33401,7 +32553,6 @@ type SubcontrolWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -33413,7 +32564,6 @@ type SubcontrolWhereInput struct {
 	ExternalUUIDIn           []string `json:"externalUUIDIn,omitempty"`
 	ExternalUUIDNotIn        []string `json:"externalUUIDNotIn,omitempty"`
 	ExternalUUIDContains     *string  `json:"externalUUIDContains,omitempty"`
-	ExternalUUIDHasPrefix    *string  `json:"externalUUIDHasPrefix,omitempty"`
 	ExternalUUIDHasSuffix    *string  `json:"externalUUIDHasSuffix,omitempty"`
 	ExternalUUIDIsNil        *bool    `json:"externalUUIDIsNil,omitempty"`
 	ExternalUUIDNotNil       *bool    `json:"externalUUIDNotNil,omitempty"`
@@ -33425,7 +32575,6 @@ type SubcontrolWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
 	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
@@ -33437,7 +32586,6 @@ type SubcontrolWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -33449,7 +32597,6 @@ type SubcontrolWhereInput struct {
 	ReferenceIDIn           []string `json:"referenceIDIn,omitempty"`
 	ReferenceIDNotIn        []string `json:"referenceIDNotIn,omitempty"`
 	ReferenceIDContains     *string  `json:"referenceIDContains,omitempty"`
-	ReferenceIDHasPrefix    *string  `json:"referenceIDHasPrefix,omitempty"`
 	ReferenceIDHasSuffix    *string  `json:"referenceIDHasSuffix,omitempty"`
 	ReferenceIDIsNil        *bool    `json:"referenceIDIsNil,omitempty"`
 	ReferenceIDNotNil       *bool    `json:"referenceIDNotNil,omitempty"`
@@ -33461,7 +32608,6 @@ type SubcontrolWhereInput struct {
 	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
 	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
 	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
-	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
 	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
 	AuditorReferenceIDIsNil        *bool    `json:"auditorReferenceIDIsNil,omitempty"`
 	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
@@ -33499,7 +32645,6 @@ type SubcontrolWhereInput struct {
 	ImplementationDescriptionIn           []string `json:"implementationDescriptionIn,omitempty"`
 	ImplementationDescriptionNotIn        []string `json:"implementationDescriptionNotIn,omitempty"`
 	ImplementationDescriptionContains     *string  `json:"implementationDescriptionContains,omitempty"`
-	ImplementationDescriptionHasPrefix    *string  `json:"implementationDescriptionHasPrefix,omitempty"`
 	ImplementationDescriptionHasSuffix    *string  `json:"implementationDescriptionHasSuffix,omitempty"`
 	ImplementationDescriptionIsNil        *bool    `json:"implementationDescriptionIsNil,omitempty"`
 	ImplementationDescriptionNotNil       *bool    `json:"implementationDescriptionNotNil,omitempty"`
@@ -33511,7 +32656,6 @@ type SubcontrolWhereInput struct {
 	PublicRepresentationIn           []string `json:"publicRepresentationIn,omitempty"`
 	PublicRepresentationNotIn        []string `json:"publicRepresentationNotIn,omitempty"`
 	PublicRepresentationContains     *string  `json:"publicRepresentationContains,omitempty"`
-	PublicRepresentationHasPrefix    *string  `json:"publicRepresentationHasPrefix,omitempty"`
 	PublicRepresentationHasSuffix    *string  `json:"publicRepresentationHasSuffix,omitempty"`
 	PublicRepresentationIsNil        *bool    `json:"publicRepresentationIsNil,omitempty"`
 	PublicRepresentationNotNil       *bool    `json:"publicRepresentationNotNil,omitempty"`
@@ -33530,7 +32674,6 @@ type SubcontrolWhereInput struct {
 	SourceNameIn           []string `json:"sourceNameIn,omitempty"`
 	SourceNameNotIn        []string `json:"sourceNameNotIn,omitempty"`
 	SourceNameContains     *string  `json:"sourceNameContains,omitempty"`
-	SourceNameHasPrefix    *string  `json:"sourceNameHasPrefix,omitempty"`
 	SourceNameHasSuffix    *string  `json:"sourceNameHasSuffix,omitempty"`
 	SourceNameIsNil        *bool    `json:"sourceNameIsNil,omitempty"`
 	SourceNameNotNil       *bool    `json:"sourceNameNotNil,omitempty"`
@@ -33542,7 +32685,6 @@ type SubcontrolWhereInput struct {
 	ReferenceFrameworkIn           []string `json:"referenceFrameworkIn,omitempty"`
 	ReferenceFrameworkNotIn        []string `json:"referenceFrameworkNotIn,omitempty"`
 	ReferenceFrameworkContains     *string  `json:"referenceFrameworkContains,omitempty"`
-	ReferenceFrameworkHasPrefix    *string  `json:"referenceFrameworkHasPrefix,omitempty"`
 	ReferenceFrameworkHasSuffix    *string  `json:"referenceFrameworkHasSuffix,omitempty"`
 	ReferenceFrameworkIsNil        *bool    `json:"referenceFrameworkIsNil,omitempty"`
 	ReferenceFrameworkNotNil       *bool    `json:"referenceFrameworkNotNil,omitempty"`
@@ -33554,7 +32696,6 @@ type SubcontrolWhereInput struct {
 	ReferenceFrameworkRevisionIn           []string `json:"referenceFrameworkRevisionIn,omitempty"`
 	ReferenceFrameworkRevisionNotIn        []string `json:"referenceFrameworkRevisionNotIn,omitempty"`
 	ReferenceFrameworkRevisionContains     *string  `json:"referenceFrameworkRevisionContains,omitempty"`
-	ReferenceFrameworkRevisionHasPrefix    *string  `json:"referenceFrameworkRevisionHasPrefix,omitempty"`
 	ReferenceFrameworkRevisionHasSuffix    *string  `json:"referenceFrameworkRevisionHasSuffix,omitempty"`
 	ReferenceFrameworkRevisionIsNil        *bool    `json:"referenceFrameworkRevisionIsNil,omitempty"`
 	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
@@ -33566,7 +32707,6 @@ type SubcontrolWhereInput struct {
 	CategoryIn           []string `json:"categoryIn,omitempty"`
 	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
 	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
 	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
 	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
 	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
@@ -33578,7 +32718,6 @@ type SubcontrolWhereInput struct {
 	CategoryIDIn           []string `json:"categoryIDIn,omitempty"`
 	CategoryIDNotIn        []string `json:"categoryIDNotIn,omitempty"`
 	CategoryIDContains     *string  `json:"categoryIDContains,omitempty"`
-	CategoryIDHasPrefix    *string  `json:"categoryIDHasPrefix,omitempty"`
 	CategoryIDHasSuffix    *string  `json:"categoryIDHasSuffix,omitempty"`
 	CategoryIDIsNil        *bool    `json:"categoryIDIsNil,omitempty"`
 	CategoryIDNotNil       *bool    `json:"categoryIDNotNil,omitempty"`
@@ -33590,7 +32729,6 @@ type SubcontrolWhereInput struct {
 	SubcategoryIn           []string `json:"subcategoryIn,omitempty"`
 	SubcategoryNotIn        []string `json:"subcategoryNotIn,omitempty"`
 	SubcategoryContains     *string  `json:"subcategoryContains,omitempty"`
-	SubcategoryHasPrefix    *string  `json:"subcategoryHasPrefix,omitempty"`
 	SubcategoryHasSuffix    *string  `json:"subcategoryHasSuffix,omitempty"`
 	SubcategoryIsNil        *bool    `json:"subcategoryIsNil,omitempty"`
 	SubcategoryNotNil       *bool    `json:"subcategoryNotNil,omitempty"`
@@ -33643,7 +32781,6 @@ type SubcontrolWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -33655,7 +32792,6 @@ type SubcontrolWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -33667,7 +32803,6 @@ type SubcontrolWhereInput struct {
 	SubcontrolKindNameIn           []string `json:"subcontrolKindNameIn,omitempty"`
 	SubcontrolKindNameNotIn        []string `json:"subcontrolKindNameNotIn,omitempty"`
 	SubcontrolKindNameContains     *string  `json:"subcontrolKindNameContains,omitempty"`
-	SubcontrolKindNameHasPrefix    *string  `json:"subcontrolKindNameHasPrefix,omitempty"`
 	SubcontrolKindNameHasSuffix    *string  `json:"subcontrolKindNameHasSuffix,omitempty"`
 	SubcontrolKindNameIsNil        *bool    `json:"subcontrolKindNameIsNil,omitempty"`
 	SubcontrolKindNameNotNil       *bool    `json:"subcontrolKindNameNotNil,omitempty"`
@@ -33696,7 +32831,6 @@ type SubcontrolWhereInput struct {
 	RefCodeIn           []string `json:"refCodeIn,omitempty"`
 	RefCodeNotIn        []string `json:"refCodeNotIn,omitempty"`
 	RefCodeContains     *string  `json:"refCodeContains,omitempty"`
-	RefCodeHasPrefix    *string  `json:"refCodeHasPrefix,omitempty"`
 	RefCodeHasSuffix    *string  `json:"refCodeHasSuffix,omitempty"`
 	RefCodeEqualFold    *string  `json:"refCodeEqualFold,omitempty"`
 	RefCodeContainsFold *string  `json:"refCodeContainsFold,omitempty"`
@@ -33953,7 +33087,6 @@ type SubprocessorWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -33965,7 +33098,6 @@ type SubprocessorWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -33977,7 +33109,6 @@ type SubprocessorWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -34006,7 +33137,6 @@ type SubprocessorWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -34018,7 +33148,6 @@ type SubprocessorWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -34030,7 +33159,6 @@ type SubprocessorWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -34040,7 +33168,6 @@ type SubprocessorWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -34052,7 +33179,6 @@ type SubprocessorWhereInput struct {
 	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
 	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
 	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
-	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
 	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
 	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
 	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
@@ -34213,7 +33339,6 @@ type SubscriberWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -34225,7 +33350,6 @@ type SubscriberWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -34237,7 +33361,6 @@ type SubscriberWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -34273,7 +33396,6 @@ type SubscriberWhereInput struct {
 	EmailIn           []string `json:"emailIn,omitempty"`
 	EmailNotIn        []string `json:"emailNotIn,omitempty"`
 	EmailContains     *string  `json:"emailContains,omitempty"`
-	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
 	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
 	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
 	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
@@ -34283,7 +33405,6 @@ type SubscriberWhereInput struct {
 	PhoneNumberIn           []string `json:"phoneNumberIn,omitempty"`
 	PhoneNumberNotIn        []string `json:"phoneNumberNotIn,omitempty"`
 	PhoneNumberContains     *string  `json:"phoneNumberContains,omitempty"`
-	PhoneNumberHasPrefix    *string  `json:"phoneNumberHasPrefix,omitempty"`
 	PhoneNumberHasSuffix    *string  `json:"phoneNumberHasSuffix,omitempty"`
 	PhoneNumberIsNil        *bool    `json:"phoneNumberIsNil,omitempty"`
 	PhoneNumberNotNil       *bool    `json:"phoneNumberNotNil,omitempty"`
@@ -34516,7 +33637,6 @@ type SystemDetailWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -34528,7 +33648,6 @@ type SystemDetailWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -34540,7 +33659,6 @@ type SystemDetailWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -34552,7 +33670,6 @@ type SystemDetailWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -34562,7 +33679,6 @@ type SystemDetailWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -34574,7 +33690,6 @@ type SystemDetailWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -34586,7 +33701,6 @@ type SystemDetailWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -34598,7 +33712,6 @@ type SystemDetailWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -34610,7 +33723,6 @@ type SystemDetailWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -34622,7 +33734,6 @@ type SystemDetailWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -34646,7 +33757,6 @@ type SystemDetailWhereInput struct {
 	SystemNameIn           []string `json:"systemNameIn,omitempty"`
 	SystemNameNotIn        []string `json:"systemNameNotIn,omitempty"`
 	SystemNameContains     *string  `json:"systemNameContains,omitempty"`
-	SystemNameHasPrefix    *string  `json:"systemNameHasPrefix,omitempty"`
 	SystemNameHasSuffix    *string  `json:"systemNameHasSuffix,omitempty"`
 	SystemNameEqualFold    *string  `json:"systemNameEqualFold,omitempty"`
 	SystemNameContainsFold *string  `json:"systemNameContainsFold,omitempty"`
@@ -34656,7 +33766,6 @@ type SystemDetailWhereInput struct {
 	VersionIn           []string `json:"versionIn,omitempty"`
 	VersionNotIn        []string `json:"versionNotIn,omitempty"`
 	VersionContains     *string  `json:"versionContains,omitempty"`
-	VersionHasPrefix    *string  `json:"versionHasPrefix,omitempty"`
 	VersionHasSuffix    *string  `json:"versionHasSuffix,omitempty"`
 	VersionIsNil        *bool    `json:"versionIsNil,omitempty"`
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
@@ -34668,7 +33777,6 @@ type SystemDetailWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -34680,7 +33788,6 @@ type SystemDetailWhereInput struct {
 	AuthorizationBoundaryIn           []string `json:"authorizationBoundaryIn,omitempty"`
 	AuthorizationBoundaryNotIn        []string `json:"authorizationBoundaryNotIn,omitempty"`
 	AuthorizationBoundaryContains     *string  `json:"authorizationBoundaryContains,omitempty"`
-	AuthorizationBoundaryHasPrefix    *string  `json:"authorizationBoundaryHasPrefix,omitempty"`
 	AuthorizationBoundaryHasSuffix    *string  `json:"authorizationBoundaryHasSuffix,omitempty"`
 	AuthorizationBoundaryIsNil        *bool    `json:"authorizationBoundaryIsNil,omitempty"`
 	AuthorizationBoundaryNotNil       *bool    `json:"authorizationBoundaryNotNil,omitempty"`
@@ -34818,7 +33925,6 @@ type TFASettingWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -34830,7 +33936,6 @@ type TFASettingWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -34842,7 +33947,6 @@ type TFASettingWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -34990,7 +34094,6 @@ type TagDefinitionWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -35002,7 +34105,6 @@ type TagDefinitionWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -35014,7 +34116,6 @@ type TagDefinitionWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -35026,7 +34127,6 @@ type TagDefinitionWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -35038,7 +34138,6 @@ type TagDefinitionWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -35050,7 +34149,6 @@ type TagDefinitionWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -35062,7 +34160,6 @@ type TagDefinitionWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -35074,7 +34171,6 @@ type TagDefinitionWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -35086,7 +34182,6 @@ type TagDefinitionWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -35115,7 +34210,6 @@ type TagDefinitionWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -35127,7 +34221,6 @@ type TagDefinitionWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -35139,7 +34232,6 @@ type TagDefinitionWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -35149,7 +34241,6 @@ type TagDefinitionWhereInput struct {
 	SlugIn           []string `json:"slugIn,omitempty"`
 	SlugNotIn        []string `json:"slugNotIn,omitempty"`
 	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
 	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
 	SlugIsNil        *bool    `json:"slugIsNil,omitempty"`
 	SlugNotNil       *bool    `json:"slugNotNil,omitempty"`
@@ -35161,7 +34252,6 @@ type TagDefinitionWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -35173,7 +34263,6 @@ type TagDefinitionWhereInput struct {
 	ColorIn           []string `json:"colorIn,omitempty"`
 	ColorNotIn        []string `json:"colorNotIn,omitempty"`
 	ColorContains     *string  `json:"colorContains,omitempty"`
-	ColorHasPrefix    *string  `json:"colorHasPrefix,omitempty"`
 	ColorHasSuffix    *string  `json:"colorHasSuffix,omitempty"`
 	ColorIsNil        *bool    `json:"colorIsNil,omitempty"`
 	ColorNotNil       *bool    `json:"colorNotNil,omitempty"`
@@ -35413,7 +34502,6 @@ type TaskWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -35425,7 +34513,6 @@ type TaskWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -35437,7 +34524,6 @@ type TaskWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -35449,7 +34535,6 @@ type TaskWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -35459,7 +34544,6 @@ type TaskWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -35471,7 +34555,6 @@ type TaskWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -35483,7 +34566,6 @@ type TaskWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -35495,7 +34577,6 @@ type TaskWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -35507,7 +34588,6 @@ type TaskWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -35519,7 +34599,6 @@ type TaskWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -35543,7 +34622,6 @@ type TaskWhereInput struct {
 	TaskKindNameIn           []string `json:"taskKindNameIn,omitempty"`
 	TaskKindNameNotIn        []string `json:"taskKindNameNotIn,omitempty"`
 	TaskKindNameContains     *string  `json:"taskKindNameContains,omitempty"`
-	TaskKindNameHasPrefix    *string  `json:"taskKindNameHasPrefix,omitempty"`
 	TaskKindNameHasSuffix    *string  `json:"taskKindNameHasSuffix,omitempty"`
 	TaskKindNameIsNil        *bool    `json:"taskKindNameIsNil,omitempty"`
 	TaskKindNameNotNil       *bool    `json:"taskKindNameNotNil,omitempty"`
@@ -35567,7 +34645,6 @@ type TaskWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -35591,7 +34668,6 @@ type TaskWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -35620,7 +34696,6 @@ type TaskWhereInput struct {
 	ExternalUUIDIn           []string `json:"externalUUIDIn,omitempty"`
 	ExternalUUIDNotIn        []string `json:"externalUUIDNotIn,omitempty"`
 	ExternalUUIDContains     *string  `json:"externalUUIDContains,omitempty"`
-	ExternalUUIDHasPrefix    *string  `json:"externalUUIDHasPrefix,omitempty"`
 	ExternalUUIDHasSuffix    *string  `json:"externalUUIDHasSuffix,omitempty"`
 	ExternalUUIDIsNil        *bool    `json:"externalUUIDIsNil,omitempty"`
 	ExternalUUIDNotNil       *bool    `json:"externalUUIDNotNil,omitempty"`
@@ -35632,7 +34707,6 @@ type TaskWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
@@ -35642,7 +34716,6 @@ type TaskWhereInput struct {
 	DetailsIn           []string `json:"detailsIn,omitempty"`
 	DetailsNotIn        []string `json:"detailsNotIn,omitempty"`
 	DetailsContains     *string  `json:"detailsContains,omitempty"`
-	DetailsHasPrefix    *string  `json:"detailsHasPrefix,omitempty"`
 	DetailsHasSuffix    *string  `json:"detailsHasSuffix,omitempty"`
 	DetailsIsNil        *bool    `json:"detailsIsNil,omitempty"`
 	DetailsNotNil       *bool    `json:"detailsNotNil,omitempty"`
@@ -35715,7 +34788,6 @@ type TaskWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
@@ -35727,7 +34799,6 @@ type TaskWhereInput struct {
 	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
 	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
 	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
-	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
 	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
 	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
 	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
@@ -35739,7 +34810,6 @@ type TaskWhereInput struct {
 	IdempotencyKeyIn           []string `json:"idempotencyKeyIn,omitempty"`
 	IdempotencyKeyNotIn        []string `json:"idempotencyKeyNotIn,omitempty"`
 	IdempotencyKeyContains     *string  `json:"idempotencyKeyContains,omitempty"`
-	IdempotencyKeyHasPrefix    *string  `json:"idempotencyKeyHasPrefix,omitempty"`
 	IdempotencyKeyHasSuffix    *string  `json:"idempotencyKeyHasSuffix,omitempty"`
 	IdempotencyKeyIsNil        *bool    `json:"idempotencyKeyIsNil,omitempty"`
 	IdempotencyKeyNotNil       *bool    `json:"idempotencyKeyNotNil,omitempty"`
@@ -36051,7 +35121,6 @@ type TemplateWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -36063,7 +35132,6 @@ type TemplateWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -36075,7 +35143,6 @@ type TemplateWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -36087,7 +35154,6 @@ type TemplateWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -36099,7 +35165,6 @@ type TemplateWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -36111,7 +35176,6 @@ type TemplateWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -36123,7 +35187,6 @@ type TemplateWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -36135,7 +35198,6 @@ type TemplateWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -36147,7 +35209,6 @@ type TemplateWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDIsNil        *bool    `json:"externalIDIsNil,omitempty"`
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
@@ -36176,7 +35237,6 @@ type TemplateWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -36188,7 +35248,6 @@ type TemplateWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -36200,7 +35259,6 @@ type TemplateWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -36224,7 +35282,6 @@ type TemplateWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -36248,7 +35305,6 @@ type TemplateWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -36263,7 +35319,6 @@ type TemplateWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -36507,7 +35562,6 @@ type TrustCenterComplianceWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -36519,7 +35573,6 @@ type TrustCenterComplianceWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -36531,7 +35584,6 @@ type TrustCenterComplianceWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -36747,7 +35799,6 @@ type TrustCenterDocWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -36759,7 +35810,6 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -36771,7 +35821,6 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -36783,7 +35832,6 @@ type TrustCenterDocWhereInput struct {
 	TrustCenterDocKindNameIn           []string `json:"trustCenterDocKindNameIn,omitempty"`
 	TrustCenterDocKindNameNotIn        []string `json:"trustCenterDocKindNameNotIn,omitempty"`
 	TrustCenterDocKindNameContains     *string  `json:"trustCenterDocKindNameContains,omitempty"`
-	TrustCenterDocKindNameHasPrefix    *string  `json:"trustCenterDocKindNameHasPrefix,omitempty"`
 	TrustCenterDocKindNameHasSuffix    *string  `json:"trustCenterDocKindNameHasSuffix,omitempty"`
 	TrustCenterDocKindNameIsNil        *bool    `json:"trustCenterDocKindNameIsNil,omitempty"`
 	TrustCenterDocKindNameNotNil       *bool    `json:"trustCenterDocKindNameNotNil,omitempty"`
@@ -36819,7 +35867,6 @@ type TrustCenterDocWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
@@ -37028,7 +36075,6 @@ type TrustCenterEntityWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -37040,7 +36086,6 @@ type TrustCenterEntityWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -37052,7 +36097,6 @@ type TrustCenterEntityWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -37076,7 +36120,6 @@ type TrustCenterEntityWhereInput struct {
 	URLIn           []string `json:"urlIn,omitempty"`
 	URLNotIn        []string `json:"urlNotIn,omitempty"`
 	URLContains     *string  `json:"urlContains,omitempty"`
-	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
 	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
 	URLIsNil        *bool    `json:"urlIsNil,omitempty"`
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
@@ -37100,7 +36143,6 @@ type TrustCenterEntityWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -37257,7 +36299,6 @@ type TrustCenterFAQWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -37269,7 +36310,6 @@ type TrustCenterFAQWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -37281,7 +36321,6 @@ type TrustCenterFAQWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -37293,7 +36332,6 @@ type TrustCenterFAQWhereInput struct {
 	TrustCenterFaqKindNameIn           []string `json:"trustCenterFaqKindNameIn,omitempty"`
 	TrustCenterFaqKindNameNotIn        []string `json:"trustCenterFaqKindNameNotIn,omitempty"`
 	TrustCenterFaqKindNameContains     *string  `json:"trustCenterFaqKindNameContains,omitempty"`
-	TrustCenterFaqKindNameHasPrefix    *string  `json:"trustCenterFaqKindNameHasPrefix,omitempty"`
 	TrustCenterFaqKindNameHasSuffix    *string  `json:"trustCenterFaqKindNameHasSuffix,omitempty"`
 	TrustCenterFaqKindNameIsNil        *bool    `json:"trustCenterFaqKindNameIsNil,omitempty"`
 	TrustCenterFaqKindNameNotNil       *bool    `json:"trustCenterFaqKindNameNotNil,omitempty"`
@@ -37339,7 +36377,6 @@ type TrustCenterFAQWhereInput struct {
 	ReferenceLinkIn           []string `json:"referenceLinkIn,omitempty"`
 	ReferenceLinkNotIn        []string `json:"referenceLinkNotIn,omitempty"`
 	ReferenceLinkContains     *string  `json:"referenceLinkContains,omitempty"`
-	ReferenceLinkHasPrefix    *string  `json:"referenceLinkHasPrefix,omitempty"`
 	ReferenceLinkHasSuffix    *string  `json:"referenceLinkHasSuffix,omitempty"`
 	ReferenceLinkIsNil        *bool    `json:"referenceLinkIsNil,omitempty"`
 	ReferenceLinkNotNil       *bool    `json:"referenceLinkNotNil,omitempty"`
@@ -37520,7 +36557,6 @@ type TrustCenterNDARequestWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -37532,7 +36568,6 @@ type TrustCenterNDARequestWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -37544,7 +36579,6 @@ type TrustCenterNDARequestWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -37568,7 +36602,6 @@ type TrustCenterNDARequestWhereInput struct {
 	FirstNameIn           []string `json:"firstNameIn,omitempty"`
 	FirstNameNotIn        []string `json:"firstNameNotIn,omitempty"`
 	FirstNameContains     *string  `json:"firstNameContains,omitempty"`
-	FirstNameHasPrefix    *string  `json:"firstNameHasPrefix,omitempty"`
 	FirstNameHasSuffix    *string  `json:"firstNameHasSuffix,omitempty"`
 	FirstNameEqualFold    *string  `json:"firstNameEqualFold,omitempty"`
 	FirstNameContainsFold *string  `json:"firstNameContainsFold,omitempty"`
@@ -37578,7 +36611,6 @@ type TrustCenterNDARequestWhereInput struct {
 	LastNameIn           []string `json:"lastNameIn,omitempty"`
 	LastNameNotIn        []string `json:"lastNameNotIn,omitempty"`
 	LastNameContains     *string  `json:"lastNameContains,omitempty"`
-	LastNameHasPrefix    *string  `json:"lastNameHasPrefix,omitempty"`
 	LastNameHasSuffix    *string  `json:"lastNameHasSuffix,omitempty"`
 	LastNameEqualFold    *string  `json:"lastNameEqualFold,omitempty"`
 	LastNameContainsFold *string  `json:"lastNameContainsFold,omitempty"`
@@ -37588,7 +36620,6 @@ type TrustCenterNDARequestWhereInput struct {
 	EmailIn           []string `json:"emailIn,omitempty"`
 	EmailNotIn        []string `json:"emailNotIn,omitempty"`
 	EmailContains     *string  `json:"emailContains,omitempty"`
-	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
 	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
 	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
 	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
@@ -37598,7 +36629,6 @@ type TrustCenterNDARequestWhereInput struct {
 	CompanyNameIn           []string `json:"companyNameIn,omitempty"`
 	CompanyNameNotIn        []string `json:"companyNameNotIn,omitempty"`
 	CompanyNameContains     *string  `json:"companyNameContains,omitempty"`
-	CompanyNameHasPrefix    *string  `json:"companyNameHasPrefix,omitempty"`
 	CompanyNameHasSuffix    *string  `json:"companyNameHasSuffix,omitempty"`
 	CompanyNameIsNil        *bool    `json:"companyNameIsNil,omitempty"`
 	CompanyNameNotNil       *bool    `json:"companyNameNotNil,omitempty"`
@@ -37610,7 +36640,6 @@ type TrustCenterNDARequestWhereInput struct {
 	ReasonIn           []string `json:"reasonIn,omitempty"`
 	ReasonNotIn        []string `json:"reasonNotIn,omitempty"`
 	ReasonContains     *string  `json:"reasonContains,omitempty"`
-	ReasonHasPrefix    *string  `json:"reasonHasPrefix,omitempty"`
 	ReasonHasSuffix    *string  `json:"reasonHasSuffix,omitempty"`
 	ReasonIsNil        *bool    `json:"reasonIsNil,omitempty"`
 	ReasonNotNil       *bool    `json:"reasonNotNil,omitempty"`
@@ -37895,7 +36924,6 @@ type TrustCenterSettingWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -37907,7 +36935,6 @@ type TrustCenterSettingWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -37919,7 +36946,6 @@ type TrustCenterSettingWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -37931,7 +36957,6 @@ type TrustCenterSettingWhereInput struct {
 	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
 	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
 	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
-	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
 	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
 	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
 	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
@@ -37943,7 +36968,6 @@ type TrustCenterSettingWhereInput struct {
 	TitleIn           []string `json:"titleIn,omitempty"`
 	TitleNotIn        []string `json:"titleNotIn,omitempty"`
 	TitleContains     *string  `json:"titleContains,omitempty"`
-	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleIsNil        *bool    `json:"titleIsNil,omitempty"`
 	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
@@ -37955,7 +36979,6 @@ type TrustCenterSettingWhereInput struct {
 	CompanyNameIn           []string `json:"companyNameIn,omitempty"`
 	CompanyNameNotIn        []string `json:"companyNameNotIn,omitempty"`
 	CompanyNameContains     *string  `json:"companyNameContains,omitempty"`
-	CompanyNameHasPrefix    *string  `json:"companyNameHasPrefix,omitempty"`
 	CompanyNameHasSuffix    *string  `json:"companyNameHasSuffix,omitempty"`
 	CompanyNameIsNil        *bool    `json:"companyNameIsNil,omitempty"`
 	CompanyNameNotNil       *bool    `json:"companyNameNotNil,omitempty"`
@@ -37967,7 +36990,6 @@ type TrustCenterSettingWhereInput struct {
 	CompanyDescriptionIn           []string `json:"companyDescriptionIn,omitempty"`
 	CompanyDescriptionNotIn        []string `json:"companyDescriptionNotIn,omitempty"`
 	CompanyDescriptionContains     *string  `json:"companyDescriptionContains,omitempty"`
-	CompanyDescriptionHasPrefix    *string  `json:"companyDescriptionHasPrefix,omitempty"`
 	CompanyDescriptionHasSuffix    *string  `json:"companyDescriptionHasSuffix,omitempty"`
 	CompanyDescriptionIsNil        *bool    `json:"companyDescriptionIsNil,omitempty"`
 	CompanyDescriptionNotNil       *bool    `json:"companyDescriptionNotNil,omitempty"`
@@ -37979,7 +37001,6 @@ type TrustCenterSettingWhereInput struct {
 	OverviewIn           []string `json:"overviewIn,omitempty"`
 	OverviewNotIn        []string `json:"overviewNotIn,omitempty"`
 	OverviewContains     *string  `json:"overviewContains,omitempty"`
-	OverviewHasPrefix    *string  `json:"overviewHasPrefix,omitempty"`
 	OverviewHasSuffix    *string  `json:"overviewHasSuffix,omitempty"`
 	OverviewIsNil        *bool    `json:"overviewIsNil,omitempty"`
 	OverviewNotNil       *bool    `json:"overviewNotNil,omitempty"`
@@ -37991,7 +37012,6 @@ type TrustCenterSettingWhereInput struct {
 	LogoRemoteURLIn           []string `json:"logoRemoteURLIn,omitempty"`
 	LogoRemoteURLNotIn        []string `json:"logoRemoteURLNotIn,omitempty"`
 	LogoRemoteURLContains     *string  `json:"logoRemoteURLContains,omitempty"`
-	LogoRemoteURLHasPrefix    *string  `json:"logoRemoteURLHasPrefix,omitempty"`
 	LogoRemoteURLHasSuffix    *string  `json:"logoRemoteURLHasSuffix,omitempty"`
 	LogoRemoteURLIsNil        *bool    `json:"logoRemoteURLIsNil,omitempty"`
 	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
@@ -38015,7 +37035,6 @@ type TrustCenterSettingWhereInput struct {
 	FaviconRemoteURLIn           []string `json:"faviconRemoteURLIn,omitempty"`
 	FaviconRemoteURLNotIn        []string `json:"faviconRemoteURLNotIn,omitempty"`
 	FaviconRemoteURLContains     *string  `json:"faviconRemoteURLContains,omitempty"`
-	FaviconRemoteURLHasPrefix    *string  `json:"faviconRemoteURLHasPrefix,omitempty"`
 	FaviconRemoteURLHasSuffix    *string  `json:"faviconRemoteURLHasSuffix,omitempty"`
 	FaviconRemoteURLIsNil        *bool    `json:"faviconRemoteURLIsNil,omitempty"`
 	FaviconRemoteURLNotNil       *bool    `json:"faviconRemoteURLNotNil,omitempty"`
@@ -38058,7 +37077,6 @@ type TrustCenterSettingWhereInput struct {
 	PrimaryColorIn           []string `json:"primaryColorIn,omitempty"`
 	PrimaryColorNotIn        []string `json:"primaryColorNotIn,omitempty"`
 	PrimaryColorContains     *string  `json:"primaryColorContains,omitempty"`
-	PrimaryColorHasPrefix    *string  `json:"primaryColorHasPrefix,omitempty"`
 	PrimaryColorHasSuffix    *string  `json:"primaryColorHasSuffix,omitempty"`
 	PrimaryColorIsNil        *bool    `json:"primaryColorIsNil,omitempty"`
 	PrimaryColorNotNil       *bool    `json:"primaryColorNotNil,omitempty"`
@@ -38070,7 +37088,6 @@ type TrustCenterSettingWhereInput struct {
 	FontIn           []string `json:"fontIn,omitempty"`
 	FontNotIn        []string `json:"fontNotIn,omitempty"`
 	FontContains     *string  `json:"fontContains,omitempty"`
-	FontHasPrefix    *string  `json:"fontHasPrefix,omitempty"`
 	FontHasSuffix    *string  `json:"fontHasSuffix,omitempty"`
 	FontIsNil        *bool    `json:"fontIsNil,omitempty"`
 	FontNotNil       *bool    `json:"fontNotNil,omitempty"`
@@ -38082,7 +37099,6 @@ type TrustCenterSettingWhereInput struct {
 	ForegroundColorIn           []string `json:"foregroundColorIn,omitempty"`
 	ForegroundColorNotIn        []string `json:"foregroundColorNotIn,omitempty"`
 	ForegroundColorContains     *string  `json:"foregroundColorContains,omitempty"`
-	ForegroundColorHasPrefix    *string  `json:"foregroundColorHasPrefix,omitempty"`
 	ForegroundColorHasSuffix    *string  `json:"foregroundColorHasSuffix,omitempty"`
 	ForegroundColorIsNil        *bool    `json:"foregroundColorIsNil,omitempty"`
 	ForegroundColorNotNil       *bool    `json:"foregroundColorNotNil,omitempty"`
@@ -38094,7 +37110,6 @@ type TrustCenterSettingWhereInput struct {
 	BackgroundColorIn           []string `json:"backgroundColorIn,omitempty"`
 	BackgroundColorNotIn        []string `json:"backgroundColorNotIn,omitempty"`
 	BackgroundColorContains     *string  `json:"backgroundColorContains,omitempty"`
-	BackgroundColorHasPrefix    *string  `json:"backgroundColorHasPrefix,omitempty"`
 	BackgroundColorHasSuffix    *string  `json:"backgroundColorHasSuffix,omitempty"`
 	BackgroundColorIsNil        *bool    `json:"backgroundColorIsNil,omitempty"`
 	BackgroundColorNotNil       *bool    `json:"backgroundColorNotNil,omitempty"`
@@ -38106,7 +37121,6 @@ type TrustCenterSettingWhereInput struct {
 	AccentColorIn           []string `json:"accentColorIn,omitempty"`
 	AccentColorNotIn        []string `json:"accentColorNotIn,omitempty"`
 	AccentColorContains     *string  `json:"accentColorContains,omitempty"`
-	AccentColorHasPrefix    *string  `json:"accentColorHasPrefix,omitempty"`
 	AccentColorHasSuffix    *string  `json:"accentColorHasSuffix,omitempty"`
 	AccentColorIsNil        *bool    `json:"accentColorIsNil,omitempty"`
 	AccentColorNotNil       *bool    `json:"accentColorNotNil,omitempty"`
@@ -38118,7 +37132,6 @@ type TrustCenterSettingWhereInput struct {
 	SecondaryBackgroundColorIn           []string `json:"secondaryBackgroundColorIn,omitempty"`
 	SecondaryBackgroundColorNotIn        []string `json:"secondaryBackgroundColorNotIn,omitempty"`
 	SecondaryBackgroundColorContains     *string  `json:"secondaryBackgroundColorContains,omitempty"`
-	SecondaryBackgroundColorHasPrefix    *string  `json:"secondaryBackgroundColorHasPrefix,omitempty"`
 	SecondaryBackgroundColorHasSuffix    *string  `json:"secondaryBackgroundColorHasSuffix,omitempty"`
 	SecondaryBackgroundColorIsNil        *bool    `json:"secondaryBackgroundColorIsNil,omitempty"`
 	SecondaryBackgroundColorNotNil       *bool    `json:"secondaryBackgroundColorNotNil,omitempty"`
@@ -38130,7 +37143,6 @@ type TrustCenterSettingWhereInput struct {
 	SecondaryForegroundColorIn           []string `json:"secondaryForegroundColorIn,omitempty"`
 	SecondaryForegroundColorNotIn        []string `json:"secondaryForegroundColorNotIn,omitempty"`
 	SecondaryForegroundColorContains     *string  `json:"secondaryForegroundColorContains,omitempty"`
-	SecondaryForegroundColorHasPrefix    *string  `json:"secondaryForegroundColorHasPrefix,omitempty"`
 	SecondaryForegroundColorHasSuffix    *string  `json:"secondaryForegroundColorHasSuffix,omitempty"`
 	SecondaryForegroundColorIsNil        *bool    `json:"secondaryForegroundColorIsNil,omitempty"`
 	SecondaryForegroundColorNotNil       *bool    `json:"secondaryForegroundColorNotNil,omitempty"`
@@ -38154,7 +37166,6 @@ type TrustCenterSettingWhereInput struct {
 	CompanyDomainIn           []string `json:"companyDomainIn,omitempty"`
 	CompanyDomainNotIn        []string `json:"companyDomainNotIn,omitempty"`
 	CompanyDomainContains     *string  `json:"companyDomainContains,omitempty"`
-	CompanyDomainHasPrefix    *string  `json:"companyDomainHasPrefix,omitempty"`
 	CompanyDomainHasSuffix    *string  `json:"companyDomainHasSuffix,omitempty"`
 	CompanyDomainIsNil        *bool    `json:"companyDomainIsNil,omitempty"`
 	CompanyDomainNotNil       *bool    `json:"companyDomainNotNil,omitempty"`
@@ -38166,7 +37177,6 @@ type TrustCenterSettingWhereInput struct {
 	SecurityContactIn           []string `json:"securityContactIn,omitempty"`
 	SecurityContactNotIn        []string `json:"securityContactNotIn,omitempty"`
 	SecurityContactContains     *string  `json:"securityContactContains,omitempty"`
-	SecurityContactHasPrefix    *string  `json:"securityContactHasPrefix,omitempty"`
 	SecurityContactHasSuffix    *string  `json:"securityContactHasSuffix,omitempty"`
 	SecurityContactIsNil        *bool    `json:"securityContactIsNil,omitempty"`
 	SecurityContactNotNil       *bool    `json:"securityContactNotNil,omitempty"`
@@ -38213,7 +37223,6 @@ type TrustCenterSettingWhereInput struct {
 	StatusPageURLIn           []string `json:"statusPageURLIn,omitempty"`
 	StatusPageURLNotIn        []string `json:"statusPageURLNotIn,omitempty"`
 	StatusPageURLContains     *string  `json:"statusPageURLContains,omitempty"`
-	StatusPageURLHasPrefix    *string  `json:"statusPageURLHasPrefix,omitempty"`
 	StatusPageURLHasSuffix    *string  `json:"statusPageURLHasSuffix,omitempty"`
 	StatusPageURLIsNil        *bool    `json:"statusPageURLIsNil,omitempty"`
 	StatusPageURLNotNil       *bool    `json:"statusPageURLNotNil,omitempty"`
@@ -38383,7 +37392,6 @@ type TrustCenterSubprocessorWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -38395,7 +37403,6 @@ type TrustCenterSubprocessorWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -38407,7 +37414,6 @@ type TrustCenterSubprocessorWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -38419,7 +37425,6 @@ type TrustCenterSubprocessorWhereInput struct {
 	TrustCenterSubprocessorKindNameIn           []string `json:"trustCenterSubprocessorKindNameIn,omitempty"`
 	TrustCenterSubprocessorKindNameNotIn        []string `json:"trustCenterSubprocessorKindNameNotIn,omitempty"`
 	TrustCenterSubprocessorKindNameContains     *string  `json:"trustCenterSubprocessorKindNameContains,omitempty"`
-	TrustCenterSubprocessorKindNameHasPrefix    *string  `json:"trustCenterSubprocessorKindNameHasPrefix,omitempty"`
 	TrustCenterSubprocessorKindNameHasSuffix    *string  `json:"trustCenterSubprocessorKindNameHasSuffix,omitempty"`
 	TrustCenterSubprocessorKindNameIsNil        *bool    `json:"trustCenterSubprocessorKindNameIsNil,omitempty"`
 	TrustCenterSubprocessorKindNameNotNil       *bool    `json:"trustCenterSubprocessorKindNameNotNil,omitempty"`
@@ -38607,7 +37612,6 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -38619,7 +37623,6 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -38631,7 +37634,6 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -38655,7 +37657,6 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
 	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
 	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
-	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
 	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
 	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
 	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
@@ -38684,7 +37685,6 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	TextIn           []string `json:"textIn,omitempty"`
 	TextNotIn        []string `json:"textNotIn,omitempty"`
 	TextContains     *string  `json:"textContains,omitempty"`
-	TextHasPrefix    *string  `json:"textHasPrefix,omitempty"`
 	TextHasSuffix    *string  `json:"textHasSuffix,omitempty"`
 	TextIsNil        *bool    `json:"textIsNil,omitempty"`
 	TextNotNil       *bool    `json:"textNotNil,omitempty"`
@@ -38729,7 +37729,6 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	ColorIn           []string `json:"colorIn,omitempty"`
 	ColorNotIn        []string `json:"colorNotIn,omitempty"`
 	ColorContains     *string  `json:"colorContains,omitempty"`
-	ColorHasPrefix    *string  `json:"colorHasPrefix,omitempty"`
 	ColorHasSuffix    *string  `json:"colorHasSuffix,omitempty"`
 	ColorIsNil        *bool    `json:"colorIsNil,omitempty"`
 	ColorNotNil       *bool    `json:"colorNotNil,omitempty"`
@@ -38794,7 +37793,6 @@ type TrustCenterWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -38806,7 +37804,6 @@ type TrustCenterWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -38818,7 +37815,6 @@ type TrustCenterWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -38842,7 +37838,6 @@ type TrustCenterWhereInput struct {
 	SlugIn           []string `json:"slugIn,omitempty"`
 	SlugNotIn        []string `json:"slugNotIn,omitempty"`
 	SlugContains     *string  `json:"slugContains,omitempty"`
-	SlugHasPrefix    *string  `json:"slugHasPrefix,omitempty"`
 	SlugHasSuffix    *string  `json:"slugHasSuffix,omitempty"`
 	SlugIsNil        *bool    `json:"slugIsNil,omitempty"`
 	SlugNotNil       *bool    `json:"slugNotNil,omitempty"`
@@ -38878,7 +37873,6 @@ type TrustCenterWhereInput struct {
 	PirschDomainIDIn           []string `json:"pirschDomainIDIn,omitempty"`
 	PirschDomainIDNotIn        []string `json:"pirschDomainIDNotIn,omitempty"`
 	PirschDomainIDContains     *string  `json:"pirschDomainIDContains,omitempty"`
-	PirschDomainIDHasPrefix    *string  `json:"pirschDomainIDHasPrefix,omitempty"`
 	PirschDomainIDHasSuffix    *string  `json:"pirschDomainIDHasSuffix,omitempty"`
 	PirschDomainIDIsNil        *bool    `json:"pirschDomainIDIsNil,omitempty"`
 	PirschDomainIDNotNil       *bool    `json:"pirschDomainIDNotNil,omitempty"`
@@ -38890,7 +37884,6 @@ type TrustCenterWhereInput struct {
 	PirschIdentificationCodeIn           []string `json:"pirschIdentificationCodeIn,omitempty"`
 	PirschIdentificationCodeNotIn        []string `json:"pirschIdentificationCodeNotIn,omitempty"`
 	PirschIdentificationCodeContains     *string  `json:"pirschIdentificationCodeContains,omitempty"`
-	PirschIdentificationCodeHasPrefix    *string  `json:"pirschIdentificationCodeHasPrefix,omitempty"`
 	PirschIdentificationCodeHasSuffix    *string  `json:"pirschIdentificationCodeHasSuffix,omitempty"`
 	PirschIdentificationCodeIsNil        *bool    `json:"pirschIdentificationCodeIsNil,omitempty"`
 	PirschIdentificationCodeNotNil       *bool    `json:"pirschIdentificationCodeNotNil,omitempty"`
@@ -38902,7 +37895,6 @@ type TrustCenterWhereInput struct {
 	PirschAccessLinkIn           []string `json:"pirschAccessLinkIn,omitempty"`
 	PirschAccessLinkNotIn        []string `json:"pirschAccessLinkNotIn,omitempty"`
 	PirschAccessLinkContains     *string  `json:"pirschAccessLinkContains,omitempty"`
-	PirschAccessLinkHasPrefix    *string  `json:"pirschAccessLinkHasPrefix,omitempty"`
 	PirschAccessLinkHasSuffix    *string  `json:"pirschAccessLinkHasSuffix,omitempty"`
 	PirschAccessLinkIsNil        *bool    `json:"pirschAccessLinkIsNil,omitempty"`
 	PirschAccessLinkNotNil       *bool    `json:"pirschAccessLinkNotNil,omitempty"`
@@ -38921,7 +37913,6 @@ type TrustCenterWhereInput struct {
 	SubprocessorURLIn           []string `json:"subprocessorURLIn,omitempty"`
 	SubprocessorURLNotIn        []string `json:"subprocessorURLNotIn,omitempty"`
 	SubprocessorURLContains     *string  `json:"subprocessorURLContains,omitempty"`
-	SubprocessorURLHasPrefix    *string  `json:"subprocessorURLHasPrefix,omitempty"`
 	SubprocessorURLHasSuffix    *string  `json:"subprocessorURLHasSuffix,omitempty"`
 	SubprocessorURLIsNil        *bool    `json:"subprocessorURLIsNil,omitempty"`
 	SubprocessorURLNotNil       *bool    `json:"subprocessorURLNotNil,omitempty"`
@@ -45743,7 +44734,6 @@ type UserSettingWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -45755,7 +44745,6 @@ type UserSettingWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -45767,7 +44756,6 @@ type UserSettingWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -45791,7 +44779,6 @@ type UserSettingWhereInput struct {
 	DelegateUserIDIn           []string `json:"delegateUserIDIn,omitempty"`
 	DelegateUserIDNotIn        []string `json:"delegateUserIDNotIn,omitempty"`
 	DelegateUserIDContains     *string  `json:"delegateUserIDContains,omitempty"`
-	DelegateUserIDHasPrefix    *string  `json:"delegateUserIDHasPrefix,omitempty"`
 	DelegateUserIDHasSuffix    *string  `json:"delegateUserIDHasSuffix,omitempty"`
 	DelegateUserIDIsNil        *bool    `json:"delegateUserIDIsNil,omitempty"`
 	DelegateUserIDNotNil       *bool    `json:"delegateUserIDNotNil,omitempty"`
@@ -45896,7 +44883,6 @@ type UserWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -45908,7 +44894,6 @@ type UserWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -45920,7 +44905,6 @@ type UserWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -45930,7 +44914,6 @@ type UserWhereInput struct {
 	EmailIn           []string `json:"emailIn,omitempty"`
 	EmailNotIn        []string `json:"emailNotIn,omitempty"`
 	EmailContains     *string  `json:"emailContains,omitempty"`
-	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
 	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
 	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
 	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
@@ -45940,7 +44923,6 @@ type UserWhereInput struct {
 	FirstNameIn           []string `json:"firstNameIn,omitempty"`
 	FirstNameNotIn        []string `json:"firstNameNotIn,omitempty"`
 	FirstNameContains     *string  `json:"firstNameContains,omitempty"`
-	FirstNameHasPrefix    *string  `json:"firstNameHasPrefix,omitempty"`
 	FirstNameHasSuffix    *string  `json:"firstNameHasSuffix,omitempty"`
 	FirstNameIsNil        *bool    `json:"firstNameIsNil,omitempty"`
 	FirstNameNotNil       *bool    `json:"firstNameNotNil,omitempty"`
@@ -45952,7 +44934,6 @@ type UserWhereInput struct {
 	LastNameIn           []string `json:"lastNameIn,omitempty"`
 	LastNameNotIn        []string `json:"lastNameNotIn,omitempty"`
 	LastNameContains     *string  `json:"lastNameContains,omitempty"`
-	LastNameHasPrefix    *string  `json:"lastNameHasPrefix,omitempty"`
 	LastNameHasSuffix    *string  `json:"lastNameHasSuffix,omitempty"`
 	LastNameIsNil        *bool    `json:"lastNameIsNil,omitempty"`
 	LastNameNotNil       *bool    `json:"lastNameNotNil,omitempty"`
@@ -45964,7 +44945,6 @@ type UserWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameEqualFold    *string  `json:"displayNameEqualFold,omitempty"`
 	DisplayNameContainsFold *string  `json:"displayNameContainsFold,omitempty"`
@@ -45974,7 +44954,6 @@ type UserWhereInput struct {
 	AvatarRemoteURLIn           []string `json:"avatarRemoteURLIn,omitempty"`
 	AvatarRemoteURLNotIn        []string `json:"avatarRemoteURLNotIn,omitempty"`
 	AvatarRemoteURLContains     *string  `json:"avatarRemoteURLContains,omitempty"`
-	AvatarRemoteURLHasPrefix    *string  `json:"avatarRemoteURLHasPrefix,omitempty"`
 	AvatarRemoteURLHasSuffix    *string  `json:"avatarRemoteURLHasSuffix,omitempty"`
 	AvatarRemoteURLIsNil        *bool    `json:"avatarRemoteURLIsNil,omitempty"`
 	AvatarRemoteURLNotNil       *bool    `json:"avatarRemoteURLNotNil,omitempty"`
@@ -46021,7 +45000,6 @@ type UserWhereInput struct {
 	SubIn           []string `json:"subIn,omitempty"`
 	SubNotIn        []string `json:"subNotIn,omitempty"`
 	SubContains     *string  `json:"subContains,omitempty"`
-	SubHasPrefix    *string  `json:"subHasPrefix,omitempty"`
 	SubHasSuffix    *string  `json:"subHasSuffix,omitempty"`
 	SubIsNil        *bool    `json:"subIsNil,omitempty"`
 	SubNotNil       *bool    `json:"subNotNil,omitempty"`
@@ -46045,7 +45023,6 @@ type UserWhereInput struct {
 	ScimExternalIDIn           []string `json:"scimExternalIDIn,omitempty"`
 	ScimExternalIDNotIn        []string `json:"scimExternalIDNotIn,omitempty"`
 	ScimExternalIDContains     *string  `json:"scimExternalIDContains,omitempty"`
-	ScimExternalIDHasPrefix    *string  `json:"scimExternalIDHasPrefix,omitempty"`
 	ScimExternalIDHasSuffix    *string  `json:"scimExternalIDHasSuffix,omitempty"`
 	ScimExternalIDIsNil        *bool    `json:"scimExternalIDIsNil,omitempty"`
 	ScimExternalIDNotNil       *bool    `json:"scimExternalIDNotNil,omitempty"`
@@ -46057,7 +45034,6 @@ type UserWhereInput struct {
 	ScimUsernameIn           []string `json:"scimUsernameIn,omitempty"`
 	ScimUsernameNotIn        []string `json:"scimUsernameNotIn,omitempty"`
 	ScimUsernameContains     *string  `json:"scimUsernameContains,omitempty"`
-	ScimUsernameHasPrefix    *string  `json:"scimUsernameHasPrefix,omitempty"`
 	ScimUsernameHasSuffix    *string  `json:"scimUsernameHasSuffix,omitempty"`
 	ScimUsernameIsNil        *bool    `json:"scimUsernameIsNil,omitempty"`
 	ScimUsernameNotNil       *bool    `json:"scimUsernameNotNil,omitempty"`
@@ -46074,7 +45050,6 @@ type UserWhereInput struct {
 	ScimPreferredLanguageIn           []string `json:"scimPreferredLanguageIn,omitempty"`
 	ScimPreferredLanguageNotIn        []string `json:"scimPreferredLanguageNotIn,omitempty"`
 	ScimPreferredLanguageContains     *string  `json:"scimPreferredLanguageContains,omitempty"`
-	ScimPreferredLanguageHasPrefix    *string  `json:"scimPreferredLanguageHasPrefix,omitempty"`
 	ScimPreferredLanguageHasSuffix    *string  `json:"scimPreferredLanguageHasSuffix,omitempty"`
 	ScimPreferredLanguageIsNil        *bool    `json:"scimPreferredLanguageIsNil,omitempty"`
 	ScimPreferredLanguageNotNil       *bool    `json:"scimPreferredLanguageNotNil,omitempty"`
@@ -46086,7 +45061,6 @@ type UserWhereInput struct {
 	ScimLocaleIn           []string `json:"scimLocaleIn,omitempty"`
 	ScimLocaleNotIn        []string `json:"scimLocaleNotIn,omitempty"`
 	ScimLocaleContains     *string  `json:"scimLocaleContains,omitempty"`
-	ScimLocaleHasPrefix    *string  `json:"scimLocaleHasPrefix,omitempty"`
 	ScimLocaleHasSuffix    *string  `json:"scimLocaleHasSuffix,omitempty"`
 	ScimLocaleIsNil        *bool    `json:"scimLocaleIsNil,omitempty"`
 	ScimLocaleNotNil       *bool    `json:"scimLocaleNotNil,omitempty"`
@@ -46324,7 +45298,6 @@ type VendorRiskScoreWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -46336,7 +45309,6 @@ type VendorRiskScoreWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -46348,7 +45320,6 @@ type VendorRiskScoreWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -46372,7 +45343,6 @@ type VendorRiskScoreWhereInput struct {
 	QuestionKeyIn           []string `json:"questionKeyIn,omitempty"`
 	QuestionKeyNotIn        []string `json:"questionKeyNotIn,omitempty"`
 	QuestionKeyContains     *string  `json:"questionKeyContains,omitempty"`
-	QuestionKeyHasPrefix    *string  `json:"questionKeyHasPrefix,omitempty"`
 	QuestionKeyHasSuffix    *string  `json:"questionKeyHasSuffix,omitempty"`
 	QuestionKeyEqualFold    *string  `json:"questionKeyEqualFold,omitempty"`
 	QuestionKeyContainsFold *string  `json:"questionKeyContainsFold,omitempty"`
@@ -46382,7 +45352,6 @@ type VendorRiskScoreWhereInput struct {
 	QuestionNameIn           []string `json:"questionNameIn,omitempty"`
 	QuestionNameNotIn        []string `json:"questionNameNotIn,omitempty"`
 	QuestionNameContains     *string  `json:"questionNameContains,omitempty"`
-	QuestionNameHasPrefix    *string  `json:"questionNameHasPrefix,omitempty"`
 	QuestionNameHasSuffix    *string  `json:"questionNameHasSuffix,omitempty"`
 	QuestionNameEqualFold    *string  `json:"questionNameEqualFold,omitempty"`
 	QuestionNameContainsFold *string  `json:"questionNameContainsFold,omitempty"`
@@ -46392,7 +45361,6 @@ type VendorRiskScoreWhereInput struct {
 	QuestionDescriptionIn           []string `json:"questionDescriptionIn,omitempty"`
 	QuestionDescriptionNotIn        []string `json:"questionDescriptionNotIn,omitempty"`
 	QuestionDescriptionContains     *string  `json:"questionDescriptionContains,omitempty"`
-	QuestionDescriptionHasPrefix    *string  `json:"questionDescriptionHasPrefix,omitempty"`
 	QuestionDescriptionHasSuffix    *string  `json:"questionDescriptionHasSuffix,omitempty"`
 	QuestionDescriptionIsNil        *bool    `json:"questionDescriptionIsNil,omitempty"`
 	QuestionDescriptionNotNil       *bool    `json:"questionDescriptionNotNil,omitempty"`
@@ -46433,7 +45401,6 @@ type VendorRiskScoreWhereInput struct {
 	AnswerIn           []string `json:"answerIn,omitempty"`
 	AnswerNotIn        []string `json:"answerNotIn,omitempty"`
 	AnswerContains     *string  `json:"answerContains,omitempty"`
-	AnswerHasPrefix    *string  `json:"answerHasPrefix,omitempty"`
 	AnswerHasSuffix    *string  `json:"answerHasSuffix,omitempty"`
 	AnswerIsNil        *bool    `json:"answerIsNil,omitempty"`
 	AnswerNotNil       *bool    `json:"answerNotNil,omitempty"`
@@ -46445,7 +45412,6 @@ type VendorRiskScoreWhereInput struct {
 	NotesIn           []string `json:"notesIn,omitempty"`
 	NotesNotIn        []string `json:"notesNotIn,omitempty"`
 	NotesContains     *string  `json:"notesContains,omitempty"`
-	NotesHasPrefix    *string  `json:"notesHasPrefix,omitempty"`
 	NotesHasSuffix    *string  `json:"notesHasSuffix,omitempty"`
 	NotesIsNil        *bool    `json:"notesIsNil,omitempty"`
 	NotesNotNil       *bool    `json:"notesNotNil,omitempty"`
@@ -46632,7 +45598,6 @@ type VendorScoringConfigWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -46644,7 +45609,6 @@ type VendorScoringConfigWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -46656,7 +45620,6 @@ type VendorScoringConfigWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -47021,7 +45984,6 @@ type VulnerabilityWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -47033,7 +45995,6 @@ type VulnerabilityWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -47045,7 +46006,6 @@ type VulnerabilityWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -47057,7 +46017,6 @@ type VulnerabilityWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -47067,7 +46026,6 @@ type VulnerabilityWhereInput struct {
 	SourceDefinitionIDIn           []string `json:"sourceDefinitionIDIn,omitempty"`
 	SourceDefinitionIDNotIn        []string `json:"sourceDefinitionIDNotIn,omitempty"`
 	SourceDefinitionIDContains     *string  `json:"sourceDefinitionIDContains,omitempty"`
-	SourceDefinitionIDHasPrefix    *string  `json:"sourceDefinitionIDHasPrefix,omitempty"`
 	SourceDefinitionIDHasSuffix    *string  `json:"sourceDefinitionIDHasSuffix,omitempty"`
 	SourceDefinitionIDIsNil        *bool    `json:"sourceDefinitionIDIsNil,omitempty"`
 	SourceDefinitionIDNotNil       *bool    `json:"sourceDefinitionIDNotNil,omitempty"`
@@ -47079,7 +46037,6 @@ type VulnerabilityWhereInput struct {
 	SourceDefinitionVersionIn           []string `json:"sourceDefinitionVersionIn,omitempty"`
 	SourceDefinitionVersionNotIn        []string `json:"sourceDefinitionVersionNotIn,omitempty"`
 	SourceDefinitionVersionContains     *string  `json:"sourceDefinitionVersionContains,omitempty"`
-	SourceDefinitionVersionHasPrefix    *string  `json:"sourceDefinitionVersionHasPrefix,omitempty"`
 	SourceDefinitionVersionHasSuffix    *string  `json:"sourceDefinitionVersionHasSuffix,omitempty"`
 	SourceDefinitionVersionIsNil        *bool    `json:"sourceDefinitionVersionIsNil,omitempty"`
 	SourceDefinitionVersionNotNil       *bool    `json:"sourceDefinitionVersionNotNil,omitempty"`
@@ -47091,7 +46048,6 @@ type VulnerabilityWhereInput struct {
 	SourceInstanceIDIn           []string `json:"sourceInstanceIDIn,omitempty"`
 	SourceInstanceIDNotIn        []string `json:"sourceInstanceIDNotIn,omitempty"`
 	SourceInstanceIDContains     *string  `json:"sourceInstanceIDContains,omitempty"`
-	SourceInstanceIDHasPrefix    *string  `json:"sourceInstanceIDHasPrefix,omitempty"`
 	SourceInstanceIDHasSuffix    *string  `json:"sourceInstanceIDHasSuffix,omitempty"`
 	SourceInstanceIDIsNil        *bool    `json:"sourceInstanceIDIsNil,omitempty"`
 	SourceInstanceIDNotNil       *bool    `json:"sourceInstanceIDNotNil,omitempty"`
@@ -47103,7 +46059,6 @@ type VulnerabilityWhereInput struct {
 	ManagedByIn           []string `json:"managedByIn,omitempty"`
 	ManagedByNotIn        []string `json:"managedByNotIn,omitempty"`
 	ManagedByContains     *string  `json:"managedByContains,omitempty"`
-	ManagedByHasPrefix    *string  `json:"managedByHasPrefix,omitempty"`
 	ManagedByHasSuffix    *string  `json:"managedByHasSuffix,omitempty"`
 	ManagedByIsNil        *bool    `json:"managedByIsNil,omitempty"`
 	ManagedByNotNil       *bool    `json:"managedByNotNil,omitempty"`
@@ -47115,7 +46070,6 @@ type VulnerabilityWhereInput struct {
 	IntegrationRunIDIn           []string `json:"integrationRunIDIn,omitempty"`
 	IntegrationRunIDNotIn        []string `json:"integrationRunIDNotIn,omitempty"`
 	IntegrationRunIDContains     *string  `json:"integrationRunIDContains,omitempty"`
-	IntegrationRunIDHasPrefix    *string  `json:"integrationRunIDHasPrefix,omitempty"`
 	IntegrationRunIDHasSuffix    *string  `json:"integrationRunIDHasSuffix,omitempty"`
 	IntegrationRunIDIsNil        *bool    `json:"integrationRunIDIsNil,omitempty"`
 	IntegrationRunIDNotNil       *bool    `json:"integrationRunIDNotNil,omitempty"`
@@ -47127,7 +46081,6 @@ type VulnerabilityWhereInput struct {
 	ExternalIDIn           []string `json:"externalIDIn,omitempty"`
 	ExternalIDNotIn        []string `json:"externalIDNotIn,omitempty"`
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
-	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
 	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
 	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
@@ -47149,7 +46102,6 @@ type VulnerabilityWhereInput struct {
 	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
 	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
 	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
-	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
 	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
 	InternalOwnerIsNil        *bool    `json:"internalOwnerIsNil,omitempty"`
 	InternalOwnerNotNil       *bool    `json:"internalOwnerNotNil,omitempty"`
@@ -47197,7 +46149,6 @@ type VulnerabilityWhereInput struct {
 	ReviewedByIn           []string `json:"reviewedByIn,omitempty"`
 	ReviewedByNotIn        []string `json:"reviewedByNotIn,omitempty"`
 	ReviewedByContains     *string  `json:"reviewedByContains,omitempty"`
-	ReviewedByHasPrefix    *string  `json:"reviewedByHasPrefix,omitempty"`
 	ReviewedByHasSuffix    *string  `json:"reviewedByHasSuffix,omitempty"`
 	ReviewedByIsNil        *bool    `json:"reviewedByIsNil,omitempty"`
 	ReviewedByNotNil       *bool    `json:"reviewedByNotNil,omitempty"`
@@ -47245,7 +46196,6 @@ type VulnerabilityWhereInput struct {
 	AssignedToIn           []string `json:"assignedToIn,omitempty"`
 	AssignedToNotIn        []string `json:"assignedToNotIn,omitempty"`
 	AssignedToContains     *string  `json:"assignedToContains,omitempty"`
-	AssignedToHasPrefix    *string  `json:"assignedToHasPrefix,omitempty"`
 	AssignedToHasSuffix    *string  `json:"assignedToHasSuffix,omitempty"`
 	AssignedToIsNil        *bool    `json:"assignedToIsNil,omitempty"`
 	AssignedToNotNil       *bool    `json:"assignedToNotNil,omitempty"`
@@ -47298,7 +46248,6 @@ type VulnerabilityWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -47310,7 +46259,6 @@ type VulnerabilityWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -47322,7 +46270,6 @@ type VulnerabilityWhereInput struct {
 	EnvironmentNameIn           []string `json:"environmentNameIn,omitempty"`
 	EnvironmentNameNotIn        []string `json:"environmentNameNotIn,omitempty"`
 	EnvironmentNameContains     *string  `json:"environmentNameContains,omitempty"`
-	EnvironmentNameHasPrefix    *string  `json:"environmentNameHasPrefix,omitempty"`
 	EnvironmentNameHasSuffix    *string  `json:"environmentNameHasSuffix,omitempty"`
 	EnvironmentNameIsNil        *bool    `json:"environmentNameIsNil,omitempty"`
 	EnvironmentNameNotNil       *bool    `json:"environmentNameNotNil,omitempty"`
@@ -47346,7 +46293,6 @@ type VulnerabilityWhereInput struct {
 	ScopeNameIn           []string `json:"scopeNameIn,omitempty"`
 	ScopeNameNotIn        []string `json:"scopeNameNotIn,omitempty"`
 	ScopeNameContains     *string  `json:"scopeNameContains,omitempty"`
-	ScopeNameHasPrefix    *string  `json:"scopeNameHasPrefix,omitempty"`
 	ScopeNameHasSuffix    *string  `json:"scopeNameHasSuffix,omitempty"`
 	ScopeNameIsNil        *bool    `json:"scopeNameIsNil,omitempty"`
 	ScopeNameNotNil       *bool    `json:"scopeNameNotNil,omitempty"`
@@ -47370,7 +46316,6 @@ type VulnerabilityWhereInput struct {
 	VulnerabilityStatusNameIn           []string `json:"vulnerabilityStatusNameIn,omitempty"`
 	VulnerabilityStatusNameNotIn        []string `json:"vulnerabilityStatusNameNotIn,omitempty"`
 	VulnerabilityStatusNameContains     *string  `json:"vulnerabilityStatusNameContains,omitempty"`
-	VulnerabilityStatusNameHasPrefix    *string  `json:"vulnerabilityStatusNameHasPrefix,omitempty"`
 	VulnerabilityStatusNameHasSuffix    *string  `json:"vulnerabilityStatusNameHasSuffix,omitempty"`
 	VulnerabilityStatusNameIsNil        *bool    `json:"vulnerabilityStatusNameIsNil,omitempty"`
 	VulnerabilityStatusNameNotNil       *bool    `json:"vulnerabilityStatusNameNotNil,omitempty"`
@@ -47399,7 +46344,6 @@ type VulnerabilityWhereInput struct {
 	ExternalOwnerIDIn           []string `json:"externalOwnerIDIn,omitempty"`
 	ExternalOwnerIDNotIn        []string `json:"externalOwnerIDNotIn,omitempty"`
 	ExternalOwnerIDContains     *string  `json:"externalOwnerIDContains,omitempty"`
-	ExternalOwnerIDHasPrefix    *string  `json:"externalOwnerIDHasPrefix,omitempty"`
 	ExternalOwnerIDHasSuffix    *string  `json:"externalOwnerIDHasSuffix,omitempty"`
 	ExternalOwnerIDIsNil        *bool    `json:"externalOwnerIDIsNil,omitempty"`
 	ExternalOwnerIDNotNil       *bool    `json:"externalOwnerIDNotNil,omitempty"`
@@ -47418,7 +46362,6 @@ type VulnerabilityWhereInput struct {
 	CveIDIn           []string `json:"cveIDIn,omitempty"`
 	CveIDNotIn        []string `json:"cveIDNotIn,omitempty"`
 	CveIDContains     *string  `json:"cveIDContains,omitempty"`
-	CveIDHasPrefix    *string  `json:"cveIDHasPrefix,omitempty"`
 	CveIDHasSuffix    *string  `json:"cveIDHasSuffix,omitempty"`
 	CveIDIsNil        *bool    `json:"cveIDIsNil,omitempty"`
 	CveIDNotNil       *bool    `json:"cveIDNotNil,omitempty"`
@@ -47430,7 +46373,6 @@ type VulnerabilityWhereInput struct {
 	SourceIn           []string `json:"sourceIn,omitempty"`
 	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
 	SourceContains     *string  `json:"sourceContains,omitempty"`
-	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
 	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
 	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
 	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
@@ -47442,7 +46384,6 @@ type VulnerabilityWhereInput struct {
 	DisplayNameIn           []string `json:"displayNameIn,omitempty"`
 	DisplayNameNotIn        []string `json:"displayNameNotIn,omitempty"`
 	DisplayNameContains     *string  `json:"displayNameContains,omitempty"`
-	DisplayNameHasPrefix    *string  `json:"displayNameHasPrefix,omitempty"`
 	DisplayNameHasSuffix    *string  `json:"displayNameHasSuffix,omitempty"`
 	DisplayNameIsNil        *bool    `json:"displayNameIsNil,omitempty"`
 	DisplayNameNotNil       *bool    `json:"displayNameNotNil,omitempty"`
@@ -47454,7 +46395,6 @@ type VulnerabilityWhereInput struct {
 	CategoryIn           []string `json:"categoryIn,omitempty"`
 	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
 	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
 	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
 	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
 	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
@@ -47466,7 +46406,6 @@ type VulnerabilityWhereInput struct {
 	SeverityIn           []string `json:"severityIn,omitempty"`
 	SeverityNotIn        []string `json:"severityNotIn,omitempty"`
 	SeverityContains     *string  `json:"severityContains,omitempty"`
-	SeverityHasPrefix    *string  `json:"severityHasPrefix,omitempty"`
 	SeverityHasSuffix    *string  `json:"severityHasSuffix,omitempty"`
 	SeverityIsNil        *bool    `json:"severityIsNil,omitempty"`
 	SeverityNotNil       *bool    `json:"severityNotNil,omitempty"`
@@ -47511,7 +46450,6 @@ type VulnerabilityWhereInput struct {
 	PriorityIn           []string `json:"priorityIn,omitempty"`
 	PriorityNotIn        []string `json:"priorityNotIn,omitempty"`
 	PriorityContains     *string  `json:"priorityContains,omitempty"`
-	PriorityHasPrefix    *string  `json:"priorityHasPrefix,omitempty"`
 	PriorityHasSuffix    *string  `json:"priorityHasSuffix,omitempty"`
 	PriorityIsNil        *bool    `json:"priorityIsNil,omitempty"`
 	PriorityNotNil       *bool    `json:"priorityNotNil,omitempty"`
@@ -47523,7 +46461,6 @@ type VulnerabilityWhereInput struct {
 	SummaryIn           []string `json:"summaryIn,omitempty"`
 	SummaryNotIn        []string `json:"summaryNotIn,omitempty"`
 	SummaryContains     *string  `json:"summaryContains,omitempty"`
-	SummaryHasPrefix    *string  `json:"summaryHasPrefix,omitempty"`
 	SummaryHasSuffix    *string  `json:"summaryHasSuffix,omitempty"`
 	SummaryIsNil        *bool    `json:"summaryIsNil,omitempty"`
 	SummaryNotNil       *bool    `json:"summaryNotNil,omitempty"`
@@ -47535,7 +46472,6 @@ type VulnerabilityWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -47547,7 +46483,6 @@ type VulnerabilityWhereInput struct {
 	VectorIn           []string `json:"vectorIn,omitempty"`
 	VectorNotIn        []string `json:"vectorNotIn,omitempty"`
 	VectorContains     *string  `json:"vectorContains,omitempty"`
-	VectorHasPrefix    *string  `json:"vectorHasPrefix,omitempty"`
 	VectorHasSuffix    *string  `json:"vectorHasSuffix,omitempty"`
 	VectorIsNil        *bool    `json:"vectorIsNil,omitempty"`
 	VectorNotNil       *bool    `json:"vectorNotNil,omitempty"`
@@ -47593,7 +46528,6 @@ type VulnerabilityWhereInput struct {
 	VulnerableVersionRangeIn           []string `json:"vulnerableVersionRangeIn,omitempty"`
 	VulnerableVersionRangeNotIn        []string `json:"vulnerableVersionRangeNotIn,omitempty"`
 	VulnerableVersionRangeContains     *string  `json:"vulnerableVersionRangeContains,omitempty"`
-	VulnerableVersionRangeHasPrefix    *string  `json:"vulnerableVersionRangeHasPrefix,omitempty"`
 	VulnerableVersionRangeHasSuffix    *string  `json:"vulnerableVersionRangeHasSuffix,omitempty"`
 	VulnerableVersionRangeIsNil        *bool    `json:"vulnerableVersionRangeIsNil,omitempty"`
 	VulnerableVersionRangeNotNil       *bool    `json:"vulnerableVersionRangeNotNil,omitempty"`
@@ -47605,7 +46539,6 @@ type VulnerabilityWhereInput struct {
 	FirstPatchedVersionIn           []string `json:"firstPatchedVersionIn,omitempty"`
 	FirstPatchedVersionNotIn        []string `json:"firstPatchedVersionNotIn,omitempty"`
 	FirstPatchedVersionContains     *string  `json:"firstPatchedVersionContains,omitempty"`
-	FirstPatchedVersionHasPrefix    *string  `json:"firstPatchedVersionHasPrefix,omitempty"`
 	FirstPatchedVersionHasSuffix    *string  `json:"firstPatchedVersionHasSuffix,omitempty"`
 	FirstPatchedVersionIsNil        *bool    `json:"firstPatchedVersionIsNil,omitempty"`
 	FirstPatchedVersionNotNil       *bool    `json:"firstPatchedVersionNotNil,omitempty"`
@@ -47622,7 +46555,6 @@ type VulnerabilityWhereInput struct {
 	PackageNameIn           []string `json:"packageNameIn,omitempty"`
 	PackageNameNotIn        []string `json:"packageNameNotIn,omitempty"`
 	PackageNameContains     *string  `json:"packageNameContains,omitempty"`
-	PackageNameHasPrefix    *string  `json:"packageNameHasPrefix,omitempty"`
 	PackageNameHasSuffix    *string  `json:"packageNameHasSuffix,omitempty"`
 	PackageNameIsNil        *bool    `json:"packageNameIsNil,omitempty"`
 	PackageNameNotNil       *bool    `json:"packageNameNotNil,omitempty"`
@@ -47634,7 +46566,6 @@ type VulnerabilityWhereInput struct {
 	PackageEcosystemIn           []string `json:"packageEcosystemIn,omitempty"`
 	PackageEcosystemNotIn        []string `json:"packageEcosystemNotIn,omitempty"`
 	PackageEcosystemContains     *string  `json:"packageEcosystemContains,omitempty"`
-	PackageEcosystemHasPrefix    *string  `json:"packageEcosystemHasPrefix,omitempty"`
 	PackageEcosystemHasSuffix    *string  `json:"packageEcosystemHasSuffix,omitempty"`
 	PackageEcosystemIsNil        *bool    `json:"packageEcosystemIsNil,omitempty"`
 	PackageEcosystemNotNil       *bool    `json:"packageEcosystemNotNil,omitempty"`
@@ -47646,7 +46577,6 @@ type VulnerabilityWhereInput struct {
 	ManifestPathIn           []string `json:"manifestPathIn,omitempty"`
 	ManifestPathNotIn        []string `json:"manifestPathNotIn,omitempty"`
 	ManifestPathContains     *string  `json:"manifestPathContains,omitempty"`
-	ManifestPathHasPrefix    *string  `json:"manifestPathHasPrefix,omitempty"`
 	ManifestPathHasSuffix    *string  `json:"manifestPathHasSuffix,omitempty"`
 	ManifestPathIsNil        *bool    `json:"manifestPathIsNil,omitempty"`
 	ManifestPathNotNil       *bool    `json:"manifestPathNotNil,omitempty"`
@@ -47658,7 +46588,6 @@ type VulnerabilityWhereInput struct {
 	DependencyScopeIn           []string `json:"dependencyScopeIn,omitempty"`
 	DependencyScopeNotIn        []string `json:"dependencyScopeNotIn,omitempty"`
 	DependencyScopeContains     *string  `json:"dependencyScopeContains,omitempty"`
-	DependencyScopeHasPrefix    *string  `json:"dependencyScopeHasPrefix,omitempty"`
 	DependencyScopeHasSuffix    *string  `json:"dependencyScopeHasSuffix,omitempty"`
 	DependencyScopeIsNil        *bool    `json:"dependencyScopeIsNil,omitempty"`
 	DependencyScopeNotNil       *bool    `json:"dependencyScopeNotNil,omitempty"`
@@ -47702,7 +46631,6 @@ type VulnerabilityWhereInput struct {
 	DismissedReasonIn           []string `json:"dismissedReasonIn,omitempty"`
 	DismissedReasonNotIn        []string `json:"dismissedReasonNotIn,omitempty"`
 	DismissedReasonContains     *string  `json:"dismissedReasonContains,omitempty"`
-	DismissedReasonHasPrefix    *string  `json:"dismissedReasonHasPrefix,omitempty"`
 	DismissedReasonHasSuffix    *string  `json:"dismissedReasonHasSuffix,omitempty"`
 	DismissedReasonIsNil        *bool    `json:"dismissedReasonIsNil,omitempty"`
 	DismissedReasonNotNil       *bool    `json:"dismissedReasonNotNil,omitempty"`
@@ -47714,7 +46642,6 @@ type VulnerabilityWhereInput struct {
 	DismissedCommentIn           []string `json:"dismissedCommentIn,omitempty"`
 	DismissedCommentNotIn        []string `json:"dismissedCommentNotIn,omitempty"`
 	DismissedCommentContains     *string  `json:"dismissedCommentContains,omitempty"`
-	DismissedCommentHasPrefix    *string  `json:"dismissedCommentHasPrefix,omitempty"`
 	DismissedCommentHasSuffix    *string  `json:"dismissedCommentHasSuffix,omitempty"`
 	DismissedCommentIsNil        *bool    `json:"dismissedCommentIsNil,omitempty"`
 	DismissedCommentNotNil       *bool    `json:"dismissedCommentNotNil,omitempty"`
@@ -47742,7 +46669,6 @@ type VulnerabilityWhereInput struct {
 	ExternalURIIn           []string `json:"externalURIIn,omitempty"`
 	ExternalURINotIn        []string `json:"externalURINotIn,omitempty"`
 	ExternalURIContains     *string  `json:"externalURIContains,omitempty"`
-	ExternalURIHasPrefix    *string  `json:"externalURIHasPrefix,omitempty"`
 	ExternalURIHasSuffix    *string  `json:"externalURIHasSuffix,omitempty"`
 	ExternalURIIsNil        *bool    `json:"externalURIIsNil,omitempty"`
 	ExternalURINotNil       *bool    `json:"externalURINotNil,omitempty"`
@@ -47943,7 +46869,6 @@ type WebauthnWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -47955,7 +46880,6 @@ type WebauthnWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -48176,7 +47100,6 @@ type WorkflowAssignmentTargetWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -48188,7 +47111,6 @@ type WorkflowAssignmentTargetWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -48200,7 +47122,6 @@ type WorkflowAssignmentTargetWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -48212,7 +47133,6 @@ type WorkflowAssignmentTargetWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -48273,7 +47193,6 @@ type WorkflowAssignmentTargetWhereInput struct {
 	ResolverKeyIn           []string `json:"resolverKeyIn,omitempty"`
 	ResolverKeyNotIn        []string `json:"resolverKeyNotIn,omitempty"`
 	ResolverKeyContains     *string  `json:"resolverKeyContains,omitempty"`
-	ResolverKeyHasPrefix    *string  `json:"resolverKeyHasPrefix,omitempty"`
 	ResolverKeyHasSuffix    *string  `json:"resolverKeyHasSuffix,omitempty"`
 	ResolverKeyIsNil        *bool    `json:"resolverKeyIsNil,omitempty"`
 	ResolverKeyNotNil       *bool    `json:"resolverKeyNotNil,omitempty"`
@@ -48330,7 +47249,6 @@ type WorkflowAssignmentWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -48342,7 +47260,6 @@ type WorkflowAssignmentWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -48354,7 +47271,6 @@ type WorkflowAssignmentWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -48366,7 +47282,6 @@ type WorkflowAssignmentWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -48398,7 +47313,6 @@ type WorkflowAssignmentWhereInput struct {
 	AssignmentKeyIn           []string `json:"assignmentKeyIn,omitempty"`
 	AssignmentKeyNotIn        []string `json:"assignmentKeyNotIn,omitempty"`
 	AssignmentKeyContains     *string  `json:"assignmentKeyContains,omitempty"`
-	AssignmentKeyHasPrefix    *string  `json:"assignmentKeyHasPrefix,omitempty"`
 	AssignmentKeyHasSuffix    *string  `json:"assignmentKeyHasSuffix,omitempty"`
 	AssignmentKeyEqualFold    *string  `json:"assignmentKeyEqualFold,omitempty"`
 	AssignmentKeyContainsFold *string  `json:"assignmentKeyContainsFold,omitempty"`
@@ -48408,7 +47322,6 @@ type WorkflowAssignmentWhereInput struct {
 	RoleIn           []string `json:"roleIn,omitempty"`
 	RoleNotIn        []string `json:"roleNotIn,omitempty"`
 	RoleContains     *string  `json:"roleContains,omitempty"`
-	RoleHasPrefix    *string  `json:"roleHasPrefix,omitempty"`
 	RoleHasSuffix    *string  `json:"roleHasSuffix,omitempty"`
 	RoleEqualFold    *string  `json:"roleEqualFold,omitempty"`
 	RoleContainsFold *string  `json:"roleContainsFold,omitempty"`
@@ -48418,7 +47331,6 @@ type WorkflowAssignmentWhereInput struct {
 	LabelIn           []string `json:"labelIn,omitempty"`
 	LabelNotIn        []string `json:"labelNotIn,omitempty"`
 	LabelContains     *string  `json:"labelContains,omitempty"`
-	LabelHasPrefix    *string  `json:"labelHasPrefix,omitempty"`
 	LabelHasSuffix    *string  `json:"labelHasSuffix,omitempty"`
 	LabelIsNil        *bool    `json:"labelIsNil,omitempty"`
 	LabelNotNil       *bool    `json:"labelNotNil,omitempty"`
@@ -48470,7 +47382,6 @@ type WorkflowAssignmentWhereInput struct {
 	NotesIn           []string `json:"notesIn,omitempty"`
 	NotesNotIn        []string `json:"notesNotIn,omitempty"`
 	NotesContains     *string  `json:"notesContains,omitempty"`
-	NotesHasPrefix    *string  `json:"notesHasPrefix,omitempty"`
 	NotesHasSuffix    *string  `json:"notesHasSuffix,omitempty"`
 	NotesIsNil        *bool    `json:"notesIsNil,omitempty"`
 	NotesNotNil       *bool    `json:"notesNotNil,omitempty"`
@@ -48644,7 +47555,6 @@ type WorkflowDefinitionWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -48656,7 +47566,6 @@ type WorkflowDefinitionWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -48668,7 +47577,6 @@ type WorkflowDefinitionWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -48680,7 +47588,6 @@ type WorkflowDefinitionWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -48707,7 +47614,6 @@ type WorkflowDefinitionWhereInput struct {
 	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
 	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
 	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
-	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
 	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
 	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
 	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
@@ -48719,7 +47625,6 @@ type WorkflowDefinitionWhereInput struct {
 	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
 	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
 	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
-	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
 	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
 	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
 	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
@@ -48731,7 +47636,6 @@ type WorkflowDefinitionWhereInput struct {
 	NameIn           []string `json:"nameIn,omitempty"`
 	NameNotIn        []string `json:"nameNotIn,omitempty"`
 	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
@@ -48741,7 +47645,6 @@ type WorkflowDefinitionWhereInput struct {
 	DescriptionIn           []string `json:"descriptionIn,omitempty"`
 	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
 	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
-	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
 	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
 	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
 	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
@@ -48758,7 +47661,6 @@ type WorkflowDefinitionWhereInput struct {
 	SchemaTypeIn           []string `json:"schemaTypeIn,omitempty"`
 	SchemaTypeNotIn        []string `json:"schemaTypeNotIn,omitempty"`
 	SchemaTypeContains     *string  `json:"schemaTypeContains,omitempty"`
-	SchemaTypeHasPrefix    *string  `json:"schemaTypeHasPrefix,omitempty"`
 	SchemaTypeHasSuffix    *string  `json:"schemaTypeHasSuffix,omitempty"`
 	SchemaTypeEqualFold    *string  `json:"schemaTypeEqualFold,omitempty"`
 	SchemaTypeContainsFold *string  `json:"schemaTypeContainsFold,omitempty"`
@@ -48910,7 +47812,6 @@ type WorkflowEventWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -48922,7 +47823,6 @@ type WorkflowEventWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -48934,7 +47834,6 @@ type WorkflowEventWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -48946,7 +47845,6 @@ type WorkflowEventWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -49200,7 +48098,6 @@ type WorkflowInstanceWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -49212,7 +48109,6 @@ type WorkflowInstanceWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -49224,7 +48120,6 @@ type WorkflowInstanceWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -49236,7 +48131,6 @@ type WorkflowInstanceWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
@@ -49756,7 +48650,6 @@ type WorkflowObjectRefWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
@@ -49768,7 +48661,6 @@ type WorkflowObjectRefWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
@@ -49780,7 +48672,6 @@ type WorkflowObjectRefWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
-	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -49792,7 +48683,6 @@ type WorkflowObjectRefWhereInput struct {
 	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
 	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
 	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
-	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
 	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
 	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
 	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`

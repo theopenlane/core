@@ -73,7 +73,7 @@ import (
 				       GraphQL Int scalar, so this matches pruneWhereInputOps in entc.go.
 				       must stay in sync with the same guard in the P() body below */}}
 				{{- if $f.IsString }}
-					{{- if or (eq $op.Name "GT") (eq $op.Name "GTE") (eq $op.Name "LT") (eq $op.Name "LTE") }}
+					{{- if or (eq $op.Name "GT") (eq $op.Name "GTE") (eq $op.Name "LT") (eq $op.Name "LTE") (eq $op.Name "HasPrefix") }}
 						{{- continue }}
 					{{- end }}
 				{{- else if $f.IsTime }}
@@ -201,7 +201,7 @@ import (
 			{{- range $op := $f.Ops }}
 				{{- /* must stay in sync with the guard in the struct definition above */}}
 				{{- if $f.IsString }}
-					{{- if or (eq $op.Name "GT") (eq $op.Name "GTE") (eq $op.Name "LT") (eq $op.Name "LTE") }}
+					{{- if or (eq $op.Name "GT") (eq $op.Name "GTE") (eq $op.Name "LT") (eq $op.Name "LTE") (eq $op.Name "HasPrefix") }}
 						{{- continue }}
 					{{- end }}
 				{{- else if $f.IsTime }}

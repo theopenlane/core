@@ -3,8 +3,8 @@
 package engine_test
 
 import (
-	"testing"
 	"context"
+	"testing"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"

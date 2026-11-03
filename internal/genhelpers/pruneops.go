@@ -13,11 +13,11 @@ import (
 // which prunes the matching Go struct fields; entgql builds the GraphQL schema from its own code rather than that template,
 // so both sides need the same rule
 var droppedWhereOps = map[string][]string{
-	"ID":       {"GT", "GTE", "LT", "LTE"}, // strings should never need GT/LT comparison
-	"String":   {"GT", "GTE", "LT", "LTE"}, // strings should never need GT/LT comparison
-	"Time":     {"NEQ", "In", "NotIn"},     // time uses GT/LT comparison, not specific or in logic
-	"DateTime": {"NEQ", "In", "NotIn"},     // time uses GT/LT comparison, not specific or in logic
-	"Int":      {"In", "NotIn"},            // Ints use comparison, not in logic
+	"ID":       {"GT", "GTE", "LT", "LTE"},              // strings should never need GT/LT comparison
+	"String":   {"GT", "GTE", "LT", "LTE", "HasPrefix"}, // strings never need GT/LT comparison, and no client filters by prefix
+	"Time":     {"NEQ", "In", "NotIn"},                  // time uses GT/LT comparison, not specific or in logic
+	"DateTime": {"NEQ", "In", "NotIn"},                  // time uses GT/LT comparison, not specific or in logic
+	"Int":      {"In", "NotIn"},                         // Ints use comparison, not in logic
 }
 
 // PruneWhereInputOps removes the predicate fields listed in droppedWhereOps from every generated

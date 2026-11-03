@@ -141,8 +141,10 @@ tasks:
       - internal/ent/schema/**/*.go
       - internal/ent/generate/**/*.go
       - internal/ent/mixin/**/*.go
-      - internal/ent/templates/**/*
+      - internal/ent/generate/templates/**/*
       - internal/ent/taskrules/**/*.go
+      - common/enums/**/*.go
+      - exclude: '**/*_test.go'
     generates:
       - internal/ent/generated/**/*.go
       - internal/ent/entityops/**/*.go
@@ -181,6 +183,7 @@ tasks:
       - pkg/catalog/**/*.go
       - pkg/catalog/**/*.yaml
       - common/models/catalog.go
+      - exclude: '**/*_test.go'
     generates:
       - pkg/catalog/gencatalog/*.go
       - pkg/catalog/**/*.json
@@ -212,6 +215,7 @@ tasks:
     sources:
       - internal/httpserve/**/*.go
       - common/openapi/*.go
+      - exclude: internal/httpserve/**/*_test.go
     generates:
       - internal/httpserve/specs/openlane.openapi.json
       - internal/httpserve/specs/openlane.openapi.yaml
