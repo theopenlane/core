@@ -2275,35 +2275,7 @@ func (r *queryResolver) WorkflowDefinitionHistories(ctx context.Context, after *
 	return res, err
 }
 
-// ParentOrganizationIDHasPrefix is the resolver for the parentOrganizationIDHasPrefix field.
-func (r *organizationHistoryWhereInputResolver) ParentOrganizationIDHasPrefix(ctx context.Context, obj *historygenerated.OrganizationHistoryWhereInput, data *string) error {
-	res, err := withTransactionalMutation(ctx).ID.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "id"})
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "id"})
-	}
-
-	return &historymodel.IDUpdatePayload{
-		ID: res,
-	}, nil
-}
-
 // Query returns gqlhistorygenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlhistorygenerated.QueryResolver { return &queryResolver{r} }
 
-// OrganizationHistoryWhereInput returns gqlhistorygenerated.OrganizationHistoryWhereInputResolver implementation.
-func (r *Resolver) OrganizationHistoryWhereInput() gqlhistorygenerated.OrganizationHistoryWhereInputResolver {
-	return &organizationHistoryWhereInputResolver{r}
-}
-
-type (
-	queryResolver                         struct{ *Resolver }
-	organizationHistoryWhereInputResolver struct{ *Resolver }
-)
+type queryResolver struct{ *Resolver }
