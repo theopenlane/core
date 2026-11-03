@@ -160,16 +160,8 @@ func TestQueryTasks(t *testing.T) {
 	// create a bunch to test the pagination with different users
 	// works with overfetching
 	numTasks := 10
-	org1TaskIDs := []string{}
-	org2TaskIDs := []string{}
-	for range numTasks {
-		t1 := (&th.TaskBuilder{Client: suite.Client, Due: gofakeit.Date()}).MustNew(testUser.UserCtx, t)
-		t2 := (&th.TaskBuilder{Client: suite.Client, Due: gofakeit.Date()}).MustNew(viewUser.UserCtx, t)
-		t3 := (&th.TaskBuilder{Client: suite.Client, Due: gofakeit.Date()}).MustNew(adminUser.UserCtx, t)
-		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
-
-		t4 := (&th.TaskBuilder{Client: suite.Client, Due: gofakeit.Date()}).MustNew(anotherUser.UserCtx, t)
-		org2TaskIDs = append(org2TaskIDs, t4.ID)
+	for _, ctx := range []context.Context{testUser.UserCtx, viewUser.UserCtx, adminUser.UserCtx, anotherUser.UserCtx} {
+		(&th.TaskBuilder{Client: suite.Client, DueFunc: gofakeit.Date}).MustNewBulk(ctx, t, numTasks)
 	}
 
 	userCtxPersonalOrg := auth.NewTestContextWithOrgID(testUser.ID, testUser.PersonalOrgID)
@@ -179,9 +171,7 @@ func TestQueryTasks(t *testing.T) {
 	taskPersonal := (&th.TaskBuilder{Client: suite.Client, AssigneeID: testUser.ID}).MustNew(userCtxPersonalOrg, t)
 
 	risk := (&th.RiskBuilder{Client: suite.Client}).MustNew(adminUser.UserCtx, t)
-	taskWithRisk := (&th.TaskBuilder{Client: suite.Client, RiskID: risk.ID}).MustNew(testUser.UserCtx, t)
-
-	org1TaskIDs = append(org1TaskIDs, taskWithRisk.ID)
+	(&th.TaskBuilder{Client: suite.Client, RiskID: risk.ID}).MustNew(testUser.UserCtx, t)
 
 	var (
 		startCursorDue     *string
@@ -506,9 +496,16 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 	// create a bunch to test the pagination with different users
 	// to ensure we are paginating correctly when viewing as org admin
 	numTasks := 95
-	for _, ctx := range []context.Context{localTestOrg.Owner.UserCtx, localTestOrg.Member.UserCtx, localTestOrg.Admin.UserCtx, localTestOrg2.Owner.UserCtx} {
+	for _, ctx := range []context.Context{localTestOrg.Owner.UserCtx, localTestOrg.Member.UserCtx, localTestOrg2.Owner.UserCtx} {
 		(&th.TaskBuilder{Client: suite.Client, DueFunc: getFutureDate}).MustNewBulk(ctx, t, numTasks)
 	}
+
+	adminTaskIDs := map[string]bool{}
+	for _, task := range (&th.TaskBuilder{Client: suite.Client, DueFunc: getFutureDate}).MustNewBulk(localTestOrg.Admin.UserCtx, t, numTasks) {
+		adminTaskIDs[task.ID] = true
+	}
+
+	seenTaskIDs := map[string]string{}
 
 	var startCursorDue *string
 
@@ -636,6 +633,17 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 			resp, err := tc.client.GetTasks(tc.ctx, &firstInput, nil, after, nil, tc.orderBy, nil)
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
+
+			for _, edge := range resp.Tasks.Edges {
+				id := edge.Node.ID
+				assert.Check(t, adminTaskIDs[id], "task %s due %v is not one of the admin's tasks", id, edge.Node.Due)
+
+				if page, ok := seenTaskIDs[id]; ok {
+					t.Errorf("task %s due %v was already returned on %q", id, edge.Node.Due, page)
+				}
+
+				seenTaskIDs[id] = tc.name
+			}
 
 			assert.Check(t, is.Len(resp.Tasks.Edges, tc.expectedResults))
 			assert.Check(t, is.Equal(tc.totalCount, resp.Tasks.TotalCount))
@@ -859,6 +867,8 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 }
 
 func TestMutationCreateTask(t *testing.T) {
+	t.Parallel()
+
 	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, true)
 
 	testUser := localTestOrg.Owner
@@ -1429,6 +1439,8 @@ func TestMutationDeleteTask(t *testing.T) {
 }
 
 func TestMutationUpdateBulkTask(t *testing.T) {
+	t.Parallel()
+
 	testUser := suite.SeedOrgOwner(t)
 
 	task1 := (&th.TaskBuilder{Client: suite.Client}).MustNew(testUser.Owner.UserCtx, t)

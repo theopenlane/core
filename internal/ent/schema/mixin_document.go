@@ -135,7 +135,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Optional().
 			Comment(fmt.Sprintf("whether approval is required for edits to the %s", documentType)),
 		field.Time("review_due").
-			Default(time.Now().AddDate(1, 0, 0)).
+			Default(time.Now().UTC().AddDate(1, 0, 0)).
 			Annotations(
 				entgql.OrderField("review_due"),
 			).
