@@ -166,13 +166,14 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(s.tf.URI)}
 
 	runtime, err := gala.NewGala(s.ctx, gala.Config{
-		DispatchMode:      gala.DispatchModeDurable,
-		ConnectionURI:     s.tf.URI,
-		QueueName:         "workflow_engine_test",
-		WorkerCount:       5,
-		RunMigrations:     true,
-		FetchCooldown:     time.Millisecond,
-		FetchPollInterval: 10 * time.Millisecond,
+		DispatchMode:         gala.DispatchModeDurable,
+		ConnectionURI:        s.tf.URI,
+		QueueName:            "workflow_engine_test",
+		WorkerCount:          5,
+		RunMigrations:        true,
+		FetchCooldown:        time.Millisecond,
+		FetchPollInterval:    10 * time.Millisecond,
+		WaitIdlePollInterval: 10 * time.Millisecond,
 	})
 	s.Require().NoError(err)
 

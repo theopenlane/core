@@ -76,7 +76,32 @@ steps:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "generate:checksums:ci"]
+              command: ["task", "generate:core:ci"]
+              propagate-environment: true
+              propagate-uid-gid: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+              environment:
+                - "CGO_ENABLED=0"
+                - "GOTOOLCHAIN=auto"
+      - label: ":golang: go generate - catalog + onboarding"
+        retry: *disk-full-retry
+        key: "generate_other"
+        agents:
+          queue: $SMALL_RUNNER_QUEUE
+          workload: $RUNNER_WORKLOAD_STANDARD
+        cancel_on_build_failing: true
+        if_changed:
+          - go.{mod,sum}
+          - pkg/catalog/**
+          - common/models/**
+          - internal/onboarding/**
+        plugins:
+          - docker#v5.14.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              command: ["task", "generate:other:ci"]
               propagate-environment: true
               propagate-uid-gid: true
               volumes:
@@ -94,11 +119,13 @@ steps:
         cancel_on_build_failing: true
         if_changed:
           - fga/**
+          - internal/ent/schema/**
+          - internal/ent/mixin/**
         plugins:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
-              command: ["task", "fga:generate"]
+              command: ["task", "fga:ci"]
               propagate-environment: true
               propagate-uid-gid: true
               volumes:

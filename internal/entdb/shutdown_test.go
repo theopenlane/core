@@ -3,6 +3,7 @@ package entdb
 import (
 	"context"
 	"database/sql"
+	"os"
 	"testing"
 	"time"
 
@@ -11,27 +12,30 @@ import (
 	"github.com/stretchr/testify/require"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/enttest"
 	"github.com/theopenlane/utils/testutils"
 )
+
+var testFixture *testutils.TestFixture
+
+func TestMain(m *testing.M) {
+	testFixture = NewTestFixture()
+
+	code := m.Run()
+
+	testutils.TeardownFixture(testFixture)
+
+	os.Exit(code)
+}
 
 // TestGracefulCloseWaits verifies that GracefulClose waits for in-flight
 // queries before closing the database connection
 func TestGracefulCloseWaits(t *testing.T) {
 	flag := newShutdownFlag()
 	t.Cleanup(flag.Reset)
-	tf := NewTestFixture()
-	defer testutils.TeardownFixture(tf)
 
-	db, err := sql.Open("postgres", tf.URI)
+	client, err := ent.Open(dialect.Postgres, testFixture.URI)
 	require.NoError(t, err)
-	defer db.Close()
-
-	client := enttest.Open(t, dialect.Postgres, tf.URI,
-		enttest.WithMigrateOptions(EnablePostgresOption(db)))
-	defer func() {
-		require.NoError(t, client.Close())
-	}()
+	t.Cleanup(func() { require.NoError(t, client.Close()) })
 
 	ctx := context.Background()
 
@@ -75,18 +79,14 @@ func TestGracefulCloseWaits(t *testing.T) {
 func TestBlockNewQueries(t *testing.T) {
 	flag := newShutdownFlag()
 	t.Cleanup(flag.Reset)
-	tf := NewTestFixture()
-	defer testutils.TeardownFixture(tf)
 
-	db, err := sql.Open("postgres", tf.URI)
+	db, err := sql.Open("postgres", testFixture.URI)
 	require.NoError(t, err)
-	defer db.Close()
+	t.Cleanup(func() { _ = db.Close() })
 
 	drv := blockDriverWithFlag(entsql.OpenDB(dialect.Postgres, db), flag)
-	client := enttest.NewClient(t,
-		enttest.WithOptions(ent.Driver(drv)),
-		enttest.WithMigrateOptions(EnablePostgresOption(db)))
-	defer func() { require.NoError(t, client.Close()) }()
+	client := ent.NewClient(ent.Driver(drv))
+	t.Cleanup(func() { require.NoError(t, client.Close()) })
 
 	client.Intercept(BlockInterceptorWithFlag(flag))
 	client.Use(BlockHookWithFlag(flag))
@@ -107,16 +107,10 @@ func TestBlockNewQueries(t *testing.T) {
 func TestGracefulCloseContextCancel(t *testing.T) {
 	flag := newShutdownFlag()
 	t.Cleanup(flag.Reset)
-	tf := NewTestFixture()
-	defer testutils.TeardownFixture(tf)
 
-	db, err := sql.Open("postgres", tf.URI)
+	client, err := ent.Open(dialect.Postgres, testFixture.URI)
 	require.NoError(t, err)
-	defer db.Close()
-
-	client := enttest.Open(t, dialect.Postgres, tf.URI,
-		enttest.WithMigrateOptions(EnablePostgresOption(db)))
-	defer func() { require.NoError(t, client.Close()) }()
+	t.Cleanup(func() { require.NoError(t, client.Close()) })
 
 	txCtx := context.Background()
 	done := make(chan struct{})

@@ -389,7 +389,13 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 	}
 
 	original := suite.db.EmailVerifier
+	originalValidation := suite.db.EntConfig.EmailValidation
 	suite.db.EmailVerifier = config.NewVerifier()
+
+	t.Cleanup(func() {
+		suite.db.EmailVerifier = original
+		suite.db.EntConfig.EmailValidation = originalValidation
+	})
 
 	// Register test handler
 	suite.registerTestHandler("POST", "register", suite.h.RegisterHandler)
@@ -477,7 +483,4 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 
 		})
 	}
-
-	// reset back to original state
-	suite.db.EmailVerifier = original
 }

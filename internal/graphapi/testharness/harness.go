@@ -291,13 +291,14 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// durable gala runtime for integration dispatch
 	galaInstance, err := gala.NewGala(ctx, gala.Config{
-		DispatchMode:      gala.DispatchModeDurable,
-		ConnectionURI:     suite.TF.URI,
-		QueueName:         "graphapi_integration_test",
-		WorkerCount:       5, //nolint:mnd
-		RunMigrations:     true,
-		FetchCooldown:     time.Millisecond,
-		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
+		DispatchMode:         gala.DispatchModeDurable,
+		ConnectionURI:        suite.TF.URI,
+		QueueName:            "graphapi_integration_test",
+		WorkerCount:          5, //nolint:mnd
+		RunMigrations:        true,
+		FetchCooldown:        time.Millisecond,
+		FetchPollInterval:    10 * time.Millisecond, //nolint:mnd
+		WaitIdlePollInterval: 10 * time.Millisecond, //nolint:mnd
 	})
 	RequireNoError(t, err)
 

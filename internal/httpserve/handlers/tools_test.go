@@ -166,13 +166,14 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	// shared durable gala runtime for integration tests
 	galaInstance, err := gala.NewGala(context.Background(), gala.Config{
-		DispatchMode:      gala.DispatchModeDurable,
-		ConnectionURI:     suite.tf.URI,
-		QueueName:         "handler_integration_test",
-		WorkerCount:       5, //nolint:mnd
-		RunMigrations:     true,
-		FetchCooldown:     time.Millisecond,
-		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
+		DispatchMode:         gala.DispatchModeDurable,
+		ConnectionURI:        suite.tf.URI,
+		QueueName:            "handler_integration_test",
+		WorkerCount:          5, //nolint:mnd
+		RunMigrations:        true,
+		FetchCooldown:        time.Millisecond,
+		FetchPollInterval:    10 * time.Millisecond, //nolint:mnd
+		WaitIdlePollInterval: 10 * time.Millisecond, //nolint:mnd
 	})
 	require.NoError(suite.T(), err)
 
@@ -279,16 +280,8 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		gala.WithValue(suite.galaDB),
 		gala.WithRestoredValue("ent_client", ent.NewContext),
 	))
-}
 
-func (suite *HandlerTestSuite) SetupTest() {
-	t := suite.T()
-
-	suite.registeredRoutes = make(map[string]struct{})
-
-	ctx := context.Background()
-
-	// use all shared instances to avoid expensive recreation
+	// suite-scoped test client so schema migrations run once instead of per test
 	sessionConfig := sessions.NewSessionConfig(
 		suite.sharedSessionManager,
 		sessions.WithPersistence(suite.sharedRedisClient),
@@ -296,13 +289,9 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
-	// setup history client
-	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
-	require.NoError(t, err)
-
 	// setup mock entitlements client
-	entitlements, err := suite.mockStripeClient()
-	require.NoError(t, err)
+	entitlementsClient, err := suite.mockStripeClient()
+	require.NoError(suite.T(), err)
 
 	opts := []ent.Option{
 		ent.Authz(*suite.sharedFGAClient),
@@ -317,29 +306,43 @@ func (suite *HandlerTestSuite) SetupTest() {
 		}),
 		ent.TOTP(suite.sharedOTPManager),
 		ent.Pool(suite.sharedPool),
-		ent.EntitlementManager(entitlements),
+		ent.EntitlementManager(entitlementsClient),
 		ent.HistoryClient(hc),
 	}
 
 	// create database connection
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
-	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
-	require.NoError(t, err, "failed opening connection to database")
+	suite.db, err = entdb.NewTestClient(context.Background(), suite.tf, jobOpts, nil, opts)
+	require.NoError(suite.T(), err, "failed opening connection to database")
+}
+
+func (suite *HandlerTestSuite) SetupTest() {
+	t := suite.T()
+
+	suite.registeredRoutes = make(map[string]struct{})
+
+	ctx := context.Background()
+
+	// reset the stripe mock so expectations don't bleed across tests
+	suite.stripeMockBackend.ExpectedCalls = nil
+	suite.stripeMockBackend.Calls = nil
+	suite.orgSubscriptionMocks()
+
+	var err error
 
 	suite.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
 	require.NoError(t, err)
 
 	// truncate river tables
-	err = db.Job.TruncateRiverTables(ctx)
+	err = suite.db.Job.TruncateRiverTables(ctx)
 	require.NoError(t, err)
 
 	// reset mock email sender so messages don't bleed across tests
 	suite.mockEmailSender().Reset()
 
-	// add db to test client and wire integration runtime so email dispatch works
+	// wire integration runtime so email dispatch works
 	runtime.SetDefault(suite.sharedIntegrationsRT)
-	suite.db = db
 
 	// add the client
 	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
@@ -419,13 +422,6 @@ func (suite *HandlerTestSuite) registerRouteOnce(method, path string, handlerFun
 	suite.registerTestHandler(method, path, handlerFunc)
 }
 
-func (suite *HandlerTestSuite) TearDownTest() {
-	if suite.db != nil {
-		err := suite.db.CloseAll()
-		require.NoError(suite.T(), err)
-	}
-}
-
 func (suite *HandlerTestSuite) ClearTestData() {
 	err := suite.db.Job.TruncateRiverTables(context.Background())
 	require.NoError(suite.T(), err)
@@ -437,6 +433,10 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 	if suite.galaRuntime != nil {
 		_ = suite.galaRuntime.StopWorkers(context.Background())
 		_ = suite.galaRuntime.Close()
+	}
+
+	if suite.db != nil {
+		_ = suite.db.CloseAll()
 	}
 
 	if suite.galaDB != nil {

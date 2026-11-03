@@ -20,6 +20,12 @@ tasks:
       - go run fga/generate/main.go
       - task: generate:version
 
+  ci:
+    desc: a task that runs during CI to confirm there are no changes after running generate
+    cmds:
+      - task: generate
+      - task: :check:clean
+
   generate:version:
     desc: stamps the model with a marker type derived from the hash of every model file
     silent: true
