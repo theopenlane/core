@@ -51,18 +51,6 @@ type ResolverRoot interface {
 	Vulnerability() VulnerabilityResolver
 	WorkflowInstance() WorkflowInstanceResolver
 	WorkflowProposal() WorkflowProposalResolver
-	APITokenWhereInput() APITokenWhereInputResolver
-	ActionPlanWhereInput() ActionPlanWhereInputResolver
-	AssessmentResponseWhereInput() AssessmentResponseWhereInputResolver
-	AssessmentWhereInput() AssessmentWhereInputResolver
-	AssetWhereInput() AssetWhereInputResolver
-	CampaignTargetWhereInput() CampaignTargetWhereInputResolver
-	CampaignWhereInput() CampaignWhereInputResolver
-	CheckResultWhereInput() CheckResultWhereInputResolver
-	ContactWhereInput() ContactWhereInputResolver
-	ControlImplementationWhereInput() ControlImplementationWhereInputResolver
-	ControlObjectiveWhereInput() ControlObjectiveWhereInputResolver
-	ControlWhereInput() ControlWhereInputResolver
 	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
@@ -70,64 +58,6 @@ type ResolverRoot interface {
 	CreateNotificationInput() CreateNotificationInputResolver
 	CreateOrganizationInput() CreateOrganizationInputResolver
 	CreateTrustCenterFAQInput() CreateTrustCenterFAQInputResolver
-	CustomDomainWhereInput() CustomDomainWhereInputResolver
-	CustomTypeEnumWhereInput() CustomTypeEnumWhereInputResolver
-	DNSVerificationWhereInput() DNSVerificationWhereInputResolver
-	DirectoryAccountWhereInput() DirectoryAccountWhereInputResolver
-	DirectoryGroupWhereInput() DirectoryGroupWhereInputResolver
-	DiscussionWhereInput() DiscussionWhereInputResolver
-	DocumentDataWhereInput() DocumentDataWhereInputResolver
-	EmailTemplateWhereInput() EmailTemplateWhereInputResolver
-	EntityTypeWhereInput() EntityTypeWhereInputResolver
-	EntityWhereInput() EntityWhereInputResolver
-	EvidenceWhereInput() EvidenceWhereInputResolver
-	ExportWhereInput() ExportWhereInputResolver
-	FileWhereInput() FileWhereInputResolver
-	FindingWhereInput() FindingWhereInputResolver
-	GroupSettingWhereInput() GroupSettingWhereInputResolver
-	GroupWhereInput() GroupWhereInputResolver
-	HushWhereInput() HushWhereInputResolver
-	IdentityHolderWhereInput() IdentityHolderWhereInputResolver
-	IntegrationRunWhereInput() IntegrationRunWhereInputResolver
-	IntegrationWhereInput() IntegrationWhereInputResolver
-	InternalPolicyWhereInput() InternalPolicyWhereInputResolver
-	InviteWhereInput() InviteWhereInputResolver
-	MappedControlWhereInput() MappedControlWhereInputResolver
-	NarrativeWhereInput() NarrativeWhereInputResolver
-	NoteWhereInput() NoteWhereInputResolver
-	NotificationPreferenceWhereInput() NotificationPreferenceWhereInputResolver
-	NotificationTemplateWhereInput() NotificationTemplateWhereInputResolver
-	OnboardingWhereInput() OnboardingWhereInputResolver
-	OrgSubscriptionWhereInput() OrgSubscriptionWhereInputResolver
-	OrganizationBrandingSettingWhereInput() OrganizationBrandingSettingWhereInputResolver
-	OrganizationSettingWhereInput() OrganizationSettingWhereInputResolver
-	OrganizationWhereInput() OrganizationWhereInputResolver
-	PlatformWhereInput() PlatformWhereInputResolver
-	ProcedureWhereInput() ProcedureWhereInputResolver
-	ProgramWhereInput() ProgramWhereInputResolver
-	RemediationWhereInput() RemediationWhereInputResolver
-	ReportWhereInput() ReportWhereInputResolver
-	ReviewWhereInput() ReviewWhereInputResolver
-	RiskWhereInput() RiskWhereInputResolver
-	SLADefinitionWhereInput() SLADefinitionWhereInputResolver
-	ScanWhereInput() ScanWhereInputResolver
-	StandardWhereInput() StandardWhereInputResolver
-	SubcontrolWhereInput() SubcontrolWhereInputResolver
-	SubprocessorWhereInput() SubprocessorWhereInputResolver
-	SubscriberWhereInput() SubscriberWhereInputResolver
-	SystemDetailWhereInput() SystemDetailWhereInputResolver
-	TagDefinitionWhereInput() TagDefinitionWhereInputResolver
-	TaskWhereInput() TaskWhereInputResolver
-	TemplateWhereInput() TemplateWhereInputResolver
-	TrustCenterComplianceWhereInput() TrustCenterComplianceWhereInputResolver
-	TrustCenterDocWhereInput() TrustCenterDocWhereInputResolver
-	TrustCenterEntityWhereInput() TrustCenterEntityWhereInputResolver
-	TrustCenterFAQWhereInput() TrustCenterFAQWhereInputResolver
-	TrustCenterNDARequestWhereInput() TrustCenterNDARequestWhereInputResolver
-	TrustCenterSettingWhereInput() TrustCenterSettingWhereInputResolver
-	TrustCenterSubprocessorWhereInput() TrustCenterSubprocessorWhereInputResolver
-	TrustCenterWatermarkConfigWhereInput() TrustCenterWatermarkConfigWhereInputResolver
-	TrustCenterWhereInput() TrustCenterWhereInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
@@ -149,17 +79,6 @@ type ResolverRoot interface {
 	UpdateTrustCenterFAQInput() UpdateTrustCenterFAQInputResolver
 	UpdateTrustCenterInput() UpdateTrustCenterInputResolver
 	UpdateVulnerabilityInput() UpdateVulnerabilityInputResolver
-	UserSettingWhereInput() UserSettingWhereInputResolver
-	UserWhereInput() UserWhereInputResolver
-	VendorRiskScoreWhereInput() VendorRiskScoreWhereInputResolver
-	VendorScoringConfigWhereInput() VendorScoringConfigWhereInputResolver
-	VulnerabilityWhereInput() VulnerabilityWhereInputResolver
-	WorkflowAssignmentTargetWhereInput() WorkflowAssignmentTargetWhereInputResolver
-	WorkflowAssignmentWhereInput() WorkflowAssignmentWhereInputResolver
-	WorkflowDefinitionWhereInput() WorkflowDefinitionWhereInputResolver
-	WorkflowEventWhereInput() WorkflowEventWhereInputResolver
-	WorkflowInstanceWhereInput() WorkflowInstanceWhereInputResolver
-	WorkflowObjectRefWhereInput() WorkflowObjectRefWhereInputResolver
 }
 
 type DirectiveRoot struct {
@@ -59306,6 +59225,7 @@ input APITokenWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -59319,6 +59239,7 @@ input APITokenWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -59332,6 +59253,7 @@ input APITokenWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -59359,6 +59281,7 @@ input APITokenWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -59397,6 +59320,7 @@ input APITokenWhereInput {
   revokedReasonIn: [String!]
   revokedReasonNotIn: [String!]
   revokedReasonContains: String
+  revokedReasonHasPrefix: String
   revokedReasonHasSuffix: String
   revokedReasonIsNil: Boolean
   revokedReasonNotNil: Boolean
@@ -59410,6 +59334,7 @@ input APITokenWhereInput {
   revokedByIn: [String!]
   revokedByNotIn: [String!]
   revokedByContains: String
+  revokedByHasPrefix: String
   revokedByHasSuffix: String
   revokedByIsNil: Boolean
   revokedByNotNil: Boolean
@@ -60277,6 +60202,7 @@ input ActionPlanWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -60290,6 +60216,7 @@ input ActionPlanWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -60303,6 +60230,7 @@ input ActionPlanWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -60316,6 +60244,7 @@ input ActionPlanWhereInput {
   revisionIn: [String!]
   revisionNotIn: [String!]
   revisionContains: String
+  revisionHasPrefix: String
   revisionHasSuffix: String
   revisionIsNil: Boolean
   revisionNotNil: Boolean
@@ -60329,6 +60258,7 @@ input ActionPlanWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -60342,6 +60272,7 @@ input ActionPlanWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -60355,6 +60286,7 @@ input ActionPlanWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -60368,6 +60300,7 @@ input ActionPlanWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -60381,6 +60314,7 @@ input ActionPlanWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -60394,6 +60328,7 @@ input ActionPlanWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -60407,6 +60342,7 @@ input ActionPlanWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -60436,6 +60372,7 @@ input ActionPlanWhereInput {
   detailsIn: [String!]
   detailsNotIn: [String!]
   detailsContains: String
+  detailsHasPrefix: String
   detailsHasSuffix: String
   detailsIsNil: Boolean
   detailsNotNil: Boolean
@@ -60503,6 +60440,7 @@ input ActionPlanWhereInput {
   urlIn: [String!]
   urlNotIn: [String!]
   urlContains: String
+  urlHasPrefix: String
   urlHasSuffix: String
   urlIsNil: Boolean
   urlNotNil: Boolean
@@ -60530,6 +60468,7 @@ input ActionPlanWhereInput {
   externalFileIDIn: [String!]
   externalFileIDNotIn: [String!]
   externalFileIDContains: String
+  externalFileIDHasPrefix: String
   externalFileIDHasSuffix: String
   externalFileIDIsNil: Boolean
   externalFileIDNotNil: Boolean
@@ -60543,6 +60482,7 @@ input ActionPlanWhereInput {
   externalContentsIn: [String!]
   externalContentsNotIn: [String!]
   externalContentsContains: String
+  externalContentsHasPrefix: String
   externalContentsHasSuffix: String
   externalContentsIsNil: Boolean
   externalContentsNotNil: Boolean
@@ -60577,6 +60517,7 @@ input ActionPlanWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -60590,6 +60531,7 @@ input ActionPlanWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -60603,6 +60545,7 @@ input ActionPlanWhereInput {
   actionPlanKindNameIn: [String!]
   actionPlanKindNameNotIn: [String!]
   actionPlanKindNameContains: String
+  actionPlanKindNameHasPrefix: String
   actionPlanKindNameHasSuffix: String
   actionPlanKindNameIsNil: Boolean
   actionPlanKindNameNotNil: Boolean
@@ -60637,6 +60580,7 @@ input ActionPlanWhereInput {
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
   internalOwnerContains: String
+  internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
   internalOwnerIsNil: Boolean
   internalOwnerNotNil: Boolean
@@ -60692,6 +60636,7 @@ input ActionPlanWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
@@ -60703,6 +60648,7 @@ input ActionPlanWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -60755,6 +60701,7 @@ input ActionPlanWhereInput {
   blockerReasonIn: [String!]
   blockerReasonNotIn: [String!]
   blockerReasonContains: String
+  blockerReasonHasPrefix: String
   blockerReasonHasSuffix: String
   blockerReasonIsNil: Boolean
   blockerReasonNotNil: Boolean
@@ -60768,6 +60715,7 @@ input ActionPlanWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceIsNil: Boolean
   sourceNotNil: Boolean
@@ -61582,6 +61530,7 @@ input AssessmentPolicyWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -61595,6 +61544,7 @@ input AssessmentPolicyWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -61608,6 +61558,7 @@ input AssessmentPolicyWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -61621,6 +61572,7 @@ input AssessmentPolicyWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -61634,6 +61586,7 @@ input AssessmentPolicyWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -61647,6 +61600,7 @@ input AssessmentPolicyWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -61660,6 +61614,7 @@ input AssessmentPolicyWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -61673,6 +61628,7 @@ input AssessmentPolicyWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -61686,6 +61642,7 @@ input AssessmentPolicyWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -61699,6 +61656,7 @@ input AssessmentPolicyWhereInput {
   policyRevisionIn: [String!]
   policyRevisionNotIn: [String!]
   policyRevisionContains: String
+  policyRevisionHasPrefix: String
   policyRevisionHasSuffix: String
   policyRevisionIsNil: Boolean
   policyRevisionNotNil: Boolean
@@ -62000,6 +61958,7 @@ input AssessmentResponseWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -62013,6 +61972,7 @@ input AssessmentResponseWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -62026,6 +61986,7 @@ input AssessmentResponseWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -62119,6 +62080,7 @@ input AssessmentResponseWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameIsNil: Boolean
   displayNameNotNil: Boolean
@@ -62132,6 +62094,7 @@ input AssessmentResponseWhereInput {
   emailIn: [String!]
   emailNotIn: [String!]
   emailContains: String
+  emailHasPrefix: String
   emailHasSuffix: String
   emailIsNil: Boolean
   emailNotNil: Boolean
@@ -62342,6 +62305,7 @@ input AssessmentWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -62355,6 +62319,7 @@ input AssessmentWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -62368,6 +62333,7 @@ input AssessmentWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -62381,6 +62347,7 @@ input AssessmentWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -62394,6 +62361,7 @@ input AssessmentWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -62407,6 +62375,7 @@ input AssessmentWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -62420,6 +62389,7 @@ input AssessmentWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -62433,6 +62403,7 @@ input AssessmentWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -62446,6 +62417,7 @@ input AssessmentWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -62480,6 +62452,7 @@ input AssessmentWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -62493,6 +62466,7 @@ input AssessmentWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -62513,6 +62487,7 @@ input AssessmentWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -63560,6 +63535,7 @@ input AssetWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -63573,6 +63549,7 @@ input AssetWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -63586,6 +63563,7 @@ input AssetWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -63599,6 +63577,7 @@ input AssetWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -63612,6 +63591,7 @@ input AssetWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -63625,6 +63605,7 @@ input AssetWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -63638,6 +63619,7 @@ input AssetWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -63651,6 +63633,7 @@ input AssetWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -63664,6 +63647,7 @@ input AssetWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -63691,6 +63675,7 @@ input AssetWhereInput {
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
   internalOwnerContains: String
+  internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
   internalOwnerIsNil: Boolean
   internalOwnerNotNil: Boolean
@@ -63746,6 +63731,7 @@ input AssetWhereInput {
   assetSubtypeNameIn: [String!]
   assetSubtypeNameNotIn: [String!]
   assetSubtypeNameContains: String
+  assetSubtypeNameHasPrefix: String
   assetSubtypeNameHasSuffix: String
   assetSubtypeNameIsNil: Boolean
   assetSubtypeNameNotNil: Boolean
@@ -63773,6 +63759,7 @@ input AssetWhereInput {
   assetDataClassificationNameIn: [String!]
   assetDataClassificationNameNotIn: [String!]
   assetDataClassificationNameContains: String
+  assetDataClassificationNameHasPrefix: String
   assetDataClassificationNameHasSuffix: String
   assetDataClassificationNameIsNil: Boolean
   assetDataClassificationNameNotNil: Boolean
@@ -63800,6 +63787,7 @@ input AssetWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -63827,6 +63815,7 @@ input AssetWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -63854,6 +63843,7 @@ input AssetWhereInput {
   accessModelNameIn: [String!]
   accessModelNameNotIn: [String!]
   accessModelNameContains: String
+  accessModelNameHasPrefix: String
   accessModelNameHasSuffix: String
   accessModelNameIsNil: Boolean
   accessModelNameNotNil: Boolean
@@ -63881,6 +63871,7 @@ input AssetWhereInput {
   encryptionStatusNameIn: [String!]
   encryptionStatusNameNotIn: [String!]
   encryptionStatusNameContains: String
+  encryptionStatusNameHasPrefix: String
   encryptionStatusNameHasSuffix: String
   encryptionStatusNameIsNil: Boolean
   encryptionStatusNameNotNil: Boolean
@@ -63908,6 +63899,7 @@ input AssetWhereInput {
   securityTierNameIn: [String!]
   securityTierNameNotIn: [String!]
   securityTierNameContains: String
+  securityTierNameHasPrefix: String
   securityTierNameHasSuffix: String
   securityTierNameIsNil: Boolean
   securityTierNameNotNil: Boolean
@@ -63935,6 +63927,7 @@ input AssetWhereInput {
   criticalityNameIn: [String!]
   criticalityNameNotIn: [String!]
   criticalityNameContains: String
+  criticalityNameHasPrefix: String
   criticalityNameHasSuffix: String
   criticalityNameIsNil: Boolean
   criticalityNameNotNil: Boolean
@@ -63969,6 +63962,7 @@ input AssetWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -63982,6 +63976,7 @@ input AssetWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -64002,6 +63997,7 @@ input AssetWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -64013,6 +64009,7 @@ input AssetWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameIsNil: Boolean
   displayNameNotNil: Boolean
@@ -64026,6 +64023,7 @@ input AssetWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -64039,6 +64037,7 @@ input AssetWhereInput {
   identifierIn: [String!]
   identifierNotIn: [String!]
   identifierContains: String
+  identifierHasPrefix: String
   identifierHasSuffix: String
   identifierIsNil: Boolean
   identifierNotNil: Boolean
@@ -64052,6 +64051,7 @@ input AssetWhereInput {
   websiteIn: [String!]
   websiteNotIn: [String!]
   websiteContains: String
+  websiteHasPrefix: String
   websiteHasSuffix: String
   websiteIsNil: Boolean
   websiteNotNil: Boolean
@@ -64065,6 +64065,7 @@ input AssetWhereInput {
   physicalLocationIn: [String!]
   physicalLocationNotIn: [String!]
   physicalLocationContains: String
+  physicalLocationHasPrefix: String
   physicalLocationHasSuffix: String
   physicalLocationIsNil: Boolean
   physicalLocationNotNil: Boolean
@@ -64078,6 +64079,7 @@ input AssetWhereInput {
   regionIn: [String!]
   regionNotIn: [String!]
   regionContains: String
+  regionHasPrefix: String
   regionHasSuffix: String
   regionIsNil: Boolean
   regionNotNil: Boolean
@@ -64119,6 +64121,7 @@ input AssetWhereInput {
   sourceIdentifierIn: [String!]
   sourceIdentifierNotIn: [String!]
   sourceIdentifierContains: String
+  sourceIdentifierHasPrefix: String
   sourceIdentifierHasSuffix: String
   sourceIdentifierIsNil: Boolean
   sourceIdentifierNotNil: Boolean
@@ -64132,6 +64135,7 @@ input AssetWhereInput {
   costCenterIn: [String!]
   costCenterNotIn: [String!]
   costCenterContains: String
+  costCenterHasPrefix: String
   costCenterHasSuffix: String
   costCenterIsNil: Boolean
   costCenterNotNil: Boolean
@@ -65232,6 +65236,7 @@ input CampaignTargetWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -65245,6 +65250,7 @@ input CampaignTargetWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -65258,6 +65264,7 @@ input CampaignTargetWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -65362,6 +65369,7 @@ input CampaignTargetWhereInput {
   emailIn: [String!]
   emailNotIn: [String!]
   emailContains: String
+  emailHasPrefix: String
   emailHasSuffix: String
   emailEqualFold: String
   emailContainsFold: String
@@ -65373,6 +65381,7 @@ input CampaignTargetWhereInput {
   fullNameIn: [String!]
   fullNameNotIn: [String!]
   fullNameContains: String
+  fullNameHasPrefix: String
   fullNameHasSuffix: String
   fullNameIsNil: Boolean
   fullNameNotNil: Boolean
@@ -65486,6 +65495,7 @@ input CampaignWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -65499,6 +65509,7 @@ input CampaignWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -65512,6 +65523,7 @@ input CampaignWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -65525,6 +65537,7 @@ input CampaignWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -65536,6 +65549,7 @@ input CampaignWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -65549,6 +65563,7 @@ input CampaignWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -65562,6 +65577,7 @@ input CampaignWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -65575,6 +65591,7 @@ input CampaignWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -65588,6 +65605,7 @@ input CampaignWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -65601,6 +65619,7 @@ input CampaignWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -65628,6 +65647,7 @@ input CampaignWhereInput {
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
   internalOwnerContains: String
+  internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
   internalOwnerIsNil: Boolean
   internalOwnerNotNil: Boolean
@@ -65690,6 +65710,7 @@ input CampaignWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -65701,6 +65722,7 @@ input CampaignWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -65798,6 +65820,7 @@ input CampaignWhereInput {
   recurrenceTimezoneIn: [String!]
   recurrenceTimezoneNotIn: [String!]
   recurrenceTimezoneContains: String
+  recurrenceTimezoneHasPrefix: String
   recurrenceTimezoneHasSuffix: String
   recurrenceTimezoneIsNil: Boolean
   recurrenceTimezoneNotNil: Boolean
@@ -65943,6 +65966,7 @@ input CampaignWhereInput {
   emailBrandingIDIn: [String!]
   emailBrandingIDNotIn: [String!]
   emailBrandingIDContains: String
+  emailBrandingIDHasPrefix: String
   emailBrandingIDHasSuffix: String
   emailBrandingIDIsNil: Boolean
   emailBrandingIDNotNil: Boolean
@@ -66441,6 +66465,7 @@ input CheckResultWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -66454,6 +66479,7 @@ input CheckResultWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -66467,6 +66493,7 @@ input CheckResultWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -66480,6 +66507,7 @@ input CheckResultWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -66493,6 +66521,7 @@ input CheckResultWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -66506,6 +66535,7 @@ input CheckResultWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -66519,6 +66549,7 @@ input CheckResultWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -66532,6 +66563,7 @@ input CheckResultWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -66566,6 +66598,7 @@ input CheckResultWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceEqualFold: String
   sourceContainsFold: String
@@ -66587,6 +66620,7 @@ input CheckResultWhereInput {
   externalURIIn: [String!]
   externalURINotIn: [String!]
   externalURIContains: String
+  externalURIHasPrefix: String
   externalURIHasSuffix: String
   externalURIIsNil: Boolean
   externalURINotNil: Boolean
@@ -66600,6 +66634,7 @@ input CheckResultWhereInput {
   detailsIn: [String!]
   detailsNotIn: [String!]
   detailsContains: String
+  detailsHasPrefix: String
   detailsHasSuffix: String
   detailsIsNil: Boolean
   detailsNotNil: Boolean
@@ -66613,6 +66648,7 @@ input CheckResultWhereInput {
   parentExternalIDIn: [String!]
   parentExternalIDNotIn: [String!]
   parentExternalIDContains: String
+  parentExternalIDHasPrefix: String
   parentExternalIDHasSuffix: String
   parentExternalIDIsNil: Boolean
   parentExternalIDNotNil: Boolean
@@ -67056,6 +67092,7 @@ input ContactWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -67069,6 +67106,7 @@ input ContactWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -67082,6 +67120,7 @@ input ContactWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -67095,6 +67134,7 @@ input ContactWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -67108,6 +67148,7 @@ input ContactWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -67121,6 +67162,7 @@ input ContactWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -67134,6 +67176,7 @@ input ContactWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -67147,6 +67190,7 @@ input ContactWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -67160,6 +67204,7 @@ input ContactWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -67187,6 +67232,7 @@ input ContactWhereInput {
   fullNameIn: [String!]
   fullNameNotIn: [String!]
   fullNameContains: String
+  fullNameHasPrefix: String
   fullNameHasSuffix: String
   fullNameIsNil: Boolean
   fullNameNotNil: Boolean
@@ -67200,6 +67246,7 @@ input ContactWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleIsNil: Boolean
   titleNotNil: Boolean
@@ -67213,6 +67260,7 @@ input ContactWhereInput {
   companyIn: [String!]
   companyNotIn: [String!]
   companyContains: String
+  companyHasPrefix: String
   companyHasSuffix: String
   companyIsNil: Boolean
   companyNotNil: Boolean
@@ -67226,6 +67274,7 @@ input ContactWhereInput {
   emailIn: [String!]
   emailNotIn: [String!]
   emailContains: String
+  emailHasPrefix: String
   emailHasSuffix: String
   emailIsNil: Boolean
   emailNotNil: Boolean
@@ -67239,6 +67288,7 @@ input ContactWhereInput {
   phoneNumberIn: [String!]
   phoneNumberNotIn: [String!]
   phoneNumberContains: String
+  phoneNumberHasPrefix: String
   phoneNumberHasSuffix: String
   phoneNumberIsNil: Boolean
   phoneNumberNotNil: Boolean
@@ -67252,6 +67302,7 @@ input ContactWhereInput {
   addressIn: [String!]
   addressNotIn: [String!]
   addressContains: String
+  addressHasPrefix: String
   addressHasSuffix: String
   addressIsNil: Boolean
   addressNotNil: Boolean
@@ -67272,6 +67323,7 @@ input ContactWhereInput {
   integrationIDIn: [String!]
   integrationIDNotIn: [String!]
   integrationIDContains: String
+  integrationIDHasPrefix: String
   integrationIDHasSuffix: String
   integrationIDIsNil: Boolean
   integrationIDNotNil: Boolean
@@ -68936,6 +68988,7 @@ input ControlImplementationWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -68949,6 +69002,7 @@ input ControlImplementationWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -68962,6 +69016,7 @@ input ControlImplementationWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -68975,6 +69030,7 @@ input ControlImplementationWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -68988,6 +69044,7 @@ input ControlImplementationWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -69001,6 +69058,7 @@ input ControlImplementationWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -69014,6 +69072,7 @@ input ControlImplementationWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -69027,6 +69086,7 @@ input ControlImplementationWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -69040,6 +69100,7 @@ input ControlImplementationWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -69074,6 +69135,7 @@ input ControlImplementationWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -69087,6 +69149,7 @@ input ControlImplementationWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -69136,6 +69199,7 @@ input ControlImplementationWhereInput {
   detailsIn: [String!]
   detailsNotIn: [String!]
   detailsContains: String
+  detailsHasPrefix: String
   detailsHasSuffix: String
   detailsIsNil: Boolean
   detailsNotNil: Boolean
@@ -69805,6 +69869,7 @@ input ControlObjectiveWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -69818,6 +69883,7 @@ input ControlObjectiveWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -69831,6 +69897,7 @@ input ControlObjectiveWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -69844,6 +69911,7 @@ input ControlObjectiveWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -69855,6 +69923,7 @@ input ControlObjectiveWhereInput {
   revisionIn: [String!]
   revisionNotIn: [String!]
   revisionContains: String
+  revisionHasPrefix: String
   revisionHasSuffix: String
   revisionIsNil: Boolean
   revisionNotNil: Boolean
@@ -69868,6 +69937,7 @@ input ControlObjectiveWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -69881,6 +69951,7 @@ input ControlObjectiveWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -69894,6 +69965,7 @@ input ControlObjectiveWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -69907,6 +69979,7 @@ input ControlObjectiveWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -69920,6 +69993,7 @@ input ControlObjectiveWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -69933,6 +70007,7 @@ input ControlObjectiveWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -69967,6 +70042,7 @@ input ControlObjectiveWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -69980,6 +70056,7 @@ input ControlObjectiveWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -69993,6 +70070,7 @@ input ControlObjectiveWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -70004,6 +70082,7 @@ input ControlObjectiveWhereInput {
   desiredOutcomeIn: [String!]
   desiredOutcomeNotIn: [String!]
   desiredOutcomeContains: String
+  desiredOutcomeHasPrefix: String
   desiredOutcomeHasSuffix: String
   desiredOutcomeIsNil: Boolean
   desiredOutcomeNotNil: Boolean
@@ -70035,6 +70114,7 @@ input ControlObjectiveWhereInput {
   controlObjectiveTypeIn: [String!]
   controlObjectiveTypeNotIn: [String!]
   controlObjectiveTypeContains: String
+  controlObjectiveTypeHasPrefix: String
   controlObjectiveTypeHasSuffix: String
   controlObjectiveTypeIsNil: Boolean
   controlObjectiveTypeNotNil: Boolean
@@ -70048,6 +70128,7 @@ input ControlObjectiveWhereInput {
   categoryIn: [String!]
   categoryNotIn: [String!]
   categoryContains: String
+  categoryHasPrefix: String
   categoryHasSuffix: String
   categoryIsNil: Boolean
   categoryNotNil: Boolean
@@ -70061,6 +70142,7 @@ input ControlObjectiveWhereInput {
   subcategoryIn: [String!]
   subcategoryNotIn: [String!]
   subcategoryContains: String
+  subcategoryHasPrefix: String
   subcategoryHasSuffix: String
   subcategoryIsNil: Boolean
   subcategoryNotNil: Boolean
@@ -70224,6 +70306,7 @@ input ControlWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -70237,6 +70320,7 @@ input ControlWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -70250,6 +70334,7 @@ input ControlWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -70263,6 +70348,7 @@ input ControlWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -70274,6 +70360,7 @@ input ControlWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -70287,6 +70374,7 @@ input ControlWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -70300,6 +70388,7 @@ input ControlWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -70313,6 +70402,7 @@ input ControlWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -70326,6 +70416,7 @@ input ControlWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -70339,6 +70430,7 @@ input ControlWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -70352,6 +70444,7 @@ input ControlWhereInput {
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
   externalUUIDContains: String
+  externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
   externalUUIDIsNil: Boolean
   externalUUIDNotNil: Boolean
@@ -70365,6 +70458,7 @@ input ControlWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleIsNil: Boolean
   titleNotNil: Boolean
@@ -70378,6 +70472,7 @@ input ControlWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -70391,6 +70486,7 @@ input ControlWhereInput {
   referenceIDIn: [String!]
   referenceIDNotIn: [String!]
   referenceIDContains: String
+  referenceIDHasPrefix: String
   referenceIDHasSuffix: String
   referenceIDIsNil: Boolean
   referenceIDNotNil: Boolean
@@ -70404,6 +70500,7 @@ input ControlWhereInput {
   auditorReferenceIDIn: [String!]
   auditorReferenceIDNotIn: [String!]
   auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
   auditorReferenceIDHasSuffix: String
   auditorReferenceIDIsNil: Boolean
   auditorReferenceIDNotNil: Boolean
@@ -70449,6 +70546,7 @@ input ControlWhereInput {
   implementationDescriptionIn: [String!]
   implementationDescriptionNotIn: [String!]
   implementationDescriptionContains: String
+  implementationDescriptionHasPrefix: String
   implementationDescriptionHasSuffix: String
   implementationDescriptionIsNil: Boolean
   implementationDescriptionNotNil: Boolean
@@ -70462,6 +70560,7 @@ input ControlWhereInput {
   publicRepresentationIn: [String!]
   publicRepresentationNotIn: [String!]
   publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
   publicRepresentationHasSuffix: String
   publicRepresentationIsNil: Boolean
   publicRepresentationNotNil: Boolean
@@ -70484,6 +70583,7 @@ input ControlWhereInput {
   sourceNameIn: [String!]
   sourceNameNotIn: [String!]
   sourceNameContains: String
+  sourceNameHasPrefix: String
   sourceNameHasSuffix: String
   sourceNameIsNil: Boolean
   sourceNameNotNil: Boolean
@@ -70497,6 +70597,7 @@ input ControlWhereInput {
   referenceFrameworkIn: [String!]
   referenceFrameworkNotIn: [String!]
   referenceFrameworkContains: String
+  referenceFrameworkHasPrefix: String
   referenceFrameworkHasSuffix: String
   referenceFrameworkIsNil: Boolean
   referenceFrameworkNotNil: Boolean
@@ -70510,6 +70611,7 @@ input ControlWhereInput {
   referenceFrameworkRevisionIn: [String!]
   referenceFrameworkRevisionNotIn: [String!]
   referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
   referenceFrameworkRevisionHasSuffix: String
   referenceFrameworkRevisionIsNil: Boolean
   referenceFrameworkRevisionNotNil: Boolean
@@ -70523,6 +70625,7 @@ input ControlWhereInput {
   categoryIn: [String!]
   categoryNotIn: [String!]
   categoryContains: String
+  categoryHasPrefix: String
   categoryHasSuffix: String
   categoryIsNil: Boolean
   categoryNotNil: Boolean
@@ -70536,6 +70639,7 @@ input ControlWhereInput {
   categoryIDIn: [String!]
   categoryIDNotIn: [String!]
   categoryIDContains: String
+  categoryIDHasPrefix: String
   categoryIDHasSuffix: String
   categoryIDIsNil: Boolean
   categoryIDNotNil: Boolean
@@ -70549,6 +70653,7 @@ input ControlWhereInput {
   subcategoryIn: [String!]
   subcategoryNotIn: [String!]
   subcategoryContains: String
+  subcategoryHasPrefix: String
   subcategoryHasSuffix: String
   subcategoryIsNil: Boolean
   subcategoryNotNil: Boolean
@@ -70611,6 +70716,7 @@ input ControlWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -70624,6 +70730,7 @@ input ControlWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -70637,6 +70744,7 @@ input ControlWhereInput {
   controlKindNameIn: [String!]
   controlKindNameNotIn: [String!]
   controlKindNameContains: String
+  controlKindNameHasPrefix: String
   controlKindNameHasSuffix: String
   controlKindNameIsNil: Boolean
   controlKindNameNotNil: Boolean
@@ -70664,6 +70772,7 @@ input ControlWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -70691,6 +70800,7 @@ input ControlWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -70725,6 +70835,7 @@ input ControlWhereInput {
   refCodeIn: [String!]
   refCodeNotIn: [String!]
   refCodeContains: String
+  refCodeHasPrefix: String
   refCodeHasSuffix: String
   refCodeEqualFold: String
   refCodeContainsFold: String
@@ -77278,6 +77389,7 @@ input CustomDomainWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -77291,6 +77403,7 @@ input CustomDomainWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -77304,6 +77417,7 @@ input CustomDomainWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -77338,6 +77452,7 @@ input CustomDomainWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -77351,6 +77466,7 @@ input CustomDomainWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -77364,6 +77480,7 @@ input CustomDomainWhereInput {
   cnameRecordIn: [String!]
   cnameRecordNotIn: [String!]
   cnameRecordContains: String
+  cnameRecordHasPrefix: String
   cnameRecordHasSuffix: String
   cnameRecordEqualFold: String
   cnameRecordContainsFold: String
@@ -77401,6 +77518,7 @@ input CustomDomainWhereInput {
   trustCenterIDIn: [String!]
   trustCenterIDNotIn: [String!]
   trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
   trustCenterIDHasSuffix: String
   trustCenterIDIsNil: Boolean
   trustCenterIDNotNil: Boolean
@@ -77958,6 +78076,7 @@ input CustomTypeEnumWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -77971,6 +78090,7 @@ input CustomTypeEnumWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -77984,6 +78104,7 @@ input CustomTypeEnumWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -77997,6 +78118,7 @@ input CustomTypeEnumWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -78010,6 +78132,7 @@ input CustomTypeEnumWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -78023,6 +78146,7 @@ input CustomTypeEnumWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -78036,6 +78160,7 @@ input CustomTypeEnumWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -78049,6 +78174,7 @@ input CustomTypeEnumWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -78062,6 +78188,7 @@ input CustomTypeEnumWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -78096,6 +78223,7 @@ input CustomTypeEnumWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -78109,6 +78237,7 @@ input CustomTypeEnumWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -78122,6 +78251,7 @@ input CustomTypeEnumWhereInput {
   objectTypeIn: [String!]
   objectTypeNotIn: [String!]
   objectTypeContains: String
+  objectTypeHasPrefix: String
   objectTypeHasSuffix: String
   objectTypeEqualFold: String
   objectTypeContainsFold: String
@@ -78133,6 +78263,7 @@ input CustomTypeEnumWhereInput {
   fieldIn: [String!]
   fieldNotIn: [String!]
   fieldContains: String
+  fieldHasPrefix: String
   fieldHasSuffix: String
   fieldEqualFold: String
   fieldContainsFold: String
@@ -78144,6 +78275,7 @@ input CustomTypeEnumWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -78155,6 +78287,7 @@ input CustomTypeEnumWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -78168,6 +78301,7 @@ input CustomTypeEnumWhereInput {
   colorIn: [String!]
   colorNotIn: [String!]
   colorContains: String
+  colorHasPrefix: String
   colorHasSuffix: String
   colorIsNil: Boolean
   colorNotNil: Boolean
@@ -78181,6 +78315,7 @@ input CustomTypeEnumWhereInput {
   iconIn: [String!]
   iconNotIn: [String!]
   iconContains: String
+  iconHasPrefix: String
   iconHasSuffix: String
   iconIsNil: Boolean
   iconNotNil: Boolean
@@ -78476,6 +78611,7 @@ input DNSVerificationWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -78489,6 +78625,7 @@ input DNSVerificationWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -78502,6 +78639,7 @@ input DNSVerificationWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -78529,6 +78667,7 @@ input DNSVerificationWhereInput {
   cloudflareHostnameIDIn: [String!]
   cloudflareHostnameIDNotIn: [String!]
   cloudflareHostnameIDContains: String
+  cloudflareHostnameIDHasPrefix: String
   cloudflareHostnameIDHasSuffix: String
   cloudflareHostnameIDEqualFold: String
   cloudflareHostnameIDContainsFold: String
@@ -78540,6 +78679,7 @@ input DNSVerificationWhereInput {
   dnsTxtRecordIn: [String!]
   dnsTxtRecordNotIn: [String!]
   dnsTxtRecordContains: String
+  dnsTxtRecordHasPrefix: String
   dnsTxtRecordHasSuffix: String
   dnsTxtRecordEqualFold: String
   dnsTxtRecordContainsFold: String
@@ -78551,6 +78691,7 @@ input DNSVerificationWhereInput {
   dnsTxtValueIn: [String!]
   dnsTxtValueNotIn: [String!]
   dnsTxtValueContains: String
+  dnsTxtValueHasPrefix: String
   dnsTxtValueHasSuffix: String
   dnsTxtValueEqualFold: String
   dnsTxtValueContainsFold: String
@@ -78569,6 +78710,7 @@ input DNSVerificationWhereInput {
   dnsVerificationStatusReasonIn: [String!]
   dnsVerificationStatusReasonNotIn: [String!]
   dnsVerificationStatusReasonContains: String
+  dnsVerificationStatusReasonHasPrefix: String
   dnsVerificationStatusReasonHasSuffix: String
   dnsVerificationStatusReasonIsNil: Boolean
   dnsVerificationStatusReasonNotNil: Boolean
@@ -78582,6 +78724,7 @@ input DNSVerificationWhereInput {
   acmeChallengePathIn: [String!]
   acmeChallengePathNotIn: [String!]
   acmeChallengePathContains: String
+  acmeChallengePathHasPrefix: String
   acmeChallengePathHasSuffix: String
   acmeChallengePathIsNil: Boolean
   acmeChallengePathNotNil: Boolean
@@ -78595,6 +78738,7 @@ input DNSVerificationWhereInput {
   expectedAcmeChallengeValueIn: [String!]
   expectedAcmeChallengeValueNotIn: [String!]
   expectedAcmeChallengeValueContains: String
+  expectedAcmeChallengeValueHasPrefix: String
   expectedAcmeChallengeValueHasSuffix: String
   expectedAcmeChallengeValueIsNil: Boolean
   expectedAcmeChallengeValueNotNil: Boolean
@@ -78615,6 +78759,7 @@ input DNSVerificationWhereInput {
   acmeChallengeStatusReasonIn: [String!]
   acmeChallengeStatusReasonNotIn: [String!]
   acmeChallengeStatusReasonContains: String
+  acmeChallengeStatusReasonHasPrefix: String
   acmeChallengeStatusReasonHasSuffix: String
   acmeChallengeStatusReasonIsNil: Boolean
   acmeChallengeStatusReasonNotNil: Boolean
@@ -79114,6 +79259,7 @@ input DirectoryAccountWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -79127,6 +79273,7 @@ input DirectoryAccountWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -79140,6 +79287,7 @@ input DirectoryAccountWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -79153,6 +79301,7 @@ input DirectoryAccountWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -79164,6 +79313,7 @@ input DirectoryAccountWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -79177,6 +79327,7 @@ input DirectoryAccountWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -79190,6 +79341,7 @@ input DirectoryAccountWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -79203,6 +79355,7 @@ input DirectoryAccountWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -79216,6 +79369,7 @@ input DirectoryAccountWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -79229,6 +79383,7 @@ input DirectoryAccountWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDEqualFold: String
   externalIDContainsFold: String
@@ -79254,6 +79409,7 @@ input DirectoryAccountWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -79281,6 +79437,7 @@ input DirectoryAccountWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -79350,6 +79507,7 @@ input DirectoryAccountWhereInput {
   directoryNameIn: [String!]
   directoryNameNotIn: [String!]
   directoryNameContains: String
+  directoryNameHasPrefix: String
   directoryNameHasSuffix: String
   directoryNameIsNil: Boolean
   directoryNameNotNil: Boolean
@@ -79363,6 +79521,7 @@ input DirectoryAccountWhereInput {
   secondaryKeyIn: [String!]
   secondaryKeyNotIn: [String!]
   secondaryKeyContains: String
+  secondaryKeyHasPrefix: String
   secondaryKeyHasSuffix: String
   secondaryKeyIsNil: Boolean
   secondaryKeyNotNil: Boolean
@@ -79376,6 +79535,7 @@ input DirectoryAccountWhereInput {
   canonicalEmailIn: [String!]
   canonicalEmailNotIn: [String!]
   canonicalEmailContains: String
+  canonicalEmailHasPrefix: String
   canonicalEmailHasSuffix: String
   canonicalEmailIsNil: Boolean
   canonicalEmailNotNil: Boolean
@@ -79389,6 +79549,7 @@ input DirectoryAccountWhereInput {
   phoneNumberIn: [String!]
   phoneNumberNotIn: [String!]
   phoneNumberContains: String
+  phoneNumberHasPrefix: String
   phoneNumberHasSuffix: String
   phoneNumberIsNil: Boolean
   phoneNumberNotNil: Boolean
@@ -79402,6 +79563,7 @@ input DirectoryAccountWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameIsNil: Boolean
   displayNameNotNil: Boolean
@@ -79415,6 +79577,7 @@ input DirectoryAccountWhereInput {
   avatarRemoteURLIn: [String!]
   avatarRemoteURLNotIn: [String!]
   avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
   avatarRemoteURLHasSuffix: String
   avatarRemoteURLIsNil: Boolean
   avatarRemoteURLNotNil: Boolean
@@ -79452,6 +79615,7 @@ input DirectoryAccountWhereInput {
   givenNameIn: [String!]
   givenNameNotIn: [String!]
   givenNameContains: String
+  givenNameHasPrefix: String
   givenNameHasSuffix: String
   givenNameIsNil: Boolean
   givenNameNotNil: Boolean
@@ -79465,6 +79629,7 @@ input DirectoryAccountWhereInput {
   familyNameIn: [String!]
   familyNameNotIn: [String!]
   familyNameContains: String
+  familyNameHasPrefix: String
   familyNameHasSuffix: String
   familyNameIsNil: Boolean
   familyNameNotNil: Boolean
@@ -79478,6 +79643,7 @@ input DirectoryAccountWhereInput {
   jobTitleIn: [String!]
   jobTitleNotIn: [String!]
   jobTitleContains: String
+  jobTitleHasPrefix: String
   jobTitleHasSuffix: String
   jobTitleIsNil: Boolean
   jobTitleNotNil: Boolean
@@ -79491,6 +79657,7 @@ input DirectoryAccountWhereInput {
   departmentIn: [String!]
   departmentNotIn: [String!]
   departmentContains: String
+  departmentHasPrefix: String
   departmentHasSuffix: String
   departmentIsNil: Boolean
   departmentNotNil: Boolean
@@ -79504,6 +79671,7 @@ input DirectoryAccountWhereInput {
   organizationUnitIn: [String!]
   organizationUnitNotIn: [String!]
   organizationUnitContains: String
+  organizationUnitHasPrefix: String
   organizationUnitHasSuffix: String
   organizationUnitIsNil: Boolean
   organizationUnitNotNil: Boolean
@@ -79540,6 +79708,7 @@ input DirectoryAccountWhereInput {
   lastSeenIPIn: [String!]
   lastSeenIPNotIn: [String!]
   lastSeenIPContains: String
+  lastSeenIPHasPrefix: String
   lastSeenIPHasSuffix: String
   lastSeenIPIsNil: Boolean
   lastSeenIPNotNil: Boolean
@@ -79581,6 +79750,7 @@ input DirectoryAccountWhereInput {
   sourceVersionIn: [String!]
   sourceVersionNotIn: [String!]
   sourceVersionContains: String
+  sourceVersionHasPrefix: String
   sourceVersionHasSuffix: String
   sourceVersionIsNil: Boolean
   sourceVersionNotNil: Boolean
@@ -80042,6 +80212,7 @@ input DirectoryGroupWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -80055,6 +80226,7 @@ input DirectoryGroupWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -80068,6 +80240,7 @@ input DirectoryGroupWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -80081,6 +80254,7 @@ input DirectoryGroupWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -80092,6 +80266,7 @@ input DirectoryGroupWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -80105,6 +80280,7 @@ input DirectoryGroupWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -80118,6 +80294,7 @@ input DirectoryGroupWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -80131,6 +80308,7 @@ input DirectoryGroupWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -80144,6 +80322,7 @@ input DirectoryGroupWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -80157,6 +80336,7 @@ input DirectoryGroupWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDEqualFold: String
   externalIDContainsFold: String
@@ -80182,6 +80362,7 @@ input DirectoryGroupWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -80209,6 +80390,7 @@ input DirectoryGroupWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -80262,6 +80444,7 @@ input DirectoryGroupWhereInput {
   emailIn: [String!]
   emailNotIn: [String!]
   emailContains: String
+  emailHasPrefix: String
   emailHasSuffix: String
   emailIsNil: Boolean
   emailNotNil: Boolean
@@ -80275,6 +80458,7 @@ input DirectoryGroupWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameIsNil: Boolean
   displayNameNotNil: Boolean
@@ -80348,6 +80532,7 @@ input DirectoryGroupWhereInput {
   sourceVersionIn: [String!]
   sourceVersionNotIn: [String!]
   sourceVersionContains: String
+  sourceVersionHasPrefix: String
   sourceVersionHasSuffix: String
   sourceVersionIsNil: Boolean
   sourceVersionNotNil: Boolean
@@ -80361,6 +80546,7 @@ input DirectoryGroupWhereInput {
   directoryNameIn: [String!]
   directoryNameNotIn: [String!]
   directoryNameContains: String
+  directoryNameHasPrefix: String
   directoryNameHasSuffix: String
   directoryNameIsNil: Boolean
   directoryNameNotNil: Boolean
@@ -80726,6 +80912,7 @@ input DirectoryMembershipWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -80739,6 +80926,7 @@ input DirectoryMembershipWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -80752,6 +80940,7 @@ input DirectoryMembershipWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -80765,6 +80954,7 @@ input DirectoryMembershipWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -80776,6 +80966,7 @@ input DirectoryMembershipWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -80789,6 +80980,7 @@ input DirectoryMembershipWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -80802,6 +80994,7 @@ input DirectoryMembershipWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -80815,6 +81008,7 @@ input DirectoryMembershipWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -80828,6 +81022,7 @@ input DirectoryMembershipWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -80841,6 +81036,7 @@ input DirectoryMembershipWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -80854,6 +81050,7 @@ input DirectoryMembershipWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -80876,6 +81073,7 @@ input DirectoryMembershipWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceIsNil: Boolean
   sourceNotNil: Boolean
@@ -80889,6 +81087,7 @@ input DirectoryMembershipWhereInput {
   directoryNameIn: [String!]
   directoryNameNotIn: [String!]
   directoryNameContains: String
+  directoryNameHasPrefix: String
   directoryNameHasSuffix: String
   directoryNameIsNil: Boolean
   directoryNameNotNil: Boolean
@@ -81078,6 +81277,7 @@ input DiscussionWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -81091,6 +81291,7 @@ input DiscussionWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -81104,6 +81305,7 @@ input DiscussionWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -81131,6 +81333,7 @@ input DiscussionWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -81381,6 +81584,7 @@ input DocumentDataWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -81394,6 +81598,7 @@ input DocumentDataWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -81407,6 +81612,7 @@ input DocumentDataWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -81434,6 +81640,7 @@ input DocumentDataWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -81461,6 +81668,7 @@ input DocumentDataWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -81983,6 +82191,7 @@ input EmailTemplateWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -81996,6 +82205,7 @@ input EmailTemplateWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -82009,6 +82219,7 @@ input EmailTemplateWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -82022,6 +82233,7 @@ input EmailTemplateWhereInput {
   revisionIn: [String!]
   revisionNotIn: [String!]
   revisionContains: String
+  revisionHasPrefix: String
   revisionHasSuffix: String
   revisionIsNil: Boolean
   revisionNotNil: Boolean
@@ -82035,6 +82247,7 @@ input EmailTemplateWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -82048,6 +82261,7 @@ input EmailTemplateWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -82061,6 +82275,7 @@ input EmailTemplateWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -82074,6 +82289,7 @@ input EmailTemplateWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -82087,6 +82303,7 @@ input EmailTemplateWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -82100,6 +82317,7 @@ input EmailTemplateWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -82134,6 +82352,7 @@ input EmailTemplateWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -82147,6 +82366,7 @@ input EmailTemplateWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -82160,6 +82380,7 @@ input EmailTemplateWhereInput {
   keyIn: [String!]
   keyNotIn: [String!]
   keyContains: String
+  keyHasPrefix: String
   keyHasSuffix: String
   keyEqualFold: String
   keyContainsFold: String
@@ -82171,6 +82392,7 @@ input EmailTemplateWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -82182,6 +82404,7 @@ input EmailTemplateWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -82204,6 +82427,7 @@ input EmailTemplateWhereInput {
   localeIn: [String!]
   localeNotIn: [String!]
   localeContains: String
+  localeHasPrefix: String
   localeHasSuffix: String
   localeEqualFold: String
   localeContainsFold: String
@@ -82215,6 +82439,7 @@ input EmailTemplateWhereInput {
   subjectTemplateIn: [String!]
   subjectTemplateNotIn: [String!]
   subjectTemplateContains: String
+  subjectTemplateHasPrefix: String
   subjectTemplateHasSuffix: String
   subjectTemplateIsNil: Boolean
   subjectTemplateNotNil: Boolean
@@ -82228,6 +82453,7 @@ input EmailTemplateWhereInput {
   preheaderTemplateIn: [String!]
   preheaderTemplateNotIn: [String!]
   preheaderTemplateContains: String
+  preheaderTemplateHasPrefix: String
   preheaderTemplateHasSuffix: String
   preheaderTemplateIsNil: Boolean
   preheaderTemplateNotNil: Boolean
@@ -82241,6 +82467,7 @@ input EmailTemplateWhereInput {
   bodyTemplateIn: [String!]
   bodyTemplateNotIn: [String!]
   bodyTemplateContains: String
+  bodyTemplateHasPrefix: String
   bodyTemplateHasSuffix: String
   bodyTemplateIsNil: Boolean
   bodyTemplateNotNil: Boolean
@@ -82254,6 +82481,7 @@ input EmailTemplateWhereInput {
   textTemplateIn: [String!]
   textTemplateNotIn: [String!]
   textTemplateContains: String
+  textTemplateHasPrefix: String
   textTemplateHasSuffix: String
   textTemplateIsNil: Boolean
   textTemplateNotNil: Boolean
@@ -83876,6 +84104,7 @@ input EntityTypeWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -83889,6 +84118,7 @@ input EntityTypeWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -83902,6 +84132,7 @@ input EntityTypeWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -83936,6 +84167,7 @@ input EntityTypeWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -83949,6 +84181,7 @@ input EntityTypeWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -83962,6 +84195,7 @@ input EntityTypeWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -84034,6 +84268,7 @@ input EntityWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -84047,6 +84282,7 @@ input EntityWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -84060,6 +84296,7 @@ input EntityWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -84073,6 +84310,7 @@ input EntityWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -84086,6 +84324,7 @@ input EntityWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -84099,6 +84338,7 @@ input EntityWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -84112,6 +84352,7 @@ input EntityWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -84125,6 +84366,7 @@ input EntityWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -84138,6 +84380,7 @@ input EntityWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -84165,6 +84408,7 @@ input EntityWhereInput {
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
   internalOwnerContains: String
+  internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
   internalOwnerIsNil: Boolean
   internalOwnerNotNil: Boolean
@@ -84220,6 +84464,7 @@ input EntityWhereInput {
   reviewedByIn: [String!]
   reviewedByNotIn: [String!]
   reviewedByContains: String
+  reviewedByHasPrefix: String
   reviewedByHasSuffix: String
   reviewedByIsNil: Boolean
   reviewedByNotNil: Boolean
@@ -84292,6 +84537,7 @@ input EntityWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -84305,6 +84551,7 @@ input EntityWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -84339,6 +84586,7 @@ input EntityWhereInput {
   catalogKeyIn: [String!]
   catalogKeyNotIn: [String!]
   catalogKeyContains: String
+  catalogKeyHasPrefix: String
   catalogKeyHasSuffix: String
   catalogKeyIsNil: Boolean
   catalogKeyNotNil: Boolean
@@ -84352,6 +84600,7 @@ input EntityWhereInput {
   entityRelationshipStateNameIn: [String!]
   entityRelationshipStateNameNotIn: [String!]
   entityRelationshipStateNameContains: String
+  entityRelationshipStateNameHasPrefix: String
   entityRelationshipStateNameHasSuffix: String
   entityRelationshipStateNameIsNil: Boolean
   entityRelationshipStateNameNotNil: Boolean
@@ -84379,6 +84628,7 @@ input EntityWhereInput {
   entitySecurityQuestionnaireStatusNameIn: [String!]
   entitySecurityQuestionnaireStatusNameNotIn: [String!]
   entitySecurityQuestionnaireStatusNameContains: String
+  entitySecurityQuestionnaireStatusNameHasPrefix: String
   entitySecurityQuestionnaireStatusNameHasSuffix: String
   entitySecurityQuestionnaireStatusNameIsNil: Boolean
   entitySecurityQuestionnaireStatusNameNotNil: Boolean
@@ -84406,6 +84656,7 @@ input EntityWhereInput {
   entitySourceTypeNameIn: [String!]
   entitySourceTypeNameNotIn: [String!]
   entitySourceTypeNameContains: String
+  entitySourceTypeNameHasPrefix: String
   entitySourceTypeNameHasSuffix: String
   entitySourceTypeNameIsNil: Boolean
   entitySourceTypeNameNotNil: Boolean
@@ -84433,6 +84684,7 @@ input EntityWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -84460,6 +84712,7 @@ input EntityWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -84487,6 +84740,7 @@ input EntityWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameIsNil: Boolean
   nameNotNil: Boolean
@@ -84500,6 +84754,7 @@ input EntityWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameIsNil: Boolean
   displayNameNotNil: Boolean
@@ -84513,6 +84768,7 @@ input EntityWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -84624,6 +84880,7 @@ input EntityWhereInput {
   spendCurrencyIn: [String!]
   spendCurrencyNotIn: [String!]
   spendCurrencyContains: String
+  spendCurrencyHasPrefix: String
   spendCurrencyHasSuffix: String
   spendCurrencyIsNil: Boolean
   spendCurrencyNotNil: Boolean
@@ -84637,6 +84894,7 @@ input EntityWhereInput {
   billingModelIn: [String!]
   billingModelNotIn: [String!]
   billingModelContains: String
+  billingModelHasPrefix: String
   billingModelHasSuffix: String
   billingModelIsNil: Boolean
   billingModelNotNil: Boolean
@@ -84650,6 +84908,7 @@ input EntityWhereInput {
   renewalRiskIn: [String!]
   renewalRiskNotIn: [String!]
   renewalRiskContains: String
+  renewalRiskHasPrefix: String
   renewalRiskHasSuffix: String
   renewalRiskIsNil: Boolean
   renewalRiskNotNil: Boolean
@@ -84684,6 +84943,7 @@ input EntityWhereInput {
   statusPageURLIn: [String!]
   statusPageURLNotIn: [String!]
   statusPageURLContains: String
+  statusPageURLHasPrefix: String
   statusPageURLHasSuffix: String
   statusPageURLIsNil: Boolean
   statusPageURLNotNil: Boolean
@@ -84697,6 +84957,7 @@ input EntityWhereInput {
   riskRatingIn: [String!]
   riskRatingNotIn: [String!]
   riskRatingContains: String
+  riskRatingHasPrefix: String
   riskRatingHasSuffix: String
   riskRatingIsNil: Boolean
   riskRatingNotNil: Boolean
@@ -84770,6 +85031,7 @@ input EntityWhereInput {
   logoRemoteURLIn: [String!]
   logoRemoteURLNotIn: [String!]
   logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
   logoRemoteURLHasSuffix: String
   logoRemoteURLIsNil: Boolean
   logoRemoteURLNotNil: Boolean
@@ -85526,6 +85788,7 @@ input EventWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -85539,6 +85802,7 @@ input EventWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -85552,6 +85816,7 @@ input EventWhereInput {
   eventIDIn: [String!]
   eventIDNotIn: [String!]
   eventIDContains: String
+  eventIDHasPrefix: String
   eventIDHasSuffix: String
   eventIDIsNil: Boolean
   eventIDNotNil: Boolean
@@ -85565,6 +85830,7 @@ input EventWhereInput {
   correlationIDIn: [String!]
   correlationIDNotIn: [String!]
   correlationIDContains: String
+  correlationIDHasPrefix: String
   correlationIDHasSuffix: String
   correlationIDIsNil: Boolean
   correlationIDNotNil: Boolean
@@ -85578,6 +85844,7 @@ input EventWhereInput {
   eventTypeIn: [String!]
   eventTypeNotIn: [String!]
   eventTypeContains: String
+  eventTypeHasPrefix: String
   eventTypeHasSuffix: String
   eventTypeEqualFold: String
   eventTypeContainsFold: String
@@ -86325,6 +86592,7 @@ input EvidenceWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -86338,6 +86606,7 @@ input EvidenceWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -86351,6 +86620,7 @@ input EvidenceWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -86364,6 +86634,7 @@ input EvidenceWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -86375,6 +86646,7 @@ input EvidenceWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -86388,6 +86660,7 @@ input EvidenceWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -86401,6 +86674,7 @@ input EvidenceWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -86414,6 +86688,7 @@ input EvidenceWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -86427,6 +86702,7 @@ input EvidenceWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -86440,6 +86716,7 @@ input EvidenceWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -86467,6 +86744,7 @@ input EvidenceWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -86494,6 +86772,7 @@ input EvidenceWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -86528,6 +86807,7 @@ input EvidenceWhereInput {
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
   externalUUIDContains: String
+  externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
   externalUUIDIsNil: Boolean
   externalUUIDNotNil: Boolean
@@ -86541,6 +86821,7 @@ input EvidenceWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -86552,6 +86833,7 @@ input EvidenceWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -86565,6 +86847,7 @@ input EvidenceWhereInput {
   collectionProcedureIn: [String!]
   collectionProcedureNotIn: [String!]
   collectionProcedureContains: String
+  collectionProcedureHasPrefix: String
   collectionProcedureHasSuffix: String
   collectionProcedureIsNil: Boolean
   collectionProcedureNotNil: Boolean
@@ -86596,6 +86879,7 @@ input EvidenceWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceIsNil: Boolean
   sourceNotNil: Boolean
@@ -86616,6 +86900,7 @@ input EvidenceWhereInput {
   urlIn: [String!]
   urlNotIn: [String!]
   urlContains: String
+  urlHasPrefix: String
   urlHasSuffix: String
   urlIsNil: Boolean
   urlNotNil: Boolean
@@ -86647,6 +86932,7 @@ input EvidenceWhereInput {
   auditorReferenceIDIn: [String!]
   auditorReferenceIDNotIn: [String!]
   auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
   auditorReferenceIDHasSuffix: String
   auditorReferenceIDIsNil: Boolean
   auditorReferenceIDNotNil: Boolean
@@ -87010,6 +87296,7 @@ input ExportWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -87023,6 +87310,7 @@ input ExportWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -87036,6 +87324,7 @@ input ExportWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -87049,6 +87338,7 @@ input ExportWhereInput {
   requestorIDIn: [String!]
   requestorIDNotIn: [String!]
   requestorIDContains: String
+  requestorIDHasPrefix: String
   requestorIDHasSuffix: String
   requestorIDIsNil: Boolean
   requestorIDNotNil: Boolean
@@ -87097,6 +87387,7 @@ input ExportWhereInput {
   filtersIn: [String!]
   filtersNotIn: [String!]
   filtersContains: String
+  filtersHasPrefix: String
   filtersHasSuffix: String
   filtersIsNil: Boolean
   filtersNotNil: Boolean
@@ -87110,6 +87401,7 @@ input ExportWhereInput {
   errorMessageIn: [String!]
   errorMessageNotIn: [String!]
   errorMessageContains: String
+  errorMessageHasPrefix: String
   errorMessageHasSuffix: String
   errorMessageIsNil: Boolean
   errorMessageNotNil: Boolean
@@ -87522,6 +87814,7 @@ input FileWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -87535,6 +87828,7 @@ input FileWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -87548,6 +87842,7 @@ input FileWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -87568,6 +87863,7 @@ input FileWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -87581,6 +87877,7 @@ input FileWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -87594,6 +87891,7 @@ input FileWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -87621,6 +87919,7 @@ input FileWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -87648,6 +87947,7 @@ input FileWhereInput {
   categoryNameIn: [String!]
   categoryNameNotIn: [String!]
   categoryNameContains: String
+  categoryNameHasPrefix: String
   categoryNameHasSuffix: String
   categoryNameIsNil: Boolean
   categoryNameNotNil: Boolean
@@ -87675,6 +87975,7 @@ input FileWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameIsNil: Boolean
   nameNotNil: Boolean
@@ -87688,6 +87989,7 @@ input FileWhereInput {
   providedFileNameIn: [String!]
   providedFileNameNotIn: [String!]
   providedFileNameContains: String
+  providedFileNameHasPrefix: String
   providedFileNameHasSuffix: String
   providedFileNameEqualFold: String
   providedFileNameContainsFold: String
@@ -87699,6 +88001,7 @@ input FileWhereInput {
   providedFileExtensionIn: [String!]
   providedFileExtensionNotIn: [String!]
   providedFileExtensionContains: String
+  providedFileExtensionHasPrefix: String
   providedFileExtensionHasSuffix: String
   providedFileExtensionEqualFold: String
   providedFileExtensionContainsFold: String
@@ -87732,6 +88035,7 @@ input FileWhereInput {
   detectedMimeTypeIn: [String!]
   detectedMimeTypeNotIn: [String!]
   detectedMimeTypeContains: String
+  detectedMimeTypeHasPrefix: String
   detectedMimeTypeHasSuffix: String
   detectedMimeTypeIsNil: Boolean
   detectedMimeTypeNotNil: Boolean
@@ -87745,6 +88049,7 @@ input FileWhereInput {
   md5HashIn: [String!]
   md5HashNotIn: [String!]
   md5HashContains: String
+  md5HashHasPrefix: String
   md5HashHasSuffix: String
   md5HashIsNil: Boolean
   md5HashNotNil: Boolean
@@ -87758,6 +88063,7 @@ input FileWhereInput {
   detectedContentTypeIn: [String!]
   detectedContentTypeNotIn: [String!]
   detectedContentTypeContains: String
+  detectedContentTypeHasPrefix: String
   detectedContentTypeHasSuffix: String
   detectedContentTypeEqualFold: String
   detectedContentTypeContainsFold: String
@@ -87769,6 +88075,7 @@ input FileWhereInput {
   storeKeyIn: [String!]
   storeKeyNotIn: [String!]
   storeKeyContains: String
+  storeKeyHasPrefix: String
   storeKeyHasSuffix: String
   storeKeyIsNil: Boolean
   storeKeyNotNil: Boolean
@@ -87782,6 +88089,7 @@ input FileWhereInput {
   uriIn: [String!]
   uriNotIn: [String!]
   uriContains: String
+  uriHasPrefix: String
   uriHasSuffix: String
   uriIsNil: Boolean
   uriNotNil: Boolean
@@ -87795,6 +88103,7 @@ input FileWhereInput {
   storageSchemeIn: [String!]
   storageSchemeNotIn: [String!]
   storageSchemeContains: String
+  storageSchemeHasPrefix: String
   storageSchemeHasSuffix: String
   storageSchemeIsNil: Boolean
   storageSchemeNotNil: Boolean
@@ -87808,6 +88117,7 @@ input FileWhereInput {
   storageVolumeIn: [String!]
   storageVolumeNotIn: [String!]
   storageVolumeContains: String
+  storageVolumeHasPrefix: String
   storageVolumeHasSuffix: String
   storageVolumeIsNil: Boolean
   storageVolumeNotNil: Boolean
@@ -87821,6 +88131,7 @@ input FileWhereInput {
   storagePathIn: [String!]
   storagePathNotIn: [String!]
   storagePathContains: String
+  storagePathHasPrefix: String
   storagePathHasSuffix: String
   storagePathIsNil: Boolean
   storagePathNotNil: Boolean
@@ -87834,6 +88145,7 @@ input FileWhereInput {
   storageRegionIn: [String!]
   storageRegionNotIn: [String!]
   storageRegionContains: String
+  storageRegionHasPrefix: String
   storageRegionHasSuffix: String
   storageRegionIsNil: Boolean
   storageRegionNotNil: Boolean
@@ -87847,6 +88159,7 @@ input FileWhereInput {
   storageProviderIn: [String!]
   storageProviderNotIn: [String!]
   storageProviderContains: String
+  storageProviderHasPrefix: String
   storageProviderHasSuffix: String
   storageProviderIsNil: Boolean
   storageProviderNotNil: Boolean
@@ -89144,6 +89457,7 @@ input FindingControlWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -89157,6 +89471,7 @@ input FindingControlWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -89170,6 +89485,7 @@ input FindingControlWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -89183,6 +89499,7 @@ input FindingControlWhereInput {
   externalStandardIn: [String!]
   externalStandardNotIn: [String!]
   externalStandardContains: String
+  externalStandardHasPrefix: String
   externalStandardHasSuffix: String
   externalStandardIsNil: Boolean
   externalStandardNotNil: Boolean
@@ -89196,6 +89513,7 @@ input FindingControlWhereInput {
   externalStandardVersionIn: [String!]
   externalStandardVersionNotIn: [String!]
   externalStandardVersionContains: String
+  externalStandardVersionHasPrefix: String
   externalStandardVersionHasSuffix: String
   externalStandardVersionIsNil: Boolean
   externalStandardVersionNotNil: Boolean
@@ -89209,6 +89527,7 @@ input FindingControlWhereInput {
   externalControlIDIn: [String!]
   externalControlIDNotIn: [String!]
   externalControlIDContains: String
+  externalControlIDHasPrefix: String
   externalControlIDHasSuffix: String
   externalControlIDIsNil: Boolean
   externalControlIDNotNil: Boolean
@@ -89222,6 +89541,7 @@ input FindingControlWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceIsNil: Boolean
   sourceNotNil: Boolean
@@ -89334,6 +89654,7 @@ input FindingWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -89347,6 +89668,7 @@ input FindingWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -89360,6 +89682,7 @@ input FindingWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -89373,6 +89696,7 @@ input FindingWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -89384,6 +89708,7 @@ input FindingWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -89397,6 +89722,7 @@ input FindingWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -89410,6 +89736,7 @@ input FindingWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -89423,6 +89750,7 @@ input FindingWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -89436,6 +89764,7 @@ input FindingWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -89449,6 +89778,7 @@ input FindingWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -89476,6 +89806,7 @@ input FindingWhereInput {
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
   internalOwnerContains: String
+  internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
   internalOwnerIsNil: Boolean
   internalOwnerNotNil: Boolean
@@ -89531,6 +89862,7 @@ input FindingWhereInput {
   reviewedByIn: [String!]
   reviewedByNotIn: [String!]
   reviewedByContains: String
+  reviewedByHasPrefix: String
   reviewedByHasSuffix: String
   reviewedByIsNil: Boolean
   reviewedByNotNil: Boolean
@@ -89586,6 +89918,7 @@ input FindingWhereInput {
   assignedToIn: [String!]
   assignedToNotIn: [String!]
   assignedToContains: String
+  assignedToHasPrefix: String
   assignedToHasSuffix: String
   assignedToIsNil: Boolean
   assignedToNotNil: Boolean
@@ -89648,6 +89981,7 @@ input FindingWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -89661,6 +89995,7 @@ input FindingWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -89674,6 +90009,7 @@ input FindingWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -89701,6 +90037,7 @@ input FindingWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -89728,6 +90065,7 @@ input FindingWhereInput {
   findingStatusNameIn: [String!]
   findingStatusNameNotIn: [String!]
   findingStatusNameContains: String
+  findingStatusNameHasPrefix: String
   findingStatusNameHasSuffix: String
   findingStatusNameIsNil: Boolean
   findingStatusNameNotNil: Boolean
@@ -89771,6 +90109,7 @@ input FindingWhereInput {
   externalOwnerIDIn: [String!]
   externalOwnerIDNotIn: [String!]
   externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
   externalOwnerIDHasSuffix: String
   externalOwnerIDIsNil: Boolean
   externalOwnerIDNotNil: Boolean
@@ -89784,6 +90123,7 @@ input FindingWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceIsNil: Boolean
   sourceNotNil: Boolean
@@ -89797,6 +90137,7 @@ input FindingWhereInput {
   resourceNameIn: [String!]
   resourceNameNotIn: [String!]
   resourceNameContains: String
+  resourceNameHasPrefix: String
   resourceNameHasSuffix: String
   resourceNameIsNil: Boolean
   resourceNameNotNil: Boolean
@@ -89810,6 +90151,7 @@ input FindingWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameIsNil: Boolean
   displayNameNotNil: Boolean
@@ -89823,6 +90165,7 @@ input FindingWhereInput {
   stateIn: [String!]
   stateNotIn: [String!]
   stateContains: String
+  stateHasPrefix: String
   stateHasSuffix: String
   stateIsNil: Boolean
   stateNotNil: Boolean
@@ -89836,6 +90179,7 @@ input FindingWhereInput {
   categoryIn: [String!]
   categoryNotIn: [String!]
   categoryContains: String
+  categoryHasPrefix: String
   categoryHasSuffix: String
   categoryIsNil: Boolean
   categoryNotNil: Boolean
@@ -89849,6 +90193,7 @@ input FindingWhereInput {
   findingClassIn: [String!]
   findingClassNotIn: [String!]
   findingClassContains: String
+  findingClassHasPrefix: String
   findingClassHasSuffix: String
   findingClassIsNil: Boolean
   findingClassNotNil: Boolean
@@ -89862,6 +90207,7 @@ input FindingWhereInput {
   severityIn: [String!]
   severityNotIn: [String!]
   severityContains: String
+  severityHasPrefix: String
   severityHasSuffix: String
   severityIsNil: Boolean
   severityNotNil: Boolean
@@ -89927,6 +90273,7 @@ input FindingWhereInput {
   priorityIn: [String!]
   priorityNotIn: [String!]
   priorityContains: String
+  priorityHasPrefix: String
   priorityHasSuffix: String
   priorityIsNil: Boolean
   priorityNotNil: Boolean
@@ -89975,6 +90322,7 @@ input FindingWhereInput {
   assessmentIDIn: [String!]
   assessmentIDNotIn: [String!]
   assessmentIDContains: String
+  assessmentIDHasPrefix: String
   assessmentIDHasSuffix: String
   assessmentIDIsNil: Boolean
   assessmentIDNotNil: Boolean
@@ -89988,6 +90336,7 @@ input FindingWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -90001,6 +90350,7 @@ input FindingWhereInput {
   recommendationIn: [String!]
   recommendationNotIn: [String!]
   recommendationContains: String
+  recommendationHasPrefix: String
   recommendationHasSuffix: String
   recommendationIsNil: Boolean
   recommendationNotNil: Boolean
@@ -90014,6 +90364,7 @@ input FindingWhereInput {
   recommendedActionsIn: [String!]
   recommendedActionsNotIn: [String!]
   recommendedActionsContains: String
+  recommendedActionsHasPrefix: String
   recommendedActionsHasSuffix: String
   recommendedActionsIsNil: Boolean
   recommendedActionsNotNil: Boolean
@@ -90027,6 +90378,7 @@ input FindingWhereInput {
   vectorIn: [String!]
   vectorNotIn: [String!]
   vectorContains: String
+  vectorHasPrefix: String
   vectorHasSuffix: String
   vectorIsNil: Boolean
   vectorNotNil: Boolean
@@ -90081,6 +90433,7 @@ input FindingWhereInput {
   externalURIIn: [String!]
   externalURINotIn: [String!]
   externalURIContains: String
+  externalURIHasPrefix: String
   externalURIHasSuffix: String
   externalURIIsNil: Boolean
   externalURINotNil: Boolean
@@ -92247,6 +92600,7 @@ input GroupMembershipWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -92260,6 +92614,7 @@ input GroupMembershipWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -92273,6 +92628,7 @@ input GroupMembershipWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -92452,6 +92808,7 @@ input GroupSettingWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -92465,6 +92822,7 @@ input GroupSettingWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -92478,6 +92836,7 @@ input GroupSettingWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -92576,6 +92935,7 @@ input GroupWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -92589,6 +92949,7 @@ input GroupWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -92602,6 +92963,7 @@ input GroupWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -92615,6 +92977,7 @@ input GroupWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -92626,6 +92989,7 @@ input GroupWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -92639,6 +93003,7 @@ input GroupWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -92652,6 +93017,7 @@ input GroupWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -92665,6 +93031,7 @@ input GroupWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -92678,6 +93045,7 @@ input GroupWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -92691,6 +93059,7 @@ input GroupWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -92718,6 +93087,7 @@ input GroupWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -92750,6 +93120,7 @@ input GroupWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameEqualFold: String
   displayNameContainsFold: String
@@ -92761,6 +93132,7 @@ input GroupWhereInput {
   oscalRoleIn: [String!]
   oscalRoleNotIn: [String!]
   oscalRoleContains: String
+  oscalRoleHasPrefix: String
   oscalRoleHasSuffix: String
   oscalRoleIsNil: Boolean
   oscalRoleNotNil: Boolean
@@ -92774,6 +93146,7 @@ input GroupWhereInput {
   oscalPartyUUIDIn: [String!]
   oscalPartyUUIDNotIn: [String!]
   oscalPartyUUIDContains: String
+  oscalPartyUUIDHasPrefix: String
   oscalPartyUUIDHasSuffix: String
   oscalPartyUUIDIsNil: Boolean
   oscalPartyUUIDNotNil: Boolean
@@ -92787,6 +93160,7 @@ input GroupWhereInput {
   scimExternalIDIn: [String!]
   scimExternalIDNotIn: [String!]
   scimExternalIDContains: String
+  scimExternalIDHasPrefix: String
   scimExternalIDHasSuffix: String
   scimExternalIDIsNil: Boolean
   scimExternalIDNotNil: Boolean
@@ -92800,6 +93174,7 @@ input GroupWhereInput {
   scimDisplayNameIn: [String!]
   scimDisplayNameNotIn: [String!]
   scimDisplayNameContains: String
+  scimDisplayNameHasPrefix: String
   scimDisplayNameHasSuffix: String
   scimDisplayNameIsNil: Boolean
   scimDisplayNameNotNil: Boolean
@@ -92820,6 +93195,7 @@ input GroupWhereInput {
   scimGroupMailingIn: [String!]
   scimGroupMailingNotIn: [String!]
   scimGroupMailingContains: String
+  scimGroupMailingHasPrefix: String
   scimGroupMailingHasSuffix: String
   scimGroupMailingIsNil: Boolean
   scimGroupMailingNotNil: Boolean
@@ -93364,6 +93740,7 @@ input HushWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -93377,6 +93754,7 @@ input HushWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -93390,6 +93768,7 @@ input HushWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -93424,6 +93803,7 @@ input HushWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -93437,6 +93817,7 @@ input HushWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -93450,6 +93831,7 @@ input HushWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -93461,6 +93843,7 @@ input HushWhereInput {
   kindIn: [String!]
   kindNotIn: [String!]
   kindContains: String
+  kindHasPrefix: String
   kindHasSuffix: String
   kindIsNil: Boolean
   kindNotNil: Boolean
@@ -93474,6 +93857,7 @@ input HushWhereInput {
   secretNameIn: [String!]
   secretNameNotIn: [String!]
   secretNameContains: String
+  secretNameHasPrefix: String
   secretNameHasSuffix: String
   secretNameIsNil: Boolean
   secretNameNotNil: Boolean
@@ -94449,6 +94833,7 @@ input IdentityHolderWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -94462,6 +94847,7 @@ input IdentityHolderWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -94475,6 +94861,7 @@ input IdentityHolderWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -94488,6 +94875,7 @@ input IdentityHolderWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -94499,6 +94887,7 @@ input IdentityHolderWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -94512,6 +94901,7 @@ input IdentityHolderWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -94525,6 +94915,7 @@ input IdentityHolderWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -94538,6 +94929,7 @@ input IdentityHolderWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -94551,6 +94943,7 @@ input IdentityHolderWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -94564,6 +94957,7 @@ input IdentityHolderWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -94591,6 +94985,7 @@ input IdentityHolderWhereInput {
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
   internalOwnerContains: String
+  internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
   internalOwnerIsNil: Boolean
   internalOwnerNotNil: Boolean
@@ -94646,6 +95041,7 @@ input IdentityHolderWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -94673,6 +95069,7 @@ input IdentityHolderWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -94707,6 +95104,7 @@ input IdentityHolderWhereInput {
   fullNameIn: [String!]
   fullNameNotIn: [String!]
   fullNameContains: String
+  fullNameHasPrefix: String
   fullNameHasSuffix: String
   fullNameEqualFold: String
   fullNameContainsFold: String
@@ -94718,6 +95116,7 @@ input IdentityHolderWhereInput {
   emailIn: [String!]
   emailNotIn: [String!]
   emailContains: String
+  emailHasPrefix: String
   emailHasSuffix: String
   emailEqualFold: String
   emailContainsFold: String
@@ -94729,6 +95128,7 @@ input IdentityHolderWhereInput {
   alternateEmailIn: [String!]
   alternateEmailNotIn: [String!]
   alternateEmailContains: String
+  alternateEmailHasPrefix: String
   alternateEmailHasSuffix: String
   alternateEmailIsNil: Boolean
   alternateEmailNotNil: Boolean
@@ -94742,6 +95142,7 @@ input IdentityHolderWhereInput {
   phoneNumberIn: [String!]
   phoneNumberNotIn: [String!]
   phoneNumberContains: String
+  phoneNumberHasPrefix: String
   phoneNumberHasSuffix: String
   phoneNumberIsNil: Boolean
   phoneNumberNotNil: Boolean
@@ -94795,6 +95196,7 @@ input IdentityHolderWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleIsNil: Boolean
   titleNotNil: Boolean
@@ -94808,6 +95210,7 @@ input IdentityHolderWhereInput {
   departmentIn: [String!]
   departmentNotIn: [String!]
   departmentContains: String
+  departmentHasPrefix: String
   departmentHasSuffix: String
   departmentIsNil: Boolean
   departmentNotNil: Boolean
@@ -94821,6 +95224,7 @@ input IdentityHolderWhereInput {
   teamIn: [String!]
   teamNotIn: [String!]
   teamContains: String
+  teamHasPrefix: String
   teamHasSuffix: String
   teamIsNil: Boolean
   teamNotNil: Boolean
@@ -94834,6 +95238,7 @@ input IdentityHolderWhereInput {
   locationIn: [String!]
   locationNotIn: [String!]
   locationContains: String
+  locationHasPrefix: String
   locationHasSuffix: String
   locationIsNil: Boolean
   locationNotNil: Boolean
@@ -94881,6 +95286,7 @@ input IdentityHolderWhereInput {
   externalUserIDIn: [String!]
   externalUserIDNotIn: [String!]
   externalUserIDContains: String
+  externalUserIDHasPrefix: String
   externalUserIDHasSuffix: String
   externalUserIDIsNil: Boolean
   externalUserIDNotNil: Boolean
@@ -94894,6 +95300,7 @@ input IdentityHolderWhereInput {
   externalReferenceIDIn: [String!]
   externalReferenceIDNotIn: [String!]
   externalReferenceIDContains: String
+  externalReferenceIDHasPrefix: String
   externalReferenceIDHasSuffix: String
   externalReferenceIDIsNil: Boolean
   externalReferenceIDNotNil: Boolean
@@ -94907,6 +95314,7 @@ input IdentityHolderWhereInput {
   avatarRemoteURLIn: [String!]
   avatarRemoteURLNotIn: [String!]
   avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
   avatarRemoteURLHasSuffix: String
   avatarRemoteURLIsNil: Boolean
   avatarRemoteURLNotNil: Boolean
@@ -96468,6 +96876,7 @@ input IntegrationRunWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -96481,6 +96890,7 @@ input IntegrationRunWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -96494,6 +96904,7 @@ input IntegrationRunWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -96535,6 +96946,7 @@ input IntegrationRunWhereInput {
   operationNameIn: [String!]
   operationNameNotIn: [String!]
   operationNameContains: String
+  operationNameHasPrefix: String
   operationNameHasSuffix: String
   operationNameIsNil: Boolean
   operationNameNotNil: Boolean
@@ -96602,6 +97014,7 @@ input IntegrationRunWhereInput {
   summaryIn: [String!]
   summaryNotIn: [String!]
   summaryContains: String
+  summaryHasPrefix: String
   summaryHasSuffix: String
   summaryIsNil: Boolean
   summaryNotNil: Boolean
@@ -96615,6 +97028,7 @@ input IntegrationRunWhereInput {
   errorIn: [String!]
   errorNotIn: [String!]
   errorContains: String
+  errorHasPrefix: String
   errorHasSuffix: String
   errorIsNil: Boolean
   errorNotNil: Boolean
@@ -96741,6 +97155,7 @@ input IntegrationWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -96754,6 +97169,7 @@ input IntegrationWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -96767,6 +97183,7 @@ input IntegrationWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -96801,6 +97218,7 @@ input IntegrationWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -96814,6 +97232,7 @@ input IntegrationWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -96827,6 +97246,7 @@ input IntegrationWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -96854,6 +97274,7 @@ input IntegrationWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -96881,6 +97302,7 @@ input IntegrationWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -96892,6 +97314,7 @@ input IntegrationWhereInput {
   kindIn: [String!]
   kindNotIn: [String!]
   kindContains: String
+  kindHasPrefix: String
   kindHasSuffix: String
   kindIsNil: Boolean
   kindNotNil: Boolean
@@ -96905,6 +97328,7 @@ input IntegrationWhereInput {
   integrationTypeIn: [String!]
   integrationTypeNotIn: [String!]
   integrationTypeContains: String
+  integrationTypeHasPrefix: String
   integrationTypeHasSuffix: String
   integrationTypeIsNil: Boolean
   integrationTypeNotNil: Boolean
@@ -96932,6 +97356,7 @@ input IntegrationWhereInput {
   definitionIDIn: [String!]
   definitionIDNotIn: [String!]
   definitionIDContains: String
+  definitionIDHasPrefix: String
   definitionIDHasSuffix: String
   definitionIDIsNil: Boolean
   definitionIDNotNil: Boolean
@@ -96945,6 +97370,7 @@ input IntegrationWhereInput {
   definitionVersionIn: [String!]
   definitionVersionNotIn: [String!]
   definitionVersionContains: String
+  definitionVersionHasPrefix: String
   definitionVersionHasSuffix: String
   definitionVersionIsNil: Boolean
   definitionVersionNotNil: Boolean
@@ -96958,6 +97384,7 @@ input IntegrationWhereInput {
   definitionSlugIn: [String!]
   definitionSlugNotIn: [String!]
   definitionSlugContains: String
+  definitionSlugHasPrefix: String
   definitionSlugHasSuffix: String
   definitionSlugIsNil: Boolean
   definitionSlugNotNil: Boolean
@@ -96971,6 +97398,7 @@ input IntegrationWhereInput {
   familyIn: [String!]
   familyNotIn: [String!]
   familyContains: String
+  familyHasPrefix: String
   familyHasSuffix: String
   familyIsNil: Boolean
   familyNotNil: Boolean
@@ -98132,6 +98560,7 @@ input InternalPolicyWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -98145,6 +98574,7 @@ input InternalPolicyWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -98158,6 +98588,7 @@ input InternalPolicyWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -98171,6 +98602,7 @@ input InternalPolicyWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -98182,6 +98614,7 @@ input InternalPolicyWhereInput {
   revisionIn: [String!]
   revisionNotIn: [String!]
   revisionContains: String
+  revisionHasPrefix: String
   revisionHasSuffix: String
   revisionIsNil: Boolean
   revisionNotNil: Boolean
@@ -98195,6 +98628,7 @@ input InternalPolicyWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -98208,6 +98642,7 @@ input InternalPolicyWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -98221,6 +98656,7 @@ input InternalPolicyWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -98234,6 +98670,7 @@ input InternalPolicyWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -98247,6 +98684,7 @@ input InternalPolicyWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -98260,6 +98698,7 @@ input InternalPolicyWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -98294,6 +98733,7 @@ input InternalPolicyWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -98307,6 +98747,7 @@ input InternalPolicyWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -98320,6 +98761,7 @@ input InternalPolicyWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -98349,6 +98791,7 @@ input InternalPolicyWhereInput {
   detailsIn: [String!]
   detailsNotIn: [String!]
   detailsContains: String
+  detailsHasPrefix: String
   detailsHasSuffix: String
   detailsIsNil: Boolean
   detailsNotNil: Boolean
@@ -98416,6 +98859,7 @@ input InternalPolicyWhereInput {
   urlIn: [String!]
   urlNotIn: [String!]
   urlContains: String
+  urlHasPrefix: String
   urlHasSuffix: String
   urlIsNil: Boolean
   urlNotNil: Boolean
@@ -98443,6 +98887,7 @@ input InternalPolicyWhereInput {
   externalFileIDIn: [String!]
   externalFileIDNotIn: [String!]
   externalFileIDContains: String
+  externalFileIDHasPrefix: String
   externalFileIDHasSuffix: String
   externalFileIDIsNil: Boolean
   externalFileIDNotNil: Boolean
@@ -98456,6 +98901,7 @@ input InternalPolicyWhereInput {
   externalContentsIn: [String!]
   externalContentsNotIn: [String!]
   externalContentsContains: String
+  externalContentsHasPrefix: String
   externalContentsHasSuffix: String
   externalContentsIsNil: Boolean
   externalContentsNotNil: Boolean
@@ -98469,6 +98915,7 @@ input InternalPolicyWhereInput {
   internalPolicyKindNameIn: [String!]
   internalPolicyKindNameNotIn: [String!]
   internalPolicyKindNameContains: String
+  internalPolicyKindNameHasPrefix: String
   internalPolicyKindNameHasSuffix: String
   internalPolicyKindNameIsNil: Boolean
   internalPolicyKindNameNotNil: Boolean
@@ -98496,6 +98943,7 @@ input InternalPolicyWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -98523,6 +98971,7 @@ input InternalPolicyWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -98557,6 +99006,7 @@ input InternalPolicyWhereInput {
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
   externalUUIDContains: String
+  externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
   externalUUIDIsNil: Boolean
   externalUUIDNotNil: Boolean
@@ -98960,6 +99410,7 @@ input InviteWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -98973,6 +99424,7 @@ input InviteWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -98986,6 +99438,7 @@ input InviteWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -98999,6 +99452,7 @@ input InviteWhereInput {
   requestorIDIn: [String!]
   requestorIDNotIn: [String!]
   requestorIDContains: String
+  requestorIDHasPrefix: String
   requestorIDHasSuffix: String
   requestorIDIsNil: Boolean
   requestorIDNotNil: Boolean
@@ -99036,6 +99490,7 @@ input InviteWhereInput {
   recipientIn: [String!]
   recipientNotIn: [String!]
   recipientContains: String
+  recipientHasPrefix: String
   recipientHasSuffix: String
   recipientEqualFold: String
   recipientContainsFold: String
@@ -99250,6 +99705,7 @@ input MappableDomainWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -99263,6 +99719,7 @@ input MappableDomainWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -99276,6 +99733,7 @@ input MappableDomainWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -99289,6 +99747,7 @@ input MappableDomainWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -99300,6 +99759,7 @@ input MappableDomainWhereInput {
   zoneIDIn: [String!]
   zoneIDNotIn: [String!]
   zoneIDContains: String
+  zoneIDHasPrefix: String
   zoneIDHasSuffix: String
   zoneIDEqualFold: String
   zoneIDContainsFold: String
@@ -99718,6 +100178,7 @@ input MappedControlWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -99731,6 +100192,7 @@ input MappedControlWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -99744,6 +100206,7 @@ input MappedControlWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -99757,6 +100220,7 @@ input MappedControlWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -99770,6 +100234,7 @@ input MappedControlWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -99783,6 +100248,7 @@ input MappedControlWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -99796,6 +100262,7 @@ input MappedControlWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -99809,6 +100276,7 @@ input MappedControlWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -99822,6 +100290,7 @@ input MappedControlWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -99842,6 +100311,7 @@ input MappedControlWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -99855,6 +100325,7 @@ input MappedControlWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -99889,6 +100360,7 @@ input MappedControlWhereInput {
   relationIn: [String!]
   relationNotIn: [String!]
   relationContains: String
+  relationHasPrefix: String
   relationHasSuffix: String
   relationIsNil: Boolean
   relationNotNil: Boolean
@@ -100376,6 +100848,7 @@ input NarrativeWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -100389,6 +100862,7 @@ input NarrativeWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -100402,6 +100876,7 @@ input NarrativeWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -100415,6 +100890,7 @@ input NarrativeWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -100426,6 +100902,7 @@ input NarrativeWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -100439,6 +100916,7 @@ input NarrativeWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -100452,6 +100930,7 @@ input NarrativeWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -100465,6 +100944,7 @@ input NarrativeWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -100478,6 +100958,7 @@ input NarrativeWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -100491,6 +100972,7 @@ input NarrativeWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -100525,6 +101007,7 @@ input NarrativeWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -100538,6 +101021,7 @@ input NarrativeWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -100551,6 +101035,7 @@ input NarrativeWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -100562,6 +101047,7 @@ input NarrativeWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -100575,6 +101061,7 @@ input NarrativeWhereInput {
   detailsIn: [String!]
   detailsNotIn: [String!]
   detailsContains: String
+  detailsHasPrefix: String
   detailsHasSuffix: String
   detailsIsNil: Boolean
   detailsNotNil: Boolean
@@ -100865,6 +101352,7 @@ input NoteWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -100878,6 +101366,7 @@ input NoteWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -100891,6 +101380,7 @@ input NoteWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -100904,6 +101394,7 @@ input NoteWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -100929,6 +101420,7 @@ input NoteWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleIsNil: Boolean
   titleNotNil: Boolean
@@ -100942,6 +101434,7 @@ input NoteWhereInput {
   textIn: [String!]
   textNotIn: [String!]
   textContains: String
+  textHasPrefix: String
   textHasSuffix: String
   textEqualFold: String
   textContainsFold: String
@@ -100953,6 +101446,7 @@ input NoteWhereInput {
   noteRefIn: [String!]
   noteRefNotIn: [String!]
   noteRefContains: String
+  noteRefHasPrefix: String
   noteRefHasSuffix: String
   noteRefIsNil: Boolean
   noteRefNotNil: Boolean
@@ -101455,6 +101949,7 @@ input NotificationPreferenceWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -101468,6 +101963,7 @@ input NotificationPreferenceWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -101481,6 +101977,7 @@ input NotificationPreferenceWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -101534,6 +102031,7 @@ input NotificationPreferenceWhereInput {
   providerIn: [String!]
   providerNotIn: [String!]
   providerContains: String
+  providerHasPrefix: String
   providerHasSuffix: String
   providerIsNil: Boolean
   providerNotNil: Boolean
@@ -101547,6 +102045,7 @@ input NotificationPreferenceWhereInput {
   destinationIn: [String!]
   destinationNotIn: [String!]
   destinationContains: String
+  destinationHasPrefix: String
   destinationHasSuffix: String
   destinationIsNil: Boolean
   destinationNotNil: Boolean
@@ -101605,6 +102104,7 @@ input NotificationPreferenceWhereInput {
   quietHoursStartIn: [String!]
   quietHoursStartNotIn: [String!]
   quietHoursStartContains: String
+  quietHoursStartHasPrefix: String
   quietHoursStartHasSuffix: String
   quietHoursStartIsNil: Boolean
   quietHoursStartNotNil: Boolean
@@ -101618,6 +102118,7 @@ input NotificationPreferenceWhereInput {
   quietHoursEndIn: [String!]
   quietHoursEndNotIn: [String!]
   quietHoursEndContains: String
+  quietHoursEndHasPrefix: String
   quietHoursEndHasSuffix: String
   quietHoursEndIsNil: Boolean
   quietHoursEndNotNil: Boolean
@@ -101631,6 +102132,7 @@ input NotificationPreferenceWhereInput {
   timezoneIn: [String!]
   timezoneNotIn: [String!]
   timezoneContains: String
+  timezoneHasPrefix: String
   timezoneHasSuffix: String
   timezoneIsNil: Boolean
   timezoneNotNil: Boolean
@@ -101669,6 +102171,7 @@ input NotificationPreferenceWhereInput {
   lastErrorIn: [String!]
   lastErrorNotIn: [String!]
   lastErrorContains: String
+  lastErrorHasPrefix: String
   lastErrorHasSuffix: String
   lastErrorIsNil: Boolean
   lastErrorNotNil: Boolean
@@ -101974,6 +102477,7 @@ input NotificationTemplateWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -101987,6 +102491,7 @@ input NotificationTemplateWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -102000,6 +102505,7 @@ input NotificationTemplateWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -102013,6 +102519,7 @@ input NotificationTemplateWhereInput {
   revisionIn: [String!]
   revisionNotIn: [String!]
   revisionContains: String
+  revisionHasPrefix: String
   revisionHasSuffix: String
   revisionIsNil: Boolean
   revisionNotNil: Boolean
@@ -102047,6 +102554,7 @@ input NotificationTemplateWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -102060,6 +102568,7 @@ input NotificationTemplateWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -102073,6 +102582,7 @@ input NotificationTemplateWhereInput {
   keyIn: [String!]
   keyNotIn: [String!]
   keyContains: String
+  keyHasPrefix: String
   keyHasSuffix: String
   keyEqualFold: String
   keyContainsFold: String
@@ -102084,6 +102594,7 @@ input NotificationTemplateWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -102095,6 +102606,7 @@ input NotificationTemplateWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -102124,6 +102636,7 @@ input NotificationTemplateWhereInput {
   localeIn: [String!]
   localeNotIn: [String!]
   localeContains: String
+  localeHasPrefix: String
   localeHasSuffix: String
   localeEqualFold: String
   localeContainsFold: String
@@ -102135,6 +102648,7 @@ input NotificationTemplateWhereInput {
   topicPatternIn: [String!]
   topicPatternNotIn: [String!]
   topicPatternContains: String
+  topicPatternHasPrefix: String
   topicPatternHasSuffix: String
   topicPatternEqualFold: String
   topicPatternContainsFold: String
@@ -102188,6 +102702,7 @@ input NotificationTemplateWhereInput {
   titleTemplateIn: [String!]
   titleTemplateNotIn: [String!]
   titleTemplateContains: String
+  titleTemplateHasPrefix: String
   titleTemplateHasSuffix: String
   titleTemplateIsNil: Boolean
   titleTemplateNotNil: Boolean
@@ -102201,6 +102716,7 @@ input NotificationTemplateWhereInput {
   subjectTemplateIn: [String!]
   subjectTemplateNotIn: [String!]
   subjectTemplateContains: String
+  subjectTemplateHasPrefix: String
   subjectTemplateHasSuffix: String
   subjectTemplateIsNil: Boolean
   subjectTemplateNotNil: Boolean
@@ -102214,6 +102730,7 @@ input NotificationTemplateWhereInput {
   bodyTemplateIn: [String!]
   bodyTemplateNotIn: [String!]
   bodyTemplateContains: String
+  bodyTemplateHasPrefix: String
   bodyTemplateHasSuffix: String
   bodyTemplateIsNil: Boolean
   bodyTemplateNotNil: Boolean
@@ -102328,6 +102845,7 @@ input OnboardingWhereInput {
   companyNameIn: [String!]
   companyNameNotIn: [String!]
   companyNameContains: String
+  companyNameHasPrefix: String
   companyNameHasSuffix: String
   companyNameEqualFold: String
   companyNameContainsFold: String
@@ -102546,6 +103064,7 @@ input OrgMembershipWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -102559,6 +103078,7 @@ input OrgMembershipWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -102572,6 +103092,7 @@ input OrgMembershipWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -102599,6 +103120,7 @@ input OrgMembershipWhereInput {
   ssoExemptReasonIn: [String!]
   ssoExemptReasonNotIn: [String!]
   ssoExemptReasonContains: String
+  ssoExemptReasonHasPrefix: String
   ssoExemptReasonHasSuffix: String
   ssoExemptReasonIsNil: Boolean
   ssoExemptReasonNotNil: Boolean
@@ -102612,6 +103134,7 @@ input OrgMembershipWhereInput {
   ssoExemptGrantedByIn: [String!]
   ssoExemptGrantedByNotIn: [String!]
   ssoExemptGrantedByContains: String
+  ssoExemptGrantedByHasPrefix: String
   ssoExemptGrantedByHasSuffix: String
   ssoExemptGrantedByIsNil: Boolean
   ssoExemptGrantedByNotNil: Boolean
@@ -102642,6 +103165,7 @@ input OrgMembershipWhereInput {
   tfaEnforcedReasonIn: [String!]
   tfaEnforcedReasonNotIn: [String!]
   tfaEnforcedReasonContains: String
+  tfaEnforcedReasonHasPrefix: String
   tfaEnforcedReasonHasSuffix: String
   tfaEnforcedReasonIsNil: Boolean
   tfaEnforcedReasonNotNil: Boolean
@@ -102655,6 +103179,7 @@ input OrgMembershipWhereInput {
   tfaEnforcedByIn: [String!]
   tfaEnforcedByNotIn: [String!]
   tfaEnforcedByContains: String
+  tfaEnforcedByHasPrefix: String
   tfaEnforcedByHasSuffix: String
   tfaEnforcedByIsNil: Boolean
   tfaEnforcedByNotNil: Boolean
@@ -102846,6 +103371,7 @@ input OrgSubscriptionWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -102859,6 +103385,7 @@ input OrgSubscriptionWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -102872,6 +103399,7 @@ input OrgSubscriptionWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -102899,6 +103427,7 @@ input OrgSubscriptionWhereInput {
   stripeSubscriptionIDIn: [String!]
   stripeSubscriptionIDNotIn: [String!]
   stripeSubscriptionIDContains: String
+  stripeSubscriptionIDHasPrefix: String
   stripeSubscriptionIDHasSuffix: String
   stripeSubscriptionIDIsNil: Boolean
   stripeSubscriptionIDNotNil: Boolean
@@ -102912,6 +103441,7 @@ input OrgSubscriptionWhereInput {
   stripeSubscriptionStatusIn: [String!]
   stripeSubscriptionStatusNotIn: [String!]
   stripeSubscriptionStatusContains: String
+  stripeSubscriptionStatusHasPrefix: String
   stripeSubscriptionStatusHasSuffix: String
   stripeSubscriptionStatusIsNil: Boolean
   stripeSubscriptionStatusNotNil: Boolean
@@ -102950,6 +103480,7 @@ input OrgSubscriptionWhereInput {
   daysUntilDueIn: [String!]
   daysUntilDueNotIn: [String!]
   daysUntilDueContains: String
+  daysUntilDueHasPrefix: String
   daysUntilDueHasSuffix: String
   daysUntilDueIsNil: Boolean
   daysUntilDueNotNil: Boolean
@@ -105769,6 +106300,7 @@ input OrganizationBrandingSettingWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -105782,6 +106314,7 @@ input OrganizationBrandingSettingWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -105795,6 +106328,7 @@ input OrganizationBrandingSettingWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -105829,6 +106363,7 @@ input OrganizationBrandingSettingWhereInput {
   primaryColorIn: [String!]
   primaryColorNotIn: [String!]
   primaryColorContains: String
+  primaryColorHasPrefix: String
   primaryColorHasSuffix: String
   primaryColorIsNil: Boolean
   primaryColorNotNil: Boolean
@@ -105842,6 +106377,7 @@ input OrganizationBrandingSettingWhereInput {
   secondaryColorIn: [String!]
   secondaryColorNotIn: [String!]
   secondaryColorContains: String
+  secondaryColorHasPrefix: String
   secondaryColorHasSuffix: String
   secondaryColorIsNil: Boolean
   secondaryColorNotNil: Boolean
@@ -105855,6 +106391,7 @@ input OrganizationBrandingSettingWhereInput {
   backgroundColorIn: [String!]
   backgroundColorNotIn: [String!]
   backgroundColorContains: String
+  backgroundColorHasPrefix: String
   backgroundColorHasSuffix: String
   backgroundColorIsNil: Boolean
   backgroundColorNotNil: Boolean
@@ -105868,6 +106405,7 @@ input OrganizationBrandingSettingWhereInput {
   textColorIn: [String!]
   textColorNotIn: [String!]
   textColorContains: String
+  textColorHasPrefix: String
   textColorHasSuffix: String
   textColorIsNil: Boolean
   textColorNotNil: Boolean
@@ -105881,6 +106419,7 @@ input OrganizationBrandingSettingWhereInput {
   fontFamilyIn: [String!]
   fontFamilyNotIn: [String!]
   fontFamilyContains: String
+  fontFamilyHasPrefix: String
   fontFamilyHasSuffix: String
   fontFamilyIsNil: Boolean
   fontFamilyNotNil: Boolean
@@ -106223,6 +106762,7 @@ input OrganizationSettingWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -106236,6 +106776,7 @@ input OrganizationSettingWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -106249,6 +106790,7 @@ input OrganizationSettingWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -106262,6 +106804,7 @@ input OrganizationSettingWhereInput {
   billingContactIn: [String!]
   billingContactNotIn: [String!]
   billingContactContains: String
+  billingContactHasPrefix: String
   billingContactHasSuffix: String
   billingContactIsNil: Boolean
   billingContactNotNil: Boolean
@@ -106275,6 +106818,7 @@ input OrganizationSettingWhereInput {
   billingEmailIn: [String!]
   billingEmailNotIn: [String!]
   billingEmailContains: String
+  billingEmailHasPrefix: String
   billingEmailHasSuffix: String
   billingEmailIsNil: Boolean
   billingEmailNotNil: Boolean
@@ -106288,6 +106832,7 @@ input OrganizationSettingWhereInput {
   billingPhoneIn: [String!]
   billingPhoneNotIn: [String!]
   billingPhoneContains: String
+  billingPhoneHasPrefix: String
   billingPhoneHasSuffix: String
   billingPhoneIsNil: Boolean
   billingPhoneNotNil: Boolean
@@ -106301,6 +106846,7 @@ input OrganizationSettingWhereInput {
   taxIdentifierIn: [String!]
   taxIdentifierNotIn: [String!]
   taxIdentifierContains: String
+  taxIdentifierHasPrefix: String
   taxIdentifierHasSuffix: String
   taxIdentifierIsNil: Boolean
   taxIdentifierNotNil: Boolean
@@ -106358,6 +106904,7 @@ input OrganizationSettingWhereInput {
   identityProviderClientIDIn: [String!]
   identityProviderClientIDNotIn: [String!]
   identityProviderClientIDContains: String
+  identityProviderClientIDHasPrefix: String
   identityProviderClientIDHasSuffix: String
   identityProviderClientIDIsNil: Boolean
   identityProviderClientIDNotNil: Boolean
@@ -106371,6 +106918,7 @@ input OrganizationSettingWhereInput {
   identityProviderMetadataEndpointIn: [String!]
   identityProviderMetadataEndpointNotIn: [String!]
   identityProviderMetadataEndpointContains: String
+  identityProviderMetadataEndpointHasPrefix: String
   identityProviderMetadataEndpointHasSuffix: String
   identityProviderMetadataEndpointIsNil: Boolean
   identityProviderMetadataEndpointNotNil: Boolean
@@ -106389,6 +106937,7 @@ input OrganizationSettingWhereInput {
   identityProviderEntityIDIn: [String!]
   identityProviderEntityIDNotIn: [String!]
   identityProviderEntityIDContains: String
+  identityProviderEntityIDHasPrefix: String
   identityProviderEntityIDHasSuffix: String
   identityProviderEntityIDIsNil: Boolean
   identityProviderEntityIDNotNil: Boolean
@@ -106402,6 +106951,7 @@ input OrganizationSettingWhereInput {
   oidcDiscoveryEndpointIn: [String!]
   oidcDiscoveryEndpointNotIn: [String!]
   oidcDiscoveryEndpointContains: String
+  oidcDiscoveryEndpointHasPrefix: String
   oidcDiscoveryEndpointHasSuffix: String
   oidcDiscoveryEndpointIsNil: Boolean
   oidcDiscoveryEndpointNotNil: Boolean
@@ -106415,6 +106965,7 @@ input OrganizationSettingWhereInput {
   samlSigninURLIn: [String!]
   samlSigninURLNotIn: [String!]
   samlSigninURLContains: String
+  samlSigninURLHasPrefix: String
   samlSigninURLHasSuffix: String
   samlSigninURLIsNil: Boolean
   samlSigninURLNotNil: Boolean
@@ -106428,6 +106979,7 @@ input OrganizationSettingWhereInput {
   samlIssuerIn: [String!]
   samlIssuerNotIn: [String!]
   samlIssuerContains: String
+  samlIssuerHasPrefix: String
   samlIssuerHasSuffix: String
   samlIssuerIsNil: Boolean
   samlIssuerNotNil: Boolean
@@ -106441,6 +106993,7 @@ input OrganizationSettingWhereInput {
   samlCertIn: [String!]
   samlCertNotIn: [String!]
   samlCertContains: String
+  samlCertHasPrefix: String
   samlCertHasSuffix: String
   samlCertIsNil: Boolean
   samlCertNotNil: Boolean
@@ -106561,6 +107114,7 @@ input OrganizationWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -106574,6 +107128,7 @@ input OrganizationWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -106587,6 +107142,7 @@ input OrganizationWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -106600,6 +107156,7 @@ input OrganizationWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameEqualFold: String
   displayNameContainsFold: String
@@ -106632,6 +107189,7 @@ input OrganizationWhereInput {
   avatarRemoteURLIn: [String!]
   avatarRemoteURLNotIn: [String!]
   avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
   avatarRemoteURLHasSuffix: String
   avatarRemoteURLIsNil: Boolean
   avatarRemoteURLNotNil: Boolean
@@ -106669,6 +107227,7 @@ input OrganizationWhereInput {
   slugNameIn: [String!]
   slugNameNotIn: [String!]
   slugNameContains: String
+  slugNameHasPrefix: String
   slugNameHasSuffix: String
   slugNameIsNil: Boolean
   slugNameNotNil: Boolean
@@ -107358,6 +107917,7 @@ input PersonalAccessTokenWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -107371,6 +107931,7 @@ input PersonalAccessTokenWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -107384,6 +107945,7 @@ input PersonalAccessTokenWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -107397,6 +107959,7 @@ input PersonalAccessTokenWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -107435,6 +107998,7 @@ input PersonalAccessTokenWhereInput {
   revokedReasonIn: [String!]
   revokedReasonNotIn: [String!]
   revokedReasonContains: String
+  revokedReasonHasPrefix: String
   revokedReasonHasSuffix: String
   revokedReasonIsNil: Boolean
   revokedReasonNotNil: Boolean
@@ -107448,6 +108012,7 @@ input PersonalAccessTokenWhereInput {
   revokedByIn: [String!]
   revokedByNotIn: [String!]
   revokedByContains: String
+  revokedByHasPrefix: String
   revokedByHasSuffix: String
   revokedByIsNil: Boolean
   revokedByNotNil: Boolean
@@ -108792,6 +109357,7 @@ input PlatformWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -108805,6 +109371,7 @@ input PlatformWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -108818,6 +109385,7 @@ input PlatformWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -108831,6 +109399,7 @@ input PlatformWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -108842,6 +109411,7 @@ input PlatformWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -108855,6 +109425,7 @@ input PlatformWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -108868,6 +109439,7 @@ input PlatformWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -108881,6 +109453,7 @@ input PlatformWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -108894,6 +109467,7 @@ input PlatformWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -108907,6 +109481,7 @@ input PlatformWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -108934,6 +109509,7 @@ input PlatformWhereInput {
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
   internalOwnerContains: String
+  internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
   internalOwnerIsNil: Boolean
   internalOwnerNotNil: Boolean
@@ -108989,6 +109565,7 @@ input PlatformWhereInput {
   businessOwnerIn: [String!]
   businessOwnerNotIn: [String!]
   businessOwnerContains: String
+  businessOwnerHasPrefix: String
   businessOwnerHasSuffix: String
   businessOwnerIsNil: Boolean
   businessOwnerNotNil: Boolean
@@ -109044,6 +109621,7 @@ input PlatformWhereInput {
   technicalOwnerIn: [String!]
   technicalOwnerNotIn: [String!]
   technicalOwnerContains: String
+  technicalOwnerHasPrefix: String
   technicalOwnerHasSuffix: String
   technicalOwnerIsNil: Boolean
   technicalOwnerNotNil: Boolean
@@ -109099,6 +109677,7 @@ input PlatformWhereInput {
   securityOwnerIn: [String!]
   securityOwnerNotIn: [String!]
   securityOwnerContains: String
+  securityOwnerHasPrefix: String
   securityOwnerHasSuffix: String
   securityOwnerIsNil: Boolean
   securityOwnerNotNil: Boolean
@@ -109154,6 +109733,7 @@ input PlatformWhereInput {
   platformKindNameIn: [String!]
   platformKindNameNotIn: [String!]
   platformKindNameContains: String
+  platformKindNameHasPrefix: String
   platformKindNameHasSuffix: String
   platformKindNameIsNil: Boolean
   platformKindNameNotNil: Boolean
@@ -109181,6 +109761,7 @@ input PlatformWhereInput {
   platformDataClassificationNameIn: [String!]
   platformDataClassificationNameNotIn: [String!]
   platformDataClassificationNameContains: String
+  platformDataClassificationNameHasPrefix: String
   platformDataClassificationNameHasSuffix: String
   platformDataClassificationNameIsNil: Boolean
   platformDataClassificationNameNotNil: Boolean
@@ -109208,6 +109789,7 @@ input PlatformWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -109235,6 +109817,7 @@ input PlatformWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -109262,6 +109845,7 @@ input PlatformWhereInput {
   accessModelNameIn: [String!]
   accessModelNameNotIn: [String!]
   accessModelNameContains: String
+  accessModelNameHasPrefix: String
   accessModelNameHasSuffix: String
   accessModelNameIsNil: Boolean
   accessModelNameNotNil: Boolean
@@ -109289,6 +109873,7 @@ input PlatformWhereInput {
   encryptionStatusNameIn: [String!]
   encryptionStatusNameNotIn: [String!]
   encryptionStatusNameContains: String
+  encryptionStatusNameHasPrefix: String
   encryptionStatusNameHasSuffix: String
   encryptionStatusNameIsNil: Boolean
   encryptionStatusNameNotNil: Boolean
@@ -109316,6 +109901,7 @@ input PlatformWhereInput {
   securityTierNameIn: [String!]
   securityTierNameNotIn: [String!]
   securityTierNameContains: String
+  securityTierNameHasPrefix: String
   securityTierNameHasSuffix: String
   securityTierNameIsNil: Boolean
   securityTierNameNotNil: Boolean
@@ -109343,6 +109929,7 @@ input PlatformWhereInput {
   criticalityNameIn: [String!]
   criticalityNameNotIn: [String!]
   criticalityNameContains: String
+  criticalityNameHasPrefix: String
   criticalityNameHasSuffix: String
   criticalityNameIsNil: Boolean
   criticalityNameNotNil: Boolean
@@ -109377,6 +109964,7 @@ input PlatformWhereInput {
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
   externalUUIDContains: String
+  externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
   externalUUIDIsNil: Boolean
   externalUUIDNotNil: Boolean
@@ -109390,6 +109978,7 @@ input PlatformWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -109401,6 +109990,7 @@ input PlatformWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -109414,6 +110004,7 @@ input PlatformWhereInput {
   businessPurposeIn: [String!]
   businessPurposeNotIn: [String!]
   businessPurposeContains: String
+  businessPurposeHasPrefix: String
   businessPurposeHasSuffix: String
   businessPurposeIsNil: Boolean
   businessPurposeNotNil: Boolean
@@ -109434,6 +110025,7 @@ input PlatformWhereInput {
   physicalLocationIn: [String!]
   physicalLocationNotIn: [String!]
   physicalLocationContains: String
+  physicalLocationHasPrefix: String
   physicalLocationHasSuffix: String
   physicalLocationIsNil: Boolean
   physicalLocationNotNil: Boolean
@@ -109447,6 +110039,7 @@ input PlatformWhereInput {
   regionIn: [String!]
   regionNotIn: [String!]
   regionContains: String
+  regionHasPrefix: String
   regionHasSuffix: String
   regionIsNil: Boolean
   regionNotNil: Boolean
@@ -109474,6 +110067,7 @@ input PlatformWhereInput {
   sourceIdentifierIn: [String!]
   sourceIdentifierNotIn: [String!]
   sourceIdentifierContains: String
+  sourceIdentifierHasPrefix: String
   sourceIdentifierHasSuffix: String
   sourceIdentifierIsNil: Boolean
   sourceIdentifierNotNil: Boolean
@@ -109487,6 +110081,7 @@ input PlatformWhereInput {
   costCenterIn: [String!]
   costCenterNotIn: [String!]
   costCenterContains: String
+  costCenterHasPrefix: String
   costCenterHasSuffix: String
   costCenterIsNil: Boolean
   costCenterNotNil: Boolean
@@ -109537,6 +110132,7 @@ input PlatformWhereInput {
   externalReferenceIDIn: [String!]
   externalReferenceIDNotIn: [String!]
   externalReferenceIDContains: String
+  externalReferenceIDHasPrefix: String
   externalReferenceIDHasSuffix: String
   externalReferenceIDIsNil: Boolean
   externalReferenceIDNotNil: Boolean
@@ -110523,6 +111119,7 @@ input ProcedureWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -110536,6 +111133,7 @@ input ProcedureWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -110549,6 +111147,7 @@ input ProcedureWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -110562,6 +111161,7 @@ input ProcedureWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -110573,6 +111173,7 @@ input ProcedureWhereInput {
   revisionIn: [String!]
   revisionNotIn: [String!]
   revisionContains: String
+  revisionHasPrefix: String
   revisionHasSuffix: String
   revisionIsNil: Boolean
   revisionNotNil: Boolean
@@ -110586,6 +111187,7 @@ input ProcedureWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -110599,6 +111201,7 @@ input ProcedureWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -110612,6 +111215,7 @@ input ProcedureWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -110625,6 +111229,7 @@ input ProcedureWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -110638,6 +111243,7 @@ input ProcedureWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -110651,6 +111257,7 @@ input ProcedureWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -110678,6 +111285,7 @@ input ProcedureWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -110707,6 +111315,7 @@ input ProcedureWhereInput {
   detailsIn: [String!]
   detailsNotIn: [String!]
   detailsContains: String
+  detailsHasPrefix: String
   detailsHasSuffix: String
   detailsIsNil: Boolean
   detailsNotNil: Boolean
@@ -110774,6 +111383,7 @@ input ProcedureWhereInput {
   urlIn: [String!]
   urlNotIn: [String!]
   urlContains: String
+  urlHasPrefix: String
   urlHasSuffix: String
   urlIsNil: Boolean
   urlNotNil: Boolean
@@ -110801,6 +111411,7 @@ input ProcedureWhereInput {
   externalFileIDIn: [String!]
   externalFileIDNotIn: [String!]
   externalFileIDContains: String
+  externalFileIDHasPrefix: String
   externalFileIDHasSuffix: String
   externalFileIDIsNil: Boolean
   externalFileIDNotNil: Boolean
@@ -110814,6 +111425,7 @@ input ProcedureWhereInput {
   externalContentsIn: [String!]
   externalContentsNotIn: [String!]
   externalContentsContains: String
+  externalContentsHasPrefix: String
   externalContentsHasSuffix: String
   externalContentsIsNil: Boolean
   externalContentsNotNil: Boolean
@@ -110834,6 +111446,7 @@ input ProcedureWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -110847,6 +111460,7 @@ input ProcedureWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -110860,6 +111474,7 @@ input ProcedureWhereInput {
   procedureKindNameIn: [String!]
   procedureKindNameNotIn: [String!]
   procedureKindNameContains: String
+  procedureKindNameHasPrefix: String
   procedureKindNameHasSuffix: String
   procedureKindNameIsNil: Boolean
   procedureKindNameNotNil: Boolean
@@ -110887,6 +111502,7 @@ input ProcedureWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -110914,6 +111530,7 @@ input ProcedureWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -112062,6 +112679,7 @@ input ProgramMembershipWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -112075,6 +112693,7 @@ input ProgramMembershipWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -112088,6 +112707,7 @@ input ProgramMembershipWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -112187,6 +112807,7 @@ input ProgramWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -112200,6 +112821,7 @@ input ProgramWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -112213,6 +112835,7 @@ input ProgramWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -112226,6 +112849,7 @@ input ProgramWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -112237,6 +112861,7 @@ input ProgramWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -112250,6 +112875,7 @@ input ProgramWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -112263,6 +112889,7 @@ input ProgramWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -112276,6 +112903,7 @@ input ProgramWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -112289,6 +112917,7 @@ input ProgramWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -112302,6 +112931,7 @@ input ProgramWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -112329,6 +112959,7 @@ input ProgramWhereInput {
   programKindNameIn: [String!]
   programKindNameNotIn: [String!]
   programKindNameContains: String
+  programKindNameHasPrefix: String
   programKindNameHasSuffix: String
   programKindNameIsNil: Boolean
   programKindNameNotNil: Boolean
@@ -112356,6 +112987,7 @@ input ProgramWhereInput {
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
   externalUUIDContains: String
+  externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
   externalUUIDIsNil: Boolean
   externalUUIDNotNil: Boolean
@@ -112369,6 +113001,7 @@ input ProgramWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -112380,6 +113013,7 @@ input ProgramWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -112400,6 +113034,7 @@ input ProgramWhereInput {
   frameworkNameIn: [String!]
   frameworkNameNotIn: [String!]
   frameworkNameContains: String
+  frameworkNameHasPrefix: String
   frameworkNameHasSuffix: String
   frameworkNameIsNil: Boolean
   frameworkNameNotNil: Boolean
@@ -112488,6 +113123,7 @@ input ProgramWhereInput {
   auditFirmIn: [String!]
   auditFirmNotIn: [String!]
   auditFirmContains: String
+  auditFirmHasPrefix: String
   auditFirmHasSuffix: String
   auditFirmIsNil: Boolean
   auditFirmNotNil: Boolean
@@ -112501,6 +113137,7 @@ input ProgramWhereInput {
   auditorIn: [String!]
   auditorNotIn: [String!]
   auditorContains: String
+  auditorHasPrefix: String
   auditorHasSuffix: String
   auditorIsNil: Boolean
   auditorNotNil: Boolean
@@ -112514,6 +113151,7 @@ input ProgramWhereInput {
   auditorEmailIn: [String!]
   auditorEmailNotIn: [String!]
   auditorEmailContains: String
+  auditorEmailHasPrefix: String
   auditorEmailHasSuffix: String
   auditorEmailIsNil: Boolean
   auditorEmailNotNil: Boolean
@@ -116397,6 +117035,7 @@ input RemediationWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -116410,6 +117049,7 @@ input RemediationWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -116423,6 +117063,7 @@ input RemediationWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -116436,6 +117077,7 @@ input RemediationWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -116447,6 +117089,7 @@ input RemediationWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -116460,6 +117103,7 @@ input RemediationWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -116473,6 +117117,7 @@ input RemediationWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -116486,6 +117131,7 @@ input RemediationWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -116499,6 +117145,7 @@ input RemediationWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -116512,6 +117159,7 @@ input RemediationWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -116546,6 +117194,7 @@ input RemediationWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -116559,6 +117208,7 @@ input RemediationWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -116572,6 +117222,7 @@ input RemediationWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -116599,6 +117250,7 @@ input RemediationWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -116633,6 +117285,7 @@ input RemediationWhereInput {
   externalOwnerIDIn: [String!]
   externalOwnerIDNotIn: [String!]
   externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
   externalOwnerIDHasSuffix: String
   externalOwnerIDIsNil: Boolean
   externalOwnerIDNotNil: Boolean
@@ -116646,6 +117299,7 @@ input RemediationWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleIsNil: Boolean
   titleNotNil: Boolean
@@ -116668,6 +117322,7 @@ input RemediationWhereInput {
   stateIn: [String!]
   stateNotIn: [String!]
   stateContains: String
+  stateHasPrefix: String
   stateHasSuffix: String
   stateIsNil: Boolean
   stateNotNil: Boolean
@@ -116681,6 +117336,7 @@ input RemediationWhereInput {
   intentIn: [String!]
   intentNotIn: [String!]
   intentContains: String
+  intentHasPrefix: String
   intentHasSuffix: String
   intentIsNil: Boolean
   intentNotNil: Boolean
@@ -116694,6 +117350,7 @@ input RemediationWhereInput {
   summaryIn: [String!]
   summaryNotIn: [String!]
   summaryContains: String
+  summaryHasPrefix: String
   summaryHasSuffix: String
   summaryIsNil: Boolean
   summaryNotNil: Boolean
@@ -116707,6 +117364,7 @@ input RemediationWhereInput {
   explanationIn: [String!]
   explanationNotIn: [String!]
   explanationContains: String
+  explanationHasPrefix: String
   explanationHasSuffix: String
   explanationIsNil: Boolean
   explanationNotNil: Boolean
@@ -116720,6 +117378,7 @@ input RemediationWhereInput {
   instructionsIn: [String!]
   instructionsNotIn: [String!]
   instructionsContains: String
+  instructionsHasPrefix: String
   instructionsHasSuffix: String
   instructionsIsNil: Boolean
   instructionsNotNil: Boolean
@@ -116733,6 +117392,7 @@ input RemediationWhereInput {
   ownerReferenceIn: [String!]
   ownerReferenceNotIn: [String!]
   ownerReferenceContains: String
+  ownerReferenceHasPrefix: String
   ownerReferenceHasSuffix: String
   ownerReferenceIsNil: Boolean
   ownerReferenceNotNil: Boolean
@@ -116746,6 +117406,7 @@ input RemediationWhereInput {
   repositoryURIIn: [String!]
   repositoryURINotIn: [String!]
   repositoryURIContains: String
+  repositoryURIHasPrefix: String
   repositoryURIHasSuffix: String
   repositoryURIIsNil: Boolean
   repositoryURINotNil: Boolean
@@ -116759,6 +117420,7 @@ input RemediationWhereInput {
   pullRequestURIIn: [String!]
   pullRequestURINotIn: [String!]
   pullRequestURIContains: String
+  pullRequestURIHasPrefix: String
   pullRequestURIHasSuffix: String
   pullRequestURIIsNil: Boolean
   pullRequestURINotNil: Boolean
@@ -116772,6 +117434,7 @@ input RemediationWhereInput {
   ticketReferenceIn: [String!]
   ticketReferenceNotIn: [String!]
   ticketReferenceContains: String
+  ticketReferenceHasPrefix: String
   ticketReferenceHasSuffix: String
   ticketReferenceIsNil: Boolean
   ticketReferenceNotNil: Boolean
@@ -116815,6 +117478,7 @@ input RemediationWhereInput {
   errorIn: [String!]
   errorNotIn: [String!]
   errorContains: String
+  errorHasPrefix: String
   errorHasSuffix: String
   errorIsNil: Boolean
   errorNotNil: Boolean
@@ -116828,6 +117492,7 @@ input RemediationWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceIsNil: Boolean
   sourceNotNil: Boolean
@@ -116841,6 +117506,7 @@ input RemediationWhereInput {
   externalURIIn: [String!]
   externalURINotIn: [String!]
   externalURIContains: String
+  externalURIHasPrefix: String
   externalURIHasSuffix: String
   externalURIIsNil: Boolean
   externalURINotNil: Boolean
@@ -117322,6 +117988,7 @@ input ReportMembershipWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -117335,6 +118002,7 @@ input ReportMembershipWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -117348,6 +118016,7 @@ input ReportMembershipWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -117444,6 +118113,7 @@ input ReportWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -117457,6 +118127,7 @@ input ReportWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -117470,6 +118141,7 @@ input ReportWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -117483,6 +118155,7 @@ input ReportWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -117494,6 +118167,7 @@ input ReportWhereInput {
   requestorIDIn: [String!]
   requestorIDNotIn: [String!]
   requestorIDContains: String
+  requestorIDHasPrefix: String
   requestorIDHasSuffix: String
   requestorIDIsNil: Boolean
   requestorIDNotNil: Boolean
@@ -117521,6 +118195,7 @@ input ReportWhereInput {
   reportKindNameIn: [String!]
   reportKindNameNotIn: [String!]
   reportKindNameContains: String
+  reportKindNameHasPrefix: String
   reportKindNameHasSuffix: String
   reportKindNameIsNil: Boolean
   reportKindNameNotNil: Boolean
@@ -117548,6 +118223,7 @@ input ReportWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -117559,6 +118235,7 @@ input ReportWhereInput {
   queryIn: [String!]
   queryNotIn: [String!]
   queryContains: String
+  queryHasPrefix: String
   queryHasSuffix: String
   queryEqualFold: String
   queryContainsFold: String
@@ -118454,6 +119131,7 @@ input ReviewWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -118467,6 +119145,7 @@ input ReviewWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -118480,6 +119159,7 @@ input ReviewWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -118493,6 +119173,7 @@ input ReviewWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -118506,6 +119187,7 @@ input ReviewWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -118519,6 +119201,7 @@ input ReviewWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -118532,6 +119215,7 @@ input ReviewWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -118545,6 +119229,7 @@ input ReviewWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -118558,6 +119243,7 @@ input ReviewWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -118592,6 +119278,7 @@ input ReviewWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -118605,6 +119292,7 @@ input ReviewWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -118618,6 +119306,7 @@ input ReviewWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -118645,6 +119334,7 @@ input ReviewWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -118672,6 +119362,7 @@ input ReviewWhereInput {
   externalOwnerIDIn: [String!]
   externalOwnerIDNotIn: [String!]
   externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
   externalOwnerIDHasSuffix: String
   externalOwnerIDIsNil: Boolean
   externalOwnerIDNotNil: Boolean
@@ -118685,6 +119376,7 @@ input ReviewWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
@@ -118696,6 +119388,7 @@ input ReviewWhereInput {
   stateIn: [String!]
   stateNotIn: [String!]
   stateContains: String
+  stateHasPrefix: String
   stateHasSuffix: String
   stateIsNil: Boolean
   stateNotNil: Boolean
@@ -118718,6 +119411,7 @@ input ReviewWhereInput {
   categoryIn: [String!]
   categoryNotIn: [String!]
   categoryContains: String
+  categoryHasPrefix: String
   categoryHasSuffix: String
   categoryIsNil: Boolean
   categoryNotNil: Boolean
@@ -118731,6 +119425,7 @@ input ReviewWhereInput {
   classificationIn: [String!]
   classificationNotIn: [String!]
   classificationContains: String
+  classificationHasPrefix: String
   classificationHasSuffix: String
   classificationIsNil: Boolean
   classificationNotNil: Boolean
@@ -118744,6 +119439,7 @@ input ReviewWhereInput {
   summaryIn: [String!]
   summaryNotIn: [String!]
   summaryContains: String
+  summaryHasPrefix: String
   summaryHasSuffix: String
   summaryIsNil: Boolean
   summaryNotNil: Boolean
@@ -118757,6 +119453,7 @@ input ReviewWhereInput {
   detailsIn: [String!]
   detailsNotIn: [String!]
   detailsContains: String
+  detailsHasPrefix: String
   detailsHasSuffix: String
   detailsIsNil: Boolean
   detailsNotNil: Boolean
@@ -118770,6 +119467,7 @@ input ReviewWhereInput {
   reporterIn: [String!]
   reporterNotIn: [String!]
   reporterContains: String
+  reporterHasPrefix: String
   reporterHasSuffix: String
   reporterIsNil: Boolean
   reporterNotNil: Boolean
@@ -118834,6 +119532,7 @@ input ReviewWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceIsNil: Boolean
   sourceNotNil: Boolean
@@ -118847,6 +119546,7 @@ input ReviewWhereInput {
   externalURIIn: [String!]
   externalURINotIn: [String!]
   externalURIContains: String
+  externalURIHasPrefix: String
   externalURIHasSuffix: String
   externalURIIsNil: Boolean
   externalURINotNil: Boolean
@@ -120042,6 +120742,7 @@ input RiskWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -120055,6 +120756,7 @@ input RiskWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -120068,6 +120770,7 @@ input RiskWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -120081,6 +120784,7 @@ input RiskWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -120092,6 +120796,7 @@ input RiskWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -120105,6 +120810,7 @@ input RiskWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -120118,6 +120824,7 @@ input RiskWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -120131,6 +120838,7 @@ input RiskWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -120144,6 +120852,7 @@ input RiskWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -120157,6 +120866,7 @@ input RiskWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -120184,6 +120894,7 @@ input RiskWhereInput {
   stakeholderNameIn: [String!]
   stakeholderNameNotIn: [String!]
   stakeholderNameContains: String
+  stakeholderNameHasPrefix: String
   stakeholderNameHasSuffix: String
   stakeholderNameIsNil: Boolean
   stakeholderNameNotNil: Boolean
@@ -120239,6 +120950,7 @@ input RiskWhereInput {
   delegateNameIn: [String!]
   delegateNameNotIn: [String!]
   delegateNameContains: String
+  delegateNameHasPrefix: String
   delegateNameHasSuffix: String
   delegateNameIsNil: Boolean
   delegateNameNotNil: Boolean
@@ -120294,6 +121006,7 @@ input RiskWhereInput {
   riskKindNameIn: [String!]
   riskKindNameNotIn: [String!]
   riskKindNameContains: String
+  riskKindNameHasPrefix: String
   riskKindNameHasSuffix: String
   riskKindNameIsNil: Boolean
   riskKindNameNotNil: Boolean
@@ -120321,6 +121034,7 @@ input RiskWhereInput {
   riskCategoryNameIn: [String!]
   riskCategoryNameNotIn: [String!]
   riskCategoryNameContains: String
+  riskCategoryNameHasPrefix: String
   riskCategoryNameHasSuffix: String
   riskCategoryNameIsNil: Boolean
   riskCategoryNameNotNil: Boolean
@@ -120348,6 +121062,7 @@ input RiskWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -120375,6 +121090,7 @@ input RiskWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -120409,6 +121125,7 @@ input RiskWhereInput {
   integrationIDIn: [String!]
   integrationIDNotIn: [String!]
   integrationIDContains: String
+  integrationIDHasPrefix: String
   integrationIDHasSuffix: String
   integrationIDIsNil: Boolean
   integrationIDNotNil: Boolean
@@ -120432,6 +121149,7 @@ input RiskWhereInput {
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
   externalUUIDContains: String
+  externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
   externalUUIDIsNil: Boolean
   externalUUIDNotNil: Boolean
@@ -120445,6 +121163,7 @@ input RiskWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -120494,6 +121213,7 @@ input RiskWhereInput {
   mitigationIn: [String!]
   mitigationNotIn: [String!]
   mitigationContains: String
+  mitigationHasPrefix: String
   mitigationHasSuffix: String
   mitigationIsNil: Boolean
   mitigationNotNil: Boolean
@@ -120507,6 +121227,7 @@ input RiskWhereInput {
   detailsIn: [String!]
   detailsNotIn: [String!]
   detailsContains: String
+  detailsHasPrefix: String
   detailsHasSuffix: String
   detailsIsNil: Boolean
   detailsNotNil: Boolean
@@ -120520,6 +121241,7 @@ input RiskWhereInput {
   businessCostsIn: [String!]
   businessCostsNotIn: [String!]
   businessCostsContains: String
+  businessCostsHasPrefix: String
   businessCostsHasSuffix: String
   businessCostsIsNil: Boolean
   businessCostsNotNil: Boolean
@@ -121010,6 +121732,7 @@ input SLADefinitionWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -121023,6 +121746,7 @@ input SLADefinitionWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -121036,6 +121760,7 @@ input SLADefinitionWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -121049,6 +121774,7 @@ input SLADefinitionWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -121848,6 +122574,7 @@ input ScanWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -121861,6 +122588,7 @@ input ScanWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -121874,6 +122602,7 @@ input ScanWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -121887,6 +122616,7 @@ input ScanWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -121900,6 +122630,7 @@ input ScanWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -121913,6 +122644,7 @@ input ScanWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -121926,6 +122658,7 @@ input ScanWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -121939,6 +122672,7 @@ input ScanWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -121952,6 +122686,7 @@ input ScanWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -121986,6 +122721,7 @@ input ScanWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -121999,6 +122735,7 @@ input ScanWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -122012,6 +122749,7 @@ input ScanWhereInput {
   reviewedByIn: [String!]
   reviewedByNotIn: [String!]
   reviewedByContains: String
+  reviewedByHasPrefix: String
   reviewedByHasSuffix: String
   reviewedByIsNil: Boolean
   reviewedByNotNil: Boolean
@@ -122067,6 +122805,7 @@ input ScanWhereInput {
   assignedToIn: [String!]
   assignedToNotIn: [String!]
   assignedToContains: String
+  assignedToHasPrefix: String
   assignedToHasSuffix: String
   assignedToIsNil: Boolean
   assignedToNotNil: Boolean
@@ -122122,6 +122861,7 @@ input ScanWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -122149,6 +122889,7 @@ input ScanWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -122176,6 +122917,7 @@ input ScanWhereInput {
   targetIn: [String!]
   targetNotIn: [String!]
   targetContains: String
+  targetHasPrefix: String
   targetHasSuffix: String
   targetEqualFold: String
   targetContainsFold: String
@@ -122214,6 +122956,7 @@ input ScanWhereInput {
   performedByIn: [String!]
   performedByNotIn: [String!]
   performedByContains: String
+  performedByHasPrefix: String
   performedByHasSuffix: String
   performedByIsNil: Boolean
   performedByNotNil: Boolean
@@ -122739,6 +123482,7 @@ input StandardWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -122752,6 +123496,7 @@ input StandardWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -122765,6 +123510,7 @@ input StandardWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -122778,6 +123524,7 @@ input StandardWhereInput {
   revisionIn: [String!]
   revisionNotIn: [String!]
   revisionContains: String
+  revisionHasPrefix: String
   revisionHasSuffix: String
   revisionIsNil: Boolean
   revisionNotNil: Boolean
@@ -122812,6 +123559,7 @@ input StandardWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -122825,6 +123573,7 @@ input StandardWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -122838,6 +123587,7 @@ input StandardWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -122849,6 +123599,7 @@ input StandardWhereInput {
   shortNameIn: [String!]
   shortNameNotIn: [String!]
   shortNameContains: String
+  shortNameHasPrefix: String
   shortNameHasSuffix: String
   shortNameIsNil: Boolean
   shortNameNotNil: Boolean
@@ -122862,6 +123613,7 @@ input StandardWhereInput {
   frameworkIn: [String!]
   frameworkNotIn: [String!]
   frameworkContains: String
+  frameworkHasPrefix: String
   frameworkHasSuffix: String
   frameworkIsNil: Boolean
   frameworkNotNil: Boolean
@@ -122875,6 +123627,7 @@ input StandardWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -122888,6 +123641,7 @@ input StandardWhereInput {
   governingBodyLogoURLIn: [String!]
   governingBodyLogoURLNotIn: [String!]
   governingBodyLogoURLContains: String
+  governingBodyLogoURLHasPrefix: String
   governingBodyLogoURLHasSuffix: String
   governingBodyLogoURLIsNil: Boolean
   governingBodyLogoURLNotNil: Boolean
@@ -122901,6 +123655,7 @@ input StandardWhereInput {
   governingBodyIn: [String!]
   governingBodyNotIn: [String!]
   governingBodyContains: String
+  governingBodyHasPrefix: String
   governingBodyHasSuffix: String
   governingBodyIsNil: Boolean
   governingBodyNotNil: Boolean
@@ -122914,6 +123669,7 @@ input StandardWhereInput {
   linkIn: [String!]
   linkNotIn: [String!]
   linkContains: String
+  linkHasPrefix: String
   linkHasSuffix: String
   linkIsNil: Boolean
   linkNotNil: Boolean
@@ -122950,6 +123706,7 @@ input StandardWhereInput {
   standardTypeIn: [String!]
   standardTypeNotIn: [String!]
   standardTypeContains: String
+  standardTypeHasPrefix: String
   standardTypeHasSuffix: String
   standardTypeIsNil: Boolean
   standardTypeNotNil: Boolean
@@ -122963,6 +123720,7 @@ input StandardWhereInput {
   versionIn: [String!]
   versionNotIn: [String!]
   versionContains: String
+  versionHasPrefix: String
   versionHasSuffix: String
   versionIsNil: Boolean
   versionNotNil: Boolean
@@ -124024,6 +124782,7 @@ input SubcontrolWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -124037,6 +124796,7 @@ input SubcontrolWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -124050,6 +124810,7 @@ input SubcontrolWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -124063,6 +124824,7 @@ input SubcontrolWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -124074,6 +124836,7 @@ input SubcontrolWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -124087,6 +124850,7 @@ input SubcontrolWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -124100,6 +124864,7 @@ input SubcontrolWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -124113,6 +124878,7 @@ input SubcontrolWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -124126,6 +124892,7 @@ input SubcontrolWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -124139,6 +124906,7 @@ input SubcontrolWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -124152,6 +124920,7 @@ input SubcontrolWhereInput {
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
   externalUUIDContains: String
+  externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
   externalUUIDIsNil: Boolean
   externalUUIDNotNil: Boolean
@@ -124165,6 +124934,7 @@ input SubcontrolWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleIsNil: Boolean
   titleNotNil: Boolean
@@ -124178,6 +124948,7 @@ input SubcontrolWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -124191,6 +124962,7 @@ input SubcontrolWhereInput {
   referenceIDIn: [String!]
   referenceIDNotIn: [String!]
   referenceIDContains: String
+  referenceIDHasPrefix: String
   referenceIDHasSuffix: String
   referenceIDIsNil: Boolean
   referenceIDNotNil: Boolean
@@ -124204,6 +124976,7 @@ input SubcontrolWhereInput {
   auditorReferenceIDIn: [String!]
   auditorReferenceIDNotIn: [String!]
   auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
   auditorReferenceIDHasSuffix: String
   auditorReferenceIDIsNil: Boolean
   auditorReferenceIDNotNil: Boolean
@@ -124249,6 +125022,7 @@ input SubcontrolWhereInput {
   implementationDescriptionIn: [String!]
   implementationDescriptionNotIn: [String!]
   implementationDescriptionContains: String
+  implementationDescriptionHasPrefix: String
   implementationDescriptionHasSuffix: String
   implementationDescriptionIsNil: Boolean
   implementationDescriptionNotNil: Boolean
@@ -124262,6 +125036,7 @@ input SubcontrolWhereInput {
   publicRepresentationIn: [String!]
   publicRepresentationNotIn: [String!]
   publicRepresentationContains: String
+  publicRepresentationHasPrefix: String
   publicRepresentationHasSuffix: String
   publicRepresentationIsNil: Boolean
   publicRepresentationNotNil: Boolean
@@ -124284,6 +125059,7 @@ input SubcontrolWhereInput {
   sourceNameIn: [String!]
   sourceNameNotIn: [String!]
   sourceNameContains: String
+  sourceNameHasPrefix: String
   sourceNameHasSuffix: String
   sourceNameIsNil: Boolean
   sourceNameNotNil: Boolean
@@ -124297,6 +125073,7 @@ input SubcontrolWhereInput {
   referenceFrameworkIn: [String!]
   referenceFrameworkNotIn: [String!]
   referenceFrameworkContains: String
+  referenceFrameworkHasPrefix: String
   referenceFrameworkHasSuffix: String
   referenceFrameworkIsNil: Boolean
   referenceFrameworkNotNil: Boolean
@@ -124310,6 +125087,7 @@ input SubcontrolWhereInput {
   referenceFrameworkRevisionIn: [String!]
   referenceFrameworkRevisionNotIn: [String!]
   referenceFrameworkRevisionContains: String
+  referenceFrameworkRevisionHasPrefix: String
   referenceFrameworkRevisionHasSuffix: String
   referenceFrameworkRevisionIsNil: Boolean
   referenceFrameworkRevisionNotNil: Boolean
@@ -124323,6 +125101,7 @@ input SubcontrolWhereInput {
   categoryIn: [String!]
   categoryNotIn: [String!]
   categoryContains: String
+  categoryHasPrefix: String
   categoryHasSuffix: String
   categoryIsNil: Boolean
   categoryNotNil: Boolean
@@ -124336,6 +125115,7 @@ input SubcontrolWhereInput {
   categoryIDIn: [String!]
   categoryIDNotIn: [String!]
   categoryIDContains: String
+  categoryIDHasPrefix: String
   categoryIDHasSuffix: String
   categoryIDIsNil: Boolean
   categoryIDNotNil: Boolean
@@ -124349,6 +125129,7 @@ input SubcontrolWhereInput {
   subcategoryIn: [String!]
   subcategoryNotIn: [String!]
   subcategoryContains: String
+  subcategoryHasPrefix: String
   subcategoryHasSuffix: String
   subcategoryIsNil: Boolean
   subcategoryNotNil: Boolean
@@ -124411,6 +125192,7 @@ input SubcontrolWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -124424,6 +125206,7 @@ input SubcontrolWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -124437,6 +125220,7 @@ input SubcontrolWhereInput {
   subcontrolKindNameIn: [String!]
   subcontrolKindNameNotIn: [String!]
   subcontrolKindNameContains: String
+  subcontrolKindNameHasPrefix: String
   subcontrolKindNameHasSuffix: String
   subcontrolKindNameIsNil: Boolean
   subcontrolKindNameNotNil: Boolean
@@ -124471,6 +125255,7 @@ input SubcontrolWhereInput {
   refCodeIn: [String!]
   refCodeNotIn: [String!]
   refCodeContains: String
+  refCodeHasPrefix: String
   refCodeHasSuffix: String
   refCodeEqualFold: String
   refCodeContainsFold: String
@@ -124845,6 +125630,7 @@ input SubprocessorWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -124858,6 +125644,7 @@ input SubprocessorWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -124871,6 +125658,7 @@ input SubprocessorWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -124905,6 +125693,7 @@ input SubprocessorWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -124918,6 +125707,7 @@ input SubprocessorWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -124931,6 +125721,7 @@ input SubprocessorWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -124942,6 +125733,7 @@ input SubprocessorWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -124955,6 +125747,7 @@ input SubprocessorWhereInput {
   logoRemoteURLIn: [String!]
   logoRemoteURLNotIn: [String!]
   logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
   logoRemoteURLHasSuffix: String
   logoRemoteURLIsNil: Boolean
   logoRemoteURLNotNil: Boolean
@@ -125223,6 +126016,7 @@ input SubscriberWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -125236,6 +126030,7 @@ input SubscriberWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -125249,6 +126044,7 @@ input SubscriberWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -125290,6 +126086,7 @@ input SubscriberWhereInput {
   emailIn: [String!]
   emailNotIn: [String!]
   emailContains: String
+  emailHasPrefix: String
   emailHasSuffix: String
   emailEqualFold: String
   emailContainsFold: String
@@ -125301,6 +126098,7 @@ input SubscriberWhereInput {
   phoneNumberIn: [String!]
   phoneNumberNotIn: [String!]
   phoneNumberContains: String
+  phoneNumberHasPrefix: String
   phoneNumberHasSuffix: String
   phoneNumberIsNil: Boolean
   phoneNumberNotNil: Boolean
@@ -125739,6 +126537,7 @@ input SystemDetailWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -125752,6 +126551,7 @@ input SystemDetailWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -125765,6 +126565,7 @@ input SystemDetailWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -125778,6 +126579,7 @@ input SystemDetailWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -125789,6 +126591,7 @@ input SystemDetailWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -125802,6 +126605,7 @@ input SystemDetailWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -125815,6 +126619,7 @@ input SystemDetailWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -125828,6 +126633,7 @@ input SystemDetailWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -125841,6 +126647,7 @@ input SystemDetailWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -125854,6 +126661,7 @@ input SystemDetailWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -125881,6 +126689,7 @@ input SystemDetailWhereInput {
   systemNameIn: [String!]
   systemNameNotIn: [String!]
   systemNameContains: String
+  systemNameHasPrefix: String
   systemNameHasSuffix: String
   systemNameEqualFold: String
   systemNameContainsFold: String
@@ -125892,6 +126701,7 @@ input SystemDetailWhereInput {
   versionIn: [String!]
   versionNotIn: [String!]
   versionContains: String
+  versionHasPrefix: String
   versionHasSuffix: String
   versionIsNil: Boolean
   versionNotNil: Boolean
@@ -125905,6 +126715,7 @@ input SystemDetailWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -125918,6 +126729,7 @@ input SystemDetailWhereInput {
   authorizationBoundaryIn: [String!]
   authorizationBoundaryNotIn: [String!]
   authorizationBoundaryContains: String
+  authorizationBoundaryHasPrefix: String
   authorizationBoundaryHasSuffix: String
   authorizationBoundaryIsNil: Boolean
   authorizationBoundaryNotNil: Boolean
@@ -126092,6 +126904,7 @@ input TFASettingWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -126105,6 +126918,7 @@ input TFASettingWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -126118,6 +126932,7 @@ input TFASettingWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -126342,6 +127157,7 @@ input TagDefinitionWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -126355,6 +127171,7 @@ input TagDefinitionWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -126368,6 +127185,7 @@ input TagDefinitionWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -126381,6 +127199,7 @@ input TagDefinitionWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -126394,6 +127213,7 @@ input TagDefinitionWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -126407,6 +127227,7 @@ input TagDefinitionWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -126420,6 +127241,7 @@ input TagDefinitionWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -126433,6 +127255,7 @@ input TagDefinitionWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -126446,6 +127269,7 @@ input TagDefinitionWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -126480,6 +127304,7 @@ input TagDefinitionWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -126493,6 +127318,7 @@ input TagDefinitionWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -126506,6 +127332,7 @@ input TagDefinitionWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -126517,6 +127344,7 @@ input TagDefinitionWhereInput {
   slugIn: [String!]
   slugNotIn: [String!]
   slugContains: String
+  slugHasPrefix: String
   slugHasSuffix: String
   slugIsNil: Boolean
   slugNotNil: Boolean
@@ -126530,6 +127358,7 @@ input TagDefinitionWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -126543,6 +127372,7 @@ input TagDefinitionWhereInput {
   colorIn: [String!]
   colorNotIn: [String!]
   colorContains: String
+  colorHasPrefix: String
   colorHasSuffix: String
   colorIsNil: Boolean
   colorNotNil: Boolean
@@ -127424,6 +128254,7 @@ input TaskWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -127437,6 +128268,7 @@ input TaskWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -127450,6 +128282,7 @@ input TaskWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -127463,6 +128296,7 @@ input TaskWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -127474,6 +128308,7 @@ input TaskWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -127487,6 +128322,7 @@ input TaskWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -127500,6 +128336,7 @@ input TaskWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -127513,6 +128350,7 @@ input TaskWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -127526,6 +128364,7 @@ input TaskWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -127539,6 +128378,7 @@ input TaskWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -127566,6 +128406,7 @@ input TaskWhereInput {
   taskKindNameIn: [String!]
   taskKindNameNotIn: [String!]
   taskKindNameContains: String
+  taskKindNameHasPrefix: String
   taskKindNameHasSuffix: String
   taskKindNameIsNil: Boolean
   taskKindNameNotNil: Boolean
@@ -127593,6 +128434,7 @@ input TaskWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -127620,6 +128462,7 @@ input TaskWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -127654,6 +128497,7 @@ input TaskWhereInput {
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
   externalUUIDContains: String
+  externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
   externalUUIDIsNil: Boolean
   externalUUIDNotNil: Boolean
@@ -127667,6 +128511,7 @@ input TaskWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
@@ -127678,6 +128523,7 @@ input TaskWhereInput {
   detailsIn: [String!]
   detailsNotIn: [String!]
   detailsContains: String
+  detailsHasPrefix: String
   detailsHasSuffix: String
   detailsIsNil: Boolean
   detailsNotNil: Boolean
@@ -127770,6 +128616,7 @@ input TaskWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceIsNil: Boolean
   sourceNotNil: Boolean
@@ -127783,6 +128630,7 @@ input TaskWhereInput {
   sourceKeyIn: [String!]
   sourceKeyNotIn: [String!]
   sourceKeyContains: String
+  sourceKeyHasPrefix: String
   sourceKeyHasSuffix: String
   sourceKeyIsNil: Boolean
   sourceKeyNotNil: Boolean
@@ -127796,6 +128644,7 @@ input TaskWhereInput {
   idempotencyKeyIn: [String!]
   idempotencyKeyNotIn: [String!]
   idempotencyKeyContains: String
+  idempotencyKeyHasPrefix: String
   idempotencyKeyHasSuffix: String
   idempotencyKeyIsNil: Boolean
   idempotencyKeyNotNil: Boolean
@@ -128366,6 +129215,7 @@ input TemplateWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -128379,6 +129229,7 @@ input TemplateWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -128392,6 +129243,7 @@ input TemplateWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -128405,6 +129257,7 @@ input TemplateWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -128418,6 +129271,7 @@ input TemplateWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -128431,6 +129285,7 @@ input TemplateWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -128444,6 +129299,7 @@ input TemplateWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -128457,6 +129313,7 @@ input TemplateWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -128470,6 +129327,7 @@ input TemplateWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDIsNil: Boolean
   externalIDNotNil: Boolean
@@ -128504,6 +129362,7 @@ input TemplateWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -128517,6 +129376,7 @@ input TemplateWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -128530,6 +129390,7 @@ input TemplateWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -128557,6 +129418,7 @@ input TemplateWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -128584,6 +129446,7 @@ input TemplateWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -128602,6 +129465,7 @@ input TemplateWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -129331,6 +130195,7 @@ input TrustCenterComplianceWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -129344,6 +130209,7 @@ input TrustCenterComplianceWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -129357,6 +130223,7 @@ input TrustCenterComplianceWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -129671,6 +130538,7 @@ input TrustCenterDocWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -129684,6 +130552,7 @@ input TrustCenterDocWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -129697,6 +130566,7 @@ input TrustCenterDocWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -129710,6 +130580,7 @@ input TrustCenterDocWhereInput {
   trustCenterDocKindNameIn: [String!]
   trustCenterDocKindNameNotIn: [String!]
   trustCenterDocKindNameContains: String
+  trustCenterDocKindNameHasPrefix: String
   trustCenterDocKindNameHasSuffix: String
   trustCenterDocKindNameIsNil: Boolean
   trustCenterDocKindNameNotNil: Boolean
@@ -129751,6 +130622,7 @@ input TrustCenterDocWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
@@ -130066,6 +130938,7 @@ input TrustCenterEntityWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -130079,6 +130952,7 @@ input TrustCenterEntityWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -130092,6 +130966,7 @@ input TrustCenterEntityWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -130119,6 +130994,7 @@ input TrustCenterEntityWhereInput {
   urlIn: [String!]
   urlNotIn: [String!]
   urlContains: String
+  urlHasPrefix: String
   urlHasSuffix: String
   urlIsNil: Boolean
   urlNotNil: Boolean
@@ -130146,6 +131022,7 @@ input TrustCenterEntityWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -130371,6 +131248,7 @@ input TrustCenterFAQWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -130384,6 +131262,7 @@ input TrustCenterFAQWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -130397,6 +131276,7 @@ input TrustCenterFAQWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -130410,6 +131290,7 @@ input TrustCenterFAQWhereInput {
   trustCenterFaqKindNameIn: [String!]
   trustCenterFaqKindNameNotIn: [String!]
   trustCenterFaqKindNameContains: String
+  trustCenterFaqKindNameHasPrefix: String
   trustCenterFaqKindNameHasSuffix: String
   trustCenterFaqKindNameIsNil: Boolean
   trustCenterFaqKindNameNotNil: Boolean
@@ -130463,6 +131344,7 @@ input TrustCenterFAQWhereInput {
   referenceLinkIn: [String!]
   referenceLinkNotIn: [String!]
   referenceLinkContains: String
+  referenceLinkHasPrefix: String
   referenceLinkHasSuffix: String
   referenceLinkIsNil: Boolean
   referenceLinkNotNil: Boolean
@@ -130788,6 +131670,7 @@ input TrustCenterNDARequestWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -130801,6 +131684,7 @@ input TrustCenterNDARequestWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -130814,6 +131698,7 @@ input TrustCenterNDARequestWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -130841,6 +131726,7 @@ input TrustCenterNDARequestWhereInput {
   firstNameIn: [String!]
   firstNameNotIn: [String!]
   firstNameContains: String
+  firstNameHasPrefix: String
   firstNameHasSuffix: String
   firstNameEqualFold: String
   firstNameContainsFold: String
@@ -130852,6 +131738,7 @@ input TrustCenterNDARequestWhereInput {
   lastNameIn: [String!]
   lastNameNotIn: [String!]
   lastNameContains: String
+  lastNameHasPrefix: String
   lastNameHasSuffix: String
   lastNameEqualFold: String
   lastNameContainsFold: String
@@ -130863,6 +131750,7 @@ input TrustCenterNDARequestWhereInput {
   emailIn: [String!]
   emailNotIn: [String!]
   emailContains: String
+  emailHasPrefix: String
   emailHasSuffix: String
   emailEqualFold: String
   emailContainsFold: String
@@ -130874,6 +131762,7 @@ input TrustCenterNDARequestWhereInput {
   companyNameIn: [String!]
   companyNameNotIn: [String!]
   companyNameContains: String
+  companyNameHasPrefix: String
   companyNameHasSuffix: String
   companyNameIsNil: Boolean
   companyNameNotNil: Boolean
@@ -130887,6 +131776,7 @@ input TrustCenterNDARequestWhereInput {
   reasonIn: [String!]
   reasonNotIn: [String!]
   reasonContains: String
+  reasonHasPrefix: String
   reasonHasSuffix: String
   reasonIsNil: Boolean
   reasonNotNil: Boolean
@@ -131349,6 +132239,7 @@ input TrustCenterSettingWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -131362,6 +132253,7 @@ input TrustCenterSettingWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -131375,6 +132267,7 @@ input TrustCenterSettingWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -131388,6 +132281,7 @@ input TrustCenterSettingWhereInput {
   trustCenterIDIn: [String!]
   trustCenterIDNotIn: [String!]
   trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
   trustCenterIDHasSuffix: String
   trustCenterIDIsNil: Boolean
   trustCenterIDNotNil: Boolean
@@ -131401,6 +132295,7 @@ input TrustCenterSettingWhereInput {
   titleIn: [String!]
   titleNotIn: [String!]
   titleContains: String
+  titleHasPrefix: String
   titleHasSuffix: String
   titleIsNil: Boolean
   titleNotNil: Boolean
@@ -131414,6 +132309,7 @@ input TrustCenterSettingWhereInput {
   companyNameIn: [String!]
   companyNameNotIn: [String!]
   companyNameContains: String
+  companyNameHasPrefix: String
   companyNameHasSuffix: String
   companyNameIsNil: Boolean
   companyNameNotNil: Boolean
@@ -131427,6 +132323,7 @@ input TrustCenterSettingWhereInput {
   companyDescriptionIn: [String!]
   companyDescriptionNotIn: [String!]
   companyDescriptionContains: String
+  companyDescriptionHasPrefix: String
   companyDescriptionHasSuffix: String
   companyDescriptionIsNil: Boolean
   companyDescriptionNotNil: Boolean
@@ -131440,6 +132337,7 @@ input TrustCenterSettingWhereInput {
   overviewIn: [String!]
   overviewNotIn: [String!]
   overviewContains: String
+  overviewHasPrefix: String
   overviewHasSuffix: String
   overviewIsNil: Boolean
   overviewNotNil: Boolean
@@ -131453,6 +132351,7 @@ input TrustCenterSettingWhereInput {
   logoRemoteURLIn: [String!]
   logoRemoteURLNotIn: [String!]
   logoRemoteURLContains: String
+  logoRemoteURLHasPrefix: String
   logoRemoteURLHasSuffix: String
   logoRemoteURLIsNil: Boolean
   logoRemoteURLNotNil: Boolean
@@ -131480,6 +132379,7 @@ input TrustCenterSettingWhereInput {
   faviconRemoteURLIn: [String!]
   faviconRemoteURLNotIn: [String!]
   faviconRemoteURLContains: String
+  faviconRemoteURLHasPrefix: String
   faviconRemoteURLHasSuffix: String
   faviconRemoteURLIsNil: Boolean
   faviconRemoteURLNotNil: Boolean
@@ -131530,6 +132430,7 @@ input TrustCenterSettingWhereInput {
   primaryColorIn: [String!]
   primaryColorNotIn: [String!]
   primaryColorContains: String
+  primaryColorHasPrefix: String
   primaryColorHasSuffix: String
   primaryColorIsNil: Boolean
   primaryColorNotNil: Boolean
@@ -131543,6 +132444,7 @@ input TrustCenterSettingWhereInput {
   fontIn: [String!]
   fontNotIn: [String!]
   fontContains: String
+  fontHasPrefix: String
   fontHasSuffix: String
   fontIsNil: Boolean
   fontNotNil: Boolean
@@ -131556,6 +132458,7 @@ input TrustCenterSettingWhereInput {
   foregroundColorIn: [String!]
   foregroundColorNotIn: [String!]
   foregroundColorContains: String
+  foregroundColorHasPrefix: String
   foregroundColorHasSuffix: String
   foregroundColorIsNil: Boolean
   foregroundColorNotNil: Boolean
@@ -131569,6 +132472,7 @@ input TrustCenterSettingWhereInput {
   backgroundColorIn: [String!]
   backgroundColorNotIn: [String!]
   backgroundColorContains: String
+  backgroundColorHasPrefix: String
   backgroundColorHasSuffix: String
   backgroundColorIsNil: Boolean
   backgroundColorNotNil: Boolean
@@ -131582,6 +132486,7 @@ input TrustCenterSettingWhereInput {
   accentColorIn: [String!]
   accentColorNotIn: [String!]
   accentColorContains: String
+  accentColorHasPrefix: String
   accentColorHasSuffix: String
   accentColorIsNil: Boolean
   accentColorNotNil: Boolean
@@ -131595,6 +132500,7 @@ input TrustCenterSettingWhereInput {
   secondaryBackgroundColorIn: [String!]
   secondaryBackgroundColorNotIn: [String!]
   secondaryBackgroundColorContains: String
+  secondaryBackgroundColorHasPrefix: String
   secondaryBackgroundColorHasSuffix: String
   secondaryBackgroundColorIsNil: Boolean
   secondaryBackgroundColorNotNil: Boolean
@@ -131608,6 +132514,7 @@ input TrustCenterSettingWhereInput {
   secondaryForegroundColorIn: [String!]
   secondaryForegroundColorNotIn: [String!]
   secondaryForegroundColorContains: String
+  secondaryForegroundColorHasPrefix: String
   secondaryForegroundColorHasSuffix: String
   secondaryForegroundColorIsNil: Boolean
   secondaryForegroundColorNotNil: Boolean
@@ -131637,6 +132544,7 @@ input TrustCenterSettingWhereInput {
   companyDomainIn: [String!]
   companyDomainNotIn: [String!]
   companyDomainContains: String
+  companyDomainHasPrefix: String
   companyDomainHasSuffix: String
   companyDomainIsNil: Boolean
   companyDomainNotNil: Boolean
@@ -131650,6 +132558,7 @@ input TrustCenterSettingWhereInput {
   securityContactIn: [String!]
   securityContactNotIn: [String!]
   securityContactContains: String
+  securityContactHasPrefix: String
   securityContactHasSuffix: String
   securityContactIsNil: Boolean
   securityContactNotNil: Boolean
@@ -131708,6 +132617,7 @@ input TrustCenterSettingWhereInput {
   statusPageURLIn: [String!]
   statusPageURLNotIn: [String!]
   statusPageURLContains: String
+  statusPageURLHasPrefix: String
   statusPageURLHasSuffix: String
   statusPageURLIsNil: Boolean
   statusPageURLNotNil: Boolean
@@ -131950,6 +132860,7 @@ input TrustCenterSubprocessorWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -131963,6 +132874,7 @@ input TrustCenterSubprocessorWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -131976,6 +132888,7 @@ input TrustCenterSubprocessorWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -131989,6 +132902,7 @@ input TrustCenterSubprocessorWhereInput {
   trustCenterSubprocessorKindNameIn: [String!]
   trustCenterSubprocessorKindNameNotIn: [String!]
   trustCenterSubprocessorKindNameContains: String
+  trustCenterSubprocessorKindNameHasPrefix: String
   trustCenterSubprocessorKindNameHasSuffix: String
   trustCenterSubprocessorKindNameIsNil: Boolean
   trustCenterSubprocessorKindNameNotNil: Boolean
@@ -132306,6 +133220,7 @@ input TrustCenterWatermarkConfigWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -132319,6 +133234,7 @@ input TrustCenterWatermarkConfigWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -132332,6 +133248,7 @@ input TrustCenterWatermarkConfigWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -132359,6 +133276,7 @@ input TrustCenterWatermarkConfigWhereInput {
   trustCenterIDIn: [String!]
   trustCenterIDNotIn: [String!]
   trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
   trustCenterIDHasSuffix: String
   trustCenterIDIsNil: Boolean
   trustCenterIDNotNil: Boolean
@@ -132393,6 +133311,7 @@ input TrustCenterWatermarkConfigWhereInput {
   textIn: [String!]
   textNotIn: [String!]
   textContains: String
+  textHasPrefix: String
   textHasSuffix: String
   textIsNil: Boolean
   textNotNil: Boolean
@@ -132445,6 +133364,7 @@ input TrustCenterWatermarkConfigWhereInput {
   colorIn: [String!]
   colorNotIn: [String!]
   colorContains: String
+  colorHasPrefix: String
   colorHasSuffix: String
   colorIsNil: Boolean
   colorNotNil: Boolean
@@ -132530,6 +133450,7 @@ input TrustCenterWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -132543,6 +133464,7 @@ input TrustCenterWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -132556,6 +133478,7 @@ input TrustCenterWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -132583,6 +133506,7 @@ input TrustCenterWhereInput {
   slugIn: [String!]
   slugNotIn: [String!]
   slugContains: String
+  slugHasPrefix: String
   slugHasSuffix: String
   slugIsNil: Boolean
   slugNotNil: Boolean
@@ -132624,6 +133548,7 @@ input TrustCenterWhereInput {
   pirschDomainIDIn: [String!]
   pirschDomainIDNotIn: [String!]
   pirschDomainIDContains: String
+  pirschDomainIDHasPrefix: String
   pirschDomainIDHasSuffix: String
   pirschDomainIDIsNil: Boolean
   pirschDomainIDNotNil: Boolean
@@ -132637,6 +133562,7 @@ input TrustCenterWhereInput {
   pirschIdentificationCodeIn: [String!]
   pirschIdentificationCodeNotIn: [String!]
   pirschIdentificationCodeContains: String
+  pirschIdentificationCodeHasPrefix: String
   pirschIdentificationCodeHasSuffix: String
   pirschIdentificationCodeIsNil: Boolean
   pirschIdentificationCodeNotNil: Boolean
@@ -132650,6 +133576,7 @@ input TrustCenterWhereInput {
   pirschAccessLinkIn: [String!]
   pirschAccessLinkNotIn: [String!]
   pirschAccessLinkContains: String
+  pirschAccessLinkHasPrefix: String
   pirschAccessLinkHasSuffix: String
   pirschAccessLinkIsNil: Boolean
   pirschAccessLinkNotNil: Boolean
@@ -132672,6 +133599,7 @@ input TrustCenterWhereInput {
   subprocessorURLIn: [String!]
   subprocessorURLNotIn: [String!]
   subprocessorURLContains: String
+  subprocessorURLHasPrefix: String
   subprocessorURLHasSuffix: String
   subprocessorURLIsNil: Boolean
   subprocessorURLNotNil: Boolean
@@ -142475,6 +143403,7 @@ input UserSettingWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -142488,6 +143417,7 @@ input UserSettingWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -142501,6 +143431,7 @@ input UserSettingWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -142528,6 +143459,7 @@ input UserSettingWhereInput {
   delegateUserIDIn: [String!]
   delegateUserIDNotIn: [String!]
   delegateUserIDContains: String
+  delegateUserIDHasPrefix: String
   delegateUserIDHasSuffix: String
   delegateUserIDIsNil: Boolean
   delegateUserIDNotNil: Boolean
@@ -142657,6 +143589,7 @@ input UserWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -142670,6 +143603,7 @@ input UserWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -142683,6 +143617,7 @@ input UserWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -142694,6 +143629,7 @@ input UserWhereInput {
   emailIn: [String!]
   emailNotIn: [String!]
   emailContains: String
+  emailHasPrefix: String
   emailHasSuffix: String
   emailEqualFold: String
   emailContainsFold: String
@@ -142705,6 +143641,7 @@ input UserWhereInput {
   firstNameIn: [String!]
   firstNameNotIn: [String!]
   firstNameContains: String
+  firstNameHasPrefix: String
   firstNameHasSuffix: String
   firstNameIsNil: Boolean
   firstNameNotNil: Boolean
@@ -142718,6 +143655,7 @@ input UserWhereInput {
   lastNameIn: [String!]
   lastNameNotIn: [String!]
   lastNameContains: String
+  lastNameHasPrefix: String
   lastNameHasSuffix: String
   lastNameIsNil: Boolean
   lastNameNotNil: Boolean
@@ -142731,6 +143669,7 @@ input UserWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameEqualFold: String
   displayNameContainsFold: String
@@ -142742,6 +143681,7 @@ input UserWhereInput {
   avatarRemoteURLIn: [String!]
   avatarRemoteURLNotIn: [String!]
   avatarRemoteURLContains: String
+  avatarRemoteURLHasPrefix: String
   avatarRemoteURLHasSuffix: String
   avatarRemoteURLIsNil: Boolean
   avatarRemoteURLNotNil: Boolean
@@ -142798,6 +143738,7 @@ input UserWhereInput {
   subIn: [String!]
   subNotIn: [String!]
   subContains: String
+  subHasPrefix: String
   subHasSuffix: String
   subIsNil: Boolean
   subNotNil: Boolean
@@ -142827,6 +143768,7 @@ input UserWhereInput {
   scimExternalIDIn: [String!]
   scimExternalIDNotIn: [String!]
   scimExternalIDContains: String
+  scimExternalIDHasPrefix: String
   scimExternalIDHasSuffix: String
   scimExternalIDIsNil: Boolean
   scimExternalIDNotNil: Boolean
@@ -142840,6 +143782,7 @@ input UserWhereInput {
   scimUsernameIn: [String!]
   scimUsernameNotIn: [String!]
   scimUsernameContains: String
+  scimUsernameHasPrefix: String
   scimUsernameHasSuffix: String
   scimUsernameIsNil: Boolean
   scimUsernameNotNil: Boolean
@@ -142860,6 +143803,7 @@ input UserWhereInput {
   scimPreferredLanguageIn: [String!]
   scimPreferredLanguageNotIn: [String!]
   scimPreferredLanguageContains: String
+  scimPreferredLanguageHasPrefix: String
   scimPreferredLanguageHasSuffix: String
   scimPreferredLanguageIsNil: Boolean
   scimPreferredLanguageNotNil: Boolean
@@ -142873,6 +143817,7 @@ input UserWhereInput {
   scimLocaleIn: [String!]
   scimLocaleNotIn: [String!]
   scimLocaleContains: String
+  scimLocaleHasPrefix: String
   scimLocaleHasSuffix: String
   scimLocaleIsNil: Boolean
   scimLocaleNotNil: Boolean
@@ -143226,6 +144171,7 @@ input VendorRiskScoreWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -143239,6 +144185,7 @@ input VendorRiskScoreWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -143252,6 +144199,7 @@ input VendorRiskScoreWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -143279,6 +144227,7 @@ input VendorRiskScoreWhereInput {
   questionKeyIn: [String!]
   questionKeyNotIn: [String!]
   questionKeyContains: String
+  questionKeyHasPrefix: String
   questionKeyHasSuffix: String
   questionKeyEqualFold: String
   questionKeyContainsFold: String
@@ -143290,6 +144239,7 @@ input VendorRiskScoreWhereInput {
   questionNameIn: [String!]
   questionNameNotIn: [String!]
   questionNameContains: String
+  questionNameHasPrefix: String
   questionNameHasSuffix: String
   questionNameEqualFold: String
   questionNameContainsFold: String
@@ -143301,6 +144251,7 @@ input VendorRiskScoreWhereInput {
   questionDescriptionIn: [String!]
   questionDescriptionNotIn: [String!]
   questionDescriptionContains: String
+  questionDescriptionHasPrefix: String
   questionDescriptionHasSuffix: String
   questionDescriptionIsNil: Boolean
   questionDescriptionNotNil: Boolean
@@ -143353,6 +144304,7 @@ input VendorRiskScoreWhereInput {
   answerIn: [String!]
   answerNotIn: [String!]
   answerContains: String
+  answerHasPrefix: String
   answerHasSuffix: String
   answerIsNil: Boolean
   answerNotNil: Boolean
@@ -143366,6 +144318,7 @@ input VendorRiskScoreWhereInput {
   notesIn: [String!]
   notesNotIn: [String!]
   notesContains: String
+  notesHasPrefix: String
   notesHasSuffix: String
   notesIsNil: Boolean
   notesNotNil: Boolean
@@ -143603,6 +144556,7 @@ input VendorScoringConfigWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -143616,6 +144570,7 @@ input VendorScoringConfigWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -143629,6 +144584,7 @@ input VendorScoringConfigWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -144715,6 +145671,7 @@ input VulnerabilityWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -144728,6 +145685,7 @@ input VulnerabilityWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -144741,6 +145699,7 @@ input VulnerabilityWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -144754,6 +145713,7 @@ input VulnerabilityWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -144765,6 +145725,7 @@ input VulnerabilityWhereInput {
   sourceDefinitionIDIn: [String!]
   sourceDefinitionIDNotIn: [String!]
   sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
   sourceDefinitionIDHasSuffix: String
   sourceDefinitionIDIsNil: Boolean
   sourceDefinitionIDNotNil: Boolean
@@ -144778,6 +145739,7 @@ input VulnerabilityWhereInput {
   sourceDefinitionVersionIn: [String!]
   sourceDefinitionVersionNotIn: [String!]
   sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
   sourceDefinitionVersionHasSuffix: String
   sourceDefinitionVersionIsNil: Boolean
   sourceDefinitionVersionNotNil: Boolean
@@ -144791,6 +145753,7 @@ input VulnerabilityWhereInput {
   sourceInstanceIDIn: [String!]
   sourceInstanceIDNotIn: [String!]
   sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
   sourceInstanceIDHasSuffix: String
   sourceInstanceIDIsNil: Boolean
   sourceInstanceIDNotNil: Boolean
@@ -144804,6 +145767,7 @@ input VulnerabilityWhereInput {
   managedByIn: [String!]
   managedByNotIn: [String!]
   managedByContains: String
+  managedByHasPrefix: String
   managedByHasSuffix: String
   managedByIsNil: Boolean
   managedByNotNil: Boolean
@@ -144817,6 +145781,7 @@ input VulnerabilityWhereInput {
   integrationRunIDIn: [String!]
   integrationRunIDNotIn: [String!]
   integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
   integrationRunIDHasSuffix: String
   integrationRunIDIsNil: Boolean
   integrationRunIDNotNil: Boolean
@@ -144830,6 +145795,7 @@ input VulnerabilityWhereInput {
   externalIDIn: [String!]
   externalIDNotIn: [String!]
   externalIDContains: String
+  externalIDHasPrefix: String
   externalIDHasSuffix: String
   externalIDEqualFold: String
   externalIDContainsFold: String
@@ -144855,6 +145821,7 @@ input VulnerabilityWhereInput {
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
   internalOwnerContains: String
+  internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
   internalOwnerIsNil: Boolean
   internalOwnerNotNil: Boolean
@@ -144910,6 +145877,7 @@ input VulnerabilityWhereInput {
   reviewedByIn: [String!]
   reviewedByNotIn: [String!]
   reviewedByContains: String
+  reviewedByHasPrefix: String
   reviewedByHasSuffix: String
   reviewedByIsNil: Boolean
   reviewedByNotNil: Boolean
@@ -144965,6 +145933,7 @@ input VulnerabilityWhereInput {
   assignedToIn: [String!]
   assignedToNotIn: [String!]
   assignedToContains: String
+  assignedToHasPrefix: String
   assignedToHasSuffix: String
   assignedToIsNil: Boolean
   assignedToNotNil: Boolean
@@ -145027,6 +145996,7 @@ input VulnerabilityWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -145040,6 +146010,7 @@ input VulnerabilityWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -145053,6 +146024,7 @@ input VulnerabilityWhereInput {
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
   environmentNameContains: String
+  environmentNameHasPrefix: String
   environmentNameHasSuffix: String
   environmentNameIsNil: Boolean
   environmentNameNotNil: Boolean
@@ -145080,6 +146052,7 @@ input VulnerabilityWhereInput {
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
   scopeNameContains: String
+  scopeNameHasPrefix: String
   scopeNameHasSuffix: String
   scopeNameIsNil: Boolean
   scopeNameNotNil: Boolean
@@ -145107,6 +146080,7 @@ input VulnerabilityWhereInput {
   vulnerabilityStatusNameIn: [String!]
   vulnerabilityStatusNameNotIn: [String!]
   vulnerabilityStatusNameContains: String
+  vulnerabilityStatusNameHasPrefix: String
   vulnerabilityStatusNameHasSuffix: String
   vulnerabilityStatusNameIsNil: Boolean
   vulnerabilityStatusNameNotNil: Boolean
@@ -145141,6 +146115,7 @@ input VulnerabilityWhereInput {
   externalOwnerIDIn: [String!]
   externalOwnerIDNotIn: [String!]
   externalOwnerIDContains: String
+  externalOwnerIDHasPrefix: String
   externalOwnerIDHasSuffix: String
   externalOwnerIDIsNil: Boolean
   externalOwnerIDNotNil: Boolean
@@ -145163,6 +146138,7 @@ input VulnerabilityWhereInput {
   cveIDIn: [String!]
   cveIDNotIn: [String!]
   cveIDContains: String
+  cveIDHasPrefix: String
   cveIDHasSuffix: String
   cveIDIsNil: Boolean
   cveIDNotNil: Boolean
@@ -145176,6 +146152,7 @@ input VulnerabilityWhereInput {
   sourceIn: [String!]
   sourceNotIn: [String!]
   sourceContains: String
+  sourceHasPrefix: String
   sourceHasSuffix: String
   sourceIsNil: Boolean
   sourceNotNil: Boolean
@@ -145189,6 +146166,7 @@ input VulnerabilityWhereInput {
   displayNameIn: [String!]
   displayNameNotIn: [String!]
   displayNameContains: String
+  displayNameHasPrefix: String
   displayNameHasSuffix: String
   displayNameIsNil: Boolean
   displayNameNotNil: Boolean
@@ -145202,6 +146180,7 @@ input VulnerabilityWhereInput {
   categoryIn: [String!]
   categoryNotIn: [String!]
   categoryContains: String
+  categoryHasPrefix: String
   categoryHasSuffix: String
   categoryIsNil: Boolean
   categoryNotNil: Boolean
@@ -145215,6 +146194,7 @@ input VulnerabilityWhereInput {
   severityIn: [String!]
   severityNotIn: [String!]
   severityContains: String
+  severityHasPrefix: String
   severityHasSuffix: String
   severityIsNil: Boolean
   severityNotNil: Boolean
@@ -145267,6 +146247,7 @@ input VulnerabilityWhereInput {
   priorityIn: [String!]
   priorityNotIn: [String!]
   priorityContains: String
+  priorityHasPrefix: String
   priorityHasSuffix: String
   priorityIsNil: Boolean
   priorityNotNil: Boolean
@@ -145280,6 +146261,7 @@ input VulnerabilityWhereInput {
   summaryIn: [String!]
   summaryNotIn: [String!]
   summaryContains: String
+  summaryHasPrefix: String
   summaryHasSuffix: String
   summaryIsNil: Boolean
   summaryNotNil: Boolean
@@ -145293,6 +146275,7 @@ input VulnerabilityWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -145306,6 +146289,7 @@ input VulnerabilityWhereInput {
   vectorIn: [String!]
   vectorNotIn: [String!]
   vectorContains: String
+  vectorHasPrefix: String
   vectorHasSuffix: String
   vectorIsNil: Boolean
   vectorNotNil: Boolean
@@ -145365,6 +146349,7 @@ input VulnerabilityWhereInput {
   vulnerableVersionRangeIn: [String!]
   vulnerableVersionRangeNotIn: [String!]
   vulnerableVersionRangeContains: String
+  vulnerableVersionRangeHasPrefix: String
   vulnerableVersionRangeHasSuffix: String
   vulnerableVersionRangeIsNil: Boolean
   vulnerableVersionRangeNotNil: Boolean
@@ -145378,6 +146363,7 @@ input VulnerabilityWhereInput {
   firstPatchedVersionIn: [String!]
   firstPatchedVersionNotIn: [String!]
   firstPatchedVersionContains: String
+  firstPatchedVersionHasPrefix: String
   firstPatchedVersionHasSuffix: String
   firstPatchedVersionIsNil: Boolean
   firstPatchedVersionNotNil: Boolean
@@ -145398,6 +146384,7 @@ input VulnerabilityWhereInput {
   packageNameIn: [String!]
   packageNameNotIn: [String!]
   packageNameContains: String
+  packageNameHasPrefix: String
   packageNameHasSuffix: String
   packageNameIsNil: Boolean
   packageNameNotNil: Boolean
@@ -145411,6 +146398,7 @@ input VulnerabilityWhereInput {
   packageEcosystemIn: [String!]
   packageEcosystemNotIn: [String!]
   packageEcosystemContains: String
+  packageEcosystemHasPrefix: String
   packageEcosystemHasSuffix: String
   packageEcosystemIsNil: Boolean
   packageEcosystemNotNil: Boolean
@@ -145424,6 +146412,7 @@ input VulnerabilityWhereInput {
   manifestPathIn: [String!]
   manifestPathNotIn: [String!]
   manifestPathContains: String
+  manifestPathHasPrefix: String
   manifestPathHasSuffix: String
   manifestPathIsNil: Boolean
   manifestPathNotNil: Boolean
@@ -145437,6 +146426,7 @@ input VulnerabilityWhereInput {
   dependencyScopeIn: [String!]
   dependencyScopeNotIn: [String!]
   dependencyScopeContains: String
+  dependencyScopeHasPrefix: String
   dependencyScopeHasSuffix: String
   dependencyScopeIsNil: Boolean
   dependencyScopeNotNil: Boolean
@@ -145490,6 +146480,7 @@ input VulnerabilityWhereInput {
   dismissedReasonIn: [String!]
   dismissedReasonNotIn: [String!]
   dismissedReasonContains: String
+  dismissedReasonHasPrefix: String
   dismissedReasonHasSuffix: String
   dismissedReasonIsNil: Boolean
   dismissedReasonNotNil: Boolean
@@ -145503,6 +146494,7 @@ input VulnerabilityWhereInput {
   dismissedCommentIn: [String!]
   dismissedCommentNotIn: [String!]
   dismissedCommentContains: String
+  dismissedCommentHasPrefix: String
   dismissedCommentHasSuffix: String
   dismissedCommentIsNil: Boolean
   dismissedCommentNotNil: Boolean
@@ -145536,6 +146528,7 @@ input VulnerabilityWhereInput {
   externalURIIn: [String!]
   externalURINotIn: [String!]
   externalURIContains: String
+  externalURIHasPrefix: String
   externalURIHasSuffix: String
   externalURIIsNil: Boolean
   externalURINotNil: Boolean
@@ -145842,6 +146835,7 @@ input WebauthnWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -145855,6 +146849,7 @@ input WebauthnWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -146202,6 +147197,7 @@ input WorkflowAssignmentTargetWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -146215,6 +147211,7 @@ input WorkflowAssignmentTargetWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -146228,6 +147225,7 @@ input WorkflowAssignmentTargetWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -146241,6 +147239,7 @@ input WorkflowAssignmentTargetWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -146313,6 +147312,7 @@ input WorkflowAssignmentTargetWhereInput {
   resolverKeyIn: [String!]
   resolverKeyNotIn: [String!]
   resolverKeyContains: String
+  resolverKeyHasPrefix: String
   resolverKeyHasSuffix: String
   resolverKeyIsNil: Boolean
   resolverKeyNotNil: Boolean
@@ -146398,6 +147398,7 @@ input WorkflowAssignmentWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -146411,6 +147412,7 @@ input WorkflowAssignmentWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -146424,6 +147426,7 @@ input WorkflowAssignmentWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -146437,6 +147440,7 @@ input WorkflowAssignmentWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -146474,6 +147478,7 @@ input WorkflowAssignmentWhereInput {
   assignmentKeyIn: [String!]
   assignmentKeyNotIn: [String!]
   assignmentKeyContains: String
+  assignmentKeyHasPrefix: String
   assignmentKeyHasSuffix: String
   assignmentKeyEqualFold: String
   assignmentKeyContainsFold: String
@@ -146485,6 +147490,7 @@ input WorkflowAssignmentWhereInput {
   roleIn: [String!]
   roleNotIn: [String!]
   roleContains: String
+  roleHasPrefix: String
   roleHasSuffix: String
   roleEqualFold: String
   roleContainsFold: String
@@ -146496,6 +147502,7 @@ input WorkflowAssignmentWhereInput {
   labelIn: [String!]
   labelNotIn: [String!]
   labelContains: String
+  labelHasPrefix: String
   labelHasSuffix: String
   labelIsNil: Boolean
   labelNotNil: Boolean
@@ -146559,6 +147566,7 @@ input WorkflowAssignmentWhereInput {
   notesIn: [String!]
   notesNotIn: [String!]
   notesContains: String
+  notesHasPrefix: String
   notesHasSuffix: String
   notesIsNil: Boolean
   notesNotNil: Boolean
@@ -147009,6 +148017,7 @@ input WorkflowDefinitionWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -147022,6 +148031,7 @@ input WorkflowDefinitionWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -147035,6 +148045,7 @@ input WorkflowDefinitionWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -147048,6 +148059,7 @@ input WorkflowDefinitionWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -147080,6 +148092,7 @@ input WorkflowDefinitionWhereInput {
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
   internalNotesContains: String
+  internalNotesHasPrefix: String
   internalNotesHasSuffix: String
   internalNotesIsNil: Boolean
   internalNotesNotNil: Boolean
@@ -147093,6 +148106,7 @@ input WorkflowDefinitionWhereInput {
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
   systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
   systemInternalIDIsNil: Boolean
   systemInternalIDNotNil: Boolean
@@ -147106,6 +148120,7 @@ input WorkflowDefinitionWhereInput {
   nameIn: [String!]
   nameNotIn: [String!]
   nameContains: String
+  nameHasPrefix: String
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
@@ -147117,6 +148132,7 @@ input WorkflowDefinitionWhereInput {
   descriptionIn: [String!]
   descriptionNotIn: [String!]
   descriptionContains: String
+  descriptionHasPrefix: String
   descriptionHasSuffix: String
   descriptionIsNil: Boolean
   descriptionNotNil: Boolean
@@ -147137,6 +148153,7 @@ input WorkflowDefinitionWhereInput {
   schemaTypeIn: [String!]
   schemaTypeNotIn: [String!]
   schemaTypeContains: String
+  schemaTypeHasPrefix: String
   schemaTypeHasSuffix: String
   schemaTypeEqualFold: String
   schemaTypeContainsFold: String
@@ -147372,6 +148389,7 @@ input WorkflowEventWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -147385,6 +148403,7 @@ input WorkflowEventWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -147398,6 +148417,7 @@ input WorkflowEventWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -147411,6 +148431,7 @@ input WorkflowEventWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -147904,6 +148925,7 @@ input WorkflowInstanceWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -147917,6 +148939,7 @@ input WorkflowInstanceWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -147930,6 +148953,7 @@ input WorkflowInstanceWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -147943,6 +148967,7 @@ input WorkflowInstanceWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
@@ -148681,6 +149706,7 @@ input WorkflowObjectRefWhereInput {
   createdByIn: [String!]
   createdByNotIn: [String!]
   createdByContains: String
+  createdByHasPrefix: String
   createdByHasSuffix: String
   createdByIsNil: Boolean
   createdByNotNil: Boolean
@@ -148694,6 +149720,7 @@ input WorkflowObjectRefWhereInput {
   updatedByIn: [String!]
   updatedByNotIn: [String!]
   updatedByContains: String
+  updatedByHasPrefix: String
   updatedByHasSuffix: String
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
@@ -148707,6 +149734,7 @@ input WorkflowObjectRefWhereInput {
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
   updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
   updatedByImpersonatorIsNil: Boolean
   updatedByImpersonatorNotNil: Boolean
@@ -148720,6 +149748,7 @@ input WorkflowObjectRefWhereInput {
   displayIDIn: [String!]
   displayIDNotIn: [String!]
   displayIDContains: String
+  displayIDHasPrefix: String
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String

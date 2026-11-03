@@ -111,6 +111,7 @@ type ActionPlanHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -147,6 +148,7 @@ type ActionPlanHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -159,6 +161,7 @@ type ActionPlanHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -171,6 +174,7 @@ type ActionPlanHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -183,6 +187,7 @@ type ActionPlanHistoryWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        bool     `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       bool     `json:"revisionNotNil,omitempty"`
@@ -195,6 +200,7 @@ type ActionPlanHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -321,6 +327,9 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, actionplanhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, actionplanhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, actionplanhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -405,6 +414,9 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, actionplanhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, actionplanhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, actionplanhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -434,6 +446,9 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, actionplanhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, actionplanhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, actionplanhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -465,6 +480,9 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, actionplanhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, actionplanhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, actionplanhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -495,6 +513,9 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	if i.RevisionContains != nil {
 		predicates = append(predicates, actionplanhistory.RevisionContains(*i.RevisionContains))
 	}
+	if i.RevisionHasPrefix != nil {
+		predicates = append(predicates, actionplanhistory.RevisionHasPrefix(*i.RevisionHasPrefix))
+	}
 	if i.RevisionHasSuffix != nil {
 		predicates = append(predicates, actionplanhistory.RevisionHasSuffix(*i.RevisionHasSuffix))
 	}
@@ -524,6 +545,9 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, actionplanhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, actionplanhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, actionplanhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -579,6 +603,7 @@ type AssessmentHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -615,6 +640,7 @@ type AssessmentHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -627,6 +653,7 @@ type AssessmentHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -639,6 +666,7 @@ type AssessmentHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -651,6 +679,7 @@ type AssessmentHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -777,6 +806,9 @@ func (i *AssessmentHistoryWhereInput) P() (predicate.AssessmentHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, assessmenthistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, assessmenthistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, assessmenthistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -861,6 +893,9 @@ func (i *AssessmentHistoryWhereInput) P() (predicate.AssessmentHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, assessmenthistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, assessmenthistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, assessmenthistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -890,6 +925,9 @@ func (i *AssessmentHistoryWhereInput) P() (predicate.AssessmentHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, assessmenthistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, assessmenthistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, assessmenthistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -921,6 +959,9 @@ func (i *AssessmentHistoryWhereInput) P() (predicate.AssessmentHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, assessmenthistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, assessmenthistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, assessmenthistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -950,6 +991,9 @@ func (i *AssessmentHistoryWhereInput) P() (predicate.AssessmentHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, assessmenthistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, assessmenthistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, assessmenthistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -1005,6 +1049,7 @@ type AssessmentPolicyHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -1041,6 +1086,7 @@ type AssessmentPolicyHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -1053,6 +1099,7 @@ type AssessmentPolicyHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -1065,6 +1112,7 @@ type AssessmentPolicyHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -1077,6 +1125,7 @@ type AssessmentPolicyHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -1203,6 +1252,9 @@ func (i *AssessmentPolicyHistoryWhereInput) P() (predicate.AssessmentPolicyHisto
 	if i.RefContains != nil {
 		predicates = append(predicates, assessmentpolicyhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicyhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, assessmentpolicyhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -1287,6 +1339,9 @@ func (i *AssessmentPolicyHistoryWhereInput) P() (predicate.AssessmentPolicyHisto
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, assessmentpolicyhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicyhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, assessmentpolicyhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -1316,6 +1371,9 @@ func (i *AssessmentPolicyHistoryWhereInput) P() (predicate.AssessmentPolicyHisto
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, assessmentpolicyhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicyhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, assessmentpolicyhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -1347,6 +1405,9 @@ func (i *AssessmentPolicyHistoryWhereInput) P() (predicate.AssessmentPolicyHisto
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, assessmentpolicyhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicyhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, assessmentpolicyhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -1376,6 +1437,9 @@ func (i *AssessmentPolicyHistoryWhereInput) P() (predicate.AssessmentPolicyHisto
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, assessmentpolicyhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicyhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, assessmentpolicyhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -1431,6 +1495,7 @@ type AssessmentResponseHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -1467,6 +1532,7 @@ type AssessmentResponseHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -1479,6 +1545,7 @@ type AssessmentResponseHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -1491,6 +1558,7 @@ type AssessmentResponseHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -1503,6 +1571,7 @@ type AssessmentResponseHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -1629,6 +1698,9 @@ func (i *AssessmentResponseHistoryWhereInput) P() (predicate.AssessmentResponseH
 	if i.RefContains != nil {
 		predicates = append(predicates, assessmentresponsehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, assessmentresponsehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, assessmentresponsehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -1713,6 +1785,9 @@ func (i *AssessmentResponseHistoryWhereInput) P() (predicate.AssessmentResponseH
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, assessmentresponsehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, assessmentresponsehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, assessmentresponsehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -1742,6 +1817,9 @@ func (i *AssessmentResponseHistoryWhereInput) P() (predicate.AssessmentResponseH
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, assessmentresponsehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, assessmentresponsehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, assessmentresponsehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -1773,6 +1851,9 @@ func (i *AssessmentResponseHistoryWhereInput) P() (predicate.AssessmentResponseH
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, assessmentresponsehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, assessmentresponsehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, assessmentresponsehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -1802,6 +1883,9 @@ func (i *AssessmentResponseHistoryWhereInput) P() (predicate.AssessmentResponseH
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, assessmentresponsehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, assessmentresponsehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, assessmentresponsehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -1857,6 +1941,7 @@ type AssetHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -1893,6 +1978,7 @@ type AssetHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -1905,6 +1991,7 @@ type AssetHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -1917,6 +2004,7 @@ type AssetHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -1929,6 +2017,7 @@ type AssetHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -2055,6 +2144,9 @@ func (i *AssetHistoryWhereInput) P() (predicate.AssetHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, assethistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, assethistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, assethistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -2139,6 +2231,9 @@ func (i *AssetHistoryWhereInput) P() (predicate.AssetHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, assethistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, assethistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, assethistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -2168,6 +2263,9 @@ func (i *AssetHistoryWhereInput) P() (predicate.AssetHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, assethistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, assethistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, assethistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -2199,6 +2297,9 @@ func (i *AssetHistoryWhereInput) P() (predicate.AssetHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, assethistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, assethistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, assethistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -2228,6 +2329,9 @@ func (i *AssetHistoryWhereInput) P() (predicate.AssetHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, assethistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, assethistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, assethistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -2283,6 +2387,7 @@ type CampaignHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -2319,6 +2424,7 @@ type CampaignHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -2331,6 +2437,7 @@ type CampaignHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -2343,6 +2450,7 @@ type CampaignHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -2355,6 +2463,7 @@ type CampaignHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -2481,6 +2590,9 @@ func (i *CampaignHistoryWhereInput) P() (predicate.CampaignHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, campaignhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, campaignhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, campaignhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -2565,6 +2677,9 @@ func (i *CampaignHistoryWhereInput) P() (predicate.CampaignHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, campaignhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, campaignhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, campaignhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -2594,6 +2709,9 @@ func (i *CampaignHistoryWhereInput) P() (predicate.CampaignHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, campaignhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, campaignhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, campaignhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -2625,6 +2743,9 @@ func (i *CampaignHistoryWhereInput) P() (predicate.CampaignHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, campaignhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, campaignhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, campaignhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -2654,6 +2775,9 @@ func (i *CampaignHistoryWhereInput) P() (predicate.CampaignHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, campaignhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, campaignhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, campaignhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -2709,6 +2833,7 @@ type CampaignTargetHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -2745,6 +2870,7 @@ type CampaignTargetHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -2757,6 +2883,7 @@ type CampaignTargetHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -2769,6 +2896,7 @@ type CampaignTargetHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -2781,6 +2909,7 @@ type CampaignTargetHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -2907,6 +3036,9 @@ func (i *CampaignTargetHistoryWhereInput) P() (predicate.CampaignTargetHistory, 
 	if i.RefContains != nil {
 		predicates = append(predicates, campaigntargethistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, campaigntargethistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, campaigntargethistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -2991,6 +3123,9 @@ func (i *CampaignTargetHistoryWhereInput) P() (predicate.CampaignTargetHistory, 
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, campaigntargethistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, campaigntargethistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, campaigntargethistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -3020,6 +3155,9 @@ func (i *CampaignTargetHistoryWhereInput) P() (predicate.CampaignTargetHistory, 
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, campaigntargethistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, campaigntargethistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, campaigntargethistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -3051,6 +3189,9 @@ func (i *CampaignTargetHistoryWhereInput) P() (predicate.CampaignTargetHistory, 
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, campaigntargethistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, campaigntargethistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, campaigntargethistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -3080,6 +3221,9 @@ func (i *CampaignTargetHistoryWhereInput) P() (predicate.CampaignTargetHistory, 
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, campaigntargethistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, campaigntargethistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, campaigntargethistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -3135,6 +3279,7 @@ type ContactHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -3171,6 +3316,7 @@ type ContactHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -3183,6 +3329,7 @@ type ContactHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -3195,6 +3342,7 @@ type ContactHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -3207,6 +3355,7 @@ type ContactHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -3333,6 +3482,9 @@ func (i *ContactHistoryWhereInput) P() (predicate.ContactHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, contacthistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, contacthistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, contacthistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -3417,6 +3569,9 @@ func (i *ContactHistoryWhereInput) P() (predicate.ContactHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, contacthistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, contacthistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, contacthistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -3446,6 +3601,9 @@ func (i *ContactHistoryWhereInput) P() (predicate.ContactHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, contacthistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, contacthistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, contacthistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -3477,6 +3635,9 @@ func (i *ContactHistoryWhereInput) P() (predicate.ContactHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, contacthistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, contacthistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, contacthistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -3506,6 +3667,9 @@ func (i *ContactHistoryWhereInput) P() (predicate.ContactHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, contacthistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, contacthistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, contacthistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -3561,6 +3725,7 @@ type ControlHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -3597,6 +3762,7 @@ type ControlHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -3609,6 +3775,7 @@ type ControlHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -3621,6 +3788,7 @@ type ControlHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -3633,6 +3801,7 @@ type ControlHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -3759,6 +3928,9 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, controlhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, controlhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, controlhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -3843,6 +4015,9 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, controlhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, controlhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, controlhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -3872,6 +4047,9 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, controlhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, controlhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, controlhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -3903,6 +4081,9 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, controlhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, controlhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, controlhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -3932,6 +4113,9 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, controlhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, controlhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -3987,6 +4171,7 @@ type ControlImplementationHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -4023,6 +4208,7 @@ type ControlImplementationHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -4035,6 +4221,7 @@ type ControlImplementationHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -4047,6 +4234,7 @@ type ControlImplementationHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -4059,6 +4247,7 @@ type ControlImplementationHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -4185,6 +4374,9 @@ func (i *ControlImplementationHistoryWhereInput) P() (predicate.ControlImplement
 	if i.RefContains != nil {
 		predicates = append(predicates, controlimplementationhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, controlimplementationhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, controlimplementationhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -4269,6 +4461,9 @@ func (i *ControlImplementationHistoryWhereInput) P() (predicate.ControlImplement
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, controlimplementationhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, controlimplementationhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, controlimplementationhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -4298,6 +4493,9 @@ func (i *ControlImplementationHistoryWhereInput) P() (predicate.ControlImplement
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, controlimplementationhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, controlimplementationhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, controlimplementationhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -4329,6 +4527,9 @@ func (i *ControlImplementationHistoryWhereInput) P() (predicate.ControlImplement
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, controlimplementationhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, controlimplementationhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, controlimplementationhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -4358,6 +4559,9 @@ func (i *ControlImplementationHistoryWhereInput) P() (predicate.ControlImplement
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, controlimplementationhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, controlimplementationhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, controlimplementationhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -4413,6 +4617,7 @@ type ControlObjectiveHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -4449,6 +4654,7 @@ type ControlObjectiveHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -4461,6 +4667,7 @@ type ControlObjectiveHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -4473,6 +4680,7 @@ type ControlObjectiveHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -4485,6 +4693,7 @@ type ControlObjectiveHistoryWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        bool     `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       bool     `json:"revisionNotNil,omitempty"`
@@ -4497,6 +4706,7 @@ type ControlObjectiveHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -4623,6 +4833,9 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	if i.RefContains != nil {
 		predicates = append(predicates, controlobjectivehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, controlobjectivehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, controlobjectivehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -4707,6 +4920,9 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, controlobjectivehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, controlobjectivehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, controlobjectivehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -4736,6 +4952,9 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, controlobjectivehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, controlobjectivehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, controlobjectivehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -4767,6 +4986,9 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, controlobjectivehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, controlobjectivehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, controlobjectivehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -4797,6 +5019,9 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	if i.RevisionContains != nil {
 		predicates = append(predicates, controlobjectivehistory.RevisionContains(*i.RevisionContains))
 	}
+	if i.RevisionHasPrefix != nil {
+		predicates = append(predicates, controlobjectivehistory.RevisionHasPrefix(*i.RevisionHasPrefix))
+	}
 	if i.RevisionHasSuffix != nil {
 		predicates = append(predicates, controlobjectivehistory.RevisionHasSuffix(*i.RevisionHasSuffix))
 	}
@@ -4826,6 +5051,9 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, controlobjectivehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, controlobjectivehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, controlobjectivehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -4881,6 +5109,7 @@ type CustomDomainHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -4917,6 +5146,7 @@ type CustomDomainHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -4929,6 +5159,7 @@ type CustomDomainHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -4941,6 +5172,7 @@ type CustomDomainHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -4953,6 +5185,7 @@ type CustomDomainHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -5079,6 +5312,9 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	if i.RefContains != nil {
 		predicates = append(predicates, customdomainhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, customdomainhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, customdomainhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -5163,6 +5399,9 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, customdomainhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, customdomainhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, customdomainhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -5192,6 +5431,9 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, customdomainhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, customdomainhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, customdomainhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -5223,6 +5465,9 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, customdomainhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, customdomainhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, customdomainhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -5252,6 +5497,9 @@ func (i *CustomDomainHistoryWhereInput) P() (predicate.CustomDomainHistory, erro
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, customdomainhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, customdomainhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, customdomainhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -5307,6 +5555,7 @@ type DiscussionHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -5343,6 +5592,7 @@ type DiscussionHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -5355,6 +5605,7 @@ type DiscussionHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -5367,6 +5618,7 @@ type DiscussionHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -5379,6 +5631,7 @@ type DiscussionHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -5505,6 +5758,9 @@ func (i *DiscussionHistoryWhereInput) P() (predicate.DiscussionHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, discussionhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, discussionhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, discussionhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -5589,6 +5845,9 @@ func (i *DiscussionHistoryWhereInput) P() (predicate.DiscussionHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, discussionhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, discussionhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, discussionhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -5618,6 +5877,9 @@ func (i *DiscussionHistoryWhereInput) P() (predicate.DiscussionHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, discussionhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, discussionhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, discussionhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -5649,6 +5911,9 @@ func (i *DiscussionHistoryWhereInput) P() (predicate.DiscussionHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, discussionhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, discussionhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, discussionhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -5678,6 +5943,9 @@ func (i *DiscussionHistoryWhereInput) P() (predicate.DiscussionHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, discussionhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, discussionhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, discussionhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -5733,6 +6001,7 @@ type DocumentDataHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -5769,6 +6038,7 @@ type DocumentDataHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -5781,6 +6051,7 @@ type DocumentDataHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -5793,6 +6064,7 @@ type DocumentDataHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -5805,6 +6077,7 @@ type DocumentDataHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -5931,6 +6204,9 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 	if i.RefContains != nil {
 		predicates = append(predicates, documentdatahistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, documentdatahistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, documentdatahistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -6015,6 +6291,9 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, documentdatahistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, documentdatahistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, documentdatahistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -6044,6 +6323,9 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, documentdatahistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, documentdatahistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, documentdatahistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -6075,6 +6357,9 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, documentdatahistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, documentdatahistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, documentdatahistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -6104,6 +6389,9 @@ func (i *DocumentDataHistoryWhereInput) P() (predicate.DocumentDataHistory, erro
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, documentdatahistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, documentdatahistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, documentdatahistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -6159,6 +6447,7 @@ type EmailTemplateHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -6195,6 +6484,7 @@ type EmailTemplateHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -6207,6 +6497,7 @@ type EmailTemplateHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -6219,6 +6510,7 @@ type EmailTemplateHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -6231,6 +6523,7 @@ type EmailTemplateHistoryWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        bool     `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       bool     `json:"revisionNotNil,omitempty"`
@@ -6243,6 +6536,7 @@ type EmailTemplateHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -6369,6 +6663,9 @@ func (i *EmailTemplateHistoryWhereInput) P() (predicate.EmailTemplateHistory, er
 	if i.RefContains != nil {
 		predicates = append(predicates, emailtemplatehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, emailtemplatehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -6453,6 +6750,9 @@ func (i *EmailTemplateHistoryWhereInput) P() (predicate.EmailTemplateHistory, er
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, emailtemplatehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, emailtemplatehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -6482,6 +6782,9 @@ func (i *EmailTemplateHistoryWhereInput) P() (predicate.EmailTemplateHistory, er
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, emailtemplatehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, emailtemplatehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -6513,6 +6816,9 @@ func (i *EmailTemplateHistoryWhereInput) P() (predicate.EmailTemplateHistory, er
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, emailtemplatehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, emailtemplatehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -6543,6 +6849,9 @@ func (i *EmailTemplateHistoryWhereInput) P() (predicate.EmailTemplateHistory, er
 	if i.RevisionContains != nil {
 		predicates = append(predicates, emailtemplatehistory.RevisionContains(*i.RevisionContains))
 	}
+	if i.RevisionHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.RevisionHasPrefix(*i.RevisionHasPrefix))
+	}
 	if i.RevisionHasSuffix != nil {
 		predicates = append(predicates, emailtemplatehistory.RevisionHasSuffix(*i.RevisionHasSuffix))
 	}
@@ -6572,6 +6881,9 @@ func (i *EmailTemplateHistoryWhereInput) P() (predicate.EmailTemplateHistory, er
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, emailtemplatehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, emailtemplatehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -6627,6 +6939,7 @@ type EntityHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -6663,6 +6976,7 @@ type EntityHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -6675,6 +6989,7 @@ type EntityHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -6687,6 +7002,7 @@ type EntityHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -6699,6 +7015,7 @@ type EntityHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -6825,6 +7142,9 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, entityhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, entityhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, entityhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -6909,6 +7229,9 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, entityhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, entityhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, entityhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -6938,6 +7261,9 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, entityhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, entityhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, entityhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -6969,6 +7295,9 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, entityhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, entityhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, entityhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -6998,6 +7327,9 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, entityhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, entityhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, entityhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -7053,6 +7385,7 @@ type EntityTypeHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -7089,6 +7422,7 @@ type EntityTypeHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -7101,6 +7435,7 @@ type EntityTypeHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -7113,6 +7448,7 @@ type EntityTypeHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -7125,6 +7461,7 @@ type EntityTypeHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -7251,6 +7588,9 @@ func (i *EntityTypeHistoryWhereInput) P() (predicate.EntityTypeHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, entitytypehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, entitytypehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, entitytypehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -7335,6 +7675,9 @@ func (i *EntityTypeHistoryWhereInput) P() (predicate.EntityTypeHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, entitytypehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, entitytypehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, entitytypehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -7364,6 +7707,9 @@ func (i *EntityTypeHistoryWhereInput) P() (predicate.EntityTypeHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, entitytypehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, entitytypehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, entitytypehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -7395,6 +7741,9 @@ func (i *EntityTypeHistoryWhereInput) P() (predicate.EntityTypeHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, entitytypehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, entitytypehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, entitytypehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -7424,6 +7773,9 @@ func (i *EntityTypeHistoryWhereInput) P() (predicate.EntityTypeHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, entitytypehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, entitytypehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, entitytypehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -7479,6 +7831,7 @@ type EvidenceHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -7515,6 +7868,7 @@ type EvidenceHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -7527,6 +7881,7 @@ type EvidenceHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -7539,6 +7894,7 @@ type EvidenceHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -7551,6 +7907,7 @@ type EvidenceHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -7677,6 +8034,9 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, evidencehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, evidencehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, evidencehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -7761,6 +8121,9 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, evidencehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, evidencehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, evidencehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -7790,6 +8153,9 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, evidencehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, evidencehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, evidencehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -7821,6 +8187,9 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, evidencehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, evidencehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, evidencehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -7850,6 +8219,9 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, evidencehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, evidencehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, evidencehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -7905,6 +8277,7 @@ type FileHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -7941,6 +8314,7 @@ type FileHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -7953,6 +8327,7 @@ type FileHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -7965,6 +8340,7 @@ type FileHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -8091,6 +8467,9 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, filehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, filehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, filehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -8175,6 +8554,9 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, filehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, filehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, filehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -8205,6 +8587,9 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, filehistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, filehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, filehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -8234,6 +8619,9 @@ func (i *FileHistoryWhereInput) P() (predicate.FileHistory, error) {
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, filehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, filehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, filehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -8289,6 +8677,7 @@ type FindingControlHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -8325,6 +8714,7 @@ type FindingControlHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -8337,6 +8727,7 @@ type FindingControlHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -8349,6 +8740,7 @@ type FindingControlHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -8361,6 +8753,7 @@ type FindingControlHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -8487,6 +8880,9 @@ func (i *FindingControlHistoryWhereInput) P() (predicate.FindingControlHistory, 
 	if i.RefContains != nil {
 		predicates = append(predicates, findingcontrolhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, findingcontrolhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, findingcontrolhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -8571,6 +8967,9 @@ func (i *FindingControlHistoryWhereInput) P() (predicate.FindingControlHistory, 
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, findingcontrolhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, findingcontrolhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, findingcontrolhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -8600,6 +8999,9 @@ func (i *FindingControlHistoryWhereInput) P() (predicate.FindingControlHistory, 
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, findingcontrolhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, findingcontrolhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, findingcontrolhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -8631,6 +9033,9 @@ func (i *FindingControlHistoryWhereInput) P() (predicate.FindingControlHistory, 
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, findingcontrolhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, findingcontrolhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, findingcontrolhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -8660,6 +9065,9 @@ func (i *FindingControlHistoryWhereInput) P() (predicate.FindingControlHistory, 
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, findingcontrolhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, findingcontrolhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -8715,6 +9123,7 @@ type FindingHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -8751,6 +9160,7 @@ type FindingHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -8763,6 +9173,7 @@ type FindingHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -8775,6 +9186,7 @@ type FindingHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -8787,6 +9199,7 @@ type FindingHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -8913,6 +9326,9 @@ func (i *FindingHistoryWhereInput) P() (predicate.FindingHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, findinghistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, findinghistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, findinghistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -8997,6 +9413,9 @@ func (i *FindingHistoryWhereInput) P() (predicate.FindingHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, findinghistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, findinghistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, findinghistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -9026,6 +9445,9 @@ func (i *FindingHistoryWhereInput) P() (predicate.FindingHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, findinghistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, findinghistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, findinghistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -9057,6 +9479,9 @@ func (i *FindingHistoryWhereInput) P() (predicate.FindingHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, findinghistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, findinghistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, findinghistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -9086,6 +9511,9 @@ func (i *FindingHistoryWhereInput) P() (predicate.FindingHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, findinghistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, findinghistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, findinghistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -9141,6 +9569,7 @@ type GroupHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -9177,6 +9606,7 @@ type GroupHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -9189,6 +9619,7 @@ type GroupHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -9201,6 +9632,7 @@ type GroupHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -9213,6 +9645,7 @@ type GroupHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -9339,6 +9772,9 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, grouphistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, grouphistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, grouphistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -9423,6 +9859,9 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, grouphistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, grouphistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, grouphistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -9452,6 +9891,9 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, grouphistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, grouphistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, grouphistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -9483,6 +9925,9 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, grouphistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, grouphistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, grouphistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -9512,6 +9957,9 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, grouphistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, grouphistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, grouphistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -9567,6 +10015,7 @@ type GroupMembershipHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -9603,6 +10052,7 @@ type GroupMembershipHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -9615,6 +10065,7 @@ type GroupMembershipHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -9627,6 +10078,7 @@ type GroupMembershipHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -9753,6 +10205,9 @@ func (i *GroupMembershipHistoryWhereInput) P() (predicate.GroupMembershipHistory
 	if i.RefContains != nil {
 		predicates = append(predicates, groupmembershiphistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, groupmembershiphistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, groupmembershiphistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -9837,6 +10292,9 @@ func (i *GroupMembershipHistoryWhereInput) P() (predicate.GroupMembershipHistory
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, groupmembershiphistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, groupmembershiphistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, groupmembershiphistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -9867,6 +10325,9 @@ func (i *GroupMembershipHistoryWhereInput) P() (predicate.GroupMembershipHistory
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, groupmembershiphistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, groupmembershiphistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, groupmembershiphistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -9896,6 +10357,9 @@ func (i *GroupMembershipHistoryWhereInput) P() (predicate.GroupMembershipHistory
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, groupmembershiphistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, groupmembershiphistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, groupmembershiphistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -9951,6 +10415,7 @@ type GroupSettingHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -9987,6 +10452,7 @@ type GroupSettingHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -9999,6 +10465,7 @@ type GroupSettingHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -10011,6 +10478,7 @@ type GroupSettingHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -10137,6 +10605,9 @@ func (i *GroupSettingHistoryWhereInput) P() (predicate.GroupSettingHistory, erro
 	if i.RefContains != nil {
 		predicates = append(predicates, groupsettinghistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, groupsettinghistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, groupsettinghistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -10221,6 +10692,9 @@ func (i *GroupSettingHistoryWhereInput) P() (predicate.GroupSettingHistory, erro
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, groupsettinghistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, groupsettinghistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, groupsettinghistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -10251,6 +10725,9 @@ func (i *GroupSettingHistoryWhereInput) P() (predicate.GroupSettingHistory, erro
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, groupsettinghistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, groupsettinghistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, groupsettinghistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -10280,6 +10757,9 @@ func (i *GroupSettingHistoryWhereInput) P() (predicate.GroupSettingHistory, erro
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, groupsettinghistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, groupsettinghistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, groupsettinghistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -10335,6 +10815,7 @@ type HushHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -10371,6 +10852,7 @@ type HushHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -10383,6 +10865,7 @@ type HushHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -10395,6 +10878,7 @@ type HushHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -10407,6 +10891,7 @@ type HushHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -10533,6 +11018,9 @@ func (i *HushHistoryWhereInput) P() (predicate.HushHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, hushhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, hushhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, hushhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -10617,6 +11105,9 @@ func (i *HushHistoryWhereInput) P() (predicate.HushHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, hushhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, hushhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, hushhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -10646,6 +11137,9 @@ func (i *HushHistoryWhereInput) P() (predicate.HushHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, hushhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, hushhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, hushhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -10677,6 +11171,9 @@ func (i *HushHistoryWhereInput) P() (predicate.HushHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, hushhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, hushhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, hushhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -10706,6 +11203,9 @@ func (i *HushHistoryWhereInput) P() (predicate.HushHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, hushhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, hushhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, hushhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -10761,6 +11261,7 @@ type IdentityHolderHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -10797,6 +11298,7 @@ type IdentityHolderHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -10809,6 +11311,7 @@ type IdentityHolderHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -10821,6 +11324,7 @@ type IdentityHolderHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -10833,6 +11337,7 @@ type IdentityHolderHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -10959,6 +11464,9 @@ func (i *IdentityHolderHistoryWhereInput) P() (predicate.IdentityHolderHistory, 
 	if i.RefContains != nil {
 		predicates = append(predicates, identityholderhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, identityholderhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, identityholderhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -11043,6 +11551,9 @@ func (i *IdentityHolderHistoryWhereInput) P() (predicate.IdentityHolderHistory, 
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, identityholderhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, identityholderhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, identityholderhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -11072,6 +11583,9 @@ func (i *IdentityHolderHistoryWhereInput) P() (predicate.IdentityHolderHistory, 
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, identityholderhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, identityholderhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, identityholderhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -11103,6 +11617,9 @@ func (i *IdentityHolderHistoryWhereInput) P() (predicate.IdentityHolderHistory, 
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, identityholderhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, identityholderhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, identityholderhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -11132,6 +11649,9 @@ func (i *IdentityHolderHistoryWhereInput) P() (predicate.IdentityHolderHistory, 
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, identityholderhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, identityholderhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, identityholderhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -11187,6 +11707,7 @@ type InternalPolicyHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -11223,6 +11744,7 @@ type InternalPolicyHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -11235,6 +11757,7 @@ type InternalPolicyHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -11247,6 +11770,7 @@ type InternalPolicyHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -11259,6 +11783,7 @@ type InternalPolicyHistoryWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        bool     `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       bool     `json:"revisionNotNil,omitempty"`
@@ -11271,6 +11796,7 @@ type InternalPolicyHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -11397,6 +11923,9 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	if i.RefContains != nil {
 		predicates = append(predicates, internalpolicyhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, internalpolicyhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -11481,6 +12010,9 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, internalpolicyhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, internalpolicyhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -11510,6 +12042,9 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, internalpolicyhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, internalpolicyhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -11541,6 +12076,9 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, internalpolicyhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, internalpolicyhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -11571,6 +12109,9 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	if i.RevisionContains != nil {
 		predicates = append(predicates, internalpolicyhistory.RevisionContains(*i.RevisionContains))
 	}
+	if i.RevisionHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.RevisionHasPrefix(*i.RevisionHasPrefix))
+	}
 	if i.RevisionHasSuffix != nil {
 		predicates = append(predicates, internalpolicyhistory.RevisionHasSuffix(*i.RevisionHasSuffix))
 	}
@@ -11600,6 +12141,9 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, internalpolicyhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, internalpolicyhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -11655,6 +12199,7 @@ type MappableDomainHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -11691,6 +12236,7 @@ type MappableDomainHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -11703,6 +12249,7 @@ type MappableDomainHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -11715,6 +12262,7 @@ type MappableDomainHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -11841,6 +12389,9 @@ func (i *MappableDomainHistoryWhereInput) P() (predicate.MappableDomainHistory, 
 	if i.RefContains != nil {
 		predicates = append(predicates, mappabledomainhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, mappabledomainhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, mappabledomainhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -11925,6 +12476,9 @@ func (i *MappableDomainHistoryWhereInput) P() (predicate.MappableDomainHistory, 
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, mappabledomainhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, mappabledomainhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, mappabledomainhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -11955,6 +12509,9 @@ func (i *MappableDomainHistoryWhereInput) P() (predicate.MappableDomainHistory, 
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, mappabledomainhistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, mappabledomainhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, mappabledomainhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -11984,6 +12541,9 @@ func (i *MappableDomainHistoryWhereInput) P() (predicate.MappableDomainHistory, 
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, mappabledomainhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, mappabledomainhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, mappabledomainhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -12039,6 +12599,7 @@ type MappedControlHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -12075,6 +12636,7 @@ type MappedControlHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -12087,6 +12649,7 @@ type MappedControlHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -12099,6 +12662,7 @@ type MappedControlHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -12111,6 +12675,7 @@ type MappedControlHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -12237,6 +12802,9 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	if i.RefContains != nil {
 		predicates = append(predicates, mappedcontrolhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, mappedcontrolhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -12321,6 +12889,9 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, mappedcontrolhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, mappedcontrolhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -12350,6 +12921,9 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, mappedcontrolhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, mappedcontrolhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -12381,6 +12955,9 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, mappedcontrolhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, mappedcontrolhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -12410,6 +12987,9 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, mappedcontrolhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, mappedcontrolhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -12465,6 +13045,7 @@ type NarrativeHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -12501,6 +13082,7 @@ type NarrativeHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -12513,6 +13095,7 @@ type NarrativeHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -12525,6 +13108,7 @@ type NarrativeHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -12537,6 +13121,7 @@ type NarrativeHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -12663,6 +13248,9 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, narrativehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, narrativehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, narrativehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -12747,6 +13335,9 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, narrativehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, narrativehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, narrativehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -12776,6 +13367,9 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, narrativehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, narrativehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, narrativehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -12807,6 +13401,9 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, narrativehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, narrativehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, narrativehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -12836,6 +13433,9 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, narrativehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, narrativehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, narrativehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -12891,6 +13491,7 @@ type NoteHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -12927,6 +13528,7 @@ type NoteHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -12939,6 +13541,7 @@ type NoteHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -12951,6 +13554,7 @@ type NoteHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -12963,6 +13567,7 @@ type NoteHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -13089,6 +13694,9 @@ func (i *NoteHistoryWhereInput) P() (predicate.NoteHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, notehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, notehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, notehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -13173,6 +13781,9 @@ func (i *NoteHistoryWhereInput) P() (predicate.NoteHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, notehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, notehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, notehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -13202,6 +13813,9 @@ func (i *NoteHistoryWhereInput) P() (predicate.NoteHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, notehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, notehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, notehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -13233,6 +13847,9 @@ func (i *NoteHistoryWhereInput) P() (predicate.NoteHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, notehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, notehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, notehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -13262,6 +13879,9 @@ func (i *NoteHistoryWhereInput) P() (predicate.NoteHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, notehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, notehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, notehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -13317,6 +13937,7 @@ type NotificationPreferenceHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -13353,6 +13974,7 @@ type NotificationPreferenceHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -13365,6 +13987,7 @@ type NotificationPreferenceHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -13377,6 +14000,7 @@ type NotificationPreferenceHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -13389,6 +14013,7 @@ type NotificationPreferenceHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -13515,6 +14140,9 @@ func (i *NotificationPreferenceHistoryWhereInput) P() (predicate.NotificationPre
 	if i.RefContains != nil {
 		predicates = append(predicates, notificationpreferencehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, notificationpreferencehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -13599,6 +14227,9 @@ func (i *NotificationPreferenceHistoryWhereInput) P() (predicate.NotificationPre
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, notificationpreferencehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, notificationpreferencehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -13628,6 +14259,9 @@ func (i *NotificationPreferenceHistoryWhereInput) P() (predicate.NotificationPre
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, notificationpreferencehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, notificationpreferencehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -13659,6 +14293,9 @@ func (i *NotificationPreferenceHistoryWhereInput) P() (predicate.NotificationPre
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, notificationpreferencehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, notificationpreferencehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -13688,6 +14325,9 @@ func (i *NotificationPreferenceHistoryWhereInput) P() (predicate.NotificationPre
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, notificationpreferencehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, notificationpreferencehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, notificationpreferencehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -13743,6 +14383,7 @@ type NotificationTemplateHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -13779,6 +14420,7 @@ type NotificationTemplateHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -13791,6 +14433,7 @@ type NotificationTemplateHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -13803,6 +14446,7 @@ type NotificationTemplateHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -13815,6 +14459,7 @@ type NotificationTemplateHistoryWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        bool     `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       bool     `json:"revisionNotNil,omitempty"`
@@ -13827,6 +14472,7 @@ type NotificationTemplateHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -13953,6 +14599,9 @@ func (i *NotificationTemplateHistoryWhereInput) P() (predicate.NotificationTempl
 	if i.RefContains != nil {
 		predicates = append(predicates, notificationtemplatehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, notificationtemplatehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -14037,6 +14686,9 @@ func (i *NotificationTemplateHistoryWhereInput) P() (predicate.NotificationTempl
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, notificationtemplatehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, notificationtemplatehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -14066,6 +14718,9 @@ func (i *NotificationTemplateHistoryWhereInput) P() (predicate.NotificationTempl
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, notificationtemplatehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, notificationtemplatehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -14097,6 +14752,9 @@ func (i *NotificationTemplateHistoryWhereInput) P() (predicate.NotificationTempl
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, notificationtemplatehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, notificationtemplatehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -14127,6 +14785,9 @@ func (i *NotificationTemplateHistoryWhereInput) P() (predicate.NotificationTempl
 	if i.RevisionContains != nil {
 		predicates = append(predicates, notificationtemplatehistory.RevisionContains(*i.RevisionContains))
 	}
+	if i.RevisionHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.RevisionHasPrefix(*i.RevisionHasPrefix))
+	}
 	if i.RevisionHasSuffix != nil {
 		predicates = append(predicates, notificationtemplatehistory.RevisionHasSuffix(*i.RevisionHasSuffix))
 	}
@@ -14156,6 +14817,9 @@ func (i *NotificationTemplateHistoryWhereInput) P() (predicate.NotificationTempl
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, notificationtemplatehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, notificationtemplatehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, notificationtemplatehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -14211,6 +14875,7 @@ type OrgMembershipHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -14247,6 +14912,7 @@ type OrgMembershipHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -14259,6 +14925,7 @@ type OrgMembershipHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -14271,6 +14938,7 @@ type OrgMembershipHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -14397,6 +15065,9 @@ func (i *OrgMembershipHistoryWhereInput) P() (predicate.OrgMembershipHistory, er
 	if i.RefContains != nil {
 		predicates = append(predicates, orgmembershiphistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, orgmembershiphistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, orgmembershiphistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -14481,6 +15152,9 @@ func (i *OrgMembershipHistoryWhereInput) P() (predicate.OrgMembershipHistory, er
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, orgmembershiphistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, orgmembershiphistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, orgmembershiphistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -14511,6 +15185,9 @@ func (i *OrgMembershipHistoryWhereInput) P() (predicate.OrgMembershipHistory, er
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, orgmembershiphistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, orgmembershiphistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, orgmembershiphistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -14540,6 +15217,9 @@ func (i *OrgMembershipHistoryWhereInput) P() (predicate.OrgMembershipHistory, er
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, orgmembershiphistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, orgmembershiphistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, orgmembershiphistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -14595,6 +15275,7 @@ type OrganizationBrandingSettingHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -14631,6 +15312,7 @@ type OrganizationBrandingSettingHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -14643,6 +15325,7 @@ type OrganizationBrandingSettingHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -14655,6 +15338,7 @@ type OrganizationBrandingSettingHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -14781,6 +15465,9 @@ func (i *OrganizationBrandingSettingHistoryWhereInput) P() (predicate.Organizati
 	if i.RefContains != nil {
 		predicates = append(predicates, organizationbrandingsettinghistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsettinghistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, organizationbrandingsettinghistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -14865,6 +15552,9 @@ func (i *OrganizationBrandingSettingHistoryWhereInput) P() (predicate.Organizati
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, organizationbrandingsettinghistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsettinghistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, organizationbrandingsettinghistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -14895,6 +15585,9 @@ func (i *OrganizationBrandingSettingHistoryWhereInput) P() (predicate.Organizati
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, organizationbrandingsettinghistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsettinghistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, organizationbrandingsettinghistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -14924,6 +15617,9 @@ func (i *OrganizationBrandingSettingHistoryWhereInput) P() (predicate.Organizati
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, organizationbrandingsettinghistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, organizationbrandingsettinghistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, organizationbrandingsettinghistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -14979,6 +15675,7 @@ type OrganizationHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -15015,6 +15712,7 @@ type OrganizationHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -15027,6 +15725,7 @@ type OrganizationHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -15039,6 +15738,7 @@ type OrganizationHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -15165,6 +15865,9 @@ func (i *OrganizationHistoryWhereInput) P() (predicate.OrganizationHistory, erro
 	if i.RefContains != nil {
 		predicates = append(predicates, organizationhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, organizationhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, organizationhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -15249,6 +15952,9 @@ func (i *OrganizationHistoryWhereInput) P() (predicate.OrganizationHistory, erro
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, organizationhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, organizationhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, organizationhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -15279,6 +15985,9 @@ func (i *OrganizationHistoryWhereInput) P() (predicate.OrganizationHistory, erro
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, organizationhistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, organizationhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, organizationhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -15308,6 +16017,9 @@ func (i *OrganizationHistoryWhereInput) P() (predicate.OrganizationHistory, erro
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, organizationhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, organizationhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, organizationhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -15363,6 +16075,7 @@ type OrganizationSettingHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -15399,6 +16112,7 @@ type OrganizationSettingHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -15411,6 +16125,7 @@ type OrganizationSettingHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -15423,6 +16138,7 @@ type OrganizationSettingHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -15549,6 +16265,9 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	if i.RefContains != nil {
 		predicates = append(predicates, organizationsettinghistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, organizationsettinghistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, organizationsettinghistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -15633,6 +16352,9 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, organizationsettinghistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, organizationsettinghistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, organizationsettinghistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -15663,6 +16385,9 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, organizationsettinghistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, organizationsettinghistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, organizationsettinghistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -15692,6 +16417,9 @@ func (i *OrganizationSettingHistoryWhereInput) P() (predicate.OrganizationSettin
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, organizationsettinghistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, organizationsettinghistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, organizationsettinghistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -15747,6 +16475,7 @@ type PlatformHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -15783,6 +16512,7 @@ type PlatformHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -15795,6 +16525,7 @@ type PlatformHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -15807,6 +16538,7 @@ type PlatformHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -15819,6 +16551,7 @@ type PlatformHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -15945,6 +16678,9 @@ func (i *PlatformHistoryWhereInput) P() (predicate.PlatformHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, platformhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, platformhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, platformhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -16029,6 +16765,9 @@ func (i *PlatformHistoryWhereInput) P() (predicate.PlatformHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, platformhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, platformhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, platformhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -16058,6 +16797,9 @@ func (i *PlatformHistoryWhereInput) P() (predicate.PlatformHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, platformhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, platformhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, platformhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -16089,6 +16831,9 @@ func (i *PlatformHistoryWhereInput) P() (predicate.PlatformHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, platformhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, platformhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, platformhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -16118,6 +16863,9 @@ func (i *PlatformHistoryWhereInput) P() (predicate.PlatformHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, platformhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, platformhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, platformhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -16173,6 +16921,7 @@ type ProcedureHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -16209,6 +16958,7 @@ type ProcedureHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -16221,6 +16971,7 @@ type ProcedureHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -16233,6 +16984,7 @@ type ProcedureHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -16245,6 +16997,7 @@ type ProcedureHistoryWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        bool     `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       bool     `json:"revisionNotNil,omitempty"`
@@ -16257,6 +17010,7 @@ type ProcedureHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -16383,6 +17137,9 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, procedurehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, procedurehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -16467,6 +17224,9 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, procedurehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, procedurehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -16496,6 +17256,9 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, procedurehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, procedurehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -16527,6 +17290,9 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, procedurehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, procedurehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -16557,6 +17323,9 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	if i.RevisionContains != nil {
 		predicates = append(predicates, procedurehistory.RevisionContains(*i.RevisionContains))
 	}
+	if i.RevisionHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.RevisionHasPrefix(*i.RevisionHasPrefix))
+	}
 	if i.RevisionHasSuffix != nil {
 		predicates = append(predicates, procedurehistory.RevisionHasSuffix(*i.RevisionHasSuffix))
 	}
@@ -16586,6 +17355,9 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, procedurehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, procedurehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -16641,6 +17413,7 @@ type ProgramHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -16677,6 +17450,7 @@ type ProgramHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -16689,6 +17463,7 @@ type ProgramHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -16701,6 +17476,7 @@ type ProgramHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -16713,6 +17489,7 @@ type ProgramHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -16839,6 +17616,9 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, programhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, programhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, programhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -16923,6 +17703,9 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, programhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, programhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, programhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -16952,6 +17735,9 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, programhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, programhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, programhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -16983,6 +17769,9 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, programhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, programhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, programhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -17012,6 +17801,9 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, programhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, programhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, programhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -17067,6 +17859,7 @@ type ProgramMembershipHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -17103,6 +17896,7 @@ type ProgramMembershipHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -17115,6 +17909,7 @@ type ProgramMembershipHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -17127,6 +17922,7 @@ type ProgramMembershipHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -17253,6 +18049,9 @@ func (i *ProgramMembershipHistoryWhereInput) P() (predicate.ProgramMembershipHis
 	if i.RefContains != nil {
 		predicates = append(predicates, programmembershiphistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, programmembershiphistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, programmembershiphistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -17337,6 +18136,9 @@ func (i *ProgramMembershipHistoryWhereInput) P() (predicate.ProgramMembershipHis
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, programmembershiphistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, programmembershiphistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, programmembershiphistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -17367,6 +18169,9 @@ func (i *ProgramMembershipHistoryWhereInput) P() (predicate.ProgramMembershipHis
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, programmembershiphistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, programmembershiphistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, programmembershiphistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -17396,6 +18201,9 @@ func (i *ProgramMembershipHistoryWhereInput) P() (predicate.ProgramMembershipHis
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, programmembershiphistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, programmembershiphistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, programmembershiphistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -17451,6 +18259,7 @@ type RemediationHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -17487,6 +18296,7 @@ type RemediationHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -17499,6 +18309,7 @@ type RemediationHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -17511,6 +18322,7 @@ type RemediationHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -17523,6 +18335,7 @@ type RemediationHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -17649,6 +18462,9 @@ func (i *RemediationHistoryWhereInput) P() (predicate.RemediationHistory, error)
 	if i.RefContains != nil {
 		predicates = append(predicates, remediationhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, remediationhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, remediationhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -17733,6 +18549,9 @@ func (i *RemediationHistoryWhereInput) P() (predicate.RemediationHistory, error)
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, remediationhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, remediationhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, remediationhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -17762,6 +18581,9 @@ func (i *RemediationHistoryWhereInput) P() (predicate.RemediationHistory, error)
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, remediationhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, remediationhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, remediationhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -17793,6 +18615,9 @@ func (i *RemediationHistoryWhereInput) P() (predicate.RemediationHistory, error)
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, remediationhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, remediationhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, remediationhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -17822,6 +18647,9 @@ func (i *RemediationHistoryWhereInput) P() (predicate.RemediationHistory, error)
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, remediationhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, remediationhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, remediationhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -17877,6 +18705,7 @@ type ReportHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -17913,6 +18742,7 @@ type ReportHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -17925,6 +18755,7 @@ type ReportHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -17937,6 +18768,7 @@ type ReportHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -17949,6 +18781,7 @@ type ReportHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -18075,6 +18908,9 @@ func (i *ReportHistoryWhereInput) P() (predicate.ReportHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, reporthistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, reporthistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, reporthistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -18159,6 +18995,9 @@ func (i *ReportHistoryWhereInput) P() (predicate.ReportHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, reporthistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, reporthistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, reporthistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -18188,6 +19027,9 @@ func (i *ReportHistoryWhereInput) P() (predicate.ReportHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, reporthistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, reporthistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, reporthistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -18219,6 +19061,9 @@ func (i *ReportHistoryWhereInput) P() (predicate.ReportHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, reporthistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, reporthistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, reporthistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -18248,6 +19093,9 @@ func (i *ReportHistoryWhereInput) P() (predicate.ReportHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, reporthistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, reporthistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, reporthistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -18303,6 +19151,7 @@ type ReportMembershipHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -18339,6 +19188,7 @@ type ReportMembershipHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -18351,6 +19201,7 @@ type ReportMembershipHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -18363,6 +19214,7 @@ type ReportMembershipHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -18489,6 +19341,9 @@ func (i *ReportMembershipHistoryWhereInput) P() (predicate.ReportMembershipHisto
 	if i.RefContains != nil {
 		predicates = append(predicates, reportmembershiphistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, reportmembershiphistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, reportmembershiphistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -18573,6 +19428,9 @@ func (i *ReportMembershipHistoryWhereInput) P() (predicate.ReportMembershipHisto
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, reportmembershiphistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, reportmembershiphistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, reportmembershiphistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -18603,6 +19461,9 @@ func (i *ReportMembershipHistoryWhereInput) P() (predicate.ReportMembershipHisto
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, reportmembershiphistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, reportmembershiphistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, reportmembershiphistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -18632,6 +19493,9 @@ func (i *ReportMembershipHistoryWhereInput) P() (predicate.ReportMembershipHisto
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, reportmembershiphistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, reportmembershiphistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, reportmembershiphistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -18687,6 +19551,7 @@ type ReviewHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -18723,6 +19588,7 @@ type ReviewHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -18735,6 +19601,7 @@ type ReviewHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -18747,6 +19614,7 @@ type ReviewHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -18759,6 +19627,7 @@ type ReviewHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -18885,6 +19754,9 @@ func (i *ReviewHistoryWhereInput) P() (predicate.ReviewHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, reviewhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, reviewhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -18969,6 +19841,9 @@ func (i *ReviewHistoryWhereInput) P() (predicate.ReviewHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, reviewhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, reviewhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -18998,6 +19873,9 @@ func (i *ReviewHistoryWhereInput) P() (predicate.ReviewHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, reviewhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, reviewhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -19029,6 +19907,9 @@ func (i *ReviewHistoryWhereInput) P() (predicate.ReviewHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, reviewhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, reviewhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -19058,6 +19939,9 @@ func (i *ReviewHistoryWhereInput) P() (predicate.ReviewHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, reviewhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, reviewhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -19113,6 +19997,7 @@ type RiskHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -19149,6 +20034,7 @@ type RiskHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -19161,6 +20047,7 @@ type RiskHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -19173,6 +20060,7 @@ type RiskHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -19185,6 +20073,7 @@ type RiskHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -19311,6 +20200,9 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, riskhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, riskhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, riskhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -19395,6 +20287,9 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, riskhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, riskhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, riskhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -19424,6 +20319,9 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, riskhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, riskhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, riskhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -19455,6 +20353,9 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, riskhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, riskhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, riskhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -19484,6 +20385,9 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, riskhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, riskhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, riskhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -19539,6 +20443,7 @@ type SLADefinitionHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -19575,6 +20480,7 @@ type SLADefinitionHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -19587,6 +20493,7 @@ type SLADefinitionHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -19599,6 +20506,7 @@ type SLADefinitionHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -19611,6 +20519,7 @@ type SLADefinitionHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -19737,6 +20646,9 @@ func (i *SLADefinitionHistoryWhereInput) P() (predicate.SLADefinitionHistory, er
 	if i.RefContains != nil {
 		predicates = append(predicates, sladefinitionhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, sladefinitionhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, sladefinitionhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -19821,6 +20733,9 @@ func (i *SLADefinitionHistoryWhereInput) P() (predicate.SLADefinitionHistory, er
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, sladefinitionhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, sladefinitionhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, sladefinitionhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -19850,6 +20765,9 @@ func (i *SLADefinitionHistoryWhereInput) P() (predicate.SLADefinitionHistory, er
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, sladefinitionhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, sladefinitionhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, sladefinitionhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -19881,6 +20799,9 @@ func (i *SLADefinitionHistoryWhereInput) P() (predicate.SLADefinitionHistory, er
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, sladefinitionhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, sladefinitionhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, sladefinitionhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -19910,6 +20831,9 @@ func (i *SLADefinitionHistoryWhereInput) P() (predicate.SLADefinitionHistory, er
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, sladefinitionhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, sladefinitionhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, sladefinitionhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -19965,6 +20889,7 @@ type StandardHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -20001,6 +20926,7 @@ type StandardHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -20013,6 +20939,7 @@ type StandardHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -20025,6 +20952,7 @@ type StandardHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -20037,6 +20965,7 @@ type StandardHistoryWhereInput struct {
 	RevisionIn           []string `json:"revisionIn,omitempty"`
 	RevisionNotIn        []string `json:"revisionNotIn,omitempty"`
 	RevisionContains     *string  `json:"revisionContains,omitempty"`
+	RevisionHasPrefix    *string  `json:"revisionHasPrefix,omitempty"`
 	RevisionHasSuffix    *string  `json:"revisionHasSuffix,omitempty"`
 	RevisionIsNil        bool     `json:"revisionIsNil,omitempty"`
 	RevisionNotNil       bool     `json:"revisionNotNil,omitempty"`
@@ -20049,6 +20978,7 @@ type StandardHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -20175,6 +21105,9 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, standardhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, standardhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, standardhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -20259,6 +21192,9 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, standardhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, standardhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, standardhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -20288,6 +21224,9 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, standardhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, standardhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, standardhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -20319,6 +21258,9 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, standardhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, standardhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, standardhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -20349,6 +21291,9 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	if i.RevisionContains != nil {
 		predicates = append(predicates, standardhistory.RevisionContains(*i.RevisionContains))
 	}
+	if i.RevisionHasPrefix != nil {
+		predicates = append(predicates, standardhistory.RevisionHasPrefix(*i.RevisionHasPrefix))
+	}
 	if i.RevisionHasSuffix != nil {
 		predicates = append(predicates, standardhistory.RevisionHasSuffix(*i.RevisionHasSuffix))
 	}
@@ -20378,6 +21323,9 @@ func (i *StandardHistoryWhereInput) P() (predicate.StandardHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, standardhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, standardhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, standardhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -20433,6 +21381,7 @@ type SubcontrolHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -20469,6 +21418,7 @@ type SubcontrolHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -20481,6 +21431,7 @@ type SubcontrolHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -20493,6 +21444,7 @@ type SubcontrolHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -20505,6 +21457,7 @@ type SubcontrolHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -20631,6 +21584,9 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, subcontrolhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, subcontrolhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -20715,6 +21671,9 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, subcontrolhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, subcontrolhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -20744,6 +21703,9 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, subcontrolhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, subcontrolhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -20775,6 +21737,9 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, subcontrolhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, subcontrolhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -20804,6 +21769,9 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, subcontrolhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, subcontrolhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -20859,6 +21827,7 @@ type SubprocessorHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -20895,6 +21864,7 @@ type SubprocessorHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -20907,6 +21877,7 @@ type SubprocessorHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -20919,6 +21890,7 @@ type SubprocessorHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -20931,6 +21903,7 @@ type SubprocessorHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -21057,6 +22030,9 @@ func (i *SubprocessorHistoryWhereInput) P() (predicate.SubprocessorHistory, erro
 	if i.RefContains != nil {
 		predicates = append(predicates, subprocessorhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, subprocessorhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -21141,6 +22117,9 @@ func (i *SubprocessorHistoryWhereInput) P() (predicate.SubprocessorHistory, erro
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, subprocessorhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, subprocessorhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -21170,6 +22149,9 @@ func (i *SubprocessorHistoryWhereInput) P() (predicate.SubprocessorHistory, erro
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, subprocessorhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, subprocessorhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -21201,6 +22183,9 @@ func (i *SubprocessorHistoryWhereInput) P() (predicate.SubprocessorHistory, erro
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, subprocessorhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, subprocessorhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -21230,6 +22215,9 @@ func (i *SubprocessorHistoryWhereInput) P() (predicate.SubprocessorHistory, erro
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, subprocessorhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, subprocessorhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, subprocessorhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -21285,6 +22273,7 @@ type SystemDetailHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -21321,6 +22310,7 @@ type SystemDetailHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -21333,6 +22323,7 @@ type SystemDetailHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -21345,6 +22336,7 @@ type SystemDetailHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -21357,6 +22349,7 @@ type SystemDetailHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -21483,6 +22476,9 @@ func (i *SystemDetailHistoryWhereInput) P() (predicate.SystemDetailHistory, erro
 	if i.RefContains != nil {
 		predicates = append(predicates, systemdetailhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, systemdetailhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -21567,6 +22563,9 @@ func (i *SystemDetailHistoryWhereInput) P() (predicate.SystemDetailHistory, erro
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, systemdetailhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, systemdetailhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -21596,6 +22595,9 @@ func (i *SystemDetailHistoryWhereInput) P() (predicate.SystemDetailHistory, erro
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, systemdetailhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, systemdetailhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -21627,6 +22629,9 @@ func (i *SystemDetailHistoryWhereInput) P() (predicate.SystemDetailHistory, erro
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, systemdetailhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, systemdetailhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -21656,6 +22661,9 @@ func (i *SystemDetailHistoryWhereInput) P() (predicate.SystemDetailHistory, erro
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, systemdetailhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, systemdetailhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -21711,6 +22719,7 @@ type TaskHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -21747,6 +22756,7 @@ type TaskHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -21759,6 +22769,7 @@ type TaskHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -21771,6 +22782,7 @@ type TaskHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -21783,6 +22795,7 @@ type TaskHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -21909,6 +22922,9 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, taskhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, taskhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, taskhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -21993,6 +23009,9 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, taskhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, taskhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, taskhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -22022,6 +23041,9 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, taskhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, taskhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, taskhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -22053,6 +23075,9 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, taskhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, taskhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, taskhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -22082,6 +23107,9 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, taskhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, taskhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, taskhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -22137,6 +23165,7 @@ type TemplateHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -22173,6 +23202,7 @@ type TemplateHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -22185,6 +23215,7 @@ type TemplateHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -22197,6 +23228,7 @@ type TemplateHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -22209,6 +23241,7 @@ type TemplateHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -22335,6 +23368,9 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, templatehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, templatehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, templatehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -22419,6 +23455,9 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, templatehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, templatehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, templatehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -22448,6 +23487,9 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, templatehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, templatehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, templatehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -22479,6 +23521,9 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, templatehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, templatehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, templatehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -22508,6 +23553,9 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, templatehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, templatehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, templatehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -22563,6 +23611,7 @@ type TrustCenterComplianceHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -22599,6 +23648,7 @@ type TrustCenterComplianceHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -22611,6 +23661,7 @@ type TrustCenterComplianceHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -22623,6 +23674,7 @@ type TrustCenterComplianceHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -22749,6 +23801,9 @@ func (i *TrustCenterComplianceHistoryWhereInput) P() (predicate.TrustCenterCompl
 	if i.RefContains != nil {
 		predicates = append(predicates, trustcentercompliancehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcentercompliancehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, trustcentercompliancehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -22833,6 +23888,9 @@ func (i *TrustCenterComplianceHistoryWhereInput) P() (predicate.TrustCenterCompl
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, trustcentercompliancehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcentercompliancehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, trustcentercompliancehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -22863,6 +23921,9 @@ func (i *TrustCenterComplianceHistoryWhereInput) P() (predicate.TrustCenterCompl
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, trustcentercompliancehistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcentercompliancehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, trustcentercompliancehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -22892,6 +23953,9 @@ func (i *TrustCenterComplianceHistoryWhereInput) P() (predicate.TrustCenterCompl
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, trustcentercompliancehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, trustcentercompliancehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, trustcentercompliancehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -22947,6 +24011,7 @@ type TrustCenterDocHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -22983,6 +24048,7 @@ type TrustCenterDocHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -22995,6 +24061,7 @@ type TrustCenterDocHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -23007,6 +24074,7 @@ type TrustCenterDocHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -23133,6 +24201,9 @@ func (i *TrustCenterDocHistoryWhereInput) P() (predicate.TrustCenterDocHistory, 
 	if i.RefContains != nil {
 		predicates = append(predicates, trustcenterdochistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcenterdochistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, trustcenterdochistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -23217,6 +24288,9 @@ func (i *TrustCenterDocHistoryWhereInput) P() (predicate.TrustCenterDocHistory, 
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, trustcenterdochistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterdochistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterdochistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -23247,6 +24321,9 @@ func (i *TrustCenterDocHistoryWhereInput) P() (predicate.TrustCenterDocHistory, 
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, trustcenterdochistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterdochistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterdochistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -23276,6 +24353,9 @@ func (i *TrustCenterDocHistoryWhereInput) P() (predicate.TrustCenterDocHistory, 
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, trustcenterdochistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, trustcenterdochistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, trustcenterdochistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -23331,6 +24411,7 @@ type TrustCenterEntityHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -23367,6 +24448,7 @@ type TrustCenterEntityHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -23379,6 +24461,7 @@ type TrustCenterEntityHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -23391,6 +24474,7 @@ type TrustCenterEntityHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -23517,6 +24601,9 @@ func (i *TrustCenterEntityHistoryWhereInput) P() (predicate.TrustCenterEntityHis
 	if i.RefContains != nil {
 		predicates = append(predicates, trustcenterentityhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcenterentityhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, trustcenterentityhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -23601,6 +24688,9 @@ func (i *TrustCenterEntityHistoryWhereInput) P() (predicate.TrustCenterEntityHis
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, trustcenterentityhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterentityhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterentityhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -23631,6 +24721,9 @@ func (i *TrustCenterEntityHistoryWhereInput) P() (predicate.TrustCenterEntityHis
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, trustcenterentityhistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterentityhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterentityhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -23660,6 +24753,9 @@ func (i *TrustCenterEntityHistoryWhereInput) P() (predicate.TrustCenterEntityHis
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, trustcenterentityhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, trustcenterentityhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, trustcenterentityhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -23715,6 +24811,7 @@ type TrustCenterFAQHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -23751,6 +24848,7 @@ type TrustCenterFAQHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -23763,6 +24861,7 @@ type TrustCenterFAQHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -23775,6 +24874,7 @@ type TrustCenterFAQHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -23901,6 +25001,9 @@ func (i *TrustCenterFAQHistoryWhereInput) P() (predicate.TrustCenterFAQHistory, 
 	if i.RefContains != nil {
 		predicates = append(predicates, trustcenterfaqhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, trustcenterfaqhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -23985,6 +25088,9 @@ func (i *TrustCenterFAQHistoryWhereInput) P() (predicate.TrustCenterFAQHistory, 
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, trustcenterfaqhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterfaqhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -24015,6 +25121,9 @@ func (i *TrustCenterFAQHistoryWhereInput) P() (predicate.TrustCenterFAQHistory, 
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, trustcenterfaqhistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterfaqhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -24044,6 +25153,9 @@ func (i *TrustCenterFAQHistoryWhereInput) P() (predicate.TrustCenterFAQHistory, 
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, trustcenterfaqhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, trustcenterfaqhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -24099,6 +25211,7 @@ type TrustCenterHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -24135,6 +25248,7 @@ type TrustCenterHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -24147,6 +25261,7 @@ type TrustCenterHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -24159,6 +25274,7 @@ type TrustCenterHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -24171,6 +25287,7 @@ type TrustCenterHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -24297,6 +25414,9 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 	if i.RefContains != nil {
 		predicates = append(predicates, trustcenterhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, trustcenterhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -24381,6 +25501,9 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, trustcenterhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -24410,6 +25533,9 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, trustcenterhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -24441,6 +25567,9 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, trustcenterhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, trustcenterhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -24470,6 +25599,9 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, trustcenterhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, trustcenterhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -24525,6 +25657,7 @@ type TrustCenterNDARequestHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -24561,6 +25694,7 @@ type TrustCenterNDARequestHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -24573,6 +25707,7 @@ type TrustCenterNDARequestHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -24585,6 +25720,7 @@ type TrustCenterNDARequestHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -24711,6 +25847,9 @@ func (i *TrustCenterNDARequestHistoryWhereInput) P() (predicate.TrustCenterNDARe
 	if i.RefContains != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -24795,6 +25934,9 @@ func (i *TrustCenterNDARequestHistoryWhereInput) P() (predicate.TrustCenterNDARe
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -24825,6 +25967,9 @@ func (i *TrustCenterNDARequestHistoryWhereInput) P() (predicate.TrustCenterNDARe
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -24854,6 +25999,9 @@ func (i *TrustCenterNDARequestHistoryWhereInput) P() (predicate.TrustCenterNDARe
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequesthistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, trustcenterndarequesthistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -24909,6 +26057,7 @@ type TrustCenterSettingHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -24945,6 +26094,7 @@ type TrustCenterSettingHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -24957,6 +26107,7 @@ type TrustCenterSettingHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -24969,6 +26120,7 @@ type TrustCenterSettingHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -25095,6 +26247,9 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	if i.RefContains != nil {
 		predicates = append(predicates, trustcentersettinghistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, trustcentersettinghistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -25179,6 +26334,9 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, trustcentersettinghistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, trustcentersettinghistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -25209,6 +26367,9 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, trustcentersettinghistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, trustcentersettinghistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -25238,6 +26399,9 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, trustcentersettinghistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, trustcentersettinghistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -25293,6 +26457,7 @@ type TrustCenterSubprocessorHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -25329,6 +26494,7 @@ type TrustCenterSubprocessorHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -25341,6 +26507,7 @@ type TrustCenterSubprocessorHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -25353,6 +26520,7 @@ type TrustCenterSubprocessorHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -25479,6 +26647,9 @@ func (i *TrustCenterSubprocessorHistoryWhereInput) P() (predicate.TrustCenterSub
 	if i.RefContains != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -25563,6 +26734,9 @@ func (i *TrustCenterSubprocessorHistoryWhereInput) P() (predicate.TrustCenterSub
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -25593,6 +26767,9 @@ func (i *TrustCenterSubprocessorHistoryWhereInput) P() (predicate.TrustCenterSub
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -25622,6 +26799,9 @@ func (i *TrustCenterSubprocessorHistoryWhereInput) P() (predicate.TrustCenterSub
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, trustcentersubprocessorhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, trustcentersubprocessorhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -25677,6 +26857,7 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -25713,6 +26894,7 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -25725,6 +26907,7 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -25737,6 +26920,7 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -25749,6 +26933,7 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -25875,6 +27060,9 @@ func (i *TrustCenterWatermarkConfigHistoryWhereInput) P() (predicate.TrustCenter
 	if i.RefContains != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -25959,6 +27147,9 @@ func (i *TrustCenterWatermarkConfigHistoryWhereInput) P() (predicate.TrustCenter
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -25988,6 +27179,9 @@ func (i *TrustCenterWatermarkConfigHistoryWhereInput) P() (predicate.TrustCenter
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -26019,6 +27213,9 @@ func (i *TrustCenterWatermarkConfigHistoryWhereInput) P() (predicate.TrustCenter
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -26048,6 +27245,9 @@ func (i *TrustCenterWatermarkConfigHistoryWhereInput) P() (predicate.TrustCenter
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, trustcenterwatermarkconfighistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -26103,6 +27303,7 @@ type UserHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -26139,6 +27340,7 @@ type UserHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -26151,6 +27353,7 @@ type UserHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -26277,6 +27480,9 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 	if i.RefContains != nil {
 		predicates = append(predicates, userhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, userhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, userhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -26361,6 +27567,9 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, userhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, userhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, userhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -26390,6 +27599,9 @@ func (i *UserHistoryWhereInput) P() (predicate.UserHistory, error) {
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, userhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, userhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, userhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -26445,6 +27657,7 @@ type UserSettingHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -26481,6 +27694,7 @@ type UserSettingHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -26493,6 +27707,7 @@ type UserSettingHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -26505,6 +27720,7 @@ type UserSettingHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -26631,6 +27847,9 @@ func (i *UserSettingHistoryWhereInput) P() (predicate.UserSettingHistory, error)
 	if i.RefContains != nil {
 		predicates = append(predicates, usersettinghistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, usersettinghistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, usersettinghistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -26715,6 +27934,9 @@ func (i *UserSettingHistoryWhereInput) P() (predicate.UserSettingHistory, error)
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, usersettinghistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, usersettinghistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, usersettinghistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -26745,6 +27967,9 @@ func (i *UserSettingHistoryWhereInput) P() (predicate.UserSettingHistory, error)
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, usersettinghistory.UpdatedByContains(*i.UpdatedByContains))
 	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, usersettinghistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, usersettinghistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
 	}
@@ -26774,6 +27999,9 @@ func (i *UserSettingHistoryWhereInput) P() (predicate.UserSettingHistory, error)
 	}
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, usersettinghistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
+	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, usersettinghistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
 	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, usersettinghistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
@@ -26829,6 +28057,7 @@ type VendorRiskScoreHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -26865,6 +28094,7 @@ type VendorRiskScoreHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -26877,6 +28107,7 @@ type VendorRiskScoreHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -26889,6 +28120,7 @@ type VendorRiskScoreHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -26901,6 +28133,7 @@ type VendorRiskScoreHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -27027,6 +28260,9 @@ func (i *VendorRiskScoreHistoryWhereInput) P() (predicate.VendorRiskScoreHistory
 	if i.RefContains != nil {
 		predicates = append(predicates, vendorriskscorehistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, vendorriskscorehistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, vendorriskscorehistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -27111,6 +28347,9 @@ func (i *VendorRiskScoreHistoryWhereInput) P() (predicate.VendorRiskScoreHistory
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, vendorriskscorehistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, vendorriskscorehistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, vendorriskscorehistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -27140,6 +28379,9 @@ func (i *VendorRiskScoreHistoryWhereInput) P() (predicate.VendorRiskScoreHistory
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, vendorriskscorehistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, vendorriskscorehistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, vendorriskscorehistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -27171,6 +28413,9 @@ func (i *VendorRiskScoreHistoryWhereInput) P() (predicate.VendorRiskScoreHistory
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, vendorriskscorehistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, vendorriskscorehistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, vendorriskscorehistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -27200,6 +28445,9 @@ func (i *VendorRiskScoreHistoryWhereInput) P() (predicate.VendorRiskScoreHistory
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, vendorriskscorehistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, vendorriskscorehistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, vendorriskscorehistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -27255,6 +28503,7 @@ type VendorScoringConfigHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -27291,6 +28540,7 @@ type VendorScoringConfigHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -27303,6 +28553,7 @@ type VendorScoringConfigHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -27315,6 +28566,7 @@ type VendorScoringConfigHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -27327,6 +28579,7 @@ type VendorScoringConfigHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -27453,6 +28706,9 @@ func (i *VendorScoringConfigHistoryWhereInput) P() (predicate.VendorScoringConfi
 	if i.RefContains != nil {
 		predicates = append(predicates, vendorscoringconfighistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, vendorscoringconfighistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, vendorscoringconfighistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -27537,6 +28793,9 @@ func (i *VendorScoringConfigHistoryWhereInput) P() (predicate.VendorScoringConfi
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, vendorscoringconfighistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, vendorscoringconfighistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, vendorscoringconfighistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -27566,6 +28825,9 @@ func (i *VendorScoringConfigHistoryWhereInput) P() (predicate.VendorScoringConfi
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, vendorscoringconfighistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, vendorscoringconfighistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, vendorscoringconfighistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -27597,6 +28859,9 @@ func (i *VendorScoringConfigHistoryWhereInput) P() (predicate.VendorScoringConfi
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, vendorscoringconfighistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, vendorscoringconfighistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, vendorscoringconfighistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -27626,6 +28891,9 @@ func (i *VendorScoringConfigHistoryWhereInput) P() (predicate.VendorScoringConfi
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, vendorscoringconfighistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, vendorscoringconfighistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, vendorscoringconfighistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -27681,6 +28949,7 @@ type VulnerabilityHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -27717,6 +28986,7 @@ type VulnerabilityHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -27729,6 +28999,7 @@ type VulnerabilityHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -27741,6 +29012,7 @@ type VulnerabilityHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -27753,6 +29025,7 @@ type VulnerabilityHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -27879,6 +29152,9 @@ func (i *VulnerabilityHistoryWhereInput) P() (predicate.VulnerabilityHistory, er
 	if i.RefContains != nil {
 		predicates = append(predicates, vulnerabilityhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, vulnerabilityhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, vulnerabilityhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -27963,6 +29239,9 @@ func (i *VulnerabilityHistoryWhereInput) P() (predicate.VulnerabilityHistory, er
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, vulnerabilityhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, vulnerabilityhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, vulnerabilityhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -27992,6 +29271,9 @@ func (i *VulnerabilityHistoryWhereInput) P() (predicate.VulnerabilityHistory, er
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, vulnerabilityhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, vulnerabilityhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, vulnerabilityhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -28023,6 +29305,9 @@ func (i *VulnerabilityHistoryWhereInput) P() (predicate.VulnerabilityHistory, er
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, vulnerabilityhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, vulnerabilityhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, vulnerabilityhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -28052,6 +29337,9 @@ func (i *VulnerabilityHistoryWhereInput) P() (predicate.VulnerabilityHistory, er
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, vulnerabilityhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, vulnerabilityhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, vulnerabilityhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -28107,6 +29395,7 @@ type WorkflowAssignmentHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -28143,6 +29432,7 @@ type WorkflowAssignmentHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -28155,6 +29445,7 @@ type WorkflowAssignmentHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -28167,6 +29458,7 @@ type WorkflowAssignmentHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -28179,6 +29471,7 @@ type WorkflowAssignmentHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -28305,6 +29598,9 @@ func (i *WorkflowAssignmentHistoryWhereInput) P() (predicate.WorkflowAssignmentH
 	if i.RefContains != nil {
 		predicates = append(predicates, workflowassignmenthistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenthistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenthistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -28389,6 +29685,9 @@ func (i *WorkflowAssignmentHistoryWhereInput) P() (predicate.WorkflowAssignmentH
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, workflowassignmenthistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenthistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenthistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -28418,6 +29717,9 @@ func (i *WorkflowAssignmentHistoryWhereInput) P() (predicate.WorkflowAssignmentH
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, workflowassignmenthistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenthistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenthistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -28449,6 +29751,9 @@ func (i *WorkflowAssignmentHistoryWhereInput) P() (predicate.WorkflowAssignmentH
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, workflowassignmenthistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenthistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenthistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -28478,6 +29783,9 @@ func (i *WorkflowAssignmentHistoryWhereInput) P() (predicate.WorkflowAssignmentH
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, workflowassignmenthistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenthistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenthistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -28533,6 +29841,7 @@ type WorkflowAssignmentTargetHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -28569,6 +29878,7 @@ type WorkflowAssignmentTargetHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -28581,6 +29891,7 @@ type WorkflowAssignmentTargetHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -28593,6 +29904,7 @@ type WorkflowAssignmentTargetHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -28605,6 +29917,7 @@ type WorkflowAssignmentTargetHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -28731,6 +30044,9 @@ func (i *WorkflowAssignmentTargetHistoryWhereInput) P() (predicate.WorkflowAssig
 	if i.RefContains != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenttargethistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -28815,6 +30131,9 @@ func (i *WorkflowAssignmentTargetHistoryWhereInput) P() (predicate.WorkflowAssig
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenttargethistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -28844,6 +30163,9 @@ func (i *WorkflowAssignmentTargetHistoryWhereInput) P() (predicate.WorkflowAssig
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenttargethistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -28875,6 +30197,9 @@ func (i *WorkflowAssignmentTargetHistoryWhereInput) P() (predicate.WorkflowAssig
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenttargethistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -28904,6 +30229,9 @@ func (i *WorkflowAssignmentTargetHistoryWhereInput) P() (predicate.WorkflowAssig
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, workflowassignmenttargethistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, workflowassignmenttargethistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
@@ -28959,6 +30287,7 @@ type WorkflowDefinitionHistoryWhereInput struct {
 	RefIn           []string `json:"refIn,omitempty"`
 	RefNotIn        []string `json:"refNotIn,omitempty"`
 	RefContains     *string  `json:"refContains,omitempty"`
+	RefHasPrefix    *string  `json:"refHasPrefix,omitempty"`
 	RefHasSuffix    *string  `json:"refHasSuffix,omitempty"`
 	RefIsNil        bool     `json:"refIsNil,omitempty"`
 	RefNotNil       bool     `json:"refNotNil,omitempty"`
@@ -28995,6 +30324,7 @@ type WorkflowDefinitionHistoryWhereInput struct {
 	CreatedByIn           []string `json:"createdByIn,omitempty"`
 	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
 	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
 	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
 	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
 	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
@@ -29007,6 +30337,7 @@ type WorkflowDefinitionHistoryWhereInput struct {
 	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
 	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
 	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
 	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
 	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
@@ -29019,6 +30350,7 @@ type WorkflowDefinitionHistoryWhereInput struct {
 	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
 	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
 	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
 	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
 	UpdatedByImpersonatorIsNil        bool     `json:"updatedByImpersonatorIsNil,omitempty"`
 	UpdatedByImpersonatorNotNil       bool     `json:"updatedByImpersonatorNotNil,omitempty"`
@@ -29031,6 +30363,7 @@ type WorkflowDefinitionHistoryWhereInput struct {
 	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
 	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
 	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
 	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
 	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
@@ -29165,6 +30498,9 @@ func (i *WorkflowDefinitionHistoryWhereInput) P() (predicate.WorkflowDefinitionH
 	if i.RefContains != nil {
 		predicates = append(predicates, workflowdefinitionhistory.RefContains(*i.RefContains))
 	}
+	if i.RefHasPrefix != nil {
+		predicates = append(predicates, workflowdefinitionhistory.RefHasPrefix(*i.RefHasPrefix))
+	}
 	if i.RefHasSuffix != nil {
 		predicates = append(predicates, workflowdefinitionhistory.RefHasSuffix(*i.RefHasSuffix))
 	}
@@ -29249,6 +30585,9 @@ func (i *WorkflowDefinitionHistoryWhereInput) P() (predicate.WorkflowDefinitionH
 	if i.CreatedByContains != nil {
 		predicates = append(predicates, workflowdefinitionhistory.CreatedByContains(*i.CreatedByContains))
 	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, workflowdefinitionhistory.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
 	if i.CreatedByHasSuffix != nil {
 		predicates = append(predicates, workflowdefinitionhistory.CreatedByHasSuffix(*i.CreatedByHasSuffix))
 	}
@@ -29278,6 +30617,9 @@ func (i *WorkflowDefinitionHistoryWhereInput) P() (predicate.WorkflowDefinitionH
 	}
 	if i.UpdatedByContains != nil {
 		predicates = append(predicates, workflowdefinitionhistory.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, workflowdefinitionhistory.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
 	}
 	if i.UpdatedByHasSuffix != nil {
 		predicates = append(predicates, workflowdefinitionhistory.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
@@ -29309,6 +30651,9 @@ func (i *WorkflowDefinitionHistoryWhereInput) P() (predicate.WorkflowDefinitionH
 	if i.UpdatedByImpersonatorContains != nil {
 		predicates = append(predicates, workflowdefinitionhistory.UpdatedByImpersonatorContains(*i.UpdatedByImpersonatorContains))
 	}
+	if i.UpdatedByImpersonatorHasPrefix != nil {
+		predicates = append(predicates, workflowdefinitionhistory.UpdatedByImpersonatorHasPrefix(*i.UpdatedByImpersonatorHasPrefix))
+	}
 	if i.UpdatedByImpersonatorHasSuffix != nil {
 		predicates = append(predicates, workflowdefinitionhistory.UpdatedByImpersonatorHasSuffix(*i.UpdatedByImpersonatorHasSuffix))
 	}
@@ -29338,6 +30683,9 @@ func (i *WorkflowDefinitionHistoryWhereInput) P() (predicate.WorkflowDefinitionH
 	}
 	if i.OwnerIDContains != nil {
 		predicates = append(predicates, workflowdefinitionhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, workflowdefinitionhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
 	}
 	if i.OwnerIDHasSuffix != nil {
 		predicates = append(predicates, workflowdefinitionhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))

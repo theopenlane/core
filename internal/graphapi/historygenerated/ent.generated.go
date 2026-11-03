@@ -68266,7 +68266,7 @@ func (ec *executionContext) unmarshalInputActionPlanHistoryWhereInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -68406,6 +68406,13 @@ func (ec *executionContext) unmarshalInputActionPlanHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -68602,6 +68609,13 @@ func (ec *executionContext) unmarshalInputActionPlanHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -68672,6 +68686,13 @@ func (ec *executionContext) unmarshalInputActionPlanHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -68742,6 +68763,13 @@ func (ec *executionContext) unmarshalInputActionPlanHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -68812,6 +68840,13 @@ func (ec *executionContext) unmarshalInputActionPlanHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.RevisionContains = data
+		case "revisionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevisionHasPrefix = data
 		case "revisionHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -68882,6 +68917,13 @@ func (ec *executionContext) unmarshalInputActionPlanHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -68998,7 +69040,7 @@ func (ec *executionContext) unmarshalInputAssessmentHistoryWhereInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -69138,6 +69180,13 @@ func (ec *executionContext) unmarshalInputAssessmentHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -69334,6 +69383,13 @@ func (ec *executionContext) unmarshalInputAssessmentHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -69404,6 +69460,13 @@ func (ec *executionContext) unmarshalInputAssessmentHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -69474,6 +69537,13 @@ func (ec *executionContext) unmarshalInputAssessmentHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -69544,6 +69614,13 @@ func (ec *executionContext) unmarshalInputAssessmentHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -69660,7 +69737,7 @@ func (ec *executionContext) unmarshalInputAssessmentPolicyHistoryWhereInput(ctx 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -69800,6 +69877,13 @@ func (ec *executionContext) unmarshalInputAssessmentPolicyHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -69996,6 +70080,13 @@ func (ec *executionContext) unmarshalInputAssessmentPolicyHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -70066,6 +70157,13 @@ func (ec *executionContext) unmarshalInputAssessmentPolicyHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -70136,6 +70234,13 @@ func (ec *executionContext) unmarshalInputAssessmentPolicyHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -70206,6 +70311,13 @@ func (ec *executionContext) unmarshalInputAssessmentPolicyHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -70322,7 +70434,7 @@ func (ec *executionContext) unmarshalInputAssessmentResponseHistoryWhereInput(ct
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -70462,6 +70574,13 @@ func (ec *executionContext) unmarshalInputAssessmentResponseHistoryWhereInput(ct
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -70658,6 +70777,13 @@ func (ec *executionContext) unmarshalInputAssessmentResponseHistoryWhereInput(ct
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -70728,6 +70854,13 @@ func (ec *executionContext) unmarshalInputAssessmentResponseHistoryWhereInput(ct
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -70798,6 +70931,13 @@ func (ec *executionContext) unmarshalInputAssessmentResponseHistoryWhereInput(ct
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -70868,6 +71008,13 @@ func (ec *executionContext) unmarshalInputAssessmentResponseHistoryWhereInput(ct
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -70984,7 +71131,7 @@ func (ec *executionContext) unmarshalInputAssetHistoryWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -71124,6 +71271,13 @@ func (ec *executionContext) unmarshalInputAssetHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -71320,6 +71474,13 @@ func (ec *executionContext) unmarshalInputAssetHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -71390,6 +71551,13 @@ func (ec *executionContext) unmarshalInputAssetHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -71460,6 +71628,13 @@ func (ec *executionContext) unmarshalInputAssetHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -71530,6 +71705,13 @@ func (ec *executionContext) unmarshalInputAssetHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -71646,7 +71828,7 @@ func (ec *executionContext) unmarshalInputCampaignHistoryWhereInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -71786,6 +71968,13 @@ func (ec *executionContext) unmarshalInputCampaignHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -71982,6 +72171,13 @@ func (ec *executionContext) unmarshalInputCampaignHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -72052,6 +72248,13 @@ func (ec *executionContext) unmarshalInputCampaignHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -72122,6 +72325,13 @@ func (ec *executionContext) unmarshalInputCampaignHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -72192,6 +72402,13 @@ func (ec *executionContext) unmarshalInputCampaignHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -72308,7 +72525,7 @@ func (ec *executionContext) unmarshalInputCampaignTargetHistoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -72448,6 +72665,13 @@ func (ec *executionContext) unmarshalInputCampaignTargetHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -72644,6 +72868,13 @@ func (ec *executionContext) unmarshalInputCampaignTargetHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -72714,6 +72945,13 @@ func (ec *executionContext) unmarshalInputCampaignTargetHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -72784,6 +73022,13 @@ func (ec *executionContext) unmarshalInputCampaignTargetHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -72854,6 +73099,13 @@ func (ec *executionContext) unmarshalInputCampaignTargetHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -72970,7 +73222,7 @@ func (ec *executionContext) unmarshalInputContactHistoryWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -73110,6 +73362,13 @@ func (ec *executionContext) unmarshalInputContactHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -73306,6 +73565,13 @@ func (ec *executionContext) unmarshalInputContactHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -73376,6 +73642,13 @@ func (ec *executionContext) unmarshalInputContactHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -73446,6 +73719,13 @@ func (ec *executionContext) unmarshalInputContactHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -73516,6 +73796,13 @@ func (ec *executionContext) unmarshalInputContactHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -73632,7 +73919,7 @@ func (ec *executionContext) unmarshalInputControlHistoryWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -73772,6 +74059,13 @@ func (ec *executionContext) unmarshalInputControlHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -73968,6 +74262,13 @@ func (ec *executionContext) unmarshalInputControlHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -74038,6 +74339,13 @@ func (ec *executionContext) unmarshalInputControlHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -74108,6 +74416,13 @@ func (ec *executionContext) unmarshalInputControlHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -74178,6 +74493,13 @@ func (ec *executionContext) unmarshalInputControlHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -74294,7 +74616,7 @@ func (ec *executionContext) unmarshalInputControlImplementationHistoryWhereInput
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -74434,6 +74756,13 @@ func (ec *executionContext) unmarshalInputControlImplementationHistoryWhereInput
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -74630,6 +74959,13 @@ func (ec *executionContext) unmarshalInputControlImplementationHistoryWhereInput
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -74700,6 +75036,13 @@ func (ec *executionContext) unmarshalInputControlImplementationHistoryWhereInput
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -74770,6 +75113,13 @@ func (ec *executionContext) unmarshalInputControlImplementationHistoryWhereInput
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -74840,6 +75190,13 @@ func (ec *executionContext) unmarshalInputControlImplementationHistoryWhereInput
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -74956,7 +75313,7 @@ func (ec *executionContext) unmarshalInputControlObjectiveHistoryWhereInput(ctx 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -75096,6 +75453,13 @@ func (ec *executionContext) unmarshalInputControlObjectiveHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -75292,6 +75656,13 @@ func (ec *executionContext) unmarshalInputControlObjectiveHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -75362,6 +75733,13 @@ func (ec *executionContext) unmarshalInputControlObjectiveHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -75432,6 +75810,13 @@ func (ec *executionContext) unmarshalInputControlObjectiveHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -75502,6 +75887,13 @@ func (ec *executionContext) unmarshalInputControlObjectiveHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.RevisionContains = data
+		case "revisionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevisionHasPrefix = data
 		case "revisionHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -75572,6 +75964,13 @@ func (ec *executionContext) unmarshalInputControlObjectiveHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -75688,7 +76087,7 @@ func (ec *executionContext) unmarshalInputCustomDomainHistoryWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -75828,6 +76227,13 @@ func (ec *executionContext) unmarshalInputCustomDomainHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -76024,6 +76430,13 @@ func (ec *executionContext) unmarshalInputCustomDomainHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -76094,6 +76507,13 @@ func (ec *executionContext) unmarshalInputCustomDomainHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -76164,6 +76584,13 @@ func (ec *executionContext) unmarshalInputCustomDomainHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -76234,6 +76661,13 @@ func (ec *executionContext) unmarshalInputCustomDomainHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -76350,7 +76784,7 @@ func (ec *executionContext) unmarshalInputDiscussionHistoryWhereInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -76490,6 +76924,13 @@ func (ec *executionContext) unmarshalInputDiscussionHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -76686,6 +77127,13 @@ func (ec *executionContext) unmarshalInputDiscussionHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -76756,6 +77204,13 @@ func (ec *executionContext) unmarshalInputDiscussionHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -76826,6 +77281,13 @@ func (ec *executionContext) unmarshalInputDiscussionHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -76896,6 +77358,13 @@ func (ec *executionContext) unmarshalInputDiscussionHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -77012,7 +77481,7 @@ func (ec *executionContext) unmarshalInputDocumentDataHistoryWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -77152,6 +77621,13 @@ func (ec *executionContext) unmarshalInputDocumentDataHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -77348,6 +77824,13 @@ func (ec *executionContext) unmarshalInputDocumentDataHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -77418,6 +77901,13 @@ func (ec *executionContext) unmarshalInputDocumentDataHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -77488,6 +77978,13 @@ func (ec *executionContext) unmarshalInputDocumentDataHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -77558,6 +78055,13 @@ func (ec *executionContext) unmarshalInputDocumentDataHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -77674,7 +78178,7 @@ func (ec *executionContext) unmarshalInputEmailTemplateHistoryWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -77814,6 +78318,13 @@ func (ec *executionContext) unmarshalInputEmailTemplateHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78010,6 +78521,13 @@ func (ec *executionContext) unmarshalInputEmailTemplateHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78080,6 +78598,13 @@ func (ec *executionContext) unmarshalInputEmailTemplateHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78150,6 +78675,13 @@ func (ec *executionContext) unmarshalInputEmailTemplateHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78220,6 +78752,13 @@ func (ec *executionContext) unmarshalInputEmailTemplateHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.RevisionContains = data
+		case "revisionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevisionHasPrefix = data
 		case "revisionHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78290,6 +78829,13 @@ func (ec *executionContext) unmarshalInputEmailTemplateHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78406,7 +78952,7 @@ func (ec *executionContext) unmarshalInputEntityHistoryWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -78546,6 +79092,13 @@ func (ec *executionContext) unmarshalInputEntityHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78742,6 +79295,13 @@ func (ec *executionContext) unmarshalInputEntityHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78812,6 +79372,13 @@ func (ec *executionContext) unmarshalInputEntityHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78882,6 +79449,13 @@ func (ec *executionContext) unmarshalInputEntityHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -78952,6 +79526,13 @@ func (ec *executionContext) unmarshalInputEntityHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -79068,7 +79649,7 @@ func (ec *executionContext) unmarshalInputEntityTypeHistoryWhereInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -79208,6 +79789,13 @@ func (ec *executionContext) unmarshalInputEntityTypeHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -79404,6 +79992,13 @@ func (ec *executionContext) unmarshalInputEntityTypeHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -79474,6 +80069,13 @@ func (ec *executionContext) unmarshalInputEntityTypeHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -79544,6 +80146,13 @@ func (ec *executionContext) unmarshalInputEntityTypeHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -79614,6 +80223,13 @@ func (ec *executionContext) unmarshalInputEntityTypeHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -79730,7 +80346,7 @@ func (ec *executionContext) unmarshalInputEvidenceHistoryWhereInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -79870,6 +80486,13 @@ func (ec *executionContext) unmarshalInputEvidenceHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -80066,6 +80689,13 @@ func (ec *executionContext) unmarshalInputEvidenceHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -80136,6 +80766,13 @@ func (ec *executionContext) unmarshalInputEvidenceHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -80206,6 +80843,13 @@ func (ec *executionContext) unmarshalInputEvidenceHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -80276,6 +80920,13 @@ func (ec *executionContext) unmarshalInputEvidenceHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -80392,7 +81043,7 @@ func (ec *executionContext) unmarshalInputFileHistoryWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -80532,6 +81183,13 @@ func (ec *executionContext) unmarshalInputFileHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -80728,6 +81386,13 @@ func (ec *executionContext) unmarshalInputFileHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -80798,6 +81463,13 @@ func (ec *executionContext) unmarshalInputFileHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -80868,6 +81540,13 @@ func (ec *executionContext) unmarshalInputFileHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -80984,7 +81663,7 @@ func (ec *executionContext) unmarshalInputFindingControlHistoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -81124,6 +81803,13 @@ func (ec *executionContext) unmarshalInputFindingControlHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -81320,6 +82006,13 @@ func (ec *executionContext) unmarshalInputFindingControlHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -81390,6 +82083,13 @@ func (ec *executionContext) unmarshalInputFindingControlHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -81460,6 +82160,13 @@ func (ec *executionContext) unmarshalInputFindingControlHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -81530,6 +82237,13 @@ func (ec *executionContext) unmarshalInputFindingControlHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -81646,7 +82360,7 @@ func (ec *executionContext) unmarshalInputFindingHistoryWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -81786,6 +82500,13 @@ func (ec *executionContext) unmarshalInputFindingHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -81982,6 +82703,13 @@ func (ec *executionContext) unmarshalInputFindingHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -82052,6 +82780,13 @@ func (ec *executionContext) unmarshalInputFindingHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -82122,6 +82857,13 @@ func (ec *executionContext) unmarshalInputFindingHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -82192,6 +82934,13 @@ func (ec *executionContext) unmarshalInputFindingHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -82308,7 +83057,7 @@ func (ec *executionContext) unmarshalInputGroupHistoryWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -82448,6 +83197,13 @@ func (ec *executionContext) unmarshalInputGroupHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -82644,6 +83400,13 @@ func (ec *executionContext) unmarshalInputGroupHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -82714,6 +83477,13 @@ func (ec *executionContext) unmarshalInputGroupHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -82784,6 +83554,13 @@ func (ec *executionContext) unmarshalInputGroupHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -82854,6 +83631,13 @@ func (ec *executionContext) unmarshalInputGroupHistoryWhereInput(ctx context.Con
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -82970,7 +83754,7 @@ func (ec *executionContext) unmarshalInputGroupMembershipHistoryWhereInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -83110,6 +83894,13 @@ func (ec *executionContext) unmarshalInputGroupMembershipHistoryWhereInput(ctx c
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -83306,6 +84097,13 @@ func (ec *executionContext) unmarshalInputGroupMembershipHistoryWhereInput(ctx c
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -83376,6 +84174,13 @@ func (ec *executionContext) unmarshalInputGroupMembershipHistoryWhereInput(ctx c
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -83446,6 +84251,13 @@ func (ec *executionContext) unmarshalInputGroupMembershipHistoryWhereInput(ctx c
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -83562,7 +84374,7 @@ func (ec *executionContext) unmarshalInputGroupSettingHistoryWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -83702,6 +84514,13 @@ func (ec *executionContext) unmarshalInputGroupSettingHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -83898,6 +84717,13 @@ func (ec *executionContext) unmarshalInputGroupSettingHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -83968,6 +84794,13 @@ func (ec *executionContext) unmarshalInputGroupSettingHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -84038,6 +84871,13 @@ func (ec *executionContext) unmarshalInputGroupSettingHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -84154,7 +84994,7 @@ func (ec *executionContext) unmarshalInputHushHistoryWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -84294,6 +85134,13 @@ func (ec *executionContext) unmarshalInputHushHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -84490,6 +85337,13 @@ func (ec *executionContext) unmarshalInputHushHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -84560,6 +85414,13 @@ func (ec *executionContext) unmarshalInputHushHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -84630,6 +85491,13 @@ func (ec *executionContext) unmarshalInputHushHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -84700,6 +85568,13 @@ func (ec *executionContext) unmarshalInputHushHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -84816,7 +85691,7 @@ func (ec *executionContext) unmarshalInputIdentityHolderHistoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -84956,6 +85831,13 @@ func (ec *executionContext) unmarshalInputIdentityHolderHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -85152,6 +86034,13 @@ func (ec *executionContext) unmarshalInputIdentityHolderHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -85222,6 +86111,13 @@ func (ec *executionContext) unmarshalInputIdentityHolderHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -85292,6 +86188,13 @@ func (ec *executionContext) unmarshalInputIdentityHolderHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -85362,6 +86265,13 @@ func (ec *executionContext) unmarshalInputIdentityHolderHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -85478,7 +86388,7 @@ func (ec *executionContext) unmarshalInputInternalPolicyHistoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -85618,6 +86528,13 @@ func (ec *executionContext) unmarshalInputInternalPolicyHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -85814,6 +86731,13 @@ func (ec *executionContext) unmarshalInputInternalPolicyHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -85884,6 +86808,13 @@ func (ec *executionContext) unmarshalInputInternalPolicyHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -85954,6 +86885,13 @@ func (ec *executionContext) unmarshalInputInternalPolicyHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -86024,6 +86962,13 @@ func (ec *executionContext) unmarshalInputInternalPolicyHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.RevisionContains = data
+		case "revisionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevisionHasPrefix = data
 		case "revisionHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -86094,6 +87039,13 @@ func (ec *executionContext) unmarshalInputInternalPolicyHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -86210,7 +87162,7 @@ func (ec *executionContext) unmarshalInputMappableDomainHistoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -86350,6 +87302,13 @@ func (ec *executionContext) unmarshalInputMappableDomainHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -86546,6 +87505,13 @@ func (ec *executionContext) unmarshalInputMappableDomainHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -86616,6 +87582,13 @@ func (ec *executionContext) unmarshalInputMappableDomainHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -86686,6 +87659,13 @@ func (ec *executionContext) unmarshalInputMappableDomainHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -86802,7 +87782,7 @@ func (ec *executionContext) unmarshalInputMappedControlHistoryWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -86942,6 +87922,13 @@ func (ec *executionContext) unmarshalInputMappedControlHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -87138,6 +88125,13 @@ func (ec *executionContext) unmarshalInputMappedControlHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -87208,6 +88202,13 @@ func (ec *executionContext) unmarshalInputMappedControlHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -87278,6 +88279,13 @@ func (ec *executionContext) unmarshalInputMappedControlHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -87348,6 +88356,13 @@ func (ec *executionContext) unmarshalInputMappedControlHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -87464,7 +88479,7 @@ func (ec *executionContext) unmarshalInputNarrativeHistoryWhereInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -87604,6 +88619,13 @@ func (ec *executionContext) unmarshalInputNarrativeHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -87800,6 +88822,13 @@ func (ec *executionContext) unmarshalInputNarrativeHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -87870,6 +88899,13 @@ func (ec *executionContext) unmarshalInputNarrativeHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -87940,6 +88976,13 @@ func (ec *executionContext) unmarshalInputNarrativeHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -88010,6 +89053,13 @@ func (ec *executionContext) unmarshalInputNarrativeHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -88126,7 +89176,7 @@ func (ec *executionContext) unmarshalInputNoteHistoryWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -88266,6 +89316,13 @@ func (ec *executionContext) unmarshalInputNoteHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -88462,6 +89519,13 @@ func (ec *executionContext) unmarshalInputNoteHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -88532,6 +89596,13 @@ func (ec *executionContext) unmarshalInputNoteHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -88602,6 +89673,13 @@ func (ec *executionContext) unmarshalInputNoteHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -88672,6 +89750,13 @@ func (ec *executionContext) unmarshalInputNoteHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -88788,7 +89873,7 @@ func (ec *executionContext) unmarshalInputNotificationPreferenceHistoryWhereInpu
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -88928,6 +90013,13 @@ func (ec *executionContext) unmarshalInputNotificationPreferenceHistoryWhereInpu
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -89124,6 +90216,13 @@ func (ec *executionContext) unmarshalInputNotificationPreferenceHistoryWhereInpu
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -89194,6 +90293,13 @@ func (ec *executionContext) unmarshalInputNotificationPreferenceHistoryWhereInpu
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -89264,6 +90370,13 @@ func (ec *executionContext) unmarshalInputNotificationPreferenceHistoryWhereInpu
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -89334,6 +90447,13 @@ func (ec *executionContext) unmarshalInputNotificationPreferenceHistoryWhereInpu
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -89450,7 +90570,7 @@ func (ec *executionContext) unmarshalInputNotificationTemplateHistoryWhereInput(
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -89590,6 +90710,13 @@ func (ec *executionContext) unmarshalInputNotificationTemplateHistoryWhereInput(
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -89786,6 +90913,13 @@ func (ec *executionContext) unmarshalInputNotificationTemplateHistoryWhereInput(
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -89856,6 +90990,13 @@ func (ec *executionContext) unmarshalInputNotificationTemplateHistoryWhereInput(
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -89926,6 +91067,13 @@ func (ec *executionContext) unmarshalInputNotificationTemplateHistoryWhereInput(
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -89996,6 +91144,13 @@ func (ec *executionContext) unmarshalInputNotificationTemplateHistoryWhereInput(
 				return it, err
 			}
 			it.RevisionContains = data
+		case "revisionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevisionHasPrefix = data
 		case "revisionHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -90066,6 +91221,13 @@ func (ec *executionContext) unmarshalInputNotificationTemplateHistoryWhereInput(
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -90182,7 +91344,7 @@ func (ec *executionContext) unmarshalInputOrgMembershipHistoryWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90322,6 +91484,13 @@ func (ec *executionContext) unmarshalInputOrgMembershipHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -90518,6 +91687,13 @@ func (ec *executionContext) unmarshalInputOrgMembershipHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -90588,6 +91764,13 @@ func (ec *executionContext) unmarshalInputOrgMembershipHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -90658,6 +91841,13 @@ func (ec *executionContext) unmarshalInputOrgMembershipHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -90774,7 +91964,7 @@ func (ec *executionContext) unmarshalInputOrganizationBrandingSettingHistoryWher
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -90914,6 +92104,13 @@ func (ec *executionContext) unmarshalInputOrganizationBrandingSettingHistoryWher
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -91110,6 +92307,13 @@ func (ec *executionContext) unmarshalInputOrganizationBrandingSettingHistoryWher
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -91180,6 +92384,13 @@ func (ec *executionContext) unmarshalInputOrganizationBrandingSettingHistoryWher
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -91250,6 +92461,13 @@ func (ec *executionContext) unmarshalInputOrganizationBrandingSettingHistoryWher
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -91366,7 +92584,7 @@ func (ec *executionContext) unmarshalInputOrganizationHistoryWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -91506,6 +92724,13 @@ func (ec *executionContext) unmarshalInputOrganizationHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -91702,6 +92927,13 @@ func (ec *executionContext) unmarshalInputOrganizationHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -91772,6 +93004,13 @@ func (ec *executionContext) unmarshalInputOrganizationHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -91842,6 +93081,13 @@ func (ec *executionContext) unmarshalInputOrganizationHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -91958,7 +93204,7 @@ func (ec *executionContext) unmarshalInputOrganizationSettingHistoryWhereInput(c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92098,6 +93344,13 @@ func (ec *executionContext) unmarshalInputOrganizationSettingHistoryWhereInput(c
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -92294,6 +93547,13 @@ func (ec *executionContext) unmarshalInputOrganizationSettingHistoryWhereInput(c
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -92364,6 +93624,13 @@ func (ec *executionContext) unmarshalInputOrganizationSettingHistoryWhereInput(c
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -92434,6 +93701,13 @@ func (ec *executionContext) unmarshalInputOrganizationSettingHistoryWhereInput(c
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -92550,7 +93824,7 @@ func (ec *executionContext) unmarshalInputPlatformHistoryWhereInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -92690,6 +93964,13 @@ func (ec *executionContext) unmarshalInputPlatformHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -92886,6 +94167,13 @@ func (ec *executionContext) unmarshalInputPlatformHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -92956,6 +94244,13 @@ func (ec *executionContext) unmarshalInputPlatformHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -93026,6 +94321,13 @@ func (ec *executionContext) unmarshalInputPlatformHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -93096,6 +94398,13 @@ func (ec *executionContext) unmarshalInputPlatformHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -93212,7 +94521,7 @@ func (ec *executionContext) unmarshalInputProcedureHistoryWhereInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -93352,6 +94661,13 @@ func (ec *executionContext) unmarshalInputProcedureHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -93548,6 +94864,13 @@ func (ec *executionContext) unmarshalInputProcedureHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -93618,6 +94941,13 @@ func (ec *executionContext) unmarshalInputProcedureHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -93688,6 +95018,13 @@ func (ec *executionContext) unmarshalInputProcedureHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -93758,6 +95095,13 @@ func (ec *executionContext) unmarshalInputProcedureHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.RevisionContains = data
+		case "revisionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevisionHasPrefix = data
 		case "revisionHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -93828,6 +95172,13 @@ func (ec *executionContext) unmarshalInputProcedureHistoryWhereInput(ctx context
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -93944,7 +95295,7 @@ func (ec *executionContext) unmarshalInputProgramHistoryWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -94084,6 +95435,13 @@ func (ec *executionContext) unmarshalInputProgramHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -94280,6 +95638,13 @@ func (ec *executionContext) unmarshalInputProgramHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -94350,6 +95715,13 @@ func (ec *executionContext) unmarshalInputProgramHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -94420,6 +95792,13 @@ func (ec *executionContext) unmarshalInputProgramHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -94490,6 +95869,13 @@ func (ec *executionContext) unmarshalInputProgramHistoryWhereInput(ctx context.C
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -94606,7 +95992,7 @@ func (ec *executionContext) unmarshalInputProgramMembershipHistoryWhereInput(ctx
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -94746,6 +96132,13 @@ func (ec *executionContext) unmarshalInputProgramMembershipHistoryWhereInput(ctx
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -94942,6 +96335,13 @@ func (ec *executionContext) unmarshalInputProgramMembershipHistoryWhereInput(ctx
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -95012,6 +96412,13 @@ func (ec *executionContext) unmarshalInputProgramMembershipHistoryWhereInput(ctx
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -95082,6 +96489,13 @@ func (ec *executionContext) unmarshalInputProgramMembershipHistoryWhereInput(ctx
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -95198,7 +96612,7 @@ func (ec *executionContext) unmarshalInputRemediationHistoryWhereInput(ctx conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -95338,6 +96752,13 @@ func (ec *executionContext) unmarshalInputRemediationHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -95534,6 +96955,13 @@ func (ec *executionContext) unmarshalInputRemediationHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -95604,6 +97032,13 @@ func (ec *executionContext) unmarshalInputRemediationHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -95674,6 +97109,13 @@ func (ec *executionContext) unmarshalInputRemediationHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -95744,6 +97186,13 @@ func (ec *executionContext) unmarshalInputRemediationHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -95860,7 +97309,7 @@ func (ec *executionContext) unmarshalInputReportHistoryWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -96000,6 +97449,13 @@ func (ec *executionContext) unmarshalInputReportHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -96196,6 +97652,13 @@ func (ec *executionContext) unmarshalInputReportHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -96266,6 +97729,13 @@ func (ec *executionContext) unmarshalInputReportHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -96336,6 +97806,13 @@ func (ec *executionContext) unmarshalInputReportHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -96406,6 +97883,13 @@ func (ec *executionContext) unmarshalInputReportHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -96522,7 +98006,7 @@ func (ec *executionContext) unmarshalInputReportMembershipHistoryWhereInput(ctx 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -96662,6 +98146,13 @@ func (ec *executionContext) unmarshalInputReportMembershipHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -96858,6 +98349,13 @@ func (ec *executionContext) unmarshalInputReportMembershipHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -96928,6 +98426,13 @@ func (ec *executionContext) unmarshalInputReportMembershipHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -96998,6 +98503,13 @@ func (ec *executionContext) unmarshalInputReportMembershipHistoryWhereInput(ctx 
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -97114,7 +98626,7 @@ func (ec *executionContext) unmarshalInputReviewHistoryWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -97254,6 +98766,13 @@ func (ec *executionContext) unmarshalInputReviewHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -97450,6 +98969,13 @@ func (ec *executionContext) unmarshalInputReviewHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -97520,6 +99046,13 @@ func (ec *executionContext) unmarshalInputReviewHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -97590,6 +99123,13 @@ func (ec *executionContext) unmarshalInputReviewHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -97660,6 +99200,13 @@ func (ec *executionContext) unmarshalInputReviewHistoryWhereInput(ctx context.Co
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -97776,7 +99323,7 @@ func (ec *executionContext) unmarshalInputRiskHistoryWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -97916,6 +99463,13 @@ func (ec *executionContext) unmarshalInputRiskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -98112,6 +99666,13 @@ func (ec *executionContext) unmarshalInputRiskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -98182,6 +99743,13 @@ func (ec *executionContext) unmarshalInputRiskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -98252,6 +99820,13 @@ func (ec *executionContext) unmarshalInputRiskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -98322,6 +99897,13 @@ func (ec *executionContext) unmarshalInputRiskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -98438,7 +100020,7 @@ func (ec *executionContext) unmarshalInputSLADefinitionHistoryWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -98578,6 +100160,13 @@ func (ec *executionContext) unmarshalInputSLADefinitionHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -98774,6 +100363,13 @@ func (ec *executionContext) unmarshalInputSLADefinitionHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -98844,6 +100440,13 @@ func (ec *executionContext) unmarshalInputSLADefinitionHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -98914,6 +100517,13 @@ func (ec *executionContext) unmarshalInputSLADefinitionHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -98984,6 +100594,13 @@ func (ec *executionContext) unmarshalInputSLADefinitionHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -99100,7 +100717,7 @@ func (ec *executionContext) unmarshalInputStandardHistoryWhereInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -99240,6 +100857,13 @@ func (ec *executionContext) unmarshalInputStandardHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -99436,6 +101060,13 @@ func (ec *executionContext) unmarshalInputStandardHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -99506,6 +101137,13 @@ func (ec *executionContext) unmarshalInputStandardHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -99576,6 +101214,13 @@ func (ec *executionContext) unmarshalInputStandardHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -99646,6 +101291,13 @@ func (ec *executionContext) unmarshalInputStandardHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.RevisionContains = data
+		case "revisionHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RevisionHasPrefix = data
 		case "revisionHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("revisionHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -99716,6 +101368,13 @@ func (ec *executionContext) unmarshalInputStandardHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -99832,7 +101491,7 @@ func (ec *executionContext) unmarshalInputSubcontrolHistoryWhereInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -99972,6 +101631,13 @@ func (ec *executionContext) unmarshalInputSubcontrolHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -100168,6 +101834,13 @@ func (ec *executionContext) unmarshalInputSubcontrolHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -100238,6 +101911,13 @@ func (ec *executionContext) unmarshalInputSubcontrolHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -100308,6 +101988,13 @@ func (ec *executionContext) unmarshalInputSubcontrolHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -100378,6 +102065,13 @@ func (ec *executionContext) unmarshalInputSubcontrolHistoryWhereInput(ctx contex
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -100494,7 +102188,7 @@ func (ec *executionContext) unmarshalInputSubprocessorHistoryWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -100634,6 +102328,13 @@ func (ec *executionContext) unmarshalInputSubprocessorHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -100830,6 +102531,13 @@ func (ec *executionContext) unmarshalInputSubprocessorHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -100900,6 +102608,13 @@ func (ec *executionContext) unmarshalInputSubprocessorHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -100970,6 +102685,13 @@ func (ec *executionContext) unmarshalInputSubprocessorHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -101040,6 +102762,13 @@ func (ec *executionContext) unmarshalInputSubprocessorHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -101156,7 +102885,7 @@ func (ec *executionContext) unmarshalInputSystemDetailHistoryWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -101296,6 +103025,13 @@ func (ec *executionContext) unmarshalInputSystemDetailHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -101492,6 +103228,13 @@ func (ec *executionContext) unmarshalInputSystemDetailHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -101562,6 +103305,13 @@ func (ec *executionContext) unmarshalInputSystemDetailHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -101632,6 +103382,13 @@ func (ec *executionContext) unmarshalInputSystemDetailHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -101702,6 +103459,13 @@ func (ec *executionContext) unmarshalInputSystemDetailHistoryWhereInput(ctx cont
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -101818,7 +103582,7 @@ func (ec *executionContext) unmarshalInputTaskHistoryWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -101958,6 +103722,13 @@ func (ec *executionContext) unmarshalInputTaskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -102154,6 +103925,13 @@ func (ec *executionContext) unmarshalInputTaskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -102224,6 +104002,13 @@ func (ec *executionContext) unmarshalInputTaskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -102294,6 +104079,13 @@ func (ec *executionContext) unmarshalInputTaskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -102364,6 +104156,13 @@ func (ec *executionContext) unmarshalInputTaskHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -102480,7 +104279,7 @@ func (ec *executionContext) unmarshalInputTemplateHistoryWhereInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -102620,6 +104419,13 @@ func (ec *executionContext) unmarshalInputTemplateHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -102816,6 +104622,13 @@ func (ec *executionContext) unmarshalInputTemplateHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -102886,6 +104699,13 @@ func (ec *executionContext) unmarshalInputTemplateHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -102956,6 +104776,13 @@ func (ec *executionContext) unmarshalInputTemplateHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -103026,6 +104853,13 @@ func (ec *executionContext) unmarshalInputTemplateHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -103142,7 +104976,7 @@ func (ec *executionContext) unmarshalInputTrustCenterComplianceHistoryWhereInput
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -103282,6 +105116,13 @@ func (ec *executionContext) unmarshalInputTrustCenterComplianceHistoryWhereInput
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -103478,6 +105319,13 @@ func (ec *executionContext) unmarshalInputTrustCenterComplianceHistoryWhereInput
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -103548,6 +105396,13 @@ func (ec *executionContext) unmarshalInputTrustCenterComplianceHistoryWhereInput
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -103618,6 +105473,13 @@ func (ec *executionContext) unmarshalInputTrustCenterComplianceHistoryWhereInput
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -103734,7 +105596,7 @@ func (ec *executionContext) unmarshalInputTrustCenterDocHistoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -103874,6 +105736,13 @@ func (ec *executionContext) unmarshalInputTrustCenterDocHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -104070,6 +105939,13 @@ func (ec *executionContext) unmarshalInputTrustCenterDocHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -104140,6 +106016,13 @@ func (ec *executionContext) unmarshalInputTrustCenterDocHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -104210,6 +106093,13 @@ func (ec *executionContext) unmarshalInputTrustCenterDocHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -104326,7 +106216,7 @@ func (ec *executionContext) unmarshalInputTrustCenterEntityHistoryWhereInput(ctx
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -104466,6 +106356,13 @@ func (ec *executionContext) unmarshalInputTrustCenterEntityHistoryWhereInput(ctx
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -104662,6 +106559,13 @@ func (ec *executionContext) unmarshalInputTrustCenterEntityHistoryWhereInput(ctx
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -104732,6 +106636,13 @@ func (ec *executionContext) unmarshalInputTrustCenterEntityHistoryWhereInput(ctx
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -104802,6 +106713,13 @@ func (ec *executionContext) unmarshalInputTrustCenterEntityHistoryWhereInput(ctx
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -104918,7 +106836,7 @@ func (ec *executionContext) unmarshalInputTrustCenterFAQHistoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -105058,6 +106976,13 @@ func (ec *executionContext) unmarshalInputTrustCenterFAQHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -105254,6 +107179,13 @@ func (ec *executionContext) unmarshalInputTrustCenterFAQHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -105324,6 +107256,13 @@ func (ec *executionContext) unmarshalInputTrustCenterFAQHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -105394,6 +107333,13 @@ func (ec *executionContext) unmarshalInputTrustCenterFAQHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -105510,7 +107456,7 @@ func (ec *executionContext) unmarshalInputTrustCenterHistoryWhereInput(ctx conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -105650,6 +107596,13 @@ func (ec *executionContext) unmarshalInputTrustCenterHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -105846,6 +107799,13 @@ func (ec *executionContext) unmarshalInputTrustCenterHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -105916,6 +107876,13 @@ func (ec *executionContext) unmarshalInputTrustCenterHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -105986,6 +107953,13 @@ func (ec *executionContext) unmarshalInputTrustCenterHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -106056,6 +108030,13 @@ func (ec *executionContext) unmarshalInputTrustCenterHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -106172,7 +108153,7 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -106312,6 +108293,13 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -106508,6 +108496,13 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -106578,6 +108573,13 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -106648,6 +108650,13 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -106764,7 +108773,7 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -106904,6 +108913,13 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -107100,6 +109116,13 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -107170,6 +109193,13 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -107240,6 +109270,13 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -107356,7 +109393,7 @@ func (ec *executionContext) unmarshalInputTrustCenterSubprocessorHistoryWhereInp
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -107496,6 +109533,13 @@ func (ec *executionContext) unmarshalInputTrustCenterSubprocessorHistoryWhereInp
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -107692,6 +109736,13 @@ func (ec *executionContext) unmarshalInputTrustCenterSubprocessorHistoryWhereInp
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -107762,6 +109813,13 @@ func (ec *executionContext) unmarshalInputTrustCenterSubprocessorHistoryWhereInp
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -107832,6 +109890,13 @@ func (ec *executionContext) unmarshalInputTrustCenterSubprocessorHistoryWhereInp
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -107948,7 +110013,7 @@ func (ec *executionContext) unmarshalInputTrustCenterWatermarkConfigHistoryWhere
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -108088,6 +110153,13 @@ func (ec *executionContext) unmarshalInputTrustCenterWatermarkConfigHistoryWhere
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -108284,6 +110356,13 @@ func (ec *executionContext) unmarshalInputTrustCenterWatermarkConfigHistoryWhere
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -108354,6 +110433,13 @@ func (ec *executionContext) unmarshalInputTrustCenterWatermarkConfigHistoryWhere
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -108424,6 +110510,13 @@ func (ec *executionContext) unmarshalInputTrustCenterWatermarkConfigHistoryWhere
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -108494,6 +110587,13 @@ func (ec *executionContext) unmarshalInputTrustCenterWatermarkConfigHistoryWhere
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -108610,7 +110710,7 @@ func (ec *executionContext) unmarshalInputUserHistoryWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -108750,6 +110850,13 @@ func (ec *executionContext) unmarshalInputUserHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -108946,6 +111053,13 @@ func (ec *executionContext) unmarshalInputUserHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -109016,6 +111130,13 @@ func (ec *executionContext) unmarshalInputUserHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -109132,7 +111253,7 @@ func (ec *executionContext) unmarshalInputUserSettingHistoryWhereInput(ctx conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -109272,6 +111393,13 @@ func (ec *executionContext) unmarshalInputUserSettingHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -109468,6 +111596,13 @@ func (ec *executionContext) unmarshalInputUserSettingHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -109538,6 +111673,13 @@ func (ec *executionContext) unmarshalInputUserSettingHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -109608,6 +111750,13 @@ func (ec *executionContext) unmarshalInputUserSettingHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -109724,7 +111873,7 @@ func (ec *executionContext) unmarshalInputVendorRiskScoreHistoryWhereInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -109864,6 +112013,13 @@ func (ec *executionContext) unmarshalInputVendorRiskScoreHistoryWhereInput(ctx c
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -110060,6 +112216,13 @@ func (ec *executionContext) unmarshalInputVendorRiskScoreHistoryWhereInput(ctx c
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -110130,6 +112293,13 @@ func (ec *executionContext) unmarshalInputVendorRiskScoreHistoryWhereInput(ctx c
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -110200,6 +112370,13 @@ func (ec *executionContext) unmarshalInputVendorRiskScoreHistoryWhereInput(ctx c
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -110270,6 +112447,13 @@ func (ec *executionContext) unmarshalInputVendorRiskScoreHistoryWhereInput(ctx c
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -110386,7 +112570,7 @@ func (ec *executionContext) unmarshalInputVendorScoringConfigHistoryWhereInput(c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -110526,6 +112710,13 @@ func (ec *executionContext) unmarshalInputVendorScoringConfigHistoryWhereInput(c
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -110722,6 +112913,13 @@ func (ec *executionContext) unmarshalInputVendorScoringConfigHistoryWhereInput(c
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -110792,6 +112990,13 @@ func (ec *executionContext) unmarshalInputVendorScoringConfigHistoryWhereInput(c
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -110862,6 +113067,13 @@ func (ec *executionContext) unmarshalInputVendorScoringConfigHistoryWhereInput(c
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -110932,6 +113144,13 @@ func (ec *executionContext) unmarshalInputVendorScoringConfigHistoryWhereInput(c
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -111048,7 +113267,7 @@ func (ec *executionContext) unmarshalInputVulnerabilityHistoryWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -111188,6 +113407,13 @@ func (ec *executionContext) unmarshalInputVulnerabilityHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -111384,6 +113610,13 @@ func (ec *executionContext) unmarshalInputVulnerabilityHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -111454,6 +113687,13 @@ func (ec *executionContext) unmarshalInputVulnerabilityHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -111524,6 +113764,13 @@ func (ec *executionContext) unmarshalInputVulnerabilityHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -111594,6 +113841,13 @@ func (ec *executionContext) unmarshalInputVulnerabilityHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -111710,7 +113964,7 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentHistoryWhereInput(ct
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -111850,6 +114104,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentHistoryWhereInput(ct
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -112046,6 +114307,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentHistoryWhereInput(ct
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -112116,6 +114384,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentHistoryWhereInput(ct
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -112186,6 +114461,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentHistoryWhereInput(ct
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -112256,6 +114538,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentHistoryWhereInput(ct
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -112372,7 +114661,7 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetHistoryWhereIn
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -112512,6 +114801,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetHistoryWhereIn
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -112708,6 +115004,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetHistoryWhereIn
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -112778,6 +115081,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetHistoryWhereIn
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -112848,6 +115158,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetHistoryWhereIn
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -112918,6 +115235,13 @@ func (ec *executionContext) unmarshalInputWorkflowAssignmentTargetHistoryWhereIn
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -113034,7 +115358,7 @@ func (ec *executionContext) unmarshalInputWorkflowDefinitionHistoryWhereInput(ct
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "revision", "revisionNEQ", "revisionGT", "revisionGTE", "revisionLT", "revisionLTE"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "revision", "revisionNEQ", "revisionGT", "revisionGTE", "revisionLT", "revisionLTE"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -113174,6 +115498,13 @@ func (ec *executionContext) unmarshalInputWorkflowDefinitionHistoryWhereInput(ct
 				return it, err
 			}
 			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
 		case "refHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -113370,6 +115701,13 @@ func (ec *executionContext) unmarshalInputWorkflowDefinitionHistoryWhereInput(ct
 				return it, err
 			}
 			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
 		case "createdByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -113440,6 +115778,13 @@ func (ec *executionContext) unmarshalInputWorkflowDefinitionHistoryWhereInput(ct
 				return it, err
 			}
 			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
 		case "updatedByHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -113510,6 +115855,13 @@ func (ec *executionContext) unmarshalInputWorkflowDefinitionHistoryWhereInput(ct
 				return it, err
 			}
 			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
 		case "updatedByImpersonatorHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -113580,6 +115932,13 @@ func (ec *executionContext) unmarshalInputWorkflowDefinitionHistoryWhereInput(ct
 				return it, err
 			}
 			it.OwnerIDContains = data
+		case "ownerIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerIDHasPrefix = data
 		case "ownerIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerIDHasSuffix"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
