@@ -3,12 +3,11 @@
 package testharness
 
 import (
-	"os"
 	"testing"
 
 	"github.com/gqlgo/gqlgenc/clientv2"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	coreutils "github.com/theopenlane/core/v2/internal/testutils"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gotest.tools/v3/assert"
 )
@@ -27,27 +26,12 @@ func AssertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
 	assert.Equal(t, msg, testclient.GetErrorMessage(err))
 }
 
-func RequireNoError(t *testing.T, err error) {
-	t.Helper()
-	if err != nil {
-		log.Error().Err(err).Msg("fatal error during test setup or teardown")
-
-		os.Exit(1)
-	}
-}
-
-func FailNow(t *testing.T, msgs ...string) {
-	t.Helper()
-	logMsg := log.Error()
-
-	for _, m := range msgs {
-		logMsg.Str("msg", m)
-	}
-
-	logMsg.Msg("fatal error during test setup or teardown")
-
-	os.Exit(1)
-}
+var (
+	// RequireNoError exits the test binary when setup or teardown outside of a test fails
+	RequireNoError = coreutils.RequireNoError
+	// FailNow logs the messages and exits the test binary from setup or teardown outside of a test
+	FailNow = coreutils.FailNow
+)
 
 // ParseClientError parses the error response from the client and returns a slice of gqlerror.Error
 func ParseClientError(t *testing.T, err error) []*gqlerror.Error {

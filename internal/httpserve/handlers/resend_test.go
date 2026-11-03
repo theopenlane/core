@@ -9,8 +9,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/httpsling"
 
@@ -19,10 +17,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestResendHandler() {
-	t := suite.T()
+func TestResendHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// add handler
 	suite.registerTestHandler("POST", "resend", suite.h.ResendEmail)
@@ -69,7 +69,7 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 
 		body, err := json.Marshal(resendJSON)
 		if err != nil {
-			require.NoError(t, err)
+			assert.NilError(t, err)
 		}
 
 		req := httptest.NewRequest(http.MethodPost, "/resend", strings.NewReader(string(body)))
@@ -101,13 +101,13 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 			recorder, out := send(t, email)
 
 			if i <= 5 {
-				require.Equal(t, http.StatusOK, recorder.Code)
-				require.NotNil(t, out)
-				assert.NotEmpty(t, out.Message)
+				assert.Assert(t, is.Equal(http.StatusOK, recorder.Code))
+				assert.Assert(t, out != nil)
+				assert.Check(t, len(out.Message) > 0)
 			} else {
-				require.Equal(t, http.StatusTooManyRequests, recorder.Code)
-				require.NotNil(t, out)
-				assert.Contains(t, out.Error, "max attempts")
+				assert.Assert(t, is.Equal(http.StatusTooManyRequests, recorder.Code))
+				assert.Assert(t, out != nil)
+				assert.Check(t, is.Contains(out.Error, "max attempts"))
 			}
 		}
 	})
@@ -140,13 +140,13 @@ func (suite *HandlerTestSuite) TestResendHandler() {
 		t.Run(tc.name, func(t *testing.T) {
 			recorder, out := send(t, tc.email)
 
-			require.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Assert(t, is.Equal(tc.expectedStatus, recorder.Code))
 
 			if tc.expectedStatus == http.StatusOK {
-				require.NotEmpty(t, out)
-				assert.NotEmpty(t, out.Message)
+				assert.Assert(t, out != nil)
+				assert.Check(t, len(out.Message) > 0)
 			} else {
-				assert.Contains(t, out.Error, tc.expectedMessage)
+				assert.Check(t, is.Contains(out.Error, tc.expectedMessage))
 			}
 		})
 	}

@@ -10,13 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 const (
@@ -33,7 +32,7 @@ func (suite *HandlerTestSuite) withEmailProviderRuntime(t *testing.T, provider s
 	t.Helper()
 
 	galaInstance, err := gala.NewGala(t.Context(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 1})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	rt, err := runtime.New(runtime.Config{
 		DB:                 suite.galaDB,
@@ -41,7 +40,7 @@ func (suite *HandlerTestSuite) withEmailProviderRuntime(t *testing.T, provider s
 		Keystore:           suite.keystore,
 		DefinitionBuilders: []registry.Builder{emaildef.Builder(emaildef.MockProviderRuntimeConfig(provider), false)},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	original := suite.h.IntegrationsRuntime
 	suite.h.IntegrationsRuntime = rt
@@ -49,8 +48,8 @@ func (suite *HandlerTestSuite) withEmailProviderRuntime(t *testing.T, provider s
 	return func() {
 		suite.h.IntegrationsRuntime = original
 
-		require.NoError(t, galaInstance.WaitIdle(t.Context()))
-		require.NoError(t, galaInstance.Close())
+		assert.NilError(t, galaInstance.WaitIdle(t.Context()))
+		assert.NilError(t, galaInstance.Close())
 	}
 }
 
@@ -88,8 +87,8 @@ func postmarkWebhookRequest(password string, payload []byte) *http.Request {
 	return req
 }
 
-func (suite *HandlerTestSuite) TestEmailResendWebhookRejectsUnsigned() {
-	t := suite.T()
+func TestEmailResendWebhookRejectsUnsigned(t *testing.T) {
+	suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "resend")
 	defer restore()
@@ -100,13 +99,13 @@ func (suite *HandlerTestSuite) TestEmailResendWebhookRejectsUnsigned() {
 
 	rec := suite.serveEmailWebhook(httptest.NewRequest(http.MethodPost, emailResendWebhookPath, strings.NewReader(string(payload))))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Contains(t, rec.Body.String(), "verification failed")
-	assert.NotContains(t, rec.Body.String(), "svix")
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
+	assert.Check(t, is.Contains(rec.Body.String(), "verification failed"))
+	assert.Check(t, !strings.Contains(rec.Body.String(), "svix"))
 }
 
-func (suite *HandlerTestSuite) TestEmailResendWebhookRejectsWrongSecret() {
-	t := suite.T()
+func TestEmailResendWebhookRejectsWrongSecret(t *testing.T) {
+	suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "resend")
 	defer restore()
@@ -117,12 +116,12 @@ func (suite *HandlerTestSuite) TestEmailResendWebhookRejectsWrongSecret() {
 
 	rec := suite.serveEmailWebhook(resendWebhookRequest("whsec_d3Jvbmctc2VjcmV0", payload))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Contains(t, rec.Body.String(), "verification failed")
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
+	assert.Check(t, is.Contains(rec.Body.String(), "verification failed"))
 }
 
-func (suite *HandlerTestSuite) TestEmailResendWebhookAcceptsSignedEvents() {
-	t := suite.T()
+func TestEmailResendWebhookAcceptsSignedEvents(t *testing.T) {
+	suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "resend")
 	defer restore()
@@ -134,12 +133,12 @@ func (suite *HandlerTestSuite) TestEmailResendWebhookAcceptsSignedEvents() {
 
 		rec := suite.serveEmailWebhook(resendWebhookRequest(emaildef.MockResendWebhookSecret, payload))
 
-		require.Equal(t, http.StatusOK, rec.Code, "%s: %s", eventType, rec.Body.String())
+		assert.Assert(t, is.Equal(http.StatusOK, rec.Code), "%s: %s", eventType, rec.Body.String())
 	}
 }
 
-func (suite *HandlerTestSuite) TestEmailPostmarkWebhookRejectsMissingAuth() {
-	t := suite.T()
+func TestEmailPostmarkWebhookRejectsMissingAuth(t *testing.T) {
+	suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "postmark")
 	defer restore()
@@ -148,13 +147,13 @@ func (suite *HandlerTestSuite) TestEmailPostmarkWebhookRejectsMissingAuth() {
 
 	rec := suite.serveEmailWebhook(postmarkWebhookRequest("", []byte(`{"RecordType":"Delivery","MessageID":"m_1"}`)))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Contains(t, rec.Body.String(), "verification failed")
-	assert.NotContains(t, rec.Body.String(), "basic auth")
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
+	assert.Check(t, is.Contains(rec.Body.String(), "verification failed"))
+	assert.Check(t, !strings.Contains(rec.Body.String(), "basic auth"))
 }
 
-func (suite *HandlerTestSuite) TestEmailPostmarkWebhookRejectsWrongPassword() {
-	t := suite.T()
+func TestEmailPostmarkWebhookRejectsWrongPassword(t *testing.T) {
+	suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "postmark")
 	defer restore()
@@ -163,12 +162,12 @@ func (suite *HandlerTestSuite) TestEmailPostmarkWebhookRejectsWrongPassword() {
 
 	rec := suite.serveEmailWebhook(postmarkWebhookRequest("not-the-secret", []byte(`{"RecordType":"Delivery","MessageID":"m_2"}`)))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Contains(t, rec.Body.String(), "verification failed")
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
+	assert.Check(t, is.Contains(rec.Body.String(), "verification failed"))
 }
 
-func (suite *HandlerTestSuite) TestEmailPostmarkWebhookAcceptsAuthenticatedEvents() {
-	t := suite.T()
+func TestEmailPostmarkWebhookAcceptsAuthenticatedEvents(t *testing.T) {
+	suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "postmark")
 	defer restore()
@@ -183,12 +182,12 @@ func (suite *HandlerTestSuite) TestEmailPostmarkWebhookAcceptsAuthenticatedEvent
 
 		rec := suite.serveEmailWebhook(req)
 
-		require.Equal(t, http.StatusOK, rec.Code, "%s: %s", recordType, rec.Body.String())
+		assert.Assert(t, is.Equal(http.StatusOK, rec.Code), "%s: %s", recordType, rec.Body.String())
 	}
 }
 
-func (suite *HandlerTestSuite) TestEmailWebhookOnlySelectedProviderRouteIsConfigured() {
-	t := suite.T()
+func TestEmailWebhookOnlySelectedProviderRouteIsConfigured(t *testing.T) {
+	suite.setupTest(t)
 
 	restore := suite.withEmailProviderRuntime(t, "resend")
 	defer restore()
@@ -199,6 +198,6 @@ func (suite *HandlerTestSuite) TestEmailWebhookOnlySelectedProviderRouteIsConfig
 
 	rec := suite.serveEmailWebhook(req)
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Contains(t, rec.Body.String(), "not configured")
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
+	assert.Check(t, is.Contains(rec.Body.String(), "not configured"))
 }

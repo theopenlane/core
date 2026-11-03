@@ -10,8 +10,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
@@ -21,10 +19,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestResetPasswordHandler() {
-	t := suite.T()
+func TestResetPasswordHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// setup request request
 	suite.registerTestHandler("POST", "password-reset", suite.h.ResetPassword)
@@ -108,7 +108,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 		t.Run(tc.name, func(t *testing.T) {
 			// create user in the database
 			rt, _, err := suite.createUserWithResetToken(t, ec, tc.email, tc.ttl)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			pwResetJSON := models.ResetPasswordRequest{
 				Password: tc.newPassword,
@@ -123,7 +123,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 
 			body, err := json.Marshal(pwResetJSON)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			suite.ClearTestData()
@@ -142,7 +142,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			defer res.Body.Close()
 
 			// check status
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
 
 			var out *models.ResetPasswordResponse
 
@@ -152,14 +152,14 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			}
 
 			if tc.expectedStatus != http.StatusOK {
-				assert.Contains(t, out.Error, tc.expectedResp)
+				assert.Check(t, is.Contains(out.Error, tc.expectedResp))
 			} else {
 				suite.WaitForEvents()
 
 				msgs := suite.mockEmailSender().Messages()
-				require.NotEmpty(t, msgs)
-				assert.Contains(t, msgs[len(msgs)-1].Subject, "Password Reset")
-				require.Equal(t, []string{tc.email}, msgs[len(msgs)-1].To)
+				assert.Assert(t, len(msgs) > 0)
+				assert.Check(t, is.Contains(msgs[len(msgs)-1].Subject, "Password Reset"))
+				assert.Assert(t, is.DeepEqual([]string{tc.email}, msgs[len(msgs)-1].To))
 			}
 		})
 	}

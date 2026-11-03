@@ -13,11 +13,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func webhookHMACSHA256(secret string, payload []byte) string {
@@ -26,8 +25,8 @@ func webhookHMACSHA256(secret string, payload []byte) string {
 	return "sha256=" + hex.EncodeToString(mac.Sum(nil))
 }
 
-func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerSuccess() {
-	t := suite.T()
+func TestIntegrationWebhookHandlerSuccess(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -46,11 +45,11 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerSuccess() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingEndpointID() {
-	t := suite.T()
+func TestIntegrationWebhookHandlerMissingEndpointID(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/webhooks/", suite.h.IntegrationWebhookHandler)
 
@@ -61,11 +60,11 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingEndpointID() 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.True(t, rec.Code == http.StatusBadRequest || rec.Code == http.StatusNotFound)
+	assert.Check(t, rec.Code == http.StatusBadRequest || rec.Code == http.StatusNotFound)
 }
 
-func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyPayload() {
-	t := suite.T()
+func TestIntegrationWebhookHandlerEmptyPayload(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -75,11 +74,11 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyPayload() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerInvalidSignature() {
-	t := suite.T()
+func TestIntegrationWebhookHandlerInvalidSignature(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -98,11 +97,11 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerInvalidSignature() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingSignature() {
-	t := suite.T()
+func TestIntegrationWebhookHandlerMissingSignature(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -120,11 +119,11 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingSignature() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEndpointNotFound() {
-	t := suite.T()
+func TestIntegrationWebhookHandlerEndpointNotFound(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -139,11 +138,11 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEndpointNotFound() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyEventNameReturnsSuccess() {
-	t := suite.T()
+func TestIntegrationWebhookHandlerEmptyEventNameReturnsSuccess(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
@@ -162,7 +161,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyEventNameReturn
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 }
 
 // webhookTestIntegration holds the endpoint ID and auto-generated secret for one test webhook
@@ -176,21 +175,21 @@ func (suite *HandlerTestSuite) createWebhookTestIntegration(t *testing.T, ctx co
 	t.Helper()
 
 	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	integrationRec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def, nil, nil)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
 	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, integrationRec, webhookTestCredentialRef, credential)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	webhookRec, err := suite.h.IntegrationsRuntime.EnsureWebhook(ctx, integrationRec, "inbound.events", "")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NotNil(t, webhookRec.EndpointID)
+	assert.Assert(t, webhookRec.EndpointID != nil)
 
 	return webhookTestIntegration{
 		endpointID:  *webhookRec.EndpointID,

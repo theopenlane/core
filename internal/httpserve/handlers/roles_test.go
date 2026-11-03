@@ -8,8 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -17,10 +15,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestOrganizationRolesHandler() {
-	t := suite.T()
+func TestOrganizationRolesHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce("GET", "account/organization-roles", suite.h.RolesHandler)
 
@@ -33,25 +33,25 @@ func (suite *HandlerTestSuite) TestOrganizationRolesHandler() {
 	defer response.Body.Close()
 
 	var out models.RolesResponse
-	require.NoError(t, json.NewDecoder(response.Body).Decode(&out))
+	assert.NilError(t, json.NewDecoder(response.Body).Decode(&out))
 
-	assert.Equal(t, http.StatusOK, recorder.Code)
-	assert.True(t, out.Success)
+	assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+	assert.Check(t, out.Success)
 
-	assert.Contains(t, out.Roles, models.OrganizationRole{
+	assert.Check(t, is.Contains(out.Roles, models.OrganizationRole{
 		ID:          "policy_manager",
 		Name:        "Policy Manager",
 		Description: "Manage all policies and procedures",
-	})
-	assert.Contains(t, out.Roles, models.OrganizationRole{
+	}))
+	assert.Check(t, is.Contains(out.Roles, models.OrganizationRole{
 		ID:          "risk_manager",
 		Name:        "Risk Manager",
 		Description: "Manage risks, vulnerabilities, findings, and remediation",
-	})
+	}))
 }
 
-func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
-	t := suite.T()
+func TestOrganizationRolesAssignmentHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce("POST", "account/organization-roles", suite.h.AssignOrganizationRolesHandler)
 	suite.registerRouteOnce("DELETE", "account/organization-roles", suite.h.DeleteOrganizationRolesHandler)
@@ -66,7 +66,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 		SetDescription("Group for organization role assignment tests").
 		SetOwnerID(testUser1.OrganizationID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	member := suite.userBuilder(ctx)
 	memberRole := enums.RoleMember
@@ -75,7 +75,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 		OrganizationID: testUser1.OrganizationID,
 		Role:           &memberRole,
 	}).Exec(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	memberCtx := auth.NewTestContextWithOrgID(member.ID, testUser1.OrganizationID, auth.WithOrganizationRole(auth.MemberRole))
 	memberCtx = auth.WithInternalOperationContext(memberCtx)
@@ -208,7 +208,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			body, err := json.Marshal(tc.request)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			req := httptest.NewRequest(tc.method, "/account/organization-roles", strings.NewReader(string(body)))
 			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -221,23 +221,23 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 			defer response.Body.Close()
 
 			var out models.OrganizationRolesResponse
-			require.NoError(t, json.NewDecoder(response.Body).Decode(&out))
+			assert.NilError(t, json.NewDecoder(response.Body).Decode(&out))
 
-			assert.Equal(t, tc.statusCode, recorder.Code)
-			assert.Equal(t, tc.success, out.Success)
+			assert.Check(t, is.Equal(tc.statusCode, recorder.Code))
+			assert.Check(t, is.DeepEqual(tc.success, out.Success))
 
 			if !tc.success {
 				return
 			}
 
-			assert.Equal(t, tc.request.OrganizationID, out.OrganizationID)
-			assert.Equal(t, tc.request.Role, out.Role)
+			assert.Check(t, is.DeepEqual(tc.request.OrganizationID, out.OrganizationID))
+			assert.Check(t, is.DeepEqual(tc.request.Role, out.Role))
 		})
 	}
 }
 
-func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
-	t := suite.T()
+func TestAccountRolesMeHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce("GET", "account/roles/me", suite.h.AccountRolesMeHandler)
 
@@ -247,13 +247,13 @@ func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
 		SetDescription("Group for account roles me tests").
 		SetOwnerID(testUser1.OrganizationID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = suite.db.GroupMembership.Create().
 		SetGroupID(group.ID).
 		SetUserID(testUser1.ID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	tuple := fgax.TupleKey{
 		Subject: fgax.Entity{
@@ -268,7 +268,7 @@ func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
 	}
 
 	_, err = suite.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	groupTuple := fgax.TupleKey{
 		Subject: fgax.Entity{
@@ -284,7 +284,7 @@ func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
 	}
 
 	_, err = suite.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{groupTuple}, nil)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodGet, "/account/roles/me", nil)
 	recorder := httptest.NewRecorder()
@@ -295,12 +295,12 @@ func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
 	defer res.Body.Close()
 
 	var out models.AccountRolesMeResponse
-	require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
+	assert.NilError(t, json.NewDecoder(res.Body).Decode(&out))
 
-	assert.Equal(t, http.StatusOK, recorder.Code)
-	assert.True(t, out.Success)
-	assert.Equal(t, testUser1.OrganizationID, out.OrganizationID)
-	assert.ElementsMatch(t, []models.OrganizationRole{
+	assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+	assert.Check(t, out.Success)
+	assert.Check(t, is.DeepEqual(testUser1.OrganizationID, out.OrganizationID))
+	expectedRoles := []models.OrganizationRole{
 		{
 			ID:          "policy_manager",
 			Name:        "Policy Manager",
@@ -311,5 +311,11 @@ func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
 			Name:        "Risk Manager",
 			Description: "Manage risks, vulnerabilities, findings, and remediation",
 		},
-	}, out.Roles)
+	}
+
+	assert.Check(t, is.Len(out.Roles, len(expectedRoles)))
+
+	for _, role := range expectedRoles {
+		assert.Check(t, is.Contains(out.Roles, role))
+	}
 }

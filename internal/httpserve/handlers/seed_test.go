@@ -7,13 +7,13 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
 )
 
 var (
@@ -67,7 +67,7 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 			SetEmailConfirmed(true).
 			SetIsTfaEnabled(input.tfaEnabled).
 			Save(ctx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 	}
 
 	// ensure unique email for each test user, even if the same email is provided in the input, by appending a ULID to the email
@@ -97,13 +97,13 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	if err != nil {
 		log.Error().Err(err).Msg("failed to create test user")
 	}
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testUser.ID = testUser.UserInfo.ID
 
 	// get the personal org for the user
 	testPersonalOrg, err := testUser.UserInfo.Edges.Setting.DefaultOrg(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testUser.PersonalOrgID = testPersonalOrg.ID
 
@@ -121,14 +121,14 @@ func (suite *HandlerTestSuite) userBuilderWithInput(ctx context.Context, input *
 	orgSetting, err := suite.db.OrganizationSetting.Create().
 		SetBillingEmail(testUser.UserInfo.Email).
 		Save(userCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testOrg, err := suite.db.Organization.Create().
 		SetName(gofakeit.Name() + " " + ulids.New().String()).
 		SetSettingID(orgSetting.ID).
 		Save(userCtx)
 
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testUser.OrganizationID = testOrg.ID
 
@@ -161,11 +161,11 @@ func (suite *HandlerTestSuite) enableModules(userID, orgID string, features []mo
 			SetActive(true).
 			SetPrice(models.Price{Amount: 0, Interval: "month"}).
 			Save(newCtx)
-		require.NoError(suite.T(), err)
+		assert.NilError(suite.T(), err)
 	}
 
 	err := entitlements.CreateFeatureTuples(newCtx, &suite.db.OrgModule.Authz, orgID, features)
-	require.NoError(suite.T(), err)
+	assert.NilError(suite.T(), err)
 }
 
 // setupTestData creates test users and sets up the clients with the necessary tokens

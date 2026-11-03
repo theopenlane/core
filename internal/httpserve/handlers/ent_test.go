@@ -6,10 +6,11 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestCreateUserInput(t *testing.T) {
@@ -105,12 +106,12 @@ func TestCreateUserInput(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.testName, func(t *testing.T) {
 			input := createUserInput(tc.name, tc.email, tc.provider, tc.image)
-			assert.Equal(t, tc.expected.FirstName, input.FirstName)
-			assert.Equal(t, tc.expected.LastName, input.LastName)
-			assert.Equal(t, tc.expected.Email, input.Email)
-			assert.Equal(t, tc.expected.AuthProvider, input.AuthProvider)
-			assert.WithinDuration(t, *tc.expected.LastSeen, *input.LastSeen, 2*time.Minute) // allow for a reasonable drift while tests are running
-			assert.Equal(t, tc.expected.AvatarRemoteURL, input.AvatarRemoteURL)
+			assert.Check(t, is.DeepEqual(tc.expected.FirstName, input.FirstName))
+			assert.Check(t, is.DeepEqual(tc.expected.LastName, input.LastName))
+			assert.Check(t, is.DeepEqual(tc.expected.Email, input.Email))
+			assert.Check(t, is.DeepEqual(tc.expected.AuthProvider, input.AuthProvider))
+			assert.Check(t, input.LastSeen.Sub(*tc.expected.LastSeen).Abs() <= 2*time.Minute) // allow for a reasonable drift while tests are running
+			assert.Check(t, is.DeepEqual(tc.expected.AvatarRemoteURL, input.AvatarRemoteURL))
 		})
 	}
 }

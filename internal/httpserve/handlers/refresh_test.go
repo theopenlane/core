@@ -10,8 +10,6 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/utils/ulids"
 
@@ -25,10 +23,12 @@ import (
 	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/testutils"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestRefreshHandler() {
-	t := suite.T()
+func TestRefreshHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// add modules for the user
 	modulesEnabled := []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule}
@@ -40,7 +40,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 
 	// Set full overlap of the refresh and access token so the refresh token is immediately valid
 	tm, err := testutils.CreateTokenManager(-60 * time.Minute) //nolint:mnd
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	suite.h.TokenManager = tm
 
@@ -81,11 +81,11 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 	}
 
 	access, refresh, err := tm.CreateTokenPair(claims)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// Ensure refresh token is valid by waiting until its NotBefore time instead of a fixed sleep.
 	nbf, err := tokens.NotBefore(refresh)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	if !nbf.IsZero() {
 		if wait := time.Until(nbf); wait > 0 {
 			time.Sleep(wait + 10*time.Millisecond)
@@ -123,7 +123,7 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 			}
 
 			body, err := json.Marshal(refreshJSON)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			req := httptest.NewRequest(http.MethodPost, "/refresh", strings.NewReader(string(body)))
 			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -141,20 +141,20 @@ func (suite *HandlerTestSuite) TestRefreshHandler() {
 
 			// parse request body
 			err = json.NewDecoder(res.Body).Decode(&out)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
 
 			if tc.expectedStatus == http.StatusOK {
-				assert.True(t, out.Success)
+				assert.Check(t, out.Success)
 
 				jwt, err := tokens.ParseUnverifiedTokenClaims(out.AccessToken)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				// ensure the claims contain the modules
-				assert.NotEmpty(t, jwt.Modules)
+				assert.Check(t, len(jwt.Modules) > 0)
 			} else {
-				assert.Contains(t, out.Error, tc.expectedErrMessage)
+				assert.Check(t, is.Contains(out.Error, tc.expectedErrMessage))
 			}
 		})
 	}

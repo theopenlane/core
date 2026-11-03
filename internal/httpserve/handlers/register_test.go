@@ -8,8 +8,6 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/utils/rout"
 
@@ -25,10 +23,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestRegisterHandler() {
-	t := suite.T()
+func TestRegisterHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "register", suite.h.RegisterHandler)
@@ -186,7 +186,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				email = ulids.New().String() + "@theopenlane.io"
 				ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 				exists, err := suite.db.User.Query().Where(user.Email(email)).Exist(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 				if !exists {
 					_ = suite.userBuilderWithInput(ctx, &userInput{
 						email:         email,
@@ -235,7 +235,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 
 			body, err := json.Marshal(registerJSON)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			req := httptest.NewRequest(http.MethodPost, "/register", strings.NewReader(string(body)))
@@ -257,13 +257,13 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				t.Error("error parsing response", err)
 			}
 
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
-			assert.Equal(t, tc.expectedErrorCode, out.ErrorCode)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
+			assert.Check(t, is.DeepEqual(tc.expectedErrorCode, out.ErrorCode))
 
 			if tc.expectedStatus == http.StatusCreated {
-				assert.Equal(t, out.Email, strings.ToLower(email))
-				assert.NotEmpty(t, out.Message)
-				assert.NotEmpty(t, out.ID)
+				assert.Check(t, is.Equal(out.Email, strings.ToLower(email)))
+				assert.Check(t, len(out.Message) > 0)
+				assert.Check(t, len(out.ID) > 0)
 
 				// setup context to get the data back
 				ctx := auth.NewTestContextWithValidUser(out.ID)
@@ -274,14 +274,14 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 
 				// get the user and make sure things were created as expected
 				u, err := suite.db.UserSetting.Query().Where(usersetting.UserID(out.ID)).WithDefaultOrg().Only(ctx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
-				assert.NotEmpty(t, u.Edges.DefaultOrg)
-				require.NotEmpty(t, u.Edges.DefaultOrg.ID)
+				assert.Check(t, u.Edges.DefaultOrg != nil)
+				assert.Assert(t, len(u.Edges.DefaultOrg.ID) > 0)
 
 				if tc.invitationType == "invitation" {
 					// The user should be added to the organization that sent the invite (testUser1's org)
-					assert.Equal(t, testUser1.OrganizationID, u.Edges.DefaultOrg.ID)
+					assert.Check(t, is.DeepEqual(testUser1.OrganizationID, u.Edges.DefaultOrg.ID))
 
 					// setup context with the joined org
 					ctx = auth.NewTestContextWithOrgID(out.ID, testUser1.OrganizationID)
@@ -290,18 +290,18 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 					orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &testclient.OrgMembershipWhereInput{
 						OrganizationID: &testUser1.OrganizationID,
 					})
-					require.NoError(t, err)
+					assert.NilError(t, err)
 
 					// find the membership for this user
 					found := false
 					for _, edge := range orgMemberships.OrgMemberships.Edges {
 						if edge.Node.UserID == out.ID {
-							assert.Equal(t, enums.RoleMember, edge.Node.Role)
+							assert.Check(t, is.DeepEqual(enums.RoleMember, edge.Node.Role))
 							found = true
 							break
 						}
 					}
-					assert.True(t, found, "user should be a member of the invited organization")
+					assert.Check(t, found, "user should be a member of the invited organization")
 				} else {
 
 					// for regular registration, setup context with user's personal org
@@ -311,23 +311,23 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 					orgMemberships, err := suite.api.GetOrgMembersByOrgID(ctx, &testclient.OrgMembershipWhereInput{
 						OrganizationID: &u.Edges.DefaultOrg.ID,
 					})
-					require.NoError(t, err)
-					require.Len(t, orgMemberships.OrgMemberships.Edges, 1)
-					assert.Equal(t, orgMemberships.OrgMemberships.Edges[0].Node.Role, enums.RoleOwner)
+					assert.NilError(t, err)
+					assert.Assert(t, is.Len(orgMemberships.OrgMemberships.Edges, 1))
+					assert.Check(t, is.DeepEqual(orgMemberships.OrgMemberships.Edges[0].Node.Role, enums.RoleOwner))
 				}
 
 				// get user to test display name
 				user, err := suite.db.User.Get(ctx, out.ID)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				// if name is set, it's used for display name, otherwise it's the email prefix
 				if tc.firstName != "" && tc.lastName != "" {
-					assert.Equal(t, strings.TrimSpace(tc.firstName+" "+tc.lastName), user.DisplayName)
+					assert.Check(t, is.Equal(strings.TrimSpace(tc.firstName+" "+tc.lastName), user.DisplayName))
 				} else {
-					assert.Equal(t, strings.Split(tc.email, "@")[0], user.DisplayName)
+					assert.Check(t, is.DeepEqual(strings.Split(tc.email, "@")[0], user.DisplayName))
 				}
 			} else {
-				assert.Contains(t, out.Error, tc.expectedErrMessage)
+				assert.Check(t, is.Contains(out.Error, tc.expectedErrMessage))
 			}
 
 			// verify emails sent through mock sender
@@ -338,26 +338,26 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				switch {
 				case tc.invitationType == "invitation":
 					// invite + registration + invite acceptance
-					require.Len(t, msgs, 3)
+					assert.Assert(t, is.Len(msgs, 3))
 				case strings.Contains(tc.invitationType, "invitation"):
 					// only the invitation email
-					require.Len(t, msgs, 1)
+					assert.Assert(t, is.Len(msgs, 1))
 				default:
 					// regular registration — verification email
-					require.NotEmpty(t, msgs)
-					assert.Contains(t, msgs[0].Subject, "Please verify your email address")
-					assert.Equal(t, []string{strings.ToLower(tc.email)}, msgs[0].To)
+					assert.Assert(t, len(msgs) > 0)
+					assert.Check(t, is.Contains(msgs[0].Subject, "Please verify your email address"))
+					assert.Check(t, is.DeepEqual([]string{strings.ToLower(tc.email)}, msgs[0].To))
 				}
 			} else {
-				assert.Empty(t, msgs)
+				assert.Check(t, is.Len(msgs, 0))
 			}
 
 			if tc.verifyEmail {
 				ctx := auth.WithInternalOperationContext(auth.NewTestContextWithValidUser(out.ID))
 
 				evToken, err := suite.db.EmailVerificationToken.Query().Where(emailverificationtoken.OwnerID(out.ID)).Only(ctx)
-				require.NoError(t, err)
-				assert.Equal(t, strings.ToLower(email), evToken.Email)
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(strings.ToLower(email), evToken.Email))
 
 				verifyReq := httptest.NewRequest(http.MethodGet, "/verify?token="+evToken.Token, nil)
 				verifyRecorder := httptest.NewRecorder()
@@ -365,18 +365,18 @@ func (suite *HandlerTestSuite) TestRegisterHandler() {
 				suite.e.ServeHTTP(verifyRecorder, verifyReq)
 
 				var verifyOut *models.VerifyResponse
-				require.NoError(t, json.NewDecoder(verifyRecorder.Body).Decode(&verifyOut))
+				assert.NilError(t, json.NewDecoder(verifyRecorder.Body).Decode(&verifyOut))
 
-				assert.Equal(t, http.StatusOK, verifyRecorder.Code)
-				assert.True(t, verifyOut.Success)
-				assert.Equal(t, strings.ToLower(email), verifyOut.Email)
+				assert.Check(t, is.Equal(http.StatusOK, verifyRecorder.Code))
+				assert.Check(t, verifyOut.Success)
+				assert.Check(t, is.Equal(strings.ToLower(email), verifyOut.Email))
 			}
 		})
 	}
 }
 
-func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
-	t := suite.T()
+func TestRegisterHandler_EmailVerification(t *testing.T) {
+	suite.setupTest(t)
 
 	// enable email verification for this test
 	config := &validator.EmailVerificationConfig{
@@ -449,7 +449,7 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 
 			body, err := json.Marshal(registerJSON)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			req := httptest.NewRequest(http.MethodPost, "/register", strings.NewReader(string(body)))
@@ -471,14 +471,14 @@ func (suite *HandlerTestSuite) TestRegisterHandler_EmailVerification() {
 				t.Error("error parsing response", err)
 			}
 
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
-			assert.Equal(t, tc.expectedErrorCode, out.ErrorCode)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
+			assert.Check(t, is.DeepEqual(tc.expectedErrorCode, out.ErrorCode))
 
 			if tc.expectedStatus == http.StatusCreated {
-				assert.Equal(t, out.Email, tc.email)
+				assert.Check(t, is.DeepEqual(out.Email, tc.email))
 
 			} else {
-				assert.Contains(t, out.Error, tc.expectedErr)
+				assert.Check(t, is.Contains(out.Error, tc.expectedErr))
 			}
 
 		})

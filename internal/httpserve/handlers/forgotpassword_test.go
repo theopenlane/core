@@ -9,8 +9,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
@@ -18,10 +16,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
-	t := suite.T()
+func TestForgotPasswordHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "forgot-password", suite.h.ForgotPassword)
@@ -88,7 +88,7 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 
 			body, err := json.Marshal(resendJSON)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			req := httptest.NewRequest(http.MethodPost, "/forgot-password", strings.NewReader(string(body)))
@@ -103,7 +103,7 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
 
 			if tc.expectedStatus != http.StatusOK {
 				var out *models.ForgotPasswordResponse
@@ -113,8 +113,8 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 					t.Error("error parsing response", err)
 				}
 
-				assert.Contains(t, out.Error, tc.expectedErrMessage)
-				assert.False(t, out.Success)
+				assert.Check(t, is.Contains(out.Error, tc.expectedErrMessage))
+				assert.Check(t, !out.Success)
 			}
 
 			// verify email was sent through the mock sender
@@ -122,11 +122,11 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 
 			msgs := suite.mockEmailSender().Messages()
 			if tc.emailExpected {
-				require.Len(t, msgs, 1)
-				assert.Equal(t, []string{tc.email}, msgs[0].To)
-				assert.Contains(t, msgs[0].Subject, "Password Reset - Action Required")
+				assert.Assert(t, is.Len(msgs, 1))
+				assert.Check(t, is.DeepEqual([]string{tc.email}, msgs[0].To))
+				assert.Check(t, is.Contains(msgs[0].Subject, "Password Reset - Action Required"))
 			} else {
-				assert.Empty(t, msgs)
+				assert.Check(t, is.Len(msgs, 0))
 			}
 		})
 	}

@@ -4,10 +4,8 @@ import (
 	"bytes"
 	"context"
 	"net/url"
+	"testing"
 	"time"
-
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -20,12 +18,14 @@ import (
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 const testTokenIssuer = "http://localhost:17608"
 
-func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_Success() {
-	t := suite.T()
+func TestDatabaseFileDownloadHandler_Success(t *testing.T) {
+	suite.setupTest(t)
 
 	restore := suite.swapObjectStoreToDatabase()
 	t.Cleanup(restore)
@@ -50,14 +50,14 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_Success() {
 			},
 		},
 	})
-	require.NoError(t, err)
-	require.Len(t, uploadedFiles, 1)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(uploadedFiles, 1))
 
 	uploaded := uploadedFiles[0]
-	require.NotEmpty(t, uploaded.ID)
+	assert.Assert(t, len(uploaded.ID) > 0)
 
 	fileRecord, err := suite.db.File.Get(uploadCtx, uploaded.ID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	presignedURL, err := suite.objectStore.GetPresignedURL(uploadCtx, &storagetypes.File{
 		ID:           uploaded.ID,
@@ -71,28 +71,28 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_Success() {
 			FullURI:      fileRecord.URI,
 		},
 	}, time.Minute)
-	require.NoError(t, err)
-	require.NotEmpty(t, presignedURL)
+	assert.NilError(t, err)
+	assert.Assert(t, len(presignedURL) > 0)
 
-	assert.Contains(t, presignedURL, uploaded.ID)
-	assert.Contains(t, presignedURL, "token=")
+	assert.Check(t, is.Contains(presignedURL, uploaded.ID))
+	assert.Check(t, is.Contains(presignedURL, "token="))
 
 	parsedURL, err := url.Parse(presignedURL)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	tokenValue := parsedURL.Query().Get("token")
-	require.NotEmpty(t, tokenValue)
+	assert.Assert(t, len(tokenValue) > 0)
 
 	tokenRecord, err := suite.db.FileDownloadToken.Query().
 		Where(filedownloadtoken.Token(tokenValue)).
 		Only(uploadCtx)
-	require.NoError(t, err)
-	require.NotNil(t, tokenRecord.FileID)
-	require.Equal(t, uploaded.ID, *tokenRecord.FileID)
+	assert.NilError(t, err)
+	assert.Assert(t, tokenRecord.FileID != nil)
+	assert.Assert(t, is.DeepEqual(uploaded.ID, *tokenRecord.FileID))
 }
 
-func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_WithUserID() {
-	t := suite.T()
+func TestDatabaseFileDownloadHandler_WithUserID(t *testing.T) {
+	suite.setupTest(t)
 
 	restore := suite.swapObjectStoreToDatabase()
 	t.Cleanup(restore)
@@ -117,14 +117,14 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_WithUserID() {
 			},
 		},
 	})
-	require.NoError(t, err)
-	require.Len(t, uploadedFiles, 1)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(uploadedFiles, 1))
 
 	uploaded := uploadedFiles[0]
-	require.NotEmpty(t, uploaded.ID)
+	assert.Assert(t, len(uploaded.ID) > 0)
 
 	fileRecord, err := suite.db.File.Get(uploadCtx, uploaded.ID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	presignedURL, err := suite.objectStore.GetPresignedURL(uploadCtx, &storagetypes.File{
 		ID:           uploaded.ID,
@@ -138,32 +138,32 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_WithUserID() {
 			FullURI:      fileRecord.URI,
 		},
 	}, time.Minute)
-	require.NoError(t, err)
-	require.NotEmpty(t, presignedURL)
+	assert.NilError(t, err)
+	assert.Assert(t, len(presignedURL) > 0)
 
-	assert.Contains(t, presignedURL, uploaded.ID)
-	assert.Contains(t, presignedURL, "token=")
+	assert.Check(t, is.Contains(presignedURL, uploaded.ID))
+	assert.Check(t, is.Contains(presignedURL, "token="))
 
 	parsedURL, err := url.Parse(presignedURL)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	tokenValue := parsedURL.Query().Get("token")
-	require.NotEmpty(t, tokenValue)
+	assert.Assert(t, len(tokenValue) > 0)
 
 	tokenRecord, err := suite.db.FileDownloadToken.Query().
 		Where(filedownloadtoken.Token(tokenValue)).
 		Only(uploadCtx)
-	require.NoError(t, err)
-	require.NotNil(t, tokenRecord.Secret)
-	require.NotNil(t, tokenRecord.TTL)
-	require.NotNil(t, tokenRecord.FileID)
-	require.Equal(t, uploaded.ID, *tokenRecord.FileID)
-	require.NotNil(t, tokenRecord.UserID)
-	require.Equal(t, user.ID, *tokenRecord.UserID)
+	assert.NilError(t, err)
+	assert.Assert(t, tokenRecord.Secret != nil)
+	assert.Assert(t, tokenRecord.TTL != nil)
+	assert.Assert(t, tokenRecord.FileID != nil)
+	assert.Assert(t, is.DeepEqual(uploaded.ID, *tokenRecord.FileID))
+	assert.Assert(t, tokenRecord.UserID != nil)
+	assert.Assert(t, is.DeepEqual(user.ID, *tokenRecord.UserID))
 }
 
-func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_PresignedURLGeneration() {
-	t := suite.T()
+func TestDatabaseFileDownloadHandler_PresignedURLGeneration(t *testing.T) {
+	suite.setupTest(t)
 
 	baseURL := "https://api.theopenlane.io"
 
@@ -207,14 +207,14 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_PresignedURLGener
 			},
 		},
 	})
-	require.NoError(t, err)
-	require.Len(t, uploadedFiles, 1)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(uploadedFiles, 1))
 
 	uploaded := uploadedFiles[0]
-	require.NotEmpty(t, uploaded.ID)
+	assert.Assert(t, len(uploaded.ID) > 0)
 
 	fileRecord, err := suite.db.File.Get(uploadCtx, uploaded.ID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	presignedURL, err := suite.objectStore.GetPresignedURL(uploadCtx, &storagetypes.File{
 		ID:           uploaded.ID,
@@ -228,11 +228,11 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_PresignedURLGener
 			FullURI:      fileRecord.URI,
 		},
 	}, time.Minute)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Contains(t, presignedURL, baseURL)
-	assert.Contains(t, presignedURL, uploaded.ID)
-	assert.Contains(t, presignedURL, "token=")
+	assert.Check(t, is.Contains(presignedURL, baseURL))
+	assert.Check(t, is.Contains(presignedURL, uploaded.ID))
+	assert.Check(t, is.Contains(presignedURL, "token="))
 }
 
 func (suite *HandlerTestSuite) swapObjectStoreToDatabase() func() {
@@ -279,7 +279,7 @@ func (suite *HandlerTestSuite) createDatabaseStoreWithPresignConfig(cfg storage.
 		}, testTokenIssuer, testTokenIssuer),
 		resolver.WithPresignBaseURL(baseURL),
 	)
-	require.NoError(suite.T(), err)
+	assert.NilError(suite.T(), err)
 
 	return service
 }

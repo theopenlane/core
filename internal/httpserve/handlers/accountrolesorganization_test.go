@@ -6,12 +6,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	models "github.com/theopenlane/core/common/openapi"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestAccountRolesOrganizationHandler() {
-	t := suite.T()
+func TestAccountRolesOrganizationHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// add handler
 	suite.registerTestHandler("GET", "account/roles/organization", suite.h.AccountRolesOrganizationHandler)
@@ -59,22 +60,22 @@ func (suite *HandlerTestSuite) TestAccountRolesOrganizationHandler() {
 			}
 
 			if tc.errMsg != "" {
-				assert.Equal(t, http.StatusBadRequest, recorder.Code)
-				assert.False(t, out.Success)
-				assert.Equal(t, tc.errMsg, out.Error)
+				assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
+				assert.Check(t, !out.Success)
+				assert.Check(t, is.DeepEqual(tc.errMsg, out.Error))
 
 				return
 			}
 
-			assert.Equal(t, http.StatusOK, recorder.Code)
-			assert.True(t, out.Success)
+			assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+			assert.Check(t, out.Success)
 
 			// ensure it contains some of the expected roles
 			for _, r := range []string{"can_view", "can_edit", "can_delete", "audit_log_viewer", "can_invite_admins", "can_invite_members"} {
-				assert.Contains(t, out.Roles, r)
+				assert.Check(t, is.Contains(out.Roles, r))
 			}
 
-			assert.Equal(t, testUser1.OrganizationID, out.OrganizationID)
+			assert.Check(t, is.DeepEqual(testUser1.OrganizationID, out.OrganizationID))
 		})
 	}
 }

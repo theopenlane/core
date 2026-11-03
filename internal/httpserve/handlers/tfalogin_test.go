@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"slices"
 	"strings"
 	"testing"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -37,7 +38,7 @@ func (suite *HandlerTestSuite) postLogin(t *testing.T, email, password string) (
 	t.Helper()
 
 	reqBody, err := json.Marshal(models.LoginRequest{Username: email, Password: password})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, tfaLoginPath, strings.NewReader(string(reqBody)))
 	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -48,10 +49,10 @@ func (suite *HandlerTestSuite) postLogin(t *testing.T, email, password string) (
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	require.Equal(t, http.StatusOK, res.StatusCode, recorder.Body.String())
+	assert.Assert(t, is.Equal(http.StatusOK, res.StatusCode), recorder.Body.String())
 
 	var out models.LoginResponse
-	require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
+	assert.NilError(t, json.NewDecoder(res.Body).Decode(&out))
 
 	return res, out
 }
@@ -61,7 +62,7 @@ func (suite *HandlerTestSuite) postTFAValidate(t *testing.T, path string, in mod
 	t.Helper()
 
 	reqBody, err := json.Marshal(in)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, path, strings.NewReader(string(reqBody)))
 	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -81,7 +82,7 @@ func (suite *HandlerTestSuite) postTFAValidate(t *testing.T, path string, in mod
 	defer res.Body.Close()
 
 	var out models.LoginResponse
-	require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
+	assert.NilError(t, json.NewDecoder(res.Body).Decode(&out))
 
 	return res, out
 }
@@ -119,16 +120,16 @@ func accessTokenClaims(t *testing.T, accessToken string) jwt.MapClaims {
 	t.Helper()
 
 	token, _, err := new(jwt.Parser).ParseUnverified(accessToken, jwt.MapClaims{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	claims, ok := token.Claims.(jwt.MapClaims)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	return claims
 }
 
-func (suite *HandlerTestSuite) TestTFALogin() {
-	t := suite.T()
+func TestTFALogin(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler(http.MethodPost, tfaLoginPath, suite.h.LoginHandler)
 	suite.registerTestHandler(http.MethodPost, tfaLoginValidatePath, suite.h.ValidateLoginTOTP)
@@ -149,65 +150,65 @@ func (suite *HandlerTestSuite) TestTFALogin() {
 		SetVerified(true).
 		SaveX(user.UserCtx)
 
-	require.NotNil(t, setting.TfaSecret)
+	assert.Assert(t, setting.TfaSecret != nil)
 
 	res, out := suite.postLogin(t, user.UserInfo.Email, validPassword)
 
 	// no auth data should be generated but we want to make sure tfa is enforced
-	assert.True(t, out.Success)
-	assert.True(t, out.TFAEnabled)
-	assert.Empty(t, out.AuthData)
+	assert.Check(t, out.Success)
+	assert.Check(t, out.TFAEnabled)
+	assert.Check(t, is.Equal(models.AuthData{}, out.AuthData))
 
 	cookies := res.Cookies()
-	require.NotEmpty(t, cookies)
+	assert.Assert(t, len(cookies) > 0)
 
 	t.Run("missing pending cookie", func(t *testing.T) {
 		code, err := totpGenerator(*setting.TfaSecret)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		res, out := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{TOTPCode: code}, nil, "")
-		assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
-		assert.False(t, out.Success)
+		assert.Check(t, is.Equal(http.StatusUnauthorized, res.StatusCode))
+		assert.Check(t, !out.Success)
 	})
 
 	t.Run("wrong code keeps the pending login", func(t *testing.T) {
 		res, out := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{TOTPCode: "000000"}, cookies, "")
-		assert.Equal(t, http.StatusBadRequest, res.StatusCode)
-		assert.False(t, out.Success)
-		assert.Empty(t, out.AccessToken)
+		assert.Check(t, is.Equal(http.StatusBadRequest, res.StatusCode))
+		assert.Check(t, !out.Success)
+		assert.Check(t, is.Equal("", out.AccessToken))
 	})
 
 	t.Run("correct code completes the login", func(t *testing.T) {
 		code, err := totpGenerator(*setting.TfaSecret)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		res, out := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{TOTPCode: code}, cookies, "")
-		require.Equal(t, http.StatusOK, res.StatusCode)
-		assert.True(t, out.Success)
-		assert.True(t, out.TFAEnabled)
-		assert.NotEmpty(t, out.AccessToken)
-		assert.NotEmpty(t, out.RefreshToken)
-		assert.NotEmpty(t, out.Session)
+		assert.Assert(t, is.Equal(http.StatusOK, res.StatusCode))
+		assert.Check(t, out.Success)
+		assert.Check(t, out.TFAEnabled)
+		assert.Check(t, out.AccessToken != "")
+		assert.Check(t, out.RefreshToken != "")
+		assert.Check(t, out.Session != "")
 
 		_, enrollment := accessTokenClaims(t, out.AccessToken)["tfa_enrollment_required"]
-		assert.False(t, enrollment)
+		assert.Check(t, !enrollment)
 	})
 
 	t.Run("replayed cookie is rejected without spending a recovery code", func(t *testing.T) {
-		require.NotEmpty(t, setting.RecoveryCodes)
+		assert.Assert(t, len(setting.RecoveryCodes) > 0)
 
 		res, out := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{RecoveryCode: setting.RecoveryCodes[0]}, cookies, "")
-		assert.Equal(t, http.StatusUnauthorized, res.StatusCode)
-		assert.False(t, out.Success)
-		assert.Empty(t, out.AccessToken)
+		assert.Check(t, is.Equal(http.StatusUnauthorized, res.StatusCode))
+		assert.Check(t, !out.Success)
+		assert.Check(t, is.Equal("", out.AccessToken))
 
 		current := suite.db.TFASetting.GetX(user.UserCtx, setting.ID)
-		assert.Contains(t, current.RecoveryCodes, setting.RecoveryCodes[0])
+		assert.Check(t, is.Contains(current.RecoveryCodes, setting.RecoveryCodes[0]))
 	})
 }
 
-func (suite *HandlerTestSuite) TestTFALoginRecoveryCode() {
-	t := suite.T()
+func TestTFALoginRecoveryCode(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler(http.MethodPost, tfaLoginPath, suite.h.LoginHandler)
 	suite.registerTestHandler(http.MethodPost, tfaLoginValidatePath, suite.h.ValidateLoginTOTP)
@@ -228,26 +229,26 @@ func (suite *HandlerTestSuite) TestTFALoginRecoveryCode() {
 		SetVerified(true).
 		SaveX(user.UserCtx)
 
-	require.NotEmpty(t, setting.RecoveryCodes)
+	assert.Assert(t, len(setting.RecoveryCodes) > 0)
 	recoveryCode := setting.RecoveryCodes[0]
 
 	res, out := suite.postLogin(t, user.UserInfo.Email, validPassword)
-	assert.True(t, out.TFAEnabled)
-	assert.Empty(t, out.AuthData)
+	assert.Check(t, out.TFAEnabled)
+	assert.Check(t, is.Equal(models.AuthData{}, out.AuthData))
 
 	res, out = suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{RecoveryCode: recoveryCode}, res.Cookies(), "")
-	require.Equal(t, http.StatusOK, res.StatusCode)
-	assert.True(t, out.Success)
-	assert.NotEmpty(t, out.AccessToken)
-	assert.NotEmpty(t, out.Session)
+	assert.Assert(t, is.Equal(http.StatusOK, res.StatusCode))
+	assert.Check(t, out.Success)
+	assert.Check(t, out.AccessToken != "")
+	assert.Check(t, out.Session != "")
 
 	current := suite.db.TFASetting.GetX(user.UserCtx, setting.ID)
-	assert.NotContains(t, current.RecoveryCodes, recoveryCode)
-	assert.Len(t, current.RecoveryCodes, len(setting.RecoveryCodes)-1)
+	assert.Check(t, !slices.Contains(current.RecoveryCodes, recoveryCode))
+	assert.Check(t, is.Len(current.RecoveryCodes, len(setting.RecoveryCodes)-1))
 }
 
-func (suite *HandlerTestSuite) TestTFAEnrollmentSession() {
-	t := suite.T()
+func TestTFAEnrollmentSession(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler(http.MethodPost, tfaLoginPath, suite.h.LoginHandler)
 	suite.registerAuthenticatedTestHandler(http.MethodPost, tfaValidatePath, suite.h.ValidateTOTP)
@@ -264,12 +265,12 @@ func (suite *HandlerTestSuite) TestTFAEnrollmentSession() {
 	user := suite.tfaEnforcedUser(ctx, validPassword)
 
 	_, out := suite.postLogin(t, user.UserInfo.Email, validPassword)
-	assert.True(t, out.Success)
-	assert.True(t, out.TFASetupRequired)
-	assert.False(t, out.TFAEnabled)
-	require.NotEmpty(t, out.AccessToken)
-	assert.NotEmpty(t, out.Session)
-	assert.Equal(t, true, accessTokenClaims(t, out.AccessToken)["tfa_enrollment_required"])
+	assert.Check(t, out.Success)
+	assert.Check(t, out.TFASetupRequired)
+	assert.Check(t, !out.TFAEnabled)
+	assert.Assert(t, out.AccessToken != "")
+	assert.Check(t, out.Session != "")
+	assert.Check(t, is.Equal(true, accessTokenClaims(t, out.AccessToken)["tfa_enrollment_required"]))
 
 	enrollmentToken := out.AccessToken
 
@@ -284,7 +285,7 @@ func (suite *HandlerTestSuite) TestTFAEnrollmentSession() {
 	}
 
 	t.Run("enrollment session is rejected on other authenticated routes", func(t *testing.T) {
-		assert.Equal(t, http.StatusUnauthorized, getBlocked(enrollmentToken))
+		assert.Check(t, is.Equal(http.StatusUnauthorized, getBlocked(enrollmentToken)))
 	})
 
 	// enroll the user so there is a secret to validate against
@@ -293,29 +294,29 @@ func (suite *HandlerTestSuite) TestTFAEnrollmentSession() {
 		SetOwnerID(user.ID).
 		SaveX(user.UserCtx)
 
-	require.NotNil(t, setting.TfaSecret)
+	assert.Assert(t, setting.TfaSecret != nil)
 
 	t.Run("wrong code keeps the enrollment session", func(t *testing.T) {
 		res, out := suite.postTFAValidate(t, tfaValidatePath, models.TFARequest{TOTPCode: "000000"}, nil, enrollmentToken)
-		assert.Equal(t, http.StatusBadRequest, res.StatusCode)
-		assert.False(t, out.Success)
-		assert.Empty(t, out.AccessToken)
+		assert.Check(t, is.Equal(http.StatusBadRequest, res.StatusCode))
+		assert.Check(t, !out.Success)
+		assert.Check(t, is.Equal("", out.AccessToken))
 	})
 
 	t.Run("correct code upgrades to a full session", func(t *testing.T) {
 		code, err := totpGenerator(*setting.TfaSecret)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		res, out := suite.postTFAValidate(t, tfaValidatePath, models.TFARequest{TOTPCode: code}, nil, enrollmentToken)
-		require.Equal(t, http.StatusOK, res.StatusCode)
-		assert.True(t, out.Success)
-		require.NotEmpty(t, out.AccessToken)
-		assert.NotEmpty(t, out.RefreshToken)
-		assert.NotEmpty(t, out.Session)
+		assert.Assert(t, is.Equal(http.StatusOK, res.StatusCode))
+		assert.Check(t, out.Success)
+		assert.Assert(t, out.AccessToken != "")
+		assert.Check(t, out.RefreshToken != "")
+		assert.Check(t, out.Session != "")
 
 		_, enrollment := accessTokenClaims(t, out.AccessToken)["tfa_enrollment_required"]
-		assert.False(t, enrollment)
+		assert.Check(t, !enrollment)
 
-		assert.Equal(t, http.StatusOK, getBlocked(out.AccessToken))
+		assert.Check(t, is.Equal(http.StatusOK, getBlocked(out.AccessToken)))
 	})
 }

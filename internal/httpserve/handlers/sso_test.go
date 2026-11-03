@@ -15,8 +15,6 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	jose "github.com/go-jose/go-jose/v4"
 	"github.com/zitadel/oidc/v3/pkg/client"
@@ -34,10 +32,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestWebfingerHandler() {
-	t := suite.T()
+func TestWebfingerHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
@@ -62,30 +62,30 @@ func (suite *HandlerTestSuite) TestWebfingerHandler() {
 
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 	var out models.SSOStatusResponse
-	assert.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, json.NewDecoder(rec.Body).Decode(&out))
 	log.Error().Err(errors.New("output")).Interface("out", out).Msg("WebfingerHandler output")
-	assert.True(t, out.Enforced)
-	assert.True(t, out.OrgTFAEnforced)
-	assert.Equal(t, org.ID, out.OrganizationID)
+	assert.Check(t, out.Enforced)
+	assert.Check(t, out.OrgTFAEnforced)
+	assert.Check(t, is.DeepEqual(org.ID, out.OrganizationID))
 
 	emailReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+testUser1.UserInfo.Email, nil)
 	emailRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(emailRec, emailReq)
-	assert.Equal(t, http.StatusOK, emailRec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, emailRec.Code))
 	var emailOut models.SSOStatusResponse
-	assert.NoError(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
+	assert.Check(t, json.NewDecoder(emailRec.Body).Decode(&emailOut))
 	// testUser1 is the organization owner, so the per-account lookup reflects the owner SSO exemption;
 	// the org level lookup above still reports enforcement. TFA enforcement is independent of exemption
-	assert.False(t, emailOut.Enforced)
-	assert.True(t, emailOut.OrgTFAEnforced)
-	assert.True(t, emailOut.IsOrgOwner)
-	assert.Equal(t, org.ID, emailOut.OrganizationID)
+	assert.Check(t, !emailOut.Enforced)
+	assert.Check(t, emailOut.OrgTFAEnforced)
+	assert.Check(t, emailOut.IsOrgOwner)
+	assert.Check(t, is.DeepEqual(org.ID, emailOut.OrganizationID))
 }
 
-func (suite *HandlerTestSuite) TestWebfingerHandlerTFAOnly() {
-	t := suite.T()
+func TestWebfingerHandlerTFAOnly(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
@@ -109,15 +109,16 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerTFAOnly() {
 
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 	var out models.SSOStatusResponse
-	assert.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
-	assert.False(t, out.Enforced)      // SSO not enforced
-	assert.True(t, out.OrgTFAEnforced) // TFA enforced
-	assert.Equal(t, org.ID, out.OrganizationID)
+	assert.Check(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, !out.Enforced)      // SSO not enforced
+	assert.Check(t, out.OrgTFAEnforced) // TFA enforced
+	assert.Check(t, is.DeepEqual(org.ID, out.OrganizationID))
 }
 
-func (suite *HandlerTestSuite) TestWebfingerHandlerNotFound() {
+func TestWebfingerHandlerNotFound(t *testing.T) {
+	suite.setupTest(t)
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
 	req := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+gofakeit.Email(), nil)
@@ -164,13 +165,13 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 	t.Helper()
 
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	der := x509.MarshalPKCS1PrivateKey(priv)
 	pemKey := pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: der})
 
 	signer, err := client.NewSignerFromPrivateKeyByte(pemKey, "test-kid")
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	m := &mockOIDCServer{
 		keyID:          "test-kid",
@@ -271,7 +272,7 @@ func newMockOIDCServer(t *testing.T, opts ...oidcServerOption) *mockOIDCServer {
 		var claimsInterface map[string]interface{}
 		_ = json.Unmarshal(claimsBytes, &claimsInterface)
 		raw, err := oidccrypto.Sign(claimsInterface, m.signer)
-		assert.NoError(t, err)
+		assert.Check(t, err)
 
 		resp := map[string]interface{}{
 			"access_token": "access-token",
@@ -292,8 +293,8 @@ func (m *mockOIDCServer) Close() { m.server.Close() }
 // TestSSOInitiateHandler verifies the public, slug-keyed SSO entry point resolves the organization, returns
 // the identity provider redirect URL, and sets the state/nonce/organization_id cookies the callback needs,
 // without requiring the caller to be authenticated or a member
-func (suite *HandlerTestSuite) TestSSOInitiateHandler() {
-	t := suite.T()
+func TestSSOInitiateHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("GET", "v1/orgs/:slug_name/sso", suite.h.SSOInitiateHandler)
 
@@ -310,48 +311,48 @@ func (suite *HandlerTestSuite) TestSSOInitiateHandler() {
 		IdentityProviderClientID:     lo.ToPtr("client"),
 		IdentityProviderClientSecret: lo.ToPtr("secret"),
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
 
-	require.NotEmpty(t, org.SlugName, "the organization create hook should derive a slug from the name")
+	assert.Assert(t, len(org.SlugName) > 0, "the organization create hook should derive a slug from the name")
 
 	// a known slug resolves the organization and returns the IdP redirect plus the flow cookies
 	req := httptest.NewRequest(http.MethodGet, "/v1/orgs/"+org.SlugName+"/sso", nil)
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 
 	var out models.SSOLoginResponse
-	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
-	assert.True(t, out.Success)
-	assert.NotEmpty(t, out.RedirectURI, "should return the identity provider redirect URL")
-	assert.Contains(t, out.RedirectURI, oidc.server.URL, "redirect should point at the configured identity provider")
+	assert.NilError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, out.Success)
+	assert.Check(t, len(out.RedirectURI) > 0, "should return the identity provider redirect URL")
+	assert.Check(t, is.Contains(out.RedirectURI, oidc.server.URL), "redirect should point at the configured identity provider")
 
 	cookies := map[string]string{}
 	for _, c := range rec.Result().Cookies() {
 		cookies[c.Name] = c.Value
 	}
-	assert.NotEmpty(t, cookies["state"], "state cookie should be set for the callback to validate")
-	assert.NotEmpty(t, cookies["nonce"], "nonce cookie should be set for the callback to validate")
-	assert.Equal(t, org.ID, cookies["organization_id"], "organization_id cookie should be resolved from the slug")
+	assert.Check(t, len(cookies["state"]) > 0, "state cookie should be set for the callback to validate")
+	assert.Check(t, len(cookies["nonce"]) > 0, "nonce cookie should be set for the callback to validate")
+	assert.Check(t, is.DeepEqual(org.ID, cookies["organization_id"]), "organization_id cookie should be resolved from the slug")
 
 	// an unknown slug returns not found rather than starting a flow
 	missingReq := httptest.NewRequest(http.MethodGet, "/v1/orgs/this-slug-does-not-exist/sso", nil)
 	missingRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(missingRec, missingReq)
-	assert.Equal(t, http.StatusNotFound, missingRec.Code)
+	assert.Check(t, is.Equal(http.StatusNotFound, missingRec.Code))
 }
 
-func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
-	t := suite.T()
+func TestSSOLoginAndCallback(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("GET", "v1/sso/login", suite.h.SSOLoginHandler)
 	suite.registerTestHandler("GET", "v1/sso/callback", suite.h.SSOCallbackHandler)
@@ -408,18 +409,18 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 		SetName(ulids.New().String()).
 		AddOrganizationIDs(org.ID).
 		Save(testUserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	otherUserPAT, err := suite.db.PersonalAccessToken.Create().
 		SetName(ulids.New().String()).
 		AddOrganizationIDs(testUser1.OrganizationID).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	otherOrgAPIToken, err := suite.db.APIToken.Create().
 		SetName(ulids.New().String()).
 		Save(ent.NewContext(auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID), suite.db))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name         string
@@ -457,7 +458,7 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 			rec := httptest.NewRecorder()
 			suite.e.ServeHTTP(rec, req)
 
-			assert.Equal(t, http.StatusOK, rec.Code)
+			assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 			cookies := rec.Result().Cookies()
 			var state, nonce *http.Cookie
@@ -470,8 +471,8 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 				}
 			}
 
-			require.NotNil(t, state)
-			require.NotNil(t, nonce)
+			assert.Assert(t, state != nil)
+			assert.Assert(t, nonce != nil)
 
 			oidc.nonce = nonce.Value
 
@@ -486,20 +487,20 @@ func (suite *HandlerTestSuite) TestSSOLoginAndCallback() {
 			cbRec := httptest.NewRecorder()
 
 			suite.e.ServeHTTP(cbRec, cbReq)
-			assert.Equal(t, tc.expectedCode, cbRec.Code)
+			assert.Check(t, is.Equal(tc.expectedCode, cbRec.Code))
 
 			if tc.expectedCode != http.StatusOK {
 				return
 			}
 
 			var out models.LoginResponse
-			assert.NoError(t, json.NewDecoder(cbRec.Body).Decode(&out))
-			assert.True(t, out.Success)
+			assert.Check(t, json.NewDecoder(cbRec.Body).Decode(&out))
+			assert.Check(t, out.Success)
 
 			if tc.tokenID != "" {
 				pat, err := suite.db.PersonalAccessToken.Get(testUserCtx, tc.tokenID)
-				require.NoError(t, err)
-				assert.Contains(t, pat.SSOAuthorizations, org.ID)
+				assert.NilError(t, err)
+				assert.Check(t, is.Contains(pat.SSOAuthorizations, org.ID))
 			}
 		})
 	}
@@ -541,7 +542,7 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, sc ssoScenario) (boo
 			SetLastLoginProvider(enums.AuthProviderOIDC).
 			SetLastSeen(time.Now()).
 			Save(ctx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 	}
 
 	discovery := oidc.server.URL + "/.well-known/openid-configuration"
@@ -553,21 +554,21 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, sc ssoScenario) (boo
 		IdentityProviderJitProvisioning: &sc.jit,
 		JitAllowedEmailDomains:          sc.jitDomains,
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		SetIdentityProviderAuthTested(true).
 		Exec(ctx))
 
 	if sc.enforce {
-		require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+		assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 			SetIdentityProviderLoginEnforced(true).
 			Exec(ctx))
 	}
@@ -575,7 +576,7 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, sc ssoScenario) (boo
 	req := httptest.NewRequest(http.MethodGet, "/v1/sso/login?organization_id="+org.ID, nil)
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 
 	var state, nonce *http.Cookie
 	for _, c := range rec.Result().Cookies() {
@@ -586,8 +587,8 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, sc ssoScenario) (boo
 			nonce = c
 		}
 	}
-	require.NotNil(t, state)
-	require.NotNil(t, nonce)
+	assert.Assert(t, state != nil)
+	assert.Assert(t, nonce != nil)
 
 	oidc.nonce = nonce.Value
 
@@ -604,50 +605,50 @@ func (suite *HandlerTestSuite) ssoJITScenario(t *testing.T, sc ssoScenario) (boo
 	member, err := suite.db.OrgMembership.Query().
 		Where(orgmembership.HasUserWith(user.EmailEqualFold(sc.email)), orgmembership.OrganizationID(org.ID)).
 		Exist(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return member, cbRec.Code
 }
 
 // TestSSOCallbackJITPermutations covers the JIT provisioning conditions: the domain allowlist (in-list vs
 // not-in-list) and that JIT is skipped when the toggle is off or SSO is not enforced
-func (suite *HandlerTestSuite) TestSSOCallbackJITPermutations() {
-	t := suite.T()
+func TestSSOCallbackJITPermutations(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("GET", "v1/sso/login", suite.h.SSOLoginHandler)
 	suite.registerTestHandler("GET", "v1/sso/callback", suite.h.SSOCallbackHandler)
 
 	// allowlist match: enforced + JIT on + domain in jit_allowed_email_domains => provisioned
 	member, code := suite.ssoJITScenario(t, ssoScenario{email: "match@allowed-jit.com", enforce: true, jit: true, jitDomains: []string{"allowed-jit.com"}})
-	assert.True(t, member, "a directory user whose domain is in the JIT allowlist should be provisioned")
-	assert.Equal(t, http.StatusOK, code, "a provisioned user should complete sign-in")
+	assert.Check(t, member, "a directory user whose domain is in the JIT allowlist should be provisioned")
+	assert.Check(t, is.Equal(http.StatusOK, code), "a provisioned user should complete sign-in")
 
 	// allowlist miss: enforced + JIT on but domain NOT in the allowlist => not provisioned, and the
 	// callback returns a clean forbidden response rather than a server error
 	member, code = suite.ssoJITScenario(t, ssoScenario{email: "stranger@other-jit.com", enforce: true, jit: true, jitDomains: []string{"allowed-jit.com"}})
-	assert.False(t, member, "a directory user whose domain is not in the JIT allowlist should not be provisioned")
-	assert.Equal(t, http.StatusForbidden, code, "an unprovisioned user on an enforced org should get a forbidden response, not a server error")
+	assert.Check(t, !member, "a directory user whose domain is not in the JIT allowlist should not be provisioned")
+	assert.Check(t, is.Equal(http.StatusForbidden, code), "an unprovisioned user on an enforced org should get a forbidden response, not a server error")
 
 	// JIT toggle off: enforced but JIT disabled => not provisioned, clean forbidden response
 	member, code = suite.ssoJITScenario(t, ssoScenario{email: "nojit@example-jit.com", enforce: true})
-	assert.False(t, member, "JIT should not provision when the toggle is off")
-	assert.Equal(t, http.StatusForbidden, code, "an unprovisioned user on an enforced org should get a forbidden response, not a server error")
+	assert.Check(t, !member, "JIT should not provision when the toggle is off")
+	assert.Check(t, is.Equal(http.StatusForbidden, code), "an unprovisioned user on an enforced org should get a forbidden response, not a server error")
 
 	// not enforced: JIT on but SSO not enforced => not provisioned (membership comes from auto-join instead)
 	member, _ = suite.ssoJITScenario(t, ssoScenario{email: "unenforced@example-jit.com", jit: true})
-	assert.False(t, member, "JIT should not provision when SSO is not enforced")
+	assert.Check(t, !member, "JIT should not provision when SSO is not enforced")
 
 	member, code = suite.ssoJITScenario(t, ssoScenario{email: "existing@allowed-jit.com", enforce: true, jit: true, preexisting: true})
-	assert.False(t, member)
-	assert.Equal(t, http.StatusForbidden, code)
+	assert.Check(t, !member)
+	assert.Check(t, is.Equal(http.StatusForbidden, code))
 
 	member, code = suite.ssoJITScenario(t, ssoScenario{email: "mismatch@allowed-jit.com", enforce: true, jit: true, cookieOrgID: ulids.New().String()})
-	assert.False(t, member)
-	assert.Equal(t, http.StatusBadRequest, code)
+	assert.Check(t, !member)
+	assert.Check(t, is.Equal(http.StatusBadRequest, code))
 }
 
-func (suite *HandlerTestSuite) TestSSOCallbackJITProvisioning() {
-	t := suite.T()
+func TestSSOCallbackJITProvisioning(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("GET", "v1/sso/login", suite.h.SSOLoginHandler)
 	suite.registerTestHandler("GET", "v1/sso/callback", suite.h.SSOCallbackHandler)
@@ -669,27 +670,27 @@ func (suite *HandlerTestSuite) TestSSOCallbackJITProvisioning() {
 		IdentityProviderClientID:     lo.ToPtr("client"),
 		IdentityProviderClientSecret: lo.ToPtr("secret"),
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// mark the connection tested, then enforce SSO; JIT provisioning is left at its enabled default
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		SetIdentityProviderAuthTested(true).
 		Exec(ctx))
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetIdentityProviderLoginEnforced(true).
 		Exec(ctx))
 
 	req := httptest.NewRequest(http.MethodGet, "/v1/sso/login?organization_id="+org.ID, nil)
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 
 	var state, nonce *http.Cookie
 	for _, c := range rec.Result().Cookies() {
@@ -700,8 +701,8 @@ func (suite *HandlerTestSuite) TestSSOCallbackJITProvisioning() {
 			nonce = c
 		}
 	}
-	require.NotNil(t, state)
-	require.NotNil(t, nonce)
+	assert.Assert(t, state != nil)
+	assert.Assert(t, nonce != nil)
 
 	oidc.nonce = nonce.Value
 
@@ -710,12 +711,12 @@ func (suite *HandlerTestSuite) TestSSOCallbackJITProvisioning() {
 	cbReq.Header.Set("Cookie", cookieHeader)
 	cbRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(cbRec, cbReq)
-	require.Equal(t, http.StatusOK, cbRec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, cbRec.Code))
 
 	// the callback provisioned the membership just-in-time, as a member
 	membership, err := suite.db.OrgMembership.Query().
 		Where(orgmembership.HasUserWith(user.EmailEqualFold("jit@example.com")), orgmembership.OrganizationID(org.ID)).
 		Only(ctx)
-	require.NoError(t, err)
-	assert.Equal(t, enums.RoleMember, membership.Role)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.RoleMember, membership.Role))
 }

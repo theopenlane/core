@@ -7,9 +7,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -20,12 +17,14 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 const disconnectTestDefinitionID = "def_01K0TESTDISC0000000000001"
 
-func (suite *HandlerTestSuite) TestDisconnectIntegration() {
-	t := suite.T()
+func TestDisconnectIntegration(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", suite.h.DisconnectIntegration)
 
@@ -42,7 +41,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegration() {
 		UserID:         member.ID,
 		Role:           &enums.RoleMember,
 	}).Exec(memberOrgOwner.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	ownerIntegrationID := suite.createTestIntegration(t, owner.UserCtx, owner.OrganizationID, disconnectTestDefinitionID)
 	memberOrgIntegrationID := suite.createTestIntegration(t, memberOrgOwner.UserCtx, memberOrgOwner.OrganizationID, disconnectTestDefinitionID)
@@ -90,17 +89,17 @@ func (suite *HandlerTestSuite) TestDisconnectIntegration() {
 			suite.e.ServeHTTP(rec, req.WithContext(tc.ctx))
 
 			if tc.expectedStatus != 0 {
-				assert.Equal(t, tc.expectedStatus, rec.Code)
+				assert.Check(t, is.Equal(tc.expectedStatus, rec.Code))
 			} else {
-				assert.NotEqual(t, http.StatusOK, rec.Code)
+				assert.Check(t, http.StatusOK != rec.Code)
 			}
 
 			if tc.expectDisconnected {
 				var resp openmodels.DeleteIntegrationResponse
-				assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-				assert.True(t, resp.Success)
-				assert.Equal(t, tc.integrationID, resp.DeletedID)
-				assert.Contains(t, resp.Message, "GitHub")
+				assert.Check(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+				assert.Check(t, resp.Success)
+				assert.Check(t, is.DeepEqual(tc.integrationID, resp.DeletedID))
+				assert.Check(t, is.Contains(resp.Message, "GitHub"))
 
 				count, err := suite.db.Integration.Query().
 					Where(
@@ -108,18 +107,18 @@ func (suite *HandlerTestSuite) TestDisconnectIntegration() {
 						integration.DefinitionIDEQ(disconnectTestDefinitionID),
 					).
 					Count(owner.UserCtx)
-				assert.NoError(t, err)
-				assert.Zero(t, count)
+				assert.Check(t, err)
+				assert.Check(t, is.Equal(0, count))
 			}
 
 			if tc.expectRetained {
 				installation, err := suite.db.Integration.Get(memberOrgOwner.UserCtx, tc.integrationID)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				credential, ok, err := suite.keystore.LoadCredential(memberOrgOwner.UserCtx, installation, githubTestCredentialRef)
-				require.NoError(t, err)
-				require.True(t, ok)
-				assert.Contains(t, string(credential.Data), "secret")
+				assert.NilError(t, err)
+				assert.Assert(t, ok)
+				assert.Check(t, is.Contains(string(credential.Data), "secret"))
 			}
 		})
 	}
@@ -130,17 +129,17 @@ func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.C
 	t.Helper()
 
 	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def, nil, nil)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"secret"}`),
 	}
 
 	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, rec, githubTestCredentialRef, credential)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	return rec.ID
 }

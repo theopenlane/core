@@ -18,8 +18,8 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 )
 
-func (suite *HandlerTestSuite) TestGetQuestionnairePreviewAndRealResponse() {
-	t := suite.T()
+func TestGetQuestionnairePreviewAndRealResponse(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerQuestionnaireTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
 

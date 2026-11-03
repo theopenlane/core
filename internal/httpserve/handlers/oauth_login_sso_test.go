@@ -3,8 +3,8 @@ package handlers_test
 import (
 	"net/http"
 	"net/http/httptest"
-
-	"github.com/stretchr/testify/assert"
+	"strings"
+	"testing"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -13,12 +13,14 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func ptr[T any](v T) *T { return &v }
 
-func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
-	t := suite.T()
+func TestGoogleLoginHandlerSSOEnforced(t *testing.T) {
+	suite.setupTest(t)
 
 	login, _ := suite.h.GetGoogleLoginHandlers()
 	suite.e.GET("google/login", echo.WrapHandler(login))
@@ -34,18 +36,18 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		Exec(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
@@ -63,7 +65,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 		UserID:         testUser.UserInfo.ID,
 		Role:           &enums.RoleMember,
 	}).Exec(testUserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testUserCtx)
 
@@ -71,11 +73,11 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusFound, rec.Code)
-	assert.Equal(t, "/v1/sso/login?organization_id="+org.ID, rec.Header().Get("Location"))
+	assert.Check(t, is.Equal(http.StatusFound, rec.Code))
+	assert.Check(t, is.DeepEqual("/v1/sso/login?organization_id="+org.ID, rec.Header().Get("Location")))
 }
-func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
-	t := suite.T()
+func TestGoogleLoginHandlerSSOEnforcedOwnerBypass(t *testing.T) {
+	suite.setupTest(t)
 
 	login, _ := suite.h.GetGoogleLoginHandlers()
 	suite.e.GET("google/login", echo.WrapHandler(login))
@@ -91,18 +93,18 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		Exec(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
@@ -113,12 +115,12 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerSSOEnforcedOwnerBypass() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusFound, rec.Code)
-	assert.NotContains(t, rec.Header().Get("Location"), "/v1/sso/login")
+	assert.Check(t, is.Equal(http.StatusFound, rec.Code))
+	assert.Check(t, !strings.Contains(rec.Header().Get("Location"), "/v1/sso/login"))
 }
 
-func (suite *HandlerTestSuite) TestGoogleLoginHandlerTFAEnforced() {
-	t := suite.T()
+func TestGoogleLoginHandlerTFAEnforced(t *testing.T) {
+	suite.setupTest(t)
 
 	login, _ := suite.h.GetGoogleLoginHandlers()
 	suite.e.GET("google/login", echo.WrapHandler(login))
@@ -137,18 +139,18 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerTFAEnforced() {
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		MultifactorAuthEnforced: ptr(true),
 	}).Save(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		Exec(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	tfaenabled := false
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
@@ -166,7 +168,7 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerTFAEnforced() {
 		UserID:         testUser.UserInfo.ID,
 		Role:           &enums.RoleMember,
 	}).Exec(testUserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testUserCtx)
 
@@ -176,13 +178,13 @@ func (suite *HandlerTestSuite) TestGoogleLoginHandlerTFAEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusFound, rec.Code)
+	assert.Check(t, is.Equal(http.StatusFound, rec.Code))
 	// OAuth login proceeds normally - TFA would be enforced after successful OAuth authentication
-	assert.Contains(t, rec.Header().Get("Location"), "accounts.google.com")
+	assert.Check(t, is.Contains(rec.Header().Get("Location"), "accounts.google.com"))
 }
 
-func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
-	t := suite.T()
+func TestGithubLoginHandlerTFAEnforced(t *testing.T) {
+	suite.setupTest(t)
 
 	login, _ := suite.h.GetGitHubLoginHandlers()
 	suite.e.GET("github/login", echo.WrapHandler(login))
@@ -201,18 +203,18 @@ func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		MultifactorAuthEnforced: ptr(true),
 	}).Save(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
 		Exec(ownerCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	tfaenabled := false
 	testUser := suite.userBuilderWithInput(ctx, &userInput{
@@ -230,7 +232,7 @@ func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
 		UserID:         testUser.UserInfo.ID,
 		Role:           &enums.RoleMember,
 	}).Exec(testUserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testUserCtx)
 
@@ -240,7 +242,7 @@ func (suite *HandlerTestSuite) TestGithubLoginHandlerTFAEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusFound, rec.Code)
+	assert.Check(t, is.Equal(http.StatusFound, rec.Code))
 	// OAuth login proceeds normally - TFA would be enforced after successful OAuth authentication
-	assert.Contains(t, rec.Header().Get("Location"), "github.com/login/oauth/authorize")
+	assert.Check(t, is.Contains(rec.Header().Get("Location"), "github.com/login/oauth/authorize"))
 }

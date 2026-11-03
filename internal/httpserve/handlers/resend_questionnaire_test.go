@@ -8,18 +8,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
-	t := suite.T()
+func TestResendQuestionnaireEmail(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "/questionnaire/resend", suite.h.ResendQuestionnaireEmail)
 
@@ -34,7 +34,7 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 		SetJsonconfig(map[string]any{"title": "Resend Test"}).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(testUser1.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	assessmentObj, err := suite.db.Assessment.Create().
 		SetName("Resend Test Assessment").
@@ -42,7 +42,7 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 		SetAssessmentType(enums.AssessmentTypeExternal).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(testUser1.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	send := func(t *testing.T, email, assessmentID string) (*httptest.ResponseRecorder, map[string]interface{}) {
 		reqBody := models.ResendQuestionnaireRequest{
@@ -51,7 +51,7 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 		}
 
 		body, err := json.Marshal(reqBody)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		req := httptest.NewRequest(http.MethodPost, "/questionnaire/resend", strings.NewReader(string(body)))
 		req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -82,25 +82,25 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			SetOwnerID(testUser1.OrganizationID).
 			SetStatus(enums.AssessmentResponseStatusSent).
 			Save(questionnaireCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		suite.WaitForEvents()
 
 		msgs := suite.mockEmailSender().Messages()
-		require.Len(t, msgs, 1)
+		assert.Assert(t, is.Len(msgs, 1))
 
 		suite.ClearTestData()
 
 		recorder, out := send(t, testEmail, assessmentObj.ID)
 
-		assert.Equal(t, http.StatusOK, recorder.Code)
-		assert.Equal(t, true, out["success"])
-		assert.NotEmpty(t, out["message"])
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Check(t, is.Equal(true, out["success"]))
+		assert.Check(t, out["message"] != nil && out["message"] != "")
 
 		suite.WaitForEvents()
 
 		msgs = suite.mockEmailSender().Messages()
-		require.Len(t, msgs, 1)
+		assert.Assert(t, is.Len(msgs, 1))
 
 		suite.db.AssessmentResponse.DeleteOneID(assessmentResp.ID).Exec(ctx)
 	})
@@ -108,27 +108,27 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 	t.Run("email not found returns 200", func(t *testing.T) {
 		recorder, out := send(t, "nonexistent@example.com", assessmentObj.ID)
 
-		assert.Equal(t, http.StatusOK, recorder.Code)
-		assert.Equal(t, true, out["success"])
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Check(t, is.Equal(true, out["success"]))
 	})
 
 	t.Run("wrong assessment id returns 200", func(t *testing.T) {
 		recorder, out := send(t, "resend-success@example.com", "01NONEXISTENT000000000000")
 
-		assert.Equal(t, http.StatusOK, recorder.Code)
-		assert.Equal(t, true, out["success"])
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Check(t, is.Equal(true, out["success"]))
 	})
 
 	t.Run("missing email returns 400", func(t *testing.T) {
 		recorder, _ := send(t, "", assessmentObj.ID)
 
-		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
 	})
 
 	t.Run("missing assessment_id returns 400", func(t *testing.T) {
 		recorder, _ := send(t, "test@example.com", "")
 
-		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
 	})
 
 	t.Run("completed assessment returns 200 without resend", func(t *testing.T) {
@@ -141,25 +141,25 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			SetEmail(completedEmail).
 			SetOwnerID(testUser1.OrganizationID).
 			Save(questionnaireCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		suite.WaitForEvents()
 
 		msgs := suite.mockEmailSender().Messages()
-		require.Len(t, msgs, 1)
+		assert.Assert(t, is.Len(msgs, 1))
 
 		completedResp, err = suite.db.AssessmentResponse.UpdateOneID(completedResp.ID).
 			SetStatus(enums.AssessmentResponseStatusCompleted).
 			SetCompletedAt(time.Now().Add(-1 * time.Hour)).
 			Save(questionnaireCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		suite.ClearTestData()
 
 		recorder, out := send(t, completedEmail, assessmentObj.ID)
 
-		assert.Equal(t, http.StatusOK, recorder.Code)
-		assert.Equal(t, true, out["success"])
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Check(t, is.Equal(true, out["success"]))
 
 		suite.db.AssessmentResponse.DeleteOneID(completedResp.ID).Exec(ctx)
 	})
@@ -176,23 +176,23 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			SetStatus(enums.AssessmentResponseStatusSent).
 			SetDueDate(time.Now().Add(24 * time.Hour)).
 			Save(questionnaireCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		suite.WaitForEvents()
 
 		msgs := suite.mockEmailSender().Messages()
-		require.Len(t, msgs, 1)
+		assert.Assert(t, is.Len(msgs, 1))
 
 		overdueResp, err = suite.db.AssessmentResponse.UpdateOneID(overdueResp.ID).
 			SetDueDate(time.Now().Add(-24 * time.Hour)).
 			Save(questionnaireCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		recorder, out := send(t, overdueEmail, assessmentObj.ID)
 
-		assert.Equal(t, http.StatusBadRequest, recorder.Code)
+		assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
 		if errMsg, ok := out["error"].(string); ok {
-			assert.Contains(t, errMsg, "overdue")
+			assert.Check(t, is.Contains(errMsg, "overdue"))
 		}
 
 		suite.db.AssessmentResponse.DeleteOneID(overdueResp.ID).Exec(ctx)
@@ -210,19 +210,19 @@ func (suite *HandlerTestSuite) TestResendQuestionnaireEmail() {
 			SetStatus(enums.AssessmentResponseStatusSent).
 			SetSendAttempts(5).
 			Save(questionnaireCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		suite.WaitForEvents()
 
 		msgs := suite.mockEmailSender().Messages()
-		require.Len(t, msgs, 1)
+		assert.Assert(t, is.Len(msgs, 1))
 
 		suite.ClearTestData()
 
 		recorder, out := send(t, maxEmail, assessmentObj.ID)
 
-		assert.Equal(t, http.StatusOK, recorder.Code)
-		assert.Equal(t, true, out["success"])
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Check(t, is.Equal(true, out["success"]))
 
 		suite.db.AssessmentResponse.DeleteOneID(maxResp.ID).Exec(ctx)
 	})

@@ -4,18 +4,18 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"slices"
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/httpsling"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestAccountRolesHandler() {
-	t := suite.T()
+func TestAccountRolesHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// add handler
 	suite.registerTestHandler("POST", "account/roles", suite.h.AccountRolesHandler)
@@ -71,7 +71,7 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 
 			body, err := json.Marshal(tc.request)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			req := httptest.NewRequest(http.MethodPost, target, strings.NewReader(string(body)))
@@ -94,27 +94,27 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 			}
 
 			if tc.errMsg != "" {
-				assert.Equal(t, http.StatusBadRequest, recorder.Code)
-				assert.False(t, out.Success)
-				assert.Equal(t, tc.errMsg, out.Error)
+				assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
+				assert.Check(t, !out.Success)
+				assert.Check(t, is.DeepEqual(tc.errMsg, out.Error))
 
 				return
 			}
 
-			assert.Equal(t, http.StatusOK, recorder.Code)
-			assert.True(t, out.Success)
+			assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+			assert.Check(t, out.Success)
 
 			// if no roles are provided we expect all the roles, adding a number to assume its higher
 			// than our current model has
 			if len(tc.expectedRoles) == 0 && len(tc.request.ObjectIDs) == 0 {
-				assert.Greater(t, len(out.Roles), 5)
+				assert.Check(t, len(out.Roles) > 5)
 			} else if len(tc.request.ObjectIDs) > 0 {
-				assert.Len(t, out.ObjectRoles, len(tc.request.ObjectIDs))
-				assert.Len(t, out.ObjectRoles[testUser2.OrganizationID], 0)
-				assert.Greater(t, len(out.ObjectRoles[testUser1.OrganizationID]), 5)
-				assert.Greater(t, len(out.ObjectRoles[testUser1.PersonalOrgID]), 5)
+				assert.Check(t, is.Len(out.ObjectRoles, len(tc.request.ObjectIDs)))
+				assert.Check(t, is.Len(out.ObjectRoles[testUser2.OrganizationID], 0))
+				assert.Check(t, len(out.ObjectRoles[testUser1.OrganizationID]) > 5)
+				assert.Check(t, len(out.ObjectRoles[testUser1.PersonalOrgID]) > 5)
 			} else {
-				assert.ElementsMatch(t, tc.expectedRoles, out.Roles)
+				assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values(tc.expectedRoles)), slices.Sorted(slices.Values(out.Roles))))
 			}
 		})
 	}

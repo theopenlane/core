@@ -9,8 +9,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/ulids"
@@ -19,10 +17,12 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestStartImpersonation() {
-	t := suite.T()
+func TestStartImpersonation(t *testing.T) {
+	suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "impersonation/start", suite.h.StartImpersonation)
@@ -98,11 +98,11 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 			checkResponse: func(t *testing.T, rec *httptest.ResponseRecorder) {
 				var response models.StartImpersonationResponse
 				err := json.Unmarshal(rec.Body.Bytes(), &response)
-				require.NoError(t, err)
-				assert.True(t, response.Success)
-				assert.NotEmpty(t, response.Token)
-				assert.NotEmpty(t, response.SessionID)
-				assert.Equal(t, "Impersonation session started successfully", response.Message)
+				assert.NilError(t, err)
+				assert.Check(t, response.Success)
+				assert.Check(t, len(response.Token) > 0)
+				assert.Check(t, len(response.SessionID) > 0)
+				assert.Check(t, is.Equal("Impersonation session started successfully", response.Message))
 			},
 		},
 		{
@@ -172,7 +172,7 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 		t.Run(tt.name, func(t *testing.T) {
 			// Marshal request
 			reqBody, err := json.Marshal(tt.request)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			// Create HTTP request
 			req := httptest.NewRequest(http.MethodPost, "/impersonation/start", bytes.NewReader(reqBody))
@@ -187,7 +187,7 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 			suite.e.ServeHTTP(rec, req)
 
 			// Check status
-			assert.Equal(t, tt.expectedStatus, rec.Code)
+			assert.Check(t, is.Equal(tt.expectedStatus, rec.Code))
 
 			// Check response if provided
 			if tt.checkResponse != nil {
@@ -197,8 +197,8 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 	}
 }
 
-func (suite *HandlerTestSuite) TestEndImpersonation() {
-	t := suite.T()
+func TestEndImpersonation(t *testing.T) {
+	suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "impersonation/end", suite.h.EndImpersonation)
@@ -235,9 +235,9 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 			checkResponse: func(t *testing.T, rec *httptest.ResponseRecorder) {
 				var response models.EndImpersonationResponse
 				err := json.Unmarshal(rec.Body.Bytes(), &response)
-				require.NoError(t, err)
-				assert.True(t, response.Success)
-				assert.Equal(t, "Impersonation session ended successfully", response.Message)
+				assert.NilError(t, err)
+				assert.Check(t, response.Success)
+				assert.Check(t, is.Equal("Impersonation session ended successfully", response.Message))
 			},
 		},
 		{
@@ -283,7 +283,7 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 		t.Run(tt.name, func(t *testing.T) {
 			// Marshal request
 			reqBody, err := json.Marshal(tt.request)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			// Create HTTP request
 			req := httptest.NewRequest(http.MethodPost, "/impersonation/end", bytes.NewReader(reqBody))
@@ -298,7 +298,7 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 			suite.e.ServeHTTP(rec, req)
 
 			// Check status
-			assert.Equal(t, tt.expectedStatus, rec.Code)
+			assert.Check(t, is.Equal(tt.expectedStatus, rec.Code))
 
 			// Check response if provided
 			if tt.checkResponse != nil {
@@ -308,8 +308,8 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 	}
 }
 
-func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
-	t := suite.T()
+func TestExtractSessionIDFromToken(t *testing.T) {
+	suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "impersonation/start", suite.h.StartImpersonation)
@@ -327,7 +327,7 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 	}
 
 	_, err := suite.h.TokenManager.CreateImpersonationToken(context.Background(), opts)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// Test valid token by creating a simple test handler to call extractSessionIDFromToken
 	// Since it's a private method, we test it indirectly through StartImpersonation
@@ -384,7 +384,7 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 	}
 
 	reqBody, err := json.Marshal(request)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCtx := context.Background()
 	user := &auth.Caller{
@@ -408,13 +408,13 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 	suite.e.ServeHTTP(rec, req)
 
 	// Execute handler - this will internally test extractSessionIDFromToken
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 	// Verify the response includes a session ID (which means extractSessionIDFromToken worked)
 	var response models.StartImpersonationResponse
 	err = json.Unmarshal(rec.Body.Bytes(), &response)
-	require.NoError(t, err)
-	assert.NotEmpty(t, response.SessionID)
+	assert.NilError(t, err)
+	assert.Check(t, len(response.SessionID) > 0)
 }
 
 // Helper functions

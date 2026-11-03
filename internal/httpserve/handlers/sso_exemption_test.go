@@ -6,11 +6,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"testing"
 	"time"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
@@ -24,6 +23,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // enforceSSOOnSetting configures a tested identity provider on the organization setting and turns on SSO
@@ -32,18 +33,18 @@ import (
 func (suite *HandlerTestSuite) enforceSSOOnSetting(ctx context.Context, settingID string) {
 	t := suite.T()
 
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(settingID).
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(settingID).
 		SetIdentityProvider(enums.SSOProviderOkta).
 		SetIdentityProviderClientID("client").
 		SetIdentityProviderClientSecret("secret").
 		SetOidcDiscoveryEndpoint("http://example.com").
 		Exec(ctx))
 
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(settingID).
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(settingID).
 		SetIdentityProviderAuthTested(true).
 		Exec(ctx))
 
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(settingID).
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(settingID).
 		SetIdentityProviderLoginEnforced(true).
 		Exec(ctx))
 }
@@ -59,23 +60,23 @@ func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
 	t := suite.T()
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ownerCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ownerCtx))
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ownerCtx))
 
 	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
 	return org
 }
 
-func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
-	t := suite.T()
+func TestLoginHandlerSSOExemptMember(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
@@ -89,14 +90,14 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
 	// member is explicitly exempt from SSO for this organization
-	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	assert.NilError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
 		SSOExempt:      lo.ToPtr(true),
 	}).Exec(memberCtx))
 
-	require.NoError(t, suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
+	assert.NilError(t, suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
 
 	body, _ := json.Marshal(models.LoginRequest{Username: member.UserInfo.Email, Password: "$uper$ecretP@ssword"})
 	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
@@ -105,14 +106,14 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
 	suite.e.ServeHTTP(rec, req)
 
 	// the exempt member is not redirected to SSO; password login succeeds
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 	var out models.LoginResponse
-	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
-	assert.True(t, out.Success)
+	assert.NilError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, out.Success)
 }
 
-func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
-	t := suite.T()
+func TestLoginHandlerSSOExemptDomain(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
@@ -122,7 +123,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 	ctx = ent.NewContext(ctx, suite.db)
 
 	exemptDomain := strings.ToLower(ulids.New().String()) + ".example.com"
-	require.NoError(t, suite.db.OrganizationSetting.Update().
+	assert.NilError(t, suite.db.OrganizationSetting.Update().
 		Where(organizationsetting.OrganizationID(org.ID)).
 		SetSSOExemptDomains([]string{exemptDomain}).
 		Exec(ctx))
@@ -135,13 +136,13 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
 	// member relies on the per-domain exemption, not a per-user flag
-	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	assert.NilError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
 	}).Exec(memberCtx))
 
-	require.NoError(t, suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
+	assert.NilError(t, suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
 
 	body, _ := json.Marshal(models.LoginRequest{Username: member.UserInfo.Email, Password: "$uper$ecretP@ssword"})
 	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
@@ -149,14 +150,14 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 	var out models.LoginResponse
-	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
-	assert.True(t, out.Success)
+	assert.NilError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, out.Success)
 }
 
-func (suite *HandlerTestSuite) TestWebfingerHandlerExemptMember() {
-	t := suite.T()
+func TestWebfingerHandlerExemptMember(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
@@ -169,36 +170,36 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerExemptMember() {
 	memberCtx = auth.WithInternalOperationContext(memberCtx)
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
-	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	assert.NilError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
 		SSOExempt:      lo.ToPtr(true),
 	}).Exec(memberCtx))
 
-	require.NoError(t, suite.db.UserSetting.Update().Where(usersetting.UserID(member.ID)).SetDefaultOrgID(org.ID).Exec(memberCtx))
+	assert.NilError(t, suite.db.UserSetting.Update().Where(usersetting.UserID(member.ID)).SetDefaultOrgID(org.ID).Exec(memberCtx))
 
 	// the org level lookup still reports enforcement
 	orgReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=org:"+org.ID, nil)
 	orgRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(orgRec, orgReq)
-	require.Equal(t, http.StatusOK, orgRec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, orgRec.Code))
 	var orgOut models.SSOStatusResponse
-	require.NoError(t, json.NewDecoder(orgRec.Body).Decode(&orgOut))
-	assert.True(t, orgOut.Enforced, "org level lookup reports enforcement")
+	assert.NilError(t, json.NewDecoder(orgRec.Body).Decode(&orgOut))
+	assert.Check(t, orgOut.Enforced, "org level lookup reports enforcement")
 
 	// the account lookup reflects the member's exemption
 	acctReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=acct:"+member.UserInfo.Email, nil)
 	acctRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(acctRec, acctReq)
-	require.Equal(t, http.StatusOK, acctRec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, acctRec.Code))
 	var acctOut models.SSOStatusResponse
-	require.NoError(t, json.NewDecoder(acctRec.Body).Decode(&acctOut))
-	assert.False(t, acctOut.Enforced, "exempt member is not required to use SSO")
+	assert.NilError(t, json.NewDecoder(acctRec.Body).Decode(&acctOut))
+	assert.Check(t, !acctOut.Enforced, "exempt member is not required to use SSO")
 }
 
-func (suite *HandlerTestSuite) TestOrgOwnerSeededSSOExempt() {
-	t := suite.T()
+func TestOrgOwnerSeededSSOExempt(t *testing.T) {
+	suite.setupTest(t)
 
 	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
@@ -206,21 +207,21 @@ func (suite *HandlerTestSuite) TestOrgOwnerSeededSSOExempt() {
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name: ulids.New().String(),
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	member, err := suite.db.OrgMembership.Query().
 		Where(orgmembership.OrganizationID(org.ID), orgmembership.UserID(testUser1.ID)).
 		Only(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, enums.RoleOwner, member.Role)
-	assert.True(t, member.SSOExempt, "organization owner is auto-seeded as SSO exempt")
-	require.NotNil(t, member.SSOExemptReason)
-	assert.Equal(t, "organization owner", *member.SSOExemptReason)
+	assert.Check(t, is.DeepEqual(enums.RoleOwner, member.Role))
+	assert.Check(t, member.SSOExempt, "organization owner is auto-seeded as SSO exempt")
+	assert.Assert(t, member.SSOExemptReason != nil)
+	assert.Check(t, is.Equal("organization owner", *member.SSOExemptReason))
 }
 
-func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
-	t := suite.T()
+func TestSwitchHandlerSSOExemptMember(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
@@ -233,7 +234,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
 	memberCtx = auth.WithInternalOperationContext(memberCtx)
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
-	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	assert.NilError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
@@ -247,14 +248,14 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
 	suite.e.ServeHTTP(rec, req.WithContext(member.UserCtx))
 
 	// the exempt member switches into the SSO-enforced org without being redirected through SSO
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 	var out models.SwitchOrganizationResponse
-	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
-	assert.False(t, out.NeedsSSO, "exempt member is not required to use SSO when switching")
+	assert.NilError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, !out.NeedsSSO, "exempt member is not required to use SSO when switching")
 }
 
-func (suite *HandlerTestSuite) TestInviteGrantsSSOExempt() {
-	t := suite.T()
+func TestInviteGrantsSSOExempt(t *testing.T) {
+	suite.setupTest(t)
 
 	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
@@ -270,7 +271,7 @@ func (suite *HandlerTestSuite) TestInviteGrantsSSOExempt() {
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		SetLastSeen(time.Now()).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// an invitation that grants an SSO exemption on acceptance
 	role := enums.RoleMember
@@ -279,30 +280,30 @@ func (suite *HandlerTestSuite) TestInviteGrantsSSOExempt() {
 		SetRole(role).
 		SetSSOExempt(true).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// accepting the invite as the recipient triggers the accepted hook, which creates the membership
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, orgID)
 	recipientCtx = auth.WithInternalOperationContext(recipientCtx)
 	recipientCtx = ent.NewContext(recipientCtx, suite.db)
 
-	require.NoError(t, suite.db.Invite.UpdateOneID(inv.ID).SetStatus(enums.InvitationAccepted).Exec(recipientCtx))
+	assert.NilError(t, suite.db.Invite.UpdateOneID(inv.ID).SetStatus(enums.InvitationAccepted).Exec(recipientCtx))
 
 	member, err := suite.db.OrgMembership.Query().
 		Where(orgmembership.OrganizationID(orgID), orgmembership.UserID(recipient.ID)).
 		Only(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.True(t, member.SSOExempt, "invite-granted exemption sets the membership exemption")
-	require.NotNil(t, member.SSOExemptReason)
-	assert.Equal(t, "granted via invitation", *member.SSOExemptReason)
+	assert.Check(t, member.SSOExempt, "invite-granted exemption sets the membership exemption")
+	assert.Assert(t, member.SSOExemptReason != nil)
+	assert.Check(t, is.Equal("granted via invitation", *member.SSOExemptReason))
 }
 
 // TestImpersonatorAttributionStamped verifies that records mutated during an impersonation session
 // record the acting individual in updated_by_impersonator, while the standard audit fields continue to
 // reflect the impersonated identity
-func (suite *HandlerTestSuite) TestImpersonatorAttributionStamped() {
-	t := suite.T()
+func TestImpersonatorAttributionStamped(t *testing.T) {
+	suite.setupTest(t)
 
 	base := testUser1.UserCtx
 
@@ -326,17 +327,17 @@ func (suite *HandlerTestSuite) TestImpersonatorAttributionStamped() {
 		SetName("Support Touched " + ulids.New().String()).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(impCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NotNil(t, group.UpdatedByImpersonator)
-	assert.Equal(t, "engineer@theopenlane.io", *group.UpdatedByImpersonator)
+	assert.Assert(t, group.UpdatedByImpersonator != nil)
+	assert.Check(t, is.Equal("engineer@theopenlane.io", *group.UpdatedByImpersonator))
 }
 
 // TestExemptDomainAllowedDomainOverlap verifies a domain may appear in both the sso exempt domains and the
 // allowed email domains lists; the two are independent because allowed email domains only govern auto-join
 // when SSO is not enforced, while exempt domains only affect the SSO redirect when it is enforced
-func (suite *HandlerTestSuite) TestExemptDomainAllowedDomainOverlap() {
-	t := suite.T()
+func TestExemptDomainAllowedDomainOverlap(t *testing.T) {
+	suite.setupTest(t)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	ctx = auth.WithInternalOperationContext(ctx)
@@ -345,22 +346,22 @@ func (suite *HandlerTestSuite) TestExemptDomainAllowedDomainOverlap() {
 	setting, err := suite.db.OrganizationSetting.Create().
 		SetAllowedEmailDomains([]string{"audit.com"}).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// the same domain may also be marked sso exempt; previously this was rejected as a conflict
 	updated, err := suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetSSOExemptDomains([]string{"audit.com"}).
 		Save(ctx)
-	require.NoError(t, err)
-	assert.Equal(t, []string{"audit.com"}, updated.AllowedEmailDomains)
-	assert.Equal(t, []string{"audit.com"}, updated.SSOExemptDomains)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual([]string{"audit.com"}, updated.AllowedEmailDomains))
+	assert.Check(t, is.DeepEqual([]string{"audit.com"}, updated.SSOExemptDomains))
 }
 
 // TestAutoJoinSuppressedWhenSSOEnforced verifies that domain-based auto-join does not add a user to an
 // organization that enforces SSO; for enforced organizations membership comes through the identity
 // provider (JIT) instead
-func (suite *HandlerTestSuite) TestAutoJoinSuppressedWhenSSOEnforced() {
-	t := suite.T()
+func TestAutoJoinSuppressedWhenSSOEnforced(t *testing.T) {
+	suite.setupTest(t)
 
 	// a real caller is required so the organization create hook can assign the owner membership
 	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
@@ -373,20 +374,20 @@ func (suite *HandlerTestSuite) TestAutoJoinSuppressedWhenSSOEnforced() {
 		AllowedEmailDomains:          []string{allowedDomain},
 		AllowMatchingDomainsAutojoin: lo.ToPtr(true),
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
 	suite.enforceSSOOnSetting(ctx, setting.ID)
 
 	// a brand-new user on the allowed domain confirms their email, which triggers the auto-join hook
 	userSetting, err := suite.db.UserSetting.Create().SetEmailConfirmed(false).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	user, err := suite.db.User.Create().
 		SetFirstName("Auto").
@@ -396,14 +397,14 @@ func (suite *HandlerTestSuite) TestAutoJoinSuppressedWhenSSOEnforced() {
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		SetLastSeen(time.Now()).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NoError(t, suite.db.UserSetting.UpdateOneID(userSetting.ID).SetEmailConfirmed(true).Exec(ctx))
+	assert.NilError(t, suite.db.UserSetting.UpdateOneID(userSetting.ID).SetEmailConfirmed(true).Exec(ctx))
 
 	// the enforced organization must not have auto-joined the user
 	exists, err := suite.db.OrgMembership.Query().
 		Where(orgmembership.UserID(user.ID), orgmembership.OrganizationID(org.ID)).
 		Exist(ctx)
-	require.NoError(t, err)
-	assert.False(t, exists, "auto-join must be suppressed for SSO-enforced organizations")
+	assert.NilError(t, err)
+	assert.Check(t, !exists, "auto-join must be suppressed for SSO-enforced organizations")
 }

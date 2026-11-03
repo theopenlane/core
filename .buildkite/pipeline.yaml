@@ -470,6 +470,7 @@ steps:
           - "fga/**"
         agents: *small-runner
         key: "fga_test"
+        depends_on: "generate_fga"
         plugins:
           - sparse-checkout#v1.10.0:
               paths:

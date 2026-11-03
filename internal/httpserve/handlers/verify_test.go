@@ -9,8 +9,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -22,10 +20,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestVerifyHandler() {
-	t := suite.T()
+func TestVerifyHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// add handler
 	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
@@ -113,7 +113,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 			// create token
 			if err := user.CreateVerificationToken(); err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			if tc.ttl != "" {
@@ -122,7 +122,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 			ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			// store token in db
@@ -151,7 +151,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
 
 			var out *models.VerifyResponse
 
@@ -161,23 +161,23 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			}
 
 			if tc.expectedStatus >= http.StatusOK && tc.expectedStatus <= http.StatusCreated {
-				assert.Contains(t, out.Message, tc.expectedMessage)
+				assert.Check(t, is.Contains(out.Message, tc.expectedMessage))
 
 				suite.WaitForEvents()
 
 				msgs := suite.mockEmailSender().Messages()
-				require.NotEmpty(t, msgs)
-				assert.Contains(t, msgs[0].Subject, tc.expectedSubject)
-				assert.Equal(t, []string{tc.email}, msgs[0].To)
+				assert.Assert(t, len(msgs) > 0)
+				assert.Check(t, is.Contains(msgs[0].Subject, tc.expectedSubject))
+				assert.Check(t, is.DeepEqual([]string{tc.email}, msgs[0].To))
 			} else {
-				assert.Contains(t, out.Error, tc.expectedMessage)
+				assert.Check(t, is.Contains(out.Error, tc.expectedMessage))
 			}
 		})
 	}
 }
 
-func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAccepted() {
-	t := suite.T()
+func TestVerifyHandler_AutoJoinMarksPendingInvitesAsAccepted(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
 
@@ -195,10 +195,10 @@ func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAc
 	userEmail := fmt.Sprintf("%s@%s", ulids.New().String(), allowedDomain)
 
 	org, err := suite.db.Organization.Get(ownerCtx, orgOwner.OrganizationID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	orgSetting, err := org.Setting(ownerCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	suite.db.OrganizationSetting.UpdateOneID(orgSetting.ID).
 		SetAllowedEmailDomains([]string{allowedDomain}).
@@ -225,7 +225,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAc
 		SetStatus(enums.InvitationSent).
 		SaveX(ownerCtx)
 
-	assert.Equal(t, enums.InvitationSent, invitation.Status)
+	assert.Check(t, is.DeepEqual(enums.InvitationSent, invitation.Status))
 
 	user := handlers.User{
 		FirstName: u.FirstName,
@@ -234,10 +234,10 @@ func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAc
 		ID:        u.ID,
 	}
 
-	require.NoError(t, user.CreateVerificationToken())
+	assert.NilError(t, user.CreateVerificationToken())
 
 	ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	et := suite.db.EmailVerificationToken.Create().
 		SetOwner(u).
@@ -256,7 +256,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAc
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	assert.Equal(t, http.StatusOK, recorder.Code)
+	assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
 
 	// the invite should be deleted after acceptance
 	_, err = suite.db.Invite.Query().
@@ -264,8 +264,8 @@ func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAc
 			invite.ID(invitation.ID),
 		).
 		Only(ownerCtx)
-	require.Error(t, err)
-	assert.True(t, ent.IsNotFound(err))
+	assert.Assert(t, err != nil)
+	assert.Check(t, ent.IsNotFound(err))
 
 	// check if user is a member of the organization
 	exists, err := suite.db.OrgMembership.Query().
@@ -274,6 +274,6 @@ func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAc
 			orgmembership.OrganizationID(orgOwner.OrganizationID),
 		).
 		Exist(ownerCtx)
-	require.NoError(t, err)
-	assert.True(t, exists)
+	assert.NilError(t, err)
+	assert.Check(t, exists)
 }

@@ -8,17 +8,17 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
-	t := suite.T()
+func TestCreateTrustCenterAnonymousJWT(t *testing.T) {
+	suite.setupTest(t)
 
 	// setup handler
 	suite.registerTestHandler("POST", "trustcenter/auth/anonymous", suite.h.CreateTrustCenterAnonymousJWT)
@@ -32,7 +32,7 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 		SetName("trust.openlane.io").
 		SetZoneID("1234").
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	customDomain, err := suite.db.CustomDomain.Create().
 		SetCnameRecord("trust.meow.org").
@@ -41,7 +41,7 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 		SetMappableDomainID(mappableDomain.ID).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(testUser1.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	previewDomain, err := suite.db.CustomDomain.Create().
 		SetCnameRecord("preview.meow.org").
@@ -50,7 +50,7 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 		SetMappableDomainID(mappableDomain.ID).
 		SetOwnerID(testUser1.OrganizationID).
 		Save(testUser1.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	slug := "meow"
 
 	trustCenterWithCD, err := suite.db.TrustCenter.Create().
@@ -58,18 +58,18 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 		SetOwnerID(testUser1.OrganizationID).
 		SetCustomDomainID(customDomain.ID).
 		Save(testUser1.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	err = suite.db.TrustCenter.UpdateOneID(trustCenterWithCD.ID).
 		SetPreviewDomainID(previewDomain.ID).
 		Exec(testUser1.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	trustCenterNoCD, err := suite.db.TrustCenter.Create().
 		SetSlug(slug).
 		SetOwnerID(testUser2.OrganizationID).
 		Save(testUser2.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name           string
@@ -177,7 +177,7 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
 
 			var out *models.CreateTrustCenterAnonymousJWTResponse
 
@@ -187,11 +187,11 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 			}
 
 			if tc.expectSuccess {
-				require.NotNil(t, out)
-				assert.NotEmpty(t, out.AccessToken, "access token should not be empty")
-				assert.NotEmpty(t, out.RefreshToken, "refresh token should not be empty")
-				assert.NotEmpty(t, out.Session, "session should not be empty")
-				assert.Equal(t, "Bearer", out.TokenType, "token type should be bearer")
+				assert.Assert(t, out != nil)
+				assert.Check(t, len(out.AccessToken) > 0, "access token should not be empty")
+				assert.Check(t, len(out.RefreshToken) > 0, "refresh token should not be empty")
+				assert.Check(t, len(out.Session) > 0, "session should not be empty")
+				assert.Check(t, is.Equal("Bearer", out.TokenType), "token type should be bearer")
 			} else {
 				// For error cases, the response structure might be different
 				// Let's check if we can decode it as a generic error response
@@ -209,7 +209,7 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 
 					if err := json.NewDecoder(res2.Body).Decode(&errorResp); err == nil {
 						if errorMsg, ok := errorResp["error"].(string); ok {
-							assert.Contains(t, errorMsg, tc.expectedError)
+							assert.Check(t, is.Contains(errorMsg, tc.expectedError))
 						}
 					}
 				}

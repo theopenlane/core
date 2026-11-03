@@ -7,9 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/httpsling"
@@ -22,10 +19,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestOauthRegister() {
-	t := suite.T()
+func TestOauthRegister(t *testing.T) {
+	suite.setupTest(t)
 
 	// add login handler
 	suite.registerTestHandler("POST", "oauth/register", suite.h.OauthRegister)
@@ -41,7 +40,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 	send := func(t *testing.T, registerJSON models.OauthTokenRequest) (*httptest.ResponseRecorder, *models.LoginResponse) {
 		body, err := json.Marshal(registerJSON)
 		if err != nil {
-			require.NoError(t, err)
+			assert.NilError(t, err)
 		}
 
 		req := httptest.NewRequest(http.MethodPost, "/oauth/register", strings.NewReader(string(body)))
@@ -78,20 +77,20 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 
 		recorder, out := send(t, registerJSON)
 
-		assert.Equal(t, http.StatusOK, recorder.Code)
-		assert.Equal(t, rout.ErrorCode(""), out.ErrorCode)
-		assert.NotNil(t, out.AccessToken)
-		assert.NotNil(t, out.RefreshToken)
-		assert.True(t, out.Success)
-		assert.False(t, out.TFAEnabled) // we did not setup the user to have TFA
-		assert.Equal(t, "Bearer", out.TokenType)
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Check(t, is.DeepEqual(rout.ErrorCode(""), out.ErrorCode))
+		assert.Check(t, out.AccessToken != "")
+		assert.Check(t, out.RefreshToken != "")
+		assert.Check(t, out.Success)
+		assert.Check(t, !out.TFAEnabled) // we did not setup the user to have TFA
+		assert.Check(t, is.Equal("Bearer", out.TokenType))
 
 		suite.WaitForEvents()
 
 		msgs := suite.mockEmailSender().Messages()
-		require.NotEmpty(t, msgs)
-		assert.Contains(t, msgs[0].Subject, "Welcome to")
-		assert.Equal(t, []string{email}, msgs[0].To)
+		assert.Assert(t, len(msgs) > 0)
+		assert.Check(t, is.Contains(msgs[0].Subject, "Welcome to"))
+		assert.Check(t, is.DeepEqual([]string{email}, msgs[0].To))
 	})
 
 	// Keep "same user" within a single subtest so job-queue assertions don't
@@ -112,19 +111,19 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		}
 
 		recorder, out := send(t, registerJSON)
-		assert.Equal(t, http.StatusOK, recorder.Code)
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
 
 		// clear the job table so we can assert no new welcome email is sent
 		suite.ClearTestData()
 
 		recorder, out = send(t, registerJSON)
-		assert.Equal(t, http.StatusOK, recorder.Code)
-		assert.True(t, out.Success)
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Check(t, out.Success)
 
 		suite.WaitForEvents()
 
 		msgs := suite.mockEmailSender().Messages()
-		assert.Empty(t, msgs)
+		assert.Check(t, is.Len(msgs, 0))
 	})
 
 	t.Run("github requires enrollment when the orgs enforces tfa", func(t *testing.T) {
@@ -143,32 +142,32 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		}
 
 		recorder, out := send(t, data)
-		require.Equal(t, http.StatusOK, recorder.Code)
-		require.True(t, out.Success)
+		assert.Assert(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Assert(t, out.Success)
 
-		require.NotEmpty(t, out.AccessToken)
+		assert.Assert(t, out.AccessToken != "")
 
 		orgID, ok := accessTokenClaims(t, out.AccessToken)["org"].(string)
-		require.True(t, ok)
+		assert.Assert(t, ok)
 
 		ctx := generated.NewContext(auth.WithInternalOperationContext(testUser1.UserCtx), suite.db)
 
 		user, err := suite.db.User.Query().Where(user.Email(email)).WithSetting().Only(ctx)
-		require.NoError(t, err)
-		require.False(t, user.Edges.Setting.IsTfaEnabled)
+		assert.NilError(t, err)
+		assert.Assert(t, !user.Edges.Setting.IsTfaEnabled)
 
 		err = suite.db.OrganizationSetting.Update().
 			Where(organizationsetting.OrganizationID(orgID)).
 			SetMultifactorAuthEnforced(true).
 			Exec(ctx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		recorder, out = send(t, data)
-		require.Equal(t, http.StatusOK, recorder.Code)
-		assert.True(t, out.Success)
-		assert.True(t, out.TFASetupRequired)
-		assert.False(t, out.TFAEnabled)
-		require.NotEmpty(t, out.AccessToken)
+		assert.Assert(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Check(t, out.Success)
+		assert.Check(t, out.TFASetupRequired)
+		assert.Check(t, !out.TFAEnabled)
+		assert.Assert(t, out.AccessToken != "")
 	})
 
 	t.Run("mismatch email", func(t *testing.T) {
@@ -184,8 +183,8 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		}
 
 		recorder, out := send(t, registerJSON)
-		assert.Equal(t, http.StatusBadRequest, recorder.Code)
-		assert.Equal(t, handlers.InvalidInputErrCode, out.ErrorCode)
+		assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
+		assert.Check(t, is.DeepEqual(handlers.InvalidInputErrCode, out.ErrorCode))
 	})
 
 	t.Run("sso enforced default org redirects to sso instead of issuing tokens", func(t *testing.T) {
@@ -204,25 +203,25 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		}
 
 		recorder, _ := send(t, registerJSON)
-		require.Equal(t, http.StatusOK, recorder.Code)
+		assert.Assert(t, is.Equal(http.StatusOK, recorder.Code))
 
 		org := suite.ssoEnforcedOrg()
 
 		antman, err := suite.db.User.Query().Where(user.Email(email)).WithSetting().Only(auth.WithInternalOperationContext(testUser1.UserCtx))
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		memberCtx := generated.NewContext(auth.WithInternalOperationContext(auth.NewTestContextWithOrgID(antman.ID, org.ID)), suite.db)
 
-		require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+		assert.NilError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 			OrganizationID: org.ID,
 			UserID:         antman.ID,
 			Role:           &enums.RoleMember,
 		}).Exec(memberCtx))
 
-		require.NoError(t, suite.db.UserSetting.UpdateOneID(antman.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
+		assert.NilError(t, suite.db.UserSetting.UpdateOneID(antman.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
 
 		body, err := json.Marshal(registerJSON)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		req := httptest.NewRequest(http.MethodPost, "/oauth/register", strings.NewReader(string(body)))
 		req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -230,7 +229,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		rec := httptest.NewRecorder()
 		suite.e.ServeHTTP(rec, req)
 
-		assert.Equal(t, http.StatusFound, rec.Code)
-		assert.NotContains(t, rec.Body.String(), "access_token")
+		assert.Check(t, is.Equal(http.StatusFound, rec.Code))
+		assert.Check(t, !strings.Contains(rec.Body.String(), "access_token"))
 	})
 }

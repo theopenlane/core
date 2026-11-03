@@ -4,19 +4,19 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"slices"
 	"strings"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/httpsling"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
-	t := suite.T()
+func TestAccountFeaturesHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// add handler
 	suite.registerTestHandler("POST", "account/features", suite.h.AccountFeaturesHandler)
@@ -57,7 +57,7 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 
 			body, err := json.Marshal(tc.request)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			req := httptest.NewRequest(http.MethodPost, target, strings.NewReader(string(body)))
@@ -80,16 +80,16 @@ func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {
 			}
 
 			if tc.errMsg != "" {
-				assert.Equal(t, http.StatusBadRequest, recorder.Code)
-				assert.False(t, out.Success)
-				assert.Equal(t, tc.errMsg, out.Error)
+				assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
+				assert.Check(t, !out.Success)
+				assert.Check(t, is.DeepEqual(tc.errMsg, out.Error))
 
 				return
 			}
 
-			assert.Equal(t, http.StatusOK, recorder.Code)
-			assert.True(t, out.Success)
-			assert.ElementsMatch(t, tc.expectedFeatures, out.Features)
+			assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+			assert.Check(t, out.Success)
+			assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values(tc.expectedFeatures)), slices.Sorted(slices.Values(out.Features))))
 		})
 	}
 }

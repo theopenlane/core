@@ -9,8 +9,6 @@ import (
 	"testing"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/utils/rout"
 	"github.com/theopenlane/utils/ulids"
@@ -29,10 +27,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestLoginHandler() {
-	t := suite.T()
+func TestLoginHandler(t *testing.T) {
+	suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
@@ -246,7 +246,7 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 
 			body, err := json.Marshal(loginJSON)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
@@ -268,39 +268,46 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 				t.Error("error parsing response", err)
 			}
 
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
 
 			if tc.expectedStatus == http.StatusOK {
-				assert.True(t, out.Success)
-				assert.False(t, out.TFAEnabled)
-				require.NotEmpty(t, out.AccessToken)
-				assert.NotEmpty(t, out.RefreshToken)
-				assert.NotEmpty(t, out.Session)
+				assert.Check(t, out.Success)
+				assert.Check(t, !out.TFAEnabled)
+				assert.Assert(t, out.AccessToken != "")
+				assert.Check(t, out.RefreshToken != "")
+				assert.Check(t, out.Session != "")
 
 				// check the claims to ensure the user is in the correct org
 				token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				claims, ok := token.Claims.(jwt.MapClaims)
-				require.True(t, ok)
+				assert.Assert(t, ok)
 
-				assert.Equal(t, tc.expectedOrgID, claims["org"])
+				assert.Check(t, is.DeepEqual(tc.expectedOrgID, claims["org"]))
 
 				// Module ordering is not guaranteed; assert as a set to avoid flakiness.
 				if tc.expectedModules != nil {
-					assert.ElementsMatch(t, tc.expectedModules, claims["modules"])
+					modules, ok := claims["modules"].([]any)
+					assert.Assert(t, ok)
+					assert.Check(t, is.Len(modules, len(tc.expectedModules)))
+
+					for _, module := range tc.expectedModules {
+						assert.Check(t, is.Contains(modules, module))
+					}
 				} else {
-					assert.Empty(t, claims["modules"])
+					modules, _ := claims["modules"].([]any)
+					assert.Check(t, is.Len(modules, 0))
 				}
 			} else {
-				assert.Contains(t, out.Error, tc.expectedErr.Error())
+				assert.Check(t, is.Contains(out.Error, tc.expectedErr.Error()))
 			}
 		})
 	}
 }
 
-func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
-	t := suite.T()
+func TestLoginHandlerSSOEnforced(t *testing.T) {
+	suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
@@ -317,7 +324,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -355,12 +362,12 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforced() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusFound, rec.Code)
-	assert.Equal(t, sso.SSOLogin(suite.e, org.ID), rec.Header().Get("Location"))
+	assert.Assert(t, is.Equal(http.StatusFound, rec.Code))
+	assert.Check(t, is.DeepEqual(sso.SSOLogin(suite.e, org.ID), rec.Header().Get("Location")))
 }
 
-func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
-	t := suite.T()
+func TestLoginHandlerSSOEnforcedOwnerBypass(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
@@ -375,7 +382,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -397,14 +404,14 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOEnforcedOwnerBypass() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 	var out apimodels.LoginResponse
-	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
-	assert.True(t, out.Success)
+	assert.NilError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, out.Success)
 }
 
-func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
-	t := suite.T()
+func TestLoginHandlerTFAEnforced(t *testing.T) {
+	suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
@@ -446,30 +453,30 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforced() {
 	suite.e.ServeHTTP(rec, req)
 
 	// Should succeed with an enrollment-only session so the user can set up TFA
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 	var out apimodels.LoginResponse
-	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
-	assert.True(t, out.Success)
-	assert.False(t, out.TFAEnabled)
-	assert.True(t, out.TFASetupRequired)
-	assert.Equal(t, "2fa enrollment required", out.Message)
+	assert.NilError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, out.Success)
+	assert.Check(t, !out.TFAEnabled)
+	assert.Check(t, out.TFASetupRequired)
+	assert.Check(t, is.Equal("2fa enrollment required", out.Message))
 
-	require.NotEmpty(t, out.AccessToken)
-	assert.NotEmpty(t, out.RefreshToken)
-	assert.NotEmpty(t, out.Session)
+	assert.Assert(t, out.AccessToken != "")
+	assert.Check(t, out.RefreshToken != "")
+	assert.Check(t, out.Session != "")
 
 	token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	claims, ok := token.Claims.(jwt.MapClaims)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
-	assert.Equal(t, org.ID, claims["org"])
-	assert.Equal(t, true, claims["tfa_enrollment_required"])
+	assert.Check(t, is.Equal(org.ID, claims["org"]))
+	assert.Check(t, is.Equal(true, claims["tfa_enrollment_required"]))
 }
 
-func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
-	t := suite.T()
+func TestLoginHandlerTFAEnforcedUserHasTFA(t *testing.T) {
+	suite.setupTest(t)
 
 	// Register test handler
 	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
@@ -511,10 +518,10 @@ func (suite *HandlerTestSuite) TestLoginHandlerTFAEnforcedUserHasTFA() {
 	suite.e.ServeHTTP(rec, req)
 
 	// Should succeed without requiring TFA setup since user already has it
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 	var out apimodels.LoginResponse
-	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
-	assert.True(t, out.Success)
-	assert.True(t, out.TFAEnabled)        // User has TFA enabled
-	assert.False(t, out.TFASetupRequired) // No additional TFA setup needed
+	assert.NilError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, out.Success)
+	assert.Check(t, out.TFAEnabled)        // User has TFA enabled
+	assert.Check(t, !out.TFASetupRequired) // No additional TFA setup needed
 }

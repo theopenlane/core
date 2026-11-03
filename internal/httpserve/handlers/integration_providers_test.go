@@ -6,18 +6,19 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-
-	"github.com/stretchr/testify/assert"
+	"testing"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
-	t := suite.T()
+func TestListIntegrationProvidersIncludesSchemas(t *testing.T) {
+	suite.setupTest(t)
 
 	suite.registerRouteOnce(http.MethodGet, "/v1/integrations/providers", suite.h.ListIntegrationProviders)
 
@@ -33,15 +34,15 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	rec := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(rec, req)
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 	var resp struct {
 		Success   bool                           `json:"success"`
 		Providers []handlers.IntegrationProvider `json:"providers"`
 	}
-	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-	assert.True(t, resp.Success)
-	assert.GreaterOrEqual(t, len(resp.Providers), 2)
+	assert.Check(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.Check(t, resp.Success)
+	assert.Check(t, len(resp.Providers) >= 2)
 
 	providers := map[string]handlers.IntegrationProvider{}
 	for _, provider := range resp.Providers {
@@ -49,25 +50,25 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	}
 
 	provider, ok := providers[configTestProviderID]
-	assert.True(t, ok)
-	assert.True(t, provider.Spec.Active)
-	assert.True(t, provider.Spec.Visible)
-	assert.Len(t, provider.CredentialRegistrations, 1)
-	assert.Equal(t, configTestCredentialRef, provider.CredentialRegistrations[0].Ref)
-	assert.NotEmpty(t, provider.CredentialRegistrations[0].Schema)
-	assert.Len(t, provider.Connections, 1)
-	assert.Equal(t, configTestCredentialRef, provider.Connections[0].CredentialRef)
-	assert.Equal(t, []string{configTestCredentialRef}, provider.Connections[0].CredentialRefs)
-	assert.Nil(t, provider.Connections[0].Auth)
-	assert.NotNil(t, provider.Connections[0].Disconnect)
-	assert.NotNil(t, provider.UserInput)
-	assert.Empty(t, provider.Operations)
+	assert.Check(t, ok)
+	assert.Check(t, provider.Spec.Active)
+	assert.Check(t, provider.Spec.Visible)
+	assert.Check(t, is.Len(provider.CredentialRegistrations, 1))
+	assert.Check(t, is.DeepEqual(configTestCredentialRef, provider.CredentialRegistrations[0].Ref))
+	assert.Check(t, len(provider.CredentialRegistrations[0].Schema) > 0)
+	assert.Check(t, is.Len(provider.Connections, 1))
+	assert.Check(t, is.DeepEqual(configTestCredentialRef, provider.Connections[0].CredentialRef))
+	assert.Check(t, is.DeepEqual([]string{configTestCredentialRef}, provider.Connections[0].CredentialRefs))
+	assert.Check(t, is.Nil(provider.Connections[0].Auth))
+	assert.Check(t, provider.Connections[0].Disconnect != nil)
+	assert.Check(t, provider.UserInput != nil)
+	assert.Check(t, is.Len(provider.Operations, 0))
 
 	_, ok = providers["def_01K0TESTOTH00000000000001"]
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	_, ok = providers["def_01K0TESTHID00000000000001"]
-	assert.False(t, ok)
+	assert.Check(t, !ok)
 }
 
 // hiddenDefinitionBuilder returns a builder for a definition that is active but not visible in catalog surfaces
