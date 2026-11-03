@@ -339,13 +339,14 @@ func createCallerFromClaims(ctx context.Context, opts *Options, claims *tokens.C
 	}
 
 	caller := &auth.Caller{
-		SubjectID:          user.ID,
-		SubjectName:        getSubjectName(user),
-		SubjectEmail:       user.Email,
-		OrganizationID:     claims.OrgID,
-		OrganizationIDs:    []string{claims.OrgID},
-		AuthenticationType: authType,
-		Capabilities:       auth.CapabilitiesForSystemAdmin(systemAdmin),
+		SubjectID:             user.ID,
+		SubjectName:           getSubjectName(user),
+		SubjectEmail:          user.Email,
+		OrganizationID:        claims.OrgID,
+		OrganizationIDs:       []string{claims.OrgID},
+		AuthenticationType:    authType,
+		TFAEnrollmentRequired: claims.TFAEnrollmentRequired,
+		Capabilities:          auth.CapabilitiesForSystemAdmin(systemAdmin),
 	}
 
 	role := getOrgRoleFunc(ctx, opts.DBClient, user.ID, claims.OrgID)

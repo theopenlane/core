@@ -22,6 +22,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context) error {
 	return h.validateTOTP(ctx, subjectID, "")
 }
 
+// validateTOTP checks the submitted TOTP or recovery code for the subject
 func (h *Handler) validateTOTP(ctx echo.Context, subjectID, state string) error {
 	in, err := BindAndValidate[models.TFARequest](ctx)
 	if err != nil {
@@ -56,36 +57,49 @@ func (h *Handler) validateTOTP(ctx echo.Context, subjectID, state string) error 
 
 	tfasetting := user.Edges.TfaSettings[0]
 
-	if in.TOTPCode == "" {
-		// validate recovery code instead
-		recoveryCodeIndex := slices.Index(tfasetting.RecoveryCodes, in.RecoveryCode)
-		if recoveryCodeIndex > -1 {
-			// remove the recovery code from the list
-			tfasetting.RecoveryCodes = append(tfasetting.RecoveryCodes[:recoveryCodeIndex], tfasetting.RecoveryCodes[recoveryCodeIndex+1:]...)
+	recoveryCodeIndex := -1
 
-			if err := h.updateRecoveryCodes(reqCtx, tfasetting.ID, tfasetting.RecoveryCodes); err != nil {
-				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update recovery codes")
-
-				return h.BadRequest(ctx, err)
-			}
-
-			return h.completeTFALogin(ctx, state, subjectID)
+	switch {
+	case in.TOTPCode != "":
+		totpUser := totp.User{
+			ID:            subjectID,
+			TFASecret:     *tfasetting.TfaSecret,
+			IsTOTPAllowed: tfasetting.TotpAllowed,
+			Email:         sql.NullString{String: user.Email, Valid: true},
 		}
 
-		return h.BadRequest(ctx, ErrInvalidRecoveryCode)
+		if err := h.OTPManager.Manager.ValidateTOTP(reqCtx, &totpUser, in.TOTPCode); err != nil {
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to validate TOTP code")
+
+			return h.BadRequest(ctx, err)
+		}
+	default:
+		// validate recovery code instead
+		recoveryCodeIndex = slices.Index(tfasetting.RecoveryCodes, in.RecoveryCode)
+		if recoveryCodeIndex < 0 {
+			return h.BadRequest(ctx, ErrInvalidRecoveryCode)
+		}
 	}
 
-	totpUser := totp.User{
-		ID:            subjectID,
-		TFASecret:     *tfasetting.TfaSecret,
-		IsTOTPAllowed: tfasetting.TotpAllowed,
-		Email:         sql.NullString{String: user.Email, Valid: true},
+	// the pending state is taken before a recovery code is spent so a replayed cookie cannot burn one
+	if state != "" {
+		userID, err := h.SessionConfig.RedisStore.TakeSession(reqCtx, tfaPendingKeyPrefix+state)
+		if err != nil || userID != subjectID {
+			return h.Unauthorized(ctx, ErrAuthenticationRequired)
+		}
+
+		h.clearAuthFlowCookies(ctx.Response().Writer, tfaPendingCookieName)
 	}
 
-	if err := h.OTPManager.Manager.ValidateTOTP(reqCtx, &totpUser, in.TOTPCode); err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to validate TOTP code")
+	if recoveryCodeIndex >= 0 {
+		// remove the recovery code from the list
+		tfasetting.RecoveryCodes = append(tfasetting.RecoveryCodes[:recoveryCodeIndex], tfasetting.RecoveryCodes[recoveryCodeIndex+1:]...)
 
-		return h.BadRequest(ctx, err)
+		if err := h.updateRecoveryCodes(reqCtx, tfasetting.ID, tfasetting.RecoveryCodes); err != nil {
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update recovery codes")
+
+			return h.BadRequest(ctx, err)
+		}
 	}
 
 	return h.completeTFALogin(ctx, state, subjectID)

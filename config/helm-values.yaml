@@ -399,6 +399,8 @@ coreConfiguration:
     redis: true  # @schema type:boolean; default:true
     recoverycodecount: 16  # @schema type:integer; default:16
     recoverycodelength: 8  # @schema type:integer; default:8
+    maxfailedattempts: 5  # @schema type:integer; default:5
+    failurewindow: "15m0s"  # @schema type:integer; default:15m
   # -- Ratelimit contains the configuration for the global rate limiter applied to all requests
   ratelimit:
     enabled: false  # @schema type:boolean; default:false

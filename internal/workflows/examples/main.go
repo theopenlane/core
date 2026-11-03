@@ -128,6 +128,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to login: %v", err)
 	}
+
+	if resp.TFAEnabled || resp.TFASetupRequired {
+		log.Fatalf("Login requires two factor authentication; use --api-token or a demo user without 2FA")
+	}
+
 	fmt.Println("   ✓ Login successful")
 
 	session, err := client.GetSessionFromCookieJar()

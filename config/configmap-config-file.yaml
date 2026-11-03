@@ -791,6 +791,12 @@ data:
       {{- if .Values.openlane.coreConfiguration.totp.recoverycodelength }}
       recoverycodelength: {{ .Values.openlane.coreConfiguration.totp.recoverycodelength }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.totp.maxfailedattempts }}
+      maxfailedattempts: {{ .Values.openlane.coreConfiguration.totp.maxfailedattempts }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.totp.failurewindow }}
+      failurewindow: {{ .Values.openlane.coreConfiguration.totp.failurewindow | quote }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.ratelimit }}
     ratelimit:

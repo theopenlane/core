@@ -17,11 +17,11 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core/common v1.2.0
-	github.com/theopenlane/core/v2 v2.9.1
-	github.com/theopenlane/go-client v0.15.0
+	github.com/theopenlane/core/common v1.2.2
+	github.com/theopenlane/core/v2 v2.9.4
+	github.com/theopenlane/go-client v0.15.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.41.1
+	github.com/theopenlane/iam v0.41.3
 	github.com/theopenlane/utils v0.7.4
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/term v0.47.0

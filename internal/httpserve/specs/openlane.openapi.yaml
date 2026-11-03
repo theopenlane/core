@@ -1602,6 +1602,18 @@ components:
                 unverified:
                     type: boolean
             type: object
+        TFARequest:
+            description: TFARequest holds the payload for verifying the 2fa code (/2fa/validate)
+            properties:
+                recovery_code:
+                    description: The recovery code to validate, only used if TOTP code is not provided
+                    example: 8VM7AL91
+                    type: string
+                totp_code:
+                    description: The TOTP code to validate, always takes precedence over recovery code
+                    example: "113371"
+                    type: string
+            type: object
         UnsubscribeRequest:
             description: UnsubscribeRequest contains the token used to unsubscribe from communications
             properties:
@@ -3837,6 +3849,81 @@ paths:
                     description: Internal Server Error
             security: []
             summary: Login
+            tags:
+                - Authentication
+    /v1/login/2fa/validate:
+        post:
+            description: Complete a pending login by validating a TOTP or recovery code
+            operationId: ValidateLoginTOTP
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/TFARequest'
+                description: Request body
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                LoginSuccessResponse:
+                                    value:
+                                        access_token: access_token
+                                        message: ""
+                                        refresh_token: refresh_token
+                                        session: session
+                                        success: true
+                                        tfa_enabled: true
+                                        token_type: bearer
+                            schema:
+                                $ref: '#/components/schemas/LoginResponse'
+                    description: OK
+                "400":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: bad request
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: unauthorized
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Unauthorized
+                "429":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: too many requests
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Too Many Requests
+                "500":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: internal server error
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Internal Server Error
+            security: []
+            summary: LoginTFAValidation
             tags:
                 - Authentication
     /v1/logout:
