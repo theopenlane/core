@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/samber/lo"
+
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/theopenlane/entx/history"
@@ -13,6 +15,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
@@ -428,6 +431,31 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 	// delete created org and users
 	th.CleanupOrganizationDataWithContext(otherOrgCtx, t)
 	th.CleanupOrganizationDataWithContext(localTestOrg.UserCtx, t)
+}
+
+func TestMutationCreateOrgMember_NoOrganizationID(t *testing.T) {
+	t.Parallel()
+
+	org := suite.SeedFreshOrgUsers(t)
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t)
+	})
+
+	user := (&th.UserBuilder{Client: suite.Client}).MustNew(org.Owner.UserCtx, t)
+
+	// no org id
+	_, err := suite.Client.API.AddUserToOrgWithRole(org.Member.UserCtx, testclient.CreateOrgMembershipInput{
+		UserID: user.ID,
+		Role:   lo.ToPtr(enums.RoleMember),
+	})
+	assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+
+	_, err = suite.Client.API.AddUserToOrgWithRole(org.Owner.UserCtx, testclient.CreateOrgMembershipInput{
+		UserID:         user.ID,
+		Role:           lo.ToPtr(enums.RoleMember),
+		OrganizationID: org.Owner.OrganizationID,
+	})
+	assert.NilError(t, err)
 }
 
 func TestMutationCreateOrgMemberRoleCeiling(t *testing.T) {
