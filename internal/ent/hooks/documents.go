@@ -163,7 +163,7 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T, update
 		return err
 	}
 
-	parsedContent, err := storage.ParseDocument(bytes.NewReader(downloaded.File), file[0].ContentType)
+	parsedContent, err := storage.ParseDocument(ctx, bytes.NewReader(downloaded.File), file[0].ContentType)
 	if err != nil {
 		return err
 	}
@@ -272,7 +272,7 @@ func importURLToSchema(ctx context.Context, m importSchemaMutation) error {
 	}
 
 	// Parse the document using the detected MIME type
-	parsed, err := storage.ParseDocument(bytes.NewReader(buf), mimeType)
+	parsed, err := storage.ParseDocument(ctx, bytes.NewReader(buf), mimeType)
 	if err != nil {
 		return fmt.Errorf("failed to parse document: %w", err)
 	}

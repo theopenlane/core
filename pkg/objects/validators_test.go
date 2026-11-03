@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/core/v2/pkg/pdftext"
 )
 
 func TestMimeTypeValidator(t *testing.T) {
@@ -38,7 +39,7 @@ func TestMimeTypeValidator(t *testing.T) {
 		},
 		{
 			name:           "valid mime type - multiple types",
-			validMimeTypes: []string{"application/pdf", "image/png", "text/plain"},
+			validMimeTypes: []string{pdftext.ContentType, "image/png", "text/plain"},
 			file: File{
 				FileMetadata: FileMetadata{
 					ContentType: "text/plain",
@@ -51,7 +52,7 @@ func TestMimeTypeValidator(t *testing.T) {
 			validMimeTypes: []string{"image/png", "image/jpeg"},
 			file: File{
 				FileMetadata: FileMetadata{
-					ContentType: "application/pdf",
+					ContentType: pdftext.ContentType,
 				},
 			},
 			expectError:   true,
@@ -135,7 +136,7 @@ func TestChainValidators(t *testing.T) {
 	t.Run("first validator fails", func(t *testing.T) {
 		file := File{
 			FileMetadata: FileMetadata{
-				ContentType: "application/pdf",
+				ContentType: pdftext.ContentType,
 				Size:        1024,
 			},
 		}
@@ -234,7 +235,7 @@ func TestChainValidators(t *testing.T) {
 	t.Run("stops at first error", func(t *testing.T) {
 		file := File{
 			FileMetadata: FileMetadata{
-				ContentType: "application/pdf",
+				ContentType: pdftext.ContentType,
 				Size:        0,
 			},
 		}

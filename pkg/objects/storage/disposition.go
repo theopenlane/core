@@ -1,6 +1,10 @@
 package storage
 
-import "mime"
+import (
+	"mime"
+
+	"github.com/theopenlane/core/v2/pkg/pdftext"
+)
 
 // DispositionInline is the Content-Disposition value used when a file's MIME
 // type is safe for the browser to render inline (PDFs, raster images).
@@ -18,11 +22,11 @@ const DispositionAttachment = "attachment"
 // HTML, JavaScript, and CSS are excluded for the same reason. Adding a new
 // entry here is a security decision and should be reviewed accordingly.
 var inlineSafeMIMEs = map[string]struct{}{
-	"application/pdf": {},
-	"image/png":       {},
-	"image/jpeg":      {},
-	"image/gif":       {},
-	"image/webp":      {},
+	pdftext.ContentType: {},
+	"image/png":         {},
+	"image/jpeg":        {},
+	"image/gif":         {},
+	"image/webp":        {},
 }
 
 // DispositionFor returns the Content-Disposition value that is appropriate
