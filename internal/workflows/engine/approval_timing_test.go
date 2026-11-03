@@ -3,6 +3,7 @@
 package engine_test
 
 import (
+	"testing"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -19,6 +20,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/v2/internal/workflows"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func (s *WorkflowEngineTestSuite) createApprovalWorkflowDefinitionWithTiming(ctx context.Context, orgID string, action models.WorkflowAction, timing enums.WorkflowApprovalTiming) *generated.WorkflowDefinition {
@@ -26,7 +29,7 @@ func (s *WorkflowEngineTestSuite) createApprovalWorkflowDefinitionWithTiming(ctx
 	if len(action.Params) > 0 {
 		var params workflows.ApprovalActionParams
 		err := json.Unmarshal(action.Params, &params)
-		s.Require().NoError(err, "failed to parse approval action params")
+		assert.NilError(s.T(), err, "failed to parse approval action params")
 		fields := entityops.NormalizeStrings(params.Fields)
 		if len(fields) > 0 {
 			triggerFields = fields
@@ -61,7 +64,7 @@ func (s *WorkflowEngineTestSuite) createApprovalWorkflowDefinitionWithTiming(ctx
 		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
 		SetDefinitionJSON(doc).
 		Save(ctx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return def
 }
@@ -82,7 +85,8 @@ func (s *WorkflowEngineTestSuite) createApprovalWorkflowDefinitionWithTiming(ctx
 // Why This Matters:
 //
 //	Ensures PRE_COMMIT timing preserves the proposal-first approval gating behavior.
-func (s *WorkflowEngineTestSuite) TestApprovalTimingPreCommitRoutesToProposal() {
+func TestApprovalTimingPreCommitRoutesToProposal(t *testing.T) {
+	s := suite.setupTest(t)
 	approverID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(approverID, orgID)
 
@@ -97,7 +101,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPreCommitRoutesToProposal() 
 		Fields:   []string{"status"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -112,13 +116,13 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPreCommitRoutesToProposal() 
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusPreparing).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetStatus(enums.ControlStatusApproved).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusPreparing, updated.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.ControlStatusPreparing, updated.Status))
 
 	s.WaitForEvents()
 
@@ -129,20 +133,20 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPreCommitRoutesToProposal() 
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.NotEmpty(instance.WorkflowProposalID)
-	s.Equal(enums.WorkflowActionTypeApproval.String(), instance.DefinitionSnapshot.Actions[0].Type)
+	assert.NilError(t, err)
+	assert.Check(t, len(instance.WorkflowProposalID) > 0)
+	assert.Check(t, is.Equal(enums.WorkflowActionTypeApproval.String(), instance.DefinitionSnapshot.Actions[0].Type))
 
 	_, err = s.client.WorkflowProposal.Get(seedCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 1)
-	s.True(strings.HasPrefix(assignments[0].AssignmentKey, "approval_"+action.Key+"_"))
-	s.Equal("APPROVER", assignments[0].Role)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 1))
+	assert.Check(t, strings.HasPrefix(assignments[0].AssignmentKey, "approval_"+action.Key+"_"))
+	assert.Check(t, is.Equal("APPROVER", assignments[0].Role))
 }
 
 // TestApprovalTimingPostCommitCreatesReviewAssignments verifies that POST_COMMIT approvals
@@ -161,7 +165,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPreCommitRoutesToProposal() 
 // Why This Matters:
 //
 //	Ensures POST_COMMIT timing behaves as a review and does not gate the mutation.
-func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitCreatesReviewAssignments() {
+func TestApprovalTimingPostCommitCreatesReviewAssignments(t *testing.T) {
+	s := suite.setupTest(t)
 	approverID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(approverID, orgID)
 
@@ -176,7 +181,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitCreatesReviewAssig
 		Fields:   []string{"status"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -186,30 +191,30 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitCreatesReviewAssig
 
 	def := s.createApprovalWorkflowDefinitionWithTiming(seedCtx, orgID, action, enums.WorkflowApprovalTimingPostCommit)
 	freshDef, err := s.client.WorkflowDefinition.Get(seedCtx, def.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowApprovalTimingPostCommit, freshDef.DefinitionJSON.ApprovalTiming)
-	s.False(workflows.DefinitionUsesPreCommitApprovals(freshDef.DefinitionJSON))
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowApprovalTimingPostCommit, freshDef.DefinitionJSON.ApprovalTiming))
+	assert.Check(t, !(workflows.DefinitionUsesPreCommitApprovals(freshDef.DefinitionJSON)))
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusPreparing).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetStatus(enums.ControlStatusApproved).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusApproved, updated.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.ControlStatusApproved, updated.Status))
 
 	s.WaitForEvents()
 
 	proposalCount, err := s.client.WorkflowProposal.Query().
 		Where(workflowproposal.OwnerIDEQ(orgID)).
 		Count(seedCtx)
-	s.Require().NoError(err)
-	s.Zero(proposalCount)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(0, proposalCount))
 
 	instance, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -218,23 +223,24 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitCreatesReviewAssig
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Empty(instance.WorkflowProposalID)
-	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
-	s.Equal(enums.WorkflowActionTypeReview.String(), instance.DefinitionSnapshot.Actions[0].Type)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(instance.WorkflowProposalID, 0))
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStatePaused, instance.State))
+	assert.Check(t, is.Equal(enums.WorkflowActionTypeReview.String(), instance.DefinitionSnapshot.Actions[0].Type))
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 1)
-	s.True(strings.HasPrefix(assignments[0].AssignmentKey, "review_"+action.Key+"_"))
-	s.Equal("REVIEWER", assignments[0].Role)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 1))
+	assert.Check(t, strings.HasPrefix(assignments[0].AssignmentKey, "review_"+action.Key+"_"))
+	assert.Check(t, is.Equal("REVIEWER", assignments[0].Role))
 }
 
 // TestApprovalTimingPostCommitReviewCompletes verifies that POST_COMMIT reviews can be completed
 // without blocking the underlying mutation.
-func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitReviewCompletes() {
+func TestApprovalTimingPostCommitReviewCompletes(t *testing.T) {
+	s := suite.setupTest(t)
 	approverID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(approverID, orgID)
 
@@ -251,7 +257,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitReviewCompletes() 
 		Fields:   []string{"status"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -266,13 +272,13 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitReviewCompletes() 
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusPreparing).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetStatus(enums.ControlStatusApproved).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusApproved, updated.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.ControlStatusApproved, updated.Status))
 
 	s.WaitForEvents()
 
@@ -284,8 +290,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitReviewCompletes() 
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStatePaused, instance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStatePaused, instance.State))
 
 	assignmentKey := fmt.Sprintf("review_%s_%s", action.Key, approverID)
 	assignment, err := s.client.WorkflowAssignment.Query().
@@ -294,21 +300,21 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitReviewCompletes() 
 			workflowassignment.AssignmentKeyEQ(assignmentKey),
 		).
 		Only(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowAssignmentStatusPending, assignment.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, assignment.Status))
 
 	err = wfEngine.CompleteAssignment(userCtx, assignment.ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	completedInstance, err := s.client.WorkflowInstance.Get(seedCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, completedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, completedInstance.State))
 
 	completedAssignment, err := s.client.WorkflowAssignment.Get(seedCtx, assignment.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowAssignmentStatusApproved, completedAssignment.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusApproved, completedAssignment.Status))
 }
 
 // TestPreCommitAndPostCommitWorkflowsTriggerInSequence verifies that PRE_COMMIT approvals
@@ -329,7 +335,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitReviewCompletes() 
 // Why This Matters:
 //
 //	Ensures PRE_COMMIT and POST_COMMIT workflows can coexist without double-triggering.
-func (s *WorkflowEngineTestSuite) TestPreCommitAndPostCommitWorkflowsTriggerInSequence() {
+func TestPreCommitAndPostCommitWorkflowsTriggerInSequence(t *testing.T) {
+	s := suite.setupTest(t)
 	approverID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(approverID, orgID)
 
@@ -346,7 +353,7 @@ func (s *WorkflowEngineTestSuite) TestPreCommitAndPostCommitWorkflowsTriggerInSe
 		Fields:   []string{"status"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	preAction := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -367,13 +374,13 @@ func (s *WorkflowEngineTestSuite) TestPreCommitAndPostCommitWorkflowsTriggerInSe
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusPreparing).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetStatus(enums.ControlStatusApproved).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusPreparing, updated.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.ControlStatusPreparing, updated.Status))
 
 	s.WaitForEvents()
 
@@ -384,8 +391,8 @@ func (s *WorkflowEngineTestSuite) TestPreCommitAndPostCommitWorkflowsTriggerInSe
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.NotEmpty(preInstance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Check(t, len(preInstance.WorkflowProposalID) > 0)
 
 	postCount, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -393,24 +400,24 @@ func (s *WorkflowEngineTestSuite) TestPreCommitAndPostCommitWorkflowsTriggerInSe
 			workflowinstance.ControlIDEQ(control.ID),
 		).
 		Count(seedCtx)
-	s.Require().NoError(err)
-	s.Zero(postCount)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(0, postCount))
 
 	preAssignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(preInstance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Len(preAssignments, 1)
-	s.True(strings.HasPrefix(preAssignments[0].AssignmentKey, "approval_"+preAction.Key+"_"))
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(preAssignments, 1))
+	assert.Check(t, strings.HasPrefix(preAssignments[0].AssignmentKey, "approval_"+preAction.Key+"_"))
 
 	err = wfEngine.CompleteAssignment(userCtx, preAssignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	updatedControl, err := s.client.Control.Get(userCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusApproved, updatedControl.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.ControlStatusApproved, updatedControl.Status))
 
 	preCount, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -418,8 +425,8 @@ func (s *WorkflowEngineTestSuite) TestPreCommitAndPostCommitWorkflowsTriggerInSe
 			workflowinstance.ControlIDEQ(control.ID),
 		).
 		Count(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(1, preCount)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(1, preCount))
 
 	postInstance, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -428,13 +435,13 @@ func (s *WorkflowEngineTestSuite) TestPreCommitAndPostCommitWorkflowsTriggerInSe
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowActionTypeReview.String(), postInstance.DefinitionSnapshot.Actions[0].Type)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(enums.WorkflowActionTypeReview.String(), postInstance.DefinitionSnapshot.Actions[0].Type))
 
 	postAssignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(postInstance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Len(postAssignments, 1)
-	s.True(strings.HasPrefix(postAssignments[0].AssignmentKey, "review_"+postAction.Key+"_"))
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(postAssignments, 1))
+	assert.Check(t, strings.HasPrefix(postAssignments[0].AssignmentKey, "review_"+postAction.Key+"_"))
 }

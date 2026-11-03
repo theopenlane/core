@@ -3,6 +3,7 @@
 package engine_test
 
 import (
+	"testing"
 	"encoding/json"
 	"strings"
 
@@ -14,6 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/workflows"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestReviewWorkflowTriggersAndCompletes verifies that REVIEW workflows trigger after a mutation
@@ -33,7 +36,8 @@ import (
 // Why This Matters:
 //
 //	Ensures review-only workflows do not gate mutations but still require human review.
-func (s *WorkflowEngineTestSuite) TestReviewWorkflowTriggersAndCompletes() {
+func TestReviewWorkflowTriggersAndCompletes(t *testing.T) {
+	s := suite.setupTest(t)
 	submitterID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(submitterID, orgID)
 
@@ -50,7 +54,7 @@ func (s *WorkflowEngineTestSuite) TestReviewWorkflowTriggersAndCompletes() {
 		Label:         "Status Review",
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeReview.String(),
@@ -82,20 +86,20 @@ func (s *WorkflowEngineTestSuite) TestReviewWorkflowTriggersAndCompletes() {
 		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
 		SetDefinitionJSON(doc).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusPreparing).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetStatus(enums.ControlStatusApproved).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusApproved, updated.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.ControlStatusApproved, updated.Status))
 
 	s.WaitForEvents()
 
@@ -107,31 +111,32 @@ func (s *WorkflowEngineTestSuite) TestReviewWorkflowTriggersAndCompletes() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Empty(instance.WorkflowProposalID)
-	s.Equal(enums.WorkflowActionTypeReview.String(), instance.DefinitionSnapshot.Actions[0].Type)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(instance.WorkflowProposalID, 0))
+	assert.Check(t, is.Equal(enums.WorkflowActionTypeReview.String(), instance.DefinitionSnapshot.Actions[0].Type))
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 1)
-	s.True(strings.HasPrefix(assignments[0].AssignmentKey, "review_"+action.Key+"_"))
-	s.Equal(enums.WorkflowAssignmentStatusPending, assignments[0].Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 1))
+	assert.Check(t, strings.HasPrefix(assignments[0].AssignmentKey, "review_"+action.Key+"_"))
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, assignments[0].Status))
 
 	wfEngine := s.Engine()
 	err = wfEngine.CompleteAssignment(reviewerCtx, assignments[0].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	completedInstance, err := s.client.WorkflowInstance.Get(seedCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, completedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, completedInstance.State))
 }
 
 // TestReviewWorkflowTriggersOnCreate verifies CREATE triggers fire and produce review assignments.
-func (s *WorkflowEngineTestSuite) TestReviewWorkflowTriggersOnCreate() {
+func TestReviewWorkflowTriggersOnCreate(t *testing.T) {
+	s := suite.setupTest(t)
 	submitterID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(submitterID, orgID)
 
@@ -148,7 +153,7 @@ func (s *WorkflowEngineTestSuite) TestReviewWorkflowTriggersOnCreate() {
 		Label:         "Create Review",
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeReview.String(),
@@ -180,14 +185,14 @@ func (s *WorkflowEngineTestSuite) TestReviewWorkflowTriggersOnCreate() {
 		SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
 		SetDefinitionJSON(doc).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusPreparing).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
@@ -199,15 +204,15 @@ func (s *WorkflowEngineTestSuite) TestReviewWorkflowTriggersOnCreate() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Empty(instance.WorkflowProposalID)
-	s.Equal(enums.WorkflowActionTypeReview.String(), instance.DefinitionSnapshot.Actions[0].Type)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(instance.WorkflowProposalID, 0))
+	assert.Check(t, is.Equal(enums.WorkflowActionTypeReview.String(), instance.DefinitionSnapshot.Actions[0].Type))
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Len(assignments, 1)
-	s.True(strings.HasPrefix(assignments[0].AssignmentKey, "review_"+action.Key+"_"))
-	s.Equal(enums.WorkflowAssignmentStatusPending, assignments[0].Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(assignments, 1))
+	assert.Check(t, strings.HasPrefix(assignments[0].AssignmentKey, "review_"+action.Key+"_"))
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, assignments[0].Status))
 }

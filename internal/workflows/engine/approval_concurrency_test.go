@@ -3,6 +3,7 @@
 package engine_test
 
 import (
+	"testing"
 	"encoding/json"
 	"strings"
 	"sync"
@@ -16,6 +17,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestApprovalFlowConcurrentApprovalsResumesOnce verifies that when multiple approvers submit
@@ -40,7 +43,8 @@ import (
 //	In a distributed system, concurrent approvals could race to resume the workflow. The
 //	engine must ensure idempotent completion handling to prevent duplicate side effects
 //	(e.g., double-applying the proposal, sending duplicate notifications).
-func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce() {
+func TestApprovalFlowConcurrentApprovalsResumesOnce(t *testing.T) {
+	s := suite.setupTest(t)
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
@@ -59,7 +63,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 		Fields:        []string{"status"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -74,7 +78,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusNotImplemented).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -88,8 +92,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 		ChangedFields:   []string{"status"},
 		ProposedChanges: proposedChanges,
 	})
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
 
 	// wait until handlers have drained before asserting
 	s.WaitForEvents()
@@ -97,8 +101,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Require().Len(assignments, 2)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(assignments, 2))
 
 	assignmentsByUser := map[string]*generated.WorkflowAssignment{}
 	for _, assignment := range assignments {
@@ -109,8 +113,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 			assignmentsByUser[approver2ID] = assignment
 		}
 	}
-	s.Require().NotNil(assignmentsByUser[approver1ID])
-	s.Require().NotNil(assignmentsByUser[approver2ID])
+	assert.Assert(t, assignmentsByUser[approver1ID] != nil)
+	assert.Assert(t, assignmentsByUser[approver2ID] != nil)
 
 	var wg sync.WaitGroup
 	errCh := make(chan error, 2)
@@ -128,28 +132,28 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 	close(errCh)
 
 	for err := range errCh {
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 	}
 
 	// Wait for async event processing to complete before checking state
 	s.WaitForEvents()
 
 	proposal, err := s.client.WorkflowProposal.Get(userCtx, instance.WorkflowProposalID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateApplied, proposal.State))
 
 	updatedControl, err := s.client.Control.Get(userCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusApproved, updatedControl.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.ControlStatusApproved, updatedControl.Status))
 
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 
 	events, err := s.client.WorkflowEvent.Query().
 		Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	completedCount := 0
 	for _, event := range events {
@@ -159,7 +163,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 		}
 	}
 
-	s.Equal(1, completedCount)
+	assert.Check(t, is.Equal(1, completedCount))
 }
 
 // TestApprovalFlowLateApprovalDoesNotReapply verifies that "late" approvals (approvals submitted
@@ -183,7 +187,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowConcurrentApprovalsResumesOnce
 //
 //	Users may approve workflows that have already completed. The engine must handle these
 //	"late" approvals gracefully without re-applying changes or corrupting workflow state.
-func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
+func TestApprovalFlowLateApprovalDoesNotReapply(t *testing.T) {
+	s := suite.setupTest(t)
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
@@ -202,7 +207,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 		Fields:        []string{"status"},
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeApproval.String(),
@@ -217,7 +222,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 		SetOwnerID(orgID).
 		SetStatus(enums.ControlStatusNotImplemented).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -231,16 +236,16 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 		ChangedFields:   []string{"status"},
 		ProposedChanges: proposedChanges,
 	})
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
 
 	s.WaitForEvents()
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Require().Len(assignments, 2)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(assignments, 2))
 
 	assignmentsByUser := map[string]*generated.WorkflowAssignment{}
 	for _, assignment := range assignments {
@@ -251,18 +256,18 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 			assignmentsByUser[approver2ID] = assignment
 		}
 	}
-	s.Require().NotNil(assignmentsByUser[approver1ID])
-	s.Require().NotNil(assignmentsByUser[approver2ID])
+	assert.Assert(t, assignmentsByUser[approver1ID] != nil)
+	assert.Assert(t, assignmentsByUser[approver2ID] != nil)
 
 	err = wfEngine.CompleteAssignment(userCtx, assignmentsByUser[approver1ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	eventsBefore, err := s.client.WorkflowEvent.Query().
 		Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	completedBefore := 0
 	for _, event := range eventsBefore {
@@ -273,14 +278,14 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 	}
 
 	err = wfEngine.CompleteAssignment(approver2Ctx, assignmentsByUser[approver2ID].ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	eventsAfter, err := s.client.WorkflowEvent.Query().
 		Where(workflowevent.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	completedAfter := 0
 	for _, event := range eventsAfter {
@@ -290,15 +295,15 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 		}
 	}
 
-	s.Equal(completedBefore, completedAfter)
+	assert.Check(t, is.DeepEqual(completedBefore, completedAfter))
 
 	updatedControl, err := s.client.Control.Get(userCtx, control.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.ControlStatusApproved, updatedControl.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.ControlStatusApproved, updatedControl.Status))
 
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 }
 
 // TestConcurrentApprovalActionsGateUntilAllSatisfied ensures that when a workflow has multiple
@@ -326,7 +331,8 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowLateApprovalDoesNotReapply() {
 //
 //	Complex workflows may require multiple independent sign-offs. The engine must gate
 //	completion until ALL required approval actions are resolved, not just the first one.
-func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatisfied() {
+func TestConcurrentApprovalActionsGateUntilAllSatisfied(t *testing.T) {
+	s := suite.setupTest(t)
 	approver1ID, orgID, userCtx := s.SetupTestUser()
 	approver2ID, approver2Ctx := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
@@ -355,9 +361,9 @@ func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatis
 		Fields:        []string{"reference_id"},
 	}
 	paramsABytes, err := json.Marshal(paramsA)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 	paramsBBytes, err := json.Marshal(paramsB)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	def, err := s.client.WorkflowDefinition.Create().
 		SetName("Concurrent Approval Actions " + ulid.Make().String()).
@@ -385,7 +391,7 @@ func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatis
 			},
 		}).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-CONCURRENT-ACTIONS-" + ulid.Make().String()).
@@ -393,7 +399,7 @@ func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatis
 		SetStatus(enums.ControlStatusNotImplemented).
 		SetReferenceID("REF-OLD").
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -405,16 +411,16 @@ func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatis
 		ChangedFields:   []string{"status", "reference_id"},
 		ProposedChanges: map[string]any{"status": enums.ControlStatusApproved, "reference_id": "REF-NEW"},
 	})
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
 
 	s.WaitForEvents()
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(userCtx)
-	s.Require().NoError(err)
-	s.Require().Len(assignments, 2)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(assignments, 2))
 
 	var assignmentA, assignmentB *generated.WorkflowAssignment
 	for _, assignment := range assignments {
@@ -425,41 +431,41 @@ func (s *WorkflowEngineTestSuite) TestConcurrentApprovalActionsGateUntilAllSatis
 			assignmentB = assignment
 		}
 	}
-	s.Require().NotNil(assignmentA)
-	s.Require().NotNil(assignmentB)
+	assert.Assert(t, assignmentA != nil)
+	assert.Assert(t, assignmentB != nil)
 
 	// Complete approval B first; workflow should remain paused until approval A is resolved.
 	err = wfEngine.CompleteAssignment(approver2Ctx, assignmentB.ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	updatedInstance, err := s.client.WorkflowInstance.Get(userCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStatePaused, updatedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStatePaused, updatedInstance.State))
 
 	assignmentA, err = s.client.WorkflowAssignment.Get(userCtx, assignmentA.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowAssignmentStatusPending, assignmentA.Status)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, assignmentA.Status))
 
 	if instance.WorkflowProposalID != "" {
 		proposal, err := s.client.WorkflowProposal.Get(userCtx, instance.WorkflowProposalID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowProposalStateDraft, proposal.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateDraft, proposal.State))
 	}
 
 	err = wfEngine.CompleteAssignment(userCtx, assignmentA.ID, enums.WorkflowAssignmentStatusApproved, nil, nil)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	updatedInstance, err = s.client.WorkflowInstance.Get(userCtx, instance.ID)
-	s.Require().NoError(err)
-	s.Equal(enums.WorkflowInstanceStateCompleted, updatedInstance.State)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, updatedInstance.State))
 
 	if instance.WorkflowProposalID != "" {
 		proposal, err := s.client.WorkflowProposal.Get(userCtx, instance.WorkflowProposalID)
-		s.Require().NoError(err)
-		s.Equal(enums.WorkflowProposalStateApplied, proposal.State)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.WorkflowProposalStateApplied, proposal.State))
 	}
 }

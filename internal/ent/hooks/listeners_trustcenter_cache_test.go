@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -74,6 +75,10 @@ func TestBuildTrustCenterURL(t *testing.T) {
 }
 
 func TestTriggerCacheRefresh(t *testing.T) {
+	initialBackoff, maxBackoff := cacheRefreshInitialBackoff, cacheRefreshMaxBackoff
+	cacheRefreshInitialBackoff, cacheRefreshMaxBackoff = time.Millisecond, 10*time.Millisecond
+	t.Cleanup(func() { cacheRefreshInitialBackoff, cacheRefreshMaxBackoff = initialBackoff, maxBackoff })
+
 	t.Run("successful request", func(t *testing.T) {
 		var receivedFresh string
 		var receivedUserAgent string

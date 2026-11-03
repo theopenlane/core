@@ -3,6 +3,7 @@
 package engine_test
 
 import (
+	"testing"
 	"github.com/oklog/ulid/v2"
 
 	"github.com/theopenlane/core/common/enums"
@@ -10,6 +11,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestResolveTargetsRequiresEngine verifies the target resolver is properly initialized
@@ -22,9 +25,10 @@ import (
 // Why This Matters:
 //
 //	Foundational test ensuring the target resolution subsystem is available.
-func (s *WorkflowEngineTestSuite) TestResolveTargetsRequiresEngine() {
+func TestResolveTargetsRequiresEngine(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	wfEngine := s.Engine()
-	s.Require().NotNil(wfEngine)
+	assert.Assert(t, wfEngine != nil)
 }
 
 // TestResolveUserTarget verifies that USER-type targets resolve to the specified user ID.
@@ -44,7 +48,8 @@ func (s *WorkflowEngineTestSuite) TestResolveTargetsRequiresEngine() {
 //
 //	User targets enable explicit assignment to specific individuals. The resolver must
 //	validate that the user ID is provided and return it directly.
-func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
+func TestResolveUserTarget(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -54,34 +59,34 @@ func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
 		SetEmail("test-" + ulid.Make().String() + "@example.com").
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		Save(internalCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   "test123",
 		Type: enums.WorkflowObjectTypeControl,
 	}
 
-	s.Run("resolve user with ID", func() {
+	t.Run("resolve user with ID", func(t *testing.T) {
 		target := workflows.TargetConfig{
 			Type: enums.WorkflowTargetTypeUser,
 			ID:   user.ID,
 		}
 
 		userIDs, err := wfEngine.ResolveTargets(userCtx, target, obj)
-		s.NoError(err)
-		s.Len(userIDs, 1)
-		s.Equal(user.ID, userIDs[0])
+		assert.Check(t, err)
+		assert.Check(t, is.Len(userIDs, 1))
+		assert.Check(t, is.DeepEqual(user.ID, userIDs[0]))
 	})
 
-	s.Run("user target without ID returns error", func() {
+	t.Run("user target without ID returns error", func(t *testing.T) {
 		target := workflows.TargetConfig{
 			Type: enums.WorkflowTargetTypeUser,
 			ID:   "",
 		}
 
 		_, err := wfEngine.ResolveTargets(userCtx, target, obj)
-		s.Error(err)
-		s.ErrorIs(err, engine.ErrMissingRequiredField)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, engine.ErrMissingRequiredField))
 	})
 
 	_ = orgID
@@ -107,7 +112,8 @@ func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
 //
 //	Group targets enable dynamic assignment to team members. As group membership changes,
 //	workflow assignments automatically reflect the current membership.
-func (s *WorkflowEngineTestSuite) TestResolveGroupTarget() {
+func TestResolveGroupTarget(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -120,48 +126,48 @@ func (s *WorkflowEngineTestSuite) TestResolveGroupTarget() {
 		SetName("Test Group " + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Add group memberships separately to avoid conflicts
 	_, err = s.client.GroupMembership.Create().
 		SetGroupID(group.ID).
 		SetUserID(userID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	_, err = s.client.GroupMembership.Create().
 		SetGroupID(group.ID).
 		SetUserID(user2ID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   "test123",
 		Type: enums.WorkflowObjectTypeControl,
 	}
 
-	s.Run("resolve group members", func() {
+	t.Run("resolve group members", func(t *testing.T) {
 		target := workflows.TargetConfig{
 			Type: enums.WorkflowTargetTypeGroup,
 			ID:   group.ID,
 		}
 
 		userIDs, err := wfEngine.ResolveTargets(userCtx, target, obj)
-		s.NoError(err)
+		assert.Check(t, err)
 		// Group should resolve to at least one member
-		s.GreaterOrEqual(len(userIDs), 1)
-		s.Contains(userIDs, userID)
+		assert.Check(t, len(userIDs) >= 1)
+		assert.Check(t, is.Contains(userIDs, userID))
 	})
 
-	s.Run("group target without ID returns error", func() {
+	t.Run("group target without ID returns error", func(t *testing.T) {
 		target := workflows.TargetConfig{
 			Type: enums.WorkflowTargetTypeGroup,
 			ID:   "",
 		}
 
 		_, err := wfEngine.ResolveTargets(userCtx, target, obj)
-		s.Error(err)
-		s.ErrorIs(err, engine.ErrMissingRequiredField)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, engine.ErrMissingRequiredField))
 	})
 }
 
@@ -186,10 +192,12 @@ func (s *WorkflowEngineTestSuite) TestResolveGroupTarget() {
 //
 //	Role targets enable automatic assignment to users based on their organizational role.
 //	This is useful for "assign to all org owners" or "assign to all admins" workflows.
-func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
+func TestResolveRoleTarget(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	wfEngine := s.Engine()
 
-	s.Run("role target requires ID", func() {
+	t.Run("role target requires ID", func(t *testing.T) {
+		s := s.withT(t)
 		obj := &workflows.Object{
 			ID:   "test123",
 			Type: enums.WorkflowObjectTypeControl,
@@ -201,11 +209,12 @@ func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
 		}
 
 		_, err := wfEngine.ResolveTargets(s.ctx, target, obj)
-		s.Error(err)
-		s.ErrorIs(err, engine.ErrMissingRequiredField)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, engine.ErrMissingRequiredField))
 	})
 
-	s.Run("role resolution returns org members by role", func() {
+	t.Run("role resolution returns org members by role", func(t *testing.T) {
+		s := s.withT(t)
 		userID, orgID, userCtx := s.SetupTestUser()
 
 		// User from SetupTestUser already has org membership
@@ -213,7 +222,7 @@ func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
 			SetRefCode("CTL-ROLE-TARGET-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -227,19 +236,20 @@ func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
 		}
 
 		userIDs, err := wfEngine.ResolveTargets(userCtx, target, obj)
-		s.NoError(err)
-		s.GreaterOrEqual(len(userIDs), 1)
-		s.Contains(userIDs, userID)
+		assert.Check(t, err)
+		assert.Check(t, len(userIDs) >= 1)
+		assert.Check(t, is.Contains(userIDs, userID))
 	})
 
-	s.Run("invalid role returns error", func() {
+	t.Run("invalid role returns error", func(t *testing.T) {
+		s := s.withT(t)
 		_, orgID, userCtx := s.SetupTestUser()
 
 		control, err := s.client.Control.Create().
 			SetRefCode("CTL-ROLE-TARGET-INVALID-" + ulid.Make().String()).
 			SetOwnerID(orgID).
 			Save(userCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		obj := &workflows.Object{
 			ID:   control.ID,
@@ -253,7 +263,7 @@ func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
 		}
 
 		_, err = wfEngine.ResolveTargets(userCtx, target, obj)
-		s.Error(err)
+		assert.Check(t, err != nil)
 	})
 }
 
@@ -275,7 +285,8 @@ func (s *WorkflowEngineTestSuite) TestResolveRoleTarget() {
 //	Resolver targets enable dynamic assignment based on object context. For example,
 //	"CONTROL_OWNER" automatically assigns to whoever owns the control being modified,
 //	without hardcoding specific user IDs in the workflow definition.
-func (s *WorkflowEngineTestSuite) TestResolveControlTarget() {
+func TestResolveControlTarget(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -284,35 +295,35 @@ func (s *WorkflowEngineTestSuite) TestResolveControlTarget() {
 		SetRefCode("CTL-TEST-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
 		Type: enums.WorkflowObjectTypeControl,
 	}
 
-	s.Run("resolve CONTROL_OWNER", func() {
+	t.Run("resolve CONTROL_OWNER", func(t *testing.T) {
 		target := workflows.TargetConfig{
 			Type:        enums.WorkflowTargetTypeResolver,
 			ResolverKey: "CONTROL_OWNER",
 		}
 
 		userIDs, err := wfEngine.ResolveTargets(userCtx, target, obj)
-		s.NoError(err)
+		assert.Check(t, err)
 		// Org owners are resolved, which includes the user from SetupTestUser
-		s.GreaterOrEqual(len(userIDs), 1)
-		s.Contains(userIDs, userID)
+		assert.Check(t, len(userIDs) >= 1)
+		assert.Check(t, is.Contains(userIDs, userID))
 	})
 
-	s.Run("resolve OBJECT_CREATOR", func() {
+	t.Run("resolve OBJECT_CREATOR", func(t *testing.T) {
 		target := workflows.TargetConfig{
 			Type:        enums.WorkflowTargetTypeResolver,
 			ResolverKey: "OBJECT_CREATOR",
 		}
 
 		userIDs, err := wfEngine.ResolveTargets(userCtx, target, obj)
-		s.NoError(err)
-		s.GreaterOrEqual(len(userIDs), 0)
+		assert.Check(t, err)
+		assert.Check(t, len(userIDs) >= 0)
 	})
 }
 
@@ -332,7 +343,8 @@ func (s *WorkflowEngineTestSuite) TestResolveControlTarget() {
 //
 //	The resolver must validate target configurations and fail fast with clear errors
 //	rather than silently returning empty results or causing downstream failures.
-func (s *WorkflowEngineTestSuite) TestResolveInvalidTarget() {
+func TestResolveInvalidTarget(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	wfEngine := s.Engine()
 
 	obj := &workflows.Object{
@@ -340,25 +352,27 @@ func (s *WorkflowEngineTestSuite) TestResolveInvalidTarget() {
 		Type: enums.WorkflowObjectTypeControl,
 	}
 
-	s.Run("invalid target type", func() {
+	t.Run("invalid target type", func(t *testing.T) {
+		s := s.withT(t)
 		target := workflows.TargetConfig{
 			Type: "INVALID",
 			ID:   "test",
 		}
 
 		_, err := wfEngine.ResolveTargets(s.ctx, target, obj)
-		s.Error(err)
-		s.ErrorIs(err, engine.ErrInvalidTargetType)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, engine.ErrInvalidTargetType))
 	})
 
-	s.Run("resolver without resolver key", func() {
+	t.Run("resolver without resolver key", func(t *testing.T) {
+		s := s.withT(t)
 		target := workflows.TargetConfig{
 			Type:        enums.WorkflowTargetTypeResolver,
 			ResolverKey: "",
 		}
 
 		_, err := wfEngine.ResolveTargets(s.ctx, target, obj)
-		s.Error(err)
-		s.ErrorIs(err, engine.ErrMissingRequiredField)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, engine.ErrMissingRequiredField))
 	})
 }

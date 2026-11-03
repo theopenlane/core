@@ -3,6 +3,7 @@
 package engine_test
 
 import (
+	"testing"
 	"encoding/json"
 	"time"
 
@@ -15,6 +16,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestProposalManagerComputeHashUsesDomainKey ensures that when multiple approval workflows
@@ -41,7 +44,8 @@ import (
 //	should only contain the changes relevant to its domain, and the hash used for approval
 //	verification should match that scoped set of changes. This prevents cross-contamination
 //	of approval hashes between unrelated workflows.
-func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() {
+func TestProposalManagerComputeHashUsesDomainKey(t *testing.T) {
+	s := suite.setupTest(t)
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -58,7 +62,7 @@ func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() 
 			Fields:   fields,
 		}
 		paramsBytes, err := json.Marshal(params)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		return models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeApproval.String(),
@@ -96,7 +100,7 @@ func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() 
 			SetApprovalSubmissionMode(enums.WorkflowApprovalSubmissionModeAutoSubmit).
 			SetDefinitionJSON(doc).
 			Save(seedCtx)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		return def
 	}
@@ -115,15 +119,15 @@ func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() 
 		SetReferenceID(oldRef).
 		SetTitle(oldTitle).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID(newRef).
 		SetTitle(newTitle).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Equal(oldRef, updated.ReferenceID)
-	s.Equal(oldTitle, updated.Title)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(oldRef, updated.ReferenceID))
+	assert.Check(t, is.DeepEqual(oldTitle, updated.Title))
 
 	refInstance, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -133,11 +137,11 @@ func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() 
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotEmpty(refInstance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Assert(t, len(refInstance.WorkflowProposalID) > 0)
 
 	refProposal, err := s.client.WorkflowProposal.Get(seedCtx, refInstance.WorkflowProposalID)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	titleInstance, err := s.client.WorkflowInstance.Query().
 		Where(
@@ -147,36 +151,36 @@ func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() 
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotEmpty(titleInstance.WorkflowProposalID)
+	assert.NilError(t, err)
+	assert.Assert(t, len(titleInstance.WorkflowProposalID) > 0)
 
 	_, err = s.client.WorkflowProposal.Get(seedCtx, titleInstance.WorkflowProposalID)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	_, err = s.client.WorkflowProposal.UpdateOneID(refProposal.ID).
 		SetState(enums.WorkflowProposalStateSubmitted).
 		SetSubmittedAt(time.Now()).
 		SetSubmittedByUserID(userID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	instance, err := s.client.WorkflowInstance.Query().
 		Where(workflowinstance.WorkflowProposalIDEQ(refProposal.ID)).
 		Only(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	assignments, err := s.client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotEmpty(assignments)
+	assert.NilError(t, err)
+	assert.Assert(t, len(assignments) > 0)
 
 	expectedHash, err := workflows.ComputeProposalHash(refProposal.Changes)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	for _, assignment := range assignments {
-		s.Equal(expectedHash, assignment.ApprovalMetadata.ProposedHash)
+		assert.Check(t, is.DeepEqual(expectedHash, assignment.ApprovalMetadata.ProposedHash))
 	}
 }

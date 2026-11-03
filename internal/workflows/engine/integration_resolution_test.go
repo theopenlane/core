@@ -3,6 +3,7 @@
 package engine_test
 
 import (
+	"testing"
 	"encoding/json"
 
 	"github.com/oklog/ulid/v2"
@@ -14,11 +15,14 @@ import (
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestExecuteIntegrationAction_ConnectedIntegration verifies that executeIntegrationAction
 // resolves a connected integration and successfully queues the operation
-func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_ConnectedIntegration() {
+func TestExecuteIntegrationAction_ConnectedIntegration(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -30,11 +34,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_ConnectedIntegrat
 		SetDefinitionID(emaildef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	templateKey := "integ-resolution-connected-" + ulid.Make().String()
 	emailTemplateID := s.createTestEmailTemplate(userID, orgID, templateKey, "Connected Test", "body")
-	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
+	t.Cleanup(func() { s.cleanupTestEmailTemplate(userID, orgID, templateKey) })
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -42,7 +46,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_ConnectedIntegrat
 		SetRefCode("CTL-CONNECTED-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -55,7 +59,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_ConnectedIntegrat
 		OwnerID:    orgID,
 		To:         "connected@example.com",
 	})
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	params := workflows.IntegrationActionParams{
 		InstallationID: integrationRecord.ID,
@@ -64,7 +68,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_ConnectedIntegrat
 		Config:         configBytes,
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeIntegration.String(),
@@ -74,13 +78,14 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_ConnectedIntegrat
 
 	// Execute should succeed -- integration is connected and the operation is queued
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 }
 
 // TestExecuteIntegrationAction_DisconnectedReResolved verifies that when the stored
 // installation is disabled but a replacement connected installation exists for the same
 // definition, the engine re-resolves to the new installation and queues successfully
-func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedReResolved() {
+func TestExecuteIntegrationAction_DisconnectedReResolved(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -93,7 +98,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedReRes
 		SetDefinitionID(emaildef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusDisabled).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Create a replacement connected integration for the same definition
 	_, err = s.client.Integration.Create().
@@ -102,11 +107,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedReRes
 		SetDefinitionID(emaildef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	templateKey := "integ-resolution-reresolved-" + ulid.Make().String()
 	emailTemplateID := s.createTestEmailTemplate(userID, orgID, templateKey, "Re-Resolved Test", "body")
-	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
+	t.Cleanup(func() { s.cleanupTestEmailTemplate(userID, orgID, templateKey) })
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -114,7 +119,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedReRes
 		SetRefCode("CTL-RERESOLVE-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -127,7 +132,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedReRes
 		OwnerID:    orgID,
 		To:         "reresolved@example.com",
 	})
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Reference the OLD (disabled) installation ID -- engine should re-resolve
 	params := workflows.IntegrationActionParams{
@@ -137,7 +142,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedReRes
 		Config:         configBytes,
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeIntegration.String(),
@@ -147,12 +152,13 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedReRes
 
 	// Execute should succeed -- engine re-resolves from disabled to new connected installation
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 }
 
 // TestExecuteIntegrationAction_DisconnectedNoReplacement verifies that when the stored
 // installation is disabled and no replacement exists, the action is skipped gracefully
-func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedNoReplacement() {
+func TestExecuteIntegrationAction_DisconnectedNoReplacement(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -165,7 +171,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedNoRep
 		SetDefinitionID(emaildef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusDisabled).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -173,7 +179,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedNoRep
 		SetRefCode("CTL-DISCONNECTED-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -186,7 +192,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedNoRep
 		"ownerId":    orgID,
 		"to":         "disconnected@example.com",
 	})
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	params := workflows.IntegrationActionParams{
 		InstallationID: disconnectedIntegration.ID,
@@ -195,7 +201,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedNoRep
 		Config:         configBytes,
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeIntegration.String(),
@@ -205,20 +211,21 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_DisconnectedNoRep
 
 	// Should succeed (skip gracefully) rather than error
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// No integration runs should have been created
 	runs, err := s.client.IntegrationRun.Query().
 		Where(integrationrun.IntegrationIDEQ(disconnectedIntegration.ID)).
 		All(seedCtx)
-	s.Require().NoError(err)
-	s.Require().Len(runs, 0)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(runs, 0))
 }
 
 // TestExecuteSendEmail_DisconnectedFallsBackToRuntime verifies that when an email template
 // references a disabled integration, dispatchSendEmail falls through to the runtime
 // dispatch path and successfully sends the email
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DisconnectedFallsBackToRuntime() {
+func TestExecuteSendEmail_DisconnectedFallsBackToRuntime(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -231,7 +238,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DisconnectedFallsBackToRu
 		SetDefinitionID(emaildef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusDisabled).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	// Create an email template that references the disabled integration
 	templateKey := "integ-disconnected-fallback-" + ulid.Make().String()
@@ -250,11 +257,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DisconnectedFallsBackToRu
 		}).
 		SetActive(true).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	defer func() {
+	t.Cleanup(func() {
 		_, _ = s.client.EmailTemplate.Delete().Where().Exec(seedCtx)
-	}()
+	})
 
 	s.clearEmailState()
 
@@ -264,7 +271,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DisconnectedFallsBackToRu
 		SetRefCode("CTL-FALLBACK-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -284,22 +291,23 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DisconnectedFallsBackToRu
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	// The email should have been sent via runtime dispatch (not the disabled integration)
 	msgs := s.mockEmailSender().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal([]string{"fallback@example.com"}, msgs[0].To)
-	s.Equal("Fallback Subject", msgs[0].Subject)
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.DeepEqual([]string{"fallback@example.com"}, msgs[0].To))
+	assert.Check(t, is.Equal("Fallback Subject", msgs[0].Subject))
 }
 
 // TestExecuteIntegrationAction_SlackMessageSendWithTemplate verifies that an integration action
 // targeting Slack message.send with a template reference loads the notification template from
 // the database, merges its defaults into the operation config, and delivers the message
 // through the mock Slack API
-func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackMessageSendWithTemplate() {
+func TestExecuteIntegrationAction_SlackMessageSendWithTemplate(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -310,8 +318,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackMessageSendW
 		SetDefinitionID(slackdef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NoError(s.integrationsRT.ReconcileCredential(seedCtx, slackIntegration, slackdef.MockBotTokenConnection, slackdef.MockBotTokenCredential()))
+	assert.NilError(t, err)
+	assert.NilError(t, s.integrationsRT.ReconcileCredential(seedCtx, slackIntegration, slackdef.MockBotTokenConnection, slackdef.MockBotTokenCredential()))
 
 	templateKey := "slack-tpl-" + ulid.Make().String()
 
@@ -329,11 +337,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackMessageSendW
 		}).
 		SetActive(true).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	defer func() {
+	t.Cleanup(func() {
 		_, _ = s.client.NotificationTemplate.Delete().Where().Exec(seedCtx)
-	}()
+	})
 
 	s.mockSlackRecorder().Reset()
 
@@ -343,7 +351,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackMessageSendW
 		SetRefCode("CTL-SLACKTPL-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -354,7 +362,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackMessageSendW
 	configBytes, err := json.Marshal(map[string]any{
 		"templateId": template.ID,
 	})
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	params := workflows.IntegrationActionParams{
 		InstallationID: slackIntegration.ID,
@@ -363,7 +371,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackMessageSendW
 		Config:         configBytes,
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeIntegration.String(),
@@ -372,19 +380,20 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackMessageSendW
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	msgs := s.mockSlackRecorder().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal("C-FROM-TEMPLATE", msgs[0].Channel)
-	s.Equal("Hello from template defaults", msgs[0].Text)
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.Equal("C-FROM-TEMPLATE", msgs[0].Channel))
+	assert.Check(t, is.Equal("Hello from template defaults", msgs[0].Text))
 }
 
 // TestExecuteIntegrationAction_SlackTemplateMergesOverrides verifies that explicit config
 // fields override template defaults when both are provided
-func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackTemplateMergesOverrides() {
+func TestExecuteIntegrationAction_SlackTemplateMergesOverrides(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 	seedCtx := s.SeedContext(userID, orgID)
@@ -395,8 +404,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackTemplateMerg
 		SetDefinitionID(slackdef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NoError(s.integrationsRT.ReconcileCredential(seedCtx, slackIntegration, slackdef.MockBotTokenConnection, slackdef.MockBotTokenCredential()))
+	assert.NilError(t, err)
+	assert.NilError(t, s.integrationsRT.ReconcileCredential(seedCtx, slackIntegration, slackdef.MockBotTokenConnection, slackdef.MockBotTokenCredential()))
 
 	templateKey := "slack-override-" + ulid.Make().String()
 
@@ -414,11 +423,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackTemplateMerg
 		}).
 		SetActive(true).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	defer func() {
+	t.Cleanup(func() {
 		_, _ = s.client.NotificationTemplate.Delete().Where().Exec(seedCtx)
-	}()
+	})
 
 	s.mockSlackRecorder().Reset()
 
@@ -428,7 +437,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackTemplateMerg
 		SetRefCode("CTL-SLACKOVERRIDE-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -440,7 +449,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackTemplateMerg
 		"templateId": template.ID,
 		"text":       "override text",
 	})
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	params := workflows.IntegrationActionParams{
 		InstallationID: slackIntegration.ID,
@@ -449,7 +458,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackTemplateMerg
 		Config:         configBytes,
 	}
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeIntegration.String(),
@@ -458,12 +467,12 @@ func (s *WorkflowEngineTestSuite) TestExecuteIntegrationAction_SlackTemplateMerg
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 
 	msgs := s.mockSlackRecorder().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal("C-DEFAULT", msgs[0].Channel, "channel should come from template defaults")
-	s.Equal("override text", msgs[0].Text, "text should be overridden by config")
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.Equal("C-DEFAULT", msgs[0].Channel), "channel should come from template defaults")
+	assert.Check(t, is.Equal("override text", msgs[0].Text), "text should be overridden by config")
 }

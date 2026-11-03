@@ -257,6 +257,10 @@ const (
 	cacheRefreshParam          = "fresh"
 	cacheRefreshValue          = "1"
 	cacheRefreshMaxRetries     = 3
+)
+
+// cache refresh retry backoff, variables so tests can shorten the waits
+var (
 	cacheRefreshInitialBackoff = 3 * time.Second
 	cacheRefreshMaxBackoff     = 30 * time.Second
 )
