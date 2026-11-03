@@ -506,16 +506,8 @@ func TestQueryTasksPaginationDueDate(t *testing.T) {
 	// create a bunch to test the pagination with different users
 	// to ensure we are paginating correctly when viewing as org admin
 	numTasks := 95
-	org1TaskIDs := []string{}
-	org2TaskIDs := []string{}
-	for range numTasks {
-		t1 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg.Owner.UserCtx, t)
-		t2 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg.Member.UserCtx, t)
-		t3 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg.Admin.UserCtx, t)
-		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID, t3.ID)
-
-		t4 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg2.Owner.UserCtx, t)
-		org2TaskIDs = append(org2TaskIDs, t4.ID)
+	for _, ctx := range []context.Context{localTestOrg.Owner.UserCtx, localTestOrg.Member.UserCtx, localTestOrg.Admin.UserCtx, localTestOrg2.Owner.UserCtx} {
+		(&th.TaskBuilder{Client: suite.Client, DueFunc: getFutureDate}).MustNewBulk(ctx, t, numTasks)
 	}
 
 	var startCursorDue *string
@@ -695,15 +687,8 @@ func TestQueryTasksPaginationByCreatedDate(t *testing.T) {
 	viewOnlyUserCtx := localTestOrg.Member.UserCtx
 
 	numTasks := 93
-	org1TaskIDs := []string{}
-	org2TaskIDs := []string{}
-	for range numTasks {
-		t1 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(testUser.UserCtx, t)
-		t2 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(viewOnlyUserCtx, t)
-		org1TaskIDs = append(org1TaskIDs, t1.ID, t2.ID)
-
-		t4 := (&th.TaskBuilder{Client: suite.Client, Due: getFutureDate()}).MustNew(localTestOrg2.Owner.UserCtx, t)
-		org2TaskIDs = append(org2TaskIDs, t4.ID)
+	for _, ctx := range []context.Context{testUser.UserCtx, viewOnlyUserCtx, localTestOrg2.Owner.UserCtx} {
+		(&th.TaskBuilder{Client: suite.Client, DueFunc: getFutureDate}).MustNewBulk(ctx, t, numTasks)
 	}
 
 	var startCursorDue *string

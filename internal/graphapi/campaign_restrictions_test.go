@@ -72,15 +72,17 @@ func TestCampaignTargetLimit(t *testing.T) {
 		assert.Assert(t, strings.Contains(err.Error(), "500"), "error should mention 500 target limit")
 	})
 
-	t.Run("accepts exactly 500 targets", func(t *testing.T) {
+	t.Run("accepts exactly 500 targets once nil targets are compacted", func(t *testing.T) {
 		t.Parallel()
 
-		targets := make([]*testclient.CreateCampaignTargetInput, 500)
+		targets := make([]*testclient.CreateCampaignTargetInput, 502)
 		for i := range targets {
 			targets[i] = &testclient.CreateCampaignTargetInput{
 				Email: fmt.Sprintf("target%d-%s@test.example", i, uid),
 			}
 		}
+		targets[0] = nil
+		targets[1] = nil
 
 		input := testclient.CreateCampaignWithTargetsInput{
 			Campaign: &testclient.CreateCampaignInput{
@@ -97,31 +99,6 @@ func TestCampaignTargetLimit(t *testing.T) {
 		assert.Check(t, is.Equal(500, len(resp.CreateCampaignWithTargets.CampaignTargets)))
 
 		cleanupCampaignWithTargets(t, resp.CreateCampaignWithTargets.Campaign.ID, resp.CreateCampaignWithTargets.CampaignTargets)
-	})
-
-	t.Run("nil targets allowed", func(t *testing.T) {
-		t.Parallel()
-
-		targets := make([]*testclient.CreateCampaignTargetInput, 502)
-		for i := range targets {
-			targets[i] = &testclient.CreateCampaignTargetInput{
-				Email: fmt.Sprintf("target%d-%s@test.example", i, uid),
-			}
-		}
-		targets[0] = nil
-		targets[1] = nil
-
-		input := testclient.CreateCampaignWithTargetsInput{
-			Campaign: &testclient.CreateCampaignInput{
-				Name:                fmt.Sprintf("campaign-compacted-%s", uid),
-				AssessmentID:        lo.ToPtr(assessmentID),
-				RecurrenceFrequency: lo.ToPtr(enums.FrequencyYearly),
-			},
-			Targets: targets,
-		}
-
-		_, err := suite.Client.API.CreateCampaignWithTargets(th.SharedTestUser1.UserCtx, input)
-		assert.NilError(t, err)
 	})
 }
 
