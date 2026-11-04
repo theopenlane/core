@@ -51,7 +51,7 @@ func TestOrganizationRolesHandler(t *testing.T) {
 }
 
 func TestOrganizationRolesAssignmentHandler(t *testing.T) {
-	suite := suite.setupParallelTest(t)
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	suite.registerRouteOnce("POST", "account/organization-roles", suite.h.AssignOrganizationRolesHandler)
 	suite.registerRouteOnce("DELETE", "account/organization-roles", suite.h.DeleteOrganizationRolesHandler)
@@ -237,7 +237,7 @@ func TestOrganizationRolesAssignmentHandler(t *testing.T) {
 }
 
 func TestAccountRolesMeHandler(t *testing.T) {
-	suite := suite.setupParallelTest(t)
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	suite.registerRouteOnce("GET", "account/roles/me", suite.h.AccountRolesMeHandler)
 

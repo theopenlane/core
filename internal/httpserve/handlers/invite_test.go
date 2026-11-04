@@ -25,7 +25,7 @@ import (
 )
 
 func TestOrgInviteAcceptHandler(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers().withAPIClient()
 
 	// add handler
 	suite.registerTestHandler("GET", "invite", suite.h.OrganizationInviteAccept)
@@ -308,7 +308,7 @@ func TestOrgInviteAcceptHandler_ExistingMemberNoReInvitation(t *testing.T) {
 }
 
 func TestOrgInviteAcceptHandler_OwnerRoleBecomesSuperAdmin(t *testing.T) {
-	suite := suite.setupParallelTest(t)
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	suite.registerTestHandler(http.MethodGet, "invite", suite.h.OrganizationInviteAccept)
 

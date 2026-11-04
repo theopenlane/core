@@ -255,7 +255,7 @@ func TestSwitchHandlerSSOExemptMember(t *testing.T) {
 }
 
 func TestInviteGrantsSSOExempt(t *testing.T) {
-	suite := suite.setupParallelTest(t)
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)

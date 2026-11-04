@@ -64,7 +64,7 @@ func (suite *HandlerTestSuite) createConsentingOrg(ctx context.Context) *ent.Org
 }
 
 func TestSupportAccessLoginAndCallback(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers()
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 	suite.registerTestHandler("POST", "v1/support/callback", suite.h.SupportCallbackHandler)
@@ -171,7 +171,7 @@ func TestSupportAccessLoginAndCallback(t *testing.T) {
 }
 
 func TestSupportAccessRejectsWrongPassword(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers()
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 
@@ -202,7 +202,7 @@ func TestSupportAccessRejectsWrongPassword(t *testing.T) {
 }
 
 func TestSupportAccessRejectsNonConsentingOrg(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers()
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 
@@ -246,7 +246,7 @@ func TestSupportAccessRejectsNonConsentingOrg(t *testing.T) {
 // TestSupportAccessRejectsDomainMismatch ensures the second factor rejects an individual outside the
 // configured domain even when the first factor and consent succeed
 func TestSupportAccessRejectsDomainMismatch(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers()
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 	suite.registerTestHandler("POST", "v1/support/callback", suite.h.SupportCallbackHandler)
@@ -384,7 +384,7 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 // TestSupportAccessCanQueryOrgData confirms the issued support token can read org-scoped data within the
 // consented organization, without any privacy bypass in the request context
 func TestSupportAccessCanQueryOrgData(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers()
 
 	original := suite.h.SupportAccessConfig
 	defer func() { suite.h.SupportAccessConfig = original }()
@@ -403,7 +403,7 @@ func TestSupportAccessCanQueryOrgData(t *testing.T) {
 // TestSupportAccessCanUpdateOrgData confirms the issued support token can mutate org-scoped data within
 // the consented organization, without any privacy bypass in the request context
 func TestSupportAccessCanUpdateOrgData(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers().withAPIClient()
 
 	original := suite.h.SupportAccessConfig
 	defer func() { suite.h.SupportAccessConfig = original }()

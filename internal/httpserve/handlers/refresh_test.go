@@ -28,7 +28,7 @@ import (
 )
 
 func TestRefreshHandler(t *testing.T) {
-	suite := suite.setupParallelTest(t)
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	// add modules for the user
 	modulesEnabled := []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule, models.CatalogEntityManagementModule}

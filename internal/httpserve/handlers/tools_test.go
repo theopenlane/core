@@ -345,6 +345,9 @@ func (suite *HandlerTestSuite) setupSuite() {
 
 	suite.db, err = entdb.NewTestClient(context.Background(), suite.tf, jobOpts, nil, opts)
 	coreutils.RequireNoError(suite.T(), err)
+
+	// shared users, tests that change them call withTestUsers for their own
+	suite.setupTestData(context.Background())
 }
 
 // setupTest returns a per-test copy of the suite for tests that assert on shared state
@@ -361,9 +364,8 @@ func (suite *HandlerTestSuite) setupTest(t *testing.T) *HandlerTestSuite {
 	assert.NilError(t, ts.db.Job.TruncateRiverTables(context.Background()))
 
 	// reset mock email sender so messages don't bleed across tests
+	ts.WaitForEvents()
 	ts.mockEmailSender().Reset()
-
-	ts.setupTestData(context.Background())
 
 	return ts
 }
@@ -373,13 +375,27 @@ func (suite *HandlerTestSuite) setupTest(t *testing.T) *HandlerTestSuite {
 func (suite *HandlerTestSuite) setupParallelTest(t *testing.T) *HandlerTestSuite {
 	t.Parallel()
 
-	ts := suite.newTestSuite(t)
-	ts.setupTestData(context.Background())
-
-	return ts
+	return suite.newTestSuite(t)
 }
 
-// newTestSuite copies the shared suite and builds the per-test router, handler, and clients
+// withTestUsers replaces the shared testUser1 and testUser2 with fresh users for tests that change them
+func (suite *HandlerTestSuite) withTestUsers() *HandlerTestSuite {
+	suite.setupTestData(context.Background())
+
+	return suite
+}
+
+// withAPIClient adds the graph client for tests that use suite.api
+func (suite *HandlerTestSuite) withAPIClient() *HandlerTestSuite {
+	var err error
+
+	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
+	assert.NilError(suite.T(), err)
+
+	return suite
+}
+
+// newTestSuite copies the shared suite and builds the per-test router and handler
 func (suite *HandlerTestSuite) newTestSuite(t *testing.T) *HandlerTestSuite {
 	ts := *suite
 	ts.t = t
@@ -388,10 +404,6 @@ func (suite *HandlerTestSuite) newTestSuite(t *testing.T) *HandlerTestSuite {
 	var err error
 
 	ts.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
-	assert.NilError(t, err)
-
-	// add the client
-	ts.api, err = coreutils.TestClient(ts.db, ts.objectStore)
 	assert.NilError(t, err)
 
 	// setup runtime router

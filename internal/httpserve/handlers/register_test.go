@@ -28,7 +28,7 @@ import (
 )
 
 func TestRegisterHandler(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers().withAPIClient()
 
 	// Register test handler
 	suite.registerTestHandler("POST", "register", suite.h.RegisterHandler)

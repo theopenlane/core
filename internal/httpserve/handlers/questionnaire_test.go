@@ -1068,7 +1068,7 @@ func TestSubmitQuestionnaireAlreadyCompleted(t *testing.T) {
 }
 
 func TestSubmitQuestionnaireCaller(t *testing.T) {
-	suite := suite.setupParallelTest(t)
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	suite.registerTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 

@@ -16,7 +16,7 @@ import (
 )
 
 func TestAccountFeaturesHandler(t *testing.T) {
-	suite := suite.setupParallelTest(t)
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	// add handler
 	suite.registerTestHandler("POST", "account/features", suite.h.AccountFeaturesHandler)

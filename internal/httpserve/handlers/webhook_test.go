@@ -68,7 +68,7 @@ func (b *webhookBinder) Bind(c echo.Context, i interface{}) error {
 }
 
 func TestWebhookReceiverHandler(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers()
 
 	ensureSecret := func(version string) {
 		if version == "" {

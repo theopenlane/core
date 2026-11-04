@@ -37,7 +37,7 @@ import (
 )
 
 func TestWebfingerHandler(t *testing.T) {
-	suite := suite.setupParallelTest(t)
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
@@ -85,7 +85,7 @@ func TestWebfingerHandler(t *testing.T) {
 }
 
 func TestWebfingerHandlerTFAOnly(t *testing.T) {
-	suite := suite.setupParallelTest(t)
+	suite := suite.setupParallelTest(t).withTestUsers()
 
 	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
