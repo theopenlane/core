@@ -34,7 +34,7 @@ func (r *mutationResolver) seedDemoData(ctx context.Context, input model.SeedDem
 		return nil, generated.ErrPermissionDenied
 	}
 
-	rt, err := objectstoreRuntime(ctx)
+	rt, err := objectstoreRuntime(ctx, ErrDemoDataUnavailable)
 	if err != nil {
 		return nil, err
 	}
