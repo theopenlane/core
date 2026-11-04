@@ -38,7 +38,7 @@ var (
 	}
 )
 
-func (s *SchemaInfo) functionContainsCheckCreateAccess(body *ast.BlockStmt) {
+func (s *parsedSchema) functionContainsCheckCreateAccess(body *ast.BlockStmt) {
 	hasInternalPolicy := false
 
 	inQueryRules := false

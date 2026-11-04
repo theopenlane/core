@@ -89,8 +89,9 @@ tasks:
       - task: generate:onboarding:smart
       - task: generate:core
       - task: generate:catalog:smart
-      - task: fga:generate
     cmds:
+      # after generate:core, which writes the schema snapshot it reads
+      - task: fga:generate
       - task: generate:openapi:smart
       - task: tidy
 
@@ -146,6 +147,7 @@ tasks:
       - internal/ent/generate/templates/**/*
       - internal/ent/taskrules/**/*.go
       - common/enums/**/*.go
+      - fga/generate/schemaparse/**/*.go
       - exclude: '**/*_test.go'
     generates:
       - internal/ent/generated/**/*.go

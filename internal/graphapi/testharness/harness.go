@@ -299,6 +299,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		FetchCooldown:        time.Millisecond,
 		FetchPollInterval:    10 * time.Millisecond, //nolint:mnd
 		WaitIdlePollInterval: 10 * time.Millisecond, //nolint:mnd
+		CompleteJobsInline:   true,
 	})
 	RequireNoError(t, err)
 

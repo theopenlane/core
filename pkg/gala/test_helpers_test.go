@@ -35,14 +35,15 @@ type TestGalaFixture struct {
 type TestGalaOption func(*testGalaConfig)
 
 type testGalaConfig struct {
-	image             string
-	queueName         string
-	workerCount       int
-	maxRetries        int
-	expiryMins        int
-	startWorkers      bool
-	fetchCooldown     time.Duration
-	fetchPollInterval time.Duration
+	image              string
+	queueName          string
+	workerCount        int
+	maxRetries         int
+	expiryMins         int
+	startWorkers       bool
+	fetchCooldown      time.Duration
+	fetchPollInterval  time.Duration
+	completeJobsInline bool
 }
 
 // WithTestImage sets the docker image for the test database
@@ -101,6 +102,13 @@ func WithTestFetchPollInterval(d time.Duration) TestGalaOption {
 	}
 }
 
+// WithTestCompleteJobsInline completes finished jobs in the worker instead of on River's flush
+func WithTestCompleteJobsInline(inline bool) TestGalaOption {
+	return func(c *testGalaConfig) {
+		c.completeJobsInline = inline
+	}
+}
+
 // NewTestGala creates a fully initialized Gala instance backed by a real PostgreSQL database
 // for integration testing. The database container is automatically cleaned up when the test completes.
 func NewTestGala(t *testing.T, opts ...TestGalaOption) *TestGalaFixture {
@@ -128,13 +136,14 @@ func NewTestGala(t *testing.T, opts ...TestGalaOption) *TestGalaFixture {
 	)
 
 	galaApp, err := NewGala(ctx, Config{
-		ConnectionURI:     dbFixture.URI,
-		QueueName:         cfg.queueName,
-		WorkerCount:       cfg.workerCount,
-		MaxRetries:        cfg.maxRetries,
-		RunMigrations:     true,
-		FetchCooldown:     cfg.fetchCooldown,
-		FetchPollInterval: cfg.fetchPollInterval,
+		ConnectionURI:      dbFixture.URI,
+		QueueName:          cfg.queueName,
+		WorkerCount:        cfg.workerCount,
+		MaxRetries:         cfg.maxRetries,
+		RunMigrations:      true,
+		FetchCooldown:      cfg.fetchCooldown,
+		FetchPollInterval:  cfg.fetchPollInterval,
+		CompleteJobsInline: cfg.completeJobsInline,
 	})
 	if err != nil {
 		t.Fatalf("failed to create gala: %v", err)
