@@ -73,18 +73,20 @@ func TestLoginHandler(t *testing.T) {
 		confirmedUser: true,
 	})
 
-	orgSetting := suite.db.OrganizationSetting.Create().SetInput(
+	orgSetting, err := suite.db.OrganizationSetting.Create().SetInput(
 		generated.CreateOrganizationSettingInput{
 			AllowedEmailDomains: []string{"examples.com"}, // intentionally misspelled to ensure owner (validConfirmedUserRestrictedOrg) can still login
 		},
-	).SaveX(ctx)
+	).Save(ctx)
+	assert.NilError(t, err)
 
-	ssoorgSetting := suite.db.OrganizationSetting.Create().SetInput(
+	ssoorgSetting, err := suite.db.OrganizationSetting.Create().SetInput(
 		generated.CreateOrganizationSettingInput{
 			AllowedEmailDomains:           []string{"examples.com"}, // intentionally misspelled to ensure owner (validConfirmedUserRestrictedOrg) can still login
 			IdentityProviderLoginEnforced: func(b bool) *bool { return &b }(true),
 		},
-	).SaveX(ctx)
+	).Save(ctx)
+	assert.NilError(t, err)
 
 	input := generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -112,8 +114,10 @@ func TestLoginHandler(t *testing.T) {
 	internalCtx := auth.WithInternalOperationContext(validConfirmedUserRestrictedOrg.UserCtx)
 	internalCtx = ent.NewContext(internalCtx, suite.db)
 
-	org := suite.db.Organization.Create().SetInput(input).SaveX(internalCtx)
-	createdssoOrg := suite.db.Organization.Create().SetInput(ssoOrg).SaveX(internalCtx)
+	org, err := suite.db.Organization.Create().SetInput(input).Save(internalCtx)
+	assert.NilError(t, err)
+	createdssoOrg, err := suite.db.Organization.Create().SetInput(ssoOrg).Save(internalCtx)
+	assert.NilError(t, err)
 
 	ctxTargetOrg := auth.NewTestContextWithOrgID(validConfirmedUserRestrictedOrg.ID, createdssoOrg.ID)
 	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
@@ -123,35 +127,43 @@ func TestLoginHandler(t *testing.T) {
 	auditorOrgCtx = auth.WithInternalOperationContext(auditorOrgCtx)
 	auditorOrgCtx = ent.NewContext(auditorOrgCtx, suite.db)
 
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: createdssoOrg.ID,
 		UserID:         ssoMember.UserInfo.ID,
 		Role:           &enums.RoleMember,
-	}).ExecX(testUserCtx)
+	}).Exec(testUserCtx)
+	assert.NilError(t, err)
 
-	suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).ExecX(internalCtx)
+	err = suite.db.UserSetting.UpdateOneID(ssoMember.UserInfo.Edges.Setting.ID).SetDefaultOrgID(createdssoOrg.ID).Exec(internalCtx)
+	assert.NilError(t, err)
 
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         auditorUser.UserInfo.ID,
 		Role:           &enums.RoleAuditor,
-	}).ExecX(auditorOrgCtx)
+	}).Exec(auditorOrgCtx)
+	assert.NilError(t, err)
 
-	suite.db.UserSetting.UpdateOneID(auditorUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(internalCtx)
+	err = suite.db.UserSetting.UpdateOneID(auditorUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(internalCtx)
+	assert.NilError(t, err)
 
 	// update the user settings to have the default org set that is the domain restricted org
-	suite.db.UserSetting.UpdateOneID(validConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
-		SetDefaultOrgID(org.ID).ExecX(internalCtx)
+	err = suite.db.UserSetting.UpdateOneID(validConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
+		SetDefaultOrgID(org.ID).Exec(internalCtx)
+	assert.NilError(t, err)
 
-	suite.db.UserSetting.UpdateOneID(invalidConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
-		SetDefaultOrgID(org.ID).ExecX(internalCtx)
+	err = suite.db.UserSetting.UpdateOneID(invalidConfirmedUserRestrictedOrg.UserInfo.Edges.Setting.ID).
+		SetDefaultOrgID(org.ID).Exec(internalCtx)
+	assert.NilError(t, err)
 
 	// update the user settings to have the default org set to an inactive subscription
-	suite.db.OrgSubscription.Update().Where(orgsubscription.OwnerID(userWithInactiveDefaultOrg.OrganizationID)).
-		SetActive(false).ExecX(internalCtx)
+	err = suite.db.OrgSubscription.Update().Where(orgsubscription.OwnerID(userWithInactiveDefaultOrg.OrganizationID)).
+		SetActive(false).Exec(internalCtx)
+	assert.NilError(t, err)
 
-	suite.db.UserSetting.UpdateOneID(userWithInactiveDefaultOrg.UserInfo.Edges.Setting.ID).
-		SetDefaultOrgID(userWithInactiveDefaultOrg.OrganizationID).ExecX(internalCtx)
+	err = suite.db.UserSetting.UpdateOneID(userWithInactiveDefaultOrg.UserInfo.Edges.Setting.ID).
+		SetDefaultOrgID(userWithInactiveDefaultOrg.OrganizationID).Exec(internalCtx)
+	assert.NilError(t, err)
 
 	allModulesWithSignup := []any{
 		models.CatalogBaseModule.String(),
@@ -326,14 +338,16 @@ func TestLoginHandlerSSOEnforced(t *testing.T) {
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
 	assert.NilError(t, err)
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
-	}).SaveX(ownerCtx)
+	}).Save(ownerCtx)
+	assert.NilError(t, err)
 
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
-		ExecX(ownerCtx)
+		Exec(ownerCtx)
+	assert.NilError(t, err)
 
 	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
@@ -347,13 +361,15 @@ func TestLoginHandlerSSOEnforced(t *testing.T) {
 	ctxTargetOrg = auth.WithInternalOperationContext(ctxTargetOrg)
 	testUserCtx := ent.NewContext(ctxTargetOrg, suite.db)
 
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	err = suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         testUser.UserInfo.ID,
 		Role:           &enums.RoleMember, // default to member
-	}).ExecX(testUserCtx)
+	}).Exec(testUserCtx)
+	assert.NilError(t, err)
 
-	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testUserCtx)
+	err = suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(testUserCtx)
+	assert.NilError(t, err)
 
 	// Attempt login for the non-owner user (should fail due to SSO enforcement)
 	body, _ := json.Marshal(apimodels.LoginRequest{Username: testUser.UserInfo.Email, Password: "$uper$ecretP@ssword"})
@@ -384,19 +400,22 @@ func TestLoginHandlerSSOEnforcedOwnerBypass(t *testing.T) {
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
 	assert.NilError(t, err)
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
-	}).SaveX(ownerCtx)
+	}).Save(ownerCtx)
+	assert.NilError(t, err)
 
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
-		ExecX(ownerCtx)
+		Exec(ownerCtx)
+	assert.NilError(t, err)
 
 	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 	// OrganizationCreate hook automatically adds the creating user as the organization owner
 
-	suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(ownerCtx)
+	err = suite.db.UserSetting.UpdateOneID(ownerUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(ownerCtx)
+	assert.NilError(t, err)
 
 	body, _ := json.Marshal(apimodels.LoginRequest{Username: ownerUser.UserInfo.Email, Password: "0wn3rP@ssw0rd"})
 	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
@@ -429,21 +448,25 @@ func TestLoginHandlerTFAEnforced(t *testing.T) {
 	testCtx = ent.NewContext(testCtx, suite.db)
 
 	// Create organization setting with TFA enforced
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		MultifactorAuthEnforced: func(b bool) *bool { return &b }(true),
-	}).SaveX(testCtx)
+	}).Save(testCtx)
+	assert.NilError(t, err)
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
-	}).SaveX(testCtx)
+	}).Save(testCtx)
+	assert.NilError(t, err)
 
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
-		ExecX(testCtx)
+		Exec(testCtx)
+	assert.NilError(t, err)
 
 	// Set user's default org to the TFA-enforced org
-	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testCtx)
+	err = suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(testCtx)
+	assert.NilError(t, err)
 
 	// Attempt login
 	body, _ := json.Marshal(apimodels.LoginRequest{Username: testUser.UserInfo.Email, Password: "T3stP@ssw0rd"})
@@ -494,21 +517,25 @@ func TestLoginHandlerTFAEnforcedUserHasTFA(t *testing.T) {
 	testCtx = ent.NewContext(testCtx, suite.db)
 
 	// Create organization setting with TFA enforced
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		MultifactorAuthEnforced: func(b bool) *bool { return &b }(true),
-	}).SaveX(testCtx)
+	}).Save(testCtx)
+	assert.NilError(t, err)
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
-	}).SaveX(testCtx)
+	}).Save(testCtx)
+	assert.NilError(t, err)
 
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	err = suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetOrganizationID(org.ID).
-		ExecX(testCtx)
+		Exec(testCtx)
+	assert.NilError(t, err)
 
 	// Set user's default org to the TFA-enforced org
-	suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(testCtx)
+	err = suite.db.UserSetting.UpdateOneID(testUser.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(testCtx)
+	assert.NilError(t, err)
 
 	// Attempt login
 	body, _ := json.Marshal(apimodels.LoginRequest{Username: testUser.UserInfo.Email, Password: "T3stP@ssw0rd"})

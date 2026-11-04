@@ -263,7 +263,7 @@ func TestFinishWebauthnLogin(t *testing.T) {
 }
 
 func TestPasskeysRespectTFAEnforcement(t *testing.T) {
-	suite.setupTest(t)
+	suite := suite.setupParallelTest(t)
 
 	suite.enableTestWebauthn(t)
 	suite.registerTestHandler(http.MethodPost, "authentication/options", suite.h.BeginWebauthnLogin)
@@ -277,12 +277,7 @@ func TestPasskeysRespectTFAEnforcement(t *testing.T) {
 
 	passkeyCredential := suite.createTestPasskey(t, testUser)
 
-	setting := suite.db.TFASetting.UpdateOne(suite.db.TFASetting.Create().
-		SetTotpAllowed(true).
-		SetOwnerID(testUser.ID).
-		SaveX(testUser.UserCtx)).
-		SetVerified(true).
-		SaveX(testUser.UserCtx)
+	setting := suite.verifiedTFASetting(t, testUser)
 
 	rec := suite.loginWithPasskey(t, testUser, passkeyCredential)
 	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))

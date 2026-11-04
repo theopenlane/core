@@ -150,7 +150,7 @@ func TestOauthRegister(t *testing.T) {
 		orgID, ok := accessTokenClaims(t, out.AccessToken)["org"].(string)
 		assert.Assert(t, ok)
 
-		ctx := generated.NewContext(auth.WithInternalOperationContext(testUser1.UserCtx), suite.db)
+		ctx := generated.NewContext(auth.WithInternalOperationContext(suite.testUser1.UserCtx), suite.db)
 
 		user, err := suite.db.User.Query().Where(user.Email(email)).WithSetting().Only(ctx)
 		assert.NilError(t, err)
