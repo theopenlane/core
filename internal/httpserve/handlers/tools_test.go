@@ -364,7 +364,6 @@ func (suite *HandlerTestSuite) setupTest(t *testing.T) *HandlerTestSuite {
 	assert.NilError(t, ts.db.Job.TruncateRiverTables(context.Background()))
 
 	// reset mock email sender so messages don't bleed across tests
-	ts.WaitForEvents()
 	ts.mockEmailSender().Reset()
 
 	return ts

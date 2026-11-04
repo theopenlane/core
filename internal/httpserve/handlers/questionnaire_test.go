@@ -945,7 +945,7 @@ func TestSubmitQuestionnaire(t *testing.T) {
 }
 
 func TestSubmitQuestionnaireAlreadyCompleted(t *testing.T) {
-	suite := suite.setupTest(t)
+	suite := suite.setupTest(t).withTestUsers()
 
 	suite.registerQuestionnaireTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
 
