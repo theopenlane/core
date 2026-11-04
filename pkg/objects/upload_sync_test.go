@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
 )
 
 var testMutex sync.Mutex
@@ -167,8 +167,8 @@ func TestUploadSync_MultipleWaiters(t *testing.T) {
 		}
 	}
 
-	assert.True(t, waiter1Received)
-	assert.True(t, waiter2Received)
+	assert.Check(t, waiter1Received)
+	assert.Check(t, waiter2Received)
 }
 
 func TestUploadSync_NoUploads(t *testing.T) {

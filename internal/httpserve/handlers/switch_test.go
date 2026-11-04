@@ -8,9 +8,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
@@ -19,10 +16,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
-	t := suite.T()
+func TestSwitchHandlerSSOEnforced(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
@@ -38,7 +37,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
 	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org := suite.db.Organization.Create().SetInput(ent.CreateOrganizationInput{
 		Name:      ulids.New().String(),
@@ -76,11 +75,11 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	// this is expected since the sso url will be generated
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
-	t := suite.T()
+func TestSwitchHandlerTFAEnforced(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
@@ -135,16 +134,16 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforced() {
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	// Should return success with NeedsTFA flag
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 	var out models.SwitchOrganizationResponse
 	err := json.NewDecoder(rec.Body).Decode(&out)
-	assert.NoError(t, err)
-	assert.True(t, out.Success)
-	assert.True(t, out.NeedsTFA) // Should indicate TFA is needed
+	assert.Check(t, err)
+	assert.Check(t, out.Success)
+	assert.Check(t, out.NeedsTFA) // Should indicate TFA is needed
 }
 
-func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
-	t := suite.T()
+func TestSwitchHandlerTFAEnforcedUserHasTFA(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
@@ -199,17 +198,17 @@ func (suite *HandlerTestSuite) TestSwitchHandlerTFAEnforcedUserHasTFA() {
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
 	// Should succeed normally since user has TFA
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 	var out models.SwitchOrganizationResponse
 	err := json.NewDecoder(rec.Body).Decode(&out)
-	assert.NoError(t, err)
-	assert.True(t, out.Success)
-	assert.False(t, out.NeedsTFA)       // Should not require TFA setup
-	assert.NotEmpty(t, out.AccessToken) // Should have new auth data
+	assert.Check(t, err)
+	assert.Check(t, out.Success)
+	assert.Check(t, !out.NeedsTFA)            // Should not require TFA setup
+	assert.Check(t, len(out.AccessToken) > 0) // Should have new auth data
 }
 
-func (suite *HandlerTestSuite) TestSwitchHandlerRequiresInteractiveUser() {
-	t := suite.T()
+func TestSwitchHandlerRequiresInteractiveUser(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
@@ -249,7 +248,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerRequiresInteractiveUser() {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			body, err := json.Marshal(models.SwitchOrganizationRequest{TargetOrganizationID: user.PersonalOrgID})
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			req := httptest.NewRequest(http.MethodPost, "/switch", strings.NewReader(string(body)))
 			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -257,7 +256,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerRequiresInteractiveUser() {
 			rec := httptest.NewRecorder()
 			suite.e.ServeHTTP(rec, req.WithContext(auth.WithCaller(context.Background(), tc.caller)))
 
-			assert.Equal(t, http.StatusUnauthorized, rec.Code)
+			assert.Check(t, is.Equal(http.StatusUnauthorized, rec.Code))
 		})
 	}
 }

@@ -186,6 +186,7 @@ func TestMutationCreateReport(t *testing.T) {
 }
 
 func TestMutationReport_Member(t *testing.T) {
+	t.Parallel()
 
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 
@@ -321,6 +322,7 @@ func TestMutationDeleteReport(t *testing.T) {
 }
 
 func TestMutationReport_AddGroup(t *testing.T) {
+	t.Parallel()
 
 	newUser := suite.UserBuilder(context.Background(), t)
 	t.Cleanup(func() {
@@ -402,6 +404,7 @@ func TestMutationReport_AddGroup(t *testing.T) {
 }
 
 func TestMutationReport_Group(t *testing.T) {
+	t.Parallel()
 
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 
@@ -498,6 +501,8 @@ func TestMutationReport_Group(t *testing.T) {
 }
 
 func TestMutationReportGroup_Permission(t *testing.T) {
+	t.Parallel()
+
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 	t.Cleanup(func() {
 		th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t)

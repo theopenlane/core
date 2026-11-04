@@ -13,7 +13,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/metrics"
@@ -81,7 +82,7 @@ func TestHandleEmitRecordsError(t *testing.T) {
 	observer.handleEmitError(ctx, op, Fields{"k": "v"}, topic, errors.New("emit failed"))
 
 	after := testutil.ToFloat64(metrics.WorkflowEmitErrorsTotal.WithLabelValues(topic, string(op.Origin)))
-	require.Equal(t, before+1, after)
+	assert.Assert(t, is.Equal(before+1, after))
 }
 
 func TestBeginListenerTopicAppliesSpec(t *testing.T) {

@@ -5,15 +5,16 @@ package auth_test
 import (
 	"context"
 	"crypto/rand"
+	"math"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/redis/go-redis/v9"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	iamauth "github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
@@ -28,14 +29,14 @@ func TestSessionFallbackUserID(t *testing.T) {
 		ctx := iamauth.WithCaller(context.Background(), &iamauth.Caller{SubjectID: subjectID})
 
 		userID, ok := auth.SessionFallbackUserID(ctx)
-		assert.True(t, ok)
-		assert.Equal(t, subjectID, userID)
+		assert.Check(t, ok)
+		assert.Check(t, is.Equal(subjectID, userID))
 	})
 
 	t.Run("declines without a caller", func(t *testing.T) {
 		userID, ok := auth.SessionFallbackUserID(context.Background())
-		assert.False(t, ok)
-		assert.Empty(t, userID)
+		assert.Check(t, !ok)
+		assert.Check(t, is.Len(userID, 0))
 	})
 
 	t.Run("declines an impersonated caller", func(t *testing.T) {
@@ -45,16 +46,16 @@ func TestSessionFallbackUserID(t *testing.T) {
 		})
 
 		userID, ok := auth.SessionFallbackUserID(ctx)
-		assert.False(t, ok)
-		assert.Empty(t, userID)
+		assert.Check(t, !ok)
+		assert.Check(t, is.Len(userID, 0))
 	})
 
 	t.Run("declines a subject that is not a user id", func(t *testing.T) {
 		ctx := iamauth.WithCaller(context.Background(), &iamauth.Caller{SubjectID: "anon_trustcenter_" + ulids.New().String()})
 
 		userID, ok := auth.SessionFallbackUserID(ctx)
-		assert.False(t, ok)
-		assert.Empty(t, userID)
+		assert.Check(t, !ok)
+		assert.Check(t, is.Len(userID, 0))
 	})
 }
 
@@ -69,10 +70,10 @@ func newSessionMiddlewareConfig(t *testing.T, client *redis.Client, opts ...sess
 	blockKey := make([]byte, 32)
 
 	_, err := rand.Read(hashKey)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = rand.Read(blockKey)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	sm := sessions.NewCookieStore[map[string]any](cc, hashKey, blockKey)
 
@@ -139,7 +140,7 @@ func sessionIDFromCookie(t *testing.T, sc sessions.SessionConfig, cookie *http.C
 	req.AddCookie(cookie)
 
 	session, err := sc.SessionManager.Get(req, sc.CookieConfig.Name)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return sc.SessionManager.GetSessionIDFromCookie(session)
 }
@@ -150,10 +151,10 @@ func mintedCookie(t *testing.T, sc sessions.SessionConfig, userID string) *http.
 
 	rec := httptest.NewRecorder()
 	_, err := sc.CreateAndStoreSession(context.Background(), rec, userID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	cookies := sessionCookies(rec, sc.CookieConfig.Name)
-	require.Len(t, cookies, 1)
+	assert.Assert(t, is.Len(cookies, 1))
 
 	return cookies[0]
 }
@@ -169,21 +170,21 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 		userID := ulids.New().String()
 
 		rec, err := runSessionMiddleware(t, sc, jwtCaller(userID))
-		require.NoError(t, err)
-		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 		cookies := sessionCookies(rec, sc.CookieConfig.Name)
-		require.Len(t, cookies, 1)
+		assert.Assert(t, is.Len(cookies, 1))
 
 		sessionID := sessionIDFromCookie(t, sc, cookies[0])
 
 		stored, err := client.Get(ctx, sessionID).Result()
-		require.NoError(t, err)
-		assert.Equal(t, userID, stored)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(userID, stored))
 
 		ttl, err := client.TTL(ctx, sessionID).Result()
-		require.NoError(t, err)
-		assert.InDelta(t, sc.CookieConfig.MaxAge, ttl.Seconds(), 1)
+		assert.NilError(t, err)
+		assert.Check(t, math.Abs(float64(sc.CookieConfig.MaxAge)-ttl.Seconds()) <= 1)
 	})
 
 	t.Run("replaces a session that idled out of the store", func(t *testing.T) {
@@ -195,15 +196,15 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 
 		stale := mintedCookie(t, sc, userID)
 		staleID := sessionIDFromCookie(t, sc, stale)
-		require.NoError(t, client.Del(ctx, staleID).Err())
+		assert.NilError(t, client.Del(ctx, staleID).Err())
 
 		rec, err := runSessionMiddleware(t, sc, jwtCaller(userID), stale)
-		require.NoError(t, err)
-		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 		cookies := sessionCookies(rec, sc.CookieConfig.Name)
-		require.Len(t, cookies, 1)
-		assert.NotEqual(t, staleID, sessionIDFromCookie(t, sc, cookies[0]))
+		assert.Assert(t, is.Len(cookies, 1))
+		assert.Check(t, staleID != sessionIDFromCookie(t, sc, cookies[0]))
 	})
 
 	t.Run("replaces a session cookie it cannot decode", func(t *testing.T) {
@@ -216,9 +217,9 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 		garbage := &http.Cookie{Name: sc.CookieConfig.Name, Value: "not-a-session"}
 
 		rec, err := runSessionMiddleware(t, sc, jwtCaller(userID), garbage)
-		require.NoError(t, err)
-		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Len(t, sessionCookies(rec, sc.CookieConfig.Name), 1)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(http.StatusOK, rec.Code))
+		assert.Check(t, is.Len(sessionCookies(rec, sc.CookieConfig.Name), 1))
 	})
 
 	t.Run("survives a stale duplicate cookie shadowing a live one", func(t *testing.T) {
@@ -229,13 +230,13 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 		userID := ulids.New().String()
 
 		stale := mintedCookie(t, sc, userID)
-		require.NoError(t, client.Del(ctx, sessionIDFromCookie(t, sc, stale)).Err())
+		assert.NilError(t, client.Del(ctx, sessionIDFromCookie(t, sc, stale)).Err())
 		live := mintedCookie(t, sc, userID)
 
 		rec, err := runSessionMiddleware(t, sc, jwtCaller(userID), stale, live)
-		require.NoError(t, err)
-		assert.Equal(t, http.StatusOK, rec.Code)
-		assert.Len(t, sessionCookies(rec, sc.CookieConfig.Name), 1)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(http.StatusOK, rec.Code))
+		assert.Check(t, is.Len(sessionCookies(rec, sc.CookieConfig.Name), 1))
 	})
 
 	t.Run("minted session is loaded on the next request without the fallback", func(t *testing.T) {
@@ -246,30 +247,30 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 		userID := ulids.New().String()
 
 		first, err := runSessionMiddleware(t, sc, jwtCaller(userID))
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		minted := sessionCookies(first, sc.CookieConfig.Name)
-		require.Len(t, minted, 1)
+		assert.Assert(t, is.Len(minted, 1))
 		mintedID := sessionIDFromCookie(t, sc, minted[0])
 
 		strict := newSessionMiddlewareConfig(t, client, sessions.WithSkipperFunc(auth.SessionSkipperFunc))
 		strict.SessionManager = sc.SessionManager
 
 		second, err := runSessionMiddleware(t, strict, jwtCaller(userID), minted[0])
-		require.NoError(t, err)
-		assert.Equal(t, http.StatusOK, second.Code)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(http.StatusOK, second.Code))
 
 		slid := sessionCookies(second, sc.CookieConfig.Name)
-		require.Len(t, slid, 1)
-		assert.Equal(t, mintedID, sessionIDFromCookie(t, sc, slid[0]))
+		assert.Assert(t, is.Len(slid, 1))
+		assert.Check(t, is.Equal(mintedID, sessionIDFromCookie(t, sc, slid[0])))
 
 		stored, err := client.Get(ctx, mintedID).Result()
-		require.NoError(t, err)
-		assert.Equal(t, userID, stored)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(userID, stored))
 
 		ttl, err := client.TTL(ctx, mintedID).Result()
-		require.NoError(t, err)
-		assert.InDelta(t, sc.CookieConfig.MaxAge, ttl.Seconds(), 1)
+		assert.NilError(t, err)
+		assert.Check(t, math.Abs(float64(sc.CookieConfig.MaxAge)-ttl.Seconds()) <= 1)
 	})
 
 	t.Run("minted session is reissued once the renewal interval has elapsed", func(t *testing.T) {
@@ -280,10 +281,10 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 		userID := ulids.New().String()
 
 		first, err := runSessionMiddleware(t, sc, jwtCaller(userID))
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		minted := sessionCookies(first, sc.CookieConfig.Name)
-		require.Len(t, minted, 1)
+		assert.Assert(t, is.Len(minted, 1))
 		mintedID := sessionIDFromCookie(t, sc, minted[0])
 
 		strict := newSessionMiddlewareConfig(t, client,
@@ -293,22 +294,22 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 		strict.SessionManager = sc.SessionManager
 
 		second, err := runSessionMiddleware(t, strict, jwtCaller(userID), minted[0])
-		require.NoError(t, err)
-		assert.Equal(t, http.StatusOK, second.Code)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(http.StatusOK, second.Code))
 
 		reissued := sessionCookies(second, sc.CookieConfig.Name)
-		require.Len(t, reissued, 1)
+		assert.Assert(t, is.Len(reissued, 1))
 
 		reissuedID := sessionIDFromCookie(t, sc, reissued[0])
-		assert.NotEqual(t, mintedID, reissuedID)
+		assert.Check(t, mintedID != reissuedID)
 
 		stored, err := client.Get(ctx, reissuedID).Result()
-		require.NoError(t, err)
-		assert.Equal(t, userID, stored)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(userID, stored))
 
 		retired, err := client.TTL(ctx, mintedID).Result()
-		require.NoError(t, err)
-		assert.LessOrEqual(t, retired, strict.RenewalGrace)
+		assert.NilError(t, err)
+		assert.Check(t, retired <= strict.RenewalGrace)
 	})
 
 	t.Run("rejects an impersonated caller with no session", func(t *testing.T) {
@@ -320,9 +321,9 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 		caller.Impersonation = &iamauth.ImpersonationContext{ImpersonatorID: ulids.New().String()}
 
 		rec, err := runSessionMiddleware(t, sc, caller)
-		require.ErrorIs(t, err, sessions.ErrInvalidSession)
-		assert.Equal(t, http.StatusUnauthorized, rec.Code)
-		assert.Empty(t, sessionCookies(rec, sc.CookieConfig.Name))
+		assert.ErrorIs(t, err, sessions.ErrInvalidSession)
+		assert.Check(t, is.Equal(http.StatusUnauthorized, rec.Code))
+		assert.Check(t, is.Len(sessionCookies(rec, sc.CookieConfig.Name), 0))
 	})
 
 	t.Run("loads the impersonator's own session for an impersonated caller", func(t *testing.T) {
@@ -337,15 +338,15 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 		caller.Impersonation = &iamauth.ImpersonationContext{ImpersonatorID: impersonatorID}
 
 		rec, err := runSessionMiddleware(t, sc, caller, own)
-		require.NoError(t, err)
-		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 		slid := sessionCookies(rec, sc.CookieConfig.Name)
-		require.Len(t, slid, 1)
+		assert.Assert(t, is.Len(slid, 1))
 
 		stored, err := client.Get(ctx, sessionIDFromCookie(t, sc, slid[0])).Result()
-		require.NoError(t, err)
-		assert.Equal(t, impersonatorID, stored)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(impersonatorID, stored))
 	})
 
 	t.Run("skips sessions for non jwt callers", func(t *testing.T) {
@@ -360,9 +361,9 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 			iamauth.NewTrustCenterCaller(ulids.New().String(), "anon_trustcenter_"+ulids.New().String(), "Anonymous User", ""),
 		} {
 			rec, err := runSessionMiddleware(t, sc, caller)
-			require.NoError(t, err)
-			assert.Equal(t, http.StatusOK, rec.Code)
-			assert.Empty(t, sessionCookies(rec, sc.CookieConfig.Name))
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(http.StatusOK, rec.Code))
+			assert.Check(t, is.Len(sessionCookies(rec, sc.CookieConfig.Name), 0))
 		}
 	})
 
@@ -374,10 +375,10 @@ func TestGraphSessionMiddlewareFallback(t *testing.T) {
 		userID := ulids.New().String()
 
 		stale := mintedCookie(t, sc, userID)
-		require.NoError(t, client.Del(ctx, sessionIDFromCookie(t, sc, stale)).Err())
+		assert.NilError(t, client.Del(ctx, sessionIDFromCookie(t, sc, stale)).Err())
 
 		rec, err := runSessionMiddleware(t, sc, jwtCaller(userID), stale)
-		require.ErrorIs(t, err, sessions.ErrInvalidSession)
-		assert.Equal(t, http.StatusUnauthorized, rec.Code)
+		assert.ErrorIs(t, err, sessions.ErrInvalidSession)
+		assert.Check(t, is.Equal(http.StatusUnauthorized, rec.Code))
 	})
 }

@@ -2,10 +2,12 @@ package workflows
 
 import (
 	"encoding/json"
+	"slices"
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -61,7 +63,7 @@ func TestDeriveDomainKey(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := DeriveDomainKey(tt.objectType, tt.fields)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -74,7 +76,7 @@ func TestDeriveDomainKey_Stability(t *testing.T) {
 	key1 := DeriveDomainKey(enums.WorkflowObjectTypeControl, fields1)
 	key2 := DeriveDomainKey(enums.WorkflowObjectTypeControl, fields2)
 
-	assert.Equal(t, key1, key2, "domain keys should be stable regardless of input order")
+	assert.Check(t, is.Equal(key1, key2), "domain keys should be stable regardless of input order")
 }
 
 // TestFilterChangesForDomain verifies filtering changes by domain
@@ -143,7 +145,7 @@ func TestFilterChangesForDomain(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := FilterChangesForDomain(tt.changes, tt.approvalFields)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.DeepEqual(tt.expected, result))
 		})
 	}
 }
@@ -183,17 +185,17 @@ func TestComputeProposalHash(t *testing.T) {
 			hash, err := ComputeProposalHash(tt.changes)
 
 			if tt.expectError {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 				return
 			}
 
-			assert.NoError(t, err)
+			assert.Check(t, err)
 
 			if tt.expectEmpty {
-				assert.Empty(t, hash)
+				assert.Check(t, is.Len(hash, 0))
 			} else {
-				assert.NotEmpty(t, hash)
-				assert.Len(t, hash, 64, "SHA256 hash should be 64 hex characters")
+				assert.Check(t, hash != "")
+				assert.Check(t, is.Len(hash, 64), "SHA256 hash should be 64 hex characters")
 			}
 		})
 	}
@@ -212,12 +214,12 @@ func TestComputeProposalHash_Stability(t *testing.T) {
 	}
 
 	hash1, err1 := ComputeProposalHash(changes1)
-	assert.NoError(t, err1)
+	assert.Check(t, err1)
 
 	hash2, err2 := ComputeProposalHash(changes2)
-	assert.NoError(t, err2)
+	assert.Check(t, err2)
 
-	assert.Equal(t, hash1, hash2, "hashes should be stable regardless of map iteration order")
+	assert.Check(t, is.Equal(hash1, hash2), "hashes should be stable regardless of map iteration order")
 }
 
 // TestComputeProposalHash_Deterministic verifies deterministic hashes
@@ -229,12 +231,12 @@ func TestComputeProposalHash_Deterministic(t *testing.T) {
 	}
 
 	hash1, err := ComputeProposalHash(changes)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	hash2, err := ComputeProposalHash(changes)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
-	assert.Equal(t, hash1, hash2, "hash should be deterministic")
+	assert.Check(t, is.Equal(hash1, hash2), "hash should be deterministic")
 }
 
 // TestApprovalDomains verifies approval domain extraction
@@ -242,17 +244,17 @@ func TestApprovalDomains(t *testing.T) {
 	primaryParams, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{" status ", "name", ""},
 	})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	duplicateParams, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{"name", "status"},
 	})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	secondaryParams, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{"priority"},
 	})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	doc := models.WorkflowDefinitionDocument{
 		Actions: []models.WorkflowAction{
@@ -280,12 +282,12 @@ func TestApprovalDomains(t *testing.T) {
 	}
 
 	domains, err := ApprovalDomains(doc)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
-	assert.Equal(t, [][]string{
+	assert.Check(t, is.DeepEqual([][]string{
 		{"name", "status"},
 		{"priority"},
-	}, domains)
+	}, domains))
 }
 
 // TestApprovalDomainsInvalidParams verifies invalid params handling
@@ -301,7 +303,7 @@ func TestApprovalDomainsInvalidParams(t *testing.T) {
 	}
 
 	_, err := ApprovalDomains(doc)
-	assert.ErrorIs(t, err, ErrApprovalActionParamsInvalid)
+	assert.Check(t, is.ErrorIs(err, ErrApprovalActionParamsInvalid))
 }
 
 // TestApprovalDomainsIgnoresLegacyRequiredShape verifies legacy required values
@@ -322,8 +324,8 @@ func TestApprovalDomainsIgnoresLegacyRequiredShape(t *testing.T) {
 	}
 
 	domains, err := ApprovalDomains(doc)
-	assert.NoError(t, err)
-	assert.Equal(t, [][]string{{"status"}}, domains)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual([][]string{{"status"}}, domains))
 }
 
 // TestSplitChangesByDomains verifies splitting changes into domains
@@ -341,15 +343,15 @@ func TestSplitChangesByDomains(t *testing.T) {
 	}
 
 	matches := SplitChangesByDomains(changes, enums.WorkflowObjectTypeControl, domains)
-	assert.Len(t, matches, 2)
+	assert.Check(t, is.Len(matches, 2))
 
-	assert.Equal(t, DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"status"}), matches[0].DomainKey)
-	assert.Equal(t, []string{"status"}, matches[0].Fields)
-	assert.Equal(t, map[string]any{"status": "approved"}, matches[0].Changes)
+	assert.Check(t, is.Equal(DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"status"}), matches[0].DomainKey))
+	assert.Check(t, is.DeepEqual([]string{"status"}, matches[0].Fields))
+	assert.Check(t, is.DeepEqual(map[string]any{"status": "approved"}, matches[0].Changes))
 
-	assert.Equal(t, DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"description", "priority"}), matches[1].DomainKey)
-	assert.Equal(t, []string{"description", "priority"}, matches[1].Fields)
-	assert.Equal(t, map[string]any{"description": "update", "priority": "p1"}, matches[1].Changes)
+	assert.Check(t, is.Equal(DeriveDomainKey(enums.WorkflowObjectTypeControl, []string{"description", "priority"}), matches[1].DomainKey))
+	assert.Check(t, is.DeepEqual([]string{"description", "priority"}, matches[1].Fields))
+	assert.Check(t, is.DeepEqual(map[string]any{"description": "update", "priority": "p1"}, matches[1].Changes))
 }
 
 // TestDomainChangesForDefinition verifies domain change extraction
@@ -357,7 +359,7 @@ func TestDomainChangesForDefinition(t *testing.T) {
 	params, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{"status", "priority"},
 	})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	doc := models.WorkflowDefinitionDocument{
 		Actions: []models.WorkflowAction{
@@ -375,13 +377,13 @@ func TestDomainChangesForDefinition(t *testing.T) {
 	}
 
 	domainChanges, err := DomainChangesForDefinition(doc, enums.WorkflowObjectTypeControl, changes)
-	assert.NoError(t, err)
-	assert.Len(t, domainChanges, 1)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(domainChanges, 1))
 
 	expectedFields := []string{"priority", "status"}
-	assert.Equal(t, DeriveDomainKey(enums.WorkflowObjectTypeControl, expectedFields), domainChanges[0].DomainKey)
-	assert.Equal(t, expectedFields, domainChanges[0].Fields)
-	assert.Equal(t, map[string]any{"status": "approved"}, domainChanges[0].Changes)
+	assert.Check(t, is.Equal(DeriveDomainKey(enums.WorkflowObjectTypeControl, expectedFields), domainChanges[0].DomainKey))
+	assert.Check(t, is.DeepEqual(expectedFields, domainChanges[0].Fields))
+	assert.Check(t, is.DeepEqual(map[string]any{"status": "approved"}, domainChanges[0].Changes))
 }
 
 // TestDomainChangesForDefinitionFallback verifies fallback behavior
@@ -398,13 +400,13 @@ func TestDomainChangesForDefinitionFallback(t *testing.T) {
 	}
 
 	domainChanges, err := DomainChangesForDefinition(doc, enums.WorkflowObjectTypeControl, changes)
-	assert.NoError(t, err)
-	assert.Len(t, domainChanges, 1)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(domainChanges, 1))
 
 	fields := lo.Keys(changes)
-	assert.Equal(t, DeriveDomainKey(enums.WorkflowObjectTypeControl, fields), domainChanges[0].DomainKey)
-	assert.ElementsMatch(t, fields, domainChanges[0].Fields)
-	assert.Equal(t, changes, domainChanges[0].Changes)
+	assert.Check(t, is.Equal(DeriveDomainKey(enums.WorkflowObjectTypeControl, fields), domainChanges[0].DomainKey))
+	assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values(fields)), slices.Sorted(slices.Values(domainChanges[0].Fields))))
+	assert.Check(t, is.DeepEqual(changes, domainChanges[0].Changes))
 }
 
 // TestDefinitionHasApprovalAction verifies approval detection
@@ -415,14 +417,14 @@ func TestDefinitionHasApprovalAction(t *testing.T) {
 		},
 	}
 
-	assert.False(t, DefinitionHasApprovalAction(doc))
+	assert.Check(t, !DefinitionHasApprovalAction(doc))
 
 	doc.Actions = append(doc.Actions, models.WorkflowAction{
 		Key:  "approval",
 		Type: enums.WorkflowActionTypeApproval.String(),
 	})
 
-	assert.True(t, DefinitionHasApprovalAction(doc))
+	assert.Check(t, DefinitionHasApprovalAction(doc))
 }
 
 // TestApprovalDomainsFromDefinition verifies approval domains from definition
@@ -436,13 +438,13 @@ func TestApprovalDomainsFromDefinition(t *testing.T) {
 	}
 
 	domains, err := ApprovalDomains(def.DefinitionJSON)
-	assert.NoError(t, err)
-	assert.Empty(t, domains)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(domains, 0))
 
 	params, err := json.Marshal(ApprovalActionParams{
 		Fields: []string{"name"},
 	})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	def.DefinitionJSON.Actions = append(def.DefinitionJSON.Actions, models.WorkflowAction{
 		Key:    "approval",
@@ -451,8 +453,8 @@ func TestApprovalDomainsFromDefinition(t *testing.T) {
 	})
 
 	domains, err = ApprovalDomains(def.DefinitionJSON)
-	assert.NoError(t, err)
-	assert.Equal(t, [][]string{{"name"}}, domains)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual([][]string{{"name"}}, domains))
 }
 
 // TestFieldsFromChanges verifies field list extraction
@@ -463,5 +465,5 @@ func TestFieldsFromChanges(t *testing.T) {
 		"c": 3,
 	}
 
-	assert.Equal(t, []string{"a", "b", "c"}, FieldsFromChanges(changes))
+	assert.Check(t, is.DeepEqual([]string{"a", "b", "c"}, FieldsFromChanges(changes)))
 }

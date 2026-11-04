@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/vektah/gqlparser/v2/ast"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -11,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 )
 
 func TestPersonalOrgCannotCreateModuleGatedObjects(t *testing.T) {
@@ -25,6 +27,8 @@ func TestPersonalOrgCannotCreateModuleGatedObjects(t *testing.T) {
 	})
 
 	t.Run("workflow definition", func(t *testing.T) {
+		ensureWorkflowEngine(t)
+
 		_, err := suite.Client.API.CreateWorkflowDefinition(ctx, testclient.CreateWorkflowDefinitionInput{
 			Name:         "personal org workflow",
 			WorkflowKind: enums.WorkflowKindNotification,
@@ -81,6 +85,10 @@ func TestPersonalOrgCannotQueryModuleGatedObjects(t *testing.T) {
 	t.Run("tag definitions", func(t *testing.T) {
 		_, err := suite.Client.API.GetAllTagDefinitions(ctx)
 		assert.ErrorContains(t, err, featureErr)
+
+		for _, e := range th.ParseClientError(t, err) {
+			assert.Check(t, is.DeepEqual(ast.Path{ast.PathName("tagDefinitions")}, e.Path))
+		}
 	})
 
 	t.Run("api tokens", func(t *testing.T) {

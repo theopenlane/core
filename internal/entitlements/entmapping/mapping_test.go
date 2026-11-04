@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // priceBuilder defines the methods needed to set OrgPrice fields on ent builders
@@ -134,11 +134,15 @@ func TestStripePriceToOrgPrice(t *testing.T) {
 		ProductID:     "prod_123",
 	}
 
-	require.Equal(t, want, got)
+	assert.Assert(t, is.Equal(want.StripePriceID, got.StripePriceID))
+	assert.Assert(t, is.Equal(want.Price, got.Price))
+	assert.Assert(t, is.Equal(want.Status, got.Status))
+	assert.Assert(t, is.Equal(want.Active, got.Active))
+	assert.Assert(t, is.Equal(want.ProductID, got.ProductID))
 }
 
 func TestStripePriceToOrgPrice_Nil(t *testing.T) {
-	require.Nil(t, StripePriceToOrgPrice(nil))
+	assert.Assert(t, is.Nil(StripePriceToOrgPrice(nil)))
 }
 
 func TestStripeProductToOrgProduct(t *testing.T) {
@@ -159,13 +163,17 @@ func TestStripeProductToOrgProduct(t *testing.T) {
 		PriceID:         "price_default",
 	}
 
-	require.Equal(t, want, got)
+	assert.Assert(t, is.Equal(want.Module, got.Module))
+	assert.Assert(t, is.Equal(want.StripeProductID, got.StripeProductID))
+	assert.Assert(t, is.Equal(want.Status, got.Status))
+	assert.Assert(t, is.Equal(want.Active, got.Active))
+	assert.Assert(t, is.Equal(want.PriceID, got.PriceID))
 }
 
 func TestStripeProductToOrgProduct_NoMetadata(t *testing.T) {
 	p := &stripe.Product{ID: "prod_1", Name: "Fallback", Active: true}
 	got := StripeProductToOrgProduct(p)
-	require.Equal(t, "Fallback", got.Module)
+	assert.Assert(t, is.Equal("Fallback", got.Module))
 }
 
 func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
@@ -198,7 +206,11 @@ func TestStripeSubscriptionToOrgSubscription(t *testing.T) {
 		DaysUntilDue:             int64ToStringPtr(7),
 	}
 
-	require.Equal(t, want, got)
+	assert.Assert(t, is.Equal(want.StripeSubscriptionID, got.StripeSubscriptionID))
+	assert.Assert(t, is.Equal(want.StripeSubscriptionStatus, got.StripeSubscriptionStatus))
+	assert.Assert(t, is.Equal(want.Active, got.Active))
+	assert.Assert(t, is.DeepEqual(want.TrialExpiresAt, got.TrialExpiresAt))
+	assert.Assert(t, is.DeepEqual(want.DaysUntilDue, got.DaysUntilDue))
 }
 
 func TestStripeSubscriptionItemToOrgModule(t *testing.T) {
@@ -227,7 +239,12 @@ func TestStripeSubscriptionItemToOrgModule(t *testing.T) {
 		ModuleLookupKey: "lookup",
 	}
 
-	require.Equal(t, want, got)
+	assert.Assert(t, is.Equal(want.Module, got.Module))
+	assert.Assert(t, is.Equal(want.Price, got.Price))
+	assert.Assert(t, is.Equal(want.StripePriceID, got.StripePriceID))
+	assert.Assert(t, is.Equal(want.Status, got.Status))
+	assert.Assert(t, is.Equal(want.Visibility, got.Visibility))
+	assert.Assert(t, is.Equal(want.ModuleLookupKey, got.ModuleLookupKey))
 }
 
 func TestApplyStripePrice(t *testing.T) {
@@ -251,8 +268,8 @@ func TestApplyStripePrice(t *testing.T) {
 		productID:     "prod_123",
 	}
 
-	require.Equal(t, b, got)
-	require.Equal(t, expected, b)
+	assert.Assert(t, is.Equal(b, got))
+	assert.Assert(t, is.Equal(*expected, *b))
 }
 
 func TestApplyStripeProduct(t *testing.T) {
@@ -275,8 +292,8 @@ func TestApplyStripeProduct(t *testing.T) {
 		priceID:         "price_default",
 	}
 
-	require.Equal(t, b, got)
-	require.Equal(t, expected, b)
+	assert.Assert(t, is.Equal(b, got))
+	assert.Assert(t, is.Equal(*expected, *b))
 }
 
 func TestApplyStripeSubscription(t *testing.T) {
@@ -312,8 +329,16 @@ func TestApplyStripeSubscription(t *testing.T) {
 		daysUntilDue:             "7",
 	}
 
-	require.Equal(t, b, got)
-	require.Equal(t, expected, b)
+	assert.Assert(t, is.Equal(b, got))
+	assert.Assert(t, is.Equal(expected.stripeSubscriptionID, b.stripeSubscriptionID))
+	assert.Assert(t, is.Equal(expected.stripeSubscriptionStatus, b.stripeSubscriptionStatus))
+	assert.Assert(t, is.Equal(expected.active, b.active))
+	assert.Assert(t, is.Equal(expected.stripeCustomerID, b.stripeCustomerID))
+	assert.Assert(t, is.Equal(expected.productPrice, b.productPrice))
+	assert.Assert(t, expected.trialExpiresAt.Equal(b.trialExpiresAt))
+	assert.Assert(t, is.Equal(expected.daysUntilDue, b.daysUntilDue))
+	assert.Assert(t, is.DeepEqual(expected.features, b.features))
+	assert.Assert(t, is.DeepEqual(expected.featureLookupKeys, b.featureLookupKeys))
 }
 
 func TestApplyStripeSubscriptionItem(t *testing.T) {
@@ -345,8 +370,8 @@ func TestApplyStripeSubscriptionItem(t *testing.T) {
 		active:          false,
 	}
 
-	require.Equal(t, b, got)
-	require.Equal(t, expected, b)
+	assert.Assert(t, is.Equal(b, got))
+	assert.Assert(t, is.Equal(*expected, *b))
 }
 
 func TestApplyStripeSubscriptionItemActiveByStatus(t *testing.T) {
@@ -402,13 +427,13 @@ func TestApplyStripeSubscriptionItemActiveByStatus(t *testing.T) {
 			ApplyStripeSubscriptionItem(context.Background(), b, item, nil, string(tc.status))
 
 			if tc.expectDeactivated {
-				assert.True(t, b.activeSet, "expected the module to be deactivated")
-				assert.False(t, b.active)
+				assert.Check(t, b.activeSet, "expected the module to be deactivated")
+				assert.Check(t, !b.active)
 
 				return
 			}
 
-			assert.False(t, b.activeSet, "expected the active flag to be left untouched")
+			assert.Check(t, !b.activeSet, "expected the active flag to be left untouched")
 		})
 	}
 }

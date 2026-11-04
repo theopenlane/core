@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
@@ -28,10 +28,10 @@ func newTestRuntime(t *testing.T) (*intr.Runtime, *slackdef.MockSlackRuntime) {
 	t.Cleanup(mock.Close)
 
 	def, err := mock.Builder()()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	reg := registry.New()
-	require.NoError(t, reg.Register(def))
+	assert.NilError(t, reg.Register(def))
 
 	return intr.NewForTesting(reg), mock
 }
@@ -65,12 +65,12 @@ func TestBuildOperationEntries(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			entries := buildOperationEntries(tt.ops)
-			assert.Len(t, entries, tt.wantLen)
+			assert.Check(t, is.Len(entries, tt.wantLen))
 
 			if tt.wantName != "" && len(entries) > 0 {
-				assert.Equal(t, tt.wantName, entries[0].Name)
-				assert.Equal(t, tt.ops[0].Description, entries[0].Description)
-				assert.JSONEq(t, string(tt.ops[0].Input.Schema), string(entries[0].ConfigSchema))
+				assert.Check(t, is.Equal(tt.wantName, entries[0].Name))
+				assert.Check(t, is.Equal(tt.ops[0].Description, entries[0].Description))
+				assert.Check(t, is.DeepEqual(unmarshalJSONAny(t, string(tt.ops[0].Input.Schema)), unmarshalJSONAny(t, string(entries[0].ConfigSchema))))
 			}
 		})
 	}
@@ -78,53 +78,53 @@ func TestBuildOperationEntries(t *testing.T) {
 
 func TestWorkflowMetadataExtensions_NilRuntime(t *testing.T) {
 	result := workflowMetadataExtensions(context.Background(), nil, nil)
-	require.NotNil(t, result)
+	assert.Assert(t, result != nil)
 
 	integrations, ok := result["integrations"].(map[string]any)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	contract, ok := integrations["action_contract"].(map[string]any)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
-	assert.NotEmpty(t, contract["target_selector"])
-	assert.NotEmpty(t, contract["operation_selector"])
-	assert.NotEmpty(t, contract["scope_fields"])
-	assert.NotEmpty(t, contract["scope_variables"])
-	assert.NotEmpty(t, contract["run_types"])
+	assert.Check(t, len(contract["target_selector"].([]string)) > 0)
+	assert.Check(t, len(contract["operation_selector"].([]string)) > 0)
+	assert.Check(t, len(contract["scope_fields"].([]string)) > 0)
+	assert.Check(t, len(contract["scope_variables"].([]string)) > 0)
+	assert.Check(t, len(contract["run_types"].([]string)) > 0)
 
 	providers, ok := integrations["providers"].([]integrationProviderExtensions)
-	require.True(t, ok)
-	assert.Empty(t, providers, "nil runtime should produce no providers")
+	assert.Assert(t, ok)
+	assert.Check(t, is.Len(providers, 0), "nil runtime should produce no providers")
 }
 
 func TestResolveOrgIntegrationAvailability_NilDB(t *testing.T) {
 	result := resolveOrgIntegrationAvailability(context.Background(), nil)
-	assert.Nil(t, result, "nil db should return nil availability")
+	assert.Check(t, is.Nil(result), "nil db should return nil availability")
 }
 
 func TestResolveOrgIntegrationAvailability_NoCallerContext(t *testing.T) {
 	result := resolveOrgIntegrationAvailability(context.Background(), &ent.Client{})
-	assert.Nil(t, result, "unauthenticated context should return nil availability")
+	assert.Check(t, is.Nil(result), "unauthenticated context should return nil availability")
 }
 
 func TestIntegrationWorkflowProviders_CatalogOnly(t *testing.T) {
 	rt, _ := newTestRuntime(t)
 
 	providers := integrationWorkflowProviders(context.Background(), rt, nil)
-	require.Len(t, providers, 1)
+	assert.Assert(t, is.Len(providers, 1))
 
 	slack := providers[0]
-	assert.Equal(t, slackdef.DefinitionID.ID(), slack.Provider)
-	assert.NotEmpty(t, slack.DisplayName)
-	assert.NotEmpty(t, slack.Operations)
-	assert.False(t, slack.Available, "no DB means no availability data, Available should be false")
-	assert.Empty(t, slack.Installations)
+	assert.Check(t, is.Equal(slackdef.DefinitionID.ID(), slack.Provider))
+	assert.Check(t, slack.DisplayName != "")
+	assert.Check(t, len(slack.Operations) > 0)
+	assert.Check(t, !slack.Available, "no DB means no availability data, Available should be false")
+	assert.Check(t, is.Len(slack.Installations, 0))
 
 	opNames := lo.Map(slack.Operations, func(op integrationOperationEntry, _ int) string {
 		return op.Name
 	})
-	assert.Contains(t, opNames, slackdef.MessageSendOp.Name())
-	assert.True(t, slices.IsSorted(opNames), "operations should be sorted alphabetically")
+	assert.Check(t, is.Contains(opNames, slackdef.MessageSendOp.Name()))
+	assert.Check(t, slices.IsSorted(opNames), "operations should be sorted alphabetically")
 }
 
 func TestApplyProviderAvailability(t *testing.T) {
@@ -239,15 +239,25 @@ func TestApplyProviderAvailability(t *testing.T) {
 
 			enriched := applyProviderAvailability(&entry, defID, operations, tt.availability)
 
-			assert.Equal(t, tt.wantAvailable, entry.Available)
-			assert.Len(t, entry.Installations, tt.wantInstallations)
+			assert.Check(t, is.Equal(tt.wantAvailable, entry.Available))
+			assert.Check(t, is.Len(entry.Installations, tt.wantInstallations))
 
 			var totalTemplates int
 			for _, op := range enriched {
 				totalTemplates += len(op.Templates)
 			}
 
-			assert.Equal(t, tt.wantTemplates, totalTemplates)
+			assert.Check(t, is.Equal(tt.wantTemplates, totalTemplates))
 		})
 	}
+}
+
+func unmarshalJSONAny(t *testing.T, raw string) any {
+	t.Helper()
+
+	var value any
+
+	assert.NilError(t, json.Unmarshal([]byte(raw), &value))
+
+	return value
 }

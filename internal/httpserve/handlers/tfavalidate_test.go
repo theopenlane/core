@@ -16,15 +16,15 @@ import (
 	"time"
 
 	"github.com/pquerna/otp/totp"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/httpsling"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestTFAValidate() {
-	t := suite.T()
+func TestTFAValidate(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	// add login handler
 	suite.registerTestHandler("POST", "2fa/validate", suite.h.ValidateTOTP)
@@ -47,8 +47,8 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 		updateTFASetting, err := suite.db.TFASetting.UpdateOne(tfaSetting).
 			SetVerified(true).
 			Save(user.UserCtx)
-		require.NoError(t, err)
-		require.NotNil(t, updateTFASetting.TfaSecret)
+		assert.NilError(t, err)
+		assert.Assert(t, updateTFASetting.TfaSecret != nil)
 
 		return user.UserCtx, *updateTFASetting.TfaSecret, updateTFASetting.RecoveryCodes
 	}
@@ -102,7 +102,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 			var err error
 			if tc.generateCode {
 				code, err = totpGenerator(secret)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			tfaJSON := models.TFARequest{
@@ -110,13 +110,13 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 			}
 
 			if tc.recoveryIndex >= 0 {
-				require.Less(t, tc.recoveryIndex, len(recoveryCodes))
+				assert.Assert(t, tc.recoveryIndex < len(recoveryCodes))
 				tfaJSON.RecoveryCode = recoveryCodes[tc.recoveryIndex]
 			}
 
 			body, err := json.Marshal(tfaJSON)
 			if err != nil {
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 
 			req := httptest.NewRequest(http.MethodPost, "/2fa/validate", strings.NewReader(string(body)))
@@ -138,14 +138,14 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 				t.Error("error parsing response", err)
 			}
 
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
 
 			if tc.expectedStatus == http.StatusOK {
-				assert.True(t, out.Success)
-				assert.Empty(t, res.Cookies())
+				assert.Check(t, out.Success)
+				assert.Check(t, is.Len(res.Cookies(), 0))
 			} else {
-				require.NotNil(t, out.Error)
-				assert.Contains(t, out.Error, tc.expectedErr)
+				assert.Assert(t, out.Error != "")
+				assert.Check(t, is.Contains(out.Error, tc.expectedErr))
 			}
 		})
 	}
@@ -153,7 +153,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 	// Keep recovery code reuse in a single subtest to assert stateful behavior deterministically.
 	t.Run("cannot reuse the same recovery code", func(t *testing.T) {
 		ctx, _, recoveryCodes := newTFAUser(t)
-		require.NotEmpty(t, recoveryCodes)
+		assert.Assert(t, len(recoveryCodes) > 0)
 		recoveryCode := recoveryCodes[0]
 
 		send := func() (*httptest.ResponseRecorder, *models.TFAResponse) {
@@ -162,7 +162,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 			}
 
 			body, err := json.Marshal(tfaJSON)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			req := httptest.NewRequest(http.MethodPost, "/2fa/validate", strings.NewReader(string(body)))
 			req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -182,15 +182,15 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 		}
 
 		recorder, out := send()
-		assert.Equal(t, http.StatusOK, recorder.Code)
-		require.NotNil(t, out)
-		assert.True(t, out.Success)
+		assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+		assert.Assert(t, out != nil)
+		assert.Check(t, out.Success)
 
 		recorder, out = send()
-		assert.Equal(t, http.StatusBadRequest, recorder.Code)
-		require.NotNil(t, out)
-		require.NotNil(t, out.Error)
-		assert.Contains(t, out.Error, "invalid code provided")
+		assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
+		assert.Assert(t, out != nil)
+		assert.Assert(t, out.Error != "")
+		assert.Check(t, is.Contains(out.Error, "invalid code provided"))
 	})
 }
 

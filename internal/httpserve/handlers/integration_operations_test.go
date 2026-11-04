@@ -12,9 +12,6 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
@@ -27,10 +24,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
-	t := suite.T()
+func TestRunIntegrationOperationHealthCheckInline(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -48,7 +47,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -56,18 +55,18 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 
 	var resp handlers.RunIntegrationOperationResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-	assert.True(t, resp.Success)
-	assert.Equal(t, "ok", resp.Status)
-	assert.Equal(t, opTestHealthCheckOperation.Name(), resp.Operation)
-	assert.Contains(t, resp.Summary, "Integration operation completed")
+	assert.NilError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.Check(t, resp.Success)
+	assert.Check(t, is.Equal("ok", resp.Status))
+	assert.Check(t, is.DeepEqual(opTestHealthCheckOperation.Name(), resp.Operation))
+	assert.Check(t, is.Contains(resp.Summary, "Integration operation completed"))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
-	t := suite.T()
+func TestRunIntegrationOperationInlinePolicy(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -85,7 +84,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 			Operation: opTestRepoSyncOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestInlineDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -93,18 +92,18 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 
 	var resp handlers.RunIntegrationOperationResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-	assert.True(t, resp.Success)
-	assert.Equal(t, "ok", resp.Status)
-	assert.Equal(t, opTestRepoSyncOperation.Name(), resp.Operation)
-	assert.Contains(t, resp.Summary, "Integration operation completed")
+	assert.NilError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.Check(t, resp.Success)
+	assert.Check(t, is.Equal("ok", resp.Status))
+	assert.Check(t, is.DeepEqual(opTestRepoSyncOperation.Name(), resp.Operation))
+	assert.Check(t, is.Contains(resp.Summary, "Integration operation completed"))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
-	t := suite.T()
+func TestRunIntegrationOperationQueuedAsync(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -122,7 +121,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
 			Operation: opTestRepoSyncOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -130,19 +129,19 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 
 	var resp handlers.RunIntegrationOperationResponse
-	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
-	assert.True(t, resp.Success)
-	assert.Equal(t, "queued", resp.Status)
-	assert.Equal(t, opTestRepoSyncOperation.Name(), resp.Operation)
-	assert.Contains(t, resp.Summary, "queued")
-	assert.NotEmpty(t, resp.Details)
+	assert.NilError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.Check(t, resp.Success)
+	assert.Check(t, is.Equal("queued", resp.Status))
+	assert.Check(t, is.DeepEqual(opTestRepoSyncOperation.Name(), resp.Operation))
+	assert.Check(t, is.Contains(resp.Summary, "queued"))
+	assert.Check(t, len(resp.Details) > 0)
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationUnauthorized() {
-	t := suite.T()
+func TestRunIntegrationOperationUnauthorized(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -151,7 +150,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationUnauthorized() {
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -159,11 +158,11 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationUnauthorized() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	require.Equal(t, http.StatusUnauthorized, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusUnauthorized, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidProvider() {
-	t := suite.T()
+func TestRunIntegrationOperationInvalidProvider(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -175,7 +174,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidProvider() {
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/def_nonexistent/operations", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -183,11 +182,11 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidProvider() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationMissingOperationName() {
-	t := suite.T()
+func TestRunIntegrationOperationMissingOperationName(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -200,7 +199,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationMissingOperationName()
 	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
 		Body: handlers.RunIntegrationOperationBody{},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -208,11 +207,11 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationMissingOperationName()
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationUnknownOperation() {
-	t := suite.T()
+func TestRunIntegrationOperationUnknownOperation(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -227,7 +226,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationUnknownOperation() {
 			Operation: "nonexistent.op",
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -235,11 +234,11 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationUnknownOperation() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidConfig() {
-	t := suite.T()
+func TestRunIntegrationOperationInvalidConfig(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -258,7 +257,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidConfig() {
 			Config:    json.RawMessage(`{"missing":"target_field"}`),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, fmt.Sprintf("/v1/integrations/%s/operations?integration_id=%s", operationTestDefinitionID, integrationID), bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -266,11 +265,11 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidConfig() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound() {
-	t := suite.T()
+func TestRunIntegrationOperationInstallationNotFound(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -285,7 +284,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound()
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations", bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -293,11 +292,11 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound()
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(testUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationOtherOrgInstallationNotFound() {
-	t := suite.T()
+func TestRunIntegrationOperationOtherOrgInstallationNotFound(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -316,7 +315,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationOtherOrgInstallationNo
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -324,12 +323,12 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationOtherOrgInstallationNo
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(otherUser.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Contains(t, rec.Body.String(), handlers.ErrIntegrationNotFound.Error())
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
+	assert.Check(t, is.Contains(rec.Body.String(), handlers.ErrIntegrationNotFound.Error()))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationNoActiveOrgUnauthorized() {
-	t := suite.T()
+func TestRunIntegrationOperationNoActiveOrgUnauthorized(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -351,7 +350,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationNoActiveOrgUnauthorize
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+integrationID, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -359,11 +358,11 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationNoActiveOrgUnauthorize
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(noOrgCtx))
 
-	require.Equal(t, http.StatusUnauthorized, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusUnauthorized, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationAnonymousTokenUnauthorized() {
-	t := suite.T()
+func TestRunIntegrationOperationAnonymousTokenUnauthorized(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerAuthenticatedTestHandler(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -389,10 +388,10 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationAnonymousTokenUnauthor
 			c.AssessmentID = ulids.New().String()
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	trustCenterSession, err := suite.h.AuthManager.GenerateAnonymousTrustCenterSession(reqCtx, httptest.NewRecorder(), owner.OrganizationID, ulids.New().String())
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name          string
@@ -414,7 +413,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationAnonymousTokenUnauthor
 					Operation: opTestRepoSyncOperation.Name(),
 				},
 			})
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+tc.definitionID+"/operations?integration_id="+tc.integrationID, bytes.NewReader(body))
 			req.Header.Set("Content-Type", "application/json")
@@ -423,13 +422,13 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationAnonymousTokenUnauthor
 			rec := httptest.NewRecorder()
 			suite.e.ServeHTTP(rec, req)
 
-			require.Equal(t, http.StatusUnauthorized, rec.Code)
+			assert.Assert(t, is.Equal(http.StatusUnauthorized, rec.Code))
 		})
 	}
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemDefinitionNotInvocable() {
-	t := suite.T()
+func TestRunIntegrationOperationSystemDefinitionNotInvocable(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -437,12 +436,12 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemDefinitionNotInv
 	owner := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
 
 	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(operationTestSystemDefinitionID)
-	require.True(t, ok)
-	require.False(t, def.Installable())
+	assert.Assert(t, ok)
+	assert.Assert(t, !def.Installable())
 
 	// the configure handler refuses non-installable definitions, so this row can only exist by bypassing that surface
 	record, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(owner.UserCtx, owner.OrganizationID, "", def, nil, nil)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
 		IntegrationID: record.ID,
@@ -450,7 +449,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemDefinitionNotInv
 			Operation: opTestSystemSweepOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestSystemDefinitionID+"/operations?integration_id="+record.ID, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -458,12 +457,12 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemDefinitionNotInv
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(owner.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Contains(t, rec.Body.String(), handlers.ErrIntegrationNotFound.Error())
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
+	assert.Check(t, is.Contains(rec.Body.String(), handlers.ErrIntegrationNotFound.Error()))
 }
 
-func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemOwnedInstallationNotFound() {
-	t := suite.T()
+func TestRunIntegrationOperationSystemOwnedInstallationNotFound(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
@@ -479,9 +478,9 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemOwnedInstallatio
 		SetDefinitionID(operationTestDefinitionID).
 		SetStatus(enums.IntegrationStatusConnected).
 		Save(systemCtx)
-	require.NoError(t, err)
-	require.True(t, record.SystemOwned)
-	require.Empty(t, record.OwnerID)
+	assert.NilError(t, err)
+	assert.Assert(t, record.SystemOwned)
+	assert.Assert(t, is.Len(record.OwnerID, 0))
 
 	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
 		IntegrationID: record.ID,
@@ -489,7 +488,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemOwnedInstallatio
 			Operation: opTestHealthCheckOperation.Name(),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/"+operationTestDefinitionID+"/operations?integration_id="+record.ID, bytes.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -497,25 +496,25 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationSystemOwnedInstallatio
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(owner.UserCtx))
 
-	require.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Contains(t, rec.Body.String(), handlers.ErrIntegrationNotFound.Error())
+	assert.Assert(t, is.Equal(http.StatusBadRequest, rec.Code))
+	assert.Check(t, is.Contains(rec.Body.String(), handlers.ErrIntegrationNotFound.Error()))
 }
 
 func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {
 	t.Helper()
 
 	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def, nil, nil)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
 
 	err = suite.h.IntegrationsRuntime.ReconcileCredential(ctx, rec, operationTestCredentialRef, credential)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return rec.ID
 }

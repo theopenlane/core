@@ -3,9 +3,9 @@ package storage_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestParseFrontmatter(t *testing.T) {
@@ -105,20 +105,20 @@ func TestParseFrontmatter(t *testing.T) {
 			fm, body, err := storage.ParseFrontmatter([]byte(tt.input))
 
 			if tt.expectedError {
-				require.Error(t, err)
+				assert.Assert(t, err != nil)
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			if tt.expectedFM == nil {
-				assert.Nil(t, fm)
+				assert.Check(t, is.Nil(fm))
 			} else {
-				require.NotNil(t, fm)
-				assert.Equal(t, tt.expectedFM.Title, fm.Title)
+				assert.Assert(t, fm != nil)
+				assert.Check(t, is.Equal(tt.expectedFM.Title, fm.Title))
 			}
 
-			assert.Equal(t, tt.expectedBody, string(body))
+			assert.Check(t, is.Equal(tt.expectedBody, string(body)))
 		})
 	}
 }

@@ -13,11 +13,16 @@ import (
 
 // GenerateOpenAPISpecDocument builds a fully-registered OpenAPI document
 func GenerateOpenAPISpecDocument() (*openapi3.T, error) {
-	router, err := registerSpecRoutes()
+	router, err := RegisterSpecRoutes()
 	if err != nil {
 		return nil, err
 	}
 
+	return GenerateOpenAPISpecFromRouter(router)
+}
+
+// GenerateOpenAPISpecFromRouter builds the OpenAPI document from a router returned by RegisterSpecRoutes
+func GenerateOpenAPISpecFromRouter(router *route.Router) (*openapi3.T, error) {
 	if missing := missingSpecTypes(router); len(missing) > 0 {
 		return nil, fmt.Errorf("%w: %v", ErrMissingSpecInstances, missing)
 	}
@@ -44,14 +49,9 @@ func GenerateOpenAPISpecDocument() (*openapi3.T, error) {
 	return spec, nil
 }
 
-// CollectSpecTypes registers all routes in spec-build mode and returns the sorted qualified names
-// of every model type the analyzed handlers need; used by the instance emitter
-func CollectSpecTypes() ([]string, error) {
-	router, err := registerSpecRoutes()
-	if err != nil {
-		return nil, err
-	}
-
+// SpecTypeNames returns the sorted qualified names of every model type the analyzed handlers need,
+// used by the instance emitter
+func SpecTypeNames(router *route.Router) []string {
 	names := make([]string, 0, len(router.SpecTypes))
 	for name := range router.SpecTypes {
 		names = append(names, name)
@@ -59,11 +59,11 @@ func CollectSpecTypes() ([]string, error) {
 
 	sort.Strings(names)
 
-	return names, nil
+	return names
 }
 
-// registerSpecRoutes builds a spec-mode router with all routes registered
-func registerSpecRoutes() (*route.Router, error) {
+// RegisterSpecRoutes builds a spec-mode router with all routes registered
+func RegisterSpecRoutes() (*route.Router, error) {
 	router, err := NewSpecRouter(LogConfig{})
 	if err != nil {
 		log.Error().Err(err).Msg("failed to create router")

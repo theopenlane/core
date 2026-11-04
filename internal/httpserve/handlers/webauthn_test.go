@@ -19,8 +19,6 @@ import (
 	"github.com/go-webauthn/webauthn/protocol"
 	"github.com/go-webauthn/webauthn/protocol/webauthncbor"
 	"github.com/go-webauthn/webauthn/protocol/webauthncose"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	echo "github.com/theopenlane/echox"
 	iamwebauthn "github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
@@ -33,6 +31,8 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/webauthn"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 const (
@@ -45,8 +45,8 @@ type testPasskey struct {
 	key          *ecdsa.PrivateKey
 }
 
-func (suite *HandlerTestSuite) TestBeginWebauthnRegistration() {
-	t := suite.T()
+func TestBeginWebauthnRegistration(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.enableTestWebauthn(t)
 	suite.registerTestHandler("POST", "registration/options", suite.h.BeginWebauthnRegistration)
@@ -121,7 +121,7 @@ func (suite *HandlerTestSuite) TestBeginWebauthnRegistration() {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			body, err := json.Marshal(models.WebauthnRegistrationRequest{Email: tc.email, Name: "Passkey User"})
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			req := httptest.NewRequest(http.MethodPost, "/registration/options", bytes.NewReader(body))
 			req.Header.Set("Content-Type", "application/json")
@@ -129,28 +129,28 @@ func (suite *HandlerTestSuite) TestBeginWebauthnRegistration() {
 			recorder := httptest.NewRecorder()
 			suite.e.ServeHTTP(recorder, req.WithContext(tc.ctx))
 
-			require.Equal(t, tc.expectedCode, recorder.Code)
+			assert.Assert(t, is.Equal(tc.expectedCode, recorder.Code))
 
 			if tc.expectedCode != http.StatusOK {
 				return
 			}
 
 			var out models.WebauthnBeginRegistrationResponse
-			require.NoError(t, json.NewDecoder(recorder.Body).Decode(&out))
-			require.NotNil(t, out.CredentialCreation)
-			require.NotEmpty(t, out.Session)
+			assert.NilError(t, json.NewDecoder(recorder.Body).Decode(&out))
+			assert.Assert(t, out.CredentialCreation != nil)
+			assert.Assert(t, len(out.Session) > 0)
 		})
 	}
 
 	internalCtx := auth.WithInternalOperationContext(context.Background())
 
 	exists, err := suite.db.User.Query().Where(user.Email(newEmail)).Exist(internalCtx)
-	require.NoError(t, err)
-	require.False(t, exists)
+	assert.NilError(t, err)
+	assert.Assert(t, !exists)
 }
 
-func (suite *HandlerTestSuite) TestFinishWebauthnRegistration() {
-	t := suite.T()
+func TestFinishWebauthnRegistration(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.enableTestWebauthn(t)
 	suite.registerTestHandler("POST", "registration/options", suite.h.BeginWebauthnRegistration)
@@ -193,24 +193,24 @@ func (suite *HandlerTestSuite) TestFinishWebauthnRegistration() {
 
 			rec := suite.registerPasskey(t, owner, finishCtx)
 
-			assert.Equal(t, tc.expectedCode, rec.Code)
+			assert.Check(t, is.Equal(tc.expectedCode, rec.Code))
 
 			count, err := suite.db.Webauthn.Query().Where(webauthn.OwnerID(owner.ID)).Count(owner.UserCtx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			if tc.expectedCode != http.StatusOK {
-				assert.Equal(t, 0, count)
+				assert.Check(t, is.Equal(0, count))
 				return
 			}
 
-			assert.Equal(t, 1, count)
-			assert.NotContains(t, rec.Body.String(), "access_token")
+			assert.Check(t, is.Equal(1, count))
+			assert.Check(t, !strings.Contains(rec.Body.String(), "access_token"))
 		})
 	}
 }
 
-func (suite *HandlerTestSuite) TestFinishWebauthnLogin() {
-	t := suite.T()
+func TestFinishWebauthnLogin(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.enableTestWebauthn(t)
 	suite.registerTestHandler("POST", "authentication/options", suite.h.BeginWebauthnLogin)
@@ -253,17 +253,17 @@ func (suite *HandlerTestSuite) TestFinishWebauthnLogin() {
 
 			rec := suite.loginWithPasskey(t, user, passkey)
 
-			assert.Equal(t, tc.expectedStatus, rec.Code)
+			assert.Check(t, is.Equal(tc.expectedStatus, rec.Code))
 
 			if tc.expectedError != "" {
-				assert.Contains(t, rec.Body.String(), tc.expectedError)
+				assert.Check(t, is.Contains(rec.Body.String(), tc.expectedError))
 			}
 		})
 	}
 }
 
-func (suite *HandlerTestSuite) TestPasskeysRespectTFAEnforcement() {
-	t := suite.T()
+func TestPasskeysRespectTFAEnforcement(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.enableTestWebauthn(t)
 	suite.registerTestHandler(http.MethodPost, "authentication/options", suite.h.BeginWebauthnLogin)
@@ -277,38 +277,33 @@ func (suite *HandlerTestSuite) TestPasskeysRespectTFAEnforcement() {
 
 	passkeyCredential := suite.createTestPasskey(t, testUser)
 
-	setting := suite.db.TFASetting.UpdateOne(suite.db.TFASetting.Create().
-		SetTotpAllowed(true).
-		SetOwnerID(testUser.ID).
-		SaveX(testUser.UserCtx)).
-		SetVerified(true).
-		SaveX(testUser.UserCtx)
+	setting := suite.verifiedTFASetting(t, testUser)
 
 	rec := suite.loginWithPasskey(t, testUser, passkeyCredential)
-	require.Equal(t, http.StatusOK, rec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, rec.Code))
 
 	var out models.LoginResponse
-	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
-	assert.True(t, out.Success)
-	assert.True(t, out.TFAEnabled)
+	assert.NilError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.Check(t, out.Success)
+	assert.Check(t, out.TFAEnabled)
 
 	response := rec.Result()
 	defer response.Body.Close()
 
-	require.NotEmpty(t, response.Cookies())
-	require.NotNil(t, setting.TfaSecret)
+	assert.Assert(t, len(response.Cookies()) > 0)
+	assert.Assert(t, setting.TfaSecret != nil)
 
 	code, err := totpGenerator(*setting.TfaSecret)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, tfaResponse := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{TOTPCode: code}, response.Cookies(), "")
-	assert.True(t, tfaResponse.Success)
-	assert.NotEmpty(t, tfaResponse.AccessToken)
-	assert.NotEmpty(t, tfaResponse.Session)
+	assert.Check(t, tfaResponse.Success)
+	assert.Check(t, tfaResponse.AccessToken != "")
+	assert.Check(t, tfaResponse.Session != "")
 }
 
-func (suite *HandlerTestSuite) TestHasValidSSOSession() {
-	t := suite.T()
+func TestHasValidSSOSession(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 	ctx := echo.New().NewContext(httptest.NewRequest("GET", "/", nil), httptest.NewRecorder())
 
 	user := suite.userBuilder(ctx.Request().Context())
@@ -319,26 +314,26 @@ func (suite *HandlerTestSuite) TestHasValidSSOSession() {
 	}
 
 	c, err := suite.h.SessionConfig.SaveAndStoreSession(ctx.Request().Context(), ctx.Response().Writer, set, user.ID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	token, err := sessions.SessionToken(c)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	ctx.Request().AddCookie(sessions.NewDevSessionCookie(token))
 
 	ok := suite.h.HasValidSSOSession(ctx, user.ID)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 }
 
-func (suite *HandlerTestSuite) TestHasValidSSOSessionInvalid() {
-	t := suite.T()
+func TestHasValidSSOSessionInvalid(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 	ctx := echo.New().NewContext(httptest.NewRequest("GET", "/", nil), httptest.NewRecorder())
 
 	user := suite.userBuilder(ctx.Request().Context())
 
 	// no cookie set
 	ok := suite.h.HasValidSSOSession(ctx, user.ID)
-	require.False(t, ok)
+	assert.Assert(t, !ok)
 }
 
 func (suite *HandlerTestSuite) enableTestWebauthn(t *testing.T) {
@@ -365,25 +360,25 @@ func (suite *HandlerTestSuite) registerPasskey(t *testing.T, owner testUserDetai
 	t.Helper()
 
 	body, err := json.Marshal(models.WebauthnRegistrationRequest{Email: owner.UserInfo.Email})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	beginReq := httptest.NewRequest(http.MethodPost, "/registration/options", bytes.NewReader(body))
 	beginReq.Header.Set("Content-Type", "application/json")
 
 	beginRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(beginRec, beginReq.WithContext(owner.UserCtx))
-	require.Equal(t, http.StatusOK, beginRec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, beginRec.Code))
 
 	var begin models.WebauthnBeginRegistrationResponse
-	require.NoError(t, json.NewDecoder(beginRec.Body).Decode(&begin))
-	require.NotNil(t, begin.CredentialCreation)
+	assert.NilError(t, json.NewDecoder(beginRec.Body).Decode(&begin))
+	assert.Assert(t, begin.CredentialCreation != nil)
 
 	clientData, err := json.Marshal(map[string]any{
 		"type":      "webauthn.create",
 		"challenge": begin.Response.Challenge.String(),
 		"origin":    passkeyTestOrigin,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	credentialID := []byte(ulids.New().String())
 
@@ -392,7 +387,7 @@ func (suite *HandlerTestSuite) registerPasskey(t *testing.T, owner testUserDetai
 		"attStmt":  map[string]any{},
 		"authData": passkeyAttestedAuthenticatorData(t, credentialID, newTestPasskeyKey(t)),
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	finish := models.WebauthnRegistrationFinishRequest{
 		ID:    base64.RawURLEncoding.EncodeToString(credentialID),
@@ -403,7 +398,7 @@ func (suite *HandlerTestSuite) registerPasskey(t *testing.T, owner testUserDetai
 	finish.Response.ClientDataJSON = base64.RawURLEncoding.EncodeToString(clientData)
 
 	finishBody, err := json.Marshal(finish)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	finishReq := httptest.NewRequest(http.MethodPost, "/registration/verification", bytes.NewReader(finishBody))
 	finishReq.Header.Set("Content-Type", "application/json")
@@ -433,7 +428,7 @@ func (suite *HandlerTestSuite) createTestPasskey(t *testing.T, user testUserDeta
 		SetSignCount(0).
 		SetTransports([]string{"internal"}).
 		Exec(user.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return testPasskey{credentialID: credentialID, key: key}
 }
@@ -446,25 +441,25 @@ func (suite *HandlerTestSuite) loginWithPasskey(t *testing.T, user testUserDetai
 
 	beginRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(beginRec, beginReq)
-	require.Equal(t, http.StatusOK, beginRec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, beginRec.Code))
 
 	var begin models.WebauthnBeginLoginResponse
-	require.NoError(t, json.NewDecoder(beginRec.Body).Decode(&begin))
-	require.NotNil(t, begin.CredentialAssertion)
+	assert.NilError(t, json.NewDecoder(beginRec.Body).Decode(&begin))
+	assert.Assert(t, begin.CredentialAssertion != nil)
 
 	clientData, err := json.Marshal(map[string]any{
 		"type":      "webauthn.get",
 		"challenge": begin.Response.Challenge.String(),
 		"origin":    passkeyTestOrigin,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	authData := passkeyAuthenticatorData()
 	clientDataHash := sha256.Sum256(clientData)
 	digest := sha256.Sum256(append(append([]byte{}, authData...), clientDataHash[:]...))
 
 	signature, err := ecdsa.SignASN1(rand.Reader, passkey.key, digest[:])
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	finish := models.WebauthnLoginFinishRequest{
 		ID:    base64.RawURLEncoding.EncodeToString(passkey.credentialID),
@@ -477,7 +472,7 @@ func (suite *HandlerTestSuite) loginWithPasskey(t *testing.T, user testUserDetai
 	finish.Response.UserHandle = base64.RawURLEncoding.EncodeToString([]byte(user.ID))
 
 	body, err := json.Marshal(finish)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	finishReq := httptest.NewRequest(http.MethodPost, "/authentication/verification", bytes.NewReader(body))
 	finishReq.Header.Set("Content-Type", "application/json")
@@ -496,7 +491,7 @@ func newTestPasskeyKey(t *testing.T) *ecdsa.PrivateKey {
 	t.Helper()
 
 	key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return key
 }
@@ -505,7 +500,7 @@ func passkeyPublicKey(t *testing.T, key *ecdsa.PrivateKey) []byte {
 	t.Helper()
 
 	point, err := key.PublicKey.Bytes()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	publicKey, err := webauthncbor.Marshal(webauthncose.EC2PublicKeyData{
 		PublicKeyData: webauthncose.PublicKeyData{
@@ -516,7 +511,7 @@ func passkeyPublicKey(t *testing.T, key *ecdsa.PrivateKey) []byte {
 		XCoord: point[1:33],
 		YCoord: point[33:65],
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return publicKey
 }

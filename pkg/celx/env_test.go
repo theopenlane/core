@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/google/cel-go/cel"
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
 )
 
 func TestNewEnvOptionsApplied(t *testing.T) {
@@ -16,13 +16,13 @@ func TestNewEnvOptionsApplied(t *testing.T) {
 	env, err := NewEnv(cfg,
 		cel.Variable("obj", cel.DynType),
 	)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
-	assert.True(t, env.HasLibrary("cel.lib.optional"))
-	assert.True(t, env.HasFunction("optional.of"))
+	assert.Check(t, env.HasLibrary("cel.lib.optional"))
+	assert.Check(t, env.HasFunction("optional.of"))
 
 	// Identifier escape syntax allows backtick identifiers
 
 	_, iss := env.Compile("{'key-1': 1}.`key-1`")
-	assert.NoError(t, iss.Err())
+	assert.Check(t, iss.Err())
 }

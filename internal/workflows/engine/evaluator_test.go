@@ -4,6 +4,8 @@ package engine_test
 
 import (
 	"context"
+	"slices"
+	"testing"
 
 	"github.com/oklog/ulid/v2"
 	"github.com/theopenlane/iam/auth"
@@ -12,6 +14,8 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/workflows"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestWorkflowEngineEvaluator verifies the workflow engine's CEL evaluator is properly initialized.
@@ -24,9 +28,10 @@ import (
 //
 //	Foundational test ensuring the CEL expression evaluator is available for condition
 //	and "when" clause evaluation.
-func (s *WorkflowEngineTestSuite) TestWorkflowEngineEvaluator() {
+func TestWorkflowEngineEvaluator(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	wfEngine := s.Engine()
-	s.Require().NotNil(wfEngine)
+	assert.Assert(t, wfEngine != nil)
 }
 
 // TestEvaluateConditions verifies the CEL expression evaluator correctly evaluates workflow
@@ -59,7 +64,8 @@ func (s *WorkflowEngineTestSuite) TestWorkflowEngineEvaluator() {
 //
 //	Conditions are the second layer of workflow filtering (after triggers). They enable
 //	complex business rules using CEL expressions with access to object state and trigger context.
-func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
+func TestEvaluateConditions(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -154,15 +160,16 @@ func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
+		t.Run(tc.name, func(t *testing.T) {
+			s := s.withT(t)
 			def.DefinitionJSON.Conditions = tc.conditions
 			result, err := wfEngine.EvaluateConditions(s.ctx, def, tc.obj, "UPDATE", tc.changedFields, nil, nil, nil, nil)
 
 			if tc.wantErr {
-				s.Error(err)
+				assert.Check(t, err != nil)
 			} else {
-				s.NoError(err)
-				s.Equal(tc.expected, result)
+				assert.Check(t, err)
+				assert.Check(t, is.DeepEqual(tc.expected, result))
 			}
 		})
 	}
@@ -192,7 +199,8 @@ func (s *WorkflowEngineTestSuite) TestEvaluateConditions() {
 //	FindMatchingDefinitions is the core lookup function called during mutation hooks.
 //	It must correctly filter by schema type, active status, operation, and fields to
 //	find only the relevant workflow definitions.
-func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
+func TestFindMatchingDefinitions(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -201,26 +209,27 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 		SetRefCode("CTL-MATCH-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	unknownObj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectType("NonexistentType")}
 
-	s.Run("no matching definitions", func() {
+	t.Run("no matching definitions", func(t *testing.T) {
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, "NonexistentType", "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Empty(defs)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 0))
 	})
 
-	s.Run("unsupported object type", func() {
+	t.Run("unsupported object type", func(t *testing.T) {
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, "NonexistentType", "UPDATE", []string{"status"}, nil, nil, nil, nil, unknownObj)
-		s.ErrorIs(err, workflows.ErrUnsupportedObjectType)
-		s.Empty(defs)
+		assert.Check(t, is.ErrorIs(err, workflows.ErrUnsupportedObjectType))
+		assert.Check(t, is.Len(defs, 0))
 	})
 
-	s.Run("finds matching definition", func() {
+	t.Run("finds matching definition", func(t *testing.T) {
+		s := s.withT(t)
 		def := s.CreateTestWorkflowDefinition(userCtx, orgID)
-		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+		t.Cleanup(func() { s.ClearWorkflowDefinitionsForOrg(orgID) })
 
 		def.DefinitionJSON.Triggers = []models.WorkflowTrigger{
 			{Operation: "UPDATE", Fields: []string{"status"}},
@@ -228,14 +237,15 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 		def = s.UpdateWorkflowDefinitionWithPrefilter(def, def.DefinitionJSON)
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
-		s.Equal(def.ID, defs[0].ID)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
+		assert.Check(t, is.DeepEqual(def.ID, defs[0].ID))
 	})
 
-	s.Run("filters out inactive definitions", func() {
+	t.Run("filters out inactive definitions", func(t *testing.T) {
+		s := s.withT(t)
 		def := s.CreateTestWorkflowDefinition(userCtx, orgID)
-		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+		t.Cleanup(func() { s.ClearWorkflowDefinitionsForOrg(orgID) })
 
 		def.DefinitionJSON.Triggers = []models.WorkflowTrigger{
 			{Operation: "UPDATE", Fields: []string{"status"}},
@@ -243,14 +253,15 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 		s.UpdateWorkflowDefinitionInactive(def, def.DefinitionJSON)
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Empty(defs)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 0))
 	})
 }
 
 // TestFindMatchingDefinitionsAuthContextPermutations verifies auth context permutations used by
 // workflow matching, including PAT/API token contexts without a selected OrganizationID.
-func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutations() {
+func TestFindMatchingDefinitionsAuthContextPermutations(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -263,13 +274,13 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 		[]string{"UPDATE"},
 		[]string{"status"},
 	)
-	defer s.ClearWorkflowDefinitionsForOrg(orgID)
+	t.Cleanup(func() { s.ClearWorkflowDefinitionsForOrg(orgID) })
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-AUTH-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	otherOrgID := ulid.Make().String()
@@ -345,7 +356,8 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
+		t.Run(tc.name, func(t *testing.T) {
+			s := s.withT(t)
 			ctx := context.Background()
 			if tc.caller != nil {
 				ctx = auth.WithCaller(ctx, tc.caller)
@@ -353,9 +365,9 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 			ctx = generated.NewContext(ctx, s.client)
 
 			defs, err := wfEngine.FindMatchingDefinitions(ctx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-			s.NoError(err)
-			s.Len(defs, 1)
-			s.Equal(def.ID, defs[0].ID)
+			assert.Check(t, err)
+			assert.Check(t, is.Len(defs, 1))
+			assert.Check(t, is.DeepEqual(def.ID, defs[0].ID))
 		})
 	}
 }
@@ -376,7 +388,8 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 //
 //	Selectors enable scoping workflows to specific subsets of objects. This is essential
 //	for multi-tenant environments where different teams have different approval requirements.
-func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
+func TestFindMatchingDefinitionsSelectors(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -386,25 +399,25 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 		SetName("PCI-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	group, err := s.client.Group.Create().
 		SetName("Workflow Group " + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-SELECTOR-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetTags([]string{tag.Name}).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	_, err = s.client.Control.UpdateOneID(control.ID).
 		AddEditorIDs(group.ID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -423,19 +436,19 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 	def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID, triggers, []string{"UPDATE"}, []string{"status"})
 
 	defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-	s.NoError(err)
-	s.Len(defs, 1)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(defs, 1))
 
 	procedure, err := s.client.Procedure.Create().
 		SetName("Procedure " + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	otherObj := &workflows.Object{ID: procedure.ID, Type: enums.WorkflowObjectTypeProcedure}
 	defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, otherObj)
-	s.NoError(err)
-	s.Empty(defs)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(defs, 0))
 }
 
 // TestFindMatchingDefinitionsEdgeTriggers verifies that workflows can trigger on edge
@@ -459,7 +472,8 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 //
 //	Edge-based triggers enable workflows that respond to relationship changes, not just
 //	field value changes. The CEL expression support allows complex edge-based conditions.
-func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
+func TestFindMatchingDefinitionsEdgeTriggers(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -467,7 +481,7 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
 		SetRefCode("CTL-EDGE-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
@@ -484,12 +498,12 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
 	addedIDs := map[string][]string{"evidence": {"evidence-1"}}
 
 	defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", nil, []string{"evidence"}, addedIDs, nil, nil, obj)
-	s.NoError(err)
-	s.Len(defs, 1)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(defs, 1))
 
 	defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", nil, []string{"other_edge"}, addedIDs, nil, nil, obj)
-	s.NoError(err)
-	s.Empty(defs)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(defs, 0))
 }
 
 // TestPrefilterBehavior verifies the prefilter optimization that allows efficient database
@@ -531,7 +545,8 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsEdgeTriggers() {
 //
 //	Prefiltering avoids loading all workflow definitions and evaluating their CEL expressions
 //	for every mutation. The database can efficiently filter based on indexed columns.
-func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
+func TestPrefilterBehavior(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -539,11 +554,12 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 		SetRefCode("CTL-PREFILTER-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
-	s.Run("prefilter by operation - UPDATE only", func() {
+	t.Run("prefilter by operation - UPDATE only", func(t *testing.T) {
+		s := s.withT(t)
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"status"}},
@@ -551,19 +567,20 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"UPDATE"},
 			[]string{"status"},
 		)
-		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+		t.Cleanup(func() { s.ClearWorkflowDefinitionsForOrg(orgID) })
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
-		s.Equal(def.ID, defs[0].ID)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
+		assert.Check(t, is.DeepEqual(def.ID, defs[0].ID))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "CREATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Empty(defs)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 0))
 	})
 
-	s.Run("prefilter by operation - multiple operations", func() {
+	t.Run("prefilter by operation - multiple operations", func(t *testing.T) {
+		s := s.withT(t)
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"status"}},
@@ -572,22 +589,23 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"CREATE", "UPDATE"},
 			[]string{"name", "status"},
 		)
-		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+		t.Cleanup(func() { s.ClearWorkflowDefinitionsForOrg(orgID) })
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "CREATE", []string{"name"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "DELETE", []string{"id"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Empty(defs)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 0))
 	})
 
-	s.Run("prefilter by fields - single field", func() {
+	t.Run("prefilter by fields - single field", func(t *testing.T) {
+		s := s.withT(t)
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"status"}},
@@ -595,18 +613,19 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"UPDATE"},
 			[]string{"status"},
 		)
-		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+		t.Cleanup(func() { s.ClearWorkflowDefinitionsForOrg(orgID) })
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"name"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Empty(defs)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 0))
 	})
 
-	s.Run("prefilter by fields - multiple fields OR semantics", func() {
+	t.Run("prefilter by fields - multiple fields OR semantics", func(t *testing.T) {
+		s := s.withT(t)
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"status", "priority"}},
@@ -614,26 +633,27 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"UPDATE"},
 			[]string{"priority", "status"},
 		)
-		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+		t.Cleanup(func() { s.ClearWorkflowDefinitionsForOrg(orgID) })
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"priority"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status", "priority"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"description"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Empty(defs)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 0))
 	})
 
-	s.Run("prefilter with null trigger_fields matches any field", func() {
+	t.Run("prefilter with null trigger_fields matches any field", func(t *testing.T) {
+		s := s.withT(t)
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
 			[]models.WorkflowTrigger{
 				{Operation: "UPDATE", ObjectType: enums.WorkflowObjectTypeControl},
@@ -641,20 +661,21 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 			[]string{"UPDATE"},
 			nil,
 		)
-		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+		t.Cleanup(func() { s.ClearWorkflowDefinitionsForOrg(orgID) })
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"any_field"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 	})
 
-	s.Run("prefilter correctly derives from definition JSON", func() {
+	t.Run("prefilter correctly derives from definition JSON", func(t *testing.T) {
+		s := s.withT(t)
 		def := s.CreateTestWorkflowDefinition(userCtx, orgID)
-		defer s.ClearWorkflowDefinitionsForOrg(orgID)
+		t.Cleanup(func() { s.ClearWorkflowDefinitionsForOrg(orgID) })
 
 		def.DefinitionJSON.Triggers = []models.WorkflowTrigger{
 			{Operation: "CREATE", ObjectType: enums.WorkflowObjectTypeControl, Fields: []string{"name", "description"}},
@@ -663,19 +684,19 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 
 		updated := s.UpdateWorkflowDefinitionWithPrefilter(def, def.DefinitionJSON)
 
-		s.ElementsMatch([]string{"CREATE", "UPDATE"}, updated.TriggerOperations)
-		s.ElementsMatch([]string{"description", "name", "status"}, updated.TriggerFields)
+		assert.Check(t, is.DeepEqual([]string{"CREATE", "UPDATE"}, slices.Sorted(slices.Values(updated.TriggerOperations))))
+		assert.Check(t, is.DeepEqual([]string{"description", "name", "status"}, slices.Sorted(slices.Values(updated.TriggerFields))))
 
 		defs, err := wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "CREATE", []string{"name"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Len(defs, 1)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 1))
 
 		defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "DELETE", []string{"id"}, nil, nil, nil, nil, obj)
-		s.NoError(err)
-		s.Empty(defs)
+		assert.Check(t, err)
+		assert.Check(t, is.Len(defs, 0))
 	})
 }

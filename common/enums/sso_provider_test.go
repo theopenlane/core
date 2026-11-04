@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 )
@@ -25,7 +26,7 @@ func TestToSSOProvider(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(fmt.Sprintf("to %s", tc.input), func(t *testing.T) {
 			res := enums.ToSSOProvider(tc.input)
-			assert.Equal(t, tc.expected, *res)
+			assert.Check(t, is.Equal(tc.expected, *res))
 		})
 	}
 }

@@ -11,8 +11,8 @@ import (
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/objects/mocks"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -82,7 +82,7 @@ func TestExtractUploads(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := extractUploads(tt.input)
-			assert.Len(t, result, tt.expected)
+			assert.Check(t, is.Len(result, tt.expected))
 		})
 	}
 }
@@ -196,11 +196,11 @@ func TestParseVariablesMap(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result, err := parseVariablesMap(tt.variables, tt.keys...)
-			require.NoError(t, err)
-			assert.Len(t, result, tt.wantFiles)
+			assert.NilError(t, err)
+			assert.Check(t, is.Len(result, tt.wantFiles))
 
 			for _, key := range tt.wantKeys {
-				assert.Contains(t, result, key)
+				assert.Check(t, is.Contains(result, key))
 			}
 		})
 	}
@@ -292,11 +292,11 @@ func TestParseMultipartForm(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			form, err := createMultipartForm(tt.files)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			result, err := parseMultipartForm(form, tt.keys...)
-			require.NoError(t, err)
-			assert.Len(t, result, tt.wantFiles)
+			assert.NilError(t, err)
+			assert.Check(t, is.Len(result, tt.wantFiles))
 		})
 	}
 }
@@ -313,42 +313,42 @@ func TestParseFilesFromSource(t *testing.T) {
 		}
 
 		result, err := ParseFilesFromSource(source)
-		require.NoError(t, err)
-		assert.Len(t, result, 1)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 1))
 	})
 
 	t.Run("http request with nil multipart form", func(t *testing.T) {
 		req := &http.Request{}
 
 		result, err := ParseFilesFromSource(req)
-		require.NoError(t, err)
-		assert.Len(t, result, 0)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 0))
 	})
 
 	t.Run("http request with multipart form", func(t *testing.T) {
 		form, err := createMultipartForm(map[string][]string{
 			"file": {"test.txt"},
 		})
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		req := &http.Request{
 			MultipartForm: form,
 		}
 
 		result, err := ParseFilesFromSource(req)
-		require.NoError(t, err)
-		assert.Len(t, result, 1)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 1))
 	})
 
 	t.Run("multipart form source", func(t *testing.T) {
 		form, err := createMultipartForm(map[string][]string{
 			"file": {"test.txt"},
 		})
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		result, err := ParseFilesFromSource(form)
-		require.NoError(t, err)
-		assert.Len(t, result, 1)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 1))
 	})
 }
 
@@ -364,9 +364,9 @@ func TestWriteFilesToContext(t *testing.T) {
 		newCtx := WriteFilesToContext(ctx, files)
 
 		result, err := FilesFromContext(newCtx)
-		require.NoError(t, err)
-		assert.Len(t, result, 1)
-		assert.Len(t, result["file1"], 1)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 1))
+		assert.Check(t, is.Len(result["file1"], 1))
 	})
 
 	t.Run("append to existing context", func(t *testing.T) {
@@ -388,8 +388,8 @@ func TestWriteFilesToContext(t *testing.T) {
 		ctx = WriteFilesToContext(ctx, files2)
 
 		result, err := FilesFromContext(ctx)
-		require.NoError(t, err)
-		assert.Len(t, result["file1"], 2)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result["file1"], 2))
 	})
 
 	t.Run("multiple keys", func(t *testing.T) {
@@ -406,8 +406,8 @@ func TestWriteFilesToContext(t *testing.T) {
 		ctx = WriteFilesToContext(ctx, files)
 
 		result, err := FilesFromContext(ctx)
-		require.NoError(t, err)
-		assert.Len(t, result, 2)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 2))
 	})
 }
 
@@ -431,8 +431,8 @@ func TestUpdateFileInContextByKey(t *testing.T) {
 		ctx = UpdateFileInContextByKey(ctx, "file1", updatedFile)
 
 		result, err := FilesFromContextWithKey(ctx, "file1")
-		require.NoError(t, err)
-		assert.Equal(t, "new.txt", result[0].OriginalName)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal("new.txt", result[0].OriginalName))
 	})
 
 	t.Run("file not found", func(t *testing.T) {
@@ -453,9 +453,9 @@ func TestUpdateFileInContextByKey(t *testing.T) {
 		ctx = UpdateFileInContextByKey(ctx, "file1", updatedFile)
 
 		result, err := FilesFromContextWithKey(ctx, "file1")
-		require.NoError(t, err)
-		assert.Len(t, result, 1)
-		assert.Equal(t, "1", result[0].ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 1))
+		assert.Check(t, is.Equal("1", result[0].ID))
 	})
 
 	t.Run("empty context", func(t *testing.T) {
@@ -469,8 +469,8 @@ func TestUpdateFileInContextByKey(t *testing.T) {
 		ctx = UpdateFileInContextByKey(ctx, "file1", updatedFile)
 
 		result, err := FilesFromContextWithKey(ctx, "file1")
-		require.NoError(t, err)
-		assert.Empty(t, result)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 0))
 	})
 }
 
@@ -489,8 +489,8 @@ func TestRemoveFileFromContext(t *testing.T) {
 		ctx = RemoveFileFromContext(ctx, fileToRemove)
 
 		result, err := FilesFromContext(ctx)
-		require.NoError(t, err)
-		assert.Empty(t, result)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 0))
 	})
 
 	t.Run("remove one of multiple files", func(t *testing.T) {
@@ -508,9 +508,9 @@ func TestRemoveFileFromContext(t *testing.T) {
 		ctx = RemoveFileFromContext(ctx, fileToRemove)
 
 		result, err := FilesFromContextWithKey(ctx, "file1")
-		require.NoError(t, err)
-		assert.Len(t, result, 1)
-		assert.Equal(t, "2", result[0].ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 1))
+		assert.Check(t, is.Equal("2", result[0].ID))
 	})
 
 	t.Run("remove non-existent file", func(t *testing.T) {
@@ -527,8 +527,8 @@ func TestRemoveFileFromContext(t *testing.T) {
 		ctx = RemoveFileFromContext(ctx, fileToRemove)
 
 		result, err := FilesFromContext(ctx)
-		require.NoError(t, err)
-		assert.Len(t, result["file1"], 1)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result["file1"], 1))
 	})
 
 	t.Run("empty context", func(t *testing.T) {
@@ -538,8 +538,8 @@ func TestRemoveFileFromContext(t *testing.T) {
 		ctx = RemoveFileFromContext(ctx, fileToRemove)
 
 		result, err := FilesFromContext(ctx)
-		require.NoError(t, err)
-		assert.Empty(t, result)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 0))
 	})
 }
 
@@ -555,15 +555,15 @@ func TestFilesFromContext(t *testing.T) {
 		ctx = WriteFilesToContext(ctx, files)
 
 		result, err := FilesFromContext(ctx)
-		require.NoError(t, err)
-		assert.Len(t, result, 1)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 1))
 	})
 
 	t.Run("empty context", func(t *testing.T) {
 		ctx := context.Background()
 
 		_, err := FilesFromContext(ctx)
-		assert.ErrorIs(t, err, storage.ErrNoFilesUploaded)
+		assert.Check(t, is.ErrorIs(err, storage.ErrNoFilesUploaded))
 	})
 }
 
@@ -582,9 +582,9 @@ func TestFilesFromContextWithKey(t *testing.T) {
 		ctx = WriteFilesToContext(ctx, files)
 
 		result, err := FilesFromContextWithKey(ctx, "file1")
-		require.NoError(t, err)
-		assert.Len(t, result, 1)
-		assert.Equal(t, "1", result[0].ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result, 1))
+		assert.Check(t, is.Equal("1", result[0].ID))
 	})
 
 	t.Run("key not found", func(t *testing.T) {
@@ -598,15 +598,15 @@ func TestFilesFromContextWithKey(t *testing.T) {
 		ctx = WriteFilesToContext(ctx, files)
 
 		result, err := FilesFromContextWithKey(ctx, "nonexistent")
-		require.NoError(t, err)
-		assert.Nil(t, result)
+		assert.NilError(t, err)
+		assert.Check(t, is.Nil(result))
 	})
 
 	t.Run("empty context", func(t *testing.T) {
 		ctx := context.Background()
 
 		_, err := FilesFromContextWithKey(ctx, "file1")
-		assert.ErrorIs(t, err, storage.ErrNoFilesUploaded)
+		assert.Check(t, is.ErrorIs(err, storage.ErrNoFilesUploaded))
 	})
 }
 
@@ -626,17 +626,17 @@ func TestGetFileIDsFromContext(t *testing.T) {
 		ctx = WriteFilesToContext(ctx, files)
 
 		result := GetFileIDsFromContext(ctx)
-		assert.Len(t, result, 3)
-		assert.Contains(t, result, "1")
-		assert.Contains(t, result, "2")
-		assert.Contains(t, result, "3")
+		assert.Check(t, is.Len(result, 3))
+		assert.Check(t, is.Contains(result, "1"))
+		assert.Check(t, is.Contains(result, "2"))
+		assert.Check(t, is.Contains(result, "3"))
 	})
 
 	t.Run("empty context", func(t *testing.T) {
 		ctx := context.Background()
 
 		result := GetFileIDsFromContext(ctx)
-		assert.Empty(t, result)
+		assert.Check(t, is.Len(result, 0))
 	})
 }
 
@@ -656,12 +656,12 @@ func TestProcessFilesForMutation(t *testing.T) {
 		mockMutation.EXPECT().ID().Return("mutation-id-123", true)
 
 		newCtx, err := ProcessFilesForMutation(ctx, mockMutation, "file1")
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		result, err := FilesFromContextWithKey(newCtx, "file1")
-		require.NoError(t, err)
-		assert.Equal(t, "mutation-id-123", result[0].Parent.ID)
-		assert.Equal(t, "TestType", result[0].Parent.Type)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal("mutation-id-123", result[0].Parent.ID))
+		assert.Check(t, is.Equal("TestType", result[0].Parent.Type))
 	})
 
 	t.Run("process files with parent type override", func(t *testing.T) {
@@ -679,12 +679,12 @@ func TestProcessFilesForMutation(t *testing.T) {
 		mockMutation.EXPECT().ID().Return("mutation-id-456", true)
 
 		newCtx, err := ProcessFilesForMutation(ctx, mockMutation, "file1", "OverrideType")
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		result, err := FilesFromContextWithKey(newCtx, "file1")
-		require.NoError(t, err)
-		assert.Equal(t, "mutation-id-456", result[0].Parent.ID)
-		assert.Equal(t, "OverrideType", result[0].Parent.Type)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal("mutation-id-456", result[0].Parent.ID))
+		assert.Check(t, is.Equal("OverrideType", result[0].Parent.Type))
 	})
 
 	t.Run("no files in context", func(t *testing.T) {
@@ -693,8 +693,8 @@ func TestProcessFilesForMutation(t *testing.T) {
 		mockMutation := mocks.NewMockMutation(t)
 
 		newCtx, err := ProcessFilesForMutation(ctx, mockMutation, "file1")
-		require.NoError(t, err)
-		assert.Equal(t, ctx, newCtx)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(ctx, newCtx))
 	})
 
 	t.Run("different field name", func(t *testing.T) {
@@ -710,19 +710,19 @@ func TestProcessFilesForMutation(t *testing.T) {
 		mockMutation := mocks.NewMockMutation(t)
 
 		newCtx, err := ProcessFilesForMutation(ctx, mockMutation, "file2")
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		result, err := FilesFromContextWithKey(newCtx, "file1")
-		require.NoError(t, err)
-		assert.Empty(t, result[0].Parent.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(result[0].Parent.ID, 0))
 	})
 }
 
 func TestReaderToSeeker(t *testing.T) {
 	t.Run("nil reader", func(t *testing.T) {
 		result, err := ReaderToSeeker(nil)
-		require.NoError(t, err)
-		assert.Nil(t, result)
+		assert.NilError(t, err)
+		assert.Check(t, is.Nil(result))
 	})
 
 	t.Run("already a ReadSeeker", func(t *testing.T) {
@@ -730,8 +730,8 @@ func TestReaderToSeeker(t *testing.T) {
 		reader := bytes.NewReader(data)
 
 		result, err := ReaderToSeeker(reader)
-		require.NoError(t, err)
-		assert.Equal(t, reader, result)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(reader, result))
 	})
 
 	t.Run("small reader uses buffering", func(t *testing.T) {
@@ -739,14 +739,14 @@ func TestReaderToSeeker(t *testing.T) {
 		reader := io.NopCloser(bytes.NewReader(data))
 
 		result, err := ReaderToSeeker(reader)
-		require.NoError(t, err)
-		assert.NotNil(t, result)
+		assert.NilError(t, err)
+		assert.Check(t, result != nil)
 
 		buf := make([]byte, len(data))
 		n, err := result.Read(buf)
-		require.NoError(t, err)
-		assert.Equal(t, len(data), n)
-		assert.Equal(t, data, buf)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(len(data), n))
+		assert.Check(t, is.DeepEqual(data, buf))
 	})
 
 	t.Run("buffered reader is returned as is", func(t *testing.T) {
@@ -754,7 +754,7 @@ func TestReaderToSeeker(t *testing.T) {
 		br := NewBufferedReader(data)
 
 		result, err := ReaderToSeeker(br)
-		require.NoError(t, err)
-		assert.Equal(t, br, result)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(br, result))
 	})
 }

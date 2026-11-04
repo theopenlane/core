@@ -244,6 +244,8 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 }
 
 func TestMutationRemove_ProgramMember(t *testing.T) {
+	t.Parallel()
+
 	orgUser := suite.SeedFreshMinimalOrgUsers(t, false)
 	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(orgUser.Owner.UserCtx, t)
 	var memberID string

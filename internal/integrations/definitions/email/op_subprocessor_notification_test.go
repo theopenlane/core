@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // renderSubprocessorMessage renders the subprocessor notification through its dispatcher and returns the
@@ -16,15 +16,15 @@ func renderSubprocessorMessage(t *testing.T, req SubprocessorNotificationRequest
 	t.Helper()
 
 	dispatcher, ok := DispatcherByKey(SubprocessorNotificationOp.Name())
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	client := &Client{Config: *MockRuntimeConfig()}
 
 	payload, err := json.Marshal(req)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	msg, err := dispatcher.RenderMessage(context.Background(), client, payload)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return msg.GetHTML()
 }
@@ -42,17 +42,17 @@ func TestSubprocessorNotificationListUnsubscribeHeader(t *testing.T) {
 	}
 
 	dispatcher, ok := DispatcherByKey(SubprocessorNotificationOp.Name())
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	client := &Client{Config: *MockRuntimeConfig()}
 	payload, err := json.Marshal(req)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	msg, err := dispatcher.RenderMessage(context.Background(), client, payload)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "<https://trust.openlane.io/api/unsubscribe?token=tok_abc123>", msg.Headers["List-Unsubscribe"])
-	assert.Equal(t, "List-Unsubscribe=One-Click", msg.Headers["List-Unsubscribe-Post"])
+	assert.Check(t, is.Equal("<https://trust.openlane.io/api/unsubscribe?token=tok_abc123>", msg.Headers["List-Unsubscribe"]))
+	assert.Check(t, is.Equal("List-Unsubscribe=One-Click", msg.Headers["List-Unsubscribe-Post"]))
 }
 
 // sampleSubprocessorEntries returns one entry of each change kind for rendering assertions
@@ -76,10 +76,10 @@ func TestSubprocessorNotificationSubject(t *testing.T) {
 	branded := dispatcher.Subject(cfg, SubprocessorNotificationRequest{
 		TrustCenterBranding: TrustCenterBranding{CompanyName: "SecureCorp"},
 	})
-	assert.Equal(t, "SecureCorp Trust Center Subprocessor Update", branded)
+	assert.Check(t, is.Equal("SecureCorp Trust Center Subprocessor Update", branded))
 
 	generic := dispatcher.Subject(cfg, SubprocessorNotificationRequest{})
-	assert.Equal(t, subprocessorNotificationSubject, generic)
+	assert.Check(t, is.Equal(subprocessorNotificationSubject, generic))
 }
 
 // TestSubprocessorNotificationBrandingOverride verifies the subprocessor notification applies the trust
@@ -101,36 +101,36 @@ func TestSubprocessorNotificationBrandingOverride(t *testing.T) {
 	html := renderSubprocessorMessage(t, req)
 
 	// the copy leads with the trust center's company name
-	assert.Contains(t, html, "SecureCorp has updated its subprocessors")
+	assert.Check(t, is.Contains(html, "SecureCorp has updated its subprocessors"))
 
 	// trust center identity is applied: company name, and the logo exactly once (header slot
 	// only, no in-body hero logo)
-	assert.Contains(t, html, "SecureCorp")
-	assert.Equal(t, 1, strings.Count(html, "https://securecorp.example.com/logo.png"))
+	assert.Check(t, is.Contains(html, "SecureCorp"))
+	assert.Check(t, is.Equal(1, strings.Count(html, "https://securecorp.example.com/logo.png")))
 
 	// the accent surfaces only as decorative borders; containers and buttons keep the system styling
-	assert.Contains(t, html, "border-top:4px solid #3fc2b4")
-	assert.Contains(t, html, "border-left:3px solid #3fc2b4")
-	assert.Contains(t, html, "background-color:#14171e") // the CTA button keeps the system color
-	assert.NotContains(t, html, "background-color:#3fc2b4")
+	assert.Check(t, is.Contains(html, "border-top:4px solid #3fc2b4"))
+	assert.Check(t, is.Contains(html, "border-left:3px solid #3fc2b4"))
+	assert.Check(t, is.Contains(html, "background-color:#14171e")) // the CTA button keeps the system color
+	assert.Check(t, !strings.Contains(html, "background-color:#3fc2b4"))
 
 	// platform marketing chrome is stripped from trust center subscriber emails
-	assert.NotContains(t, html, MockRuntimeConfig().Tagline)
-	assert.NotContains(t, html, MockRuntimeConfig().HeaderText)
+	assert.Check(t, !strings.Contains(html, MockRuntimeConfig().Tagline))
+	assert.Check(t, !strings.Contains(html, MockRuntimeConfig().HeaderText))
 
 	// the changed vendor list renders just names and change labels (no logo, link, or countries)
-	assert.Contains(t, html, "Amazon Web Services")
-	assert.Contains(t, html, "Stripe")
-	assert.Contains(t, html, "Twilio")
-	assert.Contains(t, html, "Added")
-	assert.Contains(t, html, "Updated")
-	assert.Contains(t, html, "Removed")
+	assert.Check(t, is.Contains(html, "Amazon Web Services"))
+	assert.Check(t, is.Contains(html, "Stripe"))
+	assert.Check(t, is.Contains(html, "Twilio"))
+	assert.Check(t, is.Contains(html, "Added"))
+	assert.Check(t, is.Contains(html, "Updated"))
+	assert.Check(t, is.Contains(html, "Removed"))
 
 	// the link back to the trust center is the call-to-action button
-	assert.Contains(t, html, `href="https://securecorp.example.com/trust"`)
+	assert.Check(t, is.Contains(html, `href="https://securecorp.example.com/trust"`))
 
 	// the per-recipient unsubscribe link is resolved from the token
-	assert.Contains(t, html, "https://securecorp.example.com/unsubscribe?token=tok_dolores")
+	assert.Check(t, is.Contains(html, "https://securecorp.example.com/unsubscribe?token=tok_dolores"))
 }
 
 // TestSubprocessorNotificationSystemBrandingFallback verifies the notification falls back to the Openlane
@@ -147,8 +147,8 @@ func TestSubprocessorNotificationSystemBrandingFallback(t *testing.T) {
 
 	// no trust center company name leaks in; the system config branding and generic copy are used
 	// instead (the title's apostrophe renders HTML-escaped), and no accent border is drawn
-	assert.NotContains(t, html, "SecureCorp")
-	assert.Contains(t, html, cfg.CompanyName)
-	assert.Contains(t, html, "updated our subprocessors")
-	assert.NotContains(t, html, "border-top:4px solid")
+	assert.Check(t, !strings.Contains(html, "SecureCorp"))
+	assert.Check(t, is.Contains(html, cfg.CompanyName))
+	assert.Check(t, is.Contains(html, "updated our subprocessors"))
+	assert.Check(t, !strings.Contains(html, "border-top:4px solid"))
 }

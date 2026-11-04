@@ -9,6 +9,7 @@ import (
 	"errors"
 	"os"
 	"sync"
+	"text/template"
 
 	"github.com/rs/zerolog/log"
 
@@ -102,10 +103,12 @@ var (
 var enabledBaseFeatures = []gen.Feature{
 	gen.FeatureVersionedMigration,
 	gen.FeaturePrivacy,
-	gen.FeatureEntQL,
 	gen.FeatureNamedEdges,
 	gen.FeatureIntercept,
 }
+
+// history policies and interceptors never use entql filters, so only the main schema generates them
+var enabledMainFeatures = append(enabledBaseFeatures, gen.FeatureEntQL, gen.FeatureModifier)
 
 func main() {
 	// setup logging
@@ -187,7 +190,7 @@ func main() {
 // 12/18/2025 MKA - This was modified to remove the use of prepareQuery and withInterceptors to prevent duplicate query execution
 func WithGqlWithTemplates() entgql.ExtensionOption {
 	paginationTmpl := gen.MustParse(gen.NewTemplate("node").
-		Funcs(entgql.TemplateFuncs).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl", "templates/entgql/collection.tmpl", "templates/entgql/gql_mutation_input.tmpl"))
+		Funcs(entgql.TemplateFuncs).Funcs(template.FuncMap{"isHistoryWhereField": genhelpers.IsHistoryWhereField}).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl", "templates/entgql/collection.tmpl", "templates/entgql/gql_mutation_input.tmpl"))
 	return entgql.WithTemplates(append(entgql.AllTemplates, paginationTmpl)...)
 }
 
@@ -260,7 +263,7 @@ func getEntHistoryGqlExtension() *entgql.Extension {
 		entgql.WithSchemaPath(graphHistorySchemaDir+"ent.graphql"),
 		entgql.WithConfigPath(graphDir+"/generate/.gqlgen_history.yml"),
 		entgql.WithWhereInputs(true),
-		entgql.WithSchemaHook(genhelpers.PruneWhereInputOps()),
+		entgql.WithSchemaHook(genhelpers.PruneWhereInputOps(), genhelpers.PruneHistoryWhereInputs()),
 		WithGqlWithTemplates(),
 	)
 	if err != nil {
@@ -452,7 +455,7 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 			captureGraphHook,
 		},
 		Package:    "github.com/theopenlane/core/v2/" + entGeneratedPath,
-		Features:   append(enabledBaseFeatures, gen.FeatureModifier),
+		Features:   enabledMainFeatures,
 		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(

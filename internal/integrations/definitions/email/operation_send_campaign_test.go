@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 )
@@ -12,10 +13,10 @@ import (
 // TestUnsubscribeTokenFromMetadata verifies the per-recipient unsubscribe token is read from
 // campaign target metadata only when present and string-typed
 func TestUnsubscribeTokenFromMetadata(t *testing.T) {
-	assert.Equal(t, "tok_abc", unsubscribeTokenFromMetadata(map[string]any{MetadataUnsubscribeTokenKey: "tok_abc"}))
-	assert.Empty(t, unsubscribeTokenFromMetadata(map[string]any{}))
-	assert.Empty(t, unsubscribeTokenFromMetadata(nil))
-	assert.Empty(t, unsubscribeTokenFromMetadata(map[string]any{MetadataUnsubscribeTokenKey: 123}))
+	assert.Check(t, is.Equal("tok_abc", unsubscribeTokenFromMetadata(map[string]any{MetadataUnsubscribeTokenKey: "tok_abc"})))
+	assert.Check(t, is.Len(unsubscribeTokenFromMetadata(map[string]any{}), 0))
+	assert.Check(t, is.Len(unsubscribeTokenFromMetadata(nil), 0))
+	assert.Check(t, is.Len(unsubscribeTokenFromMetadata(map[string]any{MetadataUnsubscribeTokenKey: 123}), 0))
 }
 
 // TestUnsubscribeTokenInterpolatedIntoPayload verifies the per-recipient unsubscribe token is an
@@ -32,62 +33,62 @@ func TestUnsubscribeTokenInterpolatedIntoPayload(t *testing.T) {
 		Email:            "person@example.com",
 		UnsubscribeToken: "tok_abc123",
 	})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	resolved, err := interpolatePayload(client, payload)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	var req BrandedMessageRequest
-	assert.NoError(t, json.Unmarshal(resolved, &req))
-	assert.Equal(t, "https://tc.example.com/unsubscribe?token=tok_abc123", req.UnsubscribeURL)
+	assert.Check(t, json.Unmarshal(resolved, &req))
+	assert.Check(t, is.Equal("https://tc.example.com/unsubscribe?token=tok_abc123", req.UnsubscribeURL))
 }
 
 func TestSplitFullName_FirstAndLast(t *testing.T) {
 	first, last := splitFullName("Alice Smith")
 
-	assert.Equal(t, "Alice", first)
-	assert.Equal(t, "Smith", last)
+	assert.Check(t, is.Equal("Alice", first))
+	assert.Check(t, is.Equal("Smith", last))
 }
 
 func TestSplitFullName_FirstOnly(t *testing.T) {
 	first, last := splitFullName("Alice")
 
-	assert.Equal(t, "Alice", first)
-	assert.Equal(t, "", last)
+	assert.Check(t, is.Equal("Alice", first))
+	assert.Check(t, is.Equal("", last))
 }
 
 func TestSplitFullName_Empty(t *testing.T) {
 	first, last := splitFullName("")
 
-	assert.Equal(t, "", first)
-	assert.Equal(t, "", last)
+	assert.Check(t, is.Equal("", first))
+	assert.Check(t, is.Equal("", last))
 }
 
 func TestSplitFullName_Whitespace(t *testing.T) {
 	first, last := splitFullName("   ")
 
-	assert.Equal(t, "", first)
-	assert.Equal(t, "", last)
+	assert.Check(t, is.Equal("", first))
+	assert.Check(t, is.Equal("", last))
 }
 
 func TestSplitFullName_LeadingTrailingSpaces(t *testing.T) {
 	first, last := splitFullName("  Alice Smith  ")
 
-	assert.Equal(t, "Alice", first)
-	assert.Equal(t, "Smith", last)
+	assert.Check(t, is.Equal("Alice", first))
+	assert.Check(t, is.Equal("Smith", last))
 }
 
 func TestSplitFullName_MultipleNames(t *testing.T) {
 	// Only splits on the first space; "Mary Smith" stays in last
 	first, last := splitFullName("Jane Mary Smith")
 
-	assert.Equal(t, "Jane", first)
-	assert.Equal(t, "Mary Smith", last)
+	assert.Check(t, is.Equal("Jane", first))
+	assert.Check(t, is.Equal("Mary Smith", last))
 }
 
 func TestSplitFullName_Unicode(t *testing.T) {
 	first, last := splitFullName("José García")
 
-	assert.Equal(t, "José", first)
-	assert.Equal(t, "García", last)
+	assert.Check(t, is.Equal("José", first))
+	assert.Check(t, is.Equal("García", last))
 }

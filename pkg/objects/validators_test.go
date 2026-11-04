@@ -4,8 +4,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
 	"github.com/theopenlane/core/v2/pkg/pdftext"
 )
 
@@ -98,13 +99,13 @@ func TestMimeTypeValidator(t *testing.T) {
 			err := validator(tt.file)
 
 			if tt.expectError {
-				require.Error(t, err)
-				assert.ErrorIs(t, err, ErrUnsupportedMimeType)
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.ErrorIs(err, ErrUnsupportedMimeType))
 				if tt.errorContains != "" {
-					assert.Contains(t, err.Error(), tt.errorContains)
+					assert.Check(t, is.Contains(err.Error(), tt.errorContains))
 				}
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 		})
 	}
@@ -130,7 +131,7 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2)
 		err := chainedValidator(file)
 
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("first validator fails", func(t *testing.T) {
@@ -149,8 +150,8 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2)
 		err := chainedValidator(file)
 
-		require.Error(t, err)
-		assert.ErrorIs(t, err, ErrUnsupportedMimeType)
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, ErrUnsupportedMimeType))
 	})
 
 	t.Run("second validator fails", func(t *testing.T) {
@@ -172,8 +173,8 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2)
 		err := chainedValidator(file)
 
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "file too large")
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "file too large"))
 	})
 
 	t.Run("empty validator chain", func(t *testing.T) {
@@ -186,7 +187,7 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators()
 		err := chainedValidator(file)
 
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("single validator", func(t *testing.T) {
@@ -200,7 +201,7 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator)
 		err := chainedValidator(file)
 
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("multiple validators with custom logic", func(t *testing.T) {
@@ -229,7 +230,7 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2, validator3)
 		err := chainedValidator(file)
 
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("stops at first error", func(t *testing.T) {
@@ -254,8 +255,8 @@ func TestChainValidators(t *testing.T) {
 		chainedValidator := ChainValidators(validator1, validator2)
 		err := chainedValidator(file)
 
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "first error")
-		assert.Equal(t, []string{"validator1"}, validationOrder)
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "first error"))
+		assert.Check(t, is.DeepEqual([]string{"validator1"}, validationOrder))
 	})
 }

@@ -944,7 +944,10 @@ func (_c *ProcedureCreate) defaults() error {
 		_c.mutation.SetApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ReviewDue(); !ok {
-		v := procedure.DefaultReviewDue
+		if procedure.DefaultReviewDue == nil {
+			return fmt.Errorf("generated: uninitialized procedure.DefaultReviewDue (forgotten import generated/runtime?)")
+		}
+		v := procedure.DefaultReviewDue()
 		_c.mutation.SetReviewDue(v)
 	}
 	if _, ok := _c.mutation.ReviewFrequency(); !ok {

@@ -9,14 +9,13 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 const (
@@ -26,8 +25,8 @@ const (
 	orgCookieName           = "organization_id"
 )
 
-func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsCookiesAndReturnsURL() {
-	t := suite.T()
+func TestStartOAuthFlow_SetsCookiesAndReturnsURL(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -36,22 +35,22 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsCookiesAndReturnsURL() {
 
 	startRec, resp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 
-	assert.Equal(t, http.StatusOK, startRec.Code)
-	assert.True(t, resp.Success)
-	assert.NotEmpty(t, resp.AuthURL)
-	assert.NotEmpty(t, resp.State)
+	assert.Check(t, is.Equal(http.StatusOK, startRec.Code))
+	assert.Check(t, resp.Success)
+	assert.Check(t, len(resp.AuthURL) > 0)
+	assert.Check(t, len(resp.State) > 0)
 
 	u, err := url.Parse(resp.AuthURL)
-	assert.NoError(t, err)
-	assert.NotEmpty(t, u.Query().Get("state"))
+	assert.Check(t, err)
+	assert.Check(t, len(u.Query().Get("state")) > 0)
 
 	cookies := cookieMap(startRec.Result().Cookies())
-	assert.Contains(t, cookies, stateCookieName)
-	assert.Contains(t, cookies, orgCookieName)
+	assert.Check(t, is.Contains(cookies, stateCookieName))
+	assert.Check(t, is.Contains(cookies, orgCookieName))
 }
 
-func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
-	t := suite.T()
+func TestStartOAuthFlow_InvalidProvider(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -59,7 +58,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: "def_invalid_000000000000000000", CredentialRef: testAuthCredentialRef})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
 	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -67,11 +66,11 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestStartOAuthFlow_UndeclaredOperationConfig() {
-	t := suite.T()
+func TestStartOAuthFlow_UndeclaredOperationConfig(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -83,7 +82,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_UndeclaredOperationConfig() {
 		CredentialRef:   testAuthCredentialRef,
 		OperationConfig: map[string]json.RawMessage{"undeclared_operation": json.RawMessage(`{}`)},
 	})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
 	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -91,16 +90,16 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_UndeclaredOperationConfig() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestStartOAuthFlow_Unauthorized() {
-	t := suite.T()
+func TestStartOAuthFlow_Unauthorized(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
 	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID, CredentialRef: testAuthCredentialRef})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
 	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -108,11 +107,11 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_Unauthorized() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusUnauthorized, rec.Code)
+	assert.Check(t, is.Equal(http.StatusUnauthorized, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
-	t := suite.T()
+func TestHandleOAuthCallback_Success(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
@@ -125,9 +124,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 
 	// OAuth state is embedded in the auth URL, not the session key (startResp.State)
 	authURL, err := url.Parse(startResp.AuthURL)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	oauthState := authURL.Query().Get("state")
-	assert.NotEmpty(t, oauthState)
+	assert.Check(t, len(oauthState) > 0)
 
 	callbackReq := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
 	query := callbackReq.URL.Query()
@@ -147,15 +146,15 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, callbackReq.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusFound, rec.Code)
+	assert.Check(t, is.Equal(http.StatusFound, rec.Code))
 
 	location, err := rec.Result().Location()
-	require.NoError(t, err)
-	assert.Equal(t, "http://console.example/organization-settings/integrations/"+testAuthDefinitionID, location.String())
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal("http://console.example/organization-settings/integrations/"+testAuthDefinitionID, location.String()))
 }
 
-func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
-	t := suite.T()
+func TestHandleOAuthCallback_StateMismatch(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
@@ -167,9 +166,9 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	oauthState := authURL.Query().Get("state")
-	assert.NotEmpty(t, oauthState)
+	assert.Check(t, len(oauthState) > 0)
 
 	callbackReq := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
 	query := callbackReq.URL.Query()
@@ -187,11 +186,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, callbackReq.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
-	t := suite.T()
+func TestHandleOAuthCallback_MissingCookies(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
@@ -202,11 +201,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie() {
-	t := suite.T()
+func TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -216,11 +215,11 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCoo
 	startRec, _ := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
-	require.Equal(t, "http://console.example/organization-settings/integrations/"+testAuthDefinitionID, cookies["redirect_to"].Value)
+	assert.Assert(t, is.DeepEqual("http://console.example/organization-settings/integrations/"+testAuthDefinitionID, cookies["redirect_to"].Value))
 }
 
-func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie_WithTrailingSlashConsoleURL() {
-	t := suite.T()
+func TestStartOAuthFlow_SetsDefinitionBasedRedirectCookie_WithTrailingSlashConsoleURL(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.h.ConsoleURL = "http://console.example/"
 
@@ -232,11 +231,11 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_SetsDefinitionBasedRedirectCoo
 	startRec, _ := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
-	require.Equal(t, "http://console.example/organization-settings/integrations/"+testAuthDefinitionID, cookies["redirect_to"].Value)
+	assert.Assert(t, is.DeepEqual("http://console.example/organization-settings/integrations/"+testAuthDefinitionID, cookies["redirect_to"].Value))
 }
 
-func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
-	t := suite.T()
+func TestStartOAuthFlow_MissingProvider(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 
@@ -244,7 +243,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{DefinitionID: ""})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
 	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -252,11 +251,11 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_MissingProvider() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingState() {
-	t := suite.T()
+func TestHandleOAuthCallback_MissingState(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
 
@@ -267,11 +266,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingState() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
-	t := suite.T()
+func TestHandleOAuthCallback_MissingCode(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
@@ -283,7 +282,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	oauthState := authURL.Query().Get("state")
 
 	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
@@ -301,11 +300,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingProviderState() {
-	t := suite.T()
+func TestHandleOAuthCallback_MissingProviderState(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
@@ -331,11 +330,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingProviderState() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
-	t := suite.T()
+func TestHandleOAuthCallback_InvalidCookieOrgID(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
 	suite.registerRouteOnce(http.MethodGet, integrationCallbackPath, suite.h.HandleIntegrationAuthCallback)
@@ -347,7 +346,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	cookies := cookieMap(startRec.Result().Cookies())
 
 	authURL, err := url.Parse(startResp.AuthURL)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	oauthState := authURL.Query().Get("state")
 
 	cookies[orgCookieName].Value = "invalid-org-id"
@@ -368,7 +367,7 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 }
 
 func (suite *HandlerTestSuite) startIntegrationAuth(t *testing.T, ctx context.Context, request handlers.IntegrationAuthStartRequest) (*httptest.ResponseRecorder, openapi.OAuthFlowResponse) {
@@ -379,7 +378,7 @@ func (suite *HandlerTestSuite) startIntegrationAuth(t *testing.T, ctx context.Co
 	}
 
 	body, err := json.Marshal(request)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
 	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
@@ -389,10 +388,10 @@ func (suite *HandlerTestSuite) startIntegrationAuth(t *testing.T, ctx context.Co
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(ctx))
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 	var resp openapi.OAuthFlowResponse
-	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
+	assert.Check(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 
 	return rec, resp
 }

@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
@@ -19,7 +20,7 @@ func TestRenderTrustCenterCampaignMessages(t *testing.T) {
 
 	// resolve the dispatcher from the trust center update key, mirroring the campaign dispatch path
 	dispatcher, ok := DispatcherByKey(TrustCenterUpdateTemplate)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	// the campaign metadata carries the post data, as the automated triggers supply it
 	metadata := map[string]any{
@@ -42,18 +43,18 @@ func TestRenderTrustCenterCampaignMessages(t *testing.T) {
 		context.Background(), client, dispatcher, setting, metadata, CampaignContext{CampaignName: "June Update"}, targets,
 	)
 
-	assert.Equal(t, 0, failed)
-	assert.Len(t, messages, 1)
-	assert.Equal(t, []string{"ct_1"}, targetIDs)
+	assert.Check(t, is.Equal(0, failed))
+	assert.Check(t, is.Len(messages, 1))
+	assert.Check(t, is.DeepEqual([]string{"ct_1"}, targetIDs))
 
-	assert.Equal(t, "SecureCorp Trust Center Update: SOC 2 report published", messages[0].GetSubject())
+	assert.Check(t, is.Equal("SecureCorp Trust Center Update: SOC 2 report published", messages[0].GetSubject()))
 
 	html := messages[0].GetHTML()
-	assert.Contains(t, html, "SecureCorp has published a new update to their trust center.") // operation-composed attribution line
-	assert.Contains(t, html, "SOC 2 report published")                                       // post title as the headline
-	assert.Contains(t, html, "<p>We&#39;ve updated our subprocessor list.</p>")              // post body, escaped paragraph
-	assert.Contains(t, html, "https://securecorp.example.com/logo.png")                      // trust center logo branding
-	assert.Contains(t, html, "https://securecorp.example.com/unsubscribe?token=tok_dolores") // per-recipient unsubscribe link
+	assert.Check(t, is.Contains(html, "SecureCorp has published a new update to their trust center.")) // operation-composed attribution line
+	assert.Check(t, is.Contains(html, "SOC 2 report published"))                                       // post title as the headline
+	assert.Check(t, is.Contains(html, "<p>We&#39;ve updated our subprocessor list.</p>"))              // post body, escaped paragraph
+	assert.Check(t, is.Contains(html, "https://securecorp.example.com/logo.png"))                      // trust center logo branding
+	assert.Check(t, is.Contains(html, "https://securecorp.example.com/unsubscribe?token=tok_dolores")) // per-recipient unsubscribe link
 }
 
 // TestRenderTrustCenterCampaignMessagesNilSetting verifies a trust center with no setting renders
@@ -63,7 +64,7 @@ func TestRenderTrustCenterCampaignMessagesNilSetting(t *testing.T) {
 	client := &Client{Config: *cfg}
 
 	dispatcher, ok := DispatcherByKey(TrustCenterUpdateTemplate)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	metadata := map[string]any{
 		"postText": "We published a new update.",
@@ -77,11 +78,11 @@ func TestRenderTrustCenterCampaignMessagesNilSetting(t *testing.T) {
 		context.Background(), client, dispatcher, nil, metadata, CampaignContext{}, targets,
 	)
 
-	assert.Equal(t, 0, failed)
-	assert.Len(t, messages, 1)
+	assert.Check(t, is.Equal(0, failed))
+	assert.Check(t, is.Len(messages, 1))
 
 	html := messages[0].GetHTML()
-	assert.Contains(t, html, "A new update was published to the trust center.")
-	assert.Contains(t, html, "We published a new update.")
-	assert.Contains(t, html, cfg.CompanyName)
+	assert.Check(t, is.Contains(html, "A new update was published to the trust center."))
+	assert.Check(t, is.Contains(html, "We published a new update."))
+	assert.Check(t, is.Contains(html, cfg.CompanyName))
 }

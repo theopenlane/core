@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestSSOAuthorizationMap_MarshalGQL(t *testing.T) {
@@ -17,15 +17,15 @@ func TestSSOAuthorizationMap_MarshalGQL(t *testing.T) {
 	m.MarshalGQL(&sb)
 
 	want := `{"org":"2024-01-01T00:00:00Z"}`
-	assert.Equal(t, want, sb.String())
+	assert.Check(t, is.Equal(want, sb.String()))
 }
 
 func TestSSOAuthorizationMap_UnmarshalGQL(t *testing.T) {
 	in := map[string]any{"org": "2024-01-01T00:00:00Z"}
 	var m SSOAuthorizationMap
 	err := m.UnmarshalGQL(in)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	ts := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
-	assert.Equal(t, SSOAuthorizationMap{"org": ts}, m)
+	assert.Check(t, is.DeepEqual(SSOAuthorizationMap{"org": ts}, m))
 }

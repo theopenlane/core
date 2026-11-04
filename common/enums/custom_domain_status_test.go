@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestDNSVerificationStatusValues(t *testing.T) {
@@ -17,7 +17,7 @@ func TestDNSVerificationStatusValues(t *testing.T) {
 	}
 
 	values := DNSVerificationStatus("").Values()
-	assert.Equal(t, expected, values)
+	assert.Check(t, is.DeepEqual(expected, values))
 }
 
 func TestDNSVerificationStatusString(t *testing.T) {
@@ -35,7 +35,7 @@ func TestDNSVerificationStatusString(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		assert.Equal(t, test.expected, test.status.String())
+		assert.Check(t, is.Equal(test.expected, test.status.String()))
 	}
 }
 
@@ -58,7 +58,7 @@ func TestToDNSVerificationStatus(t *testing.T) {
 
 	for _, test := range tests {
 		result := ToDNSVerificationStatus(test.input)
-		assert.Equal(t, test.expected, result, "ToDNSVerificationStatus(%q)", test.input)
+		assert.Check(t, is.DeepEqual(test.expected, result), "ToDNSVerificationStatus(%q)", test.input)
 	}
 }
 
@@ -78,7 +78,7 @@ func TestDNSVerificationStatusMarshalGQL(t *testing.T) {
 		var writer strings.Builder
 		test.status.MarshalGQL(&writer)
 
-		assert.Equal(t, test.expected, writer.String())
+		assert.Check(t, is.Equal(test.expected, writer.String()))
 	}
 }
 
@@ -100,10 +100,10 @@ func TestDNSVerificationStatusUnmarshalGQL(t *testing.T) {
 		var status DNSVerificationStatus
 		err := status.UnmarshalGQL(test.input)
 		if test.hasError {
-			require.Error(t, err)
+			assert.Assert(t, err != nil)
 		} else {
-			require.NoError(t, err)
-			assert.Equal(t, test.expected, status)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(test.expected, status))
 		}
 	}
 }
@@ -118,10 +118,10 @@ func TestSSLVerificationStatusValues(t *testing.T) {
 	}
 	values := SSLVerificationStatus("").Values()
 
-	assert.Equal(t, len(expected), len(values))
+	assert.Check(t, is.Equal(len(expected), len(values)))
 
 	for i, v := range values {
-		assert.Equal(t, expected[i], v)
+		assert.Check(t, is.Equal(expected[i], v))
 	}
 }
 
@@ -140,7 +140,7 @@ func TestSSLVerificationStatusString(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		assert.Equal(t, test.expected, test.status.String())
+		assert.Check(t, is.Equal(test.expected, test.status.String()))
 	}
 }
 
@@ -163,7 +163,7 @@ func TestToSSLVerificationStatus(t *testing.T) {
 
 	for _, test := range tests {
 		result := ToSSLVerificationStatus(test.input)
-		assert.Equal(t, test.expected, result, "ToSSLVerificationStatus(%q)", test.input)
+		assert.Check(t, is.DeepEqual(test.expected, result), "ToSSLVerificationStatus(%q)", test.input)
 	}
 }
 
@@ -183,7 +183,7 @@ func TestSSLVerificationStatusMarshalGQL(t *testing.T) {
 		var writer strings.Builder
 		test.status.MarshalGQL(&writer)
 
-		assert.Equal(t, test.expected, writer.String())
+		assert.Check(t, is.Equal(test.expected, writer.String()))
 	}
 }
 
@@ -205,10 +205,10 @@ func TestSSLVerificationStatusUnmarshalGQL(t *testing.T) {
 		var status SSLVerificationStatus
 		err := status.UnmarshalGQL(test.input)
 		if test.hasError {
-			require.Error(t, err)
+			assert.Assert(t, err != nil)
 		} else {
-			require.NoError(t, err)
-			assert.Equal(t, test.expected, status)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(test.expected, status))
 		}
 	}
 }

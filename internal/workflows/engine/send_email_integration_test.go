@@ -5,6 +5,7 @@ package engine_test
 import (
 	"encoding/json"
 	"errors"
+	"testing"
 
 	"github.com/oklog/ulid/v2"
 
@@ -16,12 +17,14 @@ import (
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // mustMarshalSendEmailParams encodes SendEmailActionParams or fails the suite
 func (s *WorkflowEngineTestSuite) mustMarshalSendEmailParams(params workflows.SendEmailActionParams) []byte {
 	b, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return b
 }
@@ -29,7 +32,7 @@ func (s *WorkflowEngineTestSuite) mustMarshalSendEmailParams(params workflows.Se
 // clearEmailState truncates river tables and resets the mock email sender
 func (s *WorkflowEngineTestSuite) clearEmailState() {
 	err := s.client.Job.TruncateRiverTables(s.ctx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	s.mockEmailSender().Reset()
 }
@@ -52,7 +55,7 @@ func (s *WorkflowEngineTestSuite) createTestEmailTemplate(userID, orgID, key, su
 		}).
 		SetActive(true).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 
 	return emailRecord.ID
 }
@@ -64,18 +67,19 @@ func (s *WorkflowEngineTestSuite) cleanupTestEmailTemplate(userID, orgID, key st
 	_, err := s.client.EmailTemplate.Delete().
 		Where(emailtemplate.NameEQ("Email: " + key)).
 		Exec(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(s.T(), err)
 }
 
 // TestExecuteSendEmail_ByKey verifies that a send_email action composes and queues a message
 // when referencing an email template by key
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByKey() {
+func TestExecuteSendEmail_ByKey(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-bykey-" + ulid.Make().String()
 	s.createTestEmailTemplate(userID, orgID, templateKey, "Hello Workflow", "Body text")
-	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
+	t.Cleanup(func() { s.cleanupTestEmailTemplate(userID, orgID, templateKey) })
 
 	s.clearEmailState()
 
@@ -85,7 +89,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByKey() {
 		SetRefCode("CTL-BYKEY-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -106,25 +110,26 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByKey() {
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 	s.WaitForEvents()
 
 	msgs := s.mockEmailSender().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal([]string{"recipient@example.com"}, msgs[0].To)
-	s.Equal("Hello Workflow", msgs[0].Subject)
-	s.Equal("test@example.com", msgs[0].From)
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.DeepEqual([]string{"recipient@example.com"}, msgs[0].To))
+	assert.Check(t, is.Equal("Hello Workflow", msgs[0].Subject))
+	assert.Check(t, is.Equal("test@example.com", msgs[0].From))
 }
 
 // TestExecuteSendEmail_ByID verifies that a send_email action resolves an email template
 // by ID and queues a correctly addressed message
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByID() {
+func TestExecuteSendEmail_ByID(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-byid-" + ulid.Make().String()
 	emailTemplateID := s.createTestEmailTemplate(userID, orgID, templateKey, "Resolved by ID", "Content by ID")
-	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
+	t.Cleanup(func() { s.cleanupTestEmailTemplate(userID, orgID, templateKey) })
 
 	s.clearEmailState()
 
@@ -134,7 +139,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByID() {
 		SetRefCode("CTL-BYID-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -155,30 +160,31 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_ByID() {
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 	s.WaitForEvents()
 
 	msgs := s.mockEmailSender().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal([]string{"byid@example.com"}, msgs[0].To)
-	s.Equal("Resolved by ID", msgs[0].Subject)
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.DeepEqual([]string{"byid@example.com"}, msgs[0].To))
+	assert.Check(t, is.Equal("Resolved by ID", msgs[0].Subject))
 }
 
 // TestExecuteSendEmail_WithTargetUser verifies that recipients are resolved from Targets when
 // To is omitted
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WithTargetUser() {
+func TestExecuteSendEmail_WithTargetUser(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-target-" + ulid.Make().String()
 	s.createTestEmailTemplate(userID, orgID, templateKey, "Target User Email", "Body for target")
-	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
+	t.Cleanup(func() { s.cleanupTestEmailTemplate(userID, orgID, templateKey) })
 
 	s.clearEmailState()
 
 	seedCtx := s.SeedContext(userID, orgID)
 	testUser, err := s.client.User.Get(seedCtx, userID)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -186,7 +192,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WithTargetUser() {
 		SetRefCode("CTL-TARGET-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -211,25 +217,26 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WithTargetUser() {
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 	s.WaitForEvents()
 
 	msgs := s.mockEmailSender().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal([]string{testUser.Email}, msgs[0].To)
-	s.Equal("Target User Email", msgs[0].Subject)
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.DeepEqual([]string{testUser.Email}, msgs[0].To))
+	assert.Check(t, is.Equal("Target User Email", msgs[0].Subject))
 }
 
 // TestExecuteSendEmail_WorkflowDefinitionWithSendEmail verifies end-to-end that a workflow
 // definition containing a send_email action processes successfully after trigger emission
 // and sends a correctly composed email through the runtime integration
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WorkflowDefinitionWithSendEmail() {
+func TestExecuteSendEmail_WorkflowDefinitionWithSendEmail(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-e2e-" + ulid.Make().String()
 	s.createTestEmailTemplate(userID, orgID, templateKey, "E2E Subject", "E2E body text")
-	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
+	t.Cleanup(func() { s.cleanupTestEmailTemplate(userID, orgID, templateKey) })
 
 	s.clearEmailState()
 
@@ -266,13 +273,13 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WorkflowDefinitionWithSen
 		SetTriggerOperations(operations).
 		SetTriggerFields(fields).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-E2E-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -283,16 +290,17 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_WorkflowDefinitionWithSen
 	s.WaitForEvents()
 
 	msgs := s.mockEmailSender().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal([]string{"e2e@example.com"}, msgs[0].To)
-	s.Equal("E2E Subject", msgs[0].Subject)
-	s.Equal("test@example.com", msgs[0].From)
-	s.Contains(msgs[0].Text, "E2E body text")
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.DeepEqual([]string{"e2e@example.com"}, msgs[0].To))
+	assert.Check(t, is.Equal("E2E Subject", msgs[0].Subject))
+	assert.Check(t, is.Equal("test@example.com", msgs[0].From))
+	assert.Check(t, is.Contains(msgs[0].Text, "E2E body text"))
 }
 
 // TestExecuteSendEmail_NoTemplateReference verifies that a send_email action with no template
 // reference returns ErrSendEmailTemplateRequired
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoTemplateReference() {
+func TestExecuteSendEmail_NoTemplateReference(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -302,7 +310,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoTemplateReference() {
 		SetRefCode("CTL-NOREF-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -320,13 +328,14 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoTemplateReference() {
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().Error(err)
-	s.Require().True(errors.Is(err, engine.ErrSendEmailTemplateRequired))
+	assert.Assert(t, err != nil)
+	assert.Assert(t, errors.Is(err, engine.ErrSendEmailTemplateRequired))
 }
 
 // TestExecuteSendEmail_BothTemplateAndKeyConflict verifies that providing both emailTemplateId
 // and emailTemplateKey returns ErrSendEmailTemplateReferenceConflict
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_BothTemplateAndKeyConflict() {
+func TestExecuteSendEmail_BothTemplateAndKeyConflict(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -336,7 +345,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_BothTemplateAndKeyConflic
 		SetRefCode("CTL-CONFLICT-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -356,19 +365,20 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_BothTemplateAndKeyConflic
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().Error(err)
-	s.Require().True(errors.Is(err, engine.ErrSendEmailTemplateReferenceConflict))
+	assert.Assert(t, err != nil)
+	assert.Assert(t, errors.Is(err, engine.ErrSendEmailTemplateReferenceConflict))
 }
 
 // TestExecuteSendEmail_NoRecipients verifies that a send_email action with a valid template
 // but no resolved recipients returns ErrSendEmailNoRecipients
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoRecipients() {
+func TestExecuteSendEmail_NoRecipients(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-norecip-" + ulid.Make().String()
 	s.createTestEmailTemplate(userID, orgID, templateKey, "No Recip Subject", "body")
-	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
+	t.Cleanup(func() { s.cleanupTestEmailTemplate(userID, orgID, templateKey) })
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -376,7 +386,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoRecipients() {
 		SetRefCode("CTL-NORECIP-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -394,13 +404,14 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_NoRecipients() {
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().Error(err)
-	s.Require().True(errors.Is(err, engine.ErrSendEmailNoRecipients))
+	assert.Assert(t, err != nil)
+	assert.Assert(t, errors.Is(err, engine.ErrSendEmailNoRecipients))
 }
 
 // TestExecuteSendEmail_TemplateNotFound verifies that a send_email action with a non-existent
 // template key returns ErrSendEmailTemplateNotFound
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_TemplateNotFound() {
+func TestExecuteSendEmail_TemplateNotFound(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
@@ -410,7 +421,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_TemplateNotFound() {
 		SetRefCode("CTL-MISSING-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -429,19 +440,20 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_TemplateNotFound() {
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().Error(err)
-	s.Require().True(errors.Is(err, engine.ErrSendEmailTemplateNotFound))
+	assert.Assert(t, err != nil)
+	assert.Assert(t, errors.Is(err, engine.ErrSendEmailTemplateNotFound))
 }
 
 // TestExecuteSendEmail_DefaultSender verifies that a send_email action without a
 // From override uses the email integration's configured sender
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DefaultSender() {
+func TestExecuteSendEmail_DefaultSender(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
 	templateKey := "wf-send-email-nosender-" + ulid.Make().String()
 	s.createTestEmailTemplate(userID, orgID, templateKey, "Subject", "body")
-	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
+	t.Cleanup(func() { s.cleanupTestEmailTemplate(userID, orgID, templateKey) })
 
 	s.clearEmailState()
 
@@ -451,7 +463,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DefaultSender() {
 		SetRefCode("CTL-NOSEND-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -469,24 +481,25 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DefaultSender() {
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 	s.WaitForEvents()
 
 	msgs := s.mockEmailSender().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal("test@example.com", msgs[0].From)
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.Equal("test@example.com", msgs[0].From))
 }
 
 // TestExecuteSendEmail_FullAsyncPath verifies the complete end-to-end path:
 // Control mutation -> Gala mutation event -> TriggerWorkflow -> workflow.command.trigger ->
 // ProcessAction -> executeSendEmail -> River job inserted with correct email payload
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
+func TestExecuteSendEmail_FullAsyncPath(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
 	templateKey := "wf-send-email-async-" + ulid.Make().String()
 	s.createTestEmailTemplate(userID, orgID, templateKey, "Async Subject", "Async body text")
-	defer s.cleanupTestEmailTemplate(userID, orgID, templateKey)
+	t.Cleanup(func() { s.cleanupTestEmailTemplate(userID, orgID, templateKey) })
 
 	s.clearEmailState()
 
@@ -523,19 +536,19 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 		SetTriggerOperations(operations).
 		SetTriggerFields(triggerFields).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-ASYNC-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		SetReferenceID("ref-before-" + ulid.Make().String()).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	_, err = s.client.Control.UpdateOneID(control.ID).
 		SetReferenceID("ref-after-" + ulid.Make().String()).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	s.WaitForEvents()
 	s.WaitForEvents()
@@ -548,21 +561,22 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 		).
 		Order(generated.Desc(workflowinstance.FieldCreatedAt)).
 		First(seedCtx)
-	s.Require().NoError(err)
-	s.Require().NotNil(instance)
-	s.Equal(enums.WorkflowInstanceStateCompleted, instance.State)
+	assert.NilError(t, err)
+	assert.Assert(t, instance != nil)
+	assert.Check(t, is.DeepEqual(enums.WorkflowInstanceStateCompleted, instance.State))
 
 	msgs := s.mockEmailSender().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal([]string{"async@example.com"}, msgs[0].To)
-	s.Equal("Async Subject", msgs[0].Subject)
-	s.Equal("test@example.com", msgs[0].From)
-	s.Contains(msgs[0].Text, "Async body text")
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.DeepEqual([]string{"async@example.com"}, msgs[0].To))
+	assert.Check(t, is.Equal("Async Subject", msgs[0].Subject))
+	assert.Check(t, is.Equal("test@example.com", msgs[0].From))
+	assert.Check(t, is.Contains(msgs[0].Text, "Async body text"))
 }
 
 // TestExecuteSendEmail_OwnerOnlyExcludesSystemTemplate verifies that org-owned workflow definitions
 // cannot reference system-owned email templates
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_OwnerOnlyExcludesSystemTemplate() {
+func TestExecuteSendEmail_OwnerOnlyExcludesSystemTemplate(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 	_, _, adminCtx := s.SetupSystemAdmin()
 	wfEngine := s.Engine()
@@ -580,7 +594,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_OwnerOnlyExcludesSystemTe
 		}).
 		SetActive(true).
 		Save(adminCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	def := s.CreateTestWorkflowDefinition(userCtx, orgID)
 
@@ -588,7 +602,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_OwnerOnlyExcludesSystemTe
 		SetRefCode("CTL-SYSONLY-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -607,6 +621,6 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_OwnerOnlyExcludesSystemTe
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().Error(err)
-	s.Require().True(errors.Is(err, engine.ErrSendEmailTemplateNotFound))
+	assert.Assert(t, err != nil)
+	assert.Assert(t, errors.Is(err, engine.ErrSendEmailTemplateNotFound))
 }

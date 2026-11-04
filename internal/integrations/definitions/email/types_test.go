@@ -3,8 +3,8 @@ package email
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestRuntimeEmailConfig_Provisioned(t *testing.T) {
@@ -52,7 +52,7 @@ func TestRuntimeEmailConfig_Provisioned(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.expected, tc.cfg.Provisioned())
+			assert.Check(t, is.Equal(tc.expected, tc.cfg.Provisioned()))
 		})
 	}
 }
@@ -66,7 +66,7 @@ func TestUserInput_ToRuntimeConfig(t *testing.T) {
 
 	cfg := input.ToRuntimeConfig()
 
-	require.Equal(t, input.FromEmail, cfg.FromEmail)
-	assert.Equal(t, input.CompanyName, cfg.CompanyName)
-	assert.Equal(t, input.CompanyAddress, cfg.CompanyAddress)
+	assert.Assert(t, is.Equal(input.FromEmail, cfg.FromEmail))
+	assert.Check(t, is.Equal(input.CompanyName, cfg.CompanyName))
+	assert.Check(t, is.Equal(input.CompanyAddress, cfg.CompanyAddress))
 }

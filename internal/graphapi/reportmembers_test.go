@@ -15,6 +15,7 @@ import (
 )
 
 func TestMutation_ReportMembers(t *testing.T) {
+	t.Parallel()
 
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 

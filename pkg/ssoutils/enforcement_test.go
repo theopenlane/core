@@ -3,7 +3,8 @@ package ssoutils
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestEvaluate(t *testing.T) {
@@ -106,11 +107,11 @@ func TestEvaluate(t *testing.T) {
 
 			got := Evaluate(tt.in)
 
-			assert.Equal(t, tt.wantMustSSO, got.MustSSO, "MustSSO")
-			assert.Equal(t, tt.wantExempt, got.Exempt, "Exempt")
-			assert.Equal(t, tt.wantReason, got.ExemptReason, "ExemptReason")
-			assert.Equal(t, tt.wantTFA, got.TFARequired, "TFARequired")
-			assert.Equal(t, tt.wantEnforced, got.SSOEnforced, "SSOEnforced")
+			assert.Check(t, is.Equal(tt.wantMustSSO, got.MustSSO), "MustSSO")
+			assert.Check(t, is.Equal(tt.wantExempt, got.Exempt), "Exempt")
+			assert.Check(t, is.Equal(tt.wantReason, got.ExemptReason), "ExemptReason")
+			assert.Check(t, is.Equal(tt.wantTFA, got.TFARequired), "TFARequired")
+			assert.Check(t, is.Equal(tt.wantEnforced, got.SSOEnforced), "SSOEnforced")
 		})
 	}
 }

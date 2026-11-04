@@ -2,17 +2,15 @@ package store
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 	"path/filepath"
 	"strings"
 
-	"entgo.io/ent/dialect/sql"
-
-	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/consts"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
@@ -148,23 +146,23 @@ func getCategoryNameForSchema(f pkgobjects.File) string {
 	return ""
 }
 
-// mappedParent represents the table used to derive the organization ID for object types
-// that do not have an owner_id field directly and the field in the child table that references the parent
+// mappedParent represents the schema used to derive the organization ID for object types
+// that do not have an owner_id field directly and the field in the child schema that references the parent
 type mappedParent struct {
-	// parentTable is the table that contains the owner_id field, it should be the plural form, e.g. for trust_center it would be trust_centers
-	parentTable string
-	// idField is the field in the child table that references the parent table, e.g. for trust_center_docs it would be trust_center_id
+	// parentSchema is the schema that contains the owner field, e.g. TrustCenter for trust center docs
+	parentSchema string
+	// idField is the field in the child schema that references the parent, e.g. for trust_center_docs it would be trust_center_id
 	idField string
 }
 
 // nonOwnedSchemas is a map of object types that do not have an owner_id field
-// to their parent table and the field in that table that references the object
+// to their parent schema and the field in the child that references the parent
 // This is used to derive the organization ID for files correlated to these object types
-// by joining through the parent table
+// by loading through the parent
 var nonOwnedSchemas = map[string]mappedParent{
-	"trust_center_doc": {
-		parentTable: "trust_centers",
-		idField:     "trust_center_id",
+	ent.TypeTrustCenterDoc: {
+		parentSchema: ent.TypeTrustCenter,
+		idField:      "trust_center_id",
 	},
 }
 
@@ -191,42 +189,13 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 		}
 	}
 
-	// derive table name from correlated object type using snake_case to match DB naming
-	objectType := lo.SnakeCase(f.CorrelatedObjectType)
-	objectTable := pluralize.NewClient().Plural(objectType)
-
-	var rows sql.Rows
-
-	// For schemas that do not include owner_id (e.g., trust_center_docs), resolve owner through the parent
-	if mappedParent, ok := nonOwnedSchemas[objectType]; ok {
-		tcQuery := fmt.Sprintf("SELECT a.owner_id FROM %s as a JOIN %s as b ON a.id = b.%s WHERE b.id = $1", mappedParent.parentTable, objectTable, mappedParent.idField)
-
-		if err := txClientFromContext(ctx).Driver().Query(ctx, tcQuery, []any{f.CorrelatedObjectID}, &rows); err != nil {
-			return "", err
-		}
-	} else {
-		// Generic case: attempt to read owner_id directly from the correlated table
-		query := "SELECT owner_id FROM " + objectTable + " WHERE id = $1"
-		if err := txClientFromContext(ctx).Driver().Query(ctx, query, []any{f.CorrelatedObjectID}, &rows); err != nil {
-			return "", err
-		}
+	ownerID, err := loadOwnerID(ctx, f.CorrelatedObjectType, f.CorrelatedObjectID)
+	if err != nil {
+		return "", err
 	}
 
-	defer rows.Close()
-
-	if rows.Err() != nil {
-		return "", rows.Err()
-	}
-
-	if rows.Next() {
-		var ownerID sql.NullString
-		if err := rows.Scan(&ownerID); err != nil {
-			return "", err
-		}
-
-		if ownerID.Valid {
-			return ownerID.String, nil
-		}
+	if ownerID != "" {
+		return ownerID, nil
 	}
 
 	// use system admin org if the user is a system admin and we got to here
@@ -235,6 +204,51 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	}
 
 	return "", ErrMissingOrganizationID
+}
+
+// loadOwnerID returns the owner of the correlated object, resolving through the parent for schemas without an owner field
+func loadOwnerID(ctx context.Context, objectType, objectID string) (string, error) {
+	schema, ok := entityops.LookupSchema(objectType)
+	if !ok || schema.Load == nil {
+		return "", nil
+	}
+
+	if schema.OwnerField != "" {
+		return loadStringField(ctx, schema, objectID, schema.OwnerField)
+	}
+
+	parent, ok := nonOwnedSchemas[schema.Name]
+	if !ok {
+		return "", nil
+	}
+
+	parentID, err := loadStringField(ctx, schema, objectID, parent.idField)
+	if err != nil || parentID == "" {
+		return "", err
+	}
+
+	return loadOwnerID(ctx, parent.parentSchema, parentID)
+}
+
+// loadStringField loads the object through the entityops registry and returns the named field, empty when the object does not exist
+func loadStringField(ctx context.Context, schema *entityops.Schema, objectID, field string) (string, error) {
+	data, err := schema.Load(ctx, txClientFromContext(ctx), objectID)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return "", nil
+		}
+
+		return "", err
+	}
+
+	var fields map[string]any
+	if err := json.Unmarshal(data, &fields); err != nil {
+		return "", err
+	}
+
+	value, _ := fields[field].(string)
+
+	return value, nil
 }
 
 func txFileClientFromContext(ctx context.Context) *ent.FileClient {

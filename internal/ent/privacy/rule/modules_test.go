@@ -2,13 +2,14 @@ package rule_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
@@ -78,24 +79,24 @@ func TestHasFeature(t *testing.T) {
 	ctx := setupContext(t, []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
 
 	ok, err := rule.HasFeature(ctx, "base_module")
-	require.NoError(t, err)
-	assert.True(t, ok)
+	assert.NilError(t, err)
+	assert.Check(t, ok)
 
 	ok, err = rule.HasFeature(ctx, "nonexistent_module")
-	require.NoError(t, err)
-	assert.False(t, ok)
+	assert.NilError(t, err)
+	assert.Check(t, !ok)
 }
 
 func TestHasAnyFeature(t *testing.T) {
 	ctx := setupContext(t, []models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
 
 	ok, _, err := rule.HasAnyFeature(ctx, models.CatalogBaseModule, models.CatalogEntityManagementModule)
-	require.NoError(t, err)
-	assert.True(t, ok)
+	assert.NilError(t, err)
+	assert.Check(t, ok)
 
 	ok, _, err = rule.HasAnyFeature(ctx, models.CatalogEntityManagementModule)
-	require.NoError(t, err)
-	assert.False(t, ok)
+	assert.NilError(t, err)
+	assert.Check(t, !ok)
 }
 
 func TestHasAllFeatures(t *testing.T) {
@@ -138,12 +139,12 @@ func TestHasAllFeatures(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ok, missingModule, err := rule.HasAllFeatures(ctx, tt.modules...)
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, ok)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected, ok))
 
 			if !tt.expected {
-				require.NotNil(t, missingModule)
-				assert.Equal(t, tt.expectedMissing, *missingModule)
+				assert.Assert(t, missingModule != nil)
+				assert.Check(t, is.Equal(tt.expectedMissing, *missingModule))
 			}
 		})
 	}
@@ -184,19 +185,19 @@ func TestDenyIfMissingAllModulesBase(t *testing.T) {
 			err := rule.DenyIfMissingAllModules().EvalMutation(ctx, tt.createMutationFn())
 
 			if tt.shouldSkip {
-				require.Error(t, err)
-				assert.Contains(t, err.Error(), "skip rule")
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Contains(err.Error(), "skip rule"))
 				return
 			}
 
 			if tt.shouldDeny {
-				require.Error(t, err)
-				assert.Contains(t, err.Error(), tt.expectedError)
-				assert.NotContains(t, err.Error(), "skip rule")
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Contains(err.Error(), tt.expectedError))
+				assert.Check(t, !strings.Contains(err.Error(), "skip rule"))
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 		})
 	}
 }
@@ -236,19 +237,19 @@ func TestDenyIfMissingAllModules(t *testing.T) {
 			err := rule.DenyIfMissingAllModules().EvalMutation(ctx, tt.createMutationFn())
 
 			if tt.shouldSkip {
-				require.Error(t, err)
-				assert.Contains(t, err.Error(), "skip rule")
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Contains(err.Error(), "skip rule"))
 				return
 			}
 
 			if tt.shouldDeny {
-				require.Error(t, err)
-				assert.Contains(t, err.Error(), tt.expectedError)
-				assert.NotContains(t, err.Error(), "skip rule")
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Contains(err.Error(), tt.expectedError))
+				assert.Check(t, !strings.Contains(err.Error(), "skip rule"))
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 		})
 	}
 }
@@ -263,29 +264,29 @@ func TestDenyIfMissingAllModules_BypassScenarios(t *testing.T) {
 	t.Run("bypass with InternalOperationCaller", func(t *testing.T) {
 		ctx := auth.WithCaller(baseCtx, &auth.Caller{Capabilities: auth.CapInternalOperation})
 		err := featureRule.EvalMutation(ctx, testMutation)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "skip rule")
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "skip rule"))
 	})
 
 	t.Run("bypass with EmailSignUpToken", func(t *testing.T) {
 		ctx := token.NewContextWithSignUpToken(baseCtx, "test@example.com")
 		err := featureRule.EvalMutation(ctx, testMutation)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "skip rule")
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "skip rule"))
 	})
 
 	t.Run("bypass with ResetToken", func(t *testing.T) {
 		ctx := token.NewContextWithResetToken(baseCtx, "test-reset-token")
 		err := featureRule.EvalMutation(ctx, testMutation)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "skip rule")
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "skip rule"))
 	})
 
 	t.Run("bypass with VerifyToken", func(t *testing.T) {
 		ctx := token.NewContextWithVerifyToken(baseCtx, "test-verify-token")
 		err := featureRule.EvalMutation(ctx, testMutation)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "skip rule")
+		assert.Assert(t, err != nil)
+		assert.Check(t, is.Contains(err.Error(), "skip rule"))
 	})
 
 }
@@ -328,12 +329,12 @@ func TestModulesEnabledBase(t *testing.T) {
 			err := rule.EvalMutation(ctx, mutation)
 
 			if tt.shouldAllow {
-				require.Error(t, err)
-				assert.Contains(t, err.Error(), "skip rule")
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Contains(err.Error(), "skip rule"))
 			} else {
-				require.Error(t, err)
-				assert.Contains(t, err.Error(), tt.expectedErr)
-				assert.NotContains(t, err.Error(), "skip rule")
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Contains(err.Error(), tt.expectedErr))
+				assert.Check(t, !strings.Contains(err.Error(), "skip rule"))
 			}
 		})
 	}
@@ -379,12 +380,12 @@ func TestModulesEnabled(t *testing.T) {
 			err := rule.EvalMutation(ctx, mutation)
 
 			if tt.shouldAllow {
-				require.Error(t, err)
-				assert.Contains(t, err.Error(), "skip rule")
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Contains(err.Error(), "skip rule"))
 			} else {
-				require.Error(t, err)
-				assert.Contains(t, err.Error(), tt.expectedErr)
-				assert.NotContains(t, err.Error(), "skip rule")
+				assert.Assert(t, err != nil)
+				assert.Check(t, is.Contains(err.Error(), tt.expectedErr))
+				assert.Check(t, !strings.Contains(err.Error(), "skip rule"))
 			}
 		})
 	}
@@ -423,20 +424,20 @@ func TestAnyModuleFeature(t *testing.T) {
 			ctx := setupContext(t, tt.modules)
 
 			ok, err := rule.HasFeature(ctx, models.CatalogAnyModule.String())
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, ok)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected, ok))
 
 			ok, _, err = rule.HasAnyFeature(ctx, models.CatalogAnyModule)
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, ok)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected, ok))
 
 			ok, missing, err := rule.HasAllFeatures(ctx, models.CatalogBaseModule, models.CatalogAnyModule)
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, ok)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected, ok))
 
 			if !tt.expected {
-				require.NotNil(t, missing)
-				assert.Equal(t, models.CatalogAnyModule, *missing)
+				assert.Assert(t, missing != nil)
+				assert.Check(t, is.Equal(models.CatalogAnyModule, *missing))
 			}
 		})
 	}
@@ -475,15 +476,15 @@ func TestDenyIfMissingAllModulesAnyModule(t *testing.T) {
 			ctx := setupContext(t, tt.modules)
 
 			err := rule.DenyIfMissingAllModules().EvalMutation(ctx, createExportMutation(t))
-			require.Error(t, err)
+			assert.Assert(t, err != nil)
 
 			if tt.shouldAllow {
-				assert.Contains(t, err.Error(), "skip rule")
+				assert.Check(t, is.Contains(err.Error(), "skip rule"))
 				return
 			}
 
-			assert.Contains(t, err.Error(), "features are not enabled")
-			assert.NotContains(t, err.Error(), "skip rule")
+			assert.Check(t, is.Contains(err.Error(), "features are not enabled"))
+			assert.Check(t, !strings.Contains(err.Error(), "skip rule"))
 		})
 	}
 }
@@ -506,8 +507,8 @@ func TestModulesDisabled(t *testing.T) {
 
 	err := rule.EvalMutation(ctx, mutation)
 
-	require.Error(t, err)
-	assert.Contains(t, err.Error(), "skip rule")
+	assert.Assert(t, err != nil)
+	assert.Check(t, is.Contains(err.Error(), "skip rule"))
 }
 
 type mockMutation struct {
