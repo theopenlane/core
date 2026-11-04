@@ -85,17 +85,17 @@ func TestParagraphsNull(t *testing.T) {
 
 func TestMerge(t *testing.T) {
 	env, err := NewEnv(EnvConfig{}, cel.Variable("payload", cel.DynType))
-	assert.NoError(t, err)
+	assert.NilError(t, err)
 
 	eval := NewEvaluator(env, EvalConfig{Timeout: time.Second})
 
 	out, err := eval.EvaluateJSONMap(context.Background(), `merge(payload, {"status": "DRAFT", "approver_group_name": "Admins"})`, map[string]any{
 		"payload": map[string]any{"name": "policy", "status": "PUBLISHED"},
 	})
-	assert.NoError(t, err)
-	assert.Equal(t, map[string]any{"name": "policy", "status": "DRAFT", "approver_group_name": "Admins"}, out)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(map[string]any{"name": "policy", "status": "DRAFT", "approver_group_name": "Admins"}, out))
 
 	out, err = eval.EvaluateJSONMap(context.Background(), `merge(payload, {"status": "DRAFT"})`, map[string]any{"payload": nil})
-	assert.NoError(t, err)
-	assert.Equal(t, map[string]any{"status": "DRAFT"}, out)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(map[string]any{"status": "DRAFT"}, out))
 }
