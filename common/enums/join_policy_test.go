@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 )
@@ -39,7 +40,7 @@ func TestToJoinPolicy(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(fmt.Sprintf("Convert %s to Join Policy", tc.input), func(t *testing.T) {
 			result := enums.ToGroupJoinPolicy(tc.input)
-			assert.Equal(t, tc.expected, *result)
+			assert.Check(t, is.Equal(tc.expected, *result))
 		})
 	}
 }

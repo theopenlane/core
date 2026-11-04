@@ -2,16 +2,16 @@ package rule
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/sql"
-	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
@@ -87,28 +87,29 @@ func getStoredTrustCenterID(ctx context.Context, tcMutation utils.TrustCenterMut
 		return ""
 	}
 
-	pluralObjectType := pluralize.NewClient().Plural(objectType)
-	tableName := strcase.SnakeCase(pluralObjectType)
+	schema, ok := entityops.LookupSchema(objectType)
+	if !ok || schema.Load == nil {
+		return ""
+	}
 
-	query := "SELECT trust_center_id FROM " + tableName + " WHERE id = $1"
-
-	var rows sql.Rows
-	if err := tcMutation.Client().Driver().Query(ctx, query, []any{objectID}, &rows); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to check for object in organization")
+	data, err := schema.Load(ctx, tcMutation.Client(), objectID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("object_type", objectType).Msg("failed to load object for trust center id")
 
 		return ""
 	}
 
-	defer rows.Close()
-
-	if rows.Next() {
-		var trustCenterID string
-		if err := rows.Scan(&trustCenterID); err == nil {
-			return trustCenterID
-		}
+	var stored struct {
+		TrustCenterID string `json:"trust_center_id"`
 	}
 
-	return ""
+	if err := json.Unmarshal(data, &stored); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("object_type", objectType).Msg("failed to decode object for trust center id")
+
+		return ""
+	}
+
+	return stored.TrustCenterID
 }
 
 // checkTrustCenterAccess checks if the authenticated user has the specified relation access to the trust center.

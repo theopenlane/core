@@ -5,7 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/catalog"
 )
@@ -14,7 +15,7 @@ func writeTempCatalog(t *testing.T, data string) string {
 	t.Helper()
 	dir := t.TempDir()
 	p := filepath.Join(dir, "catalog.yaml")
-	assert.NoError(t, os.WriteFile(p, []byte(data), 0o644))
+	assert.Check(t, os.WriteFile(p, []byte(data), 0o644))
 	return p
 }
 
@@ -48,16 +49,16 @@ addons:
 	path := writeTempCatalog(t, yaml)
 
 	c, err := catalog.LoadCatalog(path)
-	assert.NoError(t, err)
-	assert.NotNil(t, c)
-	assert.Contains(t, c.Modules, "mod1")
-	assert.Contains(t, c.Addons, "add1")
+	assert.Check(t, err)
+	assert.Check(t, c != nil)
+	assert.Check(t, is.Contains(c.Modules, "mod1"))
+	assert.Check(t, is.Contains(c.Addons, "add1"))
 }
 
 func TestLoadCatalogMissing(t *testing.T) {
 	t.Parallel()
 	_, err := catalog.LoadCatalog("/no/such/file")
-	assert.ErrorIs(t, err, os.ErrNotExist)
+	assert.Check(t, is.ErrorIs(err, os.ErrNotExist))
 }
 
 func TestVisible(t *testing.T) {
@@ -73,12 +74,13 @@ func TestVisible(t *testing.T) {
 	}
 
 	pub := c.Visible("public")
-	assert.Len(t, pub.Modules, 1)
-	assert.NotContains(t, pub.Modules, "m2")
-	assert.Len(t, pub.Addons, 1)
-	assert.Contains(t, pub.Addons, "a2")
+	assert.Check(t, is.Len(pub.Modules, 1))
+	_, hasM2 := pub.Modules["m2"]
+	assert.Check(t, !hasM2)
+	assert.Check(t, is.Len(pub.Addons, 1))
+	assert.Check(t, is.Contains(pub.Addons, "a2"))
 
 	all := c.Visible("")
-	assert.Len(t, all.Modules, 2)
-	assert.Len(t, all.Addons, 2)
+	assert.Check(t, is.Len(all.Modules, 2))
+	assert.Check(t, is.Len(all.Addons, 2))
 }

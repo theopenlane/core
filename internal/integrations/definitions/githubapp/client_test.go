@@ -7,7 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/httpsling"
@@ -37,12 +38,12 @@ func TestQueryRepositoriesUsesConfiguredGraphQLEndpoint(t *testing.T) {
 	})(context.Background(), types.ConnectionRequest[githubAppCredential]{
 		Credential: githubAppCredential{AppID: 1, InstallationID: 2, AccessToken: "token", Expiry: &futureExpiry},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	repositories, err := queryRepositories(context.Background(), client, 1, nil)
-	require.NoError(t, err)
-	require.Len(t, repositories, 1)
-	require.Equal(t, "/api/graphql", requestPath)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(repositories, 1))
+	assert.Assert(t, is.Equal("/api/graphql", requestPath))
 }
 
 // TestAppClientCredentialValidation verifies the client builder validates the decoded credential
@@ -91,9 +92,9 @@ func TestAppClientCredentialValidation(t *testing.T) {
 
 			switch {
 			case tc.wantErr != nil:
-				require.ErrorIs(t, err, tc.wantErr)
+				assert.ErrorIs(t, err, tc.wantErr)
 			default:
-				require.NoError(t, err)
+				assert.NilError(t, err)
 			}
 		})
 	}
@@ -104,10 +105,10 @@ func TestTokenRefreshConfigFillsAppID(t *testing.T) {
 	t.Parallel()
 
 	cfg := tokenRefreshConfig(Config{}, githubAppCredential{AppID: 42})
-	require.Equal(t, "42", cfg.AppID)
+	assert.Assert(t, is.Equal("42", cfg.AppID))
 
 	cfg = tokenRefreshConfig(Config{AppID: "99"}, githubAppCredential{AppID: 42})
-	require.Equal(t, "99", cfg.AppID)
+	assert.Assert(t, is.Equal("99", cfg.AppID))
 }
 
 // TestBuildRefreshesExpiredInstallationToken verifies the client re-mints an installation token when the persisted one is expired.
@@ -143,11 +144,11 @@ func TestBuildRefreshesExpiredInstallationToken(t *testing.T) {
 	})(context.Background(), types.ConnectionRequest[githubAppCredential]{
 		Credential: githubAppCredential{AppID: 1, InstallationID: 2, AccessToken: "ghs_stale", Expiry: &expired},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	repositories, err := queryRepositories(context.Background(), client, 1, nil)
-	require.NoError(t, err)
-	require.Len(t, repositories, 1)
-	require.Equal(t, 1, tokenRequestCount)
-	require.Equal(t, "Bearer ghs_fresh", graphQLAuth)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(repositories, 1))
+	assert.Assert(t, is.Equal(1, tokenRequestCount))
+	assert.Assert(t, is.Equal("Bearer ghs_fresh", graphQLAuth))
 }

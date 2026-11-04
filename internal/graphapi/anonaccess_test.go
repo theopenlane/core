@@ -17,6 +17,8 @@ import (
 )
 
 func TestTemplateAnonymousTrustCenterAccess(t *testing.T) {
+	t.Parallel()
+
 	// two orgs each with a trust center and NDA template
 	tcOrg1 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
@@ -149,6 +151,8 @@ func TestTemplateAnonymousTrustCenterAccess(t *testing.T) {
 }
 
 func TestSubscriberAnonymousTrustCenterAccess(t *testing.T) {
+	t.Parallel()
+
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.TrustCenter
 
@@ -249,6 +253,8 @@ func TestSubscriberAnonymousTrustCenterOnlyAcceptsEmail(t *testing.T) {
 }
 
 func TestTrustCenterNDARequestAnonymousAllowedFields(t *testing.T) {
+	t.Parallel()
+
 	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	trustCenter := tcOrg.TrustCenter
 
@@ -349,6 +355,8 @@ func TestTrustCenterNDARequestAnonymousAllowedFields(t *testing.T) {
 }
 
 func TestTrustCenterNDARequestAnonymousDataIsolation(t *testing.T) {
+	t.Parallel()
+
 	tcOrg1 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
 
@@ -428,6 +436,8 @@ func TestTrustCenterNDARequestAnonymousDataIsolation(t *testing.T) {
 }
 
 func TestControlAnonymousTrustCenterAccess(t *testing.T) {
+	t.Parallel()
+
 	tcOrg1 := th.CreateFreshOrgWithTrustCenter(t)
 	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t)
 

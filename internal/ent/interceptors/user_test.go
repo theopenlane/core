@@ -6,7 +6,8 @@ import (
 
 	"entgo.io/ent"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestFilterType(t *testing.T) {
@@ -122,7 +123,7 @@ func TestFilterType(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ft := userFilterType(tt.ctx)
 
-			assert.Equal(t, tt.want, ft)
+			assert.Check(t, is.Equal(tt.want, ft))
 		})
 	}
 }

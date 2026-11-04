@@ -49,6 +49,8 @@ type paginatedEvidencesProgramCountResponse struct {
 }
 
 func TestQueryEvidencesPaginationFillsPageAfterFGAFilter(t *testing.T) {
+	t.Parallel()
+
 	users := suite.SeedFreshMinimalOrgUsers(t, true)
 	ownerCtx := users.Owner.UserCtx
 
@@ -96,6 +98,8 @@ func TestQueryEvidencesPaginationFillsPageAfterFGAFilter(t *testing.T) {
 }
 
 func TestPaginateKeepsNamedEdgesAcrossFGABatches(t *testing.T) {
+	t.Parallel()
+
 	users := suite.SeedFreshMinimalOrgUsers(t, true)
 	ownerCtx := users.Owner.UserCtx
 
@@ -166,6 +170,8 @@ func checkEagerLoadedProgramMember(t *testing.T, evidence *generated.Evidence, p
 }
 
 func TestQueryEvidencesNestedTotalCountAcrossFGABatches(t *testing.T) {
+	t.Parallel()
+
 	users := suite.SeedFreshMinimalOrgUsers(t, true)
 	ownerCtx := users.Owner.UserCtx
 

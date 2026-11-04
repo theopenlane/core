@@ -10,11 +10,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/mo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"github.com/vektah/gqlparser/v2/ast"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -93,14 +93,14 @@ func TestInterceptorPresignedURL_Base64Requested(t *testing.T) {
 
 	ctx := graphqlContextWithSelection("base64")
 	result, err := intercepted.Query(ctx, query)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	files, ok := result.([]*generated.File)
-	require.True(t, ok)
-	require.Len(t, files, 1)
+	assert.Assert(t, ok)
+	assert.Assert(t, is.Len(files, 1))
 
-	assert.Equal(t, base64.StdEncoding.EncodeToString(provider.downloaded), files[0].Base64)
-	assert.Equal(t, 1, provider.downloadCalls)
+	assert.Check(t, is.Equal(base64.StdEncoding.EncodeToString(provider.downloaded), files[0].Base64))
+	assert.Check(t, is.Equal(1, provider.downloadCalls))
 }
 
 func TestInterceptorPresignedURL_Base64NotRequested(t *testing.T) {
@@ -125,14 +125,14 @@ func TestInterceptorPresignedURL_Base64NotRequested(t *testing.T) {
 
 	ctx := graphqlContextWithSelection("id")
 	result, err := intercepted.Query(ctx, query)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	files, ok := result.([]*generated.File)
-	require.True(t, ok)
-	require.Len(t, files, 1)
+	assert.Assert(t, ok)
+	assert.Assert(t, is.Len(files, 1))
 
-	assert.Empty(t, files[0].Base64)
-	assert.Equal(t, 0, provider.downloadCalls)
+	assert.Check(t, is.Equal("", files[0].Base64))
+	assert.Check(t, is.Equal(0, provider.downloadCalls))
 }
 
 func TestInterceptorPresignedURL_Base64DatabaseProvider(t *testing.T) {
@@ -153,14 +153,14 @@ func TestInterceptorPresignedURL_Base64DatabaseProvider(t *testing.T) {
 
 	ctx := graphqlContextWithSelection("base64")
 	result, err := intercepted.Query(ctx, query)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	files, ok := result.([]*generated.File)
-	require.True(t, ok)
-	require.Len(t, files, 1)
+	assert.Assert(t, ok)
+	assert.Assert(t, is.Len(files, 1))
 
-	assert.Equal(t, base64.StdEncoding.EncodeToString(file.FileContents), files[0].Base64)
-	assert.Equal(t, 0, provider.downloadCalls)
+	assert.Check(t, is.Equal(base64.StdEncoding.EncodeToString(file.FileContents), files[0].Base64))
+	assert.Check(t, is.Equal(0, provider.downloadCalls))
 }
 
 func newObjectManager(t *testing.T, provider storage.Provider) *objects.Service {
@@ -244,17 +244,17 @@ func TestInterceptorFileOrgFilter(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			traverse, ok := InterceptorFile().(intercept.TraverseFunc)
-			require.True(t, ok)
+			assert.Assert(t, ok)
 
 			query := &mockQuery{typ: generated.TypeFile}
-			require.NoError(t, traverse(auth.WithCaller(context.Background(), tc.caller), query))
+			assert.NilError(t, traverse(auth.WithCaller(context.Background(), tc.caller), query))
 
 			if !tc.expectFilter {
-				assert.Empty(t, query.predicates)
+				assert.Check(t, is.Len(query.predicates, 0))
 				return
 			}
 
-			require.NotEmpty(t, query.predicates)
+			assert.Assert(t, len(query.predicates) != 0)
 
 			selector := sql.Select("*").From(sql.Table(file.Table))
 			for _, p := range query.predicates {
@@ -262,10 +262,10 @@ func TestInterceptorFileOrgFilter(t *testing.T) {
 			}
 
 			stmt, args := selector.Query()
-			assert.Contains(t, stmt, file.FieldSystemOwned)
+			assert.Check(t, is.Contains(stmt, file.FieldSystemOwned))
 
 			if tc.expectOrgArg {
-				assert.Contains(t, args, any(orgID))
+				assert.Check(t, is.Contains(args, any(orgID)))
 			}
 		})
 	}

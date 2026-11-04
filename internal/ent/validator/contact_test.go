@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
@@ -23,7 +23,7 @@ func TestValidatePhoneNumber(t *testing.T) {
 	for _, number := range validNumbers {
 		t.Run(fmt.Sprintf("valid phone number: %s", number), func(t *testing.T) {
 			valid := validator.ValidatePhoneNumber(number)
-			assert.True(t, valid)
+			assert.Check(t, valid)
 		})
 	}
 
@@ -39,7 +39,7 @@ func TestValidatePhoneNumber(t *testing.T) {
 	for _, number := range invalidNumbers {
 		t.Run(fmt.Sprintf("invalid phone number: %s", number), func(t *testing.T) {
 			valid := validator.ValidatePhoneNumber(number)
-			assert.False(t, valid)
+			assert.Check(t, !valid)
 		})
 	}
 }

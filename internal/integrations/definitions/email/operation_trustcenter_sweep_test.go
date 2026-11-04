@@ -4,7 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 )
@@ -57,10 +58,10 @@ func TestSubprocessorEntries(t *testing.T) {
 		row(ephemeral, after, after),
 	}, floor)
 
-	assert.Equal(t, []SubprocessorEntry{
+	assert.Check(t, is.DeepEqual([]SubprocessorEntry{
 		{Name: "Amazon Web Services", Change: "Removed"},
 		{Name: "Google Cloud", Change: "Added"},
 		{Name: "Datadog", Change: "Updated"},
 		{Name: "Snowflake", Change: "Updated"},
-	}, entries)
+	}, entries))
 }

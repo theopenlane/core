@@ -3,35 +3,39 @@ package entdb
 import (
 	"context"
 	"database/sql"
+	"os"
 	"testing"
 	"time"
 
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/enttest"
 	"github.com/theopenlane/utils/testutils"
 )
+
+var testFixture *testutils.TestFixture
+
+func TestMain(m *testing.M) {
+	testFixture = NewTestFixture()
+
+	code := m.Run()
+
+	testutils.TeardownFixture(testFixture)
+
+	os.Exit(code)
+}
 
 // TestGracefulCloseWaits verifies that GracefulClose waits for in-flight
 // queries before closing the database connection
 func TestGracefulCloseWaits(t *testing.T) {
 	flag := newShutdownFlag()
 	t.Cleanup(flag.Reset)
-	tf := NewTestFixture()
-	defer testutils.TeardownFixture(tf)
 
-	db, err := sql.Open("postgres", tf.URI)
-	require.NoError(t, err)
-	defer db.Close()
-
-	client := enttest.Open(t, dialect.Postgres, tf.URI,
-		enttest.WithMigrateOptions(EnablePostgresOption(db)))
-	defer func() {
-		require.NoError(t, client.Close())
-	}()
+	client, err := ent.Open(dialect.Postgres, testFixture.URI)
+	assert.NilError(t, err)
+	t.Cleanup(func() { assert.NilError(t, client.Close()) })
 
 	ctx := context.Background()
 
@@ -42,7 +46,7 @@ func TestGracefulCloseWaits(t *testing.T) {
 	done := make(chan struct{})
 	go func() {
 		tx, err := client.Tx(txCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 		// hold the connection for 300ms
 		time.Sleep(300 * time.Millisecond)
 		// rollback to release connection
@@ -55,7 +59,7 @@ func TestGracefulCloseWaits(t *testing.T) {
 
 	start := time.Now()
 	// GracefulClose should wait until the tx completes
-	require.NoError(t, GracefulCloseWithFlag(ctx, client, 10*time.Millisecond, flag))
+	assert.NilError(t, GracefulCloseWithFlag(ctx, client, 10*time.Millisecond, flag))
 	elapsed := time.Since(start)
 
 	// ensure goroutine finished
@@ -75,18 +79,14 @@ func TestGracefulCloseWaits(t *testing.T) {
 func TestBlockNewQueries(t *testing.T) {
 	flag := newShutdownFlag()
 	t.Cleanup(flag.Reset)
-	tf := NewTestFixture()
-	defer testutils.TeardownFixture(tf)
 
-	db, err := sql.Open("postgres", tf.URI)
-	require.NoError(t, err)
-	defer db.Close()
+	db, err := sql.Open("postgres", testFixture.URI)
+	assert.NilError(t, err)
+	t.Cleanup(func() { _ = db.Close() })
 
 	drv := blockDriverWithFlag(entsql.OpenDB(dialect.Postgres, db), flag)
-	client := enttest.NewClient(t,
-		enttest.WithOptions(ent.Driver(drv)),
-		enttest.WithMigrateOptions(EnablePostgresOption(db)))
-	defer func() { require.NoError(t, client.Close()) }()
+	client := ent.NewClient(ent.Driver(drv))
+	t.Cleanup(func() { assert.NilError(t, client.Close()) })
 
 	client.Intercept(BlockInterceptorWithFlag(flag))
 	client.Use(BlockHookWithFlag(flag))
@@ -95,34 +95,28 @@ func TestBlockNewQueries(t *testing.T) {
 
 	// verify query succeeds before shutdown
 	_, err = client.Tx(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	flag.Begin()
 
 	_, err = client.Tx(ctx)
-	require.ErrorIs(t, err, ErrShuttingDown)
+	assert.ErrorIs(t, err, ErrShuttingDown)
 }
 
 // TestGracefulCloseContextCancel verifies that GracefulClose returns when the context is canceled
 func TestGracefulCloseContextCancel(t *testing.T) {
 	flag := newShutdownFlag()
 	t.Cleanup(flag.Reset)
-	tf := NewTestFixture()
-	defer testutils.TeardownFixture(tf)
 
-	db, err := sql.Open("postgres", tf.URI)
-	require.NoError(t, err)
-	defer db.Close()
-
-	client := enttest.Open(t, dialect.Postgres, tf.URI,
-		enttest.WithMigrateOptions(EnablePostgresOption(db)))
-	defer func() { require.NoError(t, client.Close()) }()
+	client, err := ent.Open(dialect.Postgres, testFixture.URI)
+	assert.NilError(t, err)
+	t.Cleanup(func() { assert.NilError(t, client.Close()) })
 
 	txCtx := context.Background()
 	done := make(chan struct{})
 	go func() {
 		tx, err := client.Tx(txCtx)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 		time.Sleep(500 * time.Millisecond)
 		_ = tx.Rollback()
 		close(done)
@@ -134,7 +128,7 @@ func TestGracefulCloseContextCancel(t *testing.T) {
 	defer cancel()
 
 	start := time.Now()
-	require.NoError(t, GracefulCloseWithFlag(ctx, client, 10*time.Millisecond, flag))
+	assert.NilError(t, GracefulCloseWithFlag(ctx, client, 10*time.Millisecond, flag))
 	elapsed := time.Since(start)
 
 	if elapsed > 200*time.Millisecond {

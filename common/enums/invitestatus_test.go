@@ -3,7 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 )
@@ -44,7 +45,7 @@ func TestToInviteStatus(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			res := enums.ToInviteStatus(tc.status)
-			assert.Equal(t, tc.expected, *res)
+			assert.Check(t, is.Equal(tc.expected, *res))
 		})
 	}
 }

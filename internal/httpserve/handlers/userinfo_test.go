@@ -7,13 +7,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestUserInfoHandler() {
-	t := suite.T()
+func TestUserInfoHandler(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	suite.registerTestHandler("GET", "oauth/userinfo", suite.h.UserInfo)
 
@@ -24,7 +24,7 @@ func (suite *HandlerTestSuite) TestUserInfoHandler() {
 	}{
 		{
 			name:    "happy path",
-			ctx:     testUser1.UserCtx,
+			ctx:     suite.testUser1.UserCtx,
 			wantErr: false,
 		},
 		{
@@ -55,15 +55,15 @@ func (suite *HandlerTestSuite) TestUserInfoHandler() {
 			}
 
 			if tt.wantErr {
-				assert.Equal(t, http.StatusBadRequest, recorder.Code)
+				assert.Check(t, is.Equal(http.StatusBadRequest, recorder.Code))
 
 				return
 			}
 
-			assert.Equal(t, http.StatusOK, recorder.Code)
-			require.NotNil(t, out)
+			assert.Check(t, is.Equal(http.StatusOK, recorder.Code))
+			assert.Assert(t, out != nil)
 
-			assert.Equal(t, testUser1.ID, out.ID)
+			assert.Check(t, is.DeepEqual(suite.testUser1.ID, out.ID))
 		})
 	}
 }

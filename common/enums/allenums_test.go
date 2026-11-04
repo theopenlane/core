@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 )
@@ -322,23 +322,23 @@ func TestEnumCoverage(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.NotEmpty(t, tc.value.Values())
+			assert.Check(t, len(tc.value.Values()) > 0)
 
 			str := tc.value.String()
-			assert.NotEmpty(t, str)
+			assert.Check(t, str != "")
 
 			var buf bytes.Buffer
 			tc.value.MarshalGQL(&buf)
-			assert.Equal(t, `"`+str+`"`, buf.String())
+			assert.Check(t, is.Equal(`"`+str+`"`, buf.String()))
 
-			require.NoError(t, tc.unmarshal(str))
+			assert.NilError(t, tc.unmarshal(str))
 
 			errType := tc.errType
 			if errType == nil {
 				errType = enums.ErrInvalidType
 			}
 
-			require.ErrorIs(t, tc.unmarshal(42), errType)
+			assert.ErrorIs(t, tc.unmarshal(42), errType)
 
 			tc.parse()
 		})
@@ -347,31 +347,31 @@ func TestEnumCoverage(t *testing.T) {
 
 func TestDocumentManagementModeStrictMembership(t *testing.T) {
 	t.Run("IsValid", func(t *testing.T) {
-		assert.True(t, enums.DocumentManagementModeOpenlaneManaged.IsValid())
-		assert.True(t, enums.DocumentManagementModeExternalReference.IsValid())
-		assert.False(t, enums.DocumentManagementMode("DELETE_EVERYTHING").IsValid())
-		assert.False(t, enums.DocumentManagementMode("").IsValid())
+		assert.Check(t, enums.DocumentManagementModeOpenlaneManaged.IsValid())
+		assert.Check(t, enums.DocumentManagementModeExternalReference.IsValid())
+		assert.Check(t, !(enums.DocumentManagementMode("DELETE_EVERYTHING").IsValid()))
+		assert.Check(t, !(enums.DocumentManagementMode("").IsValid()))
 	})
 
 	t.Run("UnmarshalGQL rejects unknown string", func(t *testing.T) {
 		var e enums.DocumentManagementMode
-		require.ErrorIs(t, e.UnmarshalGQL("DELETE_EVERYTHING"), enums.ErrInvalidType)
-		assert.Empty(t, string(e))
+		assert.ErrorIs(t, e.UnmarshalGQL("DELETE_EVERYTHING"), enums.ErrInvalidType)
+		assert.Check(t, is.Len(string(e), 0))
 	})
 
 	t.Run("UnmarshalGQL accepts canonical values", func(t *testing.T) {
 		var e enums.DocumentManagementMode
-		require.NoError(t, e.UnmarshalGQL("OPENLANE_MANAGED"))
-		assert.Equal(t, enums.DocumentManagementModeOpenlaneManaged, e)
+		assert.NilError(t, e.UnmarshalGQL("OPENLANE_MANAGED"))
+		assert.Check(t, is.Equal(enums.DocumentManagementModeOpenlaneManaged, e))
 	})
 
 	t.Run("ToDocumentManagementMode returns nil on bad input", func(t *testing.T) {
-		assert.Nil(t, enums.ToDocumentManagementMode("DELETE_EVERYTHING"))
+		assert.Check(t, is.Nil(enums.ToDocumentManagementMode("DELETE_EVERYTHING")))
 	})
 
 	t.Run("ToDocumentManagementModeOrDefault falls back to OPENLANE_MANAGED", func(t *testing.T) {
-		assert.Equal(t, enums.DocumentManagementModeOpenlaneManaged, enums.ToDocumentManagementModeOrDefault("DELETE_EVERYTHING"))
-		assert.Equal(t, enums.DocumentManagementModeExternalReference, enums.ToDocumentManagementModeOrDefault("EXTERNAL_REFERENCE"))
+		assert.Check(t, is.Equal(enums.DocumentManagementModeOpenlaneManaged, enums.ToDocumentManagementModeOrDefault("DELETE_EVERYTHING")))
+		assert.Check(t, is.Equal(enums.DocumentManagementModeExternalReference, enums.ToDocumentManagementModeOrDefault("EXTERNAL_REFERENCE")))
 	})
 }
 
@@ -393,7 +393,7 @@ func TestToTimeWeekday(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(string(tc.input), func(t *testing.T) {
-			assert.Equal(t, tc.expected, enums.ToTimeWeekday(tc.input))
+			assert.Check(t, is.Equal(tc.expected, enums.ToTimeWeekday(tc.input)))
 		})
 	}
 }
@@ -421,10 +421,10 @@ func TestWorkflowObjectTypeParse(t *testing.T) {
 		t.Run(tc.input, func(t *testing.T) {
 			result := enums.ToWorkflowObjectType(tc.input)
 			if tc.expected == nil {
-				assert.Nil(t, result)
+				assert.Check(t, is.Nil(result))
 			} else {
-				require.NotNil(t, result)
-				assert.Equal(t, *tc.expected, *result)
+				assert.Assert(t, result != nil)
+				assert.Check(t, is.Equal(*tc.expected, *result))
 			}
 		})
 	}
@@ -454,7 +454,7 @@ func TestFontToFontStr(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(string(tc.font), func(t *testing.T) {
-			assert.Equal(t, tc.expected, tc.font.ToFontStr())
+			assert.Check(t, is.Equal(tc.expected, tc.font.ToFontStr()))
 		})
 	}
 }

@@ -5,7 +5,8 @@ import (
 	"testing"
 
 	"entgo.io/ent"
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 )
@@ -117,7 +118,7 @@ func Test_skipQueryModeCheck(t *testing.T) {
 			queryCtx := &ent.QueryContext{Op: tt.args.op}
 			ctx = ent.NewQueryContext(ctx, queryCtx)
 			got := skipQueryModeCheck(ctx, tt.args.mode)
-			assert.Equal(t, tt.want, got)
+			assert.Check(t, is.Equal(tt.want, got))
 		})
 	}
 }

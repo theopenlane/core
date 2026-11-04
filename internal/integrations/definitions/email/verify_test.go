@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/providers/mock"
@@ -33,12 +33,12 @@ func TestVerifySender_NilSender(t *testing.T) {
 
 	_, err := verifySender[ResendCredential](providerResend)(context.Background(), types.ConnectionRequest[ResendCredential]{}, client)
 
-	require.ErrorIs(t, err, ErrSenderNotConfigured)
+	assert.ErrorIs(t, err, ErrSenderNotConfigured)
 }
 
 func TestVerifySender_ConfiguredSender(t *testing.T) {
 	mockSender, err := mock.New("")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	client := &Client{
 		Sender: mockSender,
@@ -48,10 +48,10 @@ func TestVerifySender_ConfiguredSender(t *testing.T) {
 	}
 
 	metadata, err := verifySender[PostmarkCredential](providerPostmark)(context.Background(), types.ConnectionRequest[PostmarkCredential]{}, client)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, providerPostmark, metadata.Provider)
-	assert.Equal(t, "noreply@test.com", metadata.FromEmail)
+	assert.Check(t, is.Equal(providerPostmark, metadata.Provider))
+	assert.Check(t, is.Equal("noreply@test.com", metadata.FromEmail))
 }
 
 func TestVerifySender_VerifyFailed(t *testing.T) {
@@ -64,5 +64,5 @@ func TestVerifySender_VerifyFailed(t *testing.T) {
 
 	_, err := verifySender[ResendCredential](providerResend)(context.Background(), types.ConnectionRequest[ResendCredential]{}, client)
 
-	require.ErrorIs(t, err, ErrSenderVerifyFailed)
+	assert.ErrorIs(t, err, ErrSenderVerifyFailed)
 }

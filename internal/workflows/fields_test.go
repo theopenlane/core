@@ -3,23 +3,24 @@ package workflows
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 )
 
 func TestEligibleWorkflowFields(t *testing.T) {
 	metadata := WorkflowMetadata()
-	assert.NotEmpty(t, metadata)
+	assert.Check(t, len(metadata) != 0)
 
 	entry := metadata[0]
 	fields := EligibleWorkflowFields(entry.Type)
-	assert.NotEmpty(t, fields)
+	assert.Check(t, len(fields) != 0)
 
 	for _, field := range entry.EligibleFields {
-		assert.Contains(t, fields, field.Name)
+		assert.Check(t, is.Contains(fields, field.Name))
 	}
 
 	unknown := EligibleWorkflowFields(enums.WorkflowObjectType("Unknown"))
-	assert.Empty(t, unknown)
+	assert.Check(t, is.Len(unknown, 0))
 }

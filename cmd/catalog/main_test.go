@@ -5,6 +5,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -14,10 +15,10 @@ import (
 	"testing"
 
 	"github.com/oklog/ulid/v2"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/catalog"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
@@ -177,10 +178,10 @@ func TestPriceMatchesStripe(t *testing.T) {
 		Metadata:   map[string]string{"managed_by": "module-manager"},
 	}
 
-	assert.True(t, priceMatchesStripe(sp, cp, prod.ID))
+	assert.Check(t, priceMatchesStripe(sp, cp, prod.ID))
 
 	cp.UnitAmount = 2000
-	assert.False(t, priceMatchesStripe(sp, cp, prod.ID))
+	assert.Check(t, !priceMatchesStripe(sp, cp, prod.ID))
 }
 
 func TestBuildProductMap(t *testing.T) {
@@ -191,21 +192,21 @@ func TestBuildProductMap(t *testing.T) {
 	sc, _ := setupProductClient([]*stripe.Product{p1, p2}, nil)
 
 	m, err := buildProductMap(context.Background(), sc)
-	require.NoError(t, err)
-	require.Len(t, m, 4)
-	assert.Equal(t, p1, m["Basic"])
-	assert.Equal(t, p2, m["Pro"])
-	assert.Equal(t, p1, m[p1.ID])
-	assert.Equal(t, p2, m[p2.ID])
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(m, 4))
+	assert.Check(t, is.Equal(p1, m["Basic"]))
+	assert.Check(t, is.Equal(p2, m["Pro"]))
+	assert.Check(t, is.Equal(p1, m[p1.ID]))
+	assert.Check(t, is.Equal(p2, m[p2.ID]))
 }
 
 func TestBuildProductMapError(t *testing.T) {
 	t.Parallel()
 
-	sc, _ := setupProductClient(nil, assert.AnError)
+	sc, _ := setupProductClient(nil, errors.New("stripe error"))
 	m, err := buildProductMap(context.Background(), sc)
-	assert.Error(t, err)
-	assert.Nil(t, m)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Nil(m))
 }
 
 func TestUpdateFeaturePrices(t *testing.T) {
@@ -238,10 +239,10 @@ func TestUpdateFeaturePrices(t *testing.T) {
 	}
 
 	updated, takeovers, missing := updateFeaturePrices(context.Background(), sc, prod, "f1", feat)
-	require.Equal(t, 0, missing)
-	assert.Len(t, takeovers, 1)
-	assert.Equal(t, "priceA", updated.Billing.Prices[0].PriceID)
-	assert.Equal(t, "priceB", updated.Billing.Prices[1].PriceID)
+	assert.Assert(t, is.Equal(0, missing))
+	assert.Check(t, is.Len(takeovers, 1))
+	assert.Check(t, is.Equal("priceA", updated.Billing.Prices[0].PriceID))
+	assert.Check(t, is.Equal("priceB", updated.Billing.Prices[1].PriceID))
 }
 
 func TestProcessFeatureSet(t *testing.T) {
@@ -265,16 +266,16 @@ func TestProcessFeatureSet(t *testing.T) {
 	prodMap := map[string]*stripe.Product{"prod_1": prod}
 
 	takeovers, missing, reports := processFeatureSet(context.Background(), sc, prodMap, "module", fs)
-	assert.True(t, missing)
-	assert.Len(t, takeovers, 1)
-	assert.Len(t, reports, 2)
+	assert.Check(t, missing)
+	assert.Check(t, is.Len(takeovers, 1))
+	assert.Check(t, is.Len(reports, 2))
 
 	slices.SortFunc(reports, func(a, b featureReport) int {
 		return strings.Compare(a.name, b.name)
 	})
 
-	assert.Equal(t, "f1", reports[0].name)
-	assert.Equal(t, "f2", reports[1].name)
+	assert.Check(t, is.Equal("f1", reports[0].name))
+	assert.Check(t, is.Equal("f2", reports[1].name))
 }
 
 func TestHandleTakeovers(t *testing.T) {
@@ -296,8 +297,8 @@ func TestHandleTakeovers(t *testing.T) {
 	}).Return(nil)
 
 	err := handleTakeovers(context.Background(), sc, take, &takeover)
-	require.NoError(t, err)
-	assert.True(t, updated)
+	assert.NilError(t, err)
+	assert.Check(t, updated)
 }
 
 func TestPrintFeatureReports(t *testing.T) {
@@ -305,8 +306,8 @@ func TestPrintFeatureReports(t *testing.T) {
 
 	reports := []featureReport{{kind: "module", name: "m1", product: true, missingPrices: 0}}
 	out := captureOutput(func() { printFeatureReports(reports) })
-	assert.Contains(t, out, "module")
-	assert.Contains(t, out, "m1")
+	assert.Check(t, is.Contains(out, "module"))
+	assert.Check(t, is.Contains(out, "m1"))
 }
 
 func TestPromptAndCreateMissing(t *testing.T) {
@@ -323,14 +324,14 @@ func TestPromptAndCreateMissing(t *testing.T) {
 	defer func() { os.Stdin = old }()
 
 	err := promptAndCreateMissing(context.Background(), cat, sc)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 func writeTempCatalogFile(t *testing.T, data string) string {
 	t.Helper()
 	dir := t.TempDir()
 	p := filepath.Join(dir, fmt.Sprintf("catalog-%s.yaml", ulid.Make().String()))
-	require.NoError(t, os.WriteFile(p, []byte(data), 0o644))
+	assert.NilError(t, os.WriteFile(p, []byte(data), 0o644))
 	return p
 }
 
@@ -371,8 +372,8 @@ addons: {}`
 
 	app := catalogApp()
 	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
-	require.NoError(t, err)
-	require.Empty(t, client.updated)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(client.updated, 0))
 }
 
 func TestCatalogAppTakeover(t *testing.T) {
@@ -412,8 +413,8 @@ addons: {}`
 
 	app := catalogApp()
 	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
-	require.NoError(t, err)
-	assert.Equal(t, []string{"price_1"}, client.updated)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual([]string{"price_1"}, client.updated))
 }
 
 func TestCatalogAppLookupKeyConflict(t *testing.T) {
@@ -448,6 +449,6 @@ addons: {}`
 
 	app := catalogApp()
 	err := app.Run(context.Background(), []string{"catalog", "--catalog", path, "--stripe-key", "sk", "--takeover"})
-	require.NoError(t, err)
-	assert.Equal(t, []string{"price_conflict"}, client.updated)
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual([]string{"price_conflict"}, client.updated))
 }

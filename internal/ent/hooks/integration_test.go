@@ -4,8 +4,7 @@ package hooks_test
 
 import (
 	"context"
-
-	"github.com/stretchr/testify/require"
+	"testing"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -15,85 +14,88 @@ import (
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/iam/auth"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HookTestSuite) TestIntegrationCampaignEmailUniquePerOrg() {
-	t := suite.T()
+func TestIntegrationCampaignEmailUniquePerOrg(t *testing.T) {
+	s := suite.setupTest(t)
 
-	user := suite.seedUser()
-	require.NotEmpty(t, user.Edges.OrgMemberships)
+	user := s.seedUser()
+	assert.Assert(t, len(user.Edges.OrgMemberships) > 0)
 
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	ctx := auth.NewTestContextWithOrgID(user.ID, orgID)
-	ctx = generated.NewContext(ctx, suite.client)
+	ctx = generated.NewContext(ctx, s.client)
 	ctx = auth.WithInternalOperationContext(ctx)
 
-	first, err := suite.client.Integration.Create().
+	first, err := s.client.Integration.Create().
 		SetOwnerID(orgID).
 		SetName("Email One").
 		SetDefinitionID(emaildef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
 		SetCampaignEmail(true).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	second, err := suite.client.Integration.Create().
+	second, err := s.client.Integration.Create().
 		SetOwnerID(orgID).
 		SetName("Email Two").
 		SetDefinitionID(emaildef.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
 		SetCampaignEmail(true).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	first, err = suite.client.Integration.Get(ctx, first.ID)
-	require.NoError(t, err)
-	second, err = suite.client.Integration.Get(ctx, second.ID)
-	require.NoError(t, err)
+	first, err = s.client.Integration.Get(ctx, first.ID)
+	assert.NilError(t, err)
+	second, err = s.client.Integration.Get(ctx, second.ID)
+	assert.NilError(t, err)
 
-	require.False(t, first.CampaignEmail)
-	require.True(t, second.CampaignEmail)
+	assert.Assert(t, !first.CampaignEmail)
+	assert.Assert(t, second.CampaignEmail)
 
-	first, err = suite.client.Integration.UpdateOneID(first.ID).
+	first, err = s.client.Integration.UpdateOneID(first.ID).
 		SetCampaignEmail(true).
 		Save(ctx)
-	require.NoError(t, err)
-	second, err = suite.client.Integration.Get(ctx, second.ID)
-	require.NoError(t, err)
+	assert.NilError(t, err)
+	second, err = s.client.Integration.Get(ctx, second.ID)
+	assert.NilError(t, err)
 
-	require.True(t, first.CampaignEmail)
-	require.False(t, second.CampaignEmail)
+	assert.Assert(t, first.CampaignEmail)
+	assert.Assert(t, !second.CampaignEmail)
 
 	galaRuntime, err := gala.NewGala(context.Background(), gala.Config{
 		DispatchMode: gala.DispatchModeInMemory,
 		WorkerCount:  1,
 	})
-	require.NoError(t, err)
-	defer galaRuntime.Close()
+	assert.NilError(t, err)
+	t.Cleanup(func() { galaRuntime.Close() })
 
 	rt, err := intruntime.New(intruntime.Config{
-		DB:       suite.client,
+		DB:       s.client,
 		Gala:     galaRuntime,
 		Registry: registry.New(),
 		Keystore: &keystore.Store{},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	resolved, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), orgID, func(inst *generated.Integration) bool {
 		return inst.CampaignEmail
 	})
-	require.NoError(t, err)
-	require.Equal(t, first.ID, resolved)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(first.ID, resolved))
 
-	first, err = suite.client.Integration.UpdateOneID(first.ID).
+	first, err = s.client.Integration.UpdateOneID(first.ID).
 		SetStatus(enums.IntegrationStatusPending).
 		Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	resolved, err = rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), orgID, func(inst *generated.Integration) bool {
 		return inst.CampaignEmail
 	})
-	require.NoError(t, err)
-	require.Equal(t, second.ID, resolved)
-	require.True(t, first.CampaignEmail)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(second.ID, resolved))
+	assert.Assert(t, first.CampaignEmail)
 }

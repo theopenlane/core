@@ -618,7 +618,10 @@ func (_c *AssessmentResponseCreate) defaults() error {
 		_c.mutation.SetAssignedAt(v)
 	}
 	if _, ok := _c.mutation.StartedAt(); !ok {
-		v := assessmentresponse.DefaultStartedAt
+		if assessmentresponse.DefaultStartedAt == nil {
+			return fmt.Errorf("generated: uninitialized assessmentresponse.DefaultStartedAt (forgotten import generated/runtime?)")
+		}
+		v := assessmentresponse.DefaultStartedAt()
 		_c.mutation.SetStartedAt(v)
 	}
 	if _, ok := _c.mutation.IsDraft(); !ok {

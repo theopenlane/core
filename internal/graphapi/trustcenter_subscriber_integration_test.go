@@ -27,6 +27,8 @@ import (
 // the subscription is scoped to the trust center and its owning org from the JWT, and that a
 // mismatched trust center in the input is rejected
 func TestTrustCenterAnonymousSubscribe(t *testing.T) {
+	t.Parallel()
+
 	tc := th.CreateFreshOrgWithTrustCenter(t)
 
 	subscriberEmail := gofakeit.Email()
@@ -105,6 +107,8 @@ func TestTrustCenterSubscriberGate(t *testing.T) {
 // TestTrustCenterSubscriberScopedPerTrustCenter verifies the same email can subscribe to different
 // trust centers, producing distinct subscriptions scoped to each trust center
 func TestTrustCenterSubscriberScopedPerTrustCenter(t *testing.T) {
+	t.Parallel()
+
 	tc1 := th.CreateFreshOrgWithTrustCenter(t)
 	tc2 := th.CreateFreshOrgWithTrustCenter(t)
 

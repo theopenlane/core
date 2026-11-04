@@ -410,7 +410,7 @@ func NewTestFixture() *testutils.TestFixture {
 // clientOpts allows passing entdb options like WithModules; pass nil if not needed.
 func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []riverqueue.Option, clientOpts []Option, entOpts []ent.Option) (*ent.Client, error) {
 	dbconf := entx.Config{
-		Debug:           true,
+		Debug:           false,
 		DriverName:      ctr.Dialect,
 		PrimaryDBSource: ctr.URI,
 		EnableHistory:   true,            // enable history so the code path is checked during unit tests
@@ -463,7 +463,7 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []ri
 // NewTestHistoryClient creates a ent history client that can be used for TEST purposes ONLY
 func NewTestHistoryClient(ctx context.Context, ctr *testutils.TestFixture) (*historygenerated.Client, error) {
 	dbconf := entx.Config{
-		Debug:           true,
+		Debug:           false,
 		DriverName:      ctr.Dialect,
 		PrimaryDBSource: ctr.URI,
 		EnableHistory:   true,            // enable history so the code path is checked during unit tests

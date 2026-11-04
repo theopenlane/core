@@ -4,8 +4,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestSSOLogin(t *testing.T) {
@@ -23,13 +24,13 @@ func TestSSOLogin(t *testing.T) {
 
 	const orgID = "abc123"
 	want := "/v1/sso/login?organization_id=" + orgID
-	assert.Equal(t, want, SSOLogin(e, orgID))
-	assert.Equal(t, "/v1/sso/login", SSOLogin(e, ""))
+	assert.Check(t, is.Equal(want, SSOLogin(e, orgID)))
+	assert.Check(t, is.Equal("/v1/sso/login", SSOLogin(e, "")))
 
 	e2 := echo.New()
-	assert.Equal(t, want, SSOLogin(e2, orgID))
+	assert.Check(t, is.Equal(want, SSOLogin(e2, orgID)))
 
-	assert.Equal(t, want, SSOLogin(nil, orgID))
+	assert.Check(t, is.Equal(want, SSOLogin(nil, orgID)))
 }
 
 func TestSSOCallback(t *testing.T) {
@@ -45,12 +46,12 @@ func TestSSOCallback(t *testing.T) {
 		},
 	})
 
-	assert.Equal(t, "/v1/sso/callback", SSOCallback(e))
+	assert.Check(t, is.Equal("/v1/sso/callback", SSOCallback(e)))
 
 	e2 := echo.New()
-	assert.Equal(t, "/v1/sso/callback", SSOCallback(e2))
+	assert.Check(t, is.Equal("/v1/sso/callback", SSOCallback(e2)))
 
-	assert.Equal(t, "/v1/sso/callback", SSOCallback(nil))
+	assert.Check(t, is.Equal("/v1/sso/callback", SSOCallback(nil)))
 }
 
 func TestSSOLoginGroupRegisteredRoute(t *testing.T) {
@@ -67,8 +68,8 @@ func TestSSOLoginGroupRegisteredRoute(t *testing.T) {
 			return nil
 		},
 	})
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	const orgID = "abc123"
-	assert.Equal(t, "/v1/sso/login?organization_id="+orgID, SSOLogin(e, orgID))
+	assert.Check(t, is.Equal("/v1/sso/login?organization_id="+orgID, SSOLogin(e, orgID)))
 }

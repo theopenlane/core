@@ -6,33 +6,33 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/newman"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestTrustCenterUpdateRegistered verifies the trust center update entry registers under its own
 // unique identifier, distinct from the customer-selectable branded message key, so campaigns keyed
 // by it resolve a dispatcher
 func TestTrustCenterUpdateRegistered(t *testing.T) {
-	assert.NotEqual(t, BrandedMessageOp.Name(), TrustCenterUpdateTemplate)
+	assert.Check(t, BrandedMessageOp.Name() != TrustCenterUpdateTemplate)
 
 	_, ok := DispatcherByKey(TrustCenterUpdateTemplate)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 }
 
 // TestTrustCenterUpdateNotCustomerSelectable verifies the entry is excluded from the customer-facing
 // catalog: the trust center update message is a system send, never authored from the picker
 func TestTrustCenterUpdateNotCustomerSelectable(t *testing.T) {
 	d, ok := DispatcherByKey(TrustCenterUpdateTemplate)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	cs := d.Registration().CustomerSelectable
-	assert.NotNil(t, cs)
-	assert.False(t, *cs)
+	assert.Check(t, cs != nil)
+	assert.Check(t, !(*cs))
 
 	for _, sel := range CustomerSelectableDispatchers() {
-		assert.NotEqual(t, TrustCenterUpdateTemplate, sel.Name())
+		assert.Check(t, TrustCenterUpdateTemplate != sel.Name())
 	}
 }
 
@@ -72,7 +72,7 @@ func TestTrustCenterUpdateSubject(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			assert.Equal(t, tc.expected, trustCenterUpdateSubject(tc.companyName, tc.title))
+			assert.Check(t, is.Equal(tc.expected, trustCenterUpdateSubject(tc.companyName, tc.title)))
 		})
 	}
 }
@@ -83,13 +83,13 @@ func renderTrustCenterUpdateMessage(t *testing.T, client *Client, req TrustCente
 	t.Helper()
 
 	dispatcher, ok := DispatcherByKey(TrustCenterUpdateTemplate)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	payload, err := json.Marshal(req)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	msg, err := dispatcher.RenderMessage(context.Background(), client, payload)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return msg
 }
@@ -113,27 +113,27 @@ func TestTrustCenterUpdateRender(t *testing.T) {
 
 	msg := renderTrustCenterUpdateMessage(t, &Client{Config: *MockRuntimeConfig()}, req)
 
-	assert.Equal(t, "SecureCorp Trust Center Update: SOC 2 report published", msg.GetSubject())
+	assert.Check(t, is.Equal("SecureCorp Trust Center Update: SOC 2 report published", msg.GetSubject()))
 
 	html := msg.GetHTML()
 
 	// the post title is the headline with a single attribution line naming the company
-	assert.Contains(t, html, "SOC 2 report published")
-	assert.Contains(t, html, "SecureCorp has published a new update to their trust center.")
+	assert.Check(t, is.Contains(html, "SOC 2 report published"))
+	assert.Check(t, is.Contains(html, "SecureCorp has published a new update to their trust center."))
 
 	// plain-text post body renders as paragraphs
-	assert.Contains(t, html, "<p>Our latest SOC 2 Type II report is now available.</p>")
-	assert.Contains(t, html, "<p>Request access to review the full report.</p>")
+	assert.Check(t, is.Contains(html, "<p>Our latest SOC 2 Type II report is now available.</p>"))
+	assert.Check(t, is.Contains(html, "<p>Request access to review the full report.</p>"))
 
 	// identity and trust center link are applied, with the accent as a decorative border only and
 	// the logo rendered exactly once (header slot only)
-	assert.Equal(t, 1, strings.Count(html, "https://securecorp.example.com/logo.png"))
-	assert.Contains(t, html, `href="https://securecorp.example.com/trust"`)
-	assert.Contains(t, html, "border-top:4px solid #3fc2b4")
-	assert.NotContains(t, html, "background-color:#3fc2b4")
+	assert.Check(t, is.Equal(1, strings.Count(html, "https://securecorp.example.com/logo.png")))
+	assert.Check(t, is.Contains(html, `href="https://securecorp.example.com/trust"`))
+	assert.Check(t, is.Contains(html, "border-top:4px solid #3fc2b4"))
+	assert.Check(t, !strings.Contains(html, "background-color:#3fc2b4"))
 
 	// the per-recipient unsubscribe link is resolved from the token
-	assert.Contains(t, html, "https://securecorp.example.com/unsubscribe?token=tok_dolores")
+	assert.Check(t, is.Contains(html, "https://securecorp.example.com/unsubscribe?token=tok_dolores"))
 }
 
 // TestTrustCenterUpdateRenderHTMLPost verifies an HTML post body renders as authored (lists and
@@ -150,11 +150,11 @@ func TestTrustCenterUpdateRenderHTMLPost(t *testing.T) {
 	html := msg.GetHTML()
 
 	// authored formatting is preserved
-	assert.Contains(t, html, "<li>New <strong>SOC 2</strong> report</li>")
-	assert.Contains(t, html, "<li>Refreshed policies</li>")
+	assert.Check(t, is.Contains(html, "<li>New <strong>SOC 2</strong> report</li>"))
+	assert.Check(t, is.Contains(html, "<li>Refreshed policies</li>"))
 
 	// dangerous content is stripped
-	assert.NotContains(t, html, "<script>")
+	assert.Check(t, !strings.Contains(html, "<script>"))
 }
 
 // TestTrustCenterUpdateRenderFallbacks verifies a post with no title and no trust center branding
@@ -169,14 +169,14 @@ func TestTrustCenterUpdateRenderFallbacks(t *testing.T) {
 
 	msg := renderTrustCenterUpdateMessage(t, &Client{Config: *cfg}, req)
 
-	assert.Equal(t, DefaultTrustCenterUpdateTitle, msg.GetSubject())
+	assert.Check(t, is.Equal(DefaultTrustCenterUpdateTitle, msg.GetSubject()))
 
 	html := msg.GetHTML()
-	assert.Contains(t, html, DefaultTrustCenterUpdateTitle)
-	assert.Contains(t, html, "A new update was published to the trust center.")
-	assert.Contains(t, html, "We published a new update.")
-	assert.NotContains(t, html, "SecureCorp")
-	assert.Contains(t, html, cfg.CompanyName)
+	assert.Check(t, is.Contains(html, DefaultTrustCenterUpdateTitle))
+	assert.Check(t, is.Contains(html, "A new update was published to the trust center."))
+	assert.Check(t, is.Contains(html, "We published a new update."))
+	assert.Check(t, !strings.Contains(html, "SecureCorp"))
+	assert.Check(t, is.Contains(html, cfg.CompanyName))
 }
 
 // TestTrustCenterUpdateContent verifies the campaign metadata conversion carries the post data under
@@ -190,16 +190,16 @@ func TestTrustCenterUpdateContent(t *testing.T) {
 		TrustCenterURL: "https://securecorp.example.com/trust",
 		UnsubscribeURL: "https://securecorp.example.com/unsubscribe?token={{ .unsubscribeToken }}",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "SOC 2 report published", content["postTitle"])
-	assert.Equal(t, "We published a new update.", content["postText"])
-	assert.Equal(t, "https://securecorp.example.com/trust", content["trustCenterURL"])
+	assert.Check(t, is.Equal("SOC 2 report published", content["postTitle"]))
+	assert.Check(t, is.Equal("We published a new update.", content["postText"]))
+	assert.Check(t, is.Equal("https://securecorp.example.com/trust", content["trustCenterURL"]))
 
 	unsubscribeURL, ok := content["unsubscribeURL"].(string)
-	assert.True(t, ok)
-	assert.Contains(t, unsubscribeURL, "{{ .unsubscribeToken }}")
+	assert.Check(t, ok)
+	assert.Check(t, is.Contains(unsubscribeURL, "{{ .unsubscribeToken }}"))
 
 	_, hasEmail := content["email"]
-	assert.False(t, hasEmail)
+	assert.Check(t, !hasEmail)
 }

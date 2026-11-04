@@ -3,8 +3,8 @@ package urlx
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestParse(t *testing.T) {
@@ -84,12 +84,12 @@ func TestParse(t *testing.T) {
 
 			got, err := Parse(tc.rawURL)
 			if tc.wantErr != nil {
-				require.ErrorIs(t, err, tc.wantErr)
+				assert.ErrorIs(t, err, tc.wantErr)
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tc.want, got.String())
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.want, got.String()))
 		})
 	}
 }
@@ -146,12 +146,12 @@ func TestParseAbsolute(t *testing.T) {
 
 			got, err := ParseAbsolute(tc.rawURL)
 			if tc.wantErr != nil {
-				require.ErrorIs(t, err, tc.wantErr)
+				assert.ErrorIs(t, err, tc.wantErr)
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tc.want, got.String())
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.want, got.String()))
 		})
 	}
 }
@@ -223,12 +223,12 @@ func TestNormalizeHostname(t *testing.T) {
 
 			got, err := NormalizeHostname(tc.rawURL)
 			if tc.wantErr != nil {
-				require.ErrorIs(t, err, tc.wantErr)
+				assert.ErrorIs(t, err, tc.wantErr)
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tc.want, got)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.want, got))
 		})
 	}
 }
@@ -262,7 +262,7 @@ func TestWithoutQuery(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			assert.Equal(t, tc.want, WithoutQuery(tc.rawURL))
+			assert.Check(t, is.Equal(tc.want, WithoutQuery(tc.rawURL)))
 		})
 	}
 }

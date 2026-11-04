@@ -13,7 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/httpsling"
@@ -25,7 +26,7 @@ func testPrivateKey(t *testing.T) string {
 	t.Helper()
 
 	key, err := rsa.GenerateKey(rand.Reader, 2048)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	der := x509.MarshalPKCS1PrivateKey(key)
 	block := &pem.Block{Type: "RSA PRIVATE KEY", Bytes: der}
@@ -38,14 +39,14 @@ func TestFlowStartProducesInstallURL(t *testing.T) {
 	t.Parallel()
 
 	result, err := startAppInstall(Config{AppSlug: "my-app"})
-	require.NoError(t, err)
-	require.Contains(t, result.URL, "https://github.com/apps/my-app/installations/new")
-	require.Contains(t, result.URL, "state=")
-	require.NotEmpty(t, result.State)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Contains(result.URL, "https://github.com/apps/my-app/installations/new"))
+	assert.Assert(t, is.Contains(result.URL, "state="))
+	assert.Assert(t, len(result.State) > 0)
 
 	var state statePayload
-	require.NoError(t, json.Unmarshal(result.State, &state))
-	require.NotEmpty(t, state.Token)
+	assert.NilError(t, json.Unmarshal(result.State, &state))
+	assert.Assert(t, len(state.Token) > 0)
 }
 
 // TestFlowStartMissingSlug verifies Start returns an error when AppSlug is empty
@@ -53,7 +54,7 @@ func TestFlowStartMissingSlug(t *testing.T) {
 	t.Parallel()
 
 	_, err := startAppInstall(Config{})
-	require.ErrorIs(t, err, ErrAppSlugMissing)
+	assert.ErrorIs(t, err, ErrAppSlugMissing)
 }
 
 // TestFlowCompleteDecodesCallbackAndProducesCredential verifies Complete mints a credential from callback input
@@ -78,21 +79,21 @@ func TestFlowCompleteDecodesCallbackAndProducesCredential(t *testing.T) {
 	}
 
 	stateJSON, err := jsonx.ToRawMessage(statePayload{Token: "csrf-token"})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	result, err := completeAppInstall(context.Background(), cfg, stateJSON, types.AuthCallbackInput{
 		Query: []types.AuthCallbackValue{
 			{Name: "installation_id", Values: []string{"99"}},
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	var cred githubAppCredential
-	require.NoError(t, json.Unmarshal(result.Credential.Data, &cred))
-	require.Equal(t, int64(12345), cred.AppID)
-	require.Equal(t, int64(99), cred.InstallationID)
-	require.Equal(t, "ghs_test123", cred.AccessToken)
-	require.NotNil(t, cred.Expiry)
+	assert.NilError(t, json.Unmarshal(result.Credential.Data, &cred))
+	assert.Assert(t, is.Equal(int64(12345), cred.AppID))
+	assert.Assert(t, is.Equal(int64(99), cred.InstallationID))
+	assert.Assert(t, is.Equal("ghs_test123", cred.AccessToken))
+	assert.Assert(t, cred.Expiry != nil)
 }
 
 // TestFlowCompleteMissingInstallationID verifies Complete fails when installation_id is zero
@@ -100,10 +101,10 @@ func TestFlowCompleteMissingInstallationID(t *testing.T) {
 	t.Parallel()
 
 	stateJSON, err := jsonx.ToRawMessage(statePayload{Token: "tok"})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = completeAppInstall(context.Background(), Config{AppSlug: "test-app"}, stateJSON, types.AuthCallbackInput{})
-	require.ErrorIs(t, err, ErrInstallationIDMissing)
+	assert.ErrorIs(t, err, ErrInstallationIDMissing)
 }
 
 // TestFlowCompleteURLPath verifies the installation token request hits the expected API path
@@ -129,13 +130,13 @@ func TestFlowCompleteURLPath(t *testing.T) {
 	}
 
 	stateJSON, err := jsonx.ToRawMessage(statePayload{Token: "t"})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = completeAppInstall(context.Background(), cfg, stateJSON, types.AuthCallbackInput{
 		Query: []types.AuthCallbackValue{
 			{Name: "installation_id", Values: []string{"55"}},
 		},
 	})
-	require.NoError(t, err)
-	require.True(t, strings.HasPrefix(requestPath, "/api/v3/app/installations/55/access_tokens"))
+	assert.NilError(t, err)
+	assert.Assert(t, strings.HasPrefix(requestPath, "/api/v3/app/installations/55/access_tokens"))
 }

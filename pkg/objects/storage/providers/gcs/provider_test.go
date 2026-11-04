@@ -8,7 +8,9 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"errors"
+	"math"
 	"net/url"
+	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -17,9 +19,9 @@ import (
 
 	gstorage "cloud.google.com/go/storage"
 	"github.com/fsouza/fake-gcs-server/fakestorage"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"google.golang.org/api/option"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -39,7 +41,7 @@ func newFakeServer(t *testing.T, objects ...fakestorage.Object) *fakestorage.Ser
 	t.Helper()
 
 	server, err := fakestorage.NewServerWithOptions(fakestorage.Options{NoListener: true, InitialObjects: objects})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	t.Cleanup(server.Stop)
 
 	server.CreateBucketWithOpts(fakestorage.CreateBucketOpts{Name: testBucket})
@@ -70,7 +72,7 @@ func newFakeProvider(t *testing.T, server *fakestorage.Server, opts ...storage.P
 	t.Helper()
 
 	provider, err := gcs.NewProvider(context.Background(), gcsOptions(opts...), fakeClientOptions(server, option.WithoutAuthentication()))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 	t.Cleanup(func() { _ = provider.Close() })
 
 	return provider
@@ -80,7 +82,7 @@ func serviceAccountJSON(t *testing.T) []byte {
 	t.Helper()
 
 	key, err := rsa.GenerateKey(rand.Reader, rsaKeyBits)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	pemKey := pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(key)})
 	sa, err := json.Marshal(map[string]string{
@@ -90,7 +92,7 @@ func serviceAccountJSON(t *testing.T) []byte {
 		"private_key":  string(pemKey),
 		"token_uri":    "https://oauth2.googleapis.com/token",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return sa
 }
@@ -123,8 +125,8 @@ func TestNewProviderValidation(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			provider, err := gcs.NewProvider(context.Background(), tt.options, tt.opts...)
-			assert.ErrorIs(t, err, tt.expectErr)
-			assert.Nil(t, provider)
+			assert.Check(t, is.ErrorIs(err, tt.expectErr))
+			assert.Check(t, is.Nil(provider))
 		})
 	}
 }
@@ -149,13 +151,13 @@ func TestNewProvider(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			provider, err := gcs.NewProvider(context.Background(), tt.options, fakeClientOptions(server, option.WithoutAuthentication()))
-			require.NoError(t, err)
-			require.NotNil(t, provider)
+			assert.NilError(t, err)
+			assert.Assert(t, provider != nil)
 
 			exists, err := provider.Exists(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "seeded.txt"}})
-			require.NoError(t, err)
-			assert.True(t, exists)
-			assert.NoError(t, provider.Close())
+			assert.NilError(t, err)
+			assert.Check(t, exists)
+			assert.Check(t, provider.Close())
 		})
 	}
 }
@@ -164,21 +166,21 @@ func TestProviderMethods(t *testing.T) {
 	provider := newFakeProvider(t, newFakeServer(t))
 
 	t.Run("ProviderType", func(t *testing.T) {
-		assert.Equal(t, storage.GCSProvider, provider.ProviderType())
+		assert.Check(t, is.Equal(storage.GCSProvider, provider.ProviderType()))
 	})
 
 	t.Run("GetScheme", func(t *testing.T) {
 		scheme := provider.GetScheme()
-		assert.NotNil(t, scheme)
-		assert.Equal(t, "gs://", *scheme)
+		assert.Check(t, scheme != nil)
+		assert.Check(t, is.Equal("gs://", *scheme))
 	})
 
 	t.Run("Bucket", func(t *testing.T) {
-		assert.Equal(t, testBucket, provider.Bucket())
+		assert.Check(t, is.Equal(testBucket, provider.Bucket()))
 	})
 
 	t.Run("Close", func(t *testing.T) {
-		assert.NoError(t, provider.Close())
+		assert.Check(t, provider.Close())
 	})
 }
 
@@ -215,21 +217,21 @@ func TestProviderUpload(t *testing.T) {
 			provider := newFakeProvider(t, server)
 
 			uploaded, err := provider.Upload(context.Background(), strings.NewReader(tt.content), tt.uploadOpts)
-			require.NoError(t, err)
-			require.NotNil(t, uploaded)
+			assert.NilError(t, err)
+			assert.Assert(t, uploaded != nil)
 
-			assert.Equal(t, tt.expectedKey, uploaded.Key)
-			assert.Equal(t, int64(len(tt.content)), uploaded.Size)
-			assert.Equal(t, tt.uploadOpts.FolderDestination, uploaded.Folder)
-			assert.Equal(t, testBucket, uploaded.Bucket)
-			assert.Equal(t, tt.uploadOpts.ContentType, uploaded.ContentType)
-			assert.Equal(t, storage.GCSProvider, uploaded.ProviderType)
-			assert.Equal(t, "gs://"+testBucket+"/"+tt.expectedKey, uploaded.FullURI)
+			assert.Check(t, is.Equal(tt.expectedKey, uploaded.Key))
+			assert.Check(t, is.Equal(int64(len(tt.content)), uploaded.Size))
+			assert.Check(t, is.Equal(tt.uploadOpts.FolderDestination, uploaded.Folder))
+			assert.Check(t, is.Equal(testBucket, uploaded.Bucket))
+			assert.Check(t, is.Equal(tt.uploadOpts.ContentType, uploaded.ContentType))
+			assert.Check(t, is.Equal(storage.GCSProvider, uploaded.ProviderType))
+			assert.Check(t, is.Equal("gs://"+testBucket+"/"+tt.expectedKey, uploaded.FullURI))
 
 			object, err := server.GetObject(testBucket, tt.expectedKey)
-			require.NoError(t, err)
-			assert.Equal(t, []byte(tt.content), object.Content)
-			assert.Equal(t, tt.uploadOpts.ContentType, object.ContentType)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.content, string(object.Content)))
+			assert.Check(t, is.Equal(tt.uploadOpts.ContentType, object.ContentType))
 		})
 	}
 }
@@ -238,20 +240,20 @@ func TestProviderUploadReaderFailure(t *testing.T) {
 	provider := newFakeProvider(t, newFakeServer(t))
 
 	uploaded, err := provider.Upload(context.Background(), iotest.ErrReader(errReadFailed), &storagetypes.UploadFileOptions{FileName: "broken.txt"})
-	assert.ErrorIs(t, err, errReadFailed)
-	assert.Nil(t, uploaded)
+	assert.Check(t, is.ErrorIs(err, errReadFailed))
+	assert.Check(t, is.Nil(uploaded))
 
 	exists, err := provider.Exists(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "broken.txt"}})
-	require.NoError(t, err)
-	assert.False(t, exists)
+	assert.NilError(t, err)
+	assert.Check(t, !exists)
 }
 
 func TestProviderUploadMissingBucket(t *testing.T) {
 	provider := newFakeProvider(t, newFakeServer(t), storage.WithBucket("missing-bucket"))
 
 	uploaded, err := provider.Upload(context.Background(), strings.NewReader("content"), &storagetypes.UploadFileOptions{FileName: "file.txt"})
-	assert.Error(t, err)
-	assert.Nil(t, uploaded)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Nil(uploaded))
 }
 
 func TestProviderDownload(t *testing.T) {
@@ -298,20 +300,20 @@ func TestProviderDownload(t *testing.T) {
 
 			downloaded, err := provider.Download(context.Background(), tt.file, &storagetypes.DownloadFileOptions{})
 			if tt.stopped || tt.expectErr != nil {
-				assert.Error(t, err)
-				assert.Nil(t, downloaded)
+				assert.Check(t, err != nil)
+				assert.Check(t, is.Nil(downloaded))
 
 				if tt.expectErr != nil {
-					assert.ErrorIs(t, err, tt.expectErr)
+					assert.Check(t, is.ErrorIs(err, tt.expectErr))
 				}
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.NotNil(t, downloaded)
-			assert.Equal(t, []byte(tt.expected), downloaded.File)
-			assert.Equal(t, int64(len(tt.expected)), downloaded.Size)
+			assert.NilError(t, err)
+			assert.Assert(t, downloaded != nil)
+			assert.Check(t, is.Equal(tt.expected, string(downloaded.File)))
+			assert.Check(t, is.Equal(int64(len(tt.expected)), downloaded.Size))
 		})
 	}
 }
@@ -355,16 +357,16 @@ func TestProviderDelete(t *testing.T) {
 
 			err := provider.Delete(context.Background(), tt.file, &storagetypes.DeleteFileOptions{})
 			if tt.stopped {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			exists, err := provider.Exists(context.Background(), tt.file)
-			require.NoError(t, err)
-			assert.False(t, exists)
+			assert.NilError(t, err)
+			assert.Check(t, !exists)
 		})
 	}
 }
@@ -409,14 +411,14 @@ func TestProviderExists(t *testing.T) {
 
 			exists, err := provider.Exists(context.Background(), tt.file)
 			if tt.stopped {
-				assert.Error(t, err)
-				assert.False(t, exists)
+				assert.Check(t, err != nil)
+				assert.Check(t, !exists)
 
 				return
 			}
 
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, exists)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected, exists))
 		})
 	}
 }
@@ -426,19 +428,19 @@ func TestProviderListBuckets(t *testing.T) {
 		provider := newFakeProvider(t, newFakeServer(t))
 
 		buckets, err := provider.ListBuckets()
-		require.NoError(t, err)
-		assert.ElementsMatch(t, []string{testBucket, otherBucket}, buckets)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values([]string{testBucket, otherBucket})), slices.Sorted(slices.Values(buckets))))
 	})
 
 	t.Run("without project id", func(t *testing.T) {
 		server := newFakeServer(t)
 		provider, err := gcs.NewProvider(context.Background(), storage.NewProviderOptions(storage.WithBucket(testBucket)), fakeClientOptions(server, option.WithoutAuthentication()))
-		require.NoError(t, err)
+		assert.NilError(t, err)
 		t.Cleanup(func() { _ = provider.Close() })
 
 		buckets, err := provider.ListBuckets()
-		assert.ErrorIs(t, err, gcs.ErrProjectIDRequired)
-		assert.Nil(t, buckets)
+		assert.Check(t, is.ErrorIs(err, gcs.ErrProjectIDRequired))
+		assert.Check(t, is.Nil(buckets))
 	})
 
 	t.Run("stopped server", func(t *testing.T) {
@@ -447,8 +449,8 @@ func TestProviderListBuckets(t *testing.T) {
 		server.Stop()
 
 		buckets, err := provider.ListBuckets()
-		assert.Error(t, err)
-		assert.Nil(t, buckets)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Nil(buckets))
 	})
 }
 
@@ -497,18 +499,18 @@ func TestProviderListObjects(t *testing.T) {
 
 			keys, err := provider.ListObjects(context.Background(), tt.prefix, tt.limit)
 			if tt.stopped {
-				assert.Error(t, err)
-				assert.Nil(t, keys)
+				assert.Check(t, err != nil)
+				assert.Check(t, is.Nil(keys))
 
 				return
 			}
 
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			if tt.expected != nil {
-				assert.ElementsMatch(t, tt.expected, keys)
+				assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values(tt.expected)), slices.Sorted(slices.Values(keys))))
 			} else {
-				assert.Len(t, keys, tt.expectedLen)
+				assert.Check(t, is.Len(keys, tt.expectedLen))
 			}
 		})
 	}
@@ -519,7 +521,7 @@ func TestProviderGetPresignedURL(t *testing.T) {
 
 	t.Run("signing credentials", func(t *testing.T) {
 		provider, err := gcs.NewProvider(context.Background(), gcsOptions(), fakeClientOptions(server, option.WithCredentialsJSON(serviceAccountJSON(t))))
-		require.NoError(t, err)
+		assert.NilError(t, err)
 		t.Cleanup(func() { _ = provider.Close() })
 
 		tests := []struct {
@@ -547,19 +549,19 @@ func TestProviderGetPresignedURL(t *testing.T) {
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
 				signed, err := provider.GetPresignedURL(context.Background(), tt.file, tt.opts)
-				require.NoError(t, err)
-				assert.True(t, strings.HasPrefix(signed, "https://storage.googleapis.com/"+tt.expectedBucket+"/folder/object.txt?"), "unexpected URL %q", signed)
+				assert.NilError(t, err)
+				assert.Check(t, strings.HasPrefix(signed, "https://storage.googleapis.com/"+tt.expectedBucket+"/folder/object.txt?"), "unexpected URL %q", signed)
 
 				parsed, err := url.Parse(signed)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				query := parsed.Query()
-				assert.Equal(t, "GOOG4-RSA-SHA256", query.Get("X-Goog-Algorithm"))
-				assert.NotEmpty(t, query.Get("X-Goog-Signature"))
+				assert.Check(t, is.Equal("GOOG4-RSA-SHA256", query.Get("X-Goog-Algorithm")))
+				assert.Check(t, len(query.Get("X-Goog-Signature")) > 0)
 
 				expires, err := strconv.Atoi(query.Get("X-Goog-Expires"))
-				require.NoError(t, err)
-				assert.InDelta(t, tt.expectedExpiry.Seconds(), expires, 1)
+				assert.NilError(t, err)
+				assert.Check(t, math.Abs(tt.expectedExpiry.Seconds()-float64(expires)) <= 1)
 			})
 		}
 	})
@@ -568,7 +570,7 @@ func TestProviderGetPresignedURL(t *testing.T) {
 		provider := newFakeProvider(t, server)
 
 		signed, err := provider.GetPresignedURL(context.Background(), &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: "object.txt"}}, nil)
-		assert.Error(t, err)
-		assert.Empty(t, signed)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Len(signed, 0))
 	})
 }

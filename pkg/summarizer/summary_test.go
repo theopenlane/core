@@ -2,11 +2,12 @@ package summarizer
 
 import (
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/microcosm-cc/bluemonday"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestClient_Summarize(t *testing.T) {
@@ -14,7 +15,7 @@ func TestClient_Summarize(t *testing.T) {
 		Type:             TypeLexrank,
 		MaximumSentences: 10,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	tt := []struct {
 		name      string
@@ -75,13 +76,13 @@ func TestClient_Summarize(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			result, err := client.Summarize(t.Context(), tc.input)
 
-			require.NoError(t, err)
-			assert.False(t, errors.Is(err, ErrSentenceEmpty), "Client.Summarize must never surface ErrSentenceEmpty")
+			assert.NilError(t, err)
+			assert.Check(t, !errors.Is(err, ErrSentenceEmpty), "Client.Summarize must never surface ErrSentenceEmpty")
 
 			if tc.wantEmpty {
-				assert.Empty(t, result)
+				assert.Check(t, is.Len(result, 0))
 			} else {
-				assert.NotEmpty(t, result)
+				assert.Check(t, result != "")
 			}
 		})
 	}
@@ -97,7 +98,7 @@ func TestClient_Summarize_UGCSanitizedInput(t *testing.T) {
 		Type:             TypeLexrank,
 		MaximumSentences: 10,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	ugc := bluemonday.UGCPolicy()
 
@@ -133,10 +134,9 @@ func TestClient_Summarize_UGCSanitizedInput(t *testing.T) {
 			details := ugc.Sanitize(tc.raw)
 
 			result, err := client.Summarize(t.Context(), details)
-			require.NoError(t, err, "summarizing UGC-sanitized input must not error")
-			assert.False(t, errors.Is(err, ErrSentenceEmpty),
-				"UGC-sanitized HTML must not produce ErrSentenceEmpty")
-			assert.NotEmpty(t, result, "UGC-sanitized input with real text content must produce a summary")
+			assert.NilError(t, err, "summarizing UGC-sanitized input must not error")
+			assert.Check(t, !errors.Is(err, ErrSentenceEmpty), "UGC-sanitized HTML must not produce ErrSentenceEmpty")
+			assert.Check(t, result != "", "UGC-sanitized input with real text content must produce a summary")
 		})
 	}
 }
@@ -146,7 +146,7 @@ func TestClient_Summarize_MarkdownTable(t *testing.T) {
 		Type:             TypeLexrank,
 		MaximumSentences: 10,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	tt := []struct {
 		name     string
@@ -163,18 +163,18 @@ func TestClient_Summarize_MarkdownTable(t *testing.T) {
 	for _, tc := range tt {
 		t.Run(tc.name, func(t *testing.T) {
 			result, err := client.Summarize(t.Context(), tc.input)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
-			assert.False(t, errors.Is(err, ErrSentenceEmpty))
-			require.NotEmpty(t, result)
+			assert.Check(t, !errors.Is(err, ErrSentenceEmpty))
+			assert.Assert(t, result != "")
 
 			for _, want := range tc.contains {
-				assert.Contains(t, result, want)
+				assert.Check(t, is.Contains(result, want))
 			}
 
 			// verify the table markers no longer here
-			assert.NotContains(t, result, "|")
-			assert.NotContains(t, result, "---")
+			assert.Check(t, !strings.Contains(result, "|"))
+			assert.Check(t, !strings.Contains(result, "---"))
 		})
 	}
 }
@@ -187,7 +187,7 @@ func TestClient_Summarize_NoSentenceEmptyError(t *testing.T) {
 		Type:             TypeLexrank,
 		MaximumSentences: 10,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	inputs := []struct {
 		name  string
@@ -202,10 +202,9 @@ func TestClient_Summarize_NoSentenceEmptyError(t *testing.T) {
 	for _, tc := range inputs {
 		t.Run(tc.name, func(t *testing.T) {
 			result, err := client.Summarize(t.Context(), tc.input)
-			require.NoError(t, err)
-			assert.False(t, errors.Is(err, ErrSentenceEmpty),
-				"input %q must not produce ErrSentenceEmpty", tc.input)
-			assert.Empty(t, result)
+			assert.NilError(t, err)
+			assert.Check(t, !errors.Is(err, ErrSentenceEmpty), "input %q must not produce ErrSentenceEmpty", tc.input)
+			assert.Check(t, is.Len(result, 0))
 		})
 	}
 }
@@ -246,7 +245,7 @@ func TestMdToHTML(t *testing.T) {
 	for _, tc := range tt {
 		t.Run(tc.name, func(t *testing.T) {
 			result := string(mdToHTML([]byte(tc.input)))
-			assert.Contains(t, result, tc.wantSub)
+			assert.Check(t, is.Contains(result, tc.wantSub))
 		})
 	}
 }

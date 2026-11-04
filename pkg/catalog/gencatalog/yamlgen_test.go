@@ -3,7 +3,8 @@ package gencatalog_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/pkg/catalog/gencatalog"
@@ -23,8 +24,8 @@ func TestDefaultCatalogTypedModules(t *testing.T) {
 
 	for _, mod := range models.AllOrgModules {
 		_, ok := all[mod.String()]
-		assert.True(t, ok, "missing module %s", mod)
+		assert.Check(t, ok, "missing module %s", mod)
 	}
 
-	assert.Len(t, all, len(models.AllOrgModules))
+	assert.Check(t, is.Len(all, len(models.AllOrgModules)))
 }

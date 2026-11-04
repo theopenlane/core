@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -19,33 +19,33 @@ import (
 func TestNewObjectService(t *testing.T) {
 	service := storage.NewObjectService()
 
-	assert.NotNil(t, service)
-	assert.Equal(t, int64(storage.DefaultMaxFileSize), service.MaxSize())
-	assert.Equal(t, int64(storage.DefaultMaxMemory), service.MaxMemory())
-	assert.Equal(t, []string{storage.DefaultUploadFileKey}, service.Keys())
-	assert.False(t, service.IgnoreNonExistentKeys())
-	assert.NotNil(t, service.Skipper())
-	assert.NotNil(t, service.ErrorResponseHandler())
+	assert.Check(t, service != nil)
+	assert.Check(t, is.Equal(int64(storage.DefaultMaxFileSize), service.MaxSize()))
+	assert.Check(t, is.Equal(int64(storage.DefaultMaxMemory), service.MaxMemory()))
+	assert.Check(t, is.DeepEqual([]string{storage.DefaultUploadFileKey}, service.Keys()))
+	assert.Check(t, !service.IgnoreNonExistentKeys())
+	assert.Check(t, service.Skipper() != nil)
+	assert.Check(t, service.ErrorResponseHandler() != nil)
 }
 
 func TestObjectServiceAccessors(t *testing.T) {
 	service := storage.NewObjectService()
 
 	// Test all accessor methods
-	assert.Equal(t, int64(storage.DefaultMaxFileSize), service.MaxSize())
-	assert.Equal(t, int64(storage.DefaultMaxMemory), service.MaxMemory())
-	assert.Equal(t, []string{storage.DefaultUploadFileKey}, service.Keys())
-	assert.False(t, service.IgnoreNonExistentKeys())
-	assert.NotNil(t, service.Skipper())
-	assert.NotNil(t, service.ErrorResponseHandler())
+	assert.Check(t, is.Equal(int64(storage.DefaultMaxFileSize), service.MaxSize()))
+	assert.Check(t, is.Equal(int64(storage.DefaultMaxMemory), service.MaxMemory()))
+	assert.Check(t, is.DeepEqual([]string{storage.DefaultUploadFileKey}, service.Keys()))
+	assert.Check(t, !service.IgnoreNonExistentKeys())
+	assert.Check(t, service.Skipper() != nil)
+	assert.Check(t, service.ErrorResponseHandler() != nil)
 
 	// Test skipper function
 	skipper := service.Skipper()
-	assert.False(t, skipper(nil)) // DefaultSkipper always returns false
+	assert.Check(t, !skipper(nil)) // DefaultSkipper always returns false
 
 	// Test error response handler
 	handler := service.ErrorResponseHandler()
-	assert.NotNil(t, handler)
+	assert.Check(t, handler != nil)
 }
 
 type mockProvider struct {
@@ -140,10 +140,10 @@ func TestObjectService_Upload(t *testing.T) {
 		opts.Key = "files"
 
 		file, err := service.Upload(context.Background(), provider, reader, opts)
-		require.NoError(t, err)
-		require.NotNil(t, file)
-		assert.Equal(t, "test.txt", file.OriginalName)
-		assert.Equal(t, storagetypes.ProviderType("s3"), file.ProviderType)
+		assert.NilError(t, err)
+		assert.Assert(t, file != nil)
+		assert.Check(t, is.Equal("test.txt", file.OriginalName))
+		assert.Check(t, is.Equal(storagetypes.ProviderType("s3"), file.ProviderType))
 	})
 
 	t.Run("upload with content type detection", func(t *testing.T) {
@@ -158,9 +158,9 @@ func TestObjectService_Upload(t *testing.T) {
 		opts.Key = "files"
 
 		file, err := service.Upload(context.Background(), provider, reader, opts)
-		require.NoError(t, err)
-		require.NotNil(t, file)
-		assert.Contains(t, file.ContentType, "json")
+		assert.NilError(t, err)
+		assert.Assert(t, file != nil)
+		assert.Check(t, is.Contains(file.ContentType, "json"))
 	})
 
 	t.Run("upload with validation failure", func(t *testing.T) {
@@ -180,9 +180,9 @@ func TestObjectService_Upload(t *testing.T) {
 		opts.Key = "files"
 
 		file, err := service.Upload(context.Background(), provider, reader, opts)
-		assert.Error(t, err)
-		assert.Nil(t, file)
-		assert.Equal(t, validationErr, err)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Nil(file))
+		assert.Check(t, is.Equal(validationErr, err))
 	})
 
 	t.Run("upload provider error", func(t *testing.T) {
@@ -201,9 +201,9 @@ func TestObjectService_Upload(t *testing.T) {
 		opts.Key = "files"
 
 		file, err := service.Upload(context.Background(), provider, reader, opts)
-		assert.Error(t, err)
-		assert.Nil(t, file)
-		assert.Equal(t, uploadErr, err)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Nil(file))
+		assert.Check(t, is.Equal(uploadErr, err))
 	})
 }
 
@@ -224,9 +224,9 @@ func TestObjectService_Download(t *testing.T) {
 		}
 
 		metadata, err := service.Download(context.Background(), provider, file, opts)
-		require.NoError(t, err)
-		require.NotNil(t, metadata)
-		assert.Equal(t, []byte("test content"), metadata.File)
+		assert.NilError(t, err)
+		assert.Assert(t, metadata != nil)
+		assert.Check(t, is.DeepEqual([]byte("test content"), metadata.File))
 	})
 
 	t.Run("download error", func(t *testing.T) {
@@ -242,9 +242,9 @@ func TestObjectService_Download(t *testing.T) {
 		opts := &storagetypes.DownloadFileOptions{FileName: "test.txt"}
 
 		metadata, err := service.Download(context.Background(), provider, file, opts)
-		assert.Error(t, err)
-		assert.Nil(t, metadata)
-		assert.Equal(t, downloadErr, err)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Nil(metadata))
+		assert.Check(t, is.Equal(downloadErr, err))
 	})
 }
 
@@ -265,8 +265,8 @@ func TestObjectService_GetPresignedURL(t *testing.T) {
 		}
 
 		url, err := service.GetPresignedURL(context.Background(), provider, file, opts)
-		require.NoError(t, err)
-		assert.Equal(t, "https://example.com/presigned-url", url)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal("https://example.com/presigned-url", url))
 	})
 
 	t.Run("presigned URL error", func(t *testing.T) {
@@ -282,9 +282,9 @@ func TestObjectService_GetPresignedURL(t *testing.T) {
 		opts := &storagetypes.PresignedURLOptions{Duration: 1 * time.Hour}
 
 		url, err := service.GetPresignedURL(context.Background(), provider, file, opts)
-		assert.Error(t, err)
-		assert.Empty(t, url)
-		assert.Equal(t, urlErr, err)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Len(url, 0))
+		assert.Check(t, is.Equal(urlErr, err))
 	})
 }
 
@@ -305,7 +305,7 @@ func TestObjectService_Delete(t *testing.T) {
 		}
 
 		err := service.Delete(context.Background(), provider, file, opts)
-		assert.NoError(t, err)
+		assert.Check(t, err)
 	})
 
 	t.Run("delete error", func(t *testing.T) {
@@ -321,8 +321,8 @@ func TestObjectService_Delete(t *testing.T) {
 		opts := &storagetypes.DeleteFileOptions{Reason: "test"}
 
 		err := service.Delete(context.Background(), provider, file, opts)
-		assert.Error(t, err)
-		assert.Equal(t, deleteErr, err)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Equal(deleteErr, err))
 	})
 }
 
@@ -335,8 +335,8 @@ func TestObjectService_WithUploader(t *testing.T) {
 		}
 
 		newService := service.WithUploader(customUploader)
-		require.NotNil(t, newService)
-		assert.NotEqual(t, service, newService)
+		assert.Assert(t, newService != nil)
+		assert.Check(t, service != newService)
 	})
 
 	t.Run("original service unchanged", func(t *testing.T) {
@@ -348,8 +348,8 @@ func TestObjectService_WithUploader(t *testing.T) {
 		}
 
 		newService := service.WithUploader(customUploader)
-		assert.Equal(t, originalKeys, service.Keys())
-		assert.Equal(t, originalKeys, newService.Keys())
+		assert.Check(t, is.DeepEqual(originalKeys, service.Keys()))
+		assert.Check(t, is.DeepEqual(originalKeys, newService.Keys()))
 	})
 }
 
@@ -365,8 +365,8 @@ func TestObjectService_WithValidation(t *testing.T) {
 		}
 
 		newService := service.WithValidation(customValidation)
-		require.NotNil(t, newService)
-		assert.NotEqual(t, service, newService)
+		assert.Assert(t, newService != nil)
+		assert.Check(t, service != newService)
 	})
 
 	t.Run("validation affects upload", func(t *testing.T) {
@@ -386,8 +386,8 @@ func TestObjectService_WithValidation(t *testing.T) {
 		opts.Key = "files"
 
 		file, err := service.Upload(context.Background(), provider, reader, opts)
-		assert.Error(t, err)
-		assert.Nil(t, file)
-		assert.Contains(t, err.Error(), "forbidden")
+		assert.Check(t, err != nil)
+		assert.Check(t, is.Nil(file))
+		assert.Check(t, is.Contains(err.Error(), "forbidden"))
 	})
 }

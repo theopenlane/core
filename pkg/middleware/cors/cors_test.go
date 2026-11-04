@@ -1,13 +1,14 @@
 package cors_test
 
 import (
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	echo "github.com/theopenlane/echox"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/middleware/cors"
 )
@@ -24,7 +25,7 @@ func serveCORS(t *testing.T, config cors.Config, method, path, origin string) (*
 	t.Helper()
 
 	mw, err := cors.NewWithConfig(config)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	e := echo.New()
 	req := httptest.NewRequest(method, path, nil)
@@ -52,10 +53,10 @@ func TestPublicPathAllowsAnyOriginWithoutCredentials(t *testing.T) {
 	cors.RegisterPublicPath("/v1/subscribe/verify")
 
 	rec, err := serveCORS(t, prefixConfig("https://console.example.com"), http.MethodGet, "/v1/subscribe/verify", "https://random-customer-domain.example.org")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "*", rec.Header().Get(allowOriginHeader))
-	assert.Empty(t, rec.Header().Get(allowCredentialsHeader))
+	assert.Check(t, is.Equal("*", rec.Header().Get(allowOriginHeader)))
+	assert.Check(t, is.Len(rec.Header().Get(allowCredentialsHeader), 0))
 }
 
 // TestPublicPathPreflight verifies a preflight request to a public path advertises the wildcard
@@ -64,7 +65,7 @@ func TestPublicPathPreflight(t *testing.T) {
 	cors.RegisterPublicPath("/v1/unsubscribe")
 
 	mw, err := cors.NewWithConfig(prefixConfig("https://console.example.com"))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodOptions, "/v1/unsubscribe", nil)
@@ -74,23 +75,23 @@ func TestPublicPathPreflight(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	require.NoError(t, mw(func(c echo.Context) error {
+	assert.NilError(t, mw(func(c echo.Context) error {
 		return c.String(http.StatusOK, "ok")
 	})(c))
 
-	assert.Equal(t, "*", rec.Header().Get(allowOriginHeader))
-	assert.Contains(t, rec.Header().Get(allowMethodsHeader), http.MethodPost)
-	assert.Empty(t, rec.Header().Get(allowCredentialsHeader))
+	assert.Check(t, is.Equal("*", rec.Header().Get(allowOriginHeader)))
+	assert.Check(t, is.Contains(rec.Header().Get(allowMethodsHeader), http.MethodPost))
+	assert.Check(t, is.Len(rec.Header().Get(allowCredentialsHeader), 0))
 }
 
 // TestPrefixPathEchoesAllowedOriginWithCredentials verifies non-public paths keep the existing
 // behavior: a configured origin is echoed back and credentials remain allowed
 func TestPrefixPathEchoesAllowedOriginWithCredentials(t *testing.T) {
 	rec, err := serveCORS(t, prefixConfig("https://console.example.com"), http.MethodGet, "/v1/other", "https://console.example.com")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, "https://console.example.com", rec.Header().Get(allowOriginHeader))
-	assert.Equal(t, "true", rec.Header().Get(allowCredentialsHeader))
+	assert.Check(t, is.Equal("https://console.example.com", rec.Header().Get(allowOriginHeader)))
+	assert.Check(t, is.Equal("true", rec.Header().Get(allowCredentialsHeader)))
 }
 
 // TestPrefixPathRejectsUnknownOrigin verifies non-public paths reject an unconfigured origin with
@@ -98,20 +99,20 @@ func TestPrefixPathEchoesAllowedOriginWithCredentials(t *testing.T) {
 func TestPrefixPathRejectsUnknownOrigin(t *testing.T) {
 	rec, err := serveCORS(t, prefixConfig("https://console.example.com"), http.MethodGet, "/v1/other", "https://random-customer-domain.example.org")
 
-	require.Error(t, err)
+	assert.Assert(t, err != nil)
 
 	var httpErr *echo.HTTPError
-	require.ErrorAs(t, err, &httpErr)
-	assert.Equal(t, http.StatusUnauthorized, httpErr.Code)
+	assert.Assert(t, errors.As(err, &httpErr))
+	assert.Check(t, is.Equal(http.StatusUnauthorized, httpErr.Code))
 
-	assert.Empty(t, rec.Header().Get(allowOriginHeader))
+	assert.Check(t, is.Len(rec.Header().Get(allowOriginHeader), 0))
 }
 
 // TestUnmatchedPathSkipsCORS verifies a path outside every configured prefix and the public set
 // passes through without CORS headers
 func TestUnmatchedPathSkipsCORS(t *testing.T) {
 	rec, err := serveCORS(t, prefixConfig("https://console.example.com"), http.MethodGet, "/metrics", "https://console.example.com")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Empty(t, rec.Header().Get(allowOriginHeader))
+	assert.Check(t, is.Len(rec.Header().Get(allowOriginHeader), 0))
 }

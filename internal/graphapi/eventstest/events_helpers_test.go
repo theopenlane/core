@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	mockprovider "github.com/theopenlane/newman/providers/mock"
 
-	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/utils/ulids"
@@ -63,13 +62,13 @@ func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*en
 	t.Helper()
 
 	def, ok := suite.IntegrationsRT.Registry().Definition(testint.DefinitionID.ID())
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	installation, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, ownerID, "", def, nil, testint.ModeOperationConfig(mode))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	credentialRef := testint.Token.Connection().Credential.Name
 	credential := testint.TokenCredentialSet("test-token")
@@ -79,12 +78,12 @@ func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*en
 		credential = testint.ServiceAccountCredentialSet("test-project", "svc@example.com")
 	}
 
-	require.NoError(t, suite.IntegrationsRT.ReconcileCredential(ctx, installation, credentialRef, credential))
+	assert.NilError(t, suite.IntegrationsRT.ReconcileCredential(ctx, installation, credentialRef, credential))
 
 	if mode == testint.ModeUnresolvable {
 		store, err := keystore.NewStore(suite.Client.DB)
-		require.NoError(t, err)
-		require.NoError(t, store.DeleteCredential(ctx, installation.ID))
+		assert.NilError(t, err)
+		assert.NilError(t, store.DeleteCredential(ctx, installation.ID))
 	}
 
 	fragment := reconcileLoopFragment(t, installation.ID, harnessReconcileOperation(t, mode))
@@ -101,7 +100,7 @@ func seedHarnessLoop(t *testing.T, ctx context.Context) (*ent.Integration, strin
 
 	waitForEvents()
 
-	require.Equal(t, 1, activeReconcileJobs(t, fragment))
+	assert.Equal(t, 1, activeReconcileJobs(t, fragment))
 
 	return installation, fragment
 }
@@ -116,7 +115,7 @@ func reconcileLoopFragment(t *testing.T, integrationID, operation string) string
 		"operation": operation,
 		"runType":   enums.IntegrationRunTypeReconcile.String(),
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return fragment
 }
@@ -126,7 +125,7 @@ func activeReconcileJobs(t *testing.T, fragment string) int {
 	t.Helper()
 
 	count, err := suite.GalaRuntime.CountActiveJobsWithMetadata(context.Background(), fragment)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return count
 }
@@ -141,7 +140,7 @@ func integrationNotificationCount(t *testing.T, ctx context.Context, orgID, obje
 			notification.ObjectType(objectType),
 		).
 		Count(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return count
 }
@@ -162,7 +161,7 @@ func reloadIntegration(t *testing.T, ctx context.Context, id string) *ent.Integr
 	t.Helper()
 
 	installation, err := suite.Client.DB.Integration.Get(ctx, id)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return installation
 }

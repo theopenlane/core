@@ -3,9 +3,9 @@ package models_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/common/models"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestSemverVersionString(t *testing.T) {
@@ -47,7 +47,7 @@ func TestSemverVersionString(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := tt.version.String()
-			assert.Equal(t, tt.expected, got)
+			assert.Check(t, is.Equal(tt.expected, got))
 		})
 	}
 }
@@ -139,8 +139,8 @@ func TestToSemverVersion(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := models.ToSemverVersion(&tt.input)
 
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, got)
+			assert.NilError(t, err)
+			assert.Check(t, is.DeepEqual(tt.expected, got))
 		})
 	}
 }
@@ -204,16 +204,16 @@ func TestDetectVersionBump(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expected, models.DetectSemverBump(tt.oldRevision, tt.newRevision))
+			assert.Check(t, is.Equal(tt.expected, models.DetectSemverBump(tt.oldRevision, tt.newRevision)))
 		})
 	}
 }
 
 func TestIsMajorMinorBump(t *testing.T) {
-	assert.True(t, models.IsMajorMinorBump("v1.0.0", "v2.0.0"))
-	assert.True(t, models.IsMajorMinorBump("v1.0.0", "v1.1.0"))
-	assert.False(t, models.IsMajorMinorBump("v1.0.0", "v1.0.1"))
-	assert.False(t, models.IsMajorMinorBump("v1.0.0", "v1.0.0"))
+	assert.Check(t, models.IsMajorMinorBump("v1.0.0", "v2.0.0"))
+	assert.Check(t, models.IsMajorMinorBump("v1.0.0", "v1.1.0"))
+	assert.Check(t, !models.IsMajorMinorBump("v1.0.0", "v1.0.1"))
+	assert.Check(t, !models.IsMajorMinorBump("v1.0.0", "v1.0.0"))
 }
 
 func TestBumpMajor(t *testing.T) {
@@ -237,8 +237,8 @@ func TestBumpMajor(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			version, err := models.BumpMajor(tt.version)
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, version)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected, version))
 		})
 	}
 }
@@ -264,8 +264,8 @@ func TestBumpMinor(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			version, err := models.BumpMinor(tt.version)
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, version)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected, version))
 		})
 	}
 }
@@ -291,8 +291,8 @@ func TestBumpPatch(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			version, err := models.BumpPatch(tt.version)
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, version)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected, version))
 		})
 	}
 }
@@ -337,8 +337,8 @@ func TestSetPreRelease(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			version, err := models.SetPreRelease(tt.version)
-			require.NoError(t, err)
-			assert.Equal(t, tt.expected, version)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expected, version))
 		})
 	}
 }

@@ -3,7 +3,8 @@ package enums
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestToEvidenceStatus(t *testing.T) {
@@ -39,6 +40,6 @@ func TestToEvidenceStatus(t *testing.T) {
 
 	for _, test := range tests {
 		result := ToEvidenceStatus(test.input)
-		assert.Equal(t, test.expected, result, "ToEvidenceStatus(%s)", test.input)
+		assert.Check(t, is.DeepEqual(test.expected, result), "ToEvidenceStatus(%s)", test.input)
 	}
 }

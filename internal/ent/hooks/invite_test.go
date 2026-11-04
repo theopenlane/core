@@ -6,14 +6,14 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestHookRequestor(t *testing.T) {
@@ -60,16 +60,16 @@ func TestHookRequestor(t *testing.T) {
 			_, err := hook(nextMutator).Mutate(tt.ctx, invMut)
 
 			if tt.wantErr {
-				require.Error(t, err)
-				assert.False(t, mockOk)
+				assert.Assert(t, err != nil)
+				assert.Check(t, !mockOk)
 
 				return
 			}
 
-			require.NoError(t, err)
-			require.True(t, mockOk)
+			assert.NilError(t, err)
+			assert.Assert(t, mockOk)
 
-			assert.Equal(t, userID, mockRequestorID)
+			assert.Check(t, is.Equal(userID, mockRequestorID))
 		})
 	}
 }

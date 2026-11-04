@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	coreutils "github.com/theopenlane/core/v2/internal/testutils"
 )
@@ -24,7 +25,7 @@ func TestRedisClientClose(t *testing.T) {
 	}()
 
 	// ensure client works before cancellation
-	require.NoError(t, client.Ping(ctx).Err())
+	assert.NilError(t, client.Ping(ctx).Err())
 
 	cancel()
 
@@ -35,6 +36,6 @@ func TestRedisClientClose(t *testing.T) {
 	}
 
 	err := client.Ping(context.Background()).Err()
-	require.Error(t, err)
-	require.Contains(t, err.Error(), "closed")
+	assert.Assert(t, err != nil)
+	assert.Assert(t, is.Contains(err.Error(), "closed"))
 }

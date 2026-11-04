@@ -161,8 +161,7 @@ func TestQueryAllControls(t *testing.T) {
 	// create multiple objects to be queried using th.SharedTestUser1
 	controlsToCreate := int64(11)
 	controlIDs := []string{}
-	for range controlsToCreate { // set to 11 to ensure pagination is tested
-		control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	for _, control := range (&th.ControlBuilder{Client: suite.Client}).MustNewBulk(th.SharedAdminUser.UserCtx, t, int(controlsToCreate)) { // set to 11 to ensure pagination is tested
 		controlIDs = append(controlIDs, control.ID)
 	}
 
@@ -2271,6 +2270,8 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 }
 
 func TestQueryControlCategories(t *testing.T) {
+	t.Parallel()
+
 	newUser := suite.UserBuilder(context.Background(), t)
 	newUser2 := suite.UserBuilder(context.Background(), t)
 
@@ -2429,6 +2430,8 @@ func TestQueryControlSubcategories(t *testing.T) {
 // never try to run this in parallel with other tests that create controls
 // or standards, or that have controls linked to them
 func TestQueryControlCategoriesByFramework(t *testing.T) {
+	t.Parallel()
+
 	customFramework := "CUSTOM"
 
 	newUser := suite.UserBuilder(context.Background(), t)
@@ -2574,6 +2577,8 @@ func TestQueryControlCategoriesByFramework(t *testing.T) {
 }
 
 func TestQueryControlSubcategoriesByFramework(t *testing.T) {
+	t.Parallel()
+
 	customFramework := "CUSTOM"
 
 	testUser := suite.UserBuilder(context.Background(), t)

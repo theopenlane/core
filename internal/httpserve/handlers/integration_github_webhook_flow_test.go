@@ -15,15 +15,14 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 const githubAppWebhookPath = "/github/app/webhook"
@@ -41,8 +40,8 @@ func (suite *HandlerTestSuite) registerGitHubAppWebhookRoute() {
 	suite.registerRouteOnce(http.MethodPost, githubAppWebhookPath, suite.h.IntegrationStaticWebhookHandler(githubAppDefinitionID, githubapp.InstallationEventsWebhook.Name()))
 }
 
-func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
-	t := suite.T()
+func TestGitHubAppWebhookDoesNotRequireCaller(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -58,7 +57,7 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":456}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
@@ -69,11 +68,11 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata() {
-	t := suite.T()
+func TestGitHubWebhookPingUpdatesIntegrationMetadata(t *testing.T) {
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -89,7 +88,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":1001}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
@@ -100,22 +99,22 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 	// Wait for in-memory Gala pool to finish processing the dispatched webhook event
 	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	verifiedAtValue, ok := updated.Metadata["githubWebhookVerifiedAt"]
-	assert.True(t, ok)
+	assert.Check(t, ok)
 	verifiedAtString, ok := verifiedAtValue.(string)
-	assert.True(t, ok)
-	assert.NotEmpty(t, verifiedAtString)
+	assert.Check(t, ok)
+	assert.Check(t, len(verifiedAtString) > 0)
 }
 
-func (suite *HandlerTestSuite) TestGitHubWebhookInstallationDeletedRemovesIntegration() {
-	t := suite.T()
+func TestGitHubWebhookInstallationDeletedRemovesIntegration(t *testing.T) {
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	t.Cleanup(restore)
@@ -125,7 +124,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationDeletedRemovesIntegr
 	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, err := json.Marshal(githubapp.InstallationMetadata{InstallationID: "7007"})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	integrationRecord, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
@@ -133,7 +132,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationDeletedRemovesIntegr
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	payload := []byte(`{"action":"deleted","installation":{"id":7007}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
@@ -143,17 +142,17 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationDeletedRemovesIntegr
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	exists, err := suite.db.Integration.Query().Where(integration.ID(integrationRecord.ID)).Exist(user.UserCtx)
-	require.NoError(t, err)
-	assert.False(t, exists)
+	assert.NilError(t, err)
+	assert.Check(t, !exists)
 }
 
-func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
-	t := suite.T()
+func TestGitHubWebhookPingRejectsInvalidSignature(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -169,7 +168,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	payload := []byte(`{"zen":"keep it logically awesome","installation":{"id":1004}}`)
 	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
@@ -180,17 +179,17 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Check(t, is.Equal(http.StatusBadRequest, rec.Code))
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	_, hasMetadata := updated.Metadata["githubWebhookVerifiedAt"]
-	assert.False(t, hasMetadata)
+	assert.Check(t, !hasMetadata)
 }
 
-func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
-	t := suite.T()
+func TestGitHubWebhookDuplicateDeliveryIsIgnored(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -206,7 +205,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	payload := []byte(`{"action":"created","installation":{"id":1003},"repository":{"full_name":"acme/repo"},"alert":{"number":1,"state":"OPEN","html_url":"https://github.com/acme/repo/security/dependabot/1","created_at":"2026-03-01T00:00:00Z","updated_at":"2026-03-01T00:00:00Z","security_advisory":{"ghsa_id":"GHSA-0000-0000-dup1","cve_id":"CVE-2026-00001","severity":"low","summary":"Dup test","description":"Dup test"}}}`)
 	deliveryID := "delivery-dup-1"
@@ -219,7 +218,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 
 	firstRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(firstRec, firstReq)
-	assert.Equal(t, http.StatusOK, firstRec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, firstRec.Code))
 
 	secondReq := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
 	secondReq.Header.Set("X-GitHub-Event", "dependabot_alert")
@@ -229,7 +228,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 
 	secondRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(secondRec, secondReq)
-	assert.Equal(t, http.StatusOK, secondRec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, secondRec.Code))
 
 	dedupeCount, err := suite.db.IntegrationWebhook.Query().
 		Where(
@@ -238,8 +237,8 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 			integrationwebhook.ExternalEventIDEQ(deliveryID),
 		).
 		Count(user.UserCtx)
-	assert.NoError(t, err)
-	assert.Equal(t, 1, dedupeCount)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(1, dedupeCount))
 }
 
 type slackWebhookRecorder struct {
@@ -310,8 +309,8 @@ func (r *slackWebhookRecorder) Close() {
 	r.server.Close()
 }
 
-func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorrectIntegration() {
-	t := suite.T()
+func TestGitHubWebhookMultiOrgInstallationRoutesToCorrectIntegration(t *testing.T) {
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -328,7 +327,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgA}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	installAttrsOrgB, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "7002"})
 	integrationB, err := suite.db.Integration.Create().
@@ -337,7 +336,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgB}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// Send a ping webhook for installation 7002 (Org B) — should resolve to integrationB
 	payloadB := []byte(`{"zen":"keep it logically awesome","installation":{"id":7002}}`)
@@ -347,21 +346,21 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	recB := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(recB, reqB)
-	assert.Equal(t, http.StatusOK, recB.Code)
+	assert.Check(t, is.Equal(http.StatusOK, recB.Code))
 
 	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	// Verify integrationB was updated with webhook verification metadata
 	updatedB, err := suite.db.Integration.Get(user.UserCtx, integrationB.ID)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	_, hasBVerified := updatedB.Metadata["githubWebhookVerifiedAt"]
-	assert.True(t, hasBVerified, "integration B should have verification metadata")
+	assert.Check(t, hasBVerified, "integration B should have verification metadata")
 
 	// Verify integrationA was NOT updated
 	updatedA, err := suite.db.Integration.Get(user.UserCtx, integrationA.ID)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	_, hasAVerified := updatedA.Metadata["githubWebhookVerifiedAt"]
-	assert.False(t, hasAVerified, "integration A should not have verification metadata")
+	assert.Check(t, !hasAVerified, "integration A should not have verification metadata")
 
 	// Now send a ping webhook for installation 7001 (Org A) — should resolve to integrationA
 	payloadA := []byte(`{"zen":"keep it logically awesome","installation":{"id":7001}}`)
@@ -371,18 +370,18 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	recA := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(recA, reqA)
-	assert.Equal(t, http.StatusOK, recA.Code)
+	assert.Check(t, is.Equal(http.StatusOK, recA.Code))
 
 	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	updatedA, err = suite.db.Integration.Get(user.UserCtx, integrationA.ID)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 	_, hasAVerified = updatedA.Metadata["githubWebhookVerifiedAt"]
-	assert.True(t, hasAVerified, "integration A should now have verification metadata")
+	assert.Check(t, hasAVerified, "integration A should now have verification metadata")
 }
 
-func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerability() {
-	t := suite.T()
+func TestGitHubWebhookDependabotAlertIngestsVulnerability(t *testing.T) {
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -399,7 +398,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs, Display: installMeta.InstallationIdentity()}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	payload := []byte(`{
 		"action": "created",
@@ -433,7 +432,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Check(t, is.Equal(http.StatusOK, rec.Code))
 
 	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
@@ -444,28 +443,28 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 			vulnerability.ExternalID("github:acme/web-app:dependabot:42"),
 		).
 		All(user.UserCtx)
-	require.NoError(t, err)
-	require.Len(t, vulns, 1, "expected exactly one vulnerability record")
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(vulns, 1), "expected exactly one vulnerability record")
 
 	vuln := vulns[0]
-	assert.Equal(t, "GitHub App", vuln.Source)
-	assert.Equal(t, "dependabot", vuln.Category)
-	assert.Equal(t, "high", vuln.Severity)
-	assert.Equal(t, "Prototype Pollution in lodash", vuln.Summary)
-	assert.Equal(t, "Versions of lodash before 4.17.21 are vulnerable to prototype pollution.", vuln.Description)
-	assert.Equal(t, "CVE-2026-12345", vuln.CveID)
-	assert.Equal(t, "acme/web-app", vuln.ExternalOwnerID)
-	assert.Equal(t, "https://github.com/acme/web-app/security/dependabot/42", vuln.ExternalURI)
-	assert.Equal(t, "CVE-2026-12345", vuln.CveID)
-	assert.Equal(t, "CVE-2026-12345", vuln.DisplayName)
-	assert.Equal(t, 7.5, vuln.Score)
-	assert.Equal(t, enums.SecurityLevelHigh, vuln.SecurityLevel)
-	assert.Equal(t, "open", vuln.VulnerabilityStatusName)
-	assert.True(t, vuln.Open)
+	assert.Check(t, is.Equal("GitHub App", vuln.Source))
+	assert.Check(t, is.Equal("dependabot", vuln.Category))
+	assert.Check(t, is.Equal("high", vuln.Severity))
+	assert.Check(t, is.Equal("Prototype Pollution in lodash", vuln.Summary))
+	assert.Check(t, is.Equal("Versions of lodash before 4.17.21 are vulnerable to prototype pollution.", vuln.Description))
+	assert.Check(t, is.Equal("CVE-2026-12345", vuln.CveID))
+	assert.Check(t, is.Equal("acme/web-app", vuln.ExternalOwnerID))
+	assert.Check(t, is.Equal("https://github.com/acme/web-app/security/dependabot/42", vuln.ExternalURI))
+	assert.Check(t, is.Equal("CVE-2026-12345", vuln.CveID))
+	assert.Check(t, is.Equal("CVE-2026-12345", vuln.DisplayName))
+	assert.Check(t, is.Equal(7.5, vuln.Score))
+	assert.Check(t, is.DeepEqual(enums.SecurityLevelHigh, vuln.SecurityLevel))
+	assert.Check(t, is.Equal("open", vuln.VulnerabilityStatusName))
+	assert.Check(t, vuln.Open)
 }
 
-func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVulnerability() {
-	t := suite.T()
+func TestGitHubWebhookDependabotAlertUpsertsExistingVulnerability(t *testing.T) {
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -482,7 +481,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs, Display: installMeta.InstallationIdentity()}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// First delivery: alert in OPEN state
 	payloadOpen := []byte(`{
@@ -512,7 +511,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 
 	recOpen := httptest.NewRecorder()
 	suite.e.ServeHTTP(recOpen, reqOpen)
-	assert.Equal(t, http.StatusOK, recOpen.Code)
+	assert.Check(t, is.Equal(http.StatusOK, recOpen.Code))
 
 	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
@@ -523,9 +522,9 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 			vulnerability.ExternalID("github:acme/api:dependabot:99"),
 		).
 		All(user.UserCtx)
-	assert.NoError(t, err)
-	assert.Len(t, vulns, 1)
-	assert.Equal(t, "critical", vulns[0].Severity)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(vulns, 1))
+	assert.Check(t, is.Equal("critical", vulns[0].Severity))
 
 	originalID := vulns[0].ID
 
@@ -557,7 +556,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 
 	recFixed := httptest.NewRecorder()
 	suite.e.ServeHTTP(recFixed, reqFixed)
-	assert.Equal(t, http.StatusOK, recFixed.Code)
+	assert.Check(t, is.Equal(http.StatusOK, recFixed.Code))
 
 	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
@@ -568,14 +567,14 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 			vulnerability.ExternalID("github:acme/api:dependabot:99"),
 		).
 		All(user.UserCtx)
-	assert.NoError(t, err)
-	assert.Len(t, vulns, 1, "should still be one record after upsert")
-	assert.Equal(t, originalID, vulns[0].ID, "record ID should be unchanged after upsert")
-	assert.Equal(t, "fixed", vulns[0].VulnerabilityStatusName, "status should be updated to fixed")
+	assert.Check(t, err)
+	assert.Check(t, is.Len(vulns, 1), "should still be one record after upsert")
+	assert.Check(t, is.DeepEqual(originalID, vulns[0].ID), "record ID should be unchanged after upsert")
+	assert.Check(t, is.Equal("fixed", vulns[0].VulnerabilityStatusName), "status should be updated to fixed")
 }
 
-func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulnerabilitiesToSameOrg() {
-	t := suite.T()
+func TestGitHubWebhookMultiOrgInstallationIngestsVulnerabilitiesToSameOrg(t *testing.T) {
+	suite := suite.setupTest(t)
 
 	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
 	defer restore()
@@ -593,7 +592,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgA, Display: installMetaOrgA.InstallationIdentity()}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	installMetaOrgB := githubapp.InstallationMetadata{InstallationID: "9002"}
 	installAttrsOrgB, _ := json.Marshal(installMetaOrgB)
@@ -603,7 +602,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgB, Display: installMetaOrgB.InstallationIdentity()}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// Send dependabot alert from Org Alpha (installation 9001)
 	payloadA := []byte(`{
@@ -633,7 +632,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 
 	recA := httptest.NewRecorder()
 	suite.e.ServeHTTP(recA, reqA)
-	assert.Equal(t, http.StatusOK, recA.Code)
+	assert.Check(t, is.Equal(http.StatusOK, recA.Code))
 
 	// Send dependabot alert from Org Beta (installation 9002)
 	payloadB := []byte(`{
@@ -663,7 +662,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 
 	recB := httptest.NewRecorder()
 	suite.e.ServeHTTP(recB, reqB)
-	assert.Equal(t, http.StatusOK, recB.Code)
+	assert.Check(t, is.Equal(http.StatusOK, recB.Code))
 
 	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
@@ -674,11 +673,11 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 			vulnerability.ExternalID("github:alpha-org/service:dependabot:10"),
 		).
 		All(user.UserCtx)
-	assert.NoError(t, err)
-	assert.Len(t, vulnA, 1)
-	assert.Equal(t, "medium", vulnA[0].Severity)
-	assert.Equal(t, "alpha-org/service", vulnA[0].ExternalOwnerID)
-	assert.Equal(t, "CVE-2026-11111", vulnA[0].CveID)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(vulnA, 1))
+	assert.Check(t, is.Equal("medium", vulnA[0].Severity))
+	assert.Check(t, is.Equal("alpha-org/service", vulnA[0].ExternalOwnerID))
+	assert.Check(t, is.Equal("CVE-2026-11111", vulnA[0].CveID))
 
 	vulnB, err := suite.db.Vulnerability.Query().
 		Where(
@@ -686,11 +685,11 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 			vulnerability.ExternalID("github:beta-org/platform:dependabot:5"),
 		).
 		All(user.UserCtx)
-	assert.NoError(t, err)
-	assert.Len(t, vulnB, 1)
-	assert.Equal(t, "low", vulnB[0].Severity)
-	assert.Equal(t, "beta-org/platform", vulnB[0].ExternalOwnerID)
-	assert.Equal(t, "CVE-2026-22222", vulnB[0].CveID)
+	assert.Check(t, err)
+	assert.Check(t, is.Len(vulnB, 1))
+	assert.Check(t, is.Equal("low", vulnB[0].Severity))
+	assert.Check(t, is.Equal("beta-org/platform", vulnB[0].ExternalOwnerID))
+	assert.Check(t, is.Equal("CVE-2026-22222", vulnB[0].CveID))
 }
 
 func githubWebhookSignature(secret string, payload []byte) string {

@@ -11,8 +11,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/tokens"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+	"gotest.tools/v3/poll"
 )
 
 // errArchiveUnavailable stands in for redis being unreachable
@@ -24,10 +26,10 @@ func startWatcher(t *testing.T, dir string, base tokens.Config) *ServerOptions {
 	t.Helper()
 
 	conf, err := tokenConfigFromKeyDir(base, dir)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	tm, err := tokens.New(conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	so := newServerOptions()
 	so.Config.Settings.Auth.Token = conf
@@ -46,17 +48,25 @@ func TestKeyDirWatcherDetectsNewKey(t *testing.T) {
 
 	so := startWatcher(t, dir, baseConfig())
 
-	require.Eventually(t, func() bool {
+	poll.WaitOn(t, func(poll.LogT) poll.Result {
 		jwks, err := so.Config.Handler.TokenManager.Keys()
-		return err == nil && jwks.Len() == 1
-	}, 5*time.Second, 100*time.Millisecond)
+		if err == nil && jwks.Len() == 1 {
+			return poll.Success()
+		}
+
+		return poll.Continue("waiting for 1 key")
+	}, poll.WithTimeout(5*time.Second), poll.WithDelay(100*time.Millisecond))
 
 	writeKey(t, dir, "second")
 
-	require.Eventually(t, func() bool {
+	poll.WaitOn(t, func(poll.LogT) poll.Result {
 		jwks, err := so.Config.Handler.TokenManager.Keys()
-		return err == nil && jwks.Len() == 2
-	}, 5*time.Second, 100*time.Millisecond)
+		if err == nil && jwks.Len() == 2 {
+			return poll.Success()
+		}
+
+		return poll.Continue("waiting for 2 keys")
+	}, poll.WithTimeout(5*time.Second), poll.WithDelay(100*time.Millisecond))
 }
 
 // TestKeyDirWatcherKeepsTokenManagerPointer covers the bug that made rotations invisible to
@@ -72,27 +82,27 @@ func TestKeyDirWatcherKeepsTokenManagerPointer(t *testing.T) {
 	so := startWatcher(t, dir, baseConfig())
 
 	captured := so.Config.Handler.TokenManager
-	require.Equal(t, oldKID, captured.CurrentKeyID())
+	assert.Assert(t, is.Equal(oldKID, captured.CurrentKeyID()))
 
 	issued, _, err := captured.CreateTokenPair(testClaims())
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	newKID := writeKeyWithCert(t, dir, "primary", now.Add(-2*time.Hour), 90*day)
-	require.NotEqual(t, oldKID, newKID)
+	assert.Assert(t, oldKID != newKID)
 
-	require.Eventually(t, func() bool {
-		return captured.CurrentKeyID() == newKID
-	}, 10*time.Second, 100*time.Millisecond)
+	poll.WaitOn(t, func(poll.LogT) poll.Result {
+		return poll.Compare(is.Equal(captured.CurrentKeyID(), newKID))
+	}, poll.WithTimeout(10*time.Second), poll.WithDelay(100*time.Millisecond))
 
-	require.Same(t, captured, so.Config.Handler.TokenManager)
+	assert.Assert(t, is.Equal(captured, so.Config.Handler.TokenManager))
 
 	// the pointer the caller held signs with the new key and still verifies the old one
 	fresh, _, err := captured.CreateTokenPair(testClaims())
-	require.NoError(t, err)
-	require.Equal(t, newKID, tokenKID(t, fresh))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(newKID, tokenKID(t, fresh)))
 
 	_, err = captured.Verify(issued)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 // TestKeyDirWatcherSurvivesConfiguredKeyRemoval pins the fix for wedged rotation:
@@ -114,19 +124,19 @@ func TestKeyDirWatcherSurvivesConfiguredKeyRemoval(t *testing.T) {
 	so := startWatcher(t, dir, base)
 	captured := so.Config.Handler.TokenManager
 
-	require.NoError(t, os.Remove(legacyPath))
+	assert.NilError(t, os.Remove(legacyPath))
 
 	newKID := writeKeyWithCert(t, dir, "secondary", now.Add(-2*time.Hour), 120*day)
 
-	require.Eventually(t, func() bool {
-		return captured.CurrentKeyID() == newKID
-	}, 10*time.Second, 100*time.Millisecond)
+	poll.WaitOn(t, func(poll.LogT) poll.Result {
+		return poll.Compare(is.Equal(captured.CurrentKeyID(), newKID))
+	}, poll.WithTimeout(10*time.Second), poll.WithDelay(100*time.Millisecond))
 
 	jwks, err := captured.Keys()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, ok := jwks.LookupKeyID("historical-kid")
-	require.True(t, ok)
+	assert.Assert(t, ok)
 }
 
 // gatedArchive fails every call until released, standing in for redis coming back after
@@ -166,21 +176,21 @@ func TestKeyDirWatcherRetriesFailedReload(t *testing.T) {
 	// a retired key only the archive knows about; it appears in the manager only after a
 	// successful reload
 	retiredPub, _, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	retiredKID, err := thumbprintKID(retiredPub)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	inner := testArchive(t)
-	require.NoError(t, inner.Record(ctx, map[string]crypto.PublicKey{retiredKID: retiredPub}))
+	assert.NilError(t, inner.Record(ctx, map[string]crypto.PublicKey{retiredKID: retiredPub}))
 
 	archive := &gatedArchive{inner: inner}
 
 	conf, err := tokenConfigFromKeyDir(baseConfig(), dir)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	tm, err := tokens.New(conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	so := newServerOptions()
 	so.Config.Settings.Auth.Token = conf
@@ -190,21 +200,23 @@ func TestKeyDirWatcherRetriesFailedReload(t *testing.T) {
 	WithKeyDirWatcher(dir, baseConfig(), archive).apply(so)
 
 	jwks, err := tm.Keys()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, ok := jwks.LookupKeyID(retiredKID)
-	require.False(t, ok)
+	assert.Assert(t, !ok)
 
 	archive.up.Store(true)
 
-	require.Eventually(t, func() bool {
+	poll.WaitOn(t, func(poll.LogT) poll.Result {
 		jwks, err := tm.Keys()
 		if err != nil {
-			return false
+			return poll.Continue("keys unavailable: %v", err)
 		}
 
-		_, ok := jwks.LookupKeyID(retiredKID)
+		if _, ok := jwks.LookupKeyID(retiredKID); ok {
+			return poll.Success()
+		}
 
-		return ok
-	}, 30*time.Second, 250*time.Millisecond)
+		return poll.Continue("retired key not yet verifiable")
+	}, poll.WithTimeout(30*time.Second), poll.WithDelay(250*time.Millisecond))
 }

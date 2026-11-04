@@ -3,8 +3,9 @@ package reconciler
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/pkg/catalog"
 )
@@ -62,7 +63,7 @@ func TestShouldUpdateCancelBehavior(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := ShouldUpdateCancelBehavior(tt.sub)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -106,7 +107,7 @@ func TestShouldCreateSchedule(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := ShouldCreateSchedule(tt.sub)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -150,8 +151,8 @@ func TestGenerateScheduleActionDescription(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			action, customerID := GenerateScheduleActionDescription(tt.sub)
-			assert.Equal(t, tt.expectedAction, action)
-			assert.Equal(t, tt.expectedCustomerID, customerID)
+			assert.Check(t, is.Equal(tt.expectedAction, action))
+			assert.Check(t, is.Equal(tt.expectedCustomerID, customerID))
 		})
 	}
 }
@@ -180,7 +181,7 @@ func TestBuildValidProductsMap(t *testing.T) {
 		"prod_addon_2":  true,
 	}
 
-	assert.Equal(t, expected, validProducts)
+	assert.Check(t, is.DeepEqual(expected, validProducts))
 }
 
 func TestFindMissingProductsInSubscription(t *testing.T) {
@@ -322,7 +323,7 @@ func TestFindMissingProductsInSubscription(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := FindMissingProductsInSubscription(tt.sub, validProducts)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.DeepEqual(tt.expected, result))
 		})
 	}
 }
@@ -368,7 +369,7 @@ func TestIsSubscriptionActiveOrTrialing(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := IsSubscriptionActiveOrTrialing(tt.status)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }
@@ -422,7 +423,7 @@ func TestShouldUpdateCustomerPersonalOrgMetadata(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := ShouldUpdateCustomerPersonalOrgMetadata(tt.customer)
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.Equal(tt.expected, result))
 		})
 	}
 }

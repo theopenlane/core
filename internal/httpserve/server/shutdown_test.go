@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	echo "github.com/theopenlane/echox"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	coreconfig "github.com/theopenlane/core/v2/config"
 	"github.com/theopenlane/core/v2/internal/httpserve/config"
@@ -126,7 +126,7 @@ func TestAwaitDrain(t *testing.T) {
 
 		select {
 		case err := <-returned:
-			assert.ErrorIs(t, err, http.ErrServerClosed)
+			assert.Check(t, is.ErrorIs(err, http.ErrServerClosed))
 		case <-time.After(waitTimeout):
 			t.Fatal("awaitDrain did not return after the drain finished")
 		}
@@ -141,7 +141,7 @@ func TestAwaitDrain(t *testing.T) {
 
 		select {
 		case err := <-returned:
-			assert.ErrorIs(t, err, errListener)
+			assert.Check(t, is.ErrorIs(err, errListener))
 		case <-time.After(waitTimeout):
 			t.Fatal("awaitDrain blocked on a non-shutdown error")
 		}
@@ -156,7 +156,7 @@ func TestAwaitDrain(t *testing.T) {
 
 		select {
 		case err := <-returned:
-			assert.NoError(t, err)
+			assert.Check(t, err)
 		case <-time.After(waitTimeout):
 			t.Fatal("awaitDrain blocked on a nil error")
 		}
@@ -175,7 +175,7 @@ func TestShutdownOnCancel(t *testing.T) {
 		ctx, cancel := context.WithCancel(context.Background())
 		drained := make(chan struct{})
 
-		require.NoError(t, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained)(srv.server))
+		assert.NilError(t, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained)(srv.server))
 
 		status := getInBackground(t, "http://"+addr)
 		waitClosed(t, handler.started, "request to reach the handler")
@@ -183,15 +183,15 @@ func TestShutdownOnCancel(t *testing.T) {
 		cancel()
 
 		waitClosed(t, srv.served, "Serve to return after Shutdown closed the listener")
-		assert.ErrorIs(t, srv.err(), http.ErrServerClosed)
+		assert.Check(t, is.ErrorIs(srv.err(), http.ErrServerClosed))
 
 		time.Sleep(settleDelay)
-		assert.False(t, isClosed(drained), "drain finished while a request was still in flight")
+		assert.Check(t, !isClosed(drained), "drain finished while a request was still in flight")
 
 		close(handler.release)
 
 		waitClosed(t, drained, "drain to finish after the handler returned")
-		assert.Equal(t, http.StatusOK, <-status)
+		assert.Check(t, is.Equal(http.StatusOK, <-status))
 	})
 
 	t.Run("gives up on the drain when the grace period elapses", func(t *testing.T) {
@@ -205,7 +205,7 @@ func TestShutdownOnCancel(t *testing.T) {
 		ctx, cancel := context.WithCancel(context.Background())
 		drained := make(chan struct{})
 
-		require.NoError(t, newShutdownServer(settleDelay).shutdownOnCancel(ctx, drained)(srv.server))
+		assert.NilError(t, newShutdownServer(settleDelay).shutdownOnCancel(ctx, drained)(srv.server))
 
 		getInBackground(t, "http://"+addr)
 		waitClosed(t, handler.started, "request to reach the handler")
@@ -213,7 +213,7 @@ func TestShutdownOnCancel(t *testing.T) {
 		cancel()
 
 		waitClosed(t, drained, "drain to give up after the grace period")
-		assert.False(t, isClosed(handler.release), "handler was released before the drain gave up")
+		assert.Check(t, !isClosed(handler.release), "handler was released before the drain gave up")
 	})
 
 	t.Run("shuts down immediately when the context is already cancelled", func(t *testing.T) {
@@ -226,11 +226,11 @@ func TestShutdownOnCancel(t *testing.T) {
 
 		drained := make(chan struct{})
 
-		require.NoError(t, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained)(srv.server))
+		assert.NilError(t, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained)(srv.server))
 
 		waitClosed(t, drained, "drain to finish with no requests in flight")
 		waitClosed(t, srv.served, "Serve to return")
-		assert.ErrorIs(t, srv.err(), http.ErrServerClosed)
+		assert.Check(t, is.ErrorIs(srv.err(), http.ErrServerClosed))
 	})
 
 	t.Run("does nothing until the context is cancelled", func(t *testing.T) {
@@ -243,11 +243,11 @@ func TestShutdownOnCancel(t *testing.T) {
 		ctx, cancel := context.WithCancel(context.Background())
 		drained := make(chan struct{})
 
-		require.NoError(t, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained)(srv.server))
+		assert.NilError(t, newShutdownServer(waitTimeout).shutdownOnCancel(ctx, drained)(srv.server))
 
-		assert.Equal(t, http.StatusOK, <-getInBackground(t, "http://"+addr))
-		assert.False(t, isClosed(drained))
-		assert.False(t, isClosed(srv.served))
+		assert.Check(t, is.Equal(http.StatusOK, <-getInBackground(t, "http://"+addr)))
+		assert.Check(t, !isClosed(drained))
+		assert.Check(t, !isClosed(srv.served))
 
 		cancel()
 
@@ -304,12 +304,12 @@ func TestStartEchoServerDrainOrdering(t *testing.T) {
 
 	select {
 	case err := <-returned:
-		assert.ErrorIs(t, err, http.ErrServerClosed)
+		assert.Check(t, is.ErrorIs(err, http.ErrServerClosed))
 	case <-time.After(waitTimeout):
 		t.Fatal("Start did not return after the drain finished")
 	}
 
-	assert.Equal(t, http.StatusOK, <-status)
+	assert.Check(t, is.Equal(http.StatusOK, <-status))
 }
 
 // servedServer is an http.Server serving on a loopback listener with its Serve result captured
@@ -331,7 +331,7 @@ func listenAndServe(t *testing.T, handler http.Handler) (*servedServer, string) 
 	t.Helper()
 
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	s := &servedServer{
 		server: &http.Server{Handler: handler, ReadHeaderTimeout: waitTimeout},

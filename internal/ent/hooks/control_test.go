@@ -7,8 +7,6 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -16,6 +14,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	controlgen "github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
+
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestControlVisibilityTupleAction(t *testing.T) {
@@ -69,16 +70,16 @@ func TestControlVisibilityTupleAction(t *testing.T) {
 				tt.visibilityChanged,
 			)
 
-			assert.Equal(t, tt.expectedWrite, shouldWrite, "shouldWrite mismatch")
-			assert.Equal(t, tt.expectedDelete, shouldDelete, "shouldDelete mismatch")
+			assert.Check(t, is.Equal(tt.expectedWrite, shouldWrite), "shouldWrite mismatch")
+			assert.Check(t, is.Equal(tt.expectedDelete, shouldDelete), "shouldDelete mismatch")
 		})
 	}
 }
 
-func (suite *HookTestSuite) TestHookControlTrustCenterVisibility_UpdateOpsParity() {
-	t := suite.T()
+func TestHookControlTrustCenterVisibility_UpdateOpsParity(t *testing.T) {
+	s := suite.setupTest(t)
 
-	systemAdmin := suite.seedSystemAdmin()
+	systemAdmin := s.seedSystemAdmin()
 	if len(systemAdmin.Edges.OrgMemberships) == 0 {
 		t.Fatal("user has no org memberships")
 	}
@@ -86,20 +87,20 @@ func (suite *HookTestSuite) TestHookControlTrustCenterVisibility_UpdateOpsParity
 	orgID := systemAdmin.Edges.OrgMemberships[0].OrganizationID
 
 	ctx := auth.NewTestContextForSystemAdmin(systemAdmin.ID, orgID)
-	ctx = generated.NewContext(ctx, suite.client)
+	ctx = generated.NewContext(ctx, s.client)
 	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	checkWildcardViewerAccess := func(tb testing.TB, controlID string) bool {
 		tb.Helper()
 
-		allowed, err := suite.client.Authz.CheckAccessHighConsistency(context.Background(), fgax.AccessCheck{
+		allowed, err := s.client.Authz.CheckAccessHighConsistency(context.Background(), fgax.AccessCheck{
 			SubjectID:   fgax.Wildcard,
 			SubjectType: auth.UserSubjectType,
 			Relation:    fgax.CanView,
 			ObjectID:    controlID,
 			ObjectType:  fgax.Kind(generated.TypeControl),
 		})
-		require.NoError(tb, err)
+		assert.NilError(tb, err)
 
 		return allowed
 	}
@@ -112,12 +113,12 @@ func (suite *HookTestSuite) TestHookControlTrustCenterVisibility_UpdateOpsParity
 		{
 			name: "update one",
 			setPublic: func(ctx context.Context, controlID string) error {
-				return suite.client.Control.UpdateOneID(controlID).
+				return s.client.Control.UpdateOneID(controlID).
 					SetTrustCenterVisibility(enums.TrustCenterControlVisibilityPubliclyVisible).
 					Exec(ctx)
 			},
 			setNotVisible: func(ctx context.Context, controlID string) error {
-				return suite.client.Control.UpdateOneID(controlID).
+				return s.client.Control.UpdateOneID(controlID).
 					SetTrustCenterVisibility(enums.TrustCenterControlVisibilityNotVisible).
 					Exec(ctx)
 			},
@@ -125,13 +126,13 @@ func (suite *HookTestSuite) TestHookControlTrustCenterVisibility_UpdateOpsParity
 		{
 			name: "bulk update",
 			setPublic: func(ctx context.Context, controlID string) error {
-				return suite.client.Control.Update().
+				return s.client.Control.Update().
 					Where(controlgen.ID(controlID)).
 					SetTrustCenterVisibility(enums.TrustCenterControlVisibilityPubliclyVisible).
 					Exec(ctx)
 			},
 			setNotVisible: func(ctx context.Context, controlID string) error {
-				return suite.client.Control.Update().
+				return s.client.Control.Update().
 					Where(controlgen.ID(controlID)).
 					SetTrustCenterVisibility(enums.TrustCenterControlVisibilityNotVisible).
 					Exec(ctx)
@@ -141,23 +142,23 @@ func (suite *HookTestSuite) TestHookControlTrustCenterVisibility_UpdateOpsParity
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ctrl, err := suite.client.Control.Create().
+			ctrl, err := s.client.Control.Create().
 				SetRefCode(gofakeit.UUID()).
 				SetOwnerID(orgID).
 				SetIsTrustCenterControl(true).
 				SetTrustCenterVisibility(enums.TrustCenterControlVisibilityNotVisible).
 				Save(internalCtx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
-			assert.False(t, checkWildcardViewerAccess(t, ctrl.ID))
+			assert.Check(t, !checkWildcardViewerAccess(t, ctrl.ID))
 
 			err = tt.setPublic(internalCtx, ctrl.ID)
-			require.NoError(t, err)
-			assert.True(t, checkWildcardViewerAccess(t, ctrl.ID))
+			assert.NilError(t, err)
+			assert.Check(t, checkWildcardViewerAccess(t, ctrl.ID))
 
 			err = tt.setNotVisible(internalCtx, ctrl.ID)
-			require.NoError(t, err)
-			assert.False(t, checkWildcardViewerAccess(t, ctrl.ID))
+			assert.NilError(t, err)
+			assert.Check(t, !checkWildcardViewerAccess(t, ctrl.ID))
 		})
 	}
 }
