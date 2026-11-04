@@ -60308,6 +60308,29 @@ func (ec *executionContext) fieldContext_TrustCenterSettingHistory_autoApprovalR
 	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, "TrustCenterNDARequestSetting")
 }
 
+func (ec *executionContext) _TrustCenterSettingHistory_disableDefaultDomain(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSettingHistory_disableDefaultDomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DisableDefaultDomain, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterSettingHistory_disableDefaultDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, "Boolean")
+}
+
 func (ec *executionContext) _TrustCenterSettingHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistoryConnection) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -132813,6 +132836,11 @@ func (ec *executionContext) _TrustCenterSettingHistory(ctx context.Context, sel 
 			}
 		case "autoApprovalRules":
 			out.Values[i] = ec._TrustCenterSettingHistory_autoApprovalRules(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "disableDefaultDomain":
+			out.Values[i] = ec._TrustCenterSettingHistory_disableDefaultDomain(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
