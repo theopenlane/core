@@ -33,6 +33,8 @@ env:
   TEST_DB_CONTAINER_EXPIRY: "20" # in minutes
   TEST_FGA_URL: "localhost:8080"
   ENV: config
+  # match the server, which runs in UTC
+  TZ: UTC
   # go build
   GOFLAGS: -buildvcs=false
   # for test container settings

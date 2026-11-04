@@ -867,7 +867,10 @@ func (_c *ActionPlanHistoryCreate) defaults() error {
 		_c.mutation.SetApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ReviewDue(); !ok {
-		v := actionplanhistory.DefaultReviewDue
+		if actionplanhistory.DefaultReviewDue == nil {
+			return fmt.Errorf("historygenerated: uninitialized actionplanhistory.DefaultReviewDue (forgotten import historygenerated/runtime?)")
+		}
+		v := actionplanhistory.DefaultReviewDue()
 		_c.mutation.SetReviewDue(v)
 	}
 	if _, ok := _c.mutation.ReviewFrequency(); !ok {

@@ -63,7 +63,7 @@ func (Invite) Fields() []ent.Field {
 		field.Time("expires").
 			Comment("the expiration date of the invitation token which defaults to 14 days in the future from creation").
 			Default(func() time.Time {
-				return time.Now().UTC().AddDate(0, 0, defaultInviteExpiresDays)
+				return time.Now().AddDate(0, 0, defaultInviteExpiresDays)
 			}).
 			Annotations(
 				entgql.OrderField("expires"),

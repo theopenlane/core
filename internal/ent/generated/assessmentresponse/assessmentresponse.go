@@ -236,7 +236,7 @@ var (
 	// DefaultAssignedAt holds the default value on creation for the "assigned_at" field.
 	DefaultAssignedAt func() time.Time
 	// DefaultStartedAt holds the default value on creation for the "started_at" field.
-	DefaultStartedAt time.Time
+	DefaultStartedAt func() time.Time
 	// DefaultIsDraft holds the default value on creation for the "is_draft" field.
 	DefaultIsDraft bool
 	// DefaultID holds the default value on creation for the "id" field.

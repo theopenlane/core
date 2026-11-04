@@ -1106,7 +1106,10 @@ func (_c *ActionPlanCreate) defaults() error {
 		_c.mutation.SetApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ReviewDue(); !ok {
-		v := actionplan.DefaultReviewDue
+		if actionplan.DefaultReviewDue == nil {
+			return fmt.Errorf("generated: uninitialized actionplan.DefaultReviewDue (forgotten import generated/runtime?)")
+		}
+		v := actionplan.DefaultReviewDue()
 		_c.mutation.SetReviewDue(v)
 	}
 	if _, ok := _c.mutation.ReviewFrequency(); !ok {
