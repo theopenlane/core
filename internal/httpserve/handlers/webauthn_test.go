@@ -29,9 +29,10 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	coremodels "github.com/theopenlane/core/common/models"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/webauthn"
-	"github.com/theopenlane/iam/auth"
 )
 
 const (
@@ -259,6 +260,51 @@ func (suite *HandlerTestSuite) TestFinishWebauthnLogin() {
 			}
 		})
 	}
+}
+
+func (suite *HandlerTestSuite) TestPasskeysRespectTFAEnforcement() {
+	t := suite.T()
+
+	suite.enableTestWebauthn(t)
+	suite.registerTestHandler(http.MethodPost, "authentication/options", suite.h.BeginWebauthnLogin)
+	suite.registerTestHandler(http.MethodPost, "authentication/verification", suite.h.FinishWebauthnLogin)
+	suite.registerTestHandler(http.MethodPost, tfaLoginValidatePath, suite.h.ValidateLoginTOTP)
+
+	testUser := suite.userBuilderWithInput(context.Background(), &userInput{
+		confirmedUser: true,
+		tfaEnabled:    true,
+	})
+
+	passkeyCredential := suite.createTestPasskey(t, testUser)
+
+	setting := suite.db.TFASetting.UpdateOne(suite.db.TFASetting.Create().
+		SetTotpAllowed(true).
+		SetOwnerID(testUser.ID).
+		SaveX(testUser.UserCtx)).
+		SetVerified(true).
+		SaveX(testUser.UserCtx)
+
+	rec := suite.loginWithPasskey(t, testUser, passkeyCredential)
+	require.Equal(t, http.StatusOK, rec.Code)
+
+	var out models.LoginResponse
+	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
+	assert.True(t, out.Success)
+	assert.True(t, out.TFAEnabled)
+
+	response := rec.Result()
+	defer response.Body.Close()
+
+	require.NotEmpty(t, response.Cookies())
+	require.NotNil(t, setting.TfaSecret)
+
+	code, err := totpGenerator(*setting.TfaSecret)
+	require.NoError(t, err)
+
+	_, tfaResponse := suite.postTFAValidate(t, tfaLoginValidatePath, models.TFARequest{TOTPCode: code}, response.Cookies(), "")
+	assert.True(t, tfaResponse.Success)
+	assert.NotEmpty(t, tfaResponse.AccessToken)
+	assert.NotEmpty(t, tfaResponse.Session)
 }
 
 func (suite *HandlerTestSuite) TestHasValidSSOSession() {
