@@ -16,10 +16,12 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
-	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestOauthRegister() {
@@ -123,6 +125,50 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 
 		msgs := suite.mockEmailSender().Messages()
 		assert.Empty(t, msgs)
+	})
+
+	t.Run("github requires enrollment when the orgs enforces tfa", func(t *testing.T) {
+		suite.ClearTestData()
+		suite.registerAuthenticatedTestHandler(http.MethodPost, tfaValidatePath, suite.h.ValidateTOTP)
+
+		email := "tfauser@theopenlane.io"
+
+		data := models.OauthTokenRequest{
+			Name:             "User with TFA",
+			Email:            email,
+			AuthProvider:     enums.AuthProviderGitHub.String(),
+			ExternalUserID:   "123456",
+			ExternalUserName: "scarletwitch",
+			ClientToken:      "gh_thistokenisvalid",
+		}
+
+		recorder, out := send(t, data)
+		require.Equal(t, http.StatusOK, recorder.Code)
+		require.True(t, out.Success)
+
+		require.NotEmpty(t, out.AccessToken)
+
+		orgID, ok := accessTokenClaims(t, out.AccessToken)["org"].(string)
+		require.True(t, ok)
+
+		ctx := generated.NewContext(auth.WithInternalOperationContext(testUser1.UserCtx), suite.db)
+
+		user, err := suite.db.User.Query().Where(user.Email(email)).WithSetting().Only(ctx)
+		require.NoError(t, err)
+		require.False(t, user.Edges.Setting.IsTfaEnabled)
+
+		err = suite.db.OrganizationSetting.Update().
+			Where(organizationsetting.OrganizationID(orgID)).
+			SetMultifactorAuthEnforced(true).
+			Exec(ctx)
+		require.NoError(t, err)
+
+		recorder, out = send(t, data)
+		require.Equal(t, http.StatusOK, recorder.Code)
+		assert.True(t, out.Success)
+		assert.True(t, out.TFASetupRequired)
+		assert.False(t, out.TFAEnabled)
+		require.NotEmpty(t, out.AccessToken)
 	})
 
 	t.Run("mismatch email", func(t *testing.T) {
