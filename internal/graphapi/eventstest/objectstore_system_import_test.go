@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -118,6 +119,40 @@ func TestObjectStoreSystemImportReportsInvalidRecord(t *testing.T) {
 		Count(systemCtx)
 	th.RequireNoError(t, err)
 	assert.Check(t, is.Equal(0, created), "an invalid record must not be created")
+}
+
+func TestObjectStoreSystemImportAssignsSchemaByDirectory(t *testing.T) {
+	systemCtx := th.SetInternalContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+	systemVendorEntityType(t)
+
+	result := runSystemImport(t, systemCtx, "mixed/")
+
+	imported, err := suite.Client.DB.Control.Query().Where(control.ExternalID("control::fixture-mixed"), control.SystemOwned(true)).Only(systemCtx)
+	th.RequireNoError(t, err)
+
+	vendor, err := suite.Client.DB.Entity.Query().Where(entity.ExternalID("entity::fixture-mixed"), entity.SystemOwned(true)).Only(systemCtx)
+	th.RequireNoError(t, err)
+
+	t.Cleanup(func() {
+		th.RequireNoError(t, suite.Client.DB.Control.DeleteOneID(imported.ID).Exec(systemCtx))
+		deleteEntities(t, th.SharedSystemAdminUser.UserCtx, vendor.ID)
+	})
+
+	assert.Check(t, is.Equal(0, result.Failed))
+	assert.Check(t, is.Equal(2, result.Persisted))
+	assert.Check(t, is.Equal("FIXTURE-MIXED-1", imported.RefCode))
+	assert.Check(t, is.Equal("fixture-mixed-vendor", vendor.Name))
+}
+
+func TestObjectStoreSystemImportRejectsUnknownDirectory(t *testing.T) {
+	systemCtx := th.SetInternalContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+
+	_, err := executeSystemImport(t, systemCtx, "mixed-unknown/")
+	assert.Check(t, is.ErrorContains(err, objectstore.ErrRecordSchemaUnknown.Error()))
+
+	count, err := suite.Client.DB.Entity.Query().Where(entity.Name("fixture-banana")).Count(systemCtx)
+	th.RequireNoError(t, err)
+	assert.Check(t, is.Equal(0, count))
 }
 
 // TestObjectStoreSystemImportSeedsVendorEntityType verifies the import creates the system-owned vendor

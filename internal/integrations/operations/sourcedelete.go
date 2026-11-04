@@ -147,17 +147,22 @@ func deletableSchemas() []string {
 		return schema.DeleteBySource != nil
 	})
 
+	return lo.Map(DependencyOrder(deletable), func(schema *entityops.Schema, _ int) string { return schema.Snake })
+}
+
+// DependencyOrder returns schemas with each after the schemas its foreign key edges point at
+func DependencyOrder(schemas []*entityops.Schema) []*entityops.Schema {
 	sorter := dependencySorter{
-		included: lo.SliceToMap(deletable, func(schema *entityops.Schema) (*entityops.Schema, bool) { return schema, true }),
+		included: lo.SliceToMap(schemas, func(schema *entityops.Schema) (*entityops.Schema, bool) { return schema, true }),
 		placed:   map[*entityops.Schema]bool{},
 		visiting: map[*entityops.Schema]bool{},
 	}
 
-	for _, schema := range deletable {
+	for _, schema := range schemas {
 		sorter.visit(schema)
 	}
 
-	return lo.Map(sorter.ordered, func(schema *entityops.Schema, _ int) string { return schema.Snake })
+	return sorter.ordered
 }
 
 // dependencySorter orders schemas after the schemas their foreign key edges point at, keeping registry order among

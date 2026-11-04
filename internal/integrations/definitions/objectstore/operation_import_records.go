@@ -2,12 +2,15 @@ package objectstore
 
 import (
 	"bytes"
+	"cmp"
 	"context"
 	"encoding/json"
 	"fmt"
 	"path"
+	"slices"
 	"strings"
 
+	"github.com/gertd/go-pluralize"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/storagetypes"
@@ -29,6 +32,10 @@ var (
 	// importContracts lists every schema the definition has a mapping for
 	importContracts = lo.Map(recordSchemas, func(schema *entityops.Schema, _ int) types.IngestContract {
 		return types.IngestContract{Schema: schema.Name}
+	})
+	// schemaDirectories maps each import schema's directory name, its plural snake_case name, to the schema
+	schemaDirectories = lo.SliceToMap(recordSchemas, func(schema *entityops.Schema) (string, *entityops.Schema) {
+		return pluralize.NewClient().Plural(schema.Snake), schema
 	})
 )
 
@@ -53,11 +60,12 @@ func runImportRecords(ctx context.Context, request types.OperationRequest, clien
 	// a system run has no organization, so its entity types are system-owned
 	_, noOrg := auth.GetOrganizationIDFromContext(ctx)
 
-	if err := ensureEntityTypes(ctx, request.DB, noOrg != nil, []string{vendorEntityTypeName}); err != nil {
+	keys, err := listRecordObjects(ctx, client.Provider, spec.Prefix)
+	if err != nil {
 		return nil, err
 	}
 
-	keys, err := listRecordObjects(ctx, client.Provider, spec.Prefix)
+	objects, err := recordObjects(spec.Prefix, keys)
 	if err != nil {
 		return nil, err
 	}
@@ -74,9 +82,13 @@ func runImportRecords(ctx context.Context, request types.OperationRequest, clien
 	options := operations.IngestOptionsFromOperationContext(oc)
 	result := ImportRecordsResult{Objects: len(keys)}
 
-	for _, key := range keys {
-		payloadSet, err := loadPayloadSet(ctx, client.Provider, key)
+	for _, object := range objects {
+		payloadSet, err := loadPayloadSet(ctx, client.Provider, object)
 		if err != nil {
+			return nil, err
+		}
+
+		if err := ensureEntityTypes(ctx, request.DB, noOrg != nil, recordEntityTypeNames([]types.IngestPayloadSet{payloadSet})); err != nil {
 			return nil, err
 		}
 
@@ -91,7 +103,7 @@ func runImportRecords(ctx context.Context, request types.OperationRequest, clien
 			continue
 		}
 
-		if err := moveProcessed(ctx, client.Provider, key, processedKey(spec.Prefix, key)); err != nil {
+		if err := moveProcessed(ctx, client.Provider, object.key, processedKey(spec.Prefix, object.key)); err != nil {
 			return nil, err
 		}
 
@@ -159,6 +171,68 @@ func listRecordObjects(ctx context.Context, client storage.Provider, prefix stri
 	return keys, nil
 }
 
+// recordObject is one JSON object under the import prefix with the schema its records import as
+type recordObject struct {
+	// key is the object key in the bucket
+	key string
+	// schema is the schema the object's records import as
+	schema *entityops.Schema
+}
+
+// recordObjects resolves each key's schema, failing before anything imports when a directory names none, and orders the
+// objects so the targets of a schema's foreign keys import before it
+func recordObjects(prefix string, keys []string) ([]recordObject, error) {
+	objects := make([]recordObject, 0, len(keys))
+
+	for _, key := range keys {
+		schema, err := objectSchema(prefix, key)
+		if err != nil {
+			return nil, err
+		}
+
+		objects = append(objects, recordObject{key: key, schema: schema})
+	}
+
+	order := operations.DependencyOrder(recordSchemas)
+
+	slices.SortStableFunc(objects, func(a, b recordObject) int {
+		return cmp.Compare(lo.IndexOf(order, a.schema), lo.IndexOf(order, b.schema))
+	})
+
+	return objects, nil
+}
+
+// objectSchema returns the schema a key's parent directory names, an object directly under the prefix importing as the
+// schema the prefix names, or Entity when the prefix names none
+func objectSchema(prefix, key string) (*entityops.Schema, error) {
+	root := strings.TrimSuffix(prefix, "/")
+	directory := path.Dir(strings.TrimPrefix(strings.TrimPrefix(key, root), "/"))
+
+	if directory == "." {
+		schema, ok := directorySchema(path.Base(root))
+
+		return lo.Ternary(ok, schema, entityops.SchemaEntity), nil
+	}
+
+	schema, ok := directorySchema(path.Base(directory))
+	if !ok {
+		return nil, fmt.Errorf("%w: %s", ErrRecordSchemaUnknown, key)
+	}
+
+	return schema, nil
+}
+
+// directorySchema returns the import schema a directory names, by its plural snake_case name
+func directorySchema(name string) (*entityops.Schema, bool) {
+	if name == vendorsDirectory {
+		return entityops.SchemaEntity, true
+	}
+
+	schema, ok := schemaDirectories[name]
+
+	return schema, ok
+}
+
 // processedKey returns the key an imported object moves to: its path under the prefix, re-rooted under the processed directory
 func processedKey(prefix, key string) string {
 	return path.Join(prefix, processedDir, strings.TrimPrefix(key, prefix))
@@ -188,18 +262,18 @@ func moveProcessed(ctx context.Context, client storage.Provider, key, destinatio
 	return nil
 }
 
-// loadPayloadSet reads one object and wraps its records as the ingest payload set of the import schema
-func loadPayloadSet(ctx context.Context, client storage.Provider, key string) (types.IngestPayloadSet, error) {
-	records, err := loadRecords(ctx, client, key)
+// loadPayloadSet reads one object and wraps its records as the ingest payload set of its schema
+func loadPayloadSet(ctx context.Context, client storage.Provider, object recordObject) (types.IngestPayloadSet, error) {
+	records, err := loadRecords(ctx, client, object.key)
 	if err != nil {
 		return types.IngestPayloadSet{}, err
 	}
 
 	envelopes := lo.Map(records, func(record json.RawMessage, idx int) types.MappingEnvelope {
-		return providerkit.RawEnvelope(fmt.Sprintf("%s#%d", key, idx), record)
+		return providerkit.RawEnvelope(fmt.Sprintf("%s#%d", object.key, idx), record)
 	})
 
-	return types.IngestPayloadSet{Schema: entityops.SchemaEntity.Name, Envelopes: envelopes}, nil
+	return types.IngestPayloadSet{Schema: object.schema.Name, Envelopes: envelopes}, nil
 }
 
 // loadRecords reads one object and decodes its records

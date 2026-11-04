@@ -13,6 +13,8 @@ const (
 	defaultContentType = "application/json"
 	// vendorEntityTypeName is the entity type an imported entity links to when its record names none
 	vendorEntityTypeName = "vendor"
+	// vendorsDirectory is the directory holding the vendor catalog, Entity records under a name that is not a schema
+	vendorsDirectory = "vendors"
 	// jsonObjectSuffix selects the objects under a prefix that hold JSON records
 	jsonObjectSuffix = ".json"
 	// processedDir is the directory under the import prefix that receives objects whose records imported without failure

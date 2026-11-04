@@ -39,6 +39,8 @@ var (
 	ErrObjectMoveFailed = errors.New("objectstore: object move failed")
 	// ErrProviderCannotCopy indicates the storage provider does not copy objects server side
 	ErrProviderCannotCopy = errors.New("objectstore: storage provider cannot copy objects")
+	// ErrRecordSchemaUnknown indicates a directory under the import prefix does not name an ingestable schema
+	ErrRecordSchemaUnknown = errors.New("objectstore: directory does not name an import schema")
 	// ErrDatasetOwnerRequired indicates the dataset import was dispatched without an organization
 	ErrDatasetOwnerRequired = errors.New("objectstore: dataset import requires an organization")
 	// ErrDemoDatasetInvalid indicates the demo dataset name is not a single lowercase directory name

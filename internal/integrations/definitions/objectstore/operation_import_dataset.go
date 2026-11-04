@@ -122,7 +122,7 @@ func importDataset(ctx context.Context, request types.OperationRequest, client *
 		return manifest.Name, operations.IngestResult{}, err
 	}
 
-	if err := ensureEntityTypes(ctx, request.DB, false, datasetEntityTypeNames(payloadSets)); err != nil {
+	if err := ensureEntityTypes(ctx, request.DB, false, recordEntityTypeNames(payloadSets)); err != nil {
 		return manifest.Name, operations.IngestResult{}, err
 	}
 
@@ -228,9 +228,9 @@ func datasetPrefix(prefix string) (string, error) {
 	return dataset, nil
 }
 
-// datasetEntityTypeNames returns the distinct entity type names the dataset's entities link to, the vendor type for an
+// recordEntityTypeNames returns the distinct entity type names the records' entities link to, the vendor type for an
 // entity that names none
-func datasetEntityTypeNames(payloadSets []types.IngestPayloadSet) []string {
+func recordEntityTypeNames(payloadSets []types.IngestPayloadSet) []string {
 	names := []string{}
 
 	for _, set := range payloadSets {
