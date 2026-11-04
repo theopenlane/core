@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -149,7 +149,7 @@ func TestPostmarkWebhookVerify_MissingSecret(t *testing.T) {
 		Request: req,
 		Payload: testPostmarkDeliveryPayload,
 	})
-	require.ErrorIs(t, err, ErrWebhookSecretMissing)
+	assert.ErrorIs(t, err, ErrWebhookSecretMissing)
 }
 
 func TestPostmarkWebhookVerify_MissingBasicAuth(t *testing.T) {
@@ -161,7 +161,7 @@ func TestPostmarkWebhookVerify_MissingBasicAuth(t *testing.T) {
 		Request: req,
 		Payload: testPostmarkDeliveryPayload,
 	})
-	require.ErrorIs(t, err, ErrWebhookAuthMissing)
+	assert.ErrorIs(t, err, ErrWebhookAuthMissing)
 }
 
 func TestPostmarkWebhookVerify_WrongPassword(t *testing.T) {
@@ -174,7 +174,7 @@ func TestPostmarkWebhookVerify_WrongPassword(t *testing.T) {
 		Request: req,
 		Payload: testPostmarkDeliveryPayload,
 	})
-	require.ErrorIs(t, err, ErrWebhookAuthInvalid)
+	assert.ErrorIs(t, err, ErrWebhookAuthInvalid)
 }
 
 func TestPostmarkWebhookVerify_CorrectPassword(t *testing.T) {
@@ -187,7 +187,7 @@ func TestPostmarkWebhookVerify_CorrectPassword(t *testing.T) {
 		Request: req,
 		Payload: testPostmarkDeliveryPayload,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 func TestPostmarkWebhookEvent_HandledRecordTypes(t *testing.T) {
@@ -215,10 +215,10 @@ func TestPostmarkWebhookEvent_HandledRecordTypes(t *testing.T) {
 				Request: req,
 				Payload: tc.payload,
 			})
-			require.NoError(t, err)
-			assert.Equal(t, tc.recordType, event.Name)
-			assert.Equal(t, testPostmarkTraceID, event.DeliveryID)
-			assert.Equal(t, tc.payload, event.Payload)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.recordType, event.Name))
+			assert.Check(t, is.Equal(testPostmarkTraceID, event.DeliveryID))
+			assert.Check(t, is.DeepEqual(tc.payload, event.Payload))
 		})
 	}
 }
@@ -233,8 +233,8 @@ func TestPostmarkWebhookEvent_SubscriptionChangeIgnored(t *testing.T) {
 		Request: req,
 		Payload: testPostmarkSubscriptionChangePayload,
 	})
-	require.NoError(t, err)
-	assert.Empty(t, event.Name)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(event.Name, 0))
 }
 
 func TestPostmarkWebhookEvent_InvalidJSON(t *testing.T) {
@@ -246,7 +246,7 @@ func TestPostmarkWebhookEvent_InvalidJSON(t *testing.T) {
 		Request: req,
 		Payload: json.RawMessage(`not json`),
 	})
-	require.ErrorIs(t, err, ErrWebhookPayloadInvalid)
+	assert.ErrorIs(t, err, ErrWebhookPayloadInvalid)
 }
 
 func TestPostmarkDeliveryEventHandle_EmptyRecordType(t *testing.T) {
@@ -257,7 +257,7 @@ func TestPostmarkDeliveryEventHandle_EmptyRecordType(t *testing.T) {
 			Payload: json.RawMessage(`{"RecordType":"","MessageID":"00000000-0000-0000-0000-000000000000","Metadata":{}}`),
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 func TestPostmarkDeliveryEventHandle_InvalidJSON(t *testing.T) {
@@ -268,7 +268,7 @@ func TestPostmarkDeliveryEventHandle_InvalidJSON(t *testing.T) {
 			Payload: json.RawMessage(`not json`),
 		},
 	})
-	require.ErrorIs(t, err, ErrWebhookPayloadInvalid)
+	assert.ErrorIs(t, err, ErrWebhookPayloadInvalid)
 }
 
 func TestPostmarkWebhookEvent_ToDeliveryEvent(t *testing.T) {
@@ -292,18 +292,18 @@ func TestPostmarkWebhookEvent_ToDeliveryEvent(t *testing.T) {
 			t.Parallel()
 
 			var event postmarkWebhookEvent
-			require.NoError(t, json.Unmarshal(tc.payload, &event))
+			assert.NilError(t, json.Unmarshal(tc.payload, &event))
 
 			delivery, ok := event.toDeliveryEvent()
-			require.True(t, ok)
-			assert.Equal(t, providerPostmark, delivery.provider)
-			assert.Equal(t, tc.recordType, delivery.name)
-			assert.Equal(t, tc.kind, delivery.kind)
-			assert.Equal(t, tc.emailID, delivery.emailID)
-			assert.Equal(t, "2026-11-05T16:33:54.9070259Z", delivery.timestamp)
-			require.NotNil(t, delivery.occurredAt)
-			assert.Equal(t, 907025900, delivery.occurredAt.Nanosecond())
-			assert.Equal(t, "01KZP1H01G9J21QT2XHSZ5BR00", delivery.tags[TagCampaignTargetID])
+			assert.Assert(t, ok)
+			assert.Check(t, is.Equal(providerPostmark, delivery.provider))
+			assert.Check(t, is.Equal(tc.recordType, delivery.name))
+			assert.Check(t, is.Equal(tc.kind, delivery.kind))
+			assert.Check(t, is.Equal(tc.emailID, delivery.emailID))
+			assert.Check(t, is.Equal("2026-11-05T16:33:54.9070259Z", delivery.timestamp))
+			assert.Assert(t, delivery.occurredAt != nil)
+			assert.Check(t, is.Equal(907025900, delivery.occurredAt.Nanosecond()))
+			assert.Check(t, is.Equal("01KZP1H01G9J21QT2XHSZ5BR00", delivery.tags[TagCampaignTargetID]))
 		})
 	}
 }
@@ -312,20 +312,20 @@ func TestPostmarkWebhookEvent_ToDeliveryEventDeliveryTags(t *testing.T) {
 	t.Parallel()
 
 	var event postmarkWebhookEvent
-	require.NoError(t, json.Unmarshal(testPostmarkDeliveryPayload, &event))
+	assert.NilError(t, json.Unmarshal(testPostmarkDeliveryPayload, &event))
 
 	delivery, ok := event.toDeliveryEvent()
-	require.True(t, ok)
-	assert.Equal(t, "01KZP1H01G9J21QT2XHSZ5BR98", delivery.tags[TagAssessmentResponseID])
-	assert.Equal(t, "false", delivery.tags[TagIsTest])
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal("01KZP1H01G9J21QT2XHSZ5BR98", delivery.tags[TagAssessmentResponseID]))
+	assert.Check(t, is.Equal("false", delivery.tags[TagIsTest]))
 }
 
 func TestPostmarkWebhookEvent_ToDeliveryEventUnhandled(t *testing.T) {
 	t.Parallel()
 
 	var event postmarkWebhookEvent
-	require.NoError(t, json.Unmarshal(testPostmarkSubscriptionChangePayload, &event))
+	assert.NilError(t, json.Unmarshal(testPostmarkSubscriptionChangePayload, &event))
 
 	_, ok := event.toDeliveryEvent()
-	assert.False(t, ok)
+	assert.Check(t, !ok)
 }

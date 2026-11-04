@@ -580,7 +580,10 @@ func (_c *AssessmentResponseHistoryCreate) defaults() error {
 		_c.mutation.SetAssignedAt(v)
 	}
 	if _, ok := _c.mutation.StartedAt(); !ok {
-		v := assessmentresponsehistory.DefaultStartedAt
+		if assessmentresponsehistory.DefaultStartedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized assessmentresponsehistory.DefaultStartedAt (forgotten import historygenerated/runtime?)")
+		}
+		v := assessmentresponsehistory.DefaultStartedAt()
 		_c.mutation.SetStartedAt(v)
 	}
 	if _, ok := _c.mutation.IsDraft(); !ok {

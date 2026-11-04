@@ -7,14 +7,14 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/oklog/ulid/v2"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestDownload_SetDownloadTokens_Success(t *testing.T) {
@@ -33,13 +33,13 @@ func TestDownload_SetDownloadTokens_Success(t *testing.T) {
 	}
 
 	err := d.setDownloadTokens(tokenRecord, token)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, token, d.DownloadToken.Token.String)
-	assert.True(t, d.DownloadToken.Token.Valid)
-	assert.Equal(t, secret, d.Secret)
-	assert.True(t, d.Expires.Valid)
-	assert.Equal(t, ttl.Format(time.RFC3339Nano), d.Expires.String)
+	assert.Check(t, is.DeepEqual(token, d.DownloadToken.Token.String))
+	assert.Check(t, d.DownloadToken.Token.Valid)
+	assert.Check(t, is.DeepEqual(secret, d.Secret))
+	assert.Check(t, d.Expires.Valid)
+	assert.Check(t, is.DeepEqual(ttl.Format(time.RFC3339Nano), d.Expires.String))
 }
 
 func TestDownload_SetDownloadTokens_TokenMismatch(t *testing.T) {
@@ -58,8 +58,8 @@ func TestDownload_SetDownloadTokens_TokenMismatch(t *testing.T) {
 	}
 
 	err := d.setDownloadTokens(tokenRecord, requestToken)
-	require.Error(t, err)
-	assert.ErrorIs(t, err, ErrNotFound)
+	assert.Assert(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, ErrNotFound))
 }
 
 func TestDownload_SetDownloadTokens_NilToken(t *testing.T) {
@@ -75,8 +75,8 @@ func TestDownload_SetDownloadTokens_NilToken(t *testing.T) {
 	}
 
 	err := d.setDownloadTokens(tokenRecord, "some-token")
-	require.Error(t, err)
-	assert.ErrorIs(t, err, ErrNotFound)
+	assert.Assert(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, ErrNotFound))
 }
 
 func TestDownload_SetDownloadTokens_NoExpiration(t *testing.T) {
@@ -94,11 +94,11 @@ func TestDownload_SetDownloadTokens_NoExpiration(t *testing.T) {
 	}
 
 	err := d.setDownloadTokens(tokenRecord, token)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	assert.Equal(t, token, d.DownloadToken.Token.String)
-	assert.True(t, d.DownloadToken.Token.Valid)
-	assert.False(t, d.Expires.Valid)
+	assert.Check(t, is.DeepEqual(token, d.DownloadToken.Token.String))
+	assert.Check(t, d.DownloadToken.Token.Valid)
+	assert.Check(t, !d.Expires.Valid)
 }
 
 func TestDownload_SetDownloadTokens_EmptySecret(t *testing.T) {
@@ -114,8 +114,8 @@ func TestDownload_SetDownloadTokens_EmptySecret(t *testing.T) {
 	}
 
 	err := d.setDownloadTokens(tokenRecord, token)
-	require.Error(t, err)
-	assert.ErrorIs(t, err, ErrNotFound)
+	assert.Assert(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, ErrNotFound))
 }
 
 func TestDownload_GetDownloadToken(t *testing.T) {
@@ -156,7 +156,7 @@ func TestDownload_GetDownloadToken(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := tt.download.GetDownloadToken()
-			assert.Equal(t, tt.expected, result)
+			assert.Check(t, is.DeepEqual(tt.expected, result))
 		})
 	}
 }
@@ -211,13 +211,13 @@ func TestDownload_GetDownloadExpires(t *testing.T) {
 			result, err := tt.download.GetDownloadExpires()
 
 			if tt.expectError {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 				if tt.checkZero {
-					assert.True(t, result.IsZero())
+					assert.Check(t, result.IsZero())
 				} else {
-					assert.False(t, result.IsZero())
+					assert.Check(t, !result.IsZero())
 				}
 			}
 		})
@@ -231,7 +231,7 @@ func TestValidateTokenAuthorization_NoUserID(t *testing.T) {
 	}
 
 	err := validateTokenAuthorization(ctx, downloadToken)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 }
 
 func TestValidateTokenAuthorization_WithMatchingUser(t *testing.T) {
@@ -248,7 +248,7 @@ func TestValidateTokenAuthorization_WithMatchingUser(t *testing.T) {
 	}
 
 	err := validateTokenAuthorization(ctx, downloadToken)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 }
 
 func TestValidateTokenAuthorization_WithMismatchedUser(t *testing.T) {
@@ -266,8 +266,8 @@ func TestValidateTokenAuthorization_WithMismatchedUser(t *testing.T) {
 	}
 
 	err := validateTokenAuthorization(ctx, downloadToken)
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, ErrUnauthorized)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, ErrUnauthorized))
 }
 
 func TestValidateTokenAuthorization_NoAuthUser(t *testing.T) {
@@ -280,8 +280,8 @@ func TestValidateTokenAuthorization_NoAuthUser(t *testing.T) {
 	}
 
 	err := validateTokenAuthorization(ctx, downloadToken)
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, ErrUnauthorized)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, ErrUnauthorized))
 }
 
 func TestBuildStorageFile(t *testing.T) {
@@ -303,15 +303,15 @@ func TestBuildStorageFile(t *testing.T) {
 
 	result := buildStorageFile(entFile)
 
-	assert.NotNil(t, result)
-	assert.Equal(t, fileID, result.ID)
-	assert.Equal(t, fileName, result.OriginalName)
-	assert.Equal(t, storagetypes.ProviderType(provider), result.ProviderType)
-	assert.Equal(t, storagePath, result.FileMetadata.Key)
-	assert.Equal(t, storageVolume, result.FileMetadata.Bucket)
-	assert.Equal(t, contentType, result.FileMetadata.ContentType)
-	assert.NotNil(t, result.FileMetadata.ProviderHints)
-	assert.Equal(t, storagetypes.ProviderType(provider), result.FileMetadata.ProviderHints.KnownProvider)
+	assert.Check(t, result != nil)
+	assert.Check(t, is.DeepEqual(fileID, result.ID))
+	assert.Check(t, is.DeepEqual(fileName, result.OriginalName))
+	assert.Check(t, is.DeepEqual(storagetypes.ProviderType(provider), result.ProviderType))
+	assert.Check(t, is.DeepEqual(storagePath, result.FileMetadata.Key))
+	assert.Check(t, is.DeepEqual(storageVolume, result.FileMetadata.Bucket))
+	assert.Check(t, is.DeepEqual(contentType, result.FileMetadata.ContentType))
+	assert.Check(t, result.FileMetadata.ProviderHints != nil)
+	assert.Check(t, is.DeepEqual(storagetypes.ProviderType(provider), result.FileMetadata.ProviderHints.KnownProvider))
 }
 
 func TestBuildObjectURI_FromEntFile(t *testing.T) {
@@ -321,7 +321,7 @@ func TestBuildObjectURI_FromEntFile(t *testing.T) {
 	}
 
 	result := buildObjectURI(nil, entFile)
-	assert.Equal(t, uri, result)
+	assert.Check(t, is.DeepEqual(uri, result))
 }
 
 func TestBuildObjectURI_FromStorageFile(t *testing.T) {
@@ -333,7 +333,7 @@ func TestBuildObjectURI_FromStorageFile(t *testing.T) {
 	}
 
 	result := buildObjectURI(storageFile, nil)
-	assert.Equal(t, fullURI, result)
+	assert.Check(t, is.DeepEqual(fullURI, result))
 }
 
 func TestBuildObjectURI_PreferEntFile(t *testing.T) {
@@ -351,7 +351,7 @@ func TestBuildObjectURI_PreferEntFile(t *testing.T) {
 	}
 
 	result := buildObjectURI(storageFile, entFile)
-	assert.Equal(t, entURI, result)
+	assert.Check(t, is.DeepEqual(entURI, result))
 }
 
 func TestBuildObjectURI_EmptyEntFileURI(t *testing.T) {
@@ -368,12 +368,12 @@ func TestBuildObjectURI_EmptyEntFileURI(t *testing.T) {
 	}
 
 	result := buildObjectURI(storageFile, entFile)
-	assert.Equal(t, storageURI, result)
+	assert.Check(t, is.DeepEqual(storageURI, result))
 }
 
 func TestBuildObjectURI_BothNil(t *testing.T) {
 	result := buildObjectURI(nil, nil)
-	assert.Equal(t, "", result)
+	assert.Check(t, is.Equal("", result))
 }
 
 func TestBuildObjectURI_EmptyBoth(t *testing.T) {
@@ -388,5 +388,5 @@ func TestBuildObjectURI_EmptyBoth(t *testing.T) {
 	}
 
 	result := buildObjectURI(storageFile, entFile)
-	assert.Equal(t, "", result)
+	assert.Check(t, is.Equal("", result))
 }

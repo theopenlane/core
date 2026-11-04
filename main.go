@@ -2,6 +2,7 @@
 package main
 
 import (
+	"time"
 	_ "time/tzdata"
 
 	"github.com/theopenlane/core/v2/cmd"
@@ -10,5 +11,8 @@ import (
 )
 
 func main() {
+	// run in UTC regardless of the host timezone
+	time.Local = time.UTC
+
 	cmd.Execute()
 }

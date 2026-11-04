@@ -1,10 +1,12 @@
 package entitlements
 
 import (
+	"slices"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v86"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestBuildOnlyPricesItems(t *testing.T) {
@@ -68,8 +70,8 @@ func TestBuildOnlyPricesItems(t *testing.T) {
 				}
 			}
 
-			assert.ElementsMatch(t, tc.wantDeleted, deleted)
-			assert.ElementsMatch(t, tc.wantAdded, added)
+			assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values(tc.wantDeleted)), slices.Sorted(slices.Values(deleted))))
+			assert.Check(t, is.DeepEqual(slices.Sorted(slices.Values(tc.wantAdded)), slices.Sorted(slices.Values(added))))
 		})
 	}
 }

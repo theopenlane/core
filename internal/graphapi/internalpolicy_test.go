@@ -794,6 +794,8 @@ func TestMutationDeleteInternalPolicy(t *testing.T) {
 }
 
 func TestMutationRoleChangesCanAccessPolicy(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		name string
 		role string

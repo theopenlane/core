@@ -7,7 +7,6 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
@@ -414,7 +413,7 @@ func (suite *GraphTestSuite) AddFunctionalRoleForUser(ctx context.Context, t *te
 	}
 
 	_, err := suite.Client.DB.Authz.WriteTupleKeys(ctx, tuples, nil)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 // OrgMemberWithFunctionalRoles creates a user, adds them to the owner's organization as a member,

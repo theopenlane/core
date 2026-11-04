@@ -6,8 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 )
 
 // nativeTestEntity is a flat projection-shaped struct: read-only id plus scalar/FK fields,
@@ -28,7 +27,7 @@ func nativeEval(t *testing.T, withSource bool) *NativeEntityEvaluator {
 	}
 
 	ev, err := NewNativeEntityEvaluator(StrictEnvConfig(), FastEvalConfig(), reflect.TypeFor[nativeTestEntity](), sourceType)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return ev
 }
@@ -42,8 +41,8 @@ func TestNativeEntity_SourceID(t *testing.T) {
 	source, _ := json.Marshal(nativeTestEntity{ID: "ih-1"})
 
 	match, err := ev.EvaluateBoolWithSource(context.Background(), "target.identity_holder_id == source.id", target, source)
-	require.NoError(t, err)
-	assert.True(t, match)
+	assert.NilError(t, err)
+	assert.Check(t, match)
 }
 
 func TestNativeEntity_SourceID_NoMatch(t *testing.T) {
@@ -53,8 +52,8 @@ func TestNativeEntity_SourceID_NoMatch(t *testing.T) {
 	source, _ := json.Marshal(nativeTestEntity{ID: "ih-2"})
 
 	match, err := ev.EvaluateBoolWithSource(context.Background(), "target.identity_holder_id == source.id", target, source)
-	require.NoError(t, err)
-	assert.False(t, match)
+	assert.NilError(t, err)
+	assert.Check(t, !match)
 }
 
 func TestNativeEntity_TargetOnly(t *testing.T) {
@@ -63,8 +62,8 @@ func TestNativeEntity_TargetOnly(t *testing.T) {
 	target, _ := json.Marshal(nativeTestEntity{ID: "x", PrimaryDirectory: true})
 
 	match, err := ev.EvaluateBool(context.Background(), `target.primary_directory && target.id == "x"`, target)
-	require.NoError(t, err)
-	assert.True(t, match)
+	assert.NilError(t, err)
+	assert.Check(t, match)
 }
 
 // A misspelled field fails at compile, unlike the DynType+map path which accepts it silently.
@@ -74,5 +73,5 @@ func TestNativeEntity_UnknownFieldRejected(t *testing.T) {
 	target, _ := json.Marshal(nativeTestEntity{ID: "x"})
 
 	_, err := ev.EvaluateBool(context.Background(), `target.identifier == "x"`, target)
-	require.Error(t, err)
+	assert.Assert(t, err != nil)
 }

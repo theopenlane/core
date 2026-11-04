@@ -19,74 +19,74 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
-func (suite *HookTestSuite) TestCampaignRecurringListenerSchedulesNextRun() {
-	t := suite.T()
+func TestCampaignRecurringListenerSchedulesNextRun(t *testing.T) {
+	s := suite.setupTest(t)
 
-	userCtx, internalCtx, orgID := suite.setupCampaignOrg(t)
+	userCtx, internalCtx, orgID := s.setupCampaignOrg(t)
 
-	camp, err := suite.newRecurringCampaign(orgID, "recurring schedule listener").
+	camp, err := s.newRecurringCampaign(orgID, "recurring schedule listener").
 		SetIsActive(true).
 		Save(internalCtx)
 	assert.NilError(t, err)
 	assert.Check(t, camp.NextRunAt == nil)
 
-	suite.emitCampaignMutation(t, userCtx, camp.ID, campaign.FieldIsActive)
+	s.emitCampaignMutation(t, userCtx, camp.ID, campaign.FieldIsActive)
 
-	updated, err := suite.client.Campaign.Get(internalCtx, camp.ID)
+	updated, err := s.client.Campaign.Get(internalCtx, camp.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, updated.NextRunAt != nil)
 	assert.Check(t, time.Time(*updated.NextRunAt).After(time.Now()))
 }
 
-func (suite *HookTestSuite) TestCampaignRecurringListenerClearsNextRunOnDeactivation() {
-	t := suite.T()
+func TestCampaignRecurringListenerClearsNextRunOnDeactivation(t *testing.T) {
+	s := suite.setupTest(t)
 
-	userCtx, internalCtx, orgID := suite.setupCampaignOrg(t)
+	userCtx, internalCtx, orgID := s.setupCampaignOrg(t)
 
-	camp, err := suite.newRecurringCampaign(orgID, "deactivated schedule listener").
+	camp, err := s.newRecurringCampaign(orgID, "deactivated schedule listener").
 		SetIsActive(false).
 		SetNextRunAt(models.DateTime(time.Now().Add(time.Hour))).
 		Save(internalCtx)
 	assert.NilError(t, err)
 
-	suite.emitCampaignMutation(t, userCtx, camp.ID, campaign.FieldIsActive)
+	s.emitCampaignMutation(t, userCtx, camp.ID, campaign.FieldIsActive)
 
-	updated, err := suite.client.Campaign.Get(internalCtx, camp.ID)
+	updated, err := s.client.Campaign.Get(internalCtx, camp.ID)
 	assert.NilError(t, err)
 	assert.Check(t, updated.NextRunAt == nil)
 }
 
-func (suite *HookTestSuite) TestCampaignRecurringListenerSkipsDeletedCampaign() {
-	t := suite.T()
+func TestCampaignRecurringListenerSkipsDeletedCampaign(t *testing.T) {
+	s := suite.setupTest(t)
 
-	userCtx, internalCtx, orgID := suite.setupCampaignOrg(t)
+	userCtx, internalCtx, orgID := s.setupCampaignOrg(t)
 
-	camp, err := suite.newRecurringCampaign(orgID, "deleted schedule listener").
+	camp, err := s.newRecurringCampaign(orgID, "deleted schedule listener").
 		SetIsActive(true).
 		Save(internalCtx)
 	assert.NilError(t, err)
 
-	err = suite.client.Campaign.DeleteOneID(camp.ID).Exec(internalCtx)
+	err = s.client.Campaign.DeleteOneID(camp.ID).Exec(internalCtx)
 	assert.NilError(t, err)
 
-	suite.emitCampaignMutation(t, userCtx, camp.ID, campaign.FieldIsActive)
+	s.emitCampaignMutation(t, userCtx, camp.ID, campaign.FieldIsActive)
 }
 
-func (suite *HookTestSuite) setupCampaignOrg(t *testing.T) (userCtx, internalCtx context.Context, orgID string) {
-	user := suite.seedUser()
+func (s *HookTestSuite) setupCampaignOrg(t *testing.T) (userCtx, internalCtx context.Context, orgID string) {
+	user := s.seedUser()
 	orgID = user.Edges.OrgMemberships[0].OrganizationID
 
-	err := entitlements.CreateFeatureTuples(context.Background(), &suite.client.Authz, orgID,
+	err := entitlements.CreateFeatureTuples(context.Background(), &s.client.Authz, orgID,
 		[]models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
 	assert.NilError(t, err)
 
-	userCtx = generated.NewContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.client)
+	userCtx = generated.NewContext(auth.NewTestContextWithOrgID(user.ID, orgID), s.client)
 
 	return userCtx, auth.WithInternalOperationContext(userCtx), orgID
 }
 
-func (suite *HookTestSuite) newRecurringCampaign(orgID, name string) *generated.CampaignCreate {
-	return suite.client.Campaign.Create().
+func (s *HookTestSuite) newRecurringCampaign(orgID, name string) *generated.CampaignCreate {
+	return s.client.Campaign.Create().
 		SetName(name).
 		SetOwnerID(orgID).
 		SetIsRecurring(true).
@@ -97,8 +97,8 @@ func (suite *HookTestSuite) newRecurringCampaign(orgID, name string) *generated.
 
 // emitCampaignMutation emits a campaign mutation event through the public gala surface
 // and waits for the in-memory pool to drain so DB side effects are observable
-func (suite *HookTestSuite) emitCampaignMutation(_ *testing.T, ctx context.Context, campaignID string, changedFields ...string) {
-	entityops.EmitMutation(ctx, []*gala.Gala{suite.galaRuntime}, entityops.MutationPayload{
+func (s *HookTestSuite) emitCampaignMutation(_ *testing.T, ctx context.Context, campaignID string, changedFields ...string) {
+	entityops.EmitMutation(ctx, []*gala.Gala{s.galaRuntime}, entityops.MutationPayload{
 		MutationType: generated.TypeCampaign,
 		Operation:    entityops.OpUpdateOne,
 		EntityID:     campaignID,
@@ -107,5 +107,5 @@ func (suite *HookTestSuite) emitCampaignMutation(_ *testing.T, ctx context.Conte
 		},
 	})
 
-	suite.waitForEvents()
+	s.waitForEvents()
 }

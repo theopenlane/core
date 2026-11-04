@@ -3,9 +3,11 @@ package email
 import (
 	"context"
 	"encoding/json"
+	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 const brandedMessageKey = "BrandedMessageRequest"
@@ -20,15 +22,15 @@ func TestBrandedMessageButtonRendered(t *testing.T) {
 		ButtonText: "Go",
 		ButtonLink: "https://example.com",
 	})
-	assert.Len(t, withButton.Actions, 1)
-	assert.Equal(t, "Go", withButton.Actions[0].Button.Text)
-	assert.Equal(t, "https://example.com", withButton.Actions[0].Button.Link)
+	assert.Check(t, is.Len(withButton.Actions, 1))
+	assert.Check(t, is.Equal("Go", withButton.Actions[0].Button.Text))
+	assert.Check(t, is.Equal("https://example.com", withButton.Actions[0].Button.Link))
 
 	noLink := op.Build(RuntimeEmailConfig{}, BrandedMessageRequest{
 		Title:      "Hello",
 		ButtonText: "Go",
 	})
-	assert.Empty(t, noLink.Actions)
+	assert.Check(t, is.Len(noLink.Actions, 0))
 }
 
 // TestBrandedMessageConfigAppliesRequestBranding verifies customer-supplied identity and footer
@@ -53,18 +55,18 @@ func TestBrandedMessageConfigAppliesRequestBranding(t *testing.T) {
 	// MockRuntimeConfig carries inherited (non-customer) branding that must be replaced
 	out := op.Config(*MockRuntimeConfig(), req)
 
-	assert.Equal(t, "Acme", out.CompanyName)
-	assert.Equal(t, "Acme, Inc.", out.Corporation)
-	assert.Equal(t, "1 Market St", out.CompanyAddress)
-	assert.Equal(t, "(c) Acme", out.Copyright)
-	assert.Equal(t, "Tag", out.Tagline)
-	assert.Equal(t, "https://acme.com/terms", out.TermsURL)
-	assert.Equal(t, "https://acme.com/privacy", out.PrivacyURL)
-	assert.Equal(t, "https://acme.com/unsub", out.UnsubscribeURL)
-	assert.Equal(t, "https://acme.com/logo.png", out.LogoURL)
-	assert.Equal(t, "https://acme.com/icon.png", out.HeaderLogoURL)
-	assert.Len(t, out.Social, 1)
-	assert.Equal(t, "X", out.Social[0].Platform)
+	assert.Check(t, is.Equal("Acme", out.CompanyName))
+	assert.Check(t, is.Equal("Acme, Inc.", out.Corporation))
+	assert.Check(t, is.Equal("1 Market St", out.CompanyAddress))
+	assert.Check(t, is.Equal("(c) Acme", out.Copyright))
+	assert.Check(t, is.Equal("Tag", out.Tagline))
+	assert.Check(t, is.Equal("https://acme.com/terms", out.TermsURL))
+	assert.Check(t, is.Equal("https://acme.com/privacy", out.PrivacyURL))
+	assert.Check(t, is.Equal("https://acme.com/unsub", out.UnsubscribeURL))
+	assert.Check(t, is.Equal("https://acme.com/logo.png", out.LogoURL))
+	assert.Check(t, is.Equal("https://acme.com/icon.png", out.HeaderLogoURL))
+	assert.Check(t, is.Len(out.Social, 1))
+	assert.Check(t, is.Equal("X", out.Social[0].Platform))
 }
 
 // TestBrandedMessageConfigStripsInheritedBranding verifies an empty request clears inherited
@@ -76,88 +78,89 @@ func TestBrandedMessageConfigStripsInheritedBranding(t *testing.T) {
 	base := *MockRuntimeConfig()
 	out := op.Config(base, BrandedMessageRequest{})
 
-	assert.Empty(t, out.CompanyName)
-	assert.Empty(t, out.Corporation)
-	assert.Empty(t, out.CompanyAddress)
-	assert.Empty(t, out.LogoURL)
-	assert.Empty(t, out.HeaderLogoURL)
-	assert.Empty(t, out.Tagline)
-	assert.Empty(t, out.Social)
-	assert.Empty(t, out.HeaderText)
+	assert.Check(t, is.Len(out.CompanyName, 0))
+	assert.Check(t, is.Len(out.Corporation, 0))
+	assert.Check(t, is.Len(out.CompanyAddress, 0))
+	assert.Check(t, is.Len(out.LogoURL, 0))
+	assert.Check(t, is.Len(out.HeaderLogoURL, 0))
+	assert.Check(t, is.Len(out.Tagline, 0))
+	assert.Check(t, is.Len(out.Social, 0))
+	assert.Check(t, is.Len(out.HeaderText, 0))
 
-	assert.Equal(t, base.FromEmail, out.FromEmail)
-	assert.Equal(t, base.ProductURL, out.ProductURL)
+	assert.Check(t, is.Equal(base.FromEmail, out.FromEmail))
+	assert.Check(t, is.Equal(base.ProductURL, out.ProductURL))
 }
 
 // TestBrandedMessageCustomerSelectable verifies the entry is exposed via the customer-facing catalog
 func TestBrandedMessageCustomerSelectable(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	cs := d.Registration().CustomerSelectable
-	assert.NotNil(t, cs)
-	assert.True(t, *cs)
+	assert.Check(t, cs != nil)
+	assert.Check(t, *cs)
 }
 
 // TestBrandedMessageExamplePayloadValid verifies the catalog example unmarshals and populates the
 // fields needed to render a meaningful preview
 func TestBrandedMessageExamplePayloadValid(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	raw := d.ExamplePayload()
-	assert.NotEmpty(t, raw)
+	assert.Check(t, len(raw) > 0)
 
 	var req BrandedMessageRequest
-	assert.NoError(t, json.Unmarshal(raw, &req))
+	assert.Check(t, json.Unmarshal(raw, &req))
 
-	assert.NotEmpty(t, req.Email)
-	assert.NotEmpty(t, req.Subject)
-	assert.NotEmpty(t, req.Title)
-	assert.NotEmpty(t, req.CompanyName)
+	assert.Check(t, len(req.Email) > 0)
+	assert.Check(t, len(req.Subject) > 0)
+	assert.Check(t, len(req.Title) > 0)
+	assert.Check(t, len(req.CompanyName) > 0)
 }
 
 // TestBrandedMessageUISchemaValid verifies the builder UI schema is a JSON object carrying the
 // authoring order used by the form
 func TestBrandedMessageUISchemaValid(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	raw := d.BuilderUISchema()
-	assert.NotEmpty(t, raw)
+	assert.Check(t, len(raw) > 0)
 
 	var ui map[string]any
-	assert.NoError(t, json.Unmarshal(raw, &ui))
+	assert.Check(t, json.Unmarshal(raw, &ui))
 	// only the irreducible multi-line hint remains; field types/widgets come from the reflected schema
-	assert.Contains(t, ui, "intros")
+	assert.Check(t, is.Contains(ui, "intros"))
 }
 
 // TestBrandedMessageConfigSchemaScoping verifies the reflected catalog schema excludes per-send
 // fields and carries the format hints that replace the hand-written UI schema
 func TestBrandedMessageConfigSchemaScoping(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	var schema map[string]any
-	assert.NoError(t, json.Unmarshal(d.Registration().Input.Schema, &schema))
+	assert.Check(t, json.Unmarshal(d.Registration().Input.Schema, &schema))
 
 	defs, ok := schema["$defs"].(map[string]any)
-	assert.True(t, ok, "schema should have $defs")
+	assert.Check(t, ok, "schema should have $defs")
 
 	entry, ok := defs["BrandedMessageRequest"].(map[string]any)
-	assert.True(t, ok, "schema should define BrandedMessageRequest")
+	assert.Check(t, ok, "schema should define BrandedMessageRequest")
 
 	props, ok := entry["properties"].(map[string]any)
-	assert.True(t, ok, "BrandedMessageRequest should have properties")
+	assert.Check(t, ok, "BrandedMessageRequest should have properties")
 
 	// per-send fields promoted from RecipientInfo / CampaignContext are excluded from authoring
 	for _, perSend := range []string{"email", "recipients", "firstName", "lastName", "tags", "campaignId", "campaignName"} {
-		assert.NotContains(t, props, perSend, "per-send field %q should be excluded from the authorable schema", perSend)
+		_, found := props[perSend]
+		assert.Check(t, !found, "per-send field %q should be excluded from the authorable schema", perSend)
 	}
 
 	// authorable content/branding fields remain
 	for _, authorable := range []string{"subject", "title", "intros", "buttonText", "companyName"} {
-		assert.Contains(t, props, authorable, "authorable field %q should be present", authorable)
+		assert.Check(t, is.Contains(props, authorable), "authorable field %q should be present", authorable)
 	}
 
 	// format hints are reflected so the UI selects widgets from the schema, not a hand-written uiSchema
@@ -172,8 +175,8 @@ func assertSchemaFormat(t *testing.T, props map[string]any, field, want string) 
 	t.Helper()
 
 	p, ok := props[field].(map[string]any)
-	assert.True(t, ok, "field %q missing from schema", field)
-	assert.Equal(t, want, p["format"], "field %q format", field)
+	assert.Check(t, ok, "field %q missing from schema", field)
+	assert.Check(t, is.Equal(want, p["format"]), "field %q format", field)
 }
 
 // TestRenderCatalogPreviewExample verifies the catalog preview renders the example to non-empty HTML,
@@ -181,24 +184,24 @@ func assertSchemaFormat(t *testing.T, props map[string]any, field, want string) 
 // inbound config's branding
 func TestRenderCatalogPreviewExample(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	client := &Client{Config: *MockRuntimeConfig()}
 
 	html, err := RenderCatalogPreview(context.Background(), client, d, nil)
-	assert.NoError(t, err)
-	assert.NotEmpty(t, html)
+	assert.Check(t, err)
+	assert.Check(t, len(html) > 0)
 
-	assert.Contains(t, html, "Hi Jordan, welcome aboard")
-	assert.Contains(t, html, "View Onboarding")
-	assert.NotContains(t, html, "MITB")
+	assert.Check(t, is.Contains(html, "Hi Jordan, welcome aboard"))
+	assert.Check(t, is.Contains(html, "View Onboarding"))
+	assert.Check(t, !strings.Contains(html, "MITB"))
 }
 
 // TestRenderCatalogPreviewDraftOverridesExample verifies in-progress draft values override the
 // example so the live preview reflects what the author has typed
 func TestRenderCatalogPreviewDraftOverridesExample(t *testing.T) {
 	d, ok := DispatcherByKey(brandedMessageKey)
-	assert.True(t, ok)
+	assert.Check(t, ok)
 
 	client := &Client{Config: *MockRuntimeConfig()}
 
@@ -208,9 +211,9 @@ func TestRenderCatalogPreviewDraftOverridesExample(t *testing.T) {
 	}
 
 	html, err := RenderCatalogPreview(context.Background(), client, d, draft)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
-	assert.Contains(t, html, "Quarterly Update")
-	assert.Contains(t, html, "Read More")
-	assert.NotContains(t, html, "welcome aboard")
+	assert.Check(t, is.Contains(html, "Quarterly Update"))
+	assert.Check(t, is.Contains(html, "Read More"))
+	assert.Check(t, !strings.Contains(html, "welcome aboard"))
 }

@@ -300,6 +300,8 @@ func TestMutationUpdateAPIToken(t *testing.T) {
 }
 
 func TestMutationDeleteAPIToken(t *testing.T) {
+	t.Parallel()
+
 	// create user to make tokens
 	user := suite.UserBuilder(context.Background(), t)
 	user2 := suite.UserBuilder(context.Background(), t)

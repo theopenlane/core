@@ -3,7 +3,8 @@ package validator
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
@@ -131,17 +132,17 @@ func TestEmailVerificationConfig_VerifyEmailAddress(t *testing.T) {
 			got, res, err := verifier.VerifyEmailAddress(tt.email)
 
 			if tt.wantErr {
-				assert.Error(t, err)
+				assert.Check(t, err != nil)
 			} else {
-				assert.NoError(t, err)
+				assert.Check(t, err)
 			}
 
-			assert.Equal(t, tt.wantValid, got)
+			assert.Check(t, is.Equal(tt.wantValid, got))
 
 			if tt.wantValid && !tt.emptyVal {
-				assert.NotNil(t, res)
+				assert.Check(t, res != nil)
 			} else {
-				assert.Nil(t, res)
+				assert.Check(t, is.Nil(res))
 			}
 		})
 	}

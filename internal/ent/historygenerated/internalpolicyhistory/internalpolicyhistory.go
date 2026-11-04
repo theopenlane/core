@@ -222,7 +222,7 @@ var (
 	// DefaultApprovalRequired holds the default value on creation for the "approval_required" field.
 	DefaultApprovalRequired bool
 	// DefaultReviewDue holds the default value on creation for the "review_due" field.
-	DefaultReviewDue time.Time
+	DefaultReviewDue func() time.Time
 	// DefaultTagSuggestions holds the default value on creation for the "tag_suggestions" field.
 	DefaultTagSuggestions []string
 	// DefaultDismissedTagSuggestions holds the default value on creation for the "dismissed_tag_suggestions" field.

@@ -129,7 +129,7 @@ func init() {
 	// actionplanhistoryDescReviewDue is the schema descriptor for review_due field.
 	actionplanhistoryDescReviewDue := actionplanhistoryFields[26].Descriptor()
 	// actionplanhistory.DefaultReviewDue holds the default value on creation for the review_due field.
-	actionplanhistory.DefaultReviewDue = actionplanhistoryDescReviewDue.Default.(time.Time)
+	actionplanhistory.DefaultReviewDue = actionplanhistoryDescReviewDue.Default.(func() time.Time)
 	// actionplanhistoryDescTagSuggestions is the schema descriptor for tag_suggestions field.
 	actionplanhistoryDescTagSuggestions := actionplanhistoryFields[31].Descriptor()
 	// actionplanhistory.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
@@ -296,7 +296,7 @@ func init() {
 	// assessmentresponsehistoryDescStartedAt is the schema descriptor for started_at field.
 	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[30].Descriptor()
 	// assessmentresponsehistory.DefaultStartedAt holds the default value on creation for the started_at field.
-	assessmentresponsehistory.DefaultStartedAt = assessmentresponsehistoryDescStartedAt.Default.(time.Time)
+	assessmentresponsehistory.DefaultStartedAt = assessmentresponsehistoryDescStartedAt.Default.(func() time.Time)
 	// assessmentresponsehistoryDescIsDraft is the schema descriptor for is_draft field.
 	assessmentresponsehistoryDescIsDraft := assessmentresponsehistoryFields[34].Descriptor()
 	// assessmentresponsehistory.DefaultIsDraft holds the default value on creation for the is_draft field.
@@ -1275,7 +1275,7 @@ func init() {
 	// internalpolicyhistoryDescReviewDue is the schema descriptor for review_due field.
 	internalpolicyhistoryDescReviewDue := internalpolicyhistoryFields[31].Descriptor()
 	// internalpolicyhistory.DefaultReviewDue holds the default value on creation for the review_due field.
-	internalpolicyhistory.DefaultReviewDue = internalpolicyhistoryDescReviewDue.Default.(time.Time)
+	internalpolicyhistory.DefaultReviewDue = internalpolicyhistoryDescReviewDue.Default.(func() time.Time)
 	// internalpolicyhistoryDescTagSuggestions is the schema descriptor for tag_suggestions field.
 	internalpolicyhistoryDescTagSuggestions := internalpolicyhistoryFields[36].Descriptor()
 	// internalpolicyhistory.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
@@ -1803,7 +1803,7 @@ func init() {
 	// procedurehistoryDescReviewDue is the schema descriptor for review_due field.
 	procedurehistoryDescReviewDue := procedurehistoryFields[28].Descriptor()
 	// procedurehistory.DefaultReviewDue holds the default value on creation for the review_due field.
-	procedurehistory.DefaultReviewDue = procedurehistoryDescReviewDue.Default.(time.Time)
+	procedurehistory.DefaultReviewDue = procedurehistoryDescReviewDue.Default.(func() time.Time)
 	// procedurehistoryDescTagSuggestions is the schema descriptor for tag_suggestions field.
 	procedurehistoryDescTagSuggestions := procedurehistoryFields[33].Descriptor()
 	// procedurehistory.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.

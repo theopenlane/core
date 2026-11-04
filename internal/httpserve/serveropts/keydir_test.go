@@ -16,10 +16,11 @@ import (
 
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/oklog/ulid/v2"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/v2/config"
 	serverconfig "github.com/theopenlane/core/v2/internal/httpserve/config"
 	"github.com/theopenlane/iam/tokens"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 const day = 24 * time.Hour
@@ -42,18 +43,18 @@ func writeKey(t *testing.T, dir, name string) (string, string) {
 	t.Helper()
 
 	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	path := filepath.Join(dir, name+pemExtension)
 
 	privateDER, err := x509.MarshalPKCS8PrivateKey(privateKey)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	privatePEM := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: privateDER})
-	require.NoError(t, os.WriteFile(path, privatePEM, 0o600))
+	assert.NilError(t, os.WriteFile(path, privatePEM, 0o600))
 
 	kid, err := thumbprintKID(publicKey)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return kid, path
 }
@@ -63,7 +64,7 @@ func writeKeyWithCert(t *testing.T, dir, name string, notBefore time.Time, lifet
 	t.Helper()
 
 	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return writeSignerWithCert(t, dir, name, notBefore, lifetime, privateKey)
 }
@@ -73,10 +74,10 @@ func writeSignerWithCert(t *testing.T, dir, name string, notBefore time.Time, li
 	t.Helper()
 
 	privateDER, err := x509.MarshalPKCS8PrivateKey(privateKey)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	privatePEM := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: privateDER})
-	require.NoError(t, os.WriteFile(filepath.Join(dir, name+pemExtension), privatePEM, 0o600))
+	assert.NilError(t, os.WriteFile(filepath.Join(dir, name+pemExtension), privatePEM, 0o600))
 
 	tmpl := &x509.Certificate{
 		SerialNumber: big.NewInt(time.Now().UnixNano()),
@@ -85,13 +86,13 @@ func writeSignerWithCert(t *testing.T, dir, name string, notBefore time.Time, li
 	}
 
 	certDER, err := x509.CreateCertificate(rand.Reader, tmpl, tmpl, privateKey.Public(), privateKey)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	certPEM := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: certDER})
-	require.NoError(t, os.WriteFile(filepath.Join(dir, name+certExtension), certPEM, 0o600))
+	assert.NilError(t, os.WriteFile(filepath.Join(dir, name+certExtension), certPEM, 0o600))
 
 	kid, err := thumbprintKID(privateKey.Public())
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return kid
 }
@@ -112,10 +113,10 @@ func tokenKID(t *testing.T, tks string) string {
 	t.Helper()
 
 	token, _, err := jwt.NewParser().ParseUnverified(tks, &jwt.RegisteredClaims{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	kid, ok := token.Header["kid"].(string)
-	require.True(t, ok)
+	assert.Assert(t, ok)
 
 	return kid
 }
@@ -131,18 +132,18 @@ func TestKeyDirThumbprintKIDs(t *testing.T) {
 	kid, path := writeKey(t, dir, "anything")
 
 	conf, err := tokenConfigFromKeyDir(baseConfig(), dir)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// the kid comes from the key material, never the filename
-	require.Equal(t, map[string]string{kid: path}, conf.Keys)
-	require.Equal(t, kid, conf.KID)
+	assert.Assert(t, is.DeepEqual(map[string]string{kid: path}, conf.Keys))
+	assert.Assert(t, is.Equal(kid, conf.KID))
 }
 
 func TestKeyDirEmpty(t *testing.T) {
 	t.Parallel()
 
 	_, err := tokenConfigFromKeyDir(baseConfig(), t.TempDir())
-	require.ErrorIs(t, err, ErrNoSigningKeys)
+	assert.ErrorIs(t, err, ErrNoSigningKeys)
 }
 
 func TestKeyDirConfiguredKeysNeverSign(t *testing.T) {
@@ -158,11 +159,11 @@ func TestKeyDirConfiguredKeysNeverSign(t *testing.T) {
 	base.Keys = map[string]string{"historical-kid": legacyPath}
 
 	conf, err := tokenConfigFromKeyDir(base, dir)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.Equal(t, legacyPath, conf.Keys["historical-kid"])
-	require.Contains(t, conf.Keys, certKID)
-	require.Equal(t, certKID, conf.KID)
+	assert.Assert(t, is.Equal(legacyPath, conf.Keys["historical-kid"]))
+	assert.Assert(t, is.Contains(conf.Keys, certKID))
+	assert.Assert(t, is.Equal(certKID, conf.KID))
 }
 
 // TestKeyDirNeverPromotesLegacyULIDKey covers the failure this selection logic exists to
@@ -186,17 +187,17 @@ func TestKeyDirNeverPromotesLegacyULIDKey(t *testing.T) {
 	expiringKID := writeKeyWithCert(t, dir, "primary", now.Add(-89*day), 90*day)
 
 	conf, err := tokenConfigFromKeyDir(base, dir)
-	require.NoError(t, err)
-	require.Equal(t, expiringKID, conf.KID)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(expiringKID, conf.KID))
 
 	tm, err := tokens.New(conf)
-	require.NoError(t, err)
-	require.Equal(t, expiringKID, tm.CurrentKeyID())
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(expiringKID, tm.CurrentKeyID()))
 
 	atks, _, err := tm.CreateTokenPair(testClaims())
-	require.NoError(t, err)
-	require.Equal(t, expiringKID, tokenKID(t, atks))
-	require.NotEqual(t, legacyULID, tokenKID(t, atks))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(expiringKID, tokenKID(t, atks)))
+	assert.Assert(t, legacyULID != tokenKID(t, atks))
 }
 
 func TestKeyDirConfiguredKIDReplacedByDiskSelection(t *testing.T) {
@@ -209,8 +210,8 @@ func TestKeyDirConfiguredKIDReplacedByDiskSelection(t *testing.T) {
 	base.KID = "does-not-exist"
 
 	conf, err := tokenConfigFromKeyDir(base, dir)
-	require.NoError(t, err)
-	require.Equal(t, kid, conf.KID)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(kid, conf.KID))
 }
 
 func TestKeyDirSelectsMostHeadroom(t *testing.T) {
@@ -223,15 +224,15 @@ func TestKeyDirSelectsMostHeadroom(t *testing.T) {
 	secondaryKID := writeKeyWithCert(t, dir, "secondary", now.Add(-30*day), 90*day)
 
 	conf, err := tokenConfigFromKeyDir(baseConfig(), dir)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.Contains(t, conf.Keys, primaryKID)
-	require.Contains(t, conf.Keys, secondaryKID)
-	require.Equal(t, secondaryKID, conf.KID)
+	assert.Assert(t, is.Contains(conf.Keys, primaryKID))
+	assert.Assert(t, is.Contains(conf.Keys, secondaryKID))
+	assert.Assert(t, is.Equal(secondaryKID, conf.KID))
 
 	tm, err := tokens.New(conf)
-	require.NoError(t, err)
-	require.Equal(t, secondaryKID, tm.CurrentKeyID())
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(secondaryKID, tm.CurrentKeyID()))
 }
 
 func TestKeyDirSkipsCertExpiringInsideMargin(t *testing.T) {
@@ -245,8 +246,8 @@ func TestKeyDirSkipsCertExpiringInsideMargin(t *testing.T) {
 	writeKeyWithCert(t, dir, "secondary", now.Add(-62*day), 63*day)
 
 	conf, err := tokenConfigFromKeyDir(baseConfig(), dir)
-	require.NoError(t, err)
-	require.Equal(t, primaryKID, conf.KID)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(primaryKID, conf.KID))
 }
 
 func TestKeyDirSignsWithBestAvailableWhenNoneQualify(t *testing.T) {
@@ -258,11 +259,11 @@ func TestKeyDirSignsWithBestAvailableWhenNoneQualify(t *testing.T) {
 	nearest := writeKeyWithCert(t, dir, "primary", now.Add(-89*day), 90*day)
 
 	entries, err := scanKeyDir(dir)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	kid, healthy := chooseSigningKID(entries, signingMargin(baseConfig()))
-	require.Equal(t, nearest, kid)
-	require.False(t, healthy)
+	assert.Assert(t, is.Equal(nearest, kid))
+	assert.Assert(t, !healthy)
 }
 
 func TestKeyDirNewCertWaitsForPropagation(t *testing.T) {
@@ -277,8 +278,8 @@ func TestKeyDirNewCertWaitsForPropagation(t *testing.T) {
 	writeKeyWithCert(t, dir, "secondary", now.Add(-time.Minute), 120*day)
 
 	conf, err := tokenConfigFromKeyDir(baseConfig(), dir)
-	require.NoError(t, err)
-	require.Equal(t, primaryKID, conf.KID)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(primaryKID, conf.KID))
 }
 
 func TestKeyDirMixedKeyTypes(t *testing.T) {
@@ -288,41 +289,41 @@ func TestKeyDirMixedKeyTypes(t *testing.T) {
 	now := time.Now()
 
 	_, edPriv, err := ed25519.GenerateKey(rand.Reader)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	edKID := writeSignerWithCert(t, dir, "primary", now.Add(-24*time.Hour), 90*day, edPriv)
 
 	conf, err := tokenConfigFromKeyDir(baseConfig(), dir)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	tm, err := tokens.New(conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	edToken, _, err := tm.CreateTokenPair(testClaims())
-	require.NoError(t, err)
-	require.Equal(t, edKID, tokenKID(t, edToken))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(edKID, tokenKID(t, edToken)))
 
 	rsaKID := writeKeyWithCert(t, dir, "secondary", now.Add(-2*time.Hour), 120*day)
 
 	conf, err = tokenConfigFromKeyDir(baseConfig(), dir)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	mixed, err := tokens.New(conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	rsaToken, _, err := mixed.CreateTokenPair(testClaims())
-	require.NoError(t, err)
-	require.Equal(t, rsaKID, tokenKID(t, rsaToken))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(rsaKID, tokenKID(t, rsaToken)))
 
 	for _, tks := range []string{edToken, rsaToken} {
 		verified, err := mixed.Verify(tks)
-		require.NoError(t, err)
-		require.Equal(t, "user", verified.Subject)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Equal("user", verified.Subject))
 	}
 
 	jwks, err := mixed.Keys()
-	require.NoError(t, err)
-	require.Equal(t, 2, jwks.Len())
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(2, jwks.Len()))
 }
 
 func TestKeySetFromKeyDirConfiguredKeysVerifyOnly(t *testing.T) {
@@ -338,16 +339,17 @@ func TestKeySetFromKeyDirConfiguredKeysVerifyOnly(t *testing.T) {
 	base.Keys = map[string]string{legacyKID: legacyPath}
 
 	configured, err := configuredVerificationKeys(base.Keys)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	keySet, healthy, err := keySetFromKeyDir(context.Background(), base, dir, configured, noopKeyArchive{})
-	require.NoError(t, err)
-	require.True(t, healthy)
+	assert.NilError(t, err)
+	assert.Assert(t, healthy)
 
-	require.Equal(t, primaryKID, keySet.KID)
-	require.Contains(t, keySet.Signing, primaryKID)
-	require.NotContains(t, keySet.Signing, legacyKID)
-	require.Contains(t, keySet.Verification, legacyKID)
+	assert.Assert(t, is.Equal(primaryKID, keySet.KID))
+	assert.Assert(t, is.Contains(keySet.Signing, primaryKID))
+	_, signsWithLegacy := keySet.Signing[legacyKID]
+	assert.Assert(t, !signsWithLegacy)
+	assert.Assert(t, is.Contains(keySet.Verification, legacyKID))
 }
 
 // TestKeyDirLegacyULIDFilenameKeptForVerification pins the upgrade path: tokens signed
@@ -367,38 +369,38 @@ func TestKeyDirLegacyULIDFilenameKeptForVerification(t *testing.T) {
 	old.Keys = map[string]string{legacyULID: legacyPath}
 
 	oldTM, err := tokens.New(old)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	issued, _, err := oldTM.CreateTokenPair(testClaims())
-	require.NoError(t, err)
-	require.Equal(t, legacyULID, tokenKID(t, issued))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(legacyULID, tokenKID(t, issued)))
 
 	// the new cert-backed pair takes over signing; the legacy file stays in the dir
 	primaryKID := writeKeyWithCert(t, dir, "primary", now.Add(-2*time.Hour), 90*day)
 
 	keySet, healthy, err := keySetFromKeyDir(context.Background(), baseConfig(), dir, nil, noopKeyArchive{})
-	require.NoError(t, err)
-	require.True(t, healthy)
-	require.Equal(t, primaryKID, keySet.KID)
-	require.Contains(t, keySet.Verification, legacyULID)
+	assert.NilError(t, err)
+	assert.Assert(t, healthy)
+	assert.Assert(t, is.Equal(primaryKID, keySet.KID))
+	assert.Assert(t, is.Contains(keySet.Verification, legacyULID))
 
 	tm, err := tokens.NewWithKey(keySet.Signing[keySet.KID], baseConfig())
-	require.NoError(t, err)
-	require.NoError(t, tm.SetKeySet(keySet))
+	assert.NilError(t, err)
+	assert.NilError(t, tm.SetKeySet(keySet))
 
 	claims, err := tm.Verify(issued)
-	require.NoError(t, err)
-	require.Equal(t, "user", claims.Subject)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal("user", claims.Subject))
 
 	// the startup lane carries the legacy kid too, so tokens verify before the watcher runs
 	conf, err := tokenConfigFromKeyDir(baseConfig(), dir)
-	require.NoError(t, err)
-	require.Equal(t, primaryKID, conf.KID)
-	require.Equal(t, legacyPath, conf.Keys[legacyULID])
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(primaryKID, conf.KID))
+	assert.Assert(t, is.Equal(legacyPath, conf.Keys[legacyULID]))
 
 	boot, err := tokens.New(conf)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = boot.Verify(issued)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }

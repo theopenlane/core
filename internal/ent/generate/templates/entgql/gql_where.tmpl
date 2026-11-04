@@ -42,14 +42,16 @@ import (
 			{{ $comparableFields = list }}
 		{{ end }}
 	{{ end }}
+	{{- /* history where inputs only filter on the fields in genhelpers.historyWhereFields, matching PruneHistoryWhereInputs */}}
+	{{ $isHistory := hasSuffix $n.Name "History" }}
 	{{ range $f := filterFields $n.Fields (skipMode "where_input") }}
-		{{ if $f.Type.Comparable }}
+		{{ if and $f.Type.Comparable (or (not $isHistory) (isHistoryWhereField $f.Name)) }}
 			{{ $comparableFields = append $comparableFields $f }}
 		{{ end }}
 	{{ end }}
 	{{ $stringSliceFields := list }}
 	{{ range $f := filterFields $n.Fields (skipMode "where_input") }}
-		{{- if eq $f.Type.Ident "[]string" }}
+		{{- if and (eq $f.Type.Ident "[]string") (not $isHistory) }}
 			{{- $stringSliceFields = append $stringSliceFields $f }}
 		{{- end }}
 	{{ end }}

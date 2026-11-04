@@ -2,12 +2,10 @@ package interceptors
 
 import (
 	"context"
-	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	entintercept "github.com/theopenlane/core/v2/internal/ent/generated/intercept"
@@ -82,7 +80,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				s.Where(sql.ExprP("1=0"))
 			})
 
-			entity := pluralize.NewClient().Plural(strings.ToLower(q.Type()))
+			entity := listQueryName(q.Type())
 
 			path := graphql.GetPath(ctx)
 

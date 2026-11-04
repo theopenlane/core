@@ -12,8 +12,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v86"
 	"github.com/stripe/stripe-go/v86/webhook"
 	echo "github.com/theopenlane/echox"
@@ -29,6 +27,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 type webhookBinder struct {
@@ -67,8 +67,8 @@ func (b *webhookBinder) Bind(c echo.Context, i interface{}) error {
 	return nil
 }
 
-func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
-	t := suite.T()
+func TestWebhookReceiverHandler(t *testing.T) {
+	suite := suite.setupTest(t).withTestUsers()
 
 	ensureSecret := func(version string) {
 		if version == "" {
@@ -83,9 +83,9 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	suite.db.OrgSubscription.Create().
 		SetStripeSubscriptionStatus("active").
 		SetStripeSubscriptionID("PENDING_UPDATE").
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetStripeSubscriptionID(seedStripeSubscriptionID).
-		ExecX(testUser1.UserCtx)
+		ExecX(suite.testUser1.UserCtx)
 
 	moduleUser := suite.userBuilderWithInput(context.Background(), &userInput{
 		confirmedUser: true,
@@ -99,7 +99,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		SetOwnerID(moduleUser.OrganizationID).
 		SetStripeSubscriptionID(moduleSubscriptionID).
 		Save(moduleUser.UserCtx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	moduleItemSub := &stripe.Subscription{
 		ID:       moduleSubscriptionID,
@@ -125,7 +125,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 	}
 
 	jsonModuleItemSub, err := json.Marshal(moduleItemSub)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	jsonTrustCenterModuleSub, err := json.Marshal(&stripe.Subscription{
 		ID:       moduleSubscriptionID,
@@ -149,7 +149,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			},
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	jsonEmptyModuleSub, err := json.Marshal(&stripe.Subscription{
 		ID:       moduleSubscriptionID,
@@ -157,7 +157,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		Status:   stripe.SubscriptionStatusActive,
 		Items:    &stripe.SubscriptionItemList{},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	suite.registerTestHandler(http.MethodPost, "/webhook", suite.h.WebhookReceiverHandler)
 
@@ -172,11 +172,11 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 
 	sub := dataUpdate.Subscriptions.Data[0]
 	jsonDataUpdate, err := json.Marshal(sub)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	paymentUpdate := &stripe.PaymentMethod{ID: "pm_test_payment"}
 	jsonPaymentUpdate, err := json.Marshal(paymentUpdate)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	strPtr := func(s string) *string { return &s }
 	boolPtr := func(b bool) *bool { return &b }
@@ -484,7 +484,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			suite.orgSubscriptionMocks()
 
 			// internalCtx to skip checks on updating subs
-			internalCtx := auth.WithInternalOperationContext(testUser1.UserCtx)
+			internalCtx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 
 			suite.db.OrgSubscription.Update().
 				Where(orgsubscription.StripeSubscriptionID(seedStripeSubscriptionID)).
@@ -499,14 +499,14 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 
 			if tc.expectRevocation {
 				apiToken := suite.db.APIToken.Create().
-					SetOwnerID(testUser1.OrganizationID).
+					SetOwnerID(suite.testUser1.OrganizationID).
 					SetName("test_token").
 					SaveX(internalCtx)
 				apiTokenID = apiToken.ID
 
 				pat := suite.db.PersonalAccessToken.Create().
-					SetOwnerID(testUser1.ID).
-					AddOrganizationIDs(testUser1.OrganizationID).
+					SetOwnerID(suite.testUser1.ID).
+					AddOrganizationIDs(suite.testUser1.OrganizationID).
 					SetName("test_token").
 					SaveX(internalCtx)
 				patID = pat.ID
@@ -546,12 +546,12 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 			ensureSecret(string(tc.payload.APIVersion))
 			if tc.queryParams != "" {
 				values, err := url.ParseQuery(tc.queryParams)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 				ensureSecret(values.Get("api_version"))
 			}
 
 			payloadBytes, err := json.Marshal(tc.payload)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			signedPayload := webhook.GenerateTestSignedPayload(&webhook.UnsignedPayload{
 				Payload: payloadBytes,
@@ -578,41 +578,41 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 
 			res := recorder.Result()
 			bodyBytes, readErr := io.ReadAll(res.Body)
-			require.NoError(t, readErr)
+			assert.NilError(t, readErr)
 
 			if recorder.Code != tc.expectedStatus {
 				t.Fatalf("expected status %d got %d, response: %s", tc.expectedStatus, recorder.Code, string(bodyBytes))
 			}
 
-			require.NoError(t, res.Body.Close())
+			assert.NilError(t, res.Body.Close())
 
 			if tc.expectRevocation && tc.expectedStatus == http.StatusOK {
 				sub, err := suite.db.OrgSubscription.Query().
 					Where(orgsubscription.StripeSubscriptionID(seedStripeSubscriptionID)).
-					Only(testUser1.UserCtx)
-				require.NoError(t, err)
-				assert.False(t, sub.Active)
+					Only(suite.testUser1.UserCtx)
+				assert.NilError(t, err)
+				assert.Check(t, !sub.Active)
 
-				apiToken, err := suite.db.APIToken.Get(testUser1.UserCtx, apiTokenID)
-				require.NoError(t, err)
-				require.False(t, apiToken.IsActive)
-				require.NotEmpty(t, apiToken.RevokedBy)
-				require.NotEmpty(t, apiToken.RevokedAt)
-				require.NotEmpty(t, apiToken.RevokedReason)
+				apiToken, err := suite.db.APIToken.Get(suite.testUser1.UserCtx, apiTokenID)
+				assert.NilError(t, err)
+				assert.Assert(t, !apiToken.IsActive)
+				assert.Assert(t, apiToken.RevokedBy != nil && *apiToken.RevokedBy != "")
+				assert.Assert(t, apiToken.RevokedAt != nil && !apiToken.RevokedAt.IsZero())
+				assert.Assert(t, apiToken.RevokedReason != nil && *apiToken.RevokedReason != "")
 				// Allow for clock granularity; avoid flaking on exact timestamp equality.
-				assert.True(t, apiToken.ExpiresAt.Before(time.Now().Add(time.Second)))
+				assert.Check(t, apiToken.ExpiresAt.Before(time.Now().Add(time.Second)))
 
-				pat, err := suite.db.PersonalAccessToken.Get(testUser1.UserCtx, patID)
-				require.NoError(t, err)
-				require.Len(t, pat.Edges.Organizations, 0)
+				pat, err := suite.db.PersonalAccessToken.Get(suite.testUser1.UserCtx, patID)
+				assert.NilError(t, err)
+				assert.Assert(t, is.Len(pat.Edges.Organizations, 0))
 			}
 
 			if tc.expectProcessed != nil {
 				exists, err := suite.db.Event.Query().
 					Where(entEvent.IDEQ(tc.payload.ID)).
-					Exist(testUser1.UserCtx)
-				require.NoError(t, err)
-				assert.Equal(t, *tc.expectProcessed, exists)
+					Exist(suite.testUser1.UserCtx)
+				assert.NilError(t, err)
+				assert.Check(t, is.DeepEqual(*tc.expectProcessed, exists))
 			}
 
 			if tc.expectModuleEnabled != nil {
@@ -623,8 +623,8 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 						orgmodule.ModuleEQ(syncedModule),
 					).
 					Exist(moduleUser.UserCtx)
-				require.NoError(t, err)
-				assert.Equal(t, *tc.expectModuleEnabled, moduleExists)
+				assert.NilError(t, err)
+				assert.Check(t, is.DeepEqual(*tc.expectModuleEnabled, moduleExists))
 
 				tupleExists, err := suite.sharedFGAClient.CheckAccess(context.Background(), fgax.AccessCheck{
 					SubjectID:   moduleUser.OrganizationID,
@@ -633,8 +633,8 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					ObjectID:    syncedModule.String(),
 					Relation:    entitlements.TupleRelation,
 				})
-				require.NoError(t, err)
-				assert.Equal(t, *tc.expectModuleEnabled, tupleExists)
+				assert.NilError(t, err)
+				assert.Check(t, is.DeepEqual(*tc.expectModuleEnabled, tupleExists))
 			}
 
 			if tc.expectTrustCenter {
@@ -644,21 +644,21 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 					WithPreviewSetting().
 					WithWatermarkConfig().
 					Only(moduleUser.UserCtx)
-				require.NoError(t, err)
+				assert.NilError(t, err)
 
 				liveSetting := createdTrustCenter.Edges.Setting
-				require.NotNil(t, liveSetting)
-				assert.Equal(t, createdTrustCenter.ID, liveSetting.TrustCenterID)
-				assert.Equal(t, enums.TrustCenterEnvironmentLive, liveSetting.Environment)
+				assert.Assert(t, liveSetting != nil)
+				assert.Check(t, is.DeepEqual(createdTrustCenter.ID, liveSetting.TrustCenterID))
+				assert.Check(t, is.DeepEqual(enums.TrustCenterEnvironmentLive, liveSetting.Environment))
 
 				previewSetting := createdTrustCenter.Edges.PreviewSetting
-				require.NotNil(t, previewSetting)
-				assert.Equal(t, createdTrustCenter.ID, previewSetting.TrustCenterID)
-				assert.Equal(t, enums.TrustCenterEnvironmentPreview, previewSetting.Environment)
-				assert.NotEqual(t, liveSetting.ID, previewSetting.ID)
+				assert.Assert(t, previewSetting != nil)
+				assert.Check(t, is.DeepEqual(createdTrustCenter.ID, previewSetting.TrustCenterID))
+				assert.Check(t, is.DeepEqual(enums.TrustCenterEnvironmentPreview, previewSetting.Environment))
+				assert.Check(t, liveSetting.ID != previewSetting.ID)
 
-				require.NotNil(t, createdTrustCenter.Edges.WatermarkConfig)
-				assert.Equal(t, createdTrustCenter.ID, createdTrustCenter.Edges.WatermarkConfig.TrustCenterID)
+				assert.Assert(t, createdTrustCenter.Edges.WatermarkConfig != nil)
+				assert.Check(t, is.DeepEqual(createdTrustCenter.ID, createdTrustCenter.Edges.WatermarkConfig.TrustCenterID))
 			}
 		})
 	}

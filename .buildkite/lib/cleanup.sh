@@ -72,7 +72,26 @@ prune_cache_until_below() {
     disk_below_threshold
 }
 
-# free_disk_to_threshold prunes the go build, golangci-lint, and go module download caches in that order until disk usage is under the threshold
+# prune_docker_until_below removes unused images and build cache oldest first until disk usage is under the threshold, returning 1 if it never gets there
+prune_docker_until_below() {
+    local hours
+
+    command -v docker >/dev/null 2>&1 || return 1
+
+    # until filters on image creation time, so stop at a day to keep a freshly pulled build image a waiting job is about to run
+    for hours in 168 72 24; do
+        disk_below_threshold && return 0
+
+        echo "🖼️  Removing unused docker images and build cache older than ${hours}h..."
+        docker image prune -a -f --filter "until=${hours}h" >/dev/null 2>&1 || true
+        docker builder prune -f --filter "until=${hours}h" >/dev/null 2>&1 || true
+    done
+
+    disk_below_threshold
+}
+
+# free_disk_to_threshold prunes docker, then the golangci-lint and go module download caches, then the go build cache until disk usage is under the threshold
+# the go build cache goes last because a cold one costs the most to rebuild
 free_disk_to_threshold() {
     local locked=false
 
@@ -84,11 +103,13 @@ free_disk_to_threshold() {
         flock -w 600 9 && locked=true
     fi
 
+    prune_docker_unused
+
     # go only reads module zips when extracting, the extracted module trees stay since running builds read them
-    prune_cache_until_below "🔍 Go build" "$GO_BUILD_CACHE" ||
+    prune_docker_until_below ||
         prune_cache_until_below "🔍 Golangci-lint" "$GOLANGCI_LINT_CACHE_DIR" ||
         prune_cache_until_below "📦 Go module download" "$GO_MOD_CACHE/cache/download" "*.zip" ||
-        prune_docker_unused
+        prune_cache_until_below "🔍 Go build" "$GO_BUILD_CACHE"
 
     if [[ "$locked" == true ]]; then
         flock -u 9

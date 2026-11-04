@@ -71,6 +71,13 @@ func (h *Handler) OauthRegister(ctx echo.Context) error {
 		}
 	}
 
+	switch {
+	case user.Edges.Setting.IsTfaEnabled:
+		return h.startTFAAuthentication(ctx, user.ID)
+	case orgStatus != nil && orgStatus.OrgTFAEnforced:
+		return h.startTFAEnrollment(ctx, user)
+	}
+
 	// create claims for verified user, with the user as the caller so the org access check runs
 	authData, err := h.AuthManager.GenerateOauthAuthSession(setAuthenticatedContext(ctxWithToken, user), ctx.Response().Writer, user, *in)
 	if err != nil {

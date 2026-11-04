@@ -39,8 +39,7 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 
 	numAdminControls := 5
 	adminControlIDs := []string{}
-	for range numAdminControls {
-		control := (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	for _, control := range (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNewBulk(th.SharedSystemAdminUser.UserCtx, t, numAdminControls) {
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 
@@ -132,8 +131,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 
 	numControls := 5
 	controlIDs := []string{}
-	for range numControls {
-		control := (&th.ControlBuilder{Client: suite.Client}).MustNew(user.UserCtx, t)
+	for _, control := range (&th.ControlBuilder{Client: suite.Client}).MustNewBulk(user.UserCtx, t, numControls) {
 		controlIDs = append(controlIDs, control.ID)
 	}
 
@@ -149,8 +147,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 
 	numAdminControls := 5
 	adminControlIDs := []string{}
-	for range numAdminControls {
-		control := (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	for _, control := range (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNewBulk(th.SharedSystemAdminUser.UserCtx, t, numAdminControls) {
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 

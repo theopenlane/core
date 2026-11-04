@@ -10,8 +10,6 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -24,6 +22,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/pkg/middleware/impersonation"
 	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // supportTestConfig returns a SupportAccessConfig pointed at the given mock OIDC server, with a known
@@ -50,21 +50,21 @@ func (suite *HandlerTestSuite) createConsentingOrg(ctx context.Context) *ent.Org
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		AllowSupportAccess: lo.ToPtr(true),
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
 
 	return org
 }
 
-func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
-	t := suite.T()
+func TestSupportAccessLoginAndCallback(t *testing.T) {
+	suite := suite.setupTest(t).withTestUsers()
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 	suite.registerTestHandler("POST", "v1/support/callback", suite.h.SupportCallbackHandler)
@@ -91,17 +91,17 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 			oidc := newMockOIDCServer(t,
 				withExpectedCode("code123"),
 				withClientSecret("secret"),
-				withUserInfo(testUser1.UserInfo.Email, "Support Engineer", ""),
+				withUserInfo(suite.testUser1.UserInfo.Email, "Support Engineer", ""),
 			)
 			defer oidc.Close()
 
 			// configure support access on the handler and restore afterwards so other tests are unaffected
 			original := suite.h.SupportAccessConfig
 			suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
-			suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(testUser1.UserInfo.Email, "@", 2)[1]
+			suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(suite.testUser1.UserInfo.Email, "@", 2)[1]
 			defer func() { suite.h.SupportAccessConfig = original }()
 
-			ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+			ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 			ctx = ent.NewContext(ctx, suite.db)
 
 			org := suite.createConsentingOrg(ctx)
@@ -119,12 +119,12 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 			loginRec := httptest.NewRecorder()
 			suite.e.ServeHTTP(loginRec, loginReq)
 
-			require.Equal(t, http.StatusOK, loginRec.Code)
+			assert.Assert(t, is.Equal(http.StatusOK, loginRec.Code))
 
 			var loginOut models.LoginResponse
-			require.NoError(t, json.NewDecoder(loginRec.Body).Decode(&loginOut))
-			assert.True(t, loginOut.Success)
-			assert.NotEmpty(t, loginOut.RedirectURI, "first factor should return the identity provider redirect")
+			assert.NilError(t, json.NewDecoder(loginRec.Body).Decode(&loginOut))
+			assert.Check(t, loginOut.Success)
+			assert.Check(t, len(loginOut.RedirectURI) > 0, "first factor should return the identity provider redirect")
 
 			// collect the support cookies set by the first factor
 			cookieParts := []string{}
@@ -139,7 +139,7 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 				}
 			}
 
-			require.NotEmpty(t, state, "support_state cookie should be set")
+			assert.Assert(t, len(state) > 0, "support_state cookie should be set")
 
 			// second factor: complete the identity provider exchange
 			cbBody, _ := json.Marshal(models.SupportCallbackRequest{Code: "code123", State: state})
@@ -149,29 +149,29 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 			cbRec := httptest.NewRecorder()
 			suite.e.ServeHTTP(cbRec, cbReq)
 
-			require.Equal(t, http.StatusOK, cbRec.Code)
+			assert.Assert(t, is.Equal(http.StatusOK, cbRec.Code))
 
 			var cbOut models.SupportAccessResponse
-			require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
-			assert.True(t, cbOut.Success)
-			assert.NotEmpty(t, cbOut.Token)
-			assert.Equal(t, org.ID, cbOut.OrganizationID)
-			assert.Equal(t, testUser1.UserInfo.Email, cbOut.Impersonator)
+			assert.NilError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
+			assert.Check(t, cbOut.Success)
+			assert.Check(t, len(cbOut.Token) > 0)
+			assert.Check(t, is.DeepEqual(org.ID, cbOut.OrganizationID))
+			assert.Check(t, is.DeepEqual(suite.testUser1.UserInfo.Email, cbOut.Impersonator))
 
 			// the minted token must carry both identities: the virtual support user and the individual
 			claims, err := suite.h.TokenManager.ValidateImpersonationToken(context.Background(), cbOut.Token)
-			require.NoError(t, err)
-			assert.Equal(t, auth.SupportSubjectID, claims.UserID, "target is the virtual support identity")
-			assert.Equal(t, testUser1.ID, claims.ImpersonatorID, "impersonator is the individual from the IdP")
-			assert.Equal(t, "support", claims.Type)
-			assert.Equal(t, org.ID, claims.OrgID)
-			assert.Equal(t, tc.expectedReason, claims.Reason)
+			assert.NilError(t, err)
+			assert.Check(t, is.DeepEqual(auth.SupportSubjectID, claims.UserID), "target is the virtual support identity")
+			assert.Check(t, is.DeepEqual(suite.testUser1.ID, claims.ImpersonatorID), "impersonator is the individual from the IdP")
+			assert.Check(t, is.Equal("support", claims.Type))
+			assert.Check(t, is.DeepEqual(org.ID, claims.OrgID))
+			assert.Check(t, is.DeepEqual(tc.expectedReason, claims.Reason))
 		})
 	}
 }
 
-func (suite *HandlerTestSuite) TestSupportAccessRejectsWrongPassword() {
-	t := suite.T()
+func TestSupportAccessRejectsWrongPassword(t *testing.T) {
+	suite := suite.setupTest(t).withTestUsers()
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 
@@ -182,7 +182,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsWrongPassword() {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -198,11 +198,11 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsWrongPassword() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusUnauthorized, rec.Code)
+	assert.Check(t, is.Equal(http.StatusUnauthorized, rec.Code))
 }
 
-func (suite *HandlerTestSuite) TestSupportAccessRejectsNonConsentingOrg() {
-	t := suite.T()
+func TestSupportAccessRejectsNonConsentingOrg(t *testing.T) {
+	suite := suite.setupTest(t).withTestUsers()
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 
@@ -213,20 +213,20 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsNonConsentingOrg() {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 
 	// org that has NOT consented to support access
 	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
 	}).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
+	assert.NilError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
 
 	body, _ := json.Marshal(models.LoginRequest{
 		Username:             "support@theopenlane.io",
@@ -240,13 +240,13 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsNonConsentingOrg() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	assert.Equal(t, http.StatusForbidden, rec.Code)
+	assert.Check(t, is.Equal(http.StatusForbidden, rec.Code))
 }
 
 // TestSupportAccessRejectsDomainMismatch ensures the second factor rejects an individual outside the
 // configured domain even when the first factor and consent succeed
-func (suite *HandlerTestSuite) TestSupportAccessRejectsDomainMismatch() {
-	t := suite.T()
+func TestSupportAccessRejectsDomainMismatch(t *testing.T) {
+	suite := suite.setupTest(t).withTestUsers()
 
 	suite.registerTestHandler("POST", "v1/login", suite.h.LoginHandler)
 	suite.registerTestHandler("POST", "v1/support/callback", suite.h.SupportCallbackHandler)
@@ -263,7 +263,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsDomainMismatch() {
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
 	defer func() { suite.h.SupportAccessConfig = original }()
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -277,7 +277,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsDomainMismatch() {
 	loginReq.Header.Set("Content-Type", "application/json")
 	loginRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(loginRec, loginReq)
-	require.Equal(t, http.StatusOK, loginRec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, loginRec.Code))
 
 	cookieParts := []string{}
 	var state string
@@ -298,7 +298,7 @@ func (suite *HandlerTestSuite) TestSupportAccessRejectsDomainMismatch() {
 	cbRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(cbRec, cbReq)
 
-	assert.Equal(t, http.StatusForbidden, cbRec.Code)
+	assert.Check(t, is.Equal(http.StatusForbidden, cbRec.Code))
 }
 
 // supportCallerContext resolves an issued support token through the impersonation middleware exactly as
@@ -317,7 +317,7 @@ func (suite *HandlerTestSuite) supportCallerContext(token string) context.Contex
 		resolved = c.Request().Context()
 		return nil
 	})(c)
-	require.NoError(suite.T(), err)
+	assert.NilError(suite.T(), err)
 
 	return ent.NewContext(resolved, suite.db)
 }
@@ -331,14 +331,14 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 	oidc := newMockOIDCServer(t,
 		withExpectedCode("code123"),
 		withClientSecret("secret"),
-		withUserInfo(testUser1.UserInfo.Email, "Support Engineer", ""),
+		withUserInfo(suite.testUser1.UserInfo.Email, "Support Engineer", ""),
 	)
 	defer oidc.Close()
 
 	suite.h.SupportAccessConfig = supportTestConfig(oidc.server.URL)
-	suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(testUser1.UserInfo.Email, "@", 2)[1]
+	suite.h.SupportAccessConfig.AllowedDomain = strings.SplitN(suite.testUser1.UserInfo.Email, "@", 2)[1]
 
-	ctx := auth.WithInternalOperationContext(testUser1.UserCtx)
+	ctx := auth.WithInternalOperationContext(suite.testUser1.UserCtx)
 	ctx = ent.NewContext(ctx, suite.db)
 	org := suite.createConsentingOrg(ctx)
 
@@ -352,7 +352,7 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 	loginReq.Header.Set("Content-Type", "application/json")
 	loginRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(loginRec, loginReq)
-	require.Equal(t, http.StatusOK, loginRec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, loginRec.Code))
 
 	cookieParts := []string{}
 	var state string
@@ -372,19 +372,19 @@ func (suite *HandlerTestSuite) supportSessionToken(t *testing.T) (string, *ent.O
 	cbReq.Header.Set("Cookie", strings.Join(cookieParts, "; "))
 	cbRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(cbRec, cbReq)
-	require.Equal(t, http.StatusOK, cbRec.Code)
+	assert.Assert(t, is.Equal(http.StatusOK, cbRec.Code))
 
 	var cbOut models.SupportAccessResponse
-	require.NoError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
-	require.NotEmpty(t, cbOut.Token)
+	assert.NilError(t, json.NewDecoder(cbRec.Body).Decode(&cbOut))
+	assert.Assert(t, len(cbOut.Token) > 0)
 
 	return cbOut.Token, org
 }
 
 // TestSupportAccessCanQueryOrgData confirms the issued support token can read org-scoped data within the
 // consented organization, without any privacy bypass in the request context
-func (suite *HandlerTestSuite) TestSupportAccessCanQueryOrgData() {
-	t := suite.T()
+func TestSupportAccessCanQueryOrgData(t *testing.T) {
+	suite := suite.setupTest(t).withTestUsers()
 
 	original := suite.h.SupportAccessConfig
 	defer func() { suite.h.SupportAccessConfig = original }()
@@ -396,14 +396,14 @@ func (suite *HandlerTestSuite) TestSupportAccessCanQueryOrgData() {
 	setting, err := suite.db.OrganizationSetting.Query().
 		Where(organizationsetting.OrganizationID(org.ID)).
 		Only(supportCtx)
-	require.NoError(t, err)
-	assert.True(t, setting.AllowSupportAccess, "support should read the consenting org setting")
+	assert.NilError(t, err)
+	assert.Check(t, setting.AllowSupportAccess, "support should read the consenting org setting")
 }
 
 // TestSupportAccessCanUpdateOrgData confirms the issued support token can mutate org-scoped data within
 // the consented organization, without any privacy bypass in the request context
-func (suite *HandlerTestSuite) TestSupportAccessCanUpdateOrgData() {
-	t := suite.T()
+func TestSupportAccessCanUpdateOrgData(t *testing.T) {
+	suite := suite.setupTest(t).withTestUsers().withAPIClient()
 
 	original := suite.h.SupportAccessConfig
 	defer func() { suite.h.SupportAccessConfig = original }()
@@ -414,13 +414,13 @@ func (suite *HandlerTestSuite) TestSupportAccessCanUpdateOrgData() {
 
 	// ensure org interceptor works for support
 	orgMembers, err := suite.api.GetOrgMembersByOrgID(supportCtx, &testclient.OrgMembershipWhereInput{OrganizationID: &org.ID})
-	require.NoError(t, err)
-	assert.NotEmpty(t, orgMembers.OrgMemberships.Edges)
+	assert.NilError(t, err)
+	assert.Check(t, len(orgMembers.OrgMemberships.Edges) > 0)
 
 	resp, err := suite.api.GetOrganizationSettings(supportCtx, testclient.OrganizationSettingWhereInput{})
-	require.NoError(t, err)
-	assert.NotEmpty(t, resp.OrganizationSettings.Edges)
-	assert.Len(t, resp.OrganizationSettings.Edges, 1)
+	assert.NilError(t, err)
+	assert.Check(t, len(resp.OrganizationSettings.Edges) > 0)
+	assert.Check(t, is.Len(resp.OrganizationSettings.Edges, 1))
 
 	// set for other tests
 	setting := resp.OrganizationSettings.Edges[0].Node
@@ -430,15 +430,15 @@ func (suite *HandlerTestSuite) TestSupportAccessCanUpdateOrgData() {
 	_, err = suite.api.UpdateOrganizationSetting(supportCtx, setting.ID, testclient.UpdateOrganizationSettingInput{
 		BillingContact: &updatedContact,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	got, err := suite.db.OrganizationSetting.Get(supportCtx, setting.ID)
-	require.NoError(t, err)
-	assert.Equal(t, updatedContact, got.BillingContact, "support update should persist to the org setting")
+	assert.NilError(t, err)
+	assert.Check(t, is.DeepEqual(updatedContact, got.BillingContact), "support update should persist to the org setting")
 
 	// create task to ensure assigner doesn't error on constraint
 	_, err = suite.api.CreateTask(supportCtx, testclient.CreateTaskInput{
 		Title: "new task from support user",
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }

@@ -9,24 +9,24 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
-func (suite *HandlerTestSuite) TestACMESolverHandler() {
-	t := suite.T()
+func TestACMESolverHandler(t *testing.T) {
+	suite := suite.setupParallelTest(t)
 
 	// setup handler
 	suite.registerTestHandler("GET", "/.well-known/acme-challenge/:path", suite.h.ACMESolverHandler)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
-	ctx := auth.WithOrgInternalCaller(ec, testUser1.OrganizationID)
+	ctx := auth.WithOrgInternalCaller(ec, suite.testUser1.OrganizationID)
 
 	// Test data
 	testPath := gofakeit.UUID()
@@ -42,9 +42,9 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 		SetAcmeChallengePath(testPath).
 		SetExpectedAcmeChallengeValue(testValue).
 		SetAcmeChallengeStatus(enums.SSLVerificationStatusInitializing).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		Exec(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// Create a deleted DNS verification record (should not be found)
 	err = suite.db.DNSVerification.Create().
@@ -55,11 +55,11 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 		SetAcmeChallengePath("deleted-path").
 		SetExpectedAcmeChallengeValue("deleted-value").
 		SetAcmeChallengeStatus(enums.SSLVerificationStatusInitializing).
-		SetOwnerID(testUser1.OrganizationID).
+		SetOwnerID(suite.testUser1.OrganizationID).
 		SetDeletedAt(time.Now()).
 		SetDeletedBy("test").
 		Exec(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name           string
@@ -104,7 +104,7 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			assert.Equal(t, tc.expectedStatus, recorder.Code)
+			assert.Check(t, is.Equal(tc.expectedStatus, recorder.Code))
 
 			if tc.expectError {
 				// For error cases, check that we get an error response
@@ -112,12 +112,12 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 				if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
 					t.Error("error parsing error response", err)
 				}
-				require.NotNil(t, out)
-				assert.False(t, out.Success)
+				assert.Assert(t, out != nil)
+				assert.Check(t, !out.Success)
 			} else {
 				// For success cases, check that we get the expected ACME challenge value as plain text
 				body := recorder.Body.String()
-				assert.Equal(t, tc.expectedValue, body)
+				assert.Check(t, is.DeepEqual(tc.expectedValue, body))
 			}
 		})
 	}

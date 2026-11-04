@@ -775,7 +775,10 @@ func (_c *InternalPolicyHistoryCreate) defaults() error {
 		_c.mutation.SetApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ReviewDue(); !ok {
-		v := internalpolicyhistory.DefaultReviewDue
+		if internalpolicyhistory.DefaultReviewDue == nil {
+			return fmt.Errorf("historygenerated: uninitialized internalpolicyhistory.DefaultReviewDue (forgotten import historygenerated/runtime?)")
+		}
+		v := internalpolicyhistory.DefaultReviewDue()
 		_c.mutation.SetReviewDue(v)
 	}
 	if _, ok := _c.mutation.ReviewFrequency(); !ok {

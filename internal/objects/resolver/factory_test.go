@@ -5,7 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/objects/resolver"
@@ -30,19 +31,19 @@ func TestResolveProviderUsesConfigWhenCredentialSyncDisabled(t *testing.T) {
 	}
 
 	_, providerResolver, err := resolver.Build(config)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	ctx := ent.NewContext(context.Background(), &ent.Client{})
 
 	resolution := providerResolver.Resolve(ctx)
-	assert.True(t, resolution.IsPresent(), "expected resolver to return a result")
+	assert.Check(t, resolution.IsPresent(), "expected resolver to return a result")
 
 	resolved := resolution.MustGet()
-	assert.Equal(t, "test-access", resolved.Output.AccessKeyID)
-	assert.Equal(t, "test-secret", resolved.Output.SecretAccessKey)
-	assert.NotNil(t, resolved.Config)
-	assert.Equal(t, "test-bucket", resolved.Config.Bucket)
-	assert.Equal(t, "us-west-2", resolved.Config.Region)
+	assert.Check(t, is.Equal("test-access", resolved.Output.AccessKeyID))
+	assert.Check(t, is.Equal("test-secret", resolved.Output.SecretAccessKey))
+	assert.Check(t, resolved.Config != nil)
+	assert.Check(t, is.Equal("test-bucket", resolved.Config.Bucket))
+	assert.Check(t, is.Equal("us-west-2", resolved.Config.Region))
 }
 
 func TestNewProviderDisk(t *testing.T) {
@@ -51,22 +52,22 @@ func TestNewProviderDisk(t *testing.T) {
 	provider, err := resolver.NewProvider(context.Background(), storage.DiskProvider, storage.Providers{
 		Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: bucket}},
 	})
-	assert.NoError(t, err)
-	assert.Equal(t, storage.DiskProvider, provider.ProviderType())
+	assert.Check(t, err)
+	assert.Check(t, is.Equal(storage.DiskProvider, provider.ProviderType()))
 }
 
 func TestNewProviderDisabled(t *testing.T) {
 	provider, err := resolver.NewProvider(context.Background(), storage.DiskProvider, storage.Providers{
 		Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Bucket: t.TempDir()}},
 	})
-	assert.Error(t, err)
-	assert.Nil(t, provider)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Nil(provider))
 }
 
 func TestNewProviderUnknownType(t *testing.T) {
 	provider, err := resolver.NewProvider(context.Background(), storage.ProviderType("ftp"), storage.Providers{
 		Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: "records"}},
 	})
-	assert.Error(t, err)
-	assert.Nil(t, provider)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.Nil(provider))
 }

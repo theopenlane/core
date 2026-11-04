@@ -3,7 +3,8 @@ package workflows
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestStringField verifies string field extraction behavior
@@ -16,30 +17,30 @@ func TestStringField(t *testing.T) {
 	}
 
 	value, err := StringField(sample{Name: "alpha"}, "name")
-	assert.NoError(t, err)
-	assert.Equal(t, "alpha", value)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal("alpha", value))
 
 	value, err = StringField(&sample{Name: "alpha"}, "name")
-	assert.NoError(t, err)
-	assert.Equal(t, "alpha", value)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal("alpha", value))
 
 	value, err = StringField(sample{Name: "alpha"}, "missing")
-	assert.NoError(t, err)
-	assert.Equal(t, "", value)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal("", value))
 
 	value, err = StringField(sample{Name: "alpha"}, "count")
-	assert.NoError(t, err)
-	assert.Equal(t, "", value)
+	assert.Check(t, err)
+	assert.Check(t, is.Equal("", value))
 
 	_, err = StringField(123, "name")
-	assert.ErrorIs(t, err, ErrStringFieldUnmarshal)
+	assert.Check(t, is.ErrorIs(err, ErrStringFieldUnmarshal))
 
 	var nilSample *sample
 	_, err = StringField(nilSample, "name")
-	assert.ErrorIs(t, err, ErrStringFieldNil)
+	assert.Check(t, is.ErrorIs(err, ErrStringFieldNil))
 
 	_, err = StringField(make(chan int), "name")
-	assert.ErrorIs(t, err, ErrStringFieldMarshal)
+	assert.Check(t, is.ErrorIs(err, ErrStringFieldMarshal))
 }
 
 // TestStringSliceField verifies string slice extraction behavior
@@ -50,27 +51,27 @@ func TestStringSliceField(t *testing.T) {
 	}
 
 	value, err := StringSliceField(sample{Tags: []string{"a", "b"}}, "tags")
-	assert.NoError(t, err)
-	assert.Equal(t, []string{"a", "b"}, value)
+	assert.Check(t, err)
+	assert.Check(t, is.DeepEqual([]string{"a", "b"}, value))
 
 	value, err = StringSliceField(sample{Tags: nil}, "tags")
-	assert.NoError(t, err)
-	assert.Nil(t, value)
+	assert.Check(t, err)
+	assert.Check(t, is.Nil(value))
 
 	value, err = StringSliceField(sample{Tags: []string{"a"}}, "missing")
-	assert.NoError(t, err)
-	assert.Nil(t, value)
+	assert.Check(t, err)
+	assert.Check(t, is.Nil(value))
 
 	_, err = StringSliceField(123, "tags")
-	assert.ErrorIs(t, err, ErrStringFieldUnmarshal)
+	assert.Check(t, is.ErrorIs(err, ErrStringFieldUnmarshal))
 
 	_, err = StringSliceField(nil, "tags")
-	assert.ErrorIs(t, err, ErrStringFieldNil)
+	assert.Check(t, is.ErrorIs(err, ErrStringFieldNil))
 
 	type badSample struct {
 		// Tags holds invalid tag values for testing
 		Tags []any `json:"tags"`
 	}
 	_, err = StringSliceField(badSample{Tags: []any{"ok", 123}}, "tags")
-	assert.ErrorIs(t, err, ErrStringSliceFieldInvalid)
+	assert.Check(t, is.ErrorIs(err, ErrStringSliceFieldInvalid))
 }

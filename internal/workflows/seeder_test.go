@@ -3,7 +3,8 @@ package workflows
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -17,34 +18,34 @@ func TestResolveSeedSchemaType(t *testing.T) {
 		},
 	}
 
-	require.Equal(t, "CampaignTarget", resolveSeedSchemaType("CampaignTarget", doc))
-	require.Equal(t, "Control", resolveSeedSchemaType("", doc))
+	assert.Assert(t, is.Equal("CampaignTarget", resolveSeedSchemaType("CampaignTarget", doc)))
+	assert.Assert(t, is.Equal("Control", resolveSeedSchemaType("", doc)))
 
 	doc.SchemaType = ""
-	require.Equal(t, enums.WorkflowObjectTypeEvidence.String(), resolveSeedSchemaType("", doc))
+	assert.Assert(t, is.Equal(enums.WorkflowObjectTypeEvidence.String(), resolveSeedSchemaType("", doc)))
 }
 
 func TestResolveSeedWorkflowKind(t *testing.T) {
-	require.Equal(t, enums.WorkflowKindApproval, resolveSeedWorkflowKind(enums.WorkflowKindApproval, models.WorkflowDefinitionDocument{}))
+	assert.Assert(t, is.Equal(enums.WorkflowKindApproval, resolveSeedWorkflowKind(enums.WorkflowKindApproval, models.WorkflowDefinitionDocument{})))
 
 	doc := models.WorkflowDefinitionDocument{WorkflowKind: enums.WorkflowKindLifecycle}
-	require.Equal(t, enums.WorkflowKindLifecycle, resolveSeedWorkflowKind("", doc))
+	assert.Assert(t, is.Equal(enums.WorkflowKindLifecycle, resolveSeedWorkflowKind("", doc)))
 
 	doc.WorkflowKind = ""
 	doc.Actions = []models.WorkflowAction{{Type: enums.WorkflowActionTypeApproval.String()}}
-	require.Equal(t, enums.WorkflowKindApproval, resolveSeedWorkflowKind("", doc))
+	assert.Assert(t, is.Equal(enums.WorkflowKindApproval, resolveSeedWorkflowKind("", doc)))
 
 	doc.Actions = []models.WorkflowAction{{Type: enums.WorkflowActionTypeReview.String()}}
-	require.Equal(t, enums.WorkflowKindLifecycle, resolveSeedWorkflowKind("", doc))
+	assert.Assert(t, is.Equal(enums.WorkflowKindLifecycle, resolveSeedWorkflowKind("", doc)))
 
 	doc.Actions = []models.WorkflowAction{{Type: enums.WorkflowActionTypeSendEmail.String()}}
-	require.Equal(t, enums.WorkflowKindNotification, resolveSeedWorkflowKind("", doc))
+	assert.Assert(t, is.Equal(enums.WorkflowKindNotification, resolveSeedWorkflowKind("", doc)))
 }
 
 func TestBoolOrDefault(t *testing.T) {
-	require.True(t, boolOrDefault(nil, true))
-	require.False(t, boolOrDefault(nil, false))
+	assert.Assert(t, boolOrDefault(nil, true))
+	assert.Assert(t, !boolOrDefault(nil, false))
 
 	value := true
-	require.True(t, boolOrDefault(&value, false))
+	assert.Assert(t, boolOrDefault(&value, false))
 }

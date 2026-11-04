@@ -1120,7 +1120,10 @@ func (_c *InternalPolicyCreate) defaults() error {
 		_c.mutation.SetApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ReviewDue(); !ok {
-		v := internalpolicy.DefaultReviewDue
+		if internalpolicy.DefaultReviewDue == nil {
+			return fmt.Errorf("generated: uninitialized internalpolicy.DefaultReviewDue (forgotten import generated/runtime?)")
+		}
+		v := internalpolicy.DefaultReviewDue()
 		_c.mutation.SetReviewDue(v)
 	}
 	if _, ok := _c.mutation.ReviewFrequency(); !ok {

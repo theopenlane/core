@@ -9,8 +9,9 @@ import (
 
 	"github.com/alicebob/miniredis/v2"
 	"github.com/redis/go-redis/v9"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/tokens"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func testArchive(t *testing.T) *redisKeyArchive {
@@ -20,7 +21,7 @@ func testArchive(t *testing.T) *redisKeyArchive {
 	client := redis.NewClient(&redis.Options{Addr: server.Addr()})
 
 	t.Cleanup(func() {
-		require.NoError(t, client.Close())
+		assert.NilError(t, client.Close())
 	})
 
 	return newRedisKeyArchive(client, time.Hour)
@@ -36,14 +37,14 @@ func TestKeyArchiveRoundTrip(t *testing.T) {
 	kid, _ := writeKey(t, dir, "key")
 
 	entries, err := scanKeyDir(dir)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
-	require.NoError(t, archive.Record(ctx, map[string]crypto.PublicKey{kid: entries[0].signer.Public()}))
+	assert.NilError(t, archive.Record(ctx, map[string]crypto.PublicKey{kid: entries[0].signer.Public()}))
 
 	loaded, err := archive.Load(ctx)
-	require.NoError(t, err)
-	require.Contains(t, loaded, kid)
-	require.Equal(t, entries[0].signer.Public(), loaded[kid])
+	assert.NilError(t, err)
+	assert.Assert(t, is.Contains(loaded, kid))
+	assert.Assert(t, is.DeepEqual(entries[0].signer.Public(), loaded[kid]))
 }
 
 func TestKeyArchiveKeepsRotatedKeyVerifiable(t *testing.T) {
@@ -57,34 +58,35 @@ func TestKeyArchiveKeepsRotatedKeyVerifiable(t *testing.T) {
 	oldKID := writeKeyWithCert(t, dir, "primary", now.Add(-30*day), 90*day)
 
 	keySet, _, err := keySetFromKeyDir(ctx, baseConfig(), dir, nil, archive)
-	require.NoError(t, err)
-	require.Equal(t, oldKID, keySet.KID)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(oldKID, keySet.KID))
 
 	tm, err := tokens.NewWithKey(keySet.Signing[oldKID], baseConfig())
-	require.NoError(t, err)
-	require.NoError(t, tm.SetKeySet(keySet))
+	assert.NilError(t, err)
+	assert.NilError(t, tm.SetKeySet(keySet))
 
 	issued, _, err := tm.CreateTokenPair(testClaims())
-	require.NoError(t, err)
-	require.Equal(t, oldKID, tokenKID(t, issued))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(oldKID, tokenKID(t, issued)))
 
 	// cert-manager replaces the key material at the same path, so the old private key is
 	// gone from disk entirely
 	newKID := writeKeyWithCert(t, dir, "primary", now.Add(-2*time.Hour), 90*day)
-	require.NotEqual(t, oldKID, newKID)
+	assert.Assert(t, oldKID != newKID)
 
 	rotated, _, err := keySetFromKeyDir(ctx, baseConfig(), dir, nil, archive)
-	require.NoError(t, err)
-	require.Equal(t, newKID, rotated.KID)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal(newKID, rotated.KID))
 
-	require.NotContains(t, rotated.Signing, oldKID)
-	require.Contains(t, rotated.Verification, oldKID)
+	_, signsWithOld := rotated.Signing[oldKID]
+	assert.Assert(t, !signsWithOld)
+	assert.Assert(t, is.Contains(rotated.Verification, oldKID))
 
-	require.NoError(t, tm.SetKeySet(rotated))
+	assert.NilError(t, tm.SetKeySet(rotated))
 
 	claims, err := tm.Verify(issued)
-	require.NoError(t, err)
-	require.Equal(t, "user", claims.Subject)
+	assert.NilError(t, err)
+	assert.Assert(t, is.Equal("user", claims.Subject))
 }
 
 // failingArchive stands in for redis being unreachable
@@ -108,5 +110,5 @@ func TestKeySetFromKeyDirFailsWhenArchiveUnavailable(t *testing.T) {
 	writeKeyWithCert(t, dir, "primary", time.Now().Add(-30*day), 90*day)
 
 	_, _, err := keySetFromKeyDir(context.Background(), baseConfig(), dir, nil, failingArchive{})
-	require.Error(t, err)
+	assert.Assert(t, err != nil)
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestResolveOwnerID(t *testing.T) {
@@ -23,4 +24,19 @@ func TestResolveOwnerID(t *testing.T) {
 
 	_, err = ResolveOwnerID(context.Background(), "")
 	assert.Check(t, errors.Is(err, auth.ErrNoAuthUser))
+}
+
+func TestPlural(t *testing.T) {
+	tests := map[string]string{
+		"control":      "controls",
+		"policy":       "policies",
+		"hush":         "hushes",
+		"action_plan":  "action_plans",
+		"organization": "organizations",
+	}
+
+	for word, expected := range tests {
+		assert.Check(t, is.Equal(expected, Plural(word)))
+		assert.Check(t, is.Equal(expected, Plural(word)))
+	}
 }

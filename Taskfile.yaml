@@ -33,6 +33,8 @@ env:
   TEST_DB_CONTAINER_EXPIRY: "20" # in minutes
   TEST_FGA_URL: "localhost:8080"
   ENV: config
+  # match the server, which runs in UTC
+  TZ: UTC
   # go build
   GOFLAGS: -buildvcs=false
   # for test container settings
@@ -92,17 +94,37 @@ tasks:
       - task: generate:openapi:smart
       - task: tidy
 
-  generate:checksums:ci:
-    desc: Generate with checksum tracking for CI optimization
+  generate:core:ci:
+    desc: CI check that ent and graphql generated code is up to date
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    cmds:
+      - task: generate:core
+      - task: tidy
+      - task: check:clean
+
+  generate:other:ci:
+    desc: CI check that catalog and onboarding generated code is up to date, openapi is covered by config:ci
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     deps:
       - task: generate:onboarding:smart
-      - task: generate:core
       - task: generate:catalog:smart
     cmds:
-      - task: generate:openapi:smart
       - task: tidy
+      - task: check:clean
+
+  check:clean:
+    desc: fails when generate left changes in the working tree
+    cmds:
+      - "git config --global --add safe.directory /workdir"
+      - |
+        status=$(git status --porcelain)
+        if [ -n "$status" ]; then
+        echo "detected git diff after running generate; please re-run tasks"
+        echo "$status"
+        exit 1
+        fi
 
   generate:core:
     desc: Run ent and graphql code generation (serial dependency chain)
@@ -121,8 +143,10 @@ tasks:
       - internal/ent/schema/**/*.go
       - internal/ent/generate/**/*.go
       - internal/ent/mixin/**/*.go
-      - internal/ent/templates/**/*
+      - internal/ent/generate/templates/**/*
       - internal/ent/taskrules/**/*.go
+      - common/enums/**/*.go
+      - exclude: '**/*_test.go'
     generates:
       - internal/ent/generated/**/*.go
       - internal/ent/entityops/**/*.go
@@ -161,6 +185,7 @@ tasks:
       - pkg/catalog/**/*.go
       - pkg/catalog/**/*.yaml
       - common/models/catalog.go
+      - exclude: '**/*_test.go'
     generates:
       - pkg/catalog/gencatalog/*.go
       - pkg/catalog/**/*.json
@@ -192,6 +217,7 @@ tasks:
     sources:
       - internal/httpserve/**/*.go
       - common/openapi/*.go
+      - exclude: internal/httpserve/**/*_test.go
     generates:
       - internal/httpserve/specs/openlane.openapi.json
       - internal/httpserve/specs/openlane.openapi.yaml
@@ -430,7 +456,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci']
     cmds:
-      - go run gotest.tools/gotestsum@latest --junitfile junit.xml --junitfile-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage.out -tags test
+      - go tool gotestsum --junitfile junit.xml --junitfile-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --format-icons hivis --rerun-fails=3 --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage.out -tags test
 
   go:testsum:ci:graph:
     desc: runs tests only graph tests using gotestsum for CI, sharded by BUILDKITE_PARALLEL_JOB / BUILDKITE_PARALLEL_JOB_COUNT
@@ -444,7 +470,7 @@ tasks:
         SHARDS="${BUILDKITE_PARALLEL_JOB_COUNT:-1}"
         TESTS=$(ls internal/graphapi/*_test.go | grep -v '/_' | xargs grep -hoE '^func Test[A-Za-z0-9_]+\(t \*testing\.T\)' | sed -E 's/^func (Test[^(]+).*/\1/' | sort | awk -v n="$SHARDS" -v i="$SHARD" 'NR % n == i' | paste -sd'|' -)
         echo "graphapi shard $SHARD of $SHARDS: $(echo "$TESTS" | tr '|' '\n' | grep -c .) tests"
-        go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile "junit-graph-${SHARD}.xml" --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -run "^(${TESTS})$" -timeout 20m -coverprofile="coverage-graph-${SHARD}.out" -tags test
+        go tool gotestsum --format standard-verbose --junitfile "junit-graph-${SHARD}.xml" --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/" --format-hide-empty-pkg --rerun-fails=3 --hide-summary output -- -run "^(${TESTS})$" -timeout 20m -coverprofile="coverage-graph-${SHARD}.out" -tags test
 
   go:testsum:ci:events:
     desc: runs only the event driven (listener + integrations) graphapi tests using gotestsum for CI
@@ -453,7 +479,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:events']
     cmds:
-      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-events.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/eventstest" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-events.out -tags test
+      - go tool gotestsum --format standard-verbose --junitfile junit-events.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/eventstest" --format-hide-empty-pkg --rerun-fails=3 --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-events.out -tags test
 
   go:testsum:ci:handlers:
     desc: runs only handlers tests using gotestsum for CI, sharded by BUILDKITE_PARALLEL_JOB / BUILDKITE_PARALLEL_JOB_COUNT
@@ -465,11 +491,9 @@ tasks:
       - |
         SHARD="${BUILDKITE_PARALLEL_JOB:-0}"
         SHARDS="${BUILDKITE_PARALLEL_JOB_COUNT:-1}"
-        FILES=$(ls internal/httpserve/handlers/*_test.go | grep -v '/_')
-        TESTS=$(echo "$FILES" | xargs grep -hoE '^func Test[A-Za-z0-9_]+\(t \*testing\.T\)' | sed -E 's/^func (Test[^(]+).*/\1/' | grep -vx TestHandlerTestSuite | sort | awk -v n="$SHARDS" -v i="$SHARD" 'NR % n == i' | paste -sd'|' -)
-        SUITE_TESTS=$(echo "$FILES" | xargs grep -hoE '^func \(suite \*HandlerTestSuite\) Test[A-Za-z0-9_]+' | sed -E 's/^.* (Test.*)$/\1/' | sort | awk -v n="$SHARDS" -v i="$SHARD" 'NR % n == i' | paste -sd'|' -)
-        echo "handlers shard $SHARD of $SHARDS: $(echo "$TESTS" | tr '|' '\n' | grep -c .) tests, $(echo "$SUITE_TESTS" | tr '|' '\n' | grep -c .) suite tests"
-        go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile "junit-handlers-${SHARD}.xml" --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -run "^(${TESTS}|TestHandlerTestSuite)$" -p 20 -timeout 20m -coverprofile="coverage-handlers-${SHARD}.out" -tags test -args -testify.m "^(${SUITE_TESTS})$"
+        TESTS=$(ls internal/httpserve/handlers/*_test.go | grep -v '/_' | xargs grep -hoE '^func Test[A-Za-z0-9_]+\(t \*testing\.T\)' | sed -E 's/^func (Test[^(]+).*/\1/' | sort | awk -v n="$SHARDS" -v i="$SHARD" 'NR % n == i' | paste -sd'|' -)
+        echo "handlers shard $SHARD of $SHARDS: $(echo "$TESTS" | tr '|' '\n' | grep -c .) tests"
+        go tool gotestsum --format standard-verbose --junitfile "junit-handlers-${SHARD}.xml" --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --hide-summary output -- -run "^(${TESTS})$" -p 20 -timeout 20m -coverprofile="coverage-handlers-${SHARD}.out" -tags test
 
   go:testsum:ci:no-api:
     desc: runs tests using gotestsum for CI
@@ -478,7 +502,14 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:no-api', 'testsum:ci:no-graph', 'go:testsum:ci:no-graph']
     cmds:
-      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-no-api.xml --junitfile-hide-empty-pkg --packages "$(go list ./... | grep -v /internal/graphapi | grep -v /internal/httpserve/handlers)" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-no-api.out -tags test
+      - |
+        # only packages with tests, -coverprofile would otherwise instrument every generated package
+        PACKAGES=$(go list -tags test -f '{{ `{{if or .TestGoFiles .XTestGoFiles}}{{.ImportPath}}{{end}}` }}' ./... | grep . | grep -v /internal/graphapi | grep -v /internal/httpserve/handlers)
+        if [ -z "$PACKAGES" ]; then
+          echo "no test packages found"
+          exit 1
+        fi
+        go tool gotestsum --format standard-verbose --junitfile junit-no-api.xml --junitfile-hide-empty-pkg --packages "$PACKAGES" --format-hide-empty-pkg --rerun-fails=3 --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-no-api.out -tags test
 
   go:testsum:ci:cover:
     desc: pushes test results to buildkite using gotestsum
@@ -668,14 +699,7 @@ tasks:
     cmds:
       - task: generate:ci
       - task: tidy
-      - "git config --global --add safe.directory /workdir"
-      - |
-        status=$(git status --porcelain)
-        if [ -n "$status" ]; then
-        echo "detected git diff after running generate; please re-run tasks"
-        echo "$status"
-        exit 1
-        fi
+      - task: check:clean
 
   clean:local:
     desc: cleans up core.db and openlane-cli local
@@ -793,5 +817,4 @@ tasks:
   generate:openapi:
     desc: Generate OpenAPI spec file
     cmds:
-      - go run ./internal/httpserve/specs/generate --emit-types
       - go run ./internal/httpserve/specs/generate

@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"golang.org/x/oauth2"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/iam/tokens"
 )
@@ -43,7 +43,7 @@ func testTokenManager(t *testing.T, key crypto.Signer) *tokens.TokenManager {
 		tokens.WithIssuer(testIssuer),
 		tokens.WithAudience(testIssuer),
 	))
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return manager
 }
@@ -57,8 +57,8 @@ func parseAssertion(t *testing.T, signed string, key crypto.Signer) jwt.MapClaim
 	token, err := jwt.ParseWithClaims(signed, claims, func(*jwt.Token) (any, error) {
 		return key.Public(), nil
 	}, jwt.WithValidMethods([]string{jwt.SigningMethodRS256.Alg()}))
-	require.NoError(t, err)
-	require.True(t, token.Valid)
+	assert.NilError(t, err)
+	assert.Assert(t, token.Valid)
 
 	return claims
 }
@@ -74,7 +74,7 @@ func testTokenSource(t *testing.T, key *rsa.PrivateKey, endpoint string) oauth2.
 		Scopes:         []string{testScope},
 		Endpoint:       endpoint,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	return source
 }
@@ -82,16 +82,16 @@ func testTokenSource(t *testing.T, key *rsa.PrivateKey, endpoint string) oauth2.
 // TestNewTokenSource verifies the token source constructor validation
 func TestNewTokenSource(t *testing.T) {
 	key, err := rsa.GenerateKey(rand.Reader, testRSAKeySize)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	t.Run("requires an organization", func(t *testing.T) {
 		_, err := NewTokenSource(context.Background(), FederationSource{Audience: testAudience})
-		require.ErrorIs(t, err, ErrOrganizationIDRequired)
+		assert.ErrorIs(t, err, ErrOrganizationIDRequired)
 	})
 
 	t.Run("requires an audience", func(t *testing.T) {
 		_, err := NewTokenSource(context.Background(), FederationSource{OrganizationID: testOrganizationID})
-		require.ErrorIs(t, err, ErrAudienceRequired)
+		assert.ErrorIs(t, err, ErrAudienceRequired)
 	})
 
 	t.Run("requires an endpoint", func(t *testing.T) {
@@ -100,12 +100,12 @@ func TestNewTokenSource(t *testing.T) {
 			OrganizationID: testOrganizationID,
 			Audience:       testAudience,
 		})
-		require.ErrorIs(t, err, ErrEndpointRequired)
+		assert.ErrorIs(t, err, ErrEndpointRequired)
 	})
 
 	t.Run("requires an RS256 signing key at build time", func(t *testing.T) {
 		_, edKey, keyErr := ed25519.GenerateKey(rand.Reader)
-		require.NoError(t, keyErr)
+		assert.NilError(t, keyErr)
 
 		_, err := NewTokenSource(context.Background(), FederationSource{
 			Manager:        testTokenManager(t, edKey),
@@ -113,20 +113,20 @@ func TestNewTokenSource(t *testing.T) {
 			Audience:       testAudience,
 			Endpoint:       "https://sts.example.com/v1/token",
 		})
-		require.ErrorIs(t, err, tokens.ErrSigningAlgorithmMismatch)
+		assert.ErrorIs(t, err, tokens.ErrSigningAlgorithmMismatch)
 	})
 }
 
 // TestTokenExchange verifies the RFC 8693 request sent and the response parsed
 func TestTokenExchange(t *testing.T) {
 	key, err := rsa.GenerateKey(rand.Reader, testRSAKeySize)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	t.Run("sends the exchange request and parses the granted token", func(t *testing.T) {
 		var form url.Values
 
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			require.NoError(t, r.ParseForm())
+			assert.NilError(t, r.ParseForm())
 
 			form = r.Form
 
@@ -137,38 +137,38 @@ func TestTokenExchange(t *testing.T) {
 				"token_type": "Bearer",
 				"expires_in": 3600
 			}`))
-			require.NoError(t, err)
+			assert.NilError(t, err)
 		}))
 		defer server.Close()
 
 		token, err := testTokenSource(t, key, server.URL).Token()
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
-		assert.Equal(t, "ya29.test-granted-token", token.AccessToken)
-		assert.Equal(t, "Bearer", token.TokenType)
-		assert.WithinDuration(t, time.Now().Add(time.Hour), token.Expiry, time.Minute)
+		assert.Check(t, is.Equal("ya29.test-granted-token", token.AccessToken))
+		assert.Check(t, is.Equal("Bearer", token.TokenType))
+		assert.Check(t, time.Now().Add(time.Hour).Sub(token.Expiry).Abs() <= time.Minute)
 
 		// the exchange identifies the relying party with the assertion as subject token
-		assert.Equal(t, "urn:ietf:params:oauth:grant-type:token-exchange", form.Get("grant_type"))
-		assert.Equal(t, "urn:ietf:params:oauth:token-type:jwt", form.Get("subject_token_type"))
-		assert.Equal(t, "urn:ietf:params:oauth:token-type:access_token", form.Get("requested_token_type"))
-		assert.Equal(t, testAudience, form.Get("audience"))
-		assert.Equal(t, testScope, form.Get("scope"))
+		assert.Check(t, is.Equal("urn:ietf:params:oauth:grant-type:token-exchange", form.Get("grant_type")))
+		assert.Check(t, is.Equal("urn:ietf:params:oauth:token-type:jwt", form.Get("subject_token_type")))
+		assert.Check(t, is.Equal("urn:ietf:params:oauth:token-type:access_token", form.Get("requested_token_type")))
+		assert.Check(t, is.Equal(testAudience, form.Get("audience")))
+		assert.Check(t, is.Equal(testScope, form.Get("scope")))
 
 		// pins zitadel's serialization of absent actor fields as empty parameters
-		assert.Contains(t, form, "actor_token")
-		assert.Empty(t, form.Get("actor_token"))
+		assert.Check(t, is.Contains(form, "actor_token"))
+		assert.Check(t, is.Len(form.Get("actor_token"), 0))
 
 		// the assertion carries server-derived identity claims, verifiable with the issuer's public key
 		claims := parseAssertion(t, form.Get("subject_token"), key)
-		assert.Equal(t, testIssuer, claims["iss"])
-		assert.Equal(t, testOrganizationID, claims["sub"])
-		assert.Equal(t, testAudience, claims["aud"])
-		assert.Equal(t, testOrganizationID, claims["organization_id"])
+		assert.Check(t, is.Equal(testIssuer, claims["iss"]))
+		assert.Check(t, is.Equal(testOrganizationID, claims["sub"]))
+		assert.Check(t, is.Equal(testAudience, claims["aud"]))
+		assert.Check(t, is.Equal(testOrganizationID, claims["organization_id"]))
 
 		expiry, err := claims.GetExpirationTime()
-		require.NoError(t, err)
-		assert.WithinDuration(t, time.Now().Add(defaultAssertionLifetime), expiry.Time, time.Minute)
+		assert.NilError(t, err)
+		assert.Check(t, time.Now().Add(defaultAssertionLifetime).Sub(expiry.Time).Abs() <= time.Minute)
 	})
 
 	t.Run("returns the exchange error when the STS rejects the assertion", func(t *testing.T) {
@@ -176,12 +176,12 @@ func TestTokenExchange(t *testing.T) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusBadRequest)
 			_, err := w.Write([]byte(`{"error":"invalid_request","error_description":"invalid audience"}`))
-			require.NoError(t, err)
+			assert.NilError(t, err)
 		}))
 		defer server.Close()
 
 		_, err := testTokenSource(t, key, server.URL).Token()
-		require.ErrorIs(t, err, ErrExchangeFailed)
-		require.ErrorContains(t, err, "invalid audience")
+		assert.ErrorIs(t, err, ErrExchangeFailed)
+		assert.ErrorContains(t, err, "invalid audience")
 	})
 }

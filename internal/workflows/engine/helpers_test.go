@@ -8,11 +8,12 @@ import (
 	"testing"
 
 	"entgo.io/ent"
-	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/workflows"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 type testEntity struct {
@@ -188,19 +189,19 @@ func TestApplyStringTemplates(t *testing.T) {
 	}
 
 	got := applyStringTemplates(input, replacements)
-	assert.Equal(t, "Hello Ada", got["title"])
+	assert.Check(t, is.Equal("Hello Ada", got["title"]))
 
 	nested := got["nested"].(map[string]any)
-	assert.Equal(t, "42", nested["id"])
-	assert.Equal(t, float64(2), nested["count"])
+	assert.Check(t, is.Equal("42", nested["id"]))
+	assert.Check(t, is.DeepEqual(float64(2), nested["count"]))
 
 	list := got["list"].([]any)
-	assert.Equal(t, "Ada", list[0])
-	assert.Equal(t, "42", list[1].(map[string]any)["id"])
-	assert.Equal(t, float64(7), list[2])
+	assert.Check(t, is.Equal("Ada", list[0]))
+	assert.Check(t, is.Equal("42", list[1].(map[string]any)["id"]))
+	assert.Check(t, is.DeepEqual(float64(7), list[2]))
 
 	empty := applyStringTemplates(nil, replacements)
-	assert.Empty(t, empty)
+	assert.Check(t, is.Len(empty, 0))
 }
 
 func TestApplyTriggerContext(t *testing.T) {
@@ -218,46 +219,46 @@ func TestApplyTriggerContext(t *testing.T) {
 	}
 
 	got := applyTriggerContext(existing, "def-123", obj, input, "user-999")
-	assert.Equal(t, 1, got.Version)
-	assert.Equal(t, "def-123", got.WorkflowDefinitionID)
-	assert.Equal(t, obj.Type, got.ObjectType)
-	assert.Equal(t, obj.ID, got.ObjectID)
-	assert.Equal(t, input.EventType, got.TriggerEventType)
-	assert.Equal(t, input.ChangedFields, got.TriggerChangedFields)
-	assert.Equal(t, input.ChangedEdges, got.TriggerChangedEdges)
-	assert.Equal(t, input.AddedIDs, got.TriggerAddedIDs)
-	assert.Equal(t, input.RemovedIDs, got.TriggerRemovedIDs)
-	assert.Equal(t, "user-999", got.TriggerUserID)
-	assert.Equal(t, existing.ExecutedNotifications, got.ExecutedNotifications)
+	assert.Check(t, is.Equal(1, got.Version))
+	assert.Check(t, is.Equal("def-123", got.WorkflowDefinitionID))
+	assert.Check(t, is.DeepEqual(obj.Type, got.ObjectType))
+	assert.Check(t, is.DeepEqual(obj.ID, got.ObjectID))
+	assert.Check(t, is.DeepEqual(input.EventType, got.TriggerEventType))
+	assert.Check(t, is.DeepEqual(input.ChangedFields, got.TriggerChangedFields))
+	assert.Check(t, is.DeepEqual(input.ChangedEdges, got.TriggerChangedEdges))
+	assert.Check(t, is.DeepEqual(input.AddedIDs, got.TriggerAddedIDs))
+	assert.Check(t, is.DeepEqual(input.RemovedIDs, got.TriggerRemovedIDs))
+	assert.Check(t, is.Equal("user-999", got.TriggerUserID))
+	assert.Check(t, is.DeepEqual(existing.ExecutedNotifications, got.ExecutedNotifications))
 }
 
 func TestApprovalFailureMessage(t *testing.T) {
-	assert.Equal(t, approvalRejectedMessage, approvalFailureMessage(AssignmentStatusCounts{
+	assert.Check(t, is.DeepEqual(approvalRejectedMessage, approvalFailureMessage(AssignmentStatusCounts{
 		RejectedRequired: true,
-	}, 1))
+	}, 1)))
 
-	assert.Equal(t, approvalQuorumNotMet, approvalFailureMessage(AssignmentStatusCounts{
+	assert.Check(t, is.DeepEqual(approvalQuorumNotMet, approvalFailureMessage(AssignmentStatusCounts{
 		Approved: 1,
 		Pending:  0,
-	}, 2))
+	}, 2)))
 
-	assert.Equal(t, approvalFailedMessage, approvalFailureMessage(AssignmentStatusCounts{}, 0))
+	assert.Check(t, is.DeepEqual(approvalFailedMessage, approvalFailureMessage(AssignmentStatusCounts{}, 0)))
 }
 
 func TestActionFailureDetails(t *testing.T) {
 	obj := &workflows.Object{ID: "obj-1", Type: enums.WorkflowObjectTypeControl}
 	err := errors.New("boom")
 	details := actionFailureDetails("action", 2, enums.WorkflowActionTypeNotification, obj, err)
-	assert.Equal(t, "action", details.ActionKey)
-	assert.Equal(t, 2, details.ActionIndex)
-	assert.Equal(t, enums.WorkflowActionTypeNotification, details.ActionType)
-	assert.Equal(t, obj.ID, details.ObjectID)
-	assert.Equal(t, obj.Type, details.ObjectType)
-	assert.Equal(t, err.Error(), details.ErrorMessage)
+	assert.Check(t, is.Equal("action", details.ActionKey))
+	assert.Check(t, is.Equal(2, details.ActionIndex))
+	assert.Check(t, is.DeepEqual(enums.WorkflowActionTypeNotification, details.ActionType))
+	assert.Check(t, is.DeepEqual(obj.ID, details.ObjectID))
+	assert.Check(t, is.DeepEqual(obj.Type, details.ObjectType))
+	assert.Check(t, is.Equal(err.Error(), details.ErrorMessage))
 
 	details = actionFailureDetails("action", 1, enums.WorkflowActionTypeNotification, nil, nil)
-	assert.Equal(t, actionExecutionFailedMsg, details.ErrorMessage)
-	assert.Empty(t, details.ObjectID)
+	assert.Check(t, is.DeepEqual(actionExecutionFailedMsg, details.ErrorMessage))
+	assert.Check(t, is.Len(details.ObjectID, 0))
 }
 
 func TestActionIndexOutOfBoundsDetails(t *testing.T) {
@@ -268,52 +269,52 @@ func TestActionIndexOutOfBoundsDetails(t *testing.T) {
 		ObjectType:  enums.WorkflowObjectTypeControl,
 	}
 	details := actionIndexOutOfBoundsDetails(payload)
-	assert.Equal(t, 3, details.ActionIndex)
-	assert.Equal(t, enums.WorkflowActionTypeNotification, details.ActionType)
-	assert.Equal(t, "obj-2", details.ObjectID)
-	assert.Equal(t, enums.WorkflowObjectTypeControl, details.ObjectType)
-	assert.Equal(t, actionIndexOutOfBoundsMsg, details.ErrorMessage)
+	assert.Check(t, is.Equal(3, details.ActionIndex))
+	assert.Check(t, is.DeepEqual(enums.WorkflowActionTypeNotification, details.ActionType))
+	assert.Check(t, is.Equal("obj-2", details.ObjectID))
+	assert.Check(t, is.DeepEqual(enums.WorkflowObjectTypeControl, details.ObjectType))
+	assert.Check(t, is.DeepEqual(actionIndexOutOfBoundsMsg, details.ErrorMessage))
 }
 
 func TestWorkflowEventTypeFromEntOperation(t *testing.T) {
-	assert.Equal(t, "UPDATE", workflowEventTypeFromEntOperation(ent.OpUpdate.String()))
-	assert.Equal(t, "UPDATE", workflowEventTypeFromEntOperation(ent.OpUpdateOne.String()))
-	assert.Equal(t, "CREATE", workflowEventTypeFromEntOperation(ent.OpCreate.String()))
-	assert.Equal(t, "DELETE", workflowEventTypeFromEntOperation(ent.OpDelete.String()))
-	assert.Equal(t, "DELETE", workflowEventTypeFromEntOperation(ent.OpDeleteOne.String()))
-	assert.Equal(t, "CUSTOM", workflowEventTypeFromEntOperation("CUSTOM"))
+	assert.Check(t, is.Equal("UPDATE", workflowEventTypeFromEntOperation(ent.OpUpdate.String())))
+	assert.Check(t, is.Equal("UPDATE", workflowEventTypeFromEntOperation(ent.OpUpdateOne.String())))
+	assert.Check(t, is.Equal("CREATE", workflowEventTypeFromEntOperation(ent.OpCreate.String())))
+	assert.Check(t, is.Equal("DELETE", workflowEventTypeFromEntOperation(ent.OpDelete.String())))
+	assert.Check(t, is.Equal("DELETE", workflowEventTypeFromEntOperation(ent.OpDeleteOne.String())))
+	assert.Check(t, is.Equal("CUSTOM", workflowEventTypeFromEntOperation("CUSTOM")))
 }
 
 func TestCELEvaluatorValidateAndEvaluate(t *testing.T) {
 	cfg := workflows.NewDefaultConfig()
 	env, err := workflows.NewCELEnv(cfg, workflows.CELScopeAction)
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	eval := NewCELEvaluator(env, cfg)
 
 	// Valid expression should pass validation
 	err = eval.Validate("1 == 1")
-	assert.NoError(t, err)
+	assert.Check(t, err)
 
 	// Invalid expression should fail validation
 	err = eval.Validate("1 +")
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, ErrCELCompilationFailed)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, ErrCELCompilationFailed))
 
 	ok, err := eval.Evaluate(context.Background(), "1 == 1", map[string]any{})
-	assert.NoError(t, err)
-	assert.True(t, ok)
+	assert.Check(t, err)
+	assert.Check(t, ok)
 
 	ok, err = eval.Evaluate(context.Background(), "1 + 1", map[string]any{})
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, ErrCELTypeMismatch)
-	assert.False(t, ok)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, ErrCELTypeMismatch))
+	assert.Check(t, !ok)
 }
 
 func TestGetExecutedNotifications(t *testing.T) {
 	listeners := &WorkflowListeners{}
 
-	assert.Empty(t, listeners.getExecutedNotifications(nil))
+	assert.Check(t, is.Len(listeners.getExecutedNotifications(nil), 0))
 
 	instance := &generated.WorkflowInstance{
 		Context: models.WorkflowInstanceContext{
@@ -321,10 +322,10 @@ func TestGetExecutedNotifications(t *testing.T) {
 		},
 	}
 	got := listeners.getExecutedNotifications(instance)
-	assert.True(t, got["one"])
-	assert.True(t, got["two"])
+	assert.Check(t, got["one"])
+	assert.Check(t, got["two"])
 
 	instance.Context.ExecutedNotifications = nil
 	got = listeners.getExecutedNotifications(instance)
-	assert.Empty(t, got)
+	assert.Check(t, is.Len(got, 0))
 }

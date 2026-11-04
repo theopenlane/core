@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"sync/atomic"
+	"testing"
 
 	"github.com/oklog/ulid/v2"
 
@@ -22,6 +23,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/iam/auth"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 // TestWorkflowEngineExecute verifies basic workflow engine initialization and action execution
@@ -34,9 +37,10 @@ import (
 // Why This Matters:
 //
 //	Foundational test ensuring the workflow engine is available for action execution.
-func (s *WorkflowEngineTestSuite) TestWorkflowEngineExecute() {
+func TestWorkflowEngineExecute(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	wfEngine := s.Engine()
-	s.Require().NotNil(wfEngine)
+	assert.Assert(t, wfEngine != nil)
 }
 
 // TestExecuteApproval verifies the approval action executor correctly creates WorkflowAssignment
@@ -61,7 +65,8 @@ func (s *WorkflowEngineTestSuite) TestWorkflowEngineExecute() {
 //	The approval executor is responsible for creating the database records that represent
 //	pending approval work. This test ensures the executor correctly translates action
 //	parameters into database entities.
-func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
+func TestExecuteApproval(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -72,7 +77,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 		SetRefCode("CTL-TEST-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -83,7 +88,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 		ChangedFields: []string{"status"},
 	})
 
-	s.Run("creates approval assignment with user target", func() {
+	t.Run("creates approval assignment with user target", func(t *testing.T) {
+		s := s.withT(t)
 		targets := []workflows.TargetConfig{
 			{
 				Type: enums.WorkflowTargetTypeUser,
@@ -100,7 +106,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 		}
 
 		paramsBytes, err := json.Marshal(params)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeApproval.String(),
@@ -109,28 +115,28 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.NoError(err)
+		assert.Check(t, err)
 
 		assignments, err := s.client.WorkflowAssignment.Query().
 			Where(workflowassignment.WorkflowInstanceIDEQ(instance.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Len(assignments, 1)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(assignments, 1))
 
 		assignment := assignments[0]
-		s.Equal(enums.WorkflowAssignmentStatusPending, assignment.Status)
-		s.Equal(true, assignment.Required)
-		s.Equal("Test Approval", assignment.Label)
+		assert.Check(t, is.DeepEqual(enums.WorkflowAssignmentStatusPending, assignment.Status))
+		assert.Check(t, is.Equal(true, assignment.Required))
+		assert.Check(t, is.Equal("Test Approval", assignment.Label))
 
 		assignmentTargets, err := s.client.WorkflowAssignmentTarget.Query().
 			Where(workflowassignmenttarget.WorkflowAssignmentIDEQ(assignment.ID)).
 			All(userCtx)
-		s.Require().NoError(err)
-		s.Len(assignmentTargets, 1)
-		s.Equal(userID, assignmentTargets[0].TargetUserID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(assignmentTargets, 1))
+		assert.Check(t, is.DeepEqual(userID, assignmentTargets[0].TargetUserID))
 	})
 
-	s.Run("creates assignment with no targets warns", func() {
+	t.Run("creates assignment with no targets warns", func(t *testing.T) {
 		params := workflows.ApprovalActionParams{
 			TargetedActionParams: workflows.TargetedActionParams{
 				Targets: []workflows.TargetConfig{},
@@ -140,7 +146,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 		}
 
 		paramsBytes, err := json.Marshal(params)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeApproval.String(),
@@ -149,7 +155,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.ErrorIs(err, engine.ErrApprovalNoTargets)
+		assert.Check(t, is.ErrorIs(err, engine.ErrApprovalNoTargets))
 	})
 }
 
@@ -165,7 +171,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteApproval() {
 //
 //	The workflow engine must validate action types before execution. Unknown action types
 //	should fail fast with a clear error rather than silently passing or causing cryptic failures.
-func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
+func TestExecuteInvalidActionType(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -176,7 +183,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 		SetRefCode("CTL-FIELD-TEST-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -193,8 +200,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Error(err)
-	s.ErrorIs(err, engine.ErrInvalidActionType)
+	assert.Check(t, err != nil)
+	assert.Check(t, is.ErrorIs(err, engine.ErrInvalidActionType))
 }
 
 // TestExecuteNotification verifies that notification actions execute without error.
@@ -209,7 +216,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteInvalidActionType() {
 //
 //	Notification actions should complete without blocking the workflow, even if the
 //	actual notification delivery is async or external.
-func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
+func TestExecuteNotification(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -220,7 +228,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 		SetRefCode("CTL-NOTIFY-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -229,11 +237,12 @@ func (s *WorkflowEngineTestSuite) TestExecuteNotification() {
 	})
 
 	err = wfEngine.Execute(userCtx, models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "test_notification"}, instance, obj)
-	s.NoError(err)
+	assert.Check(t, err)
 }
 
 // TestExecuteSendEmail verifies SEND_EMAIL action composition and queue insertion.
-func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
+func TestExecuteSendEmail(t *testing.T) {
+	s := suite.setupTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -241,7 +250,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	err := s.client.Job.TruncateRiverTables(context.Background())
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	emailRecord, err := s.client.EmailTemplate.Create().
 		SetOwnerID(orgID).
@@ -257,13 +266,13 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
 		}).
 		SetActive(true).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	control, err := s.client.Control.Create().
 		SetRefCode("CTL-SEND-EMAIL-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	instance := s.TriggerInstance(userCtx, wfEngine, def, obj, engine.TriggerInput{
@@ -278,7 +287,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
 	}
 
 	paramsBytes, err := json.Marshal(params)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	action := models.WorkflowAction{
 		Type:   enums.WorkflowActionTypeSendEmail.String(),
@@ -287,17 +296,17 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
 	}
 
 	err = wfEngine.Execute(userCtx, action, instance, obj)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 	s.WaitForEvents()
 
 	msgs := s.mockEmailSender().Messages()
-	s.Require().Len(msgs, 1)
-	s.Equal([]string{"person@example.com"}, msgs[0].To)
-	s.Equal("Workflow Send Email", msgs[0].Subject)
-	s.Contains(msgs[0].Text, "Hi from workflow")
+	assert.Assert(t, is.Len(msgs, 1))
+	assert.Check(t, is.DeepEqual([]string{"person@example.com"}, msgs[0].To))
+	assert.Check(t, is.Equal("Workflow Send Email", msgs[0].Subject))
+	assert.Check(t, is.Contains(msgs[0].Text, "Hi from workflow"))
 
 	_, err = s.client.EmailTemplate.Delete().Where(emailtemplate.NameEQ("Workflow Send Email")).Exec(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 }
 
 // TestExecuteWebhook verifies the webhook action executor correctly calls external URLs
@@ -325,7 +334,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail() {
 //
 //	Webhook actions are the primary integration point for external systems. This test
 //	ensures correct HTTP behavior, error handling, and security features like HMAC signing.
-func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
+func TestExecuteWebhook(t *testing.T) {
+	s := suite.setupTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -336,7 +346,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		SetRefCode("CTL-WEBHOOK-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -347,7 +357,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		ChangedFields: []string{"status"},
 	})
 
-	s.Run("executes webhook with valid URL", func() {
+	t.Run("executes webhook with valid URL", func(t *testing.T) {
+		s := s.withT(t)
 		var receivedPayload map[string]any
 		serverCalled := make(chan struct{}, 1)
 		customHeaderKey := "X-Custom-Header"
@@ -375,7 +386,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		paramsBytes, err := json.Marshal(params)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeWebhook.String(),
@@ -384,13 +395,13 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		<-serverCalled
-		s.Equal(instance.ID, receivedPayload["instance_id"])
+		assert.Check(t, is.DeepEqual(instance.ID, receivedPayload["instance_id"]))
 	})
 
-	s.Run("executes webhook with payload expression", func() {
+	t.Run("executes webhook with payload expression", func(t *testing.T) {
 		var receivedPayload map[string]any
 		serverCalled := make(chan struct{}, 1)
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -407,7 +418,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		paramsBytes, err := json.Marshal(params)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeWebhook.String(),
@@ -416,15 +427,15 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		<-serverCalled
-		s.Equal(instance.ID, receivedPayload["instance_id"])
-		s.Equal("ok", receivedPayload["custom"])
-		s.Equal("UPDATE", receivedPayload["event_type"])
+		assert.Check(t, is.DeepEqual(instance.ID, receivedPayload["instance_id"]))
+		assert.Check(t, is.Equal("ok", receivedPayload["custom"]))
+		assert.Check(t, is.Equal("UPDATE", receivedPayload["event_type"]))
 	})
 
-	s.Run("fails webhook with legacy payload", func() {
+	t.Run("fails webhook with legacy payload", func(t *testing.T) {
 		params := json.RawMessage(`{"url": "https://example.com/webhook", "payload": {"text": "nope"}}`)
 
 		action := models.WorkflowAction{
@@ -434,15 +445,15 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.Error(err)
-		s.ErrorIs(err, engine.ErrWebhookPayloadUnsupported)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, engine.ErrWebhookPayloadUnsupported))
 	})
 
-	s.Run("fails webhook without URL", func() {
+	t.Run("fails webhook without URL", func(t *testing.T) {
 		params := workflows.WebhookActionParams{}
 
 		paramsBytes, err := json.Marshal(params)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeWebhook.String(),
@@ -451,11 +462,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.Error(err)
-		s.ErrorIs(err, engine.ErrWebhookURLRequired)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, engine.ErrWebhookURLRequired))
 	})
 
-	s.Run("fails webhook on non-success status", func() {
+	t.Run("fails webhook on non-success status", func(t *testing.T) {
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusTeapot)
 		}))
@@ -466,7 +477,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		paramsBytes, err := json.Marshal(params)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeWebhook.String(),
@@ -475,10 +486,11 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.Error(err)
+		assert.Check(t, err != nil)
 	})
 
-	s.Run("blocks webhook to non-public address", func() {
+	t.Run("blocks webhook to non-public address", func(t *testing.T) {
+		s := s.withT(t)
 		var calls atomic.Int32
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 			calls.Add(1)
@@ -489,7 +501,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		guardedEngine := s.NewIsolatedEngine(nil)
 
 		paramsBytes, err := json.Marshal(workflows.WebhookActionParams{URL: server.URL})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeWebhook.String(),
@@ -498,12 +510,13 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		err = guardedEngine.Execute(userCtx, action, instance, obj)
-		s.ErrorIs(err, engine.ErrWebhookFailed)
-		s.ErrorIs(err, urlx.ErrNonPublicDestination)
-		s.Zero(calls.Load())
+		assert.Check(t, is.ErrorIs(err, engine.ErrWebhookFailed))
+		assert.Check(t, is.ErrorIs(err, urlx.ErrNonPublicDestination))
+		assert.Check(t, is.Equal(int32(0), calls.Load()))
 	})
 
-	s.Run("fails redirect without following or retrying", func() {
+	t.Run("fails redirect without following or retrying", func(t *testing.T) {
+		s := s.withT(t)
 		var calls atomic.Int32
 		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			calls.Add(1)
@@ -512,7 +525,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		s.T().Cleanup(server.Close)
 
 		paramsBytes, err := json.Marshal(workflows.WebhookActionParams{URL: server.URL})
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeWebhook.String(),
@@ -521,8 +534,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.ErrorIs(err, engine.ErrWebhookFailed)
-		s.Equal(int32(1), calls.Load())
+		assert.Check(t, is.ErrorIs(err, engine.ErrWebhookFailed))
+		assert.Check(t, is.DeepEqual(int32(1), calls.Load()))
 	})
 }
 
@@ -539,7 +552,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteWebhook() {
 //	Proposal changes are stored as map[string]any where enum values are serialized as strings.
 //	When applying these changes, the workflow system must coerce strings back to typed enums
 //	to match the entity schema. Without coercion, database updates would fail with type errors.
-func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
+func TestApplyObjectFieldUpdates_CoercesEnums(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	userID, orgID, userCtx := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
@@ -547,7 +561,7 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 		SetRefCode("CTL-APPLY-TEST-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(seedCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	bypassCtx := auth.WithInternalCrossOrgContext(userCtx)
 
@@ -561,12 +575,12 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 	}
 
 	err = workflows.ApplyObjectFieldUpdates(bypassCtx, s.client, obj.Type, obj.ID, changes)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	updated, err := s.client.Control.Get(bypassCtx, control.ID)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
-	s.Equal(enums.ControlStatusApproved, updated.Status)
+	assert.Check(t, is.DeepEqual(enums.ControlStatusApproved, updated.Status))
 }
 
 // TestExecuteFieldUpdate verifies the field_update action executor correctly applies
@@ -588,7 +602,8 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 //	Field update actions enable workflows to programmatically modify object fields as part
 //	of their execution. This is useful for automated status transitions after approval
 //	or other workflow-driven field changes.
-func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
+func TestExecuteFieldUpdate(t *testing.T) {
+	s := suite.setupParallelTest(t)
 	_, orgID, userCtx := s.SetupTestUser()
 
 	wfEngine := s.Engine()
@@ -599,7 +614,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
 		SetRefCode("CTL-FIELD-UPDATE-" + ulid.Make().String()).
 		SetOwnerID(orgID).
 		Save(userCtx)
-	s.Require().NoError(err)
+	assert.NilError(t, err)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
@@ -610,7 +625,8 @@ func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
 		ChangedFields: []string{"status"},
 	})
 
-	s.Run("executes field update with valid params", func() {
+	t.Run("executes field update with valid params", func(t *testing.T) {
+		s := s.withT(t)
 		params := workflows.FieldUpdateActionParams{
 			Updates: map[string]any{
 				"status": "APPROVED",
@@ -618,7 +634,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
 		}
 
 		paramsBytes, err := json.Marshal(params)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeFieldUpdate.String(),
@@ -627,18 +643,18 @@ func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.NoError(err)
+		assert.Check(t, err)
 
 		updated, err := s.client.Control.Get(userCtx, obj.ID)
-		s.Require().NoError(err)
-		s.Equal(enums.ControlStatusApproved, updated.Status)
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual(enums.ControlStatusApproved, updated.Status))
 	})
 
-	s.Run("fails field update without updates", func() {
+	t.Run("fails field update without updates", func(t *testing.T) {
 		params := workflows.FieldUpdateActionParams{}
 
 		paramsBytes, err := json.Marshal(params)
-		s.Require().NoError(err)
+		assert.NilError(t, err)
 
 		action := models.WorkflowAction{
 			Type:   enums.WorkflowActionTypeFieldUpdate.String(),
@@ -647,7 +663,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteFieldUpdate() {
 		}
 
 		err = wfEngine.Execute(userCtx, action, instance, obj)
-		s.Error(err)
-		s.ErrorIs(err, engine.ErrMissingRequiredField)
+		assert.Check(t, err != nil)
+		assert.Check(t, is.ErrorIs(err, engine.ErrMissingRequiredField))
 	})
 }

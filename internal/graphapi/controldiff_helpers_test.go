@@ -1,10 +1,11 @@
 package graphapi
 
 import (
+	"slices"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	historygenerated "github.com/theopenlane/core/v2/internal/ent/historygenerated"
 )
@@ -31,7 +32,7 @@ func TestControlDiffValuesEqual(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expected, controlDiffValuesEqual(tt.a, tt.b))
+			assert.Check(t, is.Equal(tt.expected, controlDiffValuesEqual(tt.a, tt.b)))
 		})
 	}
 }
@@ -53,17 +54,17 @@ func TestDiffControlHistories(t *testing.T) {
 		}
 
 		diffs, err := diffControlHistories(oldRecord, newRecord)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		fieldNames := make([]string, len(diffs))
 		for i, d := range diffs {
 			fieldNames[i] = d.Field
 		}
 
-		assert.Contains(t, fieldNames, "title")
-		assert.Contains(t, fieldNames, "subcategory")
-		assert.NotContains(t, fieldNames, "description")
-		assert.NotContains(t, fieldNames, "category")
+		assert.Check(t, is.Contains(fieldNames, "title"))
+		assert.Check(t, is.Contains(fieldNames, "subcategory"))
+		assert.Check(t, !slices.Contains(fieldNames, "description"))
+		assert.Check(t, !slices.Contains(fieldNames, "category"))
 	})
 
 	t.Run("no diffs when records are identical", func(t *testing.T) {
@@ -74,8 +75,8 @@ func TestDiffControlHistories(t *testing.T) {
 		}
 
 		diffs, err := diffControlHistories(record, record)
-		require.NoError(t, err)
-		assert.Empty(t, diffs)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(diffs, 0))
 	})
 
 	t.Run("slice field changes detected", func(t *testing.T) {
@@ -92,16 +93,16 @@ func TestDiffControlHistories(t *testing.T) {
 		}
 
 		diffs, err := diffControlHistories(oldRecord, newRecord)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
 		fieldNames := make([]string, len(diffs))
 		for i, d := range diffs {
 			fieldNames[i] = d.Field
 		}
 
-		assert.Contains(t, fieldNames, "aliases")
-		assert.Contains(t, fieldNames, "control_questions")
-		assert.NotContains(t, fieldNames, "mapped_categories")
+		assert.Check(t, is.Contains(fieldNames, "aliases"))
+		assert.Check(t, is.Contains(fieldNames, "control_questions"))
+		assert.Check(t, !slices.Contains(fieldNames, "mapped_categories"))
 	})
 
 	t.Run("detects change from empty to non-empty", func(t *testing.T) {
@@ -116,10 +117,10 @@ func TestDiffControlHistories(t *testing.T) {
 		}
 
 		diffs, err := diffControlHistories(oldRecord, newRecord)
-		require.NoError(t, err)
+		assert.NilError(t, err)
 
-		require.Len(t, diffs, 1)
-		assert.Equal(t, "title", diffs[0].Field)
+		assert.Assert(t, is.Len(diffs, 1))
+		assert.Check(t, is.Equal("title", diffs[0].Field))
 	})
 
 	t.Run("zero value produces no diff", func(t *testing.T) {
@@ -127,8 +128,8 @@ func TestDiffControlHistories(t *testing.T) {
 			&historygenerated.ControlHistory{},
 			&historygenerated.ControlHistory{},
 		)
-		require.NoError(t, err)
-		assert.Empty(t, diffs)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(diffs, 0))
 	})
 }
 
@@ -145,13 +146,13 @@ func TestDetectAndBuildControlChanges(t *testing.T) {
 		}
 
 		changes, err := detectAndBuildControlChanges(oldByRef, newByRef)
-		require.NoError(t, err)
-		require.Len(t, changes, 1)
-		assert.Equal(t, "AC-1", changes[0].RefCode)
-		assert.Equal(t, "New Title", changes[0].Title)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(changes, 1))
+		assert.Check(t, is.Equal("AC-1", changes[0].RefCode))
+		assert.Check(t, is.Equal("New Title", changes[0].Title))
 
-		assert.Len(t, changes[0].Diffs, 1)
-		assert.Equal(t, "title", changes[0].Diffs[0].Field)
+		assert.Check(t, is.Len(changes[0].Diffs, 1))
+		assert.Check(t, is.Equal("title", changes[0].Diffs[0].Field))
 	})
 
 	t.Run("controls skipped in new revision", func(t *testing.T) {
@@ -162,8 +163,8 @@ func TestDetectAndBuildControlChanges(t *testing.T) {
 		}
 
 		changes, err := detectAndBuildControlChanges(oldByRef, newByRef)
-		require.NoError(t, err)
-		assert.Empty(t, changes)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(changes, 0))
 	})
 
 	t.Run("empty map returns empty slice", func(t *testing.T) {
@@ -171,9 +172,9 @@ func TestDetectAndBuildControlChanges(t *testing.T) {
 			map[string]*historygenerated.ControlHistory{},
 			map[string]*historygenerated.ControlHistory{},
 		)
-		require.NoError(t, err)
-		require.NotNil(t, changes)
-		assert.Empty(t, changes)
+		assert.NilError(t, err)
+		assert.Assert(t, changes != nil)
+		assert.Check(t, is.Len(changes, 0))
 	})
 
 	t.Run("multiple controls contain changes", func(t *testing.T) {
@@ -190,16 +191,16 @@ func TestDetectAndBuildControlChanges(t *testing.T) {
 		}
 
 		changes, err := detectAndBuildControlChanges(oldRecordsByRef, newRecordsByRef)
-		require.NoError(t, err)
-		assert.Len(t, changes, 2)
+		assert.NilError(t, err)
+		assert.Check(t, is.Len(changes, 2))
 
 		changesByRef := make(map[string]bool)
 		for _, c := range changes {
 			changesByRef[c.RefCode] = true
 		}
 
-		assert.True(t, changesByRef["AC-1"])
-		assert.True(t, changesByRef["AC-2"])
-		assert.False(t, changesByRef["AC-3"])
+		assert.Check(t, changesByRef["AC-1"])
+		assert.Check(t, changesByRef["AC-2"])
+		assert.Check(t, !changesByRef["AC-3"])
 	})
 }

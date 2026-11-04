@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
@@ -464,6 +465,23 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 	}
 
 	(&th.Cleanup[*generated.TagDefinitionDeleteOne]{Client: suite.Client.DB.TagDefinition, ID: tagDefinition.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+}
+
+func TestMutationUpdateTagDefinitionsIncludingSystemOwned(t *testing.T) {
+	orgTagDef := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	systemTagDef := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+
+	err := suite.Client.DB.TagDefinition.Update().
+		Where(tagdefinition.IDIn(orgTagDef.ID)).
+		SetDescription("org only update").
+		Exec(th.SharedTestUser1.UserCtx)
+	assert.NilError(t, err)
+
+	err = suite.Client.DB.TagDefinition.Update().
+		Where(tagdefinition.IDIn(orgTagDef.ID, systemTagDef.ID)).
+		SetDescription("bulk update with system owned").
+		Exec(th.SharedTestUser1.UserCtx)
+	assert.ErrorContains(t, err, generated.ErrPermissionDenied.Error())
 }
 
 func TestMutationDeleteTagDefinition(t *testing.T) {

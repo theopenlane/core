@@ -7,8 +7,7 @@ import (
 	"testing"
 
 	"github.com/getkin/kin-openapi/openapi3"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/httpserve/route"
@@ -19,11 +18,11 @@ import (
 // generation does, with all routes registered, and validates it for compliance
 func TestOpenAPISpecValidation(t *testing.T) {
 	spec, err := server.GenerateOpenAPISpecDocument()
-	require.NoError(t, err, "failed to generate OpenAPI spec")
+	assert.NilError(t, err, "failed to generate OpenAPI spec")
 
 	// Convert to JSON bytes for openapi3 loader (same as the published artifact)
 	specBytes, err := json.Marshal(spec)
-	require.NoError(t, err, "failed to marshal spec for validation")
+	assert.NilError(t, err, "failed to marshal spec for validation")
 
 	t.Logf("OpenAPI spec generated successfully (%d bytes)", len(specBytes))
 
@@ -32,12 +31,12 @@ func TestOpenAPISpecValidation(t *testing.T) {
 	loader.IsExternalRefsAllowed = true
 
 	doc, err := loader.LoadFromData(specBytes)
-	require.NoError(t, err, "OpenAPI specification MUST load without errors using kin-openapi loader")
+	assert.NilError(t, err, "OpenAPI specification MUST load without errors using kin-openapi loader")
 
 	// Validate the specification against OpenAPI 3.0 standards
 	ctx := context.Background()
 	err = doc.Validate(ctx)
-	require.NoError(t, err, "OpenAPI specification MUST pass full kin-openapi validation")
+	assert.NilError(t, err, "OpenAPI specification MUST pass full kin-openapi validation")
 
 	// Log basic stats
 	pathCount := len(doc.Paths.Map())
@@ -47,14 +46,14 @@ func TestOpenAPISpecValidation(t *testing.T) {
 func TestEchoToOpenAPIConversion(t *testing.T) {
 	// Create a spec-mode router and register routes to test actual conversion
 	router, err := server.NewSpecRouter(server.LogConfig{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// Mock handler to avoid panics
 	router.Handler = &handlers.Handler{}
 
 	// Register routes (this will apply our conversion logic)
 	err = route.RegisterRoutes(router)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// Check that our actual registered paths match expectations
 	registeredPaths := make(map[string]bool)
@@ -69,8 +68,7 @@ func TestEchoToOpenAPIConversion(t *testing.T) {
 	}
 
 	for _, expectedPath := range expectedPaths {
-		assert.True(t, registeredPaths[expectedPath],
-			"Expected path '%s' should be registered in OpenAPI spec", expectedPath)
+		assert.Check(t, registeredPaths[expectedPath], "Expected path '%s' should be registered in OpenAPI spec", expectedPath)
 	}
 
 	// Log some example paths for verification
@@ -88,7 +86,7 @@ func TestEchoToOpenAPIConversion(t *testing.T) {
 
 	// Ensure no Echo-style paths are registered
 	for path := range registeredPaths {
-		assert.NotContains(t, path, ":",
+		assert.Check(t, !strings.Contains(path, ":"),
 			"Path '%s' contains Echo-style :param syntax in OpenAPI spec", path)
 	}
 

@@ -14,7 +14,8 @@ import (
 
 	"github.com/samber/lo"
 	slackgo "github.com/slack-go/slack"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestIntegrationInstalledTemplateRender(t *testing.T) {
@@ -27,12 +28,12 @@ func TestIntegrationInstalledTemplateRender(t *testing.T) {
 	}
 
 	var buf bytes.Buffer
-	require.NoError(t, integrationInstalledTemplate.Execute(&buf, input))
+	assert.NilError(t, integrationInstalledTemplate.Execute(&buf, input))
 
 	out := buf.String()
-	require.Contains(t, out, "Slack")
-	require.Contains(t, out, "Acme Inc")
-	require.Contains(t, out, "01HABCD")
+	assert.Assert(t, is.Contains(out, "Slack"))
+	assert.Assert(t, is.Contains(out, "Acme Inc"))
+	assert.Assert(t, is.Contains(out, "01HABCD"))
 }
 
 func TestDemoRequestTemplateRender(t *testing.T) {
@@ -47,14 +48,14 @@ func TestDemoRequestTemplateRender(t *testing.T) {
 	}
 
 	var buf bytes.Buffer
-	require.NoError(t, demoRequestTemplate.Execute(&buf, input))
+	assert.NilError(t, demoRequestTemplate.Execute(&buf, input))
 
 	out := buf.String()
-	require.Contains(t, out, "Acme")
-	require.Contains(t, out, "buyer@example.com")
-	require.Contains(t, out, "acme.com, acme.io")
-	require.Contains(t, out, "size")
-	require.Contains(t, out, "Demo requested")
+	assert.Assert(t, is.Contains(out, "Acme"))
+	assert.Assert(t, is.Contains(out, "buyer@example.com"))
+	assert.Assert(t, is.Contains(out, "acme.com, acme.io"))
+	assert.Assert(t, is.Contains(out, "size"))
+	assert.Assert(t, is.Contains(out, "Demo requested"))
 }
 
 func TestOrganizationsPendingDeletionTemplateRender(t *testing.T) {
@@ -101,10 +102,10 @@ func TestOrganizationsPendingDeletionTemplateRender(t *testing.T) {
 			t.Parallel()
 
 			var buf bytes.Buffer
-			require.NoError(t, orgDeletionReminderTemplate.Execute(&buf, tt.input))
+			assert.NilError(t, orgDeletionReminderTemplate.Execute(&buf, tt.input))
 
 			for _, expected := range tt.contains {
-				require.Contains(t, buf.String(), expected)
+				assert.Assert(t, is.Contains(buf.String(), expected))
 			}
 		})
 	}
@@ -115,7 +116,7 @@ func TestSlackClientSendTextEmpty(t *testing.T) {
 
 	client := &Client{WebhookURL: "https://hooks.slack.com/services/T/B/X"}
 	err := client.sendText(context.Background(), "", "")
-	require.ErrorIs(t, err, ErrMessageEmpty)
+	assert.ErrorIs(t, err, ErrMessageEmpty)
 }
 
 func TestSlackClientSendTextWebhook(t *testing.T) {
@@ -130,7 +131,7 @@ func TestSlackClientSendTextWebhook(t *testing.T) {
 		var payload struct {
 			Text string `json:"text"`
 		}
-		require.NoError(t, json.NewDecoder(req.Body).Decode(&payload))
+		assert.NilError(t, json.NewDecoder(req.Body).Decode(&payload))
 
 		mu.Lock()
 		received = append(received, payload.Text)
@@ -143,11 +144,11 @@ func TestSlackClientSendTextWebhook(t *testing.T) {
 
 	client := &Client{WebhookURL: server.URL}
 	err := client.sendText(context.Background(), "hello webhook", "")
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	mu.Lock()
 	defer mu.Unlock()
-	require.Equal(t, []string{"hello webhook"}, received)
+	assert.Assert(t, is.DeepEqual([]string{"hello webhook"}, received))
 }
 
 func TestSlackClientSendTextUsesDefaultChannel(t *testing.T) {
@@ -163,9 +164,9 @@ func TestSlackClientSendTextUsesDefaultChannel(t *testing.T) {
 	}
 
 	err := client.sendText(context.Background(), "hello channel", "")
-	require.NoError(t, err)
-	require.Equal(t, []string{"C123"}, recorder.channels())
-	require.Equal(t, []string{"hello channel"}, recorder.texts())
+	assert.NilError(t, err)
+	assert.Assert(t, is.DeepEqual([]string{"C123"}, recorder.channels()))
+	assert.Assert(t, is.DeepEqual([]string{"hello channel"}, recorder.texts()))
 }
 
 func TestSlackClientSendTextChannelOverridesDefault(t *testing.T) {
@@ -181,8 +182,8 @@ func TestSlackClientSendTextChannelOverridesDefault(t *testing.T) {
 	}
 
 	err := client.sendText(context.Background(), "hello", "C999")
-	require.NoError(t, err)
-	require.Equal(t, []string{"C999"}, recorder.channels())
+	assert.NilError(t, err)
+	assert.Assert(t, is.DeepEqual([]string{"C999"}, recorder.channels()))
 }
 
 func TestSlackClientSendTextNoChannelConfigured(t *testing.T) {
@@ -191,27 +192,27 @@ func TestSlackClientSendTextNoChannelConfigured(t *testing.T) {
 	client := &Client{API: slackgo.New("xoxb-test")}
 
 	err := client.sendText(context.Background(), "hello", "")
-	require.ErrorIs(t, err, ErrDefaultChannelMissing)
+	assert.ErrorIs(t, err, ErrDefaultChannelMissing)
 }
 
 func TestAllSlackSystemMessagesWiredToMessageClient(t *testing.T) {
 	t.Parallel()
 
 	def, err := Builder(Config{}, nil, false)()
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	clientNames := lo.Keys(def.ConnectionList()[0].Clients)
-	require.Len(t, clientNames, 1)
+	assert.Assert(t, is.Len(clientNames, 1))
 
 	regs := AllSlackSystemMessages()
-	require.NotEmpty(t, regs)
+	assert.Assert(t, len(regs) > 0)
 
 	for _, reg := range regs {
 		if reg.ClientRef != clientNames[0] {
 			t.Fatalf("op %s has ClientRef %v, want %v", reg.Name, reg.ClientRef, clientNames[0])
 		}
 
-		require.True(t, reg.Policy.SkipRunRecord, "op %s must be SkipRunRecord", reg.Name)
+		assert.Assert(t, reg.Policy.SkipRunRecord, "op %s must be SkipRunRecord", reg.Name)
 	}
 }
 
@@ -220,15 +221,15 @@ func TestBuildRuntimeMessageClientWebhookOnly(t *testing.T) {
 
 	cfg := RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/T/B/X"}
 	raw, err := json.Marshal(cfg)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	built, err := runtimeSlackClientBuilder(false)(context.Background(), raw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	client, ok := built.(*Client)
-	require.True(t, ok)
-	require.Equal(t, cfg.WebhookURL, client.WebhookURL)
-	require.Nil(t, client.API)
+	assert.Assert(t, ok)
+	assert.Assert(t, is.Equal(cfg.WebhookURL, client.WebhookURL))
+	assert.Assert(t, is.Nil(client.API))
 }
 
 func TestBuildRuntimeMessageClientBotToken(t *testing.T) {
@@ -239,16 +240,16 @@ func TestBuildRuntimeMessageClientBotToken(t *testing.T) {
 		DefaultChannel: "C_PLATFORM",
 	}
 	raw, err := json.Marshal(cfg)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	built, err := runtimeSlackClientBuilder(false)(context.Background(), raw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	client, ok := built.(*Client)
-	require.True(t, ok)
-	require.NotNil(t, client.API)
-	require.Equal(t, "C_PLATFORM", client.DefaultChannel)
-	require.Empty(t, client.WebhookURL)
+	assert.Assert(t, ok)
+	assert.Assert(t, client.API != nil)
+	assert.Assert(t, is.Equal("C_PLATFORM", client.DefaultChannel))
+	assert.Assert(t, is.Len(client.WebhookURL, 0))
 }
 
 func TestBuildRuntimeMessageClientBotTokenWithWebhookFallback(t *testing.T) {
@@ -260,39 +261,39 @@ func TestBuildRuntimeMessageClientBotTokenWithWebhookFallback(t *testing.T) {
 		DefaultChannel: "C_PLATFORM",
 	}
 	raw, err := json.Marshal(cfg)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	built, err := runtimeSlackClientBuilder(false)(context.Background(), raw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	client, ok := built.(*Client)
-	require.True(t, ok)
-	require.NotNil(t, client.API)
-	require.Equal(t, cfg.WebhookURL, client.WebhookURL)
-	require.Equal(t, "C_PLATFORM", client.DefaultChannel)
+	assert.Assert(t, ok)
+	assert.Assert(t, client.API != nil)
+	assert.Assert(t, is.Equal(cfg.WebhookURL, client.WebhookURL))
+	assert.Assert(t, is.Equal("C_PLATFORM", client.DefaultChannel))
 }
 
 func TestBuildRuntimeMessageClientUnprovisioned(t *testing.T) {
 	t.Parallel()
 
 	raw, err := json.Marshal(RuntimeSlackConfig{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	_, err = runtimeSlackClientBuilder(false)(context.Background(), raw)
-	require.True(t, errors.Is(err, ErrRuntimeConfigInvalid))
+	assert.Assert(t, errors.Is(err, ErrRuntimeConfigInvalid))
 }
 
 func TestDevModeNoCredentials_SystemMessageNoOps(t *testing.T) {
 	t.Parallel()
 
 	raw, err := json.Marshal(RuntimeSlackConfig{})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	built, err := runtimeSlackClientBuilder(true)(context.Background(), raw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	client := built.(*Client)
-	require.NoError(t, client.sendText(context.Background(), "this message should be silently dropped", ""))
+	assert.NilError(t, client.sendText(context.Background(), "this message should be silently dropped", ""))
 }
 
 func TestDevModeWithCredentials_SystemMessageDelivers(t *testing.T) {
@@ -307,17 +308,17 @@ func TestDevModeWithCredentials_SystemMessageDelivers(t *testing.T) {
 		DefaultChannel: "C_REAL",
 	}
 	raw, err := json.Marshal(cfg)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	built, err := runtimeSlackClientBuilder(true)(context.Background(), raw)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	client := built.(*Client)
 	client.API = slackgo.New("xoxb-real-token", slackgo.OptionAPIURL(server.URL+"/"))
 
-	require.NoError(t, client.sendText(context.Background(), "should deliver normally", ""))
-	require.Equal(t, []string{"C_REAL"}, recorder.channels())
-	require.Equal(t, []string{"should deliver normally"}, recorder.texts())
+	assert.NilError(t, client.sendText(context.Background(), "should deliver normally", ""))
+	assert.Assert(t, is.DeepEqual([]string{"C_REAL"}, recorder.channels()))
+	assert.Assert(t, is.DeepEqual([]string{"should deliver normally"}, recorder.texts()))
 }
 
 func TestSlackClientSendTextAPIPreferredOverWebhook(t *testing.T) {
@@ -334,9 +335,9 @@ func TestSlackClientSendTextAPIPreferredOverWebhook(t *testing.T) {
 	}
 
 	err := client.sendText(context.Background(), "bot token wins", "")
-	require.NoError(t, err)
-	require.Equal(t, []string{"C_RUNTIME"}, recorder.channels())
-	require.Equal(t, []string{"bot token wins"}, recorder.texts())
+	assert.NilError(t, err)
+	assert.Assert(t, is.DeepEqual([]string{"C_RUNTIME"}, recorder.channels()))
+	assert.Assert(t, is.DeepEqual([]string{"bot token wins"}, recorder.texts()))
 }
 
 // systemMessageRecorder captures chat.postMessage requests for the system-message client tests
@@ -362,7 +363,7 @@ func (r *systemMessageRecorder) handler() http.Handler {
 			return
 		}
 
-		require.NoError(r.t, req.ParseForm())
+		assert.NilError(r.t, req.ParseForm())
 
 		channel := req.PostForm.Get("channel")
 		text := req.PostForm.Get("text")
@@ -374,7 +375,7 @@ func (r *systemMessageRecorder) handler() http.Handler {
 		r.mu.Unlock()
 
 		w.Header().Set("Content-Type", "application/json")
-		require.NoError(r.t, json.NewEncoder(w).Encode(map[string]any{
+		assert.NilError(r.t, json.NewEncoder(w).Encode(map[string]any{
 			"ok":      true,
 			"channel": channel,
 			"ts":      fmt.Sprintf("1700000000.%06d", index),

@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+	"testing"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -31,16 +32,16 @@ func (p *selectorCallerProbe) predicate() predicate.TagDefinition {
 	}
 }
 
-func (suite *HookTestSuite) TestQuerySelectorCarriesRequestContext() {
-	t := suite.T()
+func TestQuerySelectorCarriesRequestContext(t *testing.T) {
+	s := suite.setupTest(t)
 
-	user := suite.seedUser()
+	user := s.seedUser()
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 
-	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.client)
+	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, orgID), s.client)
 
 	countIDsProbe := &selectorCallerProbe{}
-	_, err := suite.client.TagDefinition.Query().
+	_, err := s.client.TagDefinition.Query().
 		Where(tagdefinition.OwnerID(orgID), countIDsProbe.predicate()).
 		CountIDs(ctx)
 	assert.NilError(t, err)
@@ -48,7 +49,7 @@ func (suite *HookTestSuite) TestQuerySelectorCarriesRequestContext() {
 	assert.Check(t, is.Equal(countIDsProbe.withCaller, countIDsProbe.calls))
 
 	existProbe := &selectorCallerProbe{}
-	_, err = suite.client.TagDefinition.Query().
+	_, err = s.client.TagDefinition.Query().
 		Where(tagdefinition.OwnerID(orgID), existProbe.predicate()).
 		Exist(ctx)
 	assert.NilError(t, err)
@@ -56,7 +57,7 @@ func (suite *HookTestSuite) TestQuerySelectorCarriesRequestContext() {
 	assert.Check(t, is.Equal(existProbe.withCaller, existProbe.calls))
 
 	groupByProbe := &selectorCallerProbe{}
-	_, err = suite.client.TagDefinition.Query().
+	_, err = s.client.TagDefinition.Query().
 		Where(tagdefinition.OwnerID(orgID), groupByProbe.predicate()).
 		GroupBy(tagdefinition.FieldName).
 		Strings(ctx)

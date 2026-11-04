@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestNewMapLimitStore(t *testing.T) {
@@ -29,7 +30,7 @@ func TestNewMapLimitStore(t *testing.T) {
 
 	for _, tt := range tests {
 		mapLimitStore := NewMapLimitStore(context.Background(), tt.args.expirationTime, tt.args.flushInterval)
-		assert.Equal(t, tt.args.expirationTime, mapLimitStore.expirationTime)
+		assert.Check(t, is.Equal(tt.args.expirationTime, mapLimitStore.expirationTime))
 	}
 }
 
@@ -50,11 +51,11 @@ func TestMapLimitStoreIncrement(t *testing.T) {
 	for _, tt := range tests {
 		m := NewMapLimitStore(context.Background(), 1*time.Minute, 10*time.Second)
 		err := m.Inc(tt.key, tt.window)
-		assert.NoError(t, err)
+		assert.Check(t, err)
 		prevVal, currVal, err := m.Get(tt.key, tt.window, tt.window)
-		assert.NoError(t, err)
-		assert.Equal(t, int64(1), prevVal)
-		assert.Equal(t, int64(1), currVal)
+		assert.Check(t, err)
+		assert.Check(t, is.Equal(int64(1), prevVal))
+		assert.Check(t, is.Equal(int64(1), currVal))
 	}
 }
 
@@ -91,9 +92,9 @@ func TestMapLimitStoreGet(t *testing.T) {
 		m.data[mapKey(tt.args.key, tt.args.currentWindow)] = limitValue{val: tt.wantCurrValue}
 
 		prevVal, currVal, err := m.Get(tt.args.key, tt.args.previousWindow, tt.args.currentWindow)
-		assert.NoError(t, err)
-		assert.Equal(t, tt.wantPrevValue, prevVal)
-		assert.Equal(t, tt.wantCurrValue, currVal)
+		assert.Check(t, err)
+		assert.Check(t, is.Equal(tt.wantPrevValue, prevVal))
+		assert.Check(t, is.Equal(tt.wantCurrValue, currVal))
 	}
 }
 
@@ -123,9 +124,9 @@ func TestMapLimitStoreSize(t *testing.T) {
 
 		if !tt.window.IsZero() {
 			err := m.Inc(tt.key, tt.window)
-			assert.NoError(t, err)
+			assert.Check(t, err)
 		}
 
-		assert.Equal(t, tt.size, m.Size())
+		assert.Check(t, is.Equal(tt.size, m.Size()))
 	}
 }

@@ -4,9 +4,10 @@ import (
 	"testing"
 
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestParseName(t *testing.T) {
@@ -48,7 +49,7 @@ func TestParseName(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := parseName(tt.user)
 
-			assert.Equal(t, tt.want, got)
+			assert.Check(t, is.DeepEqual(tt.want, got))
 		})
 	}
 }

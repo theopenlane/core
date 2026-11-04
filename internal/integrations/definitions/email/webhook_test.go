@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -25,10 +25,10 @@ func TestResendWebhookEvent_ValidPayload(t *testing.T) {
 		Request: req,
 		Payload: payload,
 	})
-	require.NoError(t, err)
-	assert.Equal(t, "email.delivered", event.Name)
-	assert.Equal(t, "msg_abc", event.DeliveryID)
-	assert.Equal(t, payload, event.Payload)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal("email.delivered", event.Name))
+	assert.Check(t, is.Equal("msg_abc", event.DeliveryID))
+	assert.Check(t, is.DeepEqual(payload, event.Payload))
 }
 
 func TestResendWebhookEvent_ObjectTags(t *testing.T) {
@@ -60,15 +60,15 @@ func TestResendWebhookEvent_ObjectTags(t *testing.T) {
 		Request: req,
 		Payload: payload,
 	})
-	require.NoError(t, err)
-	assert.Equal(t, "email.sent", event.Name)
-	assert.Equal(t, "random_value", event.DeliveryID)
-	assert.Equal(t, payload, event.Payload)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal("email.sent", event.Name))
+	assert.Check(t, is.Equal("random_value", event.DeliveryID))
+	assert.Check(t, is.DeepEqual(payload, event.Payload))
 
 	var decoded resendWebhookEvent
-	require.NoError(t, json.Unmarshal(event.Payload, &decoded))
-	assert.Equal(t, "01KZP1H01G9J21QT2XHSZ5BR98", decoded.Data.Tags[TagAssessmentResponseID])
-	assert.Equal(t, "true", decoded.Data.Tags[TagIsTest])
+	assert.NilError(t, json.Unmarshal(event.Payload, &decoded))
+	assert.Check(t, is.Equal("01KZP1H01G9J21QT2XHSZ5BR98", decoded.Data.Tags[TagAssessmentResponseID]))
+	assert.Check(t, is.Equal("true", decoded.Data.Tags[TagIsTest]))
 }
 
 func TestResendWebhookEvent_InvalidJSON(t *testing.T) {
@@ -79,7 +79,7 @@ func TestResendWebhookEvent_InvalidJSON(t *testing.T) {
 		Request: req,
 		Payload: json.RawMessage(`not json`),
 	})
-	require.ErrorIs(t, err, ErrWebhookPayloadInvalid)
+	assert.ErrorIs(t, err, ErrWebhookPayloadInvalid)
 }
 
 func TestResendWebhookVerify_MissingSvixID(t *testing.T) {
@@ -90,7 +90,7 @@ func TestResendWebhookVerify_MissingSvixID(t *testing.T) {
 		Request: req,
 		Payload: json.RawMessage(`{}`),
 	})
-	require.ErrorIs(t, err, ErrWebhookMissingID)
+	assert.ErrorIs(t, err, ErrWebhookMissingID)
 }
 
 func TestResendWebhookVerify_MissingSecret(t *testing.T) {
@@ -103,36 +103,36 @@ func TestResendWebhookVerify_MissingSecret(t *testing.T) {
 		Request: req,
 		Payload: json.RawMessage(`{}`),
 	})
-	require.ErrorIs(t, err, ErrWebhookSecretMissing)
+	assert.ErrorIs(t, err, ErrWebhookSecretMissing)
 }
 
 func TestParseEventTime_RFC3339(t *testing.T) {
 	t.Parallel()
 
 	result := parseEventTime("2025-01-15T10:30:00Z")
-	require.NotNil(t, result)
-	assert.Equal(t, 2025, result.Year())
-	assert.Equal(t, 10, result.Hour())
+	assert.Assert(t, result != nil)
+	assert.Check(t, is.Equal(2025, result.Year()))
+	assert.Check(t, is.Equal(10, result.Hour()))
 }
 
 func TestParseEventTime_RFC3339Nano(t *testing.T) {
 	t.Parallel()
 
 	result := parseEventTime("2025-01-15T10:30:00.123456789Z")
-	require.NotNil(t, result)
-	assert.Equal(t, 123456789, result.Nanosecond())
+	assert.Assert(t, result != nil)
+	assert.Check(t, is.Equal(123456789, result.Nanosecond()))
 }
 
 func TestParseEventTime_Empty(t *testing.T) {
 	t.Parallel()
 
-	assert.Nil(t, parseEventTime(""))
+	assert.Check(t, is.Nil(parseEventTime("")))
 }
 
 func TestParseEventTime_Invalid(t *testing.T) {
 	t.Parallel()
 
-	assert.Nil(t, parseEventTime("not-a-date"))
+	assert.Check(t, is.Nil(parseEventTime("not-a-date")))
 }
 
 func TestResendWebhookEvent_ToDeliveryEvent(t *testing.T) {
@@ -161,15 +161,15 @@ func TestResendWebhookEvent_ToDeliveryEvent(t *testing.T) {
 			}
 
 			delivery, ok := event.toDeliveryEvent()
-			require.True(t, ok)
-			assert.Equal(t, providerResend, delivery.provider)
-			assert.Equal(t, tc.eventType, delivery.name)
-			assert.Equal(t, tc.kind, delivery.kind)
-			assert.Equal(t, "e_123", delivery.emailID)
-			assert.Equal(t, "2026-08-10T14:39:49.381Z", delivery.timestamp)
-			require.NotNil(t, delivery.occurredAt)
-			assert.Equal(t, 381000000, delivery.occurredAt.Nanosecond())
-			assert.Equal(t, tags, delivery.tags)
+			assert.Assert(t, ok)
+			assert.Check(t, is.Equal(providerResend, delivery.provider))
+			assert.Check(t, is.Equal(tc.eventType, delivery.name))
+			assert.Check(t, is.Equal(tc.kind, delivery.kind))
+			assert.Check(t, is.Equal("e_123", delivery.emailID))
+			assert.Check(t, is.Equal("2026-08-10T14:39:49.381Z", delivery.timestamp))
+			assert.Assert(t, delivery.occurredAt != nil)
+			assert.Check(t, is.Equal(381000000, delivery.occurredAt.Nanosecond()))
+			assert.Check(t, is.DeepEqual(tags, delivery.tags))
 		})
 	}
 }
@@ -178,10 +178,10 @@ func TestResendWebhookEvent_ToDeliveryEventUnhandled(t *testing.T) {
 	t.Parallel()
 
 	_, ok := resendWebhookEvent{Type: "email.delivery_delayed"}.toDeliveryEvent()
-	assert.False(t, ok)
+	assert.Check(t, !ok)
 
 	_, ok = resendWebhookEvent{}.toDeliveryEvent()
-	assert.False(t, ok)
+	assert.Check(t, !ok)
 }
 
 func TestGetTargetMetadata_KeysByKind(t *testing.T) {
@@ -197,10 +197,10 @@ func TestGetTargetMetadata_KeysByKind(t *testing.T) {
 		timestamp: "t2",
 	})
 
-	assert.Equal(t, map[string]any{
+	assert.Check(t, is.DeepEqual(map[string]any{
 		"sent":      map[string]string{"email_id": "e_1", "timestamp": "t1"},
 		"delivered": map[string]string{"email_id": "e_2", "timestamp": "t2"},
-	}, metadata)
+	}, metadata))
 }
 
 func TestResendDeliveryEventHandle_EmptyType(t *testing.T) {
@@ -212,7 +212,7 @@ func TestResendDeliveryEventHandle_EmptyType(t *testing.T) {
 			Payload: payload,
 		},
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 func TestResendDeliveryEventHandle_InvalidJSON(t *testing.T) {
@@ -223,7 +223,7 @@ func TestResendDeliveryEventHandle_InvalidJSON(t *testing.T) {
 			Payload: json.RawMessage(`not json`),
 		},
 	})
-	require.ErrorIs(t, err, ErrWebhookPayloadInvalid)
+	assert.ErrorIs(t, err, ErrWebhookPayloadInvalid)
 }
 
 // signedResendRequest builds a Resend webhook request whose Svix headers are signed with secret at the given time
@@ -247,7 +247,7 @@ func TestResendWebhookVerify_ValidSignature(t *testing.T) {
 		Request: signedResendRequest(MockResendWebhookSecret, time.Now(), payload),
 		Payload: payload,
 	})
-	require.NoError(t, err)
+	assert.NilError(t, err)
 }
 
 func TestResendWebhookVerify_SignatureMismatch(t *testing.T) {
@@ -259,7 +259,7 @@ func TestResendWebhookVerify_SignatureMismatch(t *testing.T) {
 		Request: signedResendRequest("whsec_d3Jvbmctc2VjcmV0", time.Now(), payload),
 		Payload: payload,
 	})
-	require.Error(t, err)
+	assert.Assert(t, err != nil)
 }
 
 func TestResendWebhookVerify_TamperedPayload(t *testing.T) {
@@ -271,7 +271,7 @@ func TestResendWebhookVerify_TamperedPayload(t *testing.T) {
 		Request: signedResendRequest(MockResendWebhookSecret, time.Now(), payload),
 		Payload: []byte(`{"type":"email.bounced","data":{}}`),
 	})
-	require.Error(t, err)
+	assert.Assert(t, err != nil)
 }
 
 func TestResendWebhookVerify_StaleTimestamp(t *testing.T) {
@@ -283,5 +283,5 @@ func TestResendWebhookVerify_StaleTimestamp(t *testing.T) {
 		Request: signedResendRequest(MockResendWebhookSecret, time.Now().Add(-10*time.Minute), payload),
 		Payload: payload,
 	})
-	require.Error(t, err)
+	assert.Assert(t, err != nil)
 }
