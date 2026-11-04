@@ -47,6 +47,8 @@ type DirectoryMembership struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the environment of the directory_membership
@@ -229,7 +231,7 @@ func (*DirectoryMembership) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case directorymembership.FieldMetadata:
 			values[i] = new([]byte)
-		case directorymembership.FieldID, directorymembership.FieldCreatedBy, directorymembership.FieldUpdatedBy, directorymembership.FieldUpdatedByImpersonator, directorymembership.FieldDisplayID, directorymembership.FieldSourceDefinitionID, directorymembership.FieldSourceDefinitionVersion, directorymembership.FieldSourceInstanceID, directorymembership.FieldManagedBy, directorymembership.FieldIntegrationRunID, directorymembership.FieldOwnerID, directorymembership.FieldEnvironmentName, directorymembership.FieldEnvironmentID, directorymembership.FieldScopeName, directorymembership.FieldScopeID, directorymembership.FieldIntegrationID, directorymembership.FieldPlatformID, directorymembership.FieldDirectoryAccountID, directorymembership.FieldDirectoryGroupID, directorymembership.FieldRole, directorymembership.FieldSource, directorymembership.FieldDirectoryName:
+		case directorymembership.FieldID, directorymembership.FieldCreatedBy, directorymembership.FieldUpdatedBy, directorymembership.FieldUpdatedByImpersonator, directorymembership.FieldDisplayID, directorymembership.FieldSourceDefinitionID, directorymembership.FieldSourceDefinitionVersion, directorymembership.FieldSourceInstanceID, directorymembership.FieldManagedBy, directorymembership.FieldIntegrationRunID, directorymembership.FieldSourceKey, directorymembership.FieldOwnerID, directorymembership.FieldEnvironmentName, directorymembership.FieldEnvironmentID, directorymembership.FieldScopeName, directorymembership.FieldScopeID, directorymembership.FieldIntegrationID, directorymembership.FieldPlatformID, directorymembership.FieldDirectoryAccountID, directorymembership.FieldDirectoryGroupID, directorymembership.FieldRole, directorymembership.FieldSource, directorymembership.FieldDirectoryName:
 			values[i] = new(sql.NullString)
 		case directorymembership.FieldCreatedAt, directorymembership.FieldUpdatedAt, directorymembership.FieldAddedAt, directorymembership.FieldRemovedAt, directorymembership.FieldObservedAt:
 			values[i] = new(sql.NullTime)
@@ -320,6 +322,12 @@ func (_m *DirectoryMembership) assignValues(columns []string, values []any) erro
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case directorymembership.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case directorymembership.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -543,6 +551,9 @@ func (_m *DirectoryMembership) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

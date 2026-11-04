@@ -263,6 +263,19 @@ type ActionPlanHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -1139,6 +1152,39 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, actionplanhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, actionplanhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, actionplanhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, actionplanhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, actionplanhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, actionplanhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, actionplanhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, actionplanhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, actionplanhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, actionplanhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, actionplanhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, actionplanhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, actionplanhistory.ExternalIDEQ(*i.ExternalID))
@@ -2260,6 +2306,19 @@ type AssessmentHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -2823,6 +2882,39 @@ func (i *AssessmentHistoryWhereInput) P() (predicate.AssessmentHistory, error) {
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, assessmenthistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, assessmenthistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, assessmenthistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, assessmenthistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, assessmenthistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, assessmenthistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, assessmenthistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, assessmenthistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, assessmenthistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, assessmenthistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, assessmenthistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, assessmenthistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
+	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, assessmenthistory.ExternalIDEQ(*i.ExternalID))
 	}
@@ -3255,6 +3347,19 @@ type AssessmentPolicyHistoryWhereInput struct {
 	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
@@ -3772,6 +3877,39 @@ func (i *AssessmentPolicyHistoryWhereInput) P() (predicate.AssessmentPolicyHisto
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, assessmentpolicyhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, assessmentpolicyhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, assessmentpolicyhistory.ExternalIDEQ(*i.ExternalID))
@@ -5188,6 +5326,19 @@ type AssetHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -6156,6 +6307,39 @@ func (i *AssetHistoryWhereInput) P() (predicate.AssetHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, assethistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, assethistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, assethistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, assethistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, assethistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, assethistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, assethistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, assethistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, assethistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, assethistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, assethistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, assethistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, assethistory.ExternalIDEQ(*i.ExternalID))
@@ -7625,6 +7809,19 @@ type CampaignHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -8452,6 +8649,39 @@ func (i *CampaignHistoryWhereInput) P() (predicate.CampaignHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, campaignhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, campaignhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, campaignhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, campaignhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, campaignhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, campaignhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, campaignhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, campaignhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, campaignhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, campaignhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, campaignhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, campaignhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, campaignhistory.ExternalIDEQ(*i.ExternalID))
@@ -10318,6 +10548,19 @@ type ContactHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -10909,6 +11152,39 @@ func (i *ContactHistoryWhereInput) P() (predicate.ContactHistory, error) {
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, contacthistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, contacthistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, contacthistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, contacthistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, contacthistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, contacthistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, contacthistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, contacthistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, contacthistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, contacthistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, contacthistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, contacthistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
+	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, contacthistory.ExternalIDEQ(*i.ExternalID))
 	}
@@ -11430,6 +11706,19 @@ type ControlHistoryWhereInput struct {
 	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
@@ -12337,6 +12626,39 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, controlhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, controlhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, controlhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, controlhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, controlhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, controlhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, controlhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, controlhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, controlhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, controlhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, controlhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, controlhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, controlhistory.ExternalIDEQ(*i.ExternalID))
@@ -13566,6 +13888,19 @@ type ControlImplementationHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -14128,6 +14463,39 @@ func (i *ControlImplementationHistoryWhereInput) P() (predicate.ControlImplement
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, controlimplementationhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, controlimplementationhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
+	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, controlimplementationhistory.ExternalIDEQ(*i.ExternalID))
 	}
@@ -14581,6 +14949,19 @@ type ControlObjectiveHistoryWhereInput struct {
 	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
@@ -15237,6 +15618,39 @@ func (i *ControlObjectiveHistoryWhereInput) P() (predicate.ControlObjectiveHisto
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, controlobjectivehistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, controlobjectivehistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, controlobjectivehistory.ExternalIDEQ(*i.ExternalID))
@@ -17737,6 +18151,19 @@ type EmailTemplateHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -18461,6 +18888,39 @@ func (i *EmailTemplateHistoryWhereInput) P() (predicate.EmailTemplateHistory, er
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, emailtemplatehistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, emailtemplatehistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, emailtemplatehistory.ExternalIDEQ(*i.ExternalID))
@@ -19217,6 +19677,19 @@ type EntityHistoryWhereInput struct {
 	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
@@ -20323,6 +20796,39 @@ func (i *EntityHistoryWhereInput) P() (predicate.EntityHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, entityhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, entityhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, entityhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, entityhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, entityhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, entityhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, entityhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, entityhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, entityhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, entityhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, entityhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, entityhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, entityhistory.ExternalIDEQ(*i.ExternalID))
@@ -22709,6 +23215,19 @@ type EvidenceHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -23405,6 +23924,39 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, evidencehistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, evidencehistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, evidencehistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, evidencehistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, evidencehistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, evidencehistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, evidencehistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, evidencehistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, evidencehistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, evidencehistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, evidencehistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, evidencehistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, evidencehistory.ExternalIDEQ(*i.ExternalID))
@@ -26367,6 +26919,19 @@ type FindingHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -27480,6 +28045,39 @@ func (i *FindingHistoryWhereInput) P() (predicate.FindingHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, findinghistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, findinghistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, findinghistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, findinghistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, findinghistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, findinghistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, findinghistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, findinghistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, findinghistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, findinghistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, findinghistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, findinghistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, findinghistory.ExternalIDEQ(*i.ExternalID))
@@ -29231,6 +29829,19 @@ type GroupHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -29857,6 +30468,39 @@ func (i *GroupHistoryWhereInput) P() (predicate.GroupHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, grouphistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, grouphistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, grouphistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, grouphistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, grouphistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, grouphistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, grouphistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, grouphistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, grouphistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, grouphistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, grouphistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, grouphistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, grouphistory.ExternalIDEQ(*i.ExternalID))
@@ -32157,6 +32801,19 @@ type IdentityHolderHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -32986,6 +33643,39 @@ func (i *IdentityHolderHistoryWhereInput) P() (predicate.IdentityHolderHistory, 
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, identityholderhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, identityholderhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, identityholderhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, identityholderhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, identityholderhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, identityholderhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, identityholderhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, identityholderhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, identityholderhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, identityholderhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, identityholderhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, identityholderhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, identityholderhistory.ExternalIDEQ(*i.ExternalID))
@@ -34042,6 +34732,19 @@ type InternalPolicyHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -34874,6 +35577,39 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, internalpolicyhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, internalpolicyhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, internalpolicyhistory.ExternalIDEQ(*i.ExternalID))
@@ -36316,6 +37052,19 @@ type MappedControlHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -36870,6 +37619,39 @@ func (i *MappedControlHistoryWhereInput) P() (predicate.MappedControlHistory, er
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, mappedcontrolhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, mappedcontrolhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
+	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, mappedcontrolhistory.ExternalIDEQ(*i.ExternalID))
 	}
@@ -37292,6 +38074,19 @@ type NarrativeHistoryWhereInput struct {
 	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
@@ -37873,6 +38668,39 @@ func (i *NarrativeHistoryWhereInput) P() (predicate.NarrativeHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, narrativehistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, narrativehistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, narrativehistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, narrativehistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, narrativehistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, narrativehistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, narrativehistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, narrativehistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, narrativehistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, narrativehistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, narrativehistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, narrativehistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, narrativehistory.ExternalIDEQ(*i.ExternalID))
@@ -44601,6 +45429,19 @@ type PlatformHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -45701,6 +46542,39 @@ func (i *PlatformHistoryWhereInput) P() (predicate.PlatformHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, platformhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, platformhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, platformhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, platformhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, platformhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, platformhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, platformhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, platformhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, platformhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, platformhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, platformhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, platformhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, platformhistory.ExternalIDEQ(*i.ExternalID))
@@ -47452,6 +48326,19 @@ type ProcedureHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -48271,6 +49158,39 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, procedurehistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, procedurehistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, procedurehistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, procedurehistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, procedurehistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, procedurehistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, procedurehistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, procedurehistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, procedurehistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, procedurehistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, procedurehistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, procedurehistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, procedurehistory.ExternalIDEQ(*i.ExternalID))
@@ -49205,6 +50125,19 @@ type ProgramHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -49916,6 +50849,39 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, programhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, programhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, programhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, programhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, programhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, programhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, programhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, programhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, programhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, programhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, programhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, programhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, programhistory.ExternalIDEQ(*i.ExternalID))
@@ -51149,6 +52115,19 @@ type RemediationHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -51967,6 +52946,39 @@ func (i *RemediationHistoryWhereInput) P() (predicate.RemediationHistory, error)
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, remediationhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, remediationhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, remediationhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, remediationhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, remediationhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, remediationhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, remediationhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, remediationhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, remediationhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, remediationhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, remediationhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, remediationhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, remediationhistory.ExternalIDEQ(*i.ExternalID))
@@ -54272,6 +55284,19 @@ type ReviewHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -55022,6 +56047,39 @@ func (i *ReviewHistoryWhereInput) P() (predicate.ReviewHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, reviewhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, reviewhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, reviewhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, reviewhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, reviewhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, reviewhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, reviewhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, reviewhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, reviewhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, reviewhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, reviewhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, reviewhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, reviewhistory.ExternalIDEQ(*i.ExternalID))
@@ -55940,6 +56998,19 @@ type RiskHistoryWhereInput struct {
 	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
@@ -56879,6 +57950,39 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, riskhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, riskhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, riskhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, riskhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, riskhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, riskhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, riskhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, riskhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, riskhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, riskhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, riskhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, riskhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, riskhistory.ExternalIDEQ(*i.ExternalID))
@@ -59865,6 +60969,19 @@ type SubcontrolHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -60703,6 +61820,39 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, subcontrolhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, subcontrolhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, subcontrolhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, subcontrolhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, subcontrolhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, subcontrolhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, subcontrolhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, subcontrolhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, subcontrolhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, subcontrolhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, subcontrolhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, subcontrolhistory.ExternalIDEQ(*i.ExternalID))
@@ -62517,6 +63667,19 @@ type SystemDetailHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -63096,6 +64259,39 @@ func (i *SystemDetailHistoryWhereInput) P() (predicate.SystemDetailHistory, erro
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, systemdetailhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
 	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, systemdetailhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, systemdetailhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, systemdetailhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, systemdetailhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, systemdetailhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, systemdetailhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, systemdetailhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, systemdetailhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, systemdetailhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, systemdetailhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
+	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, systemdetailhistory.ExternalIDEQ(*i.ExternalID))
 	}
@@ -63519,6 +64715,19 @@ type TaskHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -63748,19 +64957,6 @@ type TaskHistoryWhereInput struct {
 	SourceNotNil       bool     `json:"sourceNotNil,omitempty"`
 	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
 	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
-
-	// "source_key" field predicates.
-	SourceKey             *string  `json:"sourceKey,omitempty"`
-	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
-	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
-	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
-	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
-	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
-	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
-	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
-	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
-	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
-	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 
 	// "idempotency_key" field predicates.
 	IdempotencyKey             *string  `json:"idempotencyKey,omitempty"`
@@ -64276,6 +65472,39 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, taskhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, taskhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, taskhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, taskhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, taskhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, taskhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, taskhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, taskhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, taskhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, taskhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, taskhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, taskhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, taskhistory.ExternalIDEQ(*i.ExternalID))
@@ -64835,39 +66064,6 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	if i.SourceContainsFold != nil {
 		predicates = append(predicates, taskhistory.SourceContainsFold(*i.SourceContainsFold))
 	}
-	if i.SourceKey != nil {
-		predicates = append(predicates, taskhistory.SourceKeyEQ(*i.SourceKey))
-	}
-	if i.SourceKeyNEQ != nil {
-		predicates = append(predicates, taskhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
-	}
-	if len(i.SourceKeyIn) > 0 {
-		predicates = append(predicates, taskhistory.SourceKeyIn(i.SourceKeyIn...))
-	}
-	if len(i.SourceKeyNotIn) > 0 {
-		predicates = append(predicates, taskhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
-	}
-	if i.SourceKeyContains != nil {
-		predicates = append(predicates, taskhistory.SourceKeyContains(*i.SourceKeyContains))
-	}
-	if i.SourceKeyHasPrefix != nil {
-		predicates = append(predicates, taskhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
-	}
-	if i.SourceKeyHasSuffix != nil {
-		predicates = append(predicates, taskhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
-	}
-	if i.SourceKeyIsNil {
-		predicates = append(predicates, taskhistory.SourceKeyIsNil())
-	}
-	if i.SourceKeyNotNil {
-		predicates = append(predicates, taskhistory.SourceKeyNotNil())
-	}
-	if i.SourceKeyEqualFold != nil {
-		predicates = append(predicates, taskhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
-	}
-	if i.SourceKeyContainsFold != nil {
-		predicates = append(predicates, taskhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
-	}
 	if i.IdempotencyKey != nil {
 		predicates = append(predicates, taskhistory.IdempotencyKeyEQ(*i.IdempotencyKey))
 	}
@@ -65121,6 +66317,19 @@ type TemplateHistoryWhereInput struct {
 	IntegrationRunIDNotNil       bool     `json:"integrationRunIDNotNil,omitempty"`
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
+
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
@@ -65741,6 +66950,39 @@ func (i *TemplateHistoryWhereInput) P() (predicate.TemplateHistory, error) {
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, templatehistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, templatehistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, templatehistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, templatehistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, templatehistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, templatehistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, templatehistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, templatehistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, templatehistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, templatehistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, templatehistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, templatehistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, templatehistory.ExternalIDEQ(*i.ExternalID))
@@ -76673,6 +77915,19 @@ type VulnerabilityHistoryWhereInput struct {
 	IntegrationRunIDEqualFold    *string  `json:"integrationRunIDEqualFold,omitempty"`
 	IntegrationRunIDContainsFold *string  `json:"integrationRunIDContainsFold,omitempty"`
 
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "external_id" field predicates.
 	ExternalID             *string  `json:"externalID,omitempty"`
 	ExternalIDNEQ          *string  `json:"externalIDNEQ,omitempty"`
@@ -77854,6 +79109,39 @@ func (i *VulnerabilityHistoryWhereInput) P() (predicate.VulnerabilityHistory, er
 	}
 	if i.IntegrationRunIDContainsFold != nil {
 		predicates = append(predicates, vulnerabilityhistory.IntegrationRunIDContainsFold(*i.IntegrationRunIDContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, vulnerabilityhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.ExternalID != nil {
 		predicates = append(predicates, vulnerabilityhistory.ExternalIDEQ(*i.ExternalID))

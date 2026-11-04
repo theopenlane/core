@@ -134,6 +134,13 @@ func (p ProvenanceMixin) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entx.IntegrationMappingField().SystemControlled().Volatile(),
 			),
+		field.String("source_key").
+			Comment("key grouping the records runtime ingest wrote from one named source").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entx.IntegrationMappingField().SystemControlled(),
+			),
 	}
 
 	if p.IncludeExternalID {
@@ -174,6 +181,7 @@ func (p ProvenanceMixin) Indexes() []ent.Index {
 	indexes := []ent.Index{
 		index.Fields("source_instance_id"),
 		index.Fields("integration_run_id"),
+		index.Fields("source_key"),
 	}
 
 	if p.IncludeExternalIDIndex {

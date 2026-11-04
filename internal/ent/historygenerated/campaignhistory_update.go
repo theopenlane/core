@@ -112,6 +112,9 @@ func (_u *CampaignHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(campaignhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(campaignhistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(campaignhistory.FieldExternalID, field.TypeString)
 	}
@@ -334,6 +337,9 @@ func (_u *CampaignHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Campaig
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(campaignhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(campaignhistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(campaignhistory.FieldExternalID, field.TypeString)

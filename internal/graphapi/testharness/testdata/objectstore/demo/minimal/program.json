@@ -1,0 +1,9 @@
+[
+  {
+    "external_id": "program::minimal-program",
+    "name": "Minimal Program",
+    "description": "Test program for {{ORG_NAME}}",
+    "start_date": "{{TODAY-303}}T00:00:00Z",
+    "end_date": "{{TODAY+61}}T00:00:00Z"
+  }
+]

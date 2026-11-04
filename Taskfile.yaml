@@ -94,7 +94,6 @@ tasks:
 
   generate:checksums:ci:
     desc: Generate with checksum tracking for CI optimization
-    aliases: [generate]
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     deps:

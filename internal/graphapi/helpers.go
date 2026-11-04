@@ -5,7 +5,21 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 )
+
+// runtimeClient returns the process-wide integrations runtime and its client for the runtime definition, false when
+// either is not configured
+func runtimeClient(definitionID string) (*intruntime.Runtime, any, bool) {
+	rt := intruntime.Default()
+	if rt == nil {
+		return nil, nil, false
+	}
+
+	client, ok := rt.Registry().RuntimeClient(definitionID)
+
+	return rt, client, ok
+}
 
 // common.WithTransactionalMutation automatically wrap the GraphQL mutations with a database transaction.
 // This allows the ent.Client to commit at the end, or rollback the transaction in case of a GraphQL error.

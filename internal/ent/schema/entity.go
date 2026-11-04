@@ -74,30 +74,28 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("display_name"),
-				entx.FieldSourceManaged(),
-			),
+			).
+			Annotations(entx.CatalogManagedField()...),
 		field.String("description").
 			Comment("An optional description of the entity").
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
 				entx.IntegrationMappingField(),
-				entx.FieldSourceManaged(),
-			),
+			).
+			Annotations(entx.CatalogManagedField()...),
 		field.Strings("domains").
 			Comment("domains associated with the entity").
 			Validate(validator.ValidateDomains()).
-			Annotations(
-				entx.FieldSourceManaged(),
-			).
+			Annotations(entx.CatalogManagedField()...).
 			Optional(),
 		field.Strings("aliases").
 			Comment("common matching names that should match with the entity").
 			Annotations(
 				entx.FieldSearchable(),
 				entx.IntegrationMappingField(),
-				entx.FieldSourceManaged(),
 			).
+			Annotations(entx.CatalogManagedField()...).
 			Optional(),
 		field.String("entity_type_id").
 			Comment("The type of the entity").
@@ -223,18 +221,18 @@ func (Entity) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("status_page_url"),
-				entx.FieldSourceManaged(),
-			),
+			).
+			Annotations(entx.CatalogManagedField()...),
 		field.Strings("provided_services").
 			Comment("services provided by the entity").
 			Optional().
-			Annotations(entx.FieldSourceManaged()).
+			Annotations(entx.CatalogManagedField()...).
 			Default([]string{}),
 		field.Strings("links").
 			Comment("external links associated with the entity").
 			Validate(validator.ValidateURLs()).
 			Optional().
-			Annotations(entx.FieldSourceManaged()).
+			Annotations(entx.CatalogManagedField()...).
 			Default([]string{}),
 		field.String("risk_rating").
 			Comment("the risk rating label for the entity").
@@ -299,7 +297,7 @@ func (Entity) Fields() []ent.Field {
 			MaxLen(urlMaxLen).
 			Validate(validator.ValidateURL()).
 			Optional().
-			Annotations(entx.FieldSourceManaged()).
+			Annotations(entx.CatalogManagedField()...).
 			Nillable(),
 		field.String("logo_file_id").
 			Comment("The logo file id for the entity").

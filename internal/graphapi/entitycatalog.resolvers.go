@@ -37,15 +37,20 @@ func (r *mutationResolver) AdoptEntity(ctx context.Context, catalogID string, in
 		return nil, rout.ErrPermissionDenied
 	}
 
-	overlay, err := jsonx.ToRawMessage(input)
+	source, err := jsonx.ToRawMessage(input)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
 	}
 
-	id, _, err := entityops.SchemaEntity.Adopt(ctx, withTransactionalMutation(ctx), catalogID, orgID, overlay)
+	source, _, err = jsonx.SetObjectKey(source, entityops.CatalogPointerField, catalogID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
+	}
+
+	id, err := entityops.SchemaEntity.Reconcile(ctx, withTransactionalMutation(ctx), orgID, source)
 
 	switch {
-	case errors.Is(err, entityops.ErrCatalogRowNotSystemOwned), errors.Is(err, entityops.ErrCatalogRowNotVisible):
+	case errors.Is(err, entityops.ErrCatalogRowNotFound):
 		return nil, common.NewNotFoundError("entity")
 	case err != nil:
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})

@@ -112,6 +112,9 @@ func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(remediationhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(remediationhistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(remediationhistory.FieldExternalID, field.TypeString)
 	}
@@ -331,6 +334,9 @@ func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reme
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(remediationhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(remediationhistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(remediationhistory.FieldExternalID, field.TypeString)

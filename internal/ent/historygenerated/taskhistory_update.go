@@ -112,6 +112,9 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(taskhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(taskhistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(taskhistory.FieldExternalID, field.TypeString)
 	}
@@ -165,9 +168,6 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(taskhistory.FieldSource, field.TypeString)
-	}
-	if _u.mutation.SourceKeyCleared() {
-		_spec.ClearField(taskhistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.IdempotencyKeyCleared() {
 		_spec.ClearField(taskhistory.FieldIdempotencyKey, field.TypeString)
@@ -311,6 +311,9 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(taskhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(taskhistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(taskhistory.FieldExternalID, field.TypeString)
 	}
@@ -364,9 +367,6 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(taskhistory.FieldSource, field.TypeString)
-	}
-	if _u.mutation.SourceKeyCleared() {
-		_spec.ClearField(taskhistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.IdempotencyKeyCleared() {
 		_spec.ClearField(taskhistory.FieldIdempotencyKey, field.TypeString)

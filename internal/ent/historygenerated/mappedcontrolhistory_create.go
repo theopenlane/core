@@ -232,6 +232,20 @@ func (_c *MappedControlHistoryCreate) SetNillableIntegrationRunID(v *string) *Ma
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *MappedControlHistoryCreate) SetSourceKey(v string) *MappedControlHistoryCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *MappedControlHistoryCreate) SetNillableSourceKey(v *string) *MappedControlHistoryCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *MappedControlHistoryCreate) SetExternalID(v string) *MappedControlHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -580,6 +594,10 @@ func (_c *MappedControlHistoryCreate) createSpec() (*MappedControlHistory, *sqlg
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(mappedcontrolhistory.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(mappedcontrolhistory.FieldExternalID, field.TypeString, value)

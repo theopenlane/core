@@ -125,6 +125,11 @@ func IntegrationRunID(v string) predicate.TagDefinition {
 	return predicate.TagDefinition(sql.FieldEQ(FieldIntegrationRunID, v))
 }
 
+// SourceKey applies equality check predicate on the "source_key" field. It's identical to SourceKeyEQ.
+func SourceKey(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldEQ(FieldSourceKey, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.TagDefinition {
 	return predicate.TagDefinition(sql.FieldEQ(FieldExternalID, v))
@@ -993,6 +998,81 @@ func IntegrationRunIDEqualFold(v string) predicate.TagDefinition {
 // IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
 func IntegrationRunIDContainsFold(v string) predicate.TagDefinition {
 	return predicate.TagDefinition(sql.FieldContainsFold(FieldIntegrationRunID, v))
+}
+
+// SourceKeyEQ applies the EQ predicate on the "source_key" field.
+func SourceKeyEQ(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldEQ(FieldSourceKey, v))
+}
+
+// SourceKeyNEQ applies the NEQ predicate on the "source_key" field.
+func SourceKeyNEQ(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldNEQ(FieldSourceKey, v))
+}
+
+// SourceKeyIn applies the In predicate on the "source_key" field.
+func SourceKeyIn(vs ...string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyNotIn applies the NotIn predicate on the "source_key" field.
+func SourceKeyNotIn(vs ...string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldNotIn(FieldSourceKey, vs...))
+}
+
+// SourceKeyGT applies the GT predicate on the "source_key" field.
+func SourceKeyGT(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldGT(FieldSourceKey, v))
+}
+
+// SourceKeyGTE applies the GTE predicate on the "source_key" field.
+func SourceKeyGTE(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldGTE(FieldSourceKey, v))
+}
+
+// SourceKeyLT applies the LT predicate on the "source_key" field.
+func SourceKeyLT(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldLT(FieldSourceKey, v))
+}
+
+// SourceKeyLTE applies the LTE predicate on the "source_key" field.
+func SourceKeyLTE(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldLTE(FieldSourceKey, v))
+}
+
+// SourceKeyContains applies the Contains predicate on the "source_key" field.
+func SourceKeyContains(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldContains(FieldSourceKey, v))
+}
+
+// SourceKeyHasPrefix applies the HasPrefix predicate on the "source_key" field.
+func SourceKeyHasPrefix(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldHasPrefix(FieldSourceKey, v))
+}
+
+// SourceKeyHasSuffix applies the HasSuffix predicate on the "source_key" field.
+func SourceKeyHasSuffix(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldHasSuffix(FieldSourceKey, v))
+}
+
+// SourceKeyIsNil applies the IsNil predicate on the "source_key" field.
+func SourceKeyIsNil() predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldIsNull(FieldSourceKey))
+}
+
+// SourceKeyNotNil applies the NotNil predicate on the "source_key" field.
+func SourceKeyNotNil() predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldNotNull(FieldSourceKey))
+}
+
+// SourceKeyEqualFold applies the EqualFold predicate on the "source_key" field.
+func SourceKeyEqualFold(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldEqualFold(FieldSourceKey, v))
+}
+
+// SourceKeyContainsFold applies the ContainsFold predicate on the "source_key" field.
+func SourceKeyContainsFold(v string) predicate.TagDefinition {
+	return predicate.TagDefinition(sql.FieldContainsFold(FieldSourceKey, v))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.

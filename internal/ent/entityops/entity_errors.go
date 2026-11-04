@@ -25,6 +25,10 @@ var (
 	ErrUpdateFailed = errors.New("entityops: update failed")
 	// ErrQueryFailed indicates an entity query failed
 	ErrQueryFailed = errors.New("entityops: query failed")
+	// ErrDeleteFailed indicates an entity delete or its cleanup failed
+	ErrDeleteFailed = errors.New("entityops: delete failed")
+	// ErrSourceFilterRequired indicates a delete by source was asked for without a definition and an instance or key
+	ErrSourceFilterRequired = errors.New("entityops: delete by source requires a definition and an instance or key")
 	// ErrLoadFailed indicates an entity load failed
 	ErrLoadFailed = errors.New("entityops: load failed")
 	// ErrLinkFailed indicates an edge link operation failed
@@ -83,12 +87,8 @@ var (
 	ErrLookupAlternativeInvalid = errors.New("entityops: lookup alternative invalid")
 	// ErrCatalogUnsupported indicates the schema has no catalog adoption capability
 	ErrCatalogUnsupported = errors.New("entityops: catalog unsupported")
-	// ErrCatalogRowNotSystemOwned indicates the catalog row does not exist or is not system owned
-	ErrCatalogRowNotSystemOwned = errors.New("entityops: catalog row not system owned")
-	// ErrCatalogRowNotVisible indicates the catalog row is system owned but not visible to organizations
-	ErrCatalogRowNotVisible = errors.New("entityops: catalog row not visible")
-	// ErrCatalogMatchFieldUnsupported indicates a match candidate names a field that is not a matchable string or string-array column
-	ErrCatalogMatchFieldUnsupported = errors.New("entityops: catalog match field unsupported")
+	// ErrCatalogRowNotFound indicates no visible system-owned catalog row has the id
+	ErrCatalogRowNotFound = errors.New("entityops: catalog row not found")
 )
 
 // --- Operation constants ---
@@ -108,6 +108,10 @@ const (
 	refOpEmit = "emit"
 	// refOpUpsert identifies catalog-driven upsert operations
 	refOpUpsert = "upsert"
+	// refOpDelete identifies entity delete operations
+	refOpDelete = "delete"
+	// refOpReconcile identifies catalog reconciliation operations
+	refOpReconcile = "reconcile"
 )
 
 // --- Log field keys ---

@@ -103,15 +103,15 @@ func TestObjectStoreSystemImportRunsAsScheduledCycle(t *testing.T) {
 	}
 }
 
-// TestObjectStoreSystemImportReportsInvalidRecord verifies a record the mapping cannot apply is reported as a failed
-// record by ingest and is never created
+// TestObjectStoreSystemImportReportsInvalidRecord verifies a record without an external id is filtered by ingest and
+// is never created
 func TestObjectStoreSystemImportReportsInvalidRecord(t *testing.T) {
 	systemCtx := th.SetInternalContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
 	systemVendorEntityType(t)
 
 	result := runSystemImport(t, systemCtx, fixturePrefixInvalid)
 	assert.Check(t, is.Equal(1, result.Attempted))
-	assert.Check(t, is.Equal(1, result.Failed), "the record without a systemInternalID must fail mapping: %+v", result.Failures)
+	assert.Check(t, is.Equal(1, result.Filtered), "the record without an external_id must be filtered: %+v", result.Failures)
 
 	created, err := suite.Client.DB.Entity.Query().
 		Where(entity.NameEqualFold(fixtureInvalid.Name)).

@@ -11,4 +11,5 @@ func ImplementAllDirectives(cfg *gqlgenerated.Config) {
 	cfg.Directives.ReadOnly = directives.ReadOnlyDirective
 	cfg.Directives.ExternalReadOnly = directives.ExternalReadOnlyDirective
 	cfg.Directives.ExternalSource = directives.ExternalSourceDirective
+	cfg.Directives.CatalogManaged = directives.CatalogManagedDirective
 }

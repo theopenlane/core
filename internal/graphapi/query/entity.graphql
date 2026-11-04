@@ -245,6 +245,7 @@ query GetEntityByID ($entityId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		spendCurrency
 		ssoEnforced
 		status

@@ -450,6 +450,10 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -1458,6 +1462,20 @@ input ActionPlanWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -2054,6 +2072,10 @@ type Assessment implements Node @modules(names: ["compliance_module"]) {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -2618,6 +2640,10 @@ type AssessmentPolicy implements Node @modules(names: ["compliance_module"]) {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -2946,6 +2972,20 @@ input AssessmentPolicyWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -3774,6 +3814,20 @@ input AssessmentWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -3991,6 +4045,10 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -5078,6 +5136,20 @@ input AssetWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -5851,6 +5923,10 @@ type Campaign implements Node @modules(names: ["compliance_module","trust_center
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -7214,6 +7290,20 @@ input CampaignWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -7747,6 +7837,10 @@ type CheckResult implements Node {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
@@ -8255,6 +8349,20 @@ input CheckResultWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -8525,6 +8633,10 @@ type Contact implements Node @modules(names: ["entity_management_module","compli
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -9049,6 +9161,20 @@ input ContactWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -9269,6 +9395,10 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -10715,6 +10845,10 @@ type ControlImplementation implements Node @modules(names: ["compliance_module"]
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -11267,6 +11401,20 @@ input ControlImplementationWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -11523,6 +11671,10 @@ type ControlObjective implements Node @modules(names: ["compliance_module","poli
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -12305,6 +12457,20 @@ input ControlObjectiveWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -12896,6 +13062,20 @@ input ControlWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -18792,10 +18972,6 @@ input CreateTaskInput {
 	"""
 	source: String
 	"""
-	stable source-specific key for the task
-	"""
-	sourceKey: String
-	"""
 	an optional external reference URL for the task
 	"""
 	externalReferenceURL: [String!]
@@ -20345,6 +20521,10 @@ type CustomTypeEnum implements Node @modules(names: ["any_module"]) {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -20970,6 +21150,20 @@ input CustomTypeEnumWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -21648,6 +21842,42 @@ input DNSVerificationWhereInput {
 DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z )
 """
 scalar DateTime
+"""
+Input for deleteDemoData mutation
+"""
+input DeleteDemoDataInput {
+	"""
+	the demo dataset to remove from the current organization, e.g. soc2
+	"""
+	dataset: String!
+	"""
+	dataset object types whose seeded records are kept, by snake_case schema name, e.g. custom_type_enum
+	"""
+	keep: [String!]
+}
+"""
+Return response for deleteDemoData mutation. Removal happens asynchronously, so this only confirms
+the removal was queued - the outcome surfaces via a follow-up Notification once it finishes
+"""
+type DeleteDemoDataPayload {
+	"""
+	whether the removal was queued
+	"""
+	accepted: Boolean!
+}
+"""
+DemoDataProfile names the seed time rules applied to a demo dataset's records
+"""
+enum DemoDataProfile @goModel(model: "github.com/theopenlane/core/common/enums.DemoDataProfile") {
+	"""
+	fills the dataset out with statuses, program links and assignments
+	"""
+	DEMO
+	"""
+	seeds the dataset's controls, policies and procedures as drafts with nothing linked or assigned
+	"""
+	DRAFT
+}
 type DirectoryAccount implements Node {
 	id: ID!
 	createdAt: Time
@@ -21686,6 +21916,10 @@ type DirectoryAccount implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -22280,6 +22514,20 @@ input DirectoryAccountWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -22772,6 +23020,10 @@ type DirectoryGroup implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -23269,6 +23521,20 @@ input DirectoryGroupWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -23576,6 +23842,10 @@ type DirectoryMembership implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	the organization id that owns the object
 	"""
@@ -24004,6 +24274,20 @@ input DirectoryMembershipWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	environment_name field predicates
 	"""
@@ -24858,6 +25142,10 @@ type EmailTemplate implements Node @modules(names: ["any_module"]) {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -25524,6 +25812,20 @@ input EmailTemplateWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -25876,6 +26178,10 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -25994,19 +26300,19 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	The entity's displayed 'friendly' name
 	"""
-	displayName: String
+	displayName: String @catalogManaged
 	"""
 	An optional description of the entity
 	"""
-	description: String
+	description: String @catalogManaged
 	"""
 	domains associated with the entity
 	"""
-	domains: [String!]
+	domains: [String!] @catalogManaged
 	"""
 	common matching names that should match with the entity
 	"""
-	aliases: [String!]
+	aliases: [String!] @catalogManaged
 	"""
 	The type of the entity
 	"""
@@ -26078,15 +26384,15 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	status page URL for the entity
 	"""
-	statusPageURL: String
+	statusPageURL: String @catalogManaged
 	"""
 	services provided by the entity
 	"""
-	providedServices: [String!]
+	providedServices: [String!] @catalogManaged
 	"""
 	external links associated with the entity
 	"""
-	links: [String!]
+	links: [String!] @catalogManaged
 	"""
 	the risk rating label for the entity
 	"""
@@ -26122,7 +26428,7 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	URL of the logo for the entity
 	"""
-	logoRemoteURL: String
+	logoRemoteURL: String @catalogManaged
 	"""
 	The logo file id for the entity
 	"""
@@ -27734,6 +28040,20 @@ input EntityWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -29388,6 +29708,10 @@ type Evidence implements Node @modules(names: ["compliance_module","policy_manag
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -30251,6 +30575,20 @@ input EvidenceWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -31949,6 +32287,10 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -33539,6 +33881,20 @@ input FindingWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -34446,6 +34802,10 @@ type Group implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -37218,6 +37578,20 @@ input GroupWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -38182,6 +38556,10 @@ type IdentityHolder implements Node @modules(names: ["compliance_module","regist
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -39279,6 +39657,20 @@ input IdentityHolderWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -42130,6 +42522,10 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -43316,6 +43712,20 @@ input InternalPolicyWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -44607,6 +45017,10 @@ type MappedControl implements Node @modules(names: ["compliance_module"]) {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -45155,6 +45569,20 @@ input MappedControlWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -46474,6 +46902,27 @@ type Mutation {
 		"""
 		id: ID!
 	): CustomTypeEnumDeletePayload!
+	"""
+	Seed the current organization with a demo dataset, asynchronously creating its programs,
+	controls, policies, risks and related records
+	"""
+	seedDemoData(
+		"""
+		the demo dataset to seed
+		"""
+		input: SeedDemoDataInput!
+	): SeedDemoDataPayload!
+	"""
+	Remove a seeded demo dataset from the current organization, asynchronously deleting every
+	record it imported except the object types listed in keep. Controls cloned from catalog
+	standards such as SOC 2 are left in place
+	"""
+	deleteDemoData(
+		"""
+		the demo dataset to remove
+		"""
+		input: DeleteDemoDataInput!
+	): DeleteDemoDataPayload!
 	"""
 	Create a new directoryAccount
 	"""
@@ -51889,6 +52338,10 @@ type Narrative implements Node @modules(names: ["compliance_module","policy_mana
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -52457,6 +52910,20 @@ input NarrativeWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -60097,6 +60564,10 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -61532,6 +62003,20 @@ input PlatformWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -62524,6 +63009,10 @@ type Procedure implements Node @modules(names: ["compliance_module","policy_mana
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -63423,6 +63912,20 @@ input ProcedureWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -63897,6 +64400,10 @@ type Program implements Node @modules(names: ["compliance_module","entity_manage
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -65246,6 +65753,20 @@ input ProgramWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -70878,6 +71399,10 @@ type Remediation implements Node @modules(names: ["vulnerability_management_modu
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -71902,6 +72427,20 @@ input RemediationWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -73247,6 +73786,10 @@ type Review implements Node @modules(names: ["compliance_module","vulnerability_
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -74208,6 +74751,20 @@ input ReviewWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -74677,6 +75234,10 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -75925,6 +76486,20 @@ input RiskWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -77008,6 +77583,10 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -77898,6 +78477,20 @@ input ScanWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -78458,6 +79051,29 @@ type SearchSnippet {
 	The matched text with surrounding context (with highlighting markers if applicable)
 	"""
 	text: String!
+}
+"""
+Input for seedDemoData mutation
+"""
+input SeedDemoDataInput {
+	"""
+	the demo dataset to seed into the current organization, e.g. soc2
+	"""
+	dataset: String!
+	"""
+	the seed profile, DEMO when not set
+	"""
+	profile: DemoDataProfile
+}
+"""
+Return response for seedDemoData mutation. Seeding happens asynchronously, so this only confirms
+the seed was queued - the outcome surfaces via a follow-up Notification once it finishes
+"""
+type SeedDemoDataPayload {
+	"""
+	whether the seed was queued
+	"""
+	accepted: Boolean!
 }
 """
 Input for sendCampaignTestEmail mutation
@@ -79170,6 +79786,10 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -80345,6 +80965,20 @@ input SubcontrolWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -81811,6 +82445,10 @@ type SystemDetail implements Node @modules(names: ["compliance_module","registry
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -82304,6 +82942,20 @@ input SystemDetailWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -82660,6 +83312,10 @@ type TagDefinition implements Node @modules(names: ["any_module"]) {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -82971,6 +83627,20 @@ input TagDefinitionWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -83141,6 +83811,10 @@ type Task implements Node @modules(names: ["any_module"]) {
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String
@@ -83236,10 +83910,6 @@ type Task implements Node @modules(names: ["any_module"]) {
 	the system or workflow that created or suggested the task
 	"""
 	source: String
-	"""
-	stable source-specific key for the task
-	"""
-	sourceKey: String
 	"""
 	key to prevent duplicates for auto-generated task based on rules
 	"""
@@ -84170,6 +84840,20 @@ input TaskWhereInput {
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
 	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -84422,20 +85106,6 @@ input TaskWhereInput {
 	sourceEqualFold: String
 	sourceContainsFold: String
 	"""
-	source_key field predicates
-	"""
-	sourceKey: String
-	sourceKeyNEQ: String
-	sourceKeyIn: [String!]
-	sourceKeyNotIn: [String!]
-	sourceKeyContains: String
-	sourceKeyHasPrefix: String
-	sourceKeyHasSuffix: String
-	sourceKeyIsNil: Boolean
-	sourceKeyNotNil: Boolean
-	sourceKeyEqualFold: String
-	sourceKeyContainsFold: String
-	"""
 	idempotency_key field predicates
 	"""
 	idempotencyKey: String
@@ -84641,6 +85311,10 @@ type Template implements Node {
 	id of the integration run that last wrote this record
 	"""
 	integrationRunID: String
+	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
 	"""
 	identifier of the record in an external system
 	"""
@@ -85246,6 +85920,20 @@ input TemplateWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""
@@ -97493,11 +98181,6 @@ input UpdateTaskInput {
 	source: String
 	clearSource: Boolean
 	"""
-	stable source-specific key for the task
-	"""
-	sourceKey: String
-	clearSourceKey: Boolean
-	"""
 	an optional external reference URL for the task
 	"""
 	externalReferenceURL: [String!]
@@ -101468,6 +102151,10 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 	"""
 	integrationRunID: String
 	"""
+	key grouping the records runtime ingest wrote from one named source
+	"""
+	sourceKey: String
+	"""
 	identifier of the record in an external system
 	"""
 	externalID: String!
@@ -102727,6 +103414,20 @@ input VulnerabilityWhereInput {
 	integrationRunIDNotNil: Boolean
 	integrationRunIDEqualFold: String
 	integrationRunIDContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	external_id field predicates
 	"""

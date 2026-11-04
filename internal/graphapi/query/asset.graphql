@@ -48,6 +48,7 @@ mutation CreateAsset ($input: CreateAssetInput!) {
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -110,6 +111,7 @@ mutation CreateBulkAsset ($input: [CreateAssetInput!]) {
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -172,6 +174,7 @@ mutation CreateBulkCSVAsset ($input: Upload!) {
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -254,6 +257,7 @@ query GetAllAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				sourceDefinitionVersion
 				sourceIdentifier
 				sourceInstanceID
+				sourceKey
 				sourcePlatformID
 				sourceType
 				systemInternalID
@@ -316,6 +320,7 @@ query GetAssetByID ($assetId: ID!) {
 		sourceDefinitionVersion
 		sourceIdentifier
 		sourceInstanceID
+		sourceKey
 		sourcePlatformID
 		sourceType
 		systemInternalID
@@ -385,6 +390,7 @@ query GetAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orde
 				sourceDefinitionVersion
 				sourceIdentifier
 				sourceInstanceID
+				sourceKey
 				sourcePlatformID
 				sourceType
 				systemInternalID
@@ -448,6 +454,7 @@ mutation UpdateAsset ($updateAssetId: ID!, $input: UpdateAssetInput!) {
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -510,6 +517,7 @@ mutation UpdateBulkAsset ($ids: [ID!]!, $input: UpdateAssetInput!) {
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -575,6 +583,7 @@ mutation UpdateBulkCSVAsset ($input: Upload!) {
 			sourceDefinitionVersion
 			sourceIdentifier
 			sourceInstanceID
+			sourceKey
 			sourcePlatformID
 			sourceType
 			systemInternalID

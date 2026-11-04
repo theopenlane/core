@@ -46,6 +46,8 @@ type AssessmentPolicyHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the organization id that owns the object
@@ -66,7 +68,7 @@ func (*AssessmentPolicyHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case assessmentpolicyhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case assessmentpolicyhistory.FieldID, assessmentpolicyhistory.FieldRef, assessmentpolicyhistory.FieldCreatedBy, assessmentpolicyhistory.FieldUpdatedBy, assessmentpolicyhistory.FieldUpdatedByImpersonator, assessmentpolicyhistory.FieldSourceDefinitionID, assessmentpolicyhistory.FieldSourceDefinitionVersion, assessmentpolicyhistory.FieldSourceInstanceID, assessmentpolicyhistory.FieldManagedBy, assessmentpolicyhistory.FieldIntegrationRunID, assessmentpolicyhistory.FieldExternalID, assessmentpolicyhistory.FieldOwnerID, assessmentpolicyhistory.FieldAssessmentID, assessmentpolicyhistory.FieldInternalPolicyID, assessmentpolicyhistory.FieldPolicyRevision:
+		case assessmentpolicyhistory.FieldID, assessmentpolicyhistory.FieldRef, assessmentpolicyhistory.FieldCreatedBy, assessmentpolicyhistory.FieldUpdatedBy, assessmentpolicyhistory.FieldUpdatedByImpersonator, assessmentpolicyhistory.FieldSourceDefinitionID, assessmentpolicyhistory.FieldSourceDefinitionVersion, assessmentpolicyhistory.FieldSourceInstanceID, assessmentpolicyhistory.FieldManagedBy, assessmentpolicyhistory.FieldIntegrationRunID, assessmentpolicyhistory.FieldSourceKey, assessmentpolicyhistory.FieldExternalID, assessmentpolicyhistory.FieldOwnerID, assessmentpolicyhistory.FieldAssessmentID, assessmentpolicyhistory.FieldInternalPolicyID, assessmentpolicyhistory.FieldPolicyRevision:
 			values[i] = new(sql.NullString)
 		case assessmentpolicyhistory.FieldHistoryTime, assessmentpolicyhistory.FieldCreatedAt, assessmentpolicyhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -169,6 +171,12 @@ func (_m *AssessmentPolicyHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case assessmentpolicyhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case assessmentpolicyhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -276,6 +284,9 @@ func (_m *AssessmentPolicyHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

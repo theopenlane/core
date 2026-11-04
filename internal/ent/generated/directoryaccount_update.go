@@ -210,6 +210,26 @@ func (_u *DirectoryAccountUpdate) ClearIntegrationRunID() *DirectoryAccountUpdat
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *DirectoryAccountUpdate) SetSourceKey(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableSourceKey(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *DirectoryAccountUpdate) ClearSourceKey() *DirectoryAccountUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_u *DirectoryAccountUpdate) SetEnvironmentName(v string) *DirectoryAccountUpdate {
 	_u.mutation.SetEnvironmentName(v)
@@ -1213,6 +1233,12 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(directoryaccount.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(directoryaccount.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(directoryaccount.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directoryaccount.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -1945,6 +1971,26 @@ func (_u *DirectoryAccountUpdateOne) SetNillableIntegrationRunID(v *string) *Dir
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *DirectoryAccountUpdateOne) ClearIntegrationRunID() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *DirectoryAccountUpdateOne) SetSourceKey(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableSourceKey(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *DirectoryAccountUpdateOne) ClearSourceKey() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -2980,6 +3026,12 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(directoryaccount.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(directoryaccount.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(directoryaccount.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directoryaccount.FieldEnvironmentName, field.TypeString, value)

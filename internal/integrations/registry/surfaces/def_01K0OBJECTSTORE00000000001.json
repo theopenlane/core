@@ -1,6 +1,6 @@
 {
-  "hash": "71fa668d9b4046e60b918a27b309ee0e60104bd3dd57ce6ed3d06adde81ca29a",
-  "version": "01M57YKN8AP10H4H7S0XB24EG0",
+  "hash": "4922975a7d49d78845d2475f7ebde273519de9ff0492132272466eab88a865d1",
+  "version": "01M6J40TC6AHZCA913D69VV7QD",
   "surface": {
     "id": "def_01K0OBJECTSTORE00000000001",
     "credentials": [
@@ -253,6 +253,9 @@
     ],
     "operations": [
       {
+        "name": "DeleteSource"
+      },
+      {
         "name": "ImportRecords",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -280,6 +283,16 @@
                   "type": "boolean",
                   "title": "Move Processed",
                   "description": "Move each object into the processed directory under the prefix once its records import without failure"
+                },
+                "manifest": {
+                  "type": "boolean",
+                  "title": "Manifest",
+                  "description": "Import the prefix as a dataset described by its manifest.json"
+                },
+                "profile": {
+                  "type": "string",
+                  "title": "Profile",
+                  "description": "Dataset manifest profile whose variables fill the records' placeholders"
                 }
               },
               "additionalProperties": false,

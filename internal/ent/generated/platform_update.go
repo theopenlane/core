@@ -263,6 +263,26 @@ func (_u *PlatformUpdate) ClearIntegrationRunID() *PlatformUpdate {
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *PlatformUpdate) SetSourceKey(v string) *PlatformUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *PlatformUpdate) SetNillableSourceKey(v *string) *PlatformUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *PlatformUpdate) ClearSourceKey() *PlatformUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *PlatformUpdate) SetExternalID(v string) *PlatformUpdate {
 	_u.mutation.SetExternalID(v)
@@ -2741,6 +2761,12 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(platform.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(platform.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(platform.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(platform.FieldExternalID, field.TypeString, value)
 	}
@@ -5070,6 +5096,26 @@ func (_u *PlatformUpdateOne) SetNillableIntegrationRunID(v *string) *PlatformUpd
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *PlatformUpdateOne) ClearIntegrationRunID() *PlatformUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *PlatformUpdateOne) SetSourceKey(v string) *PlatformUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *PlatformUpdateOne) SetNillableSourceKey(v *string) *PlatformUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *PlatformUpdateOne) ClearSourceKey() *PlatformUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -7580,6 +7626,12 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(platform.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(platform.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(platform.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(platform.FieldExternalID, field.TypeString, value)

@@ -50,6 +50,8 @@ type Remediation struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -402,7 +404,7 @@ func (*Remediation) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case remediation.FieldSystemOwned, remediation.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case remediation.FieldID, remediation.FieldCreatedBy, remediation.FieldUpdatedBy, remediation.FieldUpdatedByImpersonator, remediation.FieldDeletedBy, remediation.FieldDisplayID, remediation.FieldSourceDefinitionID, remediation.FieldSourceDefinitionVersion, remediation.FieldSourceInstanceID, remediation.FieldManagedBy, remediation.FieldIntegrationRunID, remediation.FieldExternalID, remediation.FieldOwnerID, remediation.FieldInternalNotes, remediation.FieldSystemInternalID, remediation.FieldEnvironmentName, remediation.FieldEnvironmentID, remediation.FieldScopeName, remediation.FieldScopeID, remediation.FieldExternalOwnerID, remediation.FieldTitle, remediation.FieldStatus, remediation.FieldState, remediation.FieldIntent, remediation.FieldSummary, remediation.FieldExplanation, remediation.FieldInstructions, remediation.FieldOwnerReference, remediation.FieldRepositoryURI, remediation.FieldPullRequestURI, remediation.FieldTicketReference, remediation.FieldError, remediation.FieldSource, remediation.FieldExternalURI:
+		case remediation.FieldID, remediation.FieldCreatedBy, remediation.FieldUpdatedBy, remediation.FieldUpdatedByImpersonator, remediation.FieldDeletedBy, remediation.FieldDisplayID, remediation.FieldSourceDefinitionID, remediation.FieldSourceDefinitionVersion, remediation.FieldSourceInstanceID, remediation.FieldManagedBy, remediation.FieldIntegrationRunID, remediation.FieldSourceKey, remediation.FieldExternalID, remediation.FieldOwnerID, remediation.FieldInternalNotes, remediation.FieldSystemInternalID, remediation.FieldEnvironmentName, remediation.FieldEnvironmentID, remediation.FieldScopeName, remediation.FieldScopeID, remediation.FieldExternalOwnerID, remediation.FieldTitle, remediation.FieldStatus, remediation.FieldState, remediation.FieldIntent, remediation.FieldSummary, remediation.FieldExplanation, remediation.FieldInstructions, remediation.FieldOwnerReference, remediation.FieldRepositoryURI, remediation.FieldPullRequestURI, remediation.FieldTicketReference, remediation.FieldError, remediation.FieldSource, remediation.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case remediation.FieldCreatedAt, remediation.FieldUpdatedAt, remediation.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -513,6 +515,12 @@ func (_m *Remediation) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case remediation.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case remediation.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -884,6 +892,9 @@ func (_m *Remediation) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

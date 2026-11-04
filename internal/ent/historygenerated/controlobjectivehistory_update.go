@@ -115,6 +115,9 @@ func (_u *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldExternalID, field.TypeString)
 	}
@@ -286,6 +289,9 @@ func (_u *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldExternalID, field.TypeString)

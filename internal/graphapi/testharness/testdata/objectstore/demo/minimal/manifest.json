@@ -1,0 +1,17 @@
+{
+  "name": "Demo data",
+  "order": [
+    "program",
+    "entity",
+    "control",
+    "internal_policy",
+    "procedure",
+    "task"
+  ],
+  "profiles": {
+    "DRAFT": {
+      "STATUS": "DRAFT",
+      "APPROVER": ""
+    }
+  }
+}

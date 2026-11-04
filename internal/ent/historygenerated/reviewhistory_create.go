@@ -233,6 +233,20 @@ func (_c *ReviewHistoryCreate) SetNillableIntegrationRunID(v *string) *ReviewHis
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *ReviewHistoryCreate) SetSourceKey(v string) *ReviewHistoryCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *ReviewHistoryCreate) SetNillableSourceKey(v *string) *ReviewHistoryCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *ReviewHistoryCreate) SetExternalID(v string) *ReviewHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -804,6 +818,10 @@ func (_c *ReviewHistoryCreate) createSpec() (*ReviewHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(reviewhistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(reviewhistory.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(reviewhistory.FieldExternalID, field.TypeString, value)

@@ -37,6 +37,7 @@ mutation CreateBulkCSVProcedure ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -98,6 +99,7 @@ mutation CreateBulkProcedure ($input: [CreateProcedureInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -159,6 +161,7 @@ mutation CreateProcedure ($input: CreateProcedureInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -341,6 +344,7 @@ query GetProcedureByID ($procedureId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		status
 		summary
 		systemInternalID
@@ -464,6 +468,7 @@ mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID
@@ -528,6 +533,7 @@ mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			status
 			summary
 			systemInternalID

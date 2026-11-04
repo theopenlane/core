@@ -112,6 +112,9 @@ func (_u *EmailTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldExternalID, field.TypeString)
 	}
@@ -304,6 +307,9 @@ func (_u *EmailTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Em
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(emailtemplatehistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(emailtemplatehistory.FieldExternalID, field.TypeString)

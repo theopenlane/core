@@ -53083,6 +53083,29 @@ func (ec *executionContext) fieldContext_ActionPlan_integrationRunID(_ context.C
 	return graphql.NewScalarFieldContext("ActionPlan", field, false, false, "String")
 }
 
+func (ec *executionContext) _ActionPlan_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.ActionPlan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ActionPlan_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ActionPlan_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ActionPlan", field, false, false, "String")
+}
+
 func (ec *executionContext) _ActionPlan_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.ActionPlan) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -55587,6 +55610,29 @@ func (ec *executionContext) fieldContext_Assessment_integrationRunID(_ context.C
 	return graphql.NewScalarFieldContext("Assessment", field, false, false, "String")
 }
 
+func (ec *executionContext) _Assessment_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Assessment) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Assessment_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Assessment_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Assessment", field, false, false, "String")
+}
+
 func (ec *executionContext) _Assessment_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Assessment) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -57007,6 +57053,29 @@ func (ec *executionContext) _AssessmentPolicy_integrationRunID(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_AssessmentPolicy_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, "String")
+}
+
+func (ec *executionContext) _AssessmentPolicy_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentPolicy_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentPolicy_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("AssessmentPolicy", field, false, false, "String")
 }
 
@@ -58914,6 +58983,29 @@ func (ec *executionContext) _Asset_integrationRunID(ctx context.Context, field g
 	)
 }
 func (ec *executionContext) fieldContext_Asset_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Asset", field, false, false, "String")
+}
+
+func (ec *executionContext) _Asset_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Asset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Asset_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Asset_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Asset", field, false, false, "String")
 }
 
@@ -61687,6 +61779,29 @@ func (ec *executionContext) _Campaign_integrationRunID(ctx context.Context, fiel
 	)
 }
 func (ec *executionContext) fieldContext_Campaign_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Campaign", field, false, false, "String")
+}
+
+func (ec *executionContext) _Campaign_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Campaign) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Campaign_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Campaign_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Campaign", field, false, false, "String")
 }
 
@@ -64820,6 +64935,29 @@ func (ec *executionContext) fieldContext_CheckResult_integrationRunID(_ context.
 	return graphql.NewScalarFieldContext("CheckResult", field, false, false, "String")
 }
 
+func (ec *executionContext) _CheckResult_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.CheckResult) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CheckResult_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CheckResult_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CheckResult", field, false, false, "String")
+}
+
 func (ec *executionContext) _CheckResult_ownerID(ctx context.Context, field graphql.CollectedField, obj *generated.CheckResult) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -65747,6 +65885,29 @@ func (ec *executionContext) _Contact_integrationRunID(ctx context.Context, field
 	)
 }
 func (ec *executionContext) fieldContext_Contact_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Contact", field, false, false, "String")
+}
+
+func (ec *executionContext) _Contact_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Contact) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Contact_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Contact_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Contact", field, false, false, "String")
 }
 
@@ -66737,6 +66898,29 @@ func (ec *executionContext) _Control_integrationRunID(ctx context.Context, field
 	)
 }
 func (ec *executionContext) fieldContext_Control_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Control", field, false, false, "String")
+}
+
+func (ec *executionContext) _Control_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Control) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Control_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Control_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Control", field, false, false, "String")
 }
 
@@ -70100,6 +70284,29 @@ func (ec *executionContext) fieldContext_ControlImplementation_integrationRunID(
 	return graphql.NewScalarFieldContext("ControlImplementation", field, false, false, "String")
 }
 
+func (ec *executionContext) _ControlImplementation_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.ControlImplementation) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlImplementation_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlImplementation_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlImplementation", field, false, false, "String")
+}
+
 func (ec *executionContext) _ControlImplementation_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.ControlImplementation) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -71190,6 +71397,29 @@ func (ec *executionContext) _ControlObjective_integrationRunID(ctx context.Conte
 	)
 }
 func (ec *executionContext) fieldContext_ControlObjective_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ControlObjective", field, false, false, "String")
+}
+
+func (ec *executionContext) _ControlObjective_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.ControlObjective) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ControlObjective_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_ControlObjective_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ControlObjective", field, false, false, "String")
 }
 
@@ -73192,6 +73422,29 @@ func (ec *executionContext) fieldContext_CustomTypeEnum_integrationRunID(_ conte
 	return graphql.NewScalarFieldContext("CustomTypeEnum", field, false, false, "String")
 }
 
+func (ec *executionContext) _CustomTypeEnum_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.CustomTypeEnum) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CustomTypeEnum_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CustomTypeEnum_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CustomTypeEnum", field, false, false, "String")
+}
+
 func (ec *executionContext) _CustomTypeEnum_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.CustomTypeEnum) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -75047,6 +75300,29 @@ func (ec *executionContext) fieldContext_DirectoryAccount_integrationRunID(_ con
 	return graphql.NewScalarFieldContext("DirectoryAccount", field, false, false, "String")
 }
 
+func (ec *executionContext) _DirectoryAccount_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryAccount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryAccount_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_DirectoryAccount_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("DirectoryAccount", field, false, false, "String")
+}
+
 func (ec *executionContext) _DirectoryAccount_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryAccount) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -76737,6 +77013,29 @@ func (ec *executionContext) fieldContext_DirectoryGroup_integrationRunID(_ conte
 	return graphql.NewScalarFieldContext("DirectoryGroup", field, false, false, "String")
 }
 
+func (ec *executionContext) _DirectoryGroup_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryGroup) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryGroup_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_DirectoryGroup_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("DirectoryGroup", field, false, false, "String")
+}
+
 func (ec *executionContext) _DirectoryGroup_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryGroup) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -78017,6 +78316,29 @@ func (ec *executionContext) _DirectoryMembership_integrationRunID(ctx context.Co
 	)
 }
 func (ec *executionContext) fieldContext_DirectoryMembership_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("DirectoryMembership", field, false, false, "String")
+}
+
+func (ec *executionContext) _DirectoryMembership_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryMembership) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DirectoryMembership_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_DirectoryMembership_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("DirectoryMembership", field, false, false, "String")
 }
 
@@ -80427,6 +80749,29 @@ func (ec *executionContext) fieldContext_EmailTemplate_integrationRunID(_ contex
 	return graphql.NewScalarFieldContext("EmailTemplate", field, false, false, "String")
 }
 
+func (ec *executionContext) _EmailTemplate_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.EmailTemplate) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailTemplate_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EmailTemplate_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailTemplate", field, false, false, "String")
+}
+
 func (ec *executionContext) _EmailTemplate_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.EmailTemplate) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -81786,6 +82131,29 @@ func (ec *executionContext) fieldContext_Entity_integrationRunID(_ context.Conte
 	return graphql.NewScalarFieldContext("Entity", field, false, false, "String")
 }
 
+func (ec *executionContext) _Entity_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Entity_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Entity_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Entity", field, false, false, "String")
+}
+
 func (ec *executionContext) _Entity_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -82500,7 +82868,20 @@ func (ec *executionContext) _Entity_displayName(ctx context.Context, field graph
 		func(ctx context.Context) (any, error) {
 			return obj.DisplayName, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -82523,7 +82904,20 @@ func (ec *executionContext) _Entity_description(ctx context.Context, field graph
 		func(ctx context.Context) (any, error) {
 			return obj.Description, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -82546,7 +82940,20 @@ func (ec *executionContext) _Entity_domains(ctx context.Context, field graphql.C
 		func(ctx context.Context) (any, error) {
 			return obj.Domains, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal []string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
 			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
 		},
@@ -82569,7 +82976,20 @@ func (ec *executionContext) _Entity_aliases(ctx context.Context, field graphql.C
 		func(ctx context.Context) (any, error) {
 			return obj.Aliases, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal []string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
 			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
 		},
@@ -82983,7 +83403,20 @@ func (ec *executionContext) _Entity_statusPageURL(ctx context.Context, field gra
 		func(ctx context.Context) (any, error) {
 			return obj.StatusPageURL, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
 			return ec.marshalOString2string(ctx, selections, v)
 		},
@@ -83006,7 +83439,20 @@ func (ec *executionContext) _Entity_providedServices(ctx context.Context, field 
 		func(ctx context.Context) (any, error) {
 			return obj.ProvidedServices, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal []string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
 			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
 		},
@@ -83029,7 +83475,20 @@ func (ec *executionContext) _Entity_links(ctx context.Context, field graphql.Col
 		func(ctx context.Context) (any, error) {
 			return obj.Links, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal []string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
 			return ec.marshalOString2ᚕstringᚄ(ctx, selections, v)
 		},
@@ -83236,7 +83695,20 @@ func (ec *executionContext) _Entity_logoRemoteURL(ctx context.Context, field gra
 		func(ctx context.Context) (any, error) {
 			return obj.LogoRemoteURL, nil
 		},
-		nil,
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.CatalogManaged == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive catalogManaged is not implemented")
+				}
+				return ec.Directives.CatalogManaged(ctx, obj, directive0)
+			}
+
+			next = directive1
+			return next
+		},
 		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
 			return ec.marshalOString2ᚖstring(ctx, selections, v)
 		},
@@ -86918,6 +87390,29 @@ func (ec *executionContext) _Evidence_integrationRunID(ctx context.Context, fiel
 	)
 }
 func (ec *executionContext) fieldContext_Evidence_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Evidence", field, false, false, "String")
+}
+
+func (ec *executionContext) _Evidence_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Evidence) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Evidence_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Evidence_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Evidence", field, false, false, "String")
 }
 
@@ -90978,6 +91473,29 @@ func (ec *executionContext) fieldContext_Finding_integrationRunID(_ context.Cont
 	return graphql.NewScalarFieldContext("Finding", field, false, false, "String")
 }
 
+func (ec *executionContext) _Finding_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Finding) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Finding_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Finding_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Finding", field, false, false, "String")
+}
+
 func (ec *executionContext) _Finding_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Finding) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -95020,6 +95538,29 @@ func (ec *executionContext) _Group_integrationRunID(ctx context.Context, field g
 	)
 }
 func (ec *executionContext) fieldContext_Group_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Group", field, false, false, "String")
+}
+
+func (ec *executionContext) _Group_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Group) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Group_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Group_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Group", field, false, false, "String")
 }
 
@@ -99985,6 +100526,29 @@ func (ec *executionContext) _IdentityHolder_integrationRunID(ctx context.Context
 	)
 }
 func (ec *executionContext) fieldContext_IdentityHolder_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("IdentityHolder", field, false, false, "String")
+}
+
+func (ec *executionContext) _IdentityHolder_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.IdentityHolder) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolder_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_IdentityHolder_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("IdentityHolder", field, false, false, "String")
 }
 
@@ -105652,6 +106216,29 @@ func (ec *executionContext) fieldContext_InternalPolicy_integrationRunID(_ conte
 	return graphql.NewScalarFieldContext("InternalPolicy", field, false, false, "String")
 }
 
+func (ec *executionContext) _InternalPolicy_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.InternalPolicy) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InternalPolicy_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_InternalPolicy_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("InternalPolicy", field, false, false, "String")
+}
+
 func (ec *executionContext) _InternalPolicy_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.InternalPolicy) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -109225,6 +109812,29 @@ func (ec *executionContext) fieldContext_MappedControl_integrationRunID(_ contex
 	return graphql.NewScalarFieldContext("MappedControl", field, false, false, "String")
 }
 
+func (ec *executionContext) _MappedControl_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.MappedControl) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MappedControl_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MappedControl_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MappedControl", field, false, false, "String")
+}
+
 func (ec *executionContext) _MappedControl_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.MappedControl) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -110246,6 +110856,29 @@ func (ec *executionContext) _Narrative_integrationRunID(ctx context.Context, fie
 	)
 }
 func (ec *executionContext) fieldContext_Narrative_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Narrative", field, false, false, "String")
+}
+
+func (ec *executionContext) _Narrative_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Narrative) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Narrative_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Narrative_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Narrative", field, false, false, "String")
 }
 
@@ -123038,6 +123671,29 @@ func (ec *executionContext) fieldContext_Platform_integrationRunID(_ context.Con
 	return graphql.NewScalarFieldContext("Platform", field, false, false, "String")
 }
 
+func (ec *executionContext) _Platform_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Platform_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Platform_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Platform", field, false, false, "String")
+}
+
 func (ec *executionContext) _Platform_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -126846,6 +127502,29 @@ func (ec *executionContext) fieldContext_Procedure_integrationRunID(_ context.Co
 	return graphql.NewScalarFieldContext("Procedure", field, false, false, "String")
 }
 
+func (ec *executionContext) _Procedure_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Procedure) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Procedure_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Procedure_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Procedure", field, false, false, "String")
+}
+
 func (ec *executionContext) _Procedure_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Procedure) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -128997,6 +129676,29 @@ func (ec *executionContext) _Program_integrationRunID(ctx context.Context, field
 	)
 }
 func (ec *executionContext) fieldContext_Program_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Program", field, false, false, "String")
+}
+
+func (ec *executionContext) _Program_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Program_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Program_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Program", field, false, false, "String")
 }
 
@@ -142190,6 +142892,29 @@ func (ec *executionContext) fieldContext_Remediation_integrationRunID(_ context.
 	return graphql.NewScalarFieldContext("Remediation", field, false, false, "String")
 }
 
+func (ec *executionContext) _Remediation_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Remediation) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Remediation_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Remediation_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Remediation", field, false, false, "String")
+}
+
 func (ec *executionContext) _Remediation_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Remediation) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -145650,6 +146375,29 @@ func (ec *executionContext) fieldContext_Review_integrationRunID(_ context.Conte
 	return graphql.NewScalarFieldContext("Review", field, false, false, "String")
 }
 
+func (ec *executionContext) _Review_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Review) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Review_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Review_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Review", field, false, false, "String")
+}
+
 func (ec *executionContext) _Review_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Review) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -147665,6 +148413,29 @@ func (ec *executionContext) _Risk_integrationRunID(ctx context.Context, field gr
 	)
 }
 func (ec *executionContext) fieldContext_Risk_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Risk", field, false, false, "String")
+}
+
+func (ec *executionContext) _Risk_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Risk) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Risk_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Risk_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Risk", field, false, false, "String")
 }
 
@@ -151096,6 +151867,29 @@ func (ec *executionContext) fieldContext_Scan_integrationRunID(_ context.Context
 	return graphql.NewScalarFieldContext("Scan", field, false, false, "String")
 }
 
+func (ec *executionContext) _Scan_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, "String")
+}
+
 func (ec *executionContext) _Scan_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -154333,6 +155127,29 @@ func (ec *executionContext) _Subcontrol_integrationRunID(ctx context.Context, fi
 	)
 }
 func (ec *executionContext) fieldContext_Subcontrol_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Subcontrol", field, false, false, "String")
+}
+
+func (ec *executionContext) _Subcontrol_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Subcontrol) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Subcontrol_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Subcontrol_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Subcontrol", field, false, false, "String")
 }
 
@@ -158612,6 +159429,29 @@ func (ec *executionContext) fieldContext_SystemDetail_integrationRunID(_ context
 	return graphql.NewScalarFieldContext("SystemDetail", field, false, false, "String")
 }
 
+func (ec *executionContext) _SystemDetail_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.SystemDetail) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SystemDetail_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SystemDetail_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SystemDetail", field, false, false, "String")
+}
+
 func (ec *executionContext) _SystemDetail_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.SystemDetail) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -159847,6 +160687,29 @@ func (ec *executionContext) fieldContext_TagDefinition_integrationRunID(_ contex
 	return graphql.NewScalarFieldContext("TagDefinition", field, false, false, "String")
 }
 
+func (ec *executionContext) _TagDefinition_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.TagDefinition) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TagDefinition_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TagDefinition_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TagDefinition", field, false, false, "String")
+}
+
 func (ec *executionContext) _TagDefinition_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.TagDefinition) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -160630,6 +161493,29 @@ func (ec *executionContext) fieldContext_Task_integrationRunID(_ context.Context
 	return graphql.NewScalarFieldContext("Task", field, false, false, "String")
 }
 
+func (ec *executionContext) _Task_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Task_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Task_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Task", field, false, false, "String")
+}
+
 func (ec *executionContext) _Task_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -161197,29 +162083,6 @@ func (ec *executionContext) _Task_source(ctx context.Context, field graphql.Coll
 	)
 }
 func (ec *executionContext) fieldContext_Task_source(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("Task", field, false, false, "String")
-}
-
-func (ec *executionContext) _Task_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Task_sourceKey(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.SourceKey, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOString2string(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_Task_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Task", field, false, false, "String")
 }
 
@@ -162921,6 +163784,29 @@ func (ec *executionContext) _Template_integrationRunID(ctx context.Context, fiel
 	)
 }
 func (ec *executionContext) fieldContext_Template_integrationRunID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Template", field, false, false, "String")
+}
+
+func (ec *executionContext) _Template_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Template) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Template_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Template_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Template", field, false, false, "String")
 }
 
@@ -174902,6 +175788,29 @@ func (ec *executionContext) fieldContext_Vulnerability_integrationRunID(_ contex
 	return graphql.NewScalarFieldContext("Vulnerability", field, false, false, "String")
 }
 
+func (ec *executionContext) _Vulnerability_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Vulnerability) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Vulnerability_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Vulnerability_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Vulnerability", field, false, false, "String")
+}
+
 func (ec *executionContext) _Vulnerability_externalID(ctx context.Context, field graphql.CollectedField, obj *generated.Vulnerability) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -186215,7 +187124,7 @@ func (ec *executionContext) unmarshalInputActionPlanWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "managementMode", "managementModeNEQ", "managementModeIn", "managementModeNotIn", "managementModeIsNil", "managementModeNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "reviewDue", "reviewDueGT", "reviewDueGTE", "reviewDueLT", "reviewDueLTE", "reviewDueIsNil", "reviewDueNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "approverID", "approverIDNEQ", "approverIDIn", "approverIDNotIn", "approverIDContains", "approverIDHasPrefix", "approverIDHasSuffix", "approverIDIsNil", "approverIDNotNil", "approverIDEqualFold", "approverIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "externalFileID", "externalFileIDNEQ", "externalFileIDIn", "externalFileIDNotIn", "externalFileIDContains", "externalFileIDHasPrefix", "externalFileIDHasSuffix", "externalFileIDIsNil", "externalFileIDNotNil", "externalFileIDEqualFold", "externalFileIDContainsFold", "externalContents", "externalContentsNEQ", "externalContentsIn", "externalContentsNotIn", "externalContentsContains", "externalContentsHasPrefix", "externalContentsHasSuffix", "externalContentsIsNil", "externalContentsNotNil", "externalContentsEqualFold", "externalContentsContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "actionPlanKindName", "actionPlanKindNameNEQ", "actionPlanKindNameIn", "actionPlanKindNameNotIn", "actionPlanKindNameContains", "actionPlanKindNameHasPrefix", "actionPlanKindNameHasSuffix", "actionPlanKindNameIsNil", "actionPlanKindNameNotNil", "actionPlanKindNameEqualFold", "actionPlanKindNameContainsFold", "actionPlanKindID", "actionPlanKindIDNEQ", "actionPlanKindIDIn", "actionPlanKindIDNotIn", "actionPlanKindIDContains", "actionPlanKindIDHasPrefix", "actionPlanKindIDHasSuffix", "actionPlanKindIDIsNil", "actionPlanKindIDNotNil", "actionPlanKindIDEqualFold", "actionPlanKindIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "dueDate", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "completedAt", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityIsNil", "priorityNotNil", "requiresApproval", "requiresApprovalNEQ", "blocked", "blockedNEQ", "blockerReason", "blockerReasonNEQ", "blockerReasonIn", "blockerReasonNotIn", "blockerReasonContains", "blockerReasonHasPrefix", "blockerReasonHasSuffix", "blockerReasonIsNil", "blockerReasonNotNil", "blockerReasonEqualFold", "blockerReasonContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasApprover", "hasApproverWith", "hasDelegate", "hasDelegateWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasActionPlanKind", "hasActionPlanKindWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasRisks", "hasRisksWith", "hasControls", "hasControlsWith", "hasPrograms", "hasProgramsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasScans", "hasScansWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasTasks", "hasTasksWith", "hasIntegrations", "hasIntegrationsWith", "hasFile", "hasFileWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas", "tagSuggestionsHas", "dismissedTagSuggestionsHas", "controlSuggestionsHas", "dismissedControlSuggestionsHas", "improvementSuggestionsHas", "dismissedImprovementSuggestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "managementMode", "managementModeNEQ", "managementModeIn", "managementModeNotIn", "managementModeIsNil", "managementModeNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "reviewDue", "reviewDueGT", "reviewDueGTE", "reviewDueLT", "reviewDueLTE", "reviewDueIsNil", "reviewDueNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "approverID", "approverIDNEQ", "approverIDIn", "approverIDNotIn", "approverIDContains", "approverIDHasPrefix", "approverIDHasSuffix", "approverIDIsNil", "approverIDNotNil", "approverIDEqualFold", "approverIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "externalFileID", "externalFileIDNEQ", "externalFileIDIn", "externalFileIDNotIn", "externalFileIDContains", "externalFileIDHasPrefix", "externalFileIDHasSuffix", "externalFileIDIsNil", "externalFileIDNotNil", "externalFileIDEqualFold", "externalFileIDContainsFold", "externalContents", "externalContentsNEQ", "externalContentsIn", "externalContentsNotIn", "externalContentsContains", "externalContentsHasPrefix", "externalContentsHasSuffix", "externalContentsIsNil", "externalContentsNotNil", "externalContentsEqualFold", "externalContentsContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "actionPlanKindName", "actionPlanKindNameNEQ", "actionPlanKindNameIn", "actionPlanKindNameNotIn", "actionPlanKindNameContains", "actionPlanKindNameHasPrefix", "actionPlanKindNameHasSuffix", "actionPlanKindNameIsNil", "actionPlanKindNameNotNil", "actionPlanKindNameEqualFold", "actionPlanKindNameContainsFold", "actionPlanKindID", "actionPlanKindIDNEQ", "actionPlanKindIDIn", "actionPlanKindIDNotIn", "actionPlanKindIDContains", "actionPlanKindIDHasPrefix", "actionPlanKindIDHasSuffix", "actionPlanKindIDIsNil", "actionPlanKindIDNotNil", "actionPlanKindIDEqualFold", "actionPlanKindIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "dueDate", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "completedAt", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityIsNil", "priorityNotNil", "requiresApproval", "requiresApprovalNEQ", "blocked", "blockedNEQ", "blockerReason", "blockerReasonNEQ", "blockerReasonIn", "blockerReasonNotIn", "blockerReasonContains", "blockerReasonHasPrefix", "blockerReasonHasSuffix", "blockerReasonIsNil", "blockerReasonNotNil", "blockerReasonEqualFold", "blockerReasonContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasApprover", "hasApproverWith", "hasDelegate", "hasDelegateWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasActionPlanKind", "hasActionPlanKindWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasRisks", "hasRisksWith", "hasControls", "hasControlsWith", "hasPrograms", "hasProgramsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasScans", "hasScansWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasTasks", "hasTasksWith", "hasIntegrations", "hasIntegrationsWith", "hasFile", "hasFileWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas", "tagSuggestionsHas", "dismissedTagSuggestionsHas", "controlSuggestionsHas", "dismissedControlSuggestionsHas", "improvementSuggestionsHas", "dismissedImprovementSuggestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -187076,6 +187985,83 @@ func (ec *executionContext) unmarshalInputActionPlanWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -189674,7 +190660,7 @@ func (ec *executionContext) unmarshalInputAssessmentPolicyWhereInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "policyRevision", "policyRevisionNEQ", "policyRevisionIn", "policyRevisionNotIn", "policyRevisionContains", "policyRevisionHasPrefix", "policyRevisionHasSuffix", "policyRevisionIsNil", "policyRevisionNotNil", "policyRevisionEqualFold", "policyRevisionContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "policyRevision", "policyRevisionNEQ", "policyRevisionIn", "policyRevisionNotIn", "policyRevisionContains", "policyRevisionHasPrefix", "policyRevisionHasSuffix", "policyRevisionIsNil", "policyRevisionNotNil", "policyRevisionEqualFold", "policyRevisionContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -190458,6 +191444,83 @@ func (ec *executionContext) unmarshalInputAssessmentPolicyWhereInput(ctx context
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -192359,7 +193422,7 @@ func (ec *executionContext) unmarshalInputAssessmentWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "assessmentType", "assessmentTypeNEQ", "assessmentTypeIn", "assessmentTypeNotIn", "templateID", "templateIDNEQ", "templateIDIn", "templateIDNotIn", "templateIDContains", "templateIDHasPrefix", "templateIDHasSuffix", "templateIDIsNil", "templateIDNotNil", "templateIDEqualFold", "templateIDContainsFold", "responseDueDuration", "responseDueDurationNEQ", "responseDueDurationGT", "responseDueDurationGTE", "responseDueDurationLT", "responseDueDurationLTE", "responseDueDurationIsNil", "responseDueDurationNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasTemplate", "hasTemplateWith", "hasPlatforms", "hasPlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasCampaigns", "hasCampaignsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasPolicyAttestations", "hasPolicyAttestationsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "assessmentType", "assessmentTypeNEQ", "assessmentTypeIn", "assessmentTypeNotIn", "templateID", "templateIDNEQ", "templateIDIn", "templateIDNotIn", "templateIDContains", "templateIDHasPrefix", "templateIDHasSuffix", "templateIDIsNil", "templateIDNotNil", "templateIDEqualFold", "templateIDContainsFold", "responseDueDuration", "responseDueDurationNEQ", "responseDueDurationGT", "responseDueDurationGTE", "responseDueDurationLT", "responseDueDurationLTE", "responseDueDurationIsNil", "responseDueDurationNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasTemplate", "hasTemplateWith", "hasPlatforms", "hasPlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasCampaigns", "hasCampaignsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasPolicyAttestations", "hasPolicyAttestationsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -193143,6 +194206,83 @@ func (ec *executionContext) unmarshalInputAssessmentWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -194001,7 +195141,7 @@ func (ec *executionContext) unmarshalInputAssetWhereInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "assetSubtypeName", "assetSubtypeNameNEQ", "assetSubtypeNameIn", "assetSubtypeNameNotIn", "assetSubtypeNameContains", "assetSubtypeNameHasPrefix", "assetSubtypeNameHasSuffix", "assetSubtypeNameIsNil", "assetSubtypeNameNotNil", "assetSubtypeNameEqualFold", "assetSubtypeNameContainsFold", "assetSubtypeID", "assetSubtypeIDNEQ", "assetSubtypeIDIn", "assetSubtypeIDNotIn", "assetSubtypeIDContains", "assetSubtypeIDHasPrefix", "assetSubtypeIDHasSuffix", "assetSubtypeIDIsNil", "assetSubtypeIDNotNil", "assetSubtypeIDEqualFold", "assetSubtypeIDContainsFold", "assetDataClassificationName", "assetDataClassificationNameNEQ", "assetDataClassificationNameIn", "assetDataClassificationNameNotIn", "assetDataClassificationNameContains", "assetDataClassificationNameHasPrefix", "assetDataClassificationNameHasSuffix", "assetDataClassificationNameIsNil", "assetDataClassificationNameNotNil", "assetDataClassificationNameEqualFold", "assetDataClassificationNameContainsFold", "assetDataClassificationID", "assetDataClassificationIDNEQ", "assetDataClassificationIDIn", "assetDataClassificationIDNotIn", "assetDataClassificationIDContains", "assetDataClassificationIDHasPrefix", "assetDataClassificationIDHasSuffix", "assetDataClassificationIDIsNil", "assetDataClassificationIDNotNil", "assetDataClassificationIDEqualFold", "assetDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "assetType", "assetTypeNEQ", "assetTypeIn", "assetTypeNotIn", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "identifier", "identifierNEQ", "identifierIn", "identifierNotIn", "identifierContains", "identifierHasPrefix", "identifierHasSuffix", "identifierIsNil", "identifierNotNil", "identifierEqualFold", "identifierContainsFold", "website", "websiteNEQ", "websiteIn", "websiteNotIn", "websiteContains", "websiteHasPrefix", "websiteHasSuffix", "websiteIsNil", "websiteNotNil", "websiteEqualFold", "websiteContainsFold", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourcePlatformID", "sourcePlatformIDNEQ", "sourcePlatformIDIn", "sourcePlatformIDNotIn", "sourcePlatformIDContains", "sourcePlatformIDHasPrefix", "sourcePlatformIDHasSuffix", "sourcePlatformIDIsNil", "sourcePlatformIDNotNil", "sourcePlatformIDEqualFold", "sourcePlatformIDContainsFold", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasAssetSubtype", "hasAssetSubtypeWith", "hasAssetDataClassification", "hasAssetDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasScans", "hasScansWith", "hasEntities", "hasEntitiesWith", "hasPlatforms", "hasPlatformsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasSourcePlatform", "hasSourcePlatformWith", "hasIntegration", "hasIntegrationWith", "hasConnectedAssets", "hasConnectedAssetsWith", "hasConnectedFrom", "hasConnectedFromWith", "tagsHas", "categoriesHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "assetSubtypeName", "assetSubtypeNameNEQ", "assetSubtypeNameIn", "assetSubtypeNameNotIn", "assetSubtypeNameContains", "assetSubtypeNameHasPrefix", "assetSubtypeNameHasSuffix", "assetSubtypeNameIsNil", "assetSubtypeNameNotNil", "assetSubtypeNameEqualFold", "assetSubtypeNameContainsFold", "assetSubtypeID", "assetSubtypeIDNEQ", "assetSubtypeIDIn", "assetSubtypeIDNotIn", "assetSubtypeIDContains", "assetSubtypeIDHasPrefix", "assetSubtypeIDHasSuffix", "assetSubtypeIDIsNil", "assetSubtypeIDNotNil", "assetSubtypeIDEqualFold", "assetSubtypeIDContainsFold", "assetDataClassificationName", "assetDataClassificationNameNEQ", "assetDataClassificationNameIn", "assetDataClassificationNameNotIn", "assetDataClassificationNameContains", "assetDataClassificationNameHasPrefix", "assetDataClassificationNameHasSuffix", "assetDataClassificationNameIsNil", "assetDataClassificationNameNotNil", "assetDataClassificationNameEqualFold", "assetDataClassificationNameContainsFold", "assetDataClassificationID", "assetDataClassificationIDNEQ", "assetDataClassificationIDIn", "assetDataClassificationIDNotIn", "assetDataClassificationIDContains", "assetDataClassificationIDHasPrefix", "assetDataClassificationIDHasSuffix", "assetDataClassificationIDIsNil", "assetDataClassificationIDNotNil", "assetDataClassificationIDEqualFold", "assetDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "assetType", "assetTypeNEQ", "assetTypeIn", "assetTypeNotIn", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "identifier", "identifierNEQ", "identifierIn", "identifierNotIn", "identifierContains", "identifierHasPrefix", "identifierHasSuffix", "identifierIsNil", "identifierNotNil", "identifierEqualFold", "identifierContainsFold", "website", "websiteNEQ", "websiteIn", "websiteNotIn", "websiteContains", "websiteHasPrefix", "websiteHasSuffix", "websiteIsNil", "websiteNotNil", "websiteEqualFold", "websiteContainsFold", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourcePlatformID", "sourcePlatformIDNEQ", "sourcePlatformIDIn", "sourcePlatformIDNotIn", "sourcePlatformIDContains", "sourcePlatformIDHasPrefix", "sourcePlatformIDHasSuffix", "sourcePlatformIDIsNil", "sourcePlatformIDNotNil", "sourcePlatformIDEqualFold", "sourcePlatformIDContainsFold", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasAssetSubtype", "hasAssetSubtypeWith", "hasAssetDataClassification", "hasAssetDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasScans", "hasScansWith", "hasEntities", "hasEntitiesWith", "hasPlatforms", "hasPlatformsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasSourcePlatform", "hasSourcePlatformWith", "hasIntegration", "hasIntegrationWith", "hasConnectedAssets", "hasConnectedAssetsWith", "hasConnectedFrom", "hasConnectedFromWith", "tagsHas", "categoriesHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -194785,6 +195925,83 @@ func (ec *executionContext) unmarshalInputAssetWhereInput(ctx context.Context, o
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -199637,7 +200854,7 @@ func (ec *executionContext) unmarshalInputCampaignWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "campaignType", "campaignTypeNEQ", "campaignTypeIn", "campaignTypeNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "isActive", "isActiveNEQ", "scheduledAt", "scheduledAtGT", "scheduledAtGTE", "scheduledAtLT", "scheduledAtLTE", "scheduledAtIsNil", "scheduledAtNotNil", "launchedAt", "launchedAtGT", "launchedAtGTE", "launchedAtLT", "launchedAtLTE", "launchedAtIsNil", "launchedAtNotNil", "completedAt", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "dueDate", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "isRecurring", "isRecurringNEQ", "recurrenceFrequency", "recurrenceFrequencyNEQ", "recurrenceFrequencyIn", "recurrenceFrequencyNotIn", "recurrenceFrequencyIsNil", "recurrenceFrequencyNotNil", "recurrenceInterval", "recurrenceIntervalNEQ", "recurrenceIntervalGT", "recurrenceIntervalGTE", "recurrenceIntervalLT", "recurrenceIntervalLTE", "recurrenceIntervalIsNil", "recurrenceIntervalNotNil", "recurrenceTimezone", "recurrenceTimezoneNEQ", "recurrenceTimezoneIn", "recurrenceTimezoneNotIn", "recurrenceTimezoneContains", "recurrenceTimezoneHasPrefix", "recurrenceTimezoneHasSuffix", "recurrenceTimezoneIsNil", "recurrenceTimezoneNotNil", "recurrenceTimezoneEqualFold", "recurrenceTimezoneContainsFold", "lastRunAt", "lastRunAtGT", "lastRunAtGTE", "lastRunAtLT", "lastRunAtLTE", "lastRunAtIsNil", "lastRunAtNotNil", "nextRunAt", "nextRunAtGT", "nextRunAtGTE", "nextRunAtLT", "nextRunAtLTE", "nextRunAtIsNil", "nextRunAtNotNil", "recurrenceEndAt", "recurrenceEndAtGT", "recurrenceEndAtGTE", "recurrenceEndAtLT", "recurrenceEndAtLTE", "recurrenceEndAtIsNil", "recurrenceEndAtNotNil", "recipientCount", "recipientCountNEQ", "recipientCountGT", "recipientCountGTE", "recipientCountLT", "recipientCountLTE", "recipientCountIsNil", "recipientCountNotNil", "resendCount", "resendCountNEQ", "resendCountGT", "resendCountGTE", "resendCountLT", "resendCountLTE", "resendCountIsNil", "resendCountNotNil", "lastResentAt", "lastResentAtGT", "lastResentAtGTE", "lastResentAtLT", "lastResentAtLTE", "lastResentAtIsNil", "lastResentAtNotNil", "entityID", "entityIDNEQ", "entityIDIn", "entityIDNotIn", "entityIDContains", "entityIDHasPrefix", "entityIDHasSuffix", "entityIDIsNil", "entityIDNotNil", "entityIDEqualFold", "entityIDContainsFold", "templateID", "templateIDNEQ", "templateIDIn", "templateIDNotIn", "templateIDContains", "templateIDHasPrefix", "templateIDHasSuffix", "templateIDIsNil", "templateIDNotNil", "templateIDEqualFold", "templateIDContainsFold", "assessmentID", "assessmentIDNEQ", "assessmentIDIn", "assessmentIDNotIn", "assessmentIDContains", "assessmentIDHasPrefix", "assessmentIDHasSuffix", "assessmentIDIsNil", "assessmentIDNotNil", "assessmentIDEqualFold", "assessmentIDContainsFold", "emailTemplateID", "emailTemplateIDNEQ", "emailTemplateIDIn", "emailTemplateIDNotIn", "emailTemplateIDContains", "emailTemplateIDHasPrefix", "emailTemplateIDHasSuffix", "emailTemplateIDIsNil", "emailTemplateIDNotNil", "emailTemplateIDEqualFold", "emailTemplateIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "emailBrandingID", "emailBrandingIDNEQ", "emailBrandingIDIn", "emailBrandingIDNotIn", "emailBrandingIDContains", "emailBrandingIDHasPrefix", "emailBrandingIDHasSuffix", "emailBrandingIDIsNil", "emailBrandingIDNotNil", "emailBrandingIDEqualFold", "emailBrandingIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasAssessment", "hasAssessmentWith", "hasTemplate", "hasTemplateWith", "hasIntegration", "hasIntegrationWith", "hasEmailTemplate", "hasEmailTemplateWith", "hasEntity", "hasEntityWith", "hasTrustCenter", "hasTrustCenterWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasContacts", "hasContactsWith", "hasUsers", "hasUsersWith", "hasGroups", "hasGroupsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "campaignType", "campaignTypeNEQ", "campaignTypeIn", "campaignTypeNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "isActive", "isActiveNEQ", "scheduledAt", "scheduledAtGT", "scheduledAtGTE", "scheduledAtLT", "scheduledAtLTE", "scheduledAtIsNil", "scheduledAtNotNil", "launchedAt", "launchedAtGT", "launchedAtGTE", "launchedAtLT", "launchedAtLTE", "launchedAtIsNil", "launchedAtNotNil", "completedAt", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "dueDate", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "isRecurring", "isRecurringNEQ", "recurrenceFrequency", "recurrenceFrequencyNEQ", "recurrenceFrequencyIn", "recurrenceFrequencyNotIn", "recurrenceFrequencyIsNil", "recurrenceFrequencyNotNil", "recurrenceInterval", "recurrenceIntervalNEQ", "recurrenceIntervalGT", "recurrenceIntervalGTE", "recurrenceIntervalLT", "recurrenceIntervalLTE", "recurrenceIntervalIsNil", "recurrenceIntervalNotNil", "recurrenceTimezone", "recurrenceTimezoneNEQ", "recurrenceTimezoneIn", "recurrenceTimezoneNotIn", "recurrenceTimezoneContains", "recurrenceTimezoneHasPrefix", "recurrenceTimezoneHasSuffix", "recurrenceTimezoneIsNil", "recurrenceTimezoneNotNil", "recurrenceTimezoneEqualFold", "recurrenceTimezoneContainsFold", "lastRunAt", "lastRunAtGT", "lastRunAtGTE", "lastRunAtLT", "lastRunAtLTE", "lastRunAtIsNil", "lastRunAtNotNil", "nextRunAt", "nextRunAtGT", "nextRunAtGTE", "nextRunAtLT", "nextRunAtLTE", "nextRunAtIsNil", "nextRunAtNotNil", "recurrenceEndAt", "recurrenceEndAtGT", "recurrenceEndAtGTE", "recurrenceEndAtLT", "recurrenceEndAtLTE", "recurrenceEndAtIsNil", "recurrenceEndAtNotNil", "recipientCount", "recipientCountNEQ", "recipientCountGT", "recipientCountGTE", "recipientCountLT", "recipientCountLTE", "recipientCountIsNil", "recipientCountNotNil", "resendCount", "resendCountNEQ", "resendCountGT", "resendCountGTE", "resendCountLT", "resendCountLTE", "resendCountIsNil", "resendCountNotNil", "lastResentAt", "lastResentAtGT", "lastResentAtGTE", "lastResentAtLT", "lastResentAtLTE", "lastResentAtIsNil", "lastResentAtNotNil", "entityID", "entityIDNEQ", "entityIDIn", "entityIDNotIn", "entityIDContains", "entityIDHasPrefix", "entityIDHasSuffix", "entityIDIsNil", "entityIDNotNil", "entityIDEqualFold", "entityIDContainsFold", "templateID", "templateIDNEQ", "templateIDIn", "templateIDNotIn", "templateIDContains", "templateIDHasPrefix", "templateIDHasSuffix", "templateIDIsNil", "templateIDNotNil", "templateIDEqualFold", "templateIDContainsFold", "assessmentID", "assessmentIDNEQ", "assessmentIDIn", "assessmentIDNotIn", "assessmentIDContains", "assessmentIDHasPrefix", "assessmentIDHasSuffix", "assessmentIDIsNil", "assessmentIDNotNil", "assessmentIDEqualFold", "assessmentIDContainsFold", "emailTemplateID", "emailTemplateIDNEQ", "emailTemplateIDIn", "emailTemplateIDNotIn", "emailTemplateIDContains", "emailTemplateIDHasPrefix", "emailTemplateIDHasSuffix", "emailTemplateIDIsNil", "emailTemplateIDNotNil", "emailTemplateIDEqualFold", "emailTemplateIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "emailBrandingID", "emailBrandingIDNEQ", "emailBrandingIDIn", "emailBrandingIDNotIn", "emailBrandingIDContains", "emailBrandingIDHasPrefix", "emailBrandingIDHasSuffix", "emailBrandingIDIsNil", "emailBrandingIDNotNil", "emailBrandingIDEqualFold", "emailBrandingIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasAssessment", "hasAssessmentWith", "hasTemplate", "hasTemplateWith", "hasIntegration", "hasIntegrationWith", "hasEmailTemplate", "hasEmailTemplateWith", "hasEntity", "hasEntityWith", "hasTrustCenter", "hasTrustCenterWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasContacts", "hasContactsWith", "hasUsers", "hasUsersWith", "hasGroups", "hasGroupsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -200484,6 +201701,83 @@ func (ec *executionContext) unmarshalInputCampaignWhereInput(ctx context.Context
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -202812,7 +204106,7 @@ func (ec *executionContext) unmarshalInputCheckResultWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceEqualFold", "sourceContainsFold", "lastObservedAt", "lastObservedAtGT", "lastObservedAtGTE", "lastObservedAtLT", "lastObservedAtLTE", "lastObservedAtIsNil", "lastObservedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "parentExternalID", "parentExternalIDNEQ", "parentExternalIDIn", "parentExternalIDNotIn", "parentExternalIDContains", "parentExternalIDHasPrefix", "parentExternalIDHasSuffix", "parentExternalIDIsNil", "parentExternalIDNotNil", "parentExternalIDEqualFold", "parentExternalIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasControls", "hasControlsWith", "hasFindings", "hasFindingsWith", "hasIntegration", "hasIntegrationWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceEqualFold", "sourceContainsFold", "lastObservedAt", "lastObservedAtGT", "lastObservedAtGTE", "lastObservedAtLT", "lastObservedAtLTE", "lastObservedAtIsNil", "lastObservedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "parentExternalID", "parentExternalIDNEQ", "parentExternalIDIn", "parentExternalIDNotIn", "parentExternalIDContains", "parentExternalIDHasPrefix", "parentExternalIDHasSuffix", "parentExternalIDIsNil", "parentExternalIDNotNil", "parentExternalIDEqualFold", "parentExternalIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasControls", "hasControlsWith", "hasFindings", "hasFindingsWith", "hasIntegration", "hasIntegrationWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -203596,6 +204890,83 @@ func (ec *executionContext) unmarshalInputCheckResultWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "ownerID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -204321,7 +205692,7 @@ func (ec *executionContext) unmarshalInputContactWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "fullName", "fullNameNEQ", "fullNameIn", "fullNameNotIn", "fullNameContains", "fullNameHasPrefix", "fullNameHasSuffix", "fullNameIsNil", "fullNameNotNil", "fullNameEqualFold", "fullNameContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "company", "companyNEQ", "companyIn", "companyNotIn", "companyContains", "companyHasPrefix", "companyHasSuffix", "companyIsNil", "companyNotNil", "companyEqualFold", "companyContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailIsNil", "emailNotNil", "emailEqualFold", "emailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEntities", "hasEntitiesWith", "hasCampaigns", "hasCampaignsWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasFiles", "hasFilesWith", "hasSubscribers", "hasSubscribersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "fullName", "fullNameNEQ", "fullNameIn", "fullNameNotIn", "fullNameContains", "fullNameHasPrefix", "fullNameHasSuffix", "fullNameIsNil", "fullNameNotNil", "fullNameEqualFold", "fullNameContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "company", "companyNEQ", "companyIn", "companyNotIn", "companyContains", "companyHasPrefix", "companyHasSuffix", "companyIsNil", "companyNotNil", "companyEqualFold", "companyContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailIsNil", "emailNotNil", "emailEqualFold", "emailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "address", "addressNEQ", "addressIn", "addressNotIn", "addressContains", "addressHasPrefix", "addressHasSuffix", "addressIsNil", "addressNotNil", "addressEqualFold", "addressContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEntities", "hasEntitiesWith", "hasCampaigns", "hasCampaignsWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasFiles", "hasFilesWith", "hasSubscribers", "hasSubscribersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -205105,6 +206476,83 @@ func (ec *executionContext) unmarshalInputContactWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -206061,7 +207509,7 @@ func (ec *executionContext) unmarshalInputControlImplementationWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationDate", "implementationDateGT", "implementationDateGTE", "implementationDateLT", "implementationDateLTE", "implementationDateIsNil", "implementationDateNotNil", "verified", "verifiedNEQ", "verifiedIsNil", "verifiedNotNil", "verificationDate", "verificationDateGT", "verificationDateGTE", "verificationDateLT", "verificationDateLTE", "verificationDateIsNil", "verificationDateNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasTasks", "hasTasksWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationDate", "implementationDateGT", "implementationDateGTE", "implementationDateLT", "implementationDateLTE", "implementationDateIsNil", "implementationDateNotNil", "verified", "verifiedNEQ", "verifiedIsNil", "verifiedNotNil", "verificationDate", "verificationDateGT", "verificationDateGTE", "verificationDateLT", "verificationDateLTE", "verificationDateIsNil", "verificationDateNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasTasks", "hasTasksWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -206845,6 +208293,83 @@ func (ec *executionContext) unmarshalInputControlImplementationWhereInput(ctx co
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -207626,7 +209151,7 @@ func (ec *executionContext) unmarshalInputControlObjectiveWhereInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "desiredOutcome", "desiredOutcomeNEQ", "desiredOutcomeIn", "desiredOutcomeNotIn", "desiredOutcomeContains", "desiredOutcomeHasPrefix", "desiredOutcomeHasSuffix", "desiredOutcomeIsNil", "desiredOutcomeNotNil", "desiredOutcomeEqualFold", "desiredOutcomeContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "controlObjectiveType", "controlObjectiveTypeNEQ", "controlObjectiveTypeIn", "controlObjectiveTypeNotIn", "controlObjectiveTypeContains", "controlObjectiveTypeHasPrefix", "controlObjectiveTypeHasSuffix", "controlObjectiveTypeIsNil", "controlObjectiveTypeNotNil", "controlObjectiveTypeEqualFold", "controlObjectiveTypeContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasPrograms", "hasProgramsWith", "hasEvidence", "hasEvidenceWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasRisks", "hasRisksWith", "hasNarratives", "hasNarrativesWith", "hasTasks", "hasTasksWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "desiredOutcome", "desiredOutcomeNEQ", "desiredOutcomeIn", "desiredOutcomeNotIn", "desiredOutcomeContains", "desiredOutcomeHasPrefix", "desiredOutcomeHasSuffix", "desiredOutcomeIsNil", "desiredOutcomeNotNil", "desiredOutcomeEqualFold", "desiredOutcomeContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "controlObjectiveType", "controlObjectiveTypeNEQ", "controlObjectiveTypeIn", "controlObjectiveTypeNotIn", "controlObjectiveTypeContains", "controlObjectiveTypeHasPrefix", "controlObjectiveTypeHasSuffix", "controlObjectiveTypeIsNil", "controlObjectiveTypeNotNil", "controlObjectiveTypeEqualFold", "controlObjectiveTypeContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasPrograms", "hasProgramsWith", "hasEvidence", "hasEvidenceWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasRisks", "hasRisksWith", "hasNarratives", "hasNarrativesWith", "hasTasks", "hasTasksWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -208550,6 +210075,83 @@ func (ec *executionContext) unmarshalInputControlObjectiveWhereInput(ctx context
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -209625,7 +211227,7 @@ func (ec *executionContext) unmarshalInputControlWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "controlKindName", "controlKindNameNEQ", "controlKindNameIn", "controlKindNameNotIn", "controlKindNameContains", "controlKindNameHasPrefix", "controlKindNameHasSuffix", "controlKindNameIsNil", "controlKindNameNotNil", "controlKindNameEqualFold", "controlKindNameContainsFold", "controlKindID", "controlKindIDNEQ", "controlKindIDIn", "controlKindIDNotIn", "controlKindIDContains", "controlKindIDHasPrefix", "controlKindIDHasSuffix", "controlKindIDIsNil", "controlKindIDNotNil", "controlKindIDEqualFold", "controlKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "standardID", "standardIDNEQ", "standardIDIn", "standardIDNotIn", "standardIDContains", "standardIDHasPrefix", "standardIDHasSuffix", "standardIDIsNil", "standardIDNotNil", "standardIDEqualFold", "standardIDContainsFold", "trustCenterVisibility", "trustCenterVisibilityNEQ", "trustCenterVisibilityIn", "trustCenterVisibilityNotIn", "trustCenterVisibilityIsNil", "trustCenterVisibilityNotNil", "isTrustCenterControl", "isTrustCenterControlNEQ", "isTrustCenterControlIsNil", "isTrustCenterControlNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasControlKind", "hasControlKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasStandard", "hasStandardWith", "hasCheckResults", "hasCheckResultsWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasCampaigns", "hasCampaignsWith", "hasFindings", "hasFindingsWith", "hasControlImplementations", "hasControlImplementationsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "controlKindName", "controlKindNameNEQ", "controlKindNameIn", "controlKindNameNotIn", "controlKindNameContains", "controlKindNameHasPrefix", "controlKindNameHasSuffix", "controlKindNameIsNil", "controlKindNameNotNil", "controlKindNameEqualFold", "controlKindNameContainsFold", "controlKindID", "controlKindIDNEQ", "controlKindIDIn", "controlKindIDNotIn", "controlKindIDContains", "controlKindIDHasPrefix", "controlKindIDHasSuffix", "controlKindIDIsNil", "controlKindIDNotNil", "controlKindIDEqualFold", "controlKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "standardID", "standardIDNEQ", "standardIDIn", "standardIDNotIn", "standardIDContains", "standardIDHasPrefix", "standardIDHasSuffix", "standardIDIsNil", "standardIDNotNil", "standardIDEqualFold", "standardIDContainsFold", "trustCenterVisibility", "trustCenterVisibilityNEQ", "trustCenterVisibilityIn", "trustCenterVisibilityNotIn", "trustCenterVisibilityIsNil", "trustCenterVisibilityNotNil", "isTrustCenterControl", "isTrustCenterControlNEQ", "isTrustCenterControlIsNil", "isTrustCenterControlNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasControlKind", "hasControlKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasStandard", "hasStandardWith", "hasCheckResults", "hasCheckResultsWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasCampaigns", "hasCampaignsWith", "hasFindings", "hasFindingsWith", "hasControlImplementations", "hasControlImplementationsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -210472,6 +212074,83 @@ func (ec *executionContext) unmarshalInputControlWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -230235,7 +231914,7 @@ func (ec *executionContext) unmarshalInputCreateTaskInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "externalID", "taskKindName", "environmentName", "scopeName", "workflowEligibleMarker", "externalUUID", "title", "details", "detailsJSON", "metadata", "status", "due", "completed", "systemGenerated", "isTemplate", "isSuggested", "priority", "source", "sourceKey", "externalReferenceURL", "integrationRunIDs", "ownerID", "taskKindID", "environmentID", "scopeID", "assignerID", "assigneeID", "commentIDs", "groupIDs", "internalPolicyIDs", "procedureIDs", "controlIDs", "subcontrolIDs", "controlObjectiveIDs", "programIDs", "riskIDs", "platformIDs", "scanIDs", "identityHolderIDs", "controlImplementationIDs", "actionPlanIDs", "evidenceIDs", "workflowObjectRefIDs", "vulnerabilityIDs", "findingIDs", "parentID", "taskIDs"}
+	fieldsInOrder := [...]string{"tags", "externalID", "taskKindName", "environmentName", "scopeName", "workflowEligibleMarker", "externalUUID", "title", "details", "detailsJSON", "metadata", "status", "due", "completed", "systemGenerated", "isTemplate", "isSuggested", "priority", "source", "externalReferenceURL", "integrationRunIDs", "ownerID", "taskKindID", "environmentID", "scopeID", "assignerID", "assigneeID", "commentIDs", "groupIDs", "internalPolicyIDs", "procedureIDs", "controlIDs", "subcontrolIDs", "controlObjectiveIDs", "programIDs", "riskIDs", "platformIDs", "scanIDs", "identityHolderIDs", "controlImplementationIDs", "actionPlanIDs", "evidenceIDs", "workflowObjectRefIDs", "vulnerabilityIDs", "findingIDs", "parentID", "taskIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -230397,13 +232076,6 @@ func (ec *executionContext) unmarshalInputCreateTaskInput(ctx context.Context, o
 				return it, err
 			}
 			it.Source = data
-		case "sourceKey":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKey = data
 		case "externalReferenceURL":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalReferenceURL"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
@@ -234772,7 +236444,7 @@ func (ec *executionContext) unmarshalInputCustomTypeEnumWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "objectType", "objectTypeNEQ", "objectTypeIn", "objectTypeNotIn", "objectTypeContains", "objectTypeHasPrefix", "objectTypeHasSuffix", "objectTypeEqualFold", "objectTypeContainsFold", "field", "fieldNEQ", "fieldIn", "fieldNotIn", "fieldContains", "fieldHasPrefix", "fieldHasSuffix", "fieldEqualFold", "fieldContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "color", "colorNEQ", "colorIn", "colorNotIn", "colorContains", "colorHasPrefix", "colorHasSuffix", "colorIsNil", "colorNotNil", "colorEqualFold", "colorContainsFold", "icon", "iconNEQ", "iconIn", "iconNotIn", "iconContains", "iconHasPrefix", "iconHasSuffix", "iconIsNil", "iconNotNil", "iconEqualFold", "iconContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasTasks", "hasTasksWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasRiskCategories", "hasRiskCategoriesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasActionPlans", "hasActionPlansWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "objectType", "objectTypeNEQ", "objectTypeIn", "objectTypeNotIn", "objectTypeContains", "objectTypeHasPrefix", "objectTypeHasSuffix", "objectTypeEqualFold", "objectTypeContainsFold", "field", "fieldNEQ", "fieldIn", "fieldNotIn", "fieldContains", "fieldHasPrefix", "fieldHasSuffix", "fieldEqualFold", "fieldContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "color", "colorNEQ", "colorIn", "colorNotIn", "colorContains", "colorHasPrefix", "colorHasSuffix", "colorIsNil", "colorNotNil", "colorEqualFold", "colorContainsFold", "icon", "iconNEQ", "iconIn", "iconNotIn", "iconContains", "iconHasPrefix", "iconHasSuffix", "iconIsNil", "iconNotNil", "iconEqualFold", "iconContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasTasks", "hasTasksWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasRiskCategories", "hasRiskCategoriesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasActionPlans", "hasActionPlansWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -235556,6 +237228,83 @@ func (ec *executionContext) unmarshalInputCustomTypeEnumWhereInput(ctx context.C
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -237706,7 +239455,7 @@ func (ec *executionContext) unmarshalInputDirectoryAccountWhereInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "identityHolderID", "identityHolderIDNEQ", "identityHolderIDIn", "identityHolderIDNotIn", "identityHolderIDContains", "identityHolderIDHasPrefix", "identityHolderIDHasSuffix", "identityHolderIDIsNil", "identityHolderIDNotNil", "identityHolderIDEqualFold", "identityHolderIDContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "secondaryKey", "secondaryKeyNEQ", "secondaryKeyIn", "secondaryKeyNotIn", "secondaryKeyContains", "secondaryKeyHasPrefix", "secondaryKeyHasSuffix", "secondaryKeyIsNil", "secondaryKeyNotNil", "secondaryKeyEqualFold", "secondaryKeyContainsFold", "canonicalEmail", "canonicalEmailNEQ", "canonicalEmailIn", "canonicalEmailNotIn", "canonicalEmailContains", "canonicalEmailHasPrefix", "canonicalEmailHasSuffix", "canonicalEmailIsNil", "canonicalEmailNotNil", "canonicalEmailEqualFold", "canonicalEmailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "jobTitle", "jobTitleNEQ", "jobTitleIn", "jobTitleNotIn", "jobTitleContains", "jobTitleHasPrefix", "jobTitleHasSuffix", "jobTitleIsNil", "jobTitleNotNil", "jobTitleEqualFold", "jobTitleContainsFold", "department", "departmentNEQ", "departmentIn", "departmentNotIn", "departmentContains", "departmentHasPrefix", "departmentHasSuffix", "departmentIsNil", "departmentNotNil", "departmentEqualFold", "departmentContainsFold", "organizationUnit", "organizationUnitNEQ", "organizationUnitIn", "organizationUnitNotIn", "organizationUnitContains", "organizationUnitHasPrefix", "organizationUnitHasSuffix", "organizationUnitIsNil", "organizationUnitNotNil", "organizationUnitEqualFold", "organizationUnitContainsFold", "accountType", "accountTypeNEQ", "accountTypeIn", "accountTypeNotIn", "accountTypeIsNil", "accountTypeNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "mfaState", "mfaStateNEQ", "mfaStateIn", "mfaStateNotIn", "lastSeenIP", "lastSeenIPNEQ", "lastSeenIPIn", "lastSeenIPNotIn", "lastSeenIPContains", "lastSeenIPHasPrefix", "lastSeenIPHasSuffix", "lastSeenIPIsNil", "lastSeenIPNotNil", "lastSeenIPEqualFold", "lastSeenIPContainsFold", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "sourceVersion", "sourceVersionNEQ", "sourceVersionIn", "sourceVersionNotIn", "sourceVersionContains", "sourceVersionHasPrefix", "sourceVersionHasSuffix", "sourceVersionIsNil", "sourceVersionNotNil", "sourceVersionEqualFold", "sourceVersionContainsFold", "primarySource", "primarySourceNEQ", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegration", "hasIntegrationWith", "hasPlatform", "hasPlatformWith", "hasIdentityHolder", "hasIdentityHolderWith", "hasAvatarFile", "hasAvatarFileWith", "hasGroups", "hasGroupsWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasMemberships", "hasMembershipsWith", "tagsHas", "emailAliasesHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "identityHolderID", "identityHolderIDNEQ", "identityHolderIDIn", "identityHolderIDNotIn", "identityHolderIDContains", "identityHolderIDHasPrefix", "identityHolderIDHasSuffix", "identityHolderIDIsNil", "identityHolderIDNotNil", "identityHolderIDEqualFold", "identityHolderIDContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "secondaryKey", "secondaryKeyNEQ", "secondaryKeyIn", "secondaryKeyNotIn", "secondaryKeyContains", "secondaryKeyHasPrefix", "secondaryKeyHasSuffix", "secondaryKeyIsNil", "secondaryKeyNotNil", "secondaryKeyEqualFold", "secondaryKeyContainsFold", "canonicalEmail", "canonicalEmailNEQ", "canonicalEmailIn", "canonicalEmailNotIn", "canonicalEmailContains", "canonicalEmailHasPrefix", "canonicalEmailHasSuffix", "canonicalEmailIsNil", "canonicalEmailNotNil", "canonicalEmailEqualFold", "canonicalEmailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "jobTitle", "jobTitleNEQ", "jobTitleIn", "jobTitleNotIn", "jobTitleContains", "jobTitleHasPrefix", "jobTitleHasSuffix", "jobTitleIsNil", "jobTitleNotNil", "jobTitleEqualFold", "jobTitleContainsFold", "department", "departmentNEQ", "departmentIn", "departmentNotIn", "departmentContains", "departmentHasPrefix", "departmentHasSuffix", "departmentIsNil", "departmentNotNil", "departmentEqualFold", "departmentContainsFold", "organizationUnit", "organizationUnitNEQ", "organizationUnitIn", "organizationUnitNotIn", "organizationUnitContains", "organizationUnitHasPrefix", "organizationUnitHasSuffix", "organizationUnitIsNil", "organizationUnitNotNil", "organizationUnitEqualFold", "organizationUnitContainsFold", "accountType", "accountTypeNEQ", "accountTypeIn", "accountTypeNotIn", "accountTypeIsNil", "accountTypeNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "mfaState", "mfaStateNEQ", "mfaStateIn", "mfaStateNotIn", "lastSeenIP", "lastSeenIPNEQ", "lastSeenIPIn", "lastSeenIPNotIn", "lastSeenIPContains", "lastSeenIPHasPrefix", "lastSeenIPHasSuffix", "lastSeenIPIsNil", "lastSeenIPNotNil", "lastSeenIPEqualFold", "lastSeenIPContainsFold", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "sourceVersion", "sourceVersionNEQ", "sourceVersionIn", "sourceVersionNotIn", "sourceVersionContains", "sourceVersionHasPrefix", "sourceVersionHasSuffix", "sourceVersionIsNil", "sourceVersionNotNil", "sourceVersionEqualFold", "sourceVersionContainsFold", "primarySource", "primarySourceNEQ", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegration", "hasIntegrationWith", "hasPlatform", "hasPlatformWith", "hasIdentityHolder", "hasIdentityHolderWith", "hasAvatarFile", "hasAvatarFileWith", "hasGroups", "hasGroupsWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasMemberships", "hasMembershipsWith", "tagsHas", "emailAliasesHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -238553,6 +240302,83 @@ func (ec *executionContext) unmarshalInputDirectoryAccountWhereInput(ctx context
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -240867,7 +242693,7 @@ func (ec *executionContext) unmarshalInputDirectoryGroupWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDEqualFold", "integrationIDContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailIsNil", "emailNotNil", "emailEqualFold", "emailContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "classification", "classificationNEQ", "classificationIn", "classificationNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "externalSharingAllowed", "externalSharingAllowedNEQ", "externalSharingAllowedIsNil", "externalSharingAllowedNotNil", "memberCount", "memberCountNEQ", "memberCountGT", "memberCountGTE", "memberCountLT", "memberCountLTE", "memberCountIsNil", "memberCountNotNil", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "sourceVersion", "sourceVersionNEQ", "sourceVersionIn", "sourceVersionNotIn", "sourceVersionContains", "sourceVersionHasPrefix", "sourceVersionHasSuffix", "sourceVersionIsNil", "sourceVersionNotNil", "sourceVersionEqualFold", "sourceVersionContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegration", "hasIntegrationWith", "hasPlatform", "hasPlatformWith", "hasAccounts", "hasAccountsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasMembers", "hasMembersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDEqualFold", "integrationIDContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailIsNil", "emailNotNil", "emailEqualFold", "emailContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "classification", "classificationNEQ", "classificationIn", "classificationNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "externalSharingAllowed", "externalSharingAllowedNEQ", "externalSharingAllowedIsNil", "externalSharingAllowedNotNil", "memberCount", "memberCountNEQ", "memberCountGT", "memberCountGTE", "memberCountLT", "memberCountLTE", "memberCountIsNil", "memberCountNotNil", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "sourceVersion", "sourceVersionNEQ", "sourceVersionIn", "sourceVersionNotIn", "sourceVersionContains", "sourceVersionHasPrefix", "sourceVersionHasSuffix", "sourceVersionIsNil", "sourceVersionNotNil", "sourceVersionEqualFold", "sourceVersionContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegration", "hasIntegrationWith", "hasPlatform", "hasPlatformWith", "hasAccounts", "hasAccountsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasMembers", "hasMembersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -241714,6 +243540,83 @@ func (ec *executionContext) unmarshalInputDirectoryGroupWhereInput(ctx context.C
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -243097,7 +245000,7 @@ func (ec *executionContext) unmarshalInputDirectoryMembershipWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "roleIsNil", "roleNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "roleIsNil", "roleNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -243944,6 +245847,83 @@ func (ec *executionContext) unmarshalInputDirectoryMembershipWhereInput(ctx cont
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -246287,7 +248267,7 @@ func (ec *executionContext) unmarshalInputEmailTemplateWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "key", "keyNEQ", "keyIn", "keyNotIn", "keyContains", "keyHasPrefix", "keyHasSuffix", "keyEqualFold", "keyContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "format", "formatNEQ", "formatIn", "formatNotIn", "formatIsNil", "formatNotNil", "locale", "localeNEQ", "localeIn", "localeNotIn", "localeContains", "localeHasPrefix", "localeHasSuffix", "localeEqualFold", "localeContainsFold", "subjectTemplate", "subjectTemplateNEQ", "subjectTemplateIn", "subjectTemplateNotIn", "subjectTemplateContains", "subjectTemplateHasPrefix", "subjectTemplateHasSuffix", "subjectTemplateIsNil", "subjectTemplateNotNil", "subjectTemplateEqualFold", "subjectTemplateContainsFold", "preheaderTemplate", "preheaderTemplateNEQ", "preheaderTemplateIn", "preheaderTemplateNotIn", "preheaderTemplateContains", "preheaderTemplateHasPrefix", "preheaderTemplateHasSuffix", "preheaderTemplateIsNil", "preheaderTemplateNotNil", "preheaderTemplateEqualFold", "preheaderTemplateContainsFold", "bodyTemplate", "bodyTemplateNEQ", "bodyTemplateIn", "bodyTemplateNotIn", "bodyTemplateContains", "bodyTemplateHasPrefix", "bodyTemplateHasSuffix", "bodyTemplateIsNil", "bodyTemplateNotNil", "bodyTemplateEqualFold", "bodyTemplateContainsFold", "textTemplate", "textTemplateNEQ", "textTemplateIn", "textTemplateNotIn", "textTemplateContains", "textTemplateHasPrefix", "textTemplateHasSuffix", "textTemplateIsNil", "textTemplateNotNil", "textTemplateEqualFold", "textTemplateContainsFold", "active", "activeNEQ", "version", "versionNEQ", "versionGT", "versionGTE", "versionLT", "versionLTE", "templateContext", "templateContextNEQ", "templateContextIn", "templateContextNotIn", "templateContextIsNil", "templateContextNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "workflowDefinitionID", "workflowDefinitionIDNEQ", "workflowDefinitionIDIn", "workflowDefinitionIDNotIn", "workflowDefinitionIDContains", "workflowDefinitionIDHasPrefix", "workflowDefinitionIDHasSuffix", "workflowDefinitionIDIsNil", "workflowDefinitionIDNotNil", "workflowDefinitionIDEqualFold", "workflowDefinitionIDContainsFold", "workflowInstanceID", "workflowInstanceIDNEQ", "workflowInstanceIDIn", "workflowInstanceIDNotIn", "workflowInstanceIDContains", "workflowInstanceIDHasPrefix", "workflowInstanceIDHasSuffix", "workflowInstanceIDIsNil", "workflowInstanceIDNotNil", "workflowInstanceIDEqualFold", "workflowInstanceIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasIntegration", "hasIntegrationWith", "hasWorkflowDefinition", "hasWorkflowDefinitionWith", "hasWorkflowInstance", "hasWorkflowInstanceWith", "hasTrustCenter", "hasTrustCenterWith", "hasCampaigns", "hasCampaignsWith", "hasNotificationTemplates", "hasNotificationTemplatesWith", "hasFiles", "hasFilesWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "key", "keyNEQ", "keyIn", "keyNotIn", "keyContains", "keyHasPrefix", "keyHasSuffix", "keyEqualFold", "keyContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "format", "formatNEQ", "formatIn", "formatNotIn", "formatIsNil", "formatNotNil", "locale", "localeNEQ", "localeIn", "localeNotIn", "localeContains", "localeHasPrefix", "localeHasSuffix", "localeEqualFold", "localeContainsFold", "subjectTemplate", "subjectTemplateNEQ", "subjectTemplateIn", "subjectTemplateNotIn", "subjectTemplateContains", "subjectTemplateHasPrefix", "subjectTemplateHasSuffix", "subjectTemplateIsNil", "subjectTemplateNotNil", "subjectTemplateEqualFold", "subjectTemplateContainsFold", "preheaderTemplate", "preheaderTemplateNEQ", "preheaderTemplateIn", "preheaderTemplateNotIn", "preheaderTemplateContains", "preheaderTemplateHasPrefix", "preheaderTemplateHasSuffix", "preheaderTemplateIsNil", "preheaderTemplateNotNil", "preheaderTemplateEqualFold", "preheaderTemplateContainsFold", "bodyTemplate", "bodyTemplateNEQ", "bodyTemplateIn", "bodyTemplateNotIn", "bodyTemplateContains", "bodyTemplateHasPrefix", "bodyTemplateHasSuffix", "bodyTemplateIsNil", "bodyTemplateNotNil", "bodyTemplateEqualFold", "bodyTemplateContainsFold", "textTemplate", "textTemplateNEQ", "textTemplateIn", "textTemplateNotIn", "textTemplateContains", "textTemplateHasPrefix", "textTemplateHasSuffix", "textTemplateIsNil", "textTemplateNotNil", "textTemplateEqualFold", "textTemplateContainsFold", "active", "activeNEQ", "version", "versionNEQ", "versionGT", "versionGTE", "versionLT", "versionLTE", "templateContext", "templateContextNEQ", "templateContextIn", "templateContextNotIn", "templateContextIsNil", "templateContextNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "workflowDefinitionID", "workflowDefinitionIDNEQ", "workflowDefinitionIDIn", "workflowDefinitionIDNotIn", "workflowDefinitionIDContains", "workflowDefinitionIDHasPrefix", "workflowDefinitionIDHasSuffix", "workflowDefinitionIDIsNil", "workflowDefinitionIDNotNil", "workflowDefinitionIDEqualFold", "workflowDefinitionIDContainsFold", "workflowInstanceID", "workflowInstanceIDNEQ", "workflowInstanceIDIn", "workflowInstanceIDNotIn", "workflowInstanceIDContains", "workflowInstanceIDHasPrefix", "workflowInstanceIDHasSuffix", "workflowInstanceIDIsNil", "workflowInstanceIDNotNil", "workflowInstanceIDEqualFold", "workflowInstanceIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasIntegration", "hasIntegrationWith", "hasWorkflowDefinition", "hasWorkflowDefinitionWith", "hasWorkflowInstance", "hasWorkflowInstanceWith", "hasTrustCenter", "hasTrustCenterWith", "hasCampaigns", "hasCampaignsWith", "hasNotificationTemplates", "hasNotificationTemplatesWith", "hasFiles", "hasFilesWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -247148,6 +249128,83 @@ func (ec *executionContext) unmarshalInputEmailTemplateWhereInput(ctx context.Co
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -249592,7 +251649,7 @@ func (ec *executionContext) unmarshalInputEntityWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "lastReviewedAt", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "catalogID", "catalogIDNEQ", "catalogIDIn", "catalogIDNotIn", "catalogIDContains", "catalogIDHasPrefix", "catalogIDHasSuffix", "catalogIDIsNil", "catalogIDNotNil", "catalogIDEqualFold", "catalogIDContainsFold", "externallyVisible", "externallyVisibleNEQ", "externallyVisibleIsNil", "externallyVisibleNotNil", "catalogKey", "catalogKeyNEQ", "catalogKeyIn", "catalogKeyNotIn", "catalogKeyContains", "catalogKeyHasPrefix", "catalogKeyHasSuffix", "catalogKeyIsNil", "catalogKeyNotNil", "catalogKeyEqualFold", "catalogKeyContainsFold", "entityRelationshipStateName", "entityRelationshipStateNameNEQ", "entityRelationshipStateNameIn", "entityRelationshipStateNameNotIn", "entityRelationshipStateNameContains", "entityRelationshipStateNameHasPrefix", "entityRelationshipStateNameHasSuffix", "entityRelationshipStateNameIsNil", "entityRelationshipStateNameNotNil", "entityRelationshipStateNameEqualFold", "entityRelationshipStateNameContainsFold", "entityRelationshipStateID", "entityRelationshipStateIDNEQ", "entityRelationshipStateIDIn", "entityRelationshipStateIDNotIn", "entityRelationshipStateIDContains", "entityRelationshipStateIDHasPrefix", "entityRelationshipStateIDHasSuffix", "entityRelationshipStateIDIsNil", "entityRelationshipStateIDNotNil", "entityRelationshipStateIDEqualFold", "entityRelationshipStateIDContainsFold", "entitySecurityQuestionnaireStatusName", "entitySecurityQuestionnaireStatusNameNEQ", "entitySecurityQuestionnaireStatusNameIn", "entitySecurityQuestionnaireStatusNameNotIn", "entitySecurityQuestionnaireStatusNameContains", "entitySecurityQuestionnaireStatusNameHasPrefix", "entitySecurityQuestionnaireStatusNameHasSuffix", "entitySecurityQuestionnaireStatusNameIsNil", "entitySecurityQuestionnaireStatusNameNotNil", "entitySecurityQuestionnaireStatusNameEqualFold", "entitySecurityQuestionnaireStatusNameContainsFold", "entitySecurityQuestionnaireStatusID", "entitySecurityQuestionnaireStatusIDNEQ", "entitySecurityQuestionnaireStatusIDIn", "entitySecurityQuestionnaireStatusIDNotIn", "entitySecurityQuestionnaireStatusIDContains", "entitySecurityQuestionnaireStatusIDHasPrefix", "entitySecurityQuestionnaireStatusIDHasSuffix", "entitySecurityQuestionnaireStatusIDIsNil", "entitySecurityQuestionnaireStatusIDNotNil", "entitySecurityQuestionnaireStatusIDEqualFold", "entitySecurityQuestionnaireStatusIDContainsFold", "entitySourceTypeName", "entitySourceTypeNameNEQ", "entitySourceTypeNameIn", "entitySourceTypeNameNotIn", "entitySourceTypeNameContains", "entitySourceTypeNameHasPrefix", "entitySourceTypeNameHasSuffix", "entitySourceTypeNameIsNil", "entitySourceTypeNameNotNil", "entitySourceTypeNameEqualFold", "entitySourceTypeNameContainsFold", "entitySourceTypeID", "entitySourceTypeIDNEQ", "entitySourceTypeIDIn", "entitySourceTypeIDNotIn", "entitySourceTypeIDContains", "entitySourceTypeIDHasPrefix", "entitySourceTypeIDHasSuffix", "entitySourceTypeIDIsNil", "entitySourceTypeIDNotNil", "entitySourceTypeIDEqualFold", "entitySourceTypeIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "entityTypeID", "entityTypeIDNEQ", "entityTypeIDIn", "entityTypeIDNotIn", "entityTypeIDContains", "entityTypeIDHasPrefix", "entityTypeIDHasSuffix", "entityTypeIDIsNil", "entityTypeIDNotNil", "entityTypeIDEqualFold", "entityTypeIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedForUse", "approvedForUseNEQ", "approvedForUseIsNil", "approvedForUseNotNil", "hasSoc2", "hasSoc2NEQ", "hasSoc2IsNil", "hasSoc2NotNil", "soc2PeriodEnd", "soc2PeriodEndGT", "soc2PeriodEndGTE", "soc2PeriodEndLT", "soc2PeriodEndLTE", "soc2PeriodEndIsNil", "soc2PeriodEndNotNil", "contractStartDate", "contractStartDateGT", "contractStartDateGTE", "contractStartDateLT", "contractStartDateLTE", "contractStartDateIsNil", "contractStartDateNotNil", "contractEndDate", "contractEndDateGT", "contractEndDateGTE", "contractEndDateLT", "contractEndDateLTE", "contractEndDateIsNil", "contractEndDateNotNil", "autoRenews", "autoRenewsNEQ", "autoRenewsIsNil", "autoRenewsNotNil", "terminationNoticeDays", "terminationNoticeDaysNEQ", "terminationNoticeDaysGT", "terminationNoticeDaysGTE", "terminationNoticeDaysLT", "terminationNoticeDaysLTE", "terminationNoticeDaysIsNil", "terminationNoticeDaysNotNil", "annualSpend", "annualSpendNEQ", "annualSpendIn", "annualSpendNotIn", "annualSpendGT", "annualSpendGTE", "annualSpendLT", "annualSpendLTE", "annualSpendIsNil", "annualSpendNotNil", "spendCurrency", "spendCurrencyNEQ", "spendCurrencyIn", "spendCurrencyNotIn", "spendCurrencyContains", "spendCurrencyHasPrefix", "spendCurrencyHasSuffix", "spendCurrencyIsNil", "spendCurrencyNotNil", "spendCurrencyEqualFold", "spendCurrencyContainsFold", "billingModel", "billingModelNEQ", "billingModelIn", "billingModelNotIn", "billingModelContains", "billingModelHasPrefix", "billingModelHasSuffix", "billingModelIsNil", "billingModelNotNil", "billingModelEqualFold", "billingModelContainsFold", "renewalRisk", "renewalRiskNEQ", "renewalRiskIn", "renewalRiskNotIn", "renewalRiskContains", "renewalRiskHasPrefix", "renewalRiskHasSuffix", "renewalRiskIsNil", "renewalRiskNotNil", "renewalRiskEqualFold", "renewalRiskContainsFold", "ssoEnforced", "ssoEnforcedNEQ", "ssoEnforcedIsNil", "ssoEnforcedNotNil", "mfaSupported", "mfaSupportedNEQ", "mfaSupportedIsNil", "mfaSupportedNotNil", "mfaEnforced", "mfaEnforcedNEQ", "mfaEnforcedIsNil", "mfaEnforcedNotNil", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "riskRating", "riskRatingNEQ", "riskRatingIn", "riskRatingNotIn", "riskRatingContains", "riskRatingHasPrefix", "riskRatingHasSuffix", "riskRatingIsNil", "riskRatingNotNil", "riskRatingEqualFold", "riskRatingContainsFold", "riskScore", "riskScoreNEQ", "riskScoreGT", "riskScoreGTE", "riskScoreLT", "riskScoreLTE", "riskScoreIsNil", "riskScoreNotNil", "riskScoreCoverage", "riskScoreCoverageNEQ", "riskScoreCoverageGT", "riskScoreCoverageGTE", "riskScoreCoverageLT", "riskScoreCoverageLTE", "riskScoreCoverageIsNil", "riskScoreCoverageNotNil", "tier", "tierNEQ", "tierIn", "tierNotIn", "tierIsNil", "tierNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "nextReviewAt", "nextReviewAtGT", "nextReviewAtGTE", "nextReviewAtLT", "nextReviewAtLTE", "nextReviewAtIsNil", "nextReviewAtNotNil", "contractRenewalAt", "contractRenewalAtGT", "contractRenewalAtGTE", "contractRenewalAtLT", "contractRenewalAtLTE", "contractRenewalAtIsNil", "contractRenewalAtNotNil", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoFileID", "logoFileIDNEQ", "logoFileIDIn", "logoFileIDNotIn", "logoFileIDContains", "logoFileIDHasPrefix", "logoFileIDHasSuffix", "logoFileIDIsNil", "logoFileIDNotNil", "logoFileIDEqualFold", "logoFileIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasCatalog", "hasCatalogWith", "hasAdopted", "hasAdoptedWith", "hasEntityRelationshipState", "hasEntityRelationshipStateWith", "hasEntitySecurityQuestionnaireStatus", "hasEntitySecurityQuestionnaireStatusWith", "hasEntitySourceType", "hasEntitySourceTypeWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasContacts", "hasContactsWith", "hasDocuments", "hasDocumentsWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasAssets", "hasAssetsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasScans", "hasScansWith", "hasCampaigns", "hasCampaignsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasVendorRiskScores", "hasVendorRiskScoresWith", "hasIntegrations", "hasIntegrationsWith", "hasSubprocessors", "hasSubprocessorsWith", "hasAuthMethods", "hasAuthMethodsWith", "hasEmployerIdentityHolders", "hasEmployerIdentityHoldersWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasPlatforms", "hasPlatformsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasSourcePlatforms", "hasSourcePlatformsWith", "hasEntityType", "hasEntityTypeWith", "hasLogoFile", "hasLogoFileWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "domainsHas", "aliasesHas", "linkedAssetIdsHas", "providedServicesHas", "linksHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "lastReviewedAt", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "catalogID", "catalogIDNEQ", "catalogIDIn", "catalogIDNotIn", "catalogIDContains", "catalogIDHasPrefix", "catalogIDHasSuffix", "catalogIDIsNil", "catalogIDNotNil", "catalogIDEqualFold", "catalogIDContainsFold", "externallyVisible", "externallyVisibleNEQ", "externallyVisibleIsNil", "externallyVisibleNotNil", "catalogKey", "catalogKeyNEQ", "catalogKeyIn", "catalogKeyNotIn", "catalogKeyContains", "catalogKeyHasPrefix", "catalogKeyHasSuffix", "catalogKeyIsNil", "catalogKeyNotNil", "catalogKeyEqualFold", "catalogKeyContainsFold", "entityRelationshipStateName", "entityRelationshipStateNameNEQ", "entityRelationshipStateNameIn", "entityRelationshipStateNameNotIn", "entityRelationshipStateNameContains", "entityRelationshipStateNameHasPrefix", "entityRelationshipStateNameHasSuffix", "entityRelationshipStateNameIsNil", "entityRelationshipStateNameNotNil", "entityRelationshipStateNameEqualFold", "entityRelationshipStateNameContainsFold", "entityRelationshipStateID", "entityRelationshipStateIDNEQ", "entityRelationshipStateIDIn", "entityRelationshipStateIDNotIn", "entityRelationshipStateIDContains", "entityRelationshipStateIDHasPrefix", "entityRelationshipStateIDHasSuffix", "entityRelationshipStateIDIsNil", "entityRelationshipStateIDNotNil", "entityRelationshipStateIDEqualFold", "entityRelationshipStateIDContainsFold", "entitySecurityQuestionnaireStatusName", "entitySecurityQuestionnaireStatusNameNEQ", "entitySecurityQuestionnaireStatusNameIn", "entitySecurityQuestionnaireStatusNameNotIn", "entitySecurityQuestionnaireStatusNameContains", "entitySecurityQuestionnaireStatusNameHasPrefix", "entitySecurityQuestionnaireStatusNameHasSuffix", "entitySecurityQuestionnaireStatusNameIsNil", "entitySecurityQuestionnaireStatusNameNotNil", "entitySecurityQuestionnaireStatusNameEqualFold", "entitySecurityQuestionnaireStatusNameContainsFold", "entitySecurityQuestionnaireStatusID", "entitySecurityQuestionnaireStatusIDNEQ", "entitySecurityQuestionnaireStatusIDIn", "entitySecurityQuestionnaireStatusIDNotIn", "entitySecurityQuestionnaireStatusIDContains", "entitySecurityQuestionnaireStatusIDHasPrefix", "entitySecurityQuestionnaireStatusIDHasSuffix", "entitySecurityQuestionnaireStatusIDIsNil", "entitySecurityQuestionnaireStatusIDNotNil", "entitySecurityQuestionnaireStatusIDEqualFold", "entitySecurityQuestionnaireStatusIDContainsFold", "entitySourceTypeName", "entitySourceTypeNameNEQ", "entitySourceTypeNameIn", "entitySourceTypeNameNotIn", "entitySourceTypeNameContains", "entitySourceTypeNameHasPrefix", "entitySourceTypeNameHasSuffix", "entitySourceTypeNameIsNil", "entitySourceTypeNameNotNil", "entitySourceTypeNameEqualFold", "entitySourceTypeNameContainsFold", "entitySourceTypeID", "entitySourceTypeIDNEQ", "entitySourceTypeIDIn", "entitySourceTypeIDNotIn", "entitySourceTypeIDContains", "entitySourceTypeIDHasPrefix", "entitySourceTypeIDHasSuffix", "entitySourceTypeIDIsNil", "entitySourceTypeIDNotNil", "entitySourceTypeIDEqualFold", "entitySourceTypeIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "entityTypeID", "entityTypeIDNEQ", "entityTypeIDIn", "entityTypeIDNotIn", "entityTypeIDContains", "entityTypeIDHasPrefix", "entityTypeIDHasSuffix", "entityTypeIDIsNil", "entityTypeIDNotNil", "entityTypeIDEqualFold", "entityTypeIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedForUse", "approvedForUseNEQ", "approvedForUseIsNil", "approvedForUseNotNil", "hasSoc2", "hasSoc2NEQ", "hasSoc2IsNil", "hasSoc2NotNil", "soc2PeriodEnd", "soc2PeriodEndGT", "soc2PeriodEndGTE", "soc2PeriodEndLT", "soc2PeriodEndLTE", "soc2PeriodEndIsNil", "soc2PeriodEndNotNil", "contractStartDate", "contractStartDateGT", "contractStartDateGTE", "contractStartDateLT", "contractStartDateLTE", "contractStartDateIsNil", "contractStartDateNotNil", "contractEndDate", "contractEndDateGT", "contractEndDateGTE", "contractEndDateLT", "contractEndDateLTE", "contractEndDateIsNil", "contractEndDateNotNil", "autoRenews", "autoRenewsNEQ", "autoRenewsIsNil", "autoRenewsNotNil", "terminationNoticeDays", "terminationNoticeDaysNEQ", "terminationNoticeDaysGT", "terminationNoticeDaysGTE", "terminationNoticeDaysLT", "terminationNoticeDaysLTE", "terminationNoticeDaysIsNil", "terminationNoticeDaysNotNil", "annualSpend", "annualSpendNEQ", "annualSpendIn", "annualSpendNotIn", "annualSpendGT", "annualSpendGTE", "annualSpendLT", "annualSpendLTE", "annualSpendIsNil", "annualSpendNotNil", "spendCurrency", "spendCurrencyNEQ", "spendCurrencyIn", "spendCurrencyNotIn", "spendCurrencyContains", "spendCurrencyHasPrefix", "spendCurrencyHasSuffix", "spendCurrencyIsNil", "spendCurrencyNotNil", "spendCurrencyEqualFold", "spendCurrencyContainsFold", "billingModel", "billingModelNEQ", "billingModelIn", "billingModelNotIn", "billingModelContains", "billingModelHasPrefix", "billingModelHasSuffix", "billingModelIsNil", "billingModelNotNil", "billingModelEqualFold", "billingModelContainsFold", "renewalRisk", "renewalRiskNEQ", "renewalRiskIn", "renewalRiskNotIn", "renewalRiskContains", "renewalRiskHasPrefix", "renewalRiskHasSuffix", "renewalRiskIsNil", "renewalRiskNotNil", "renewalRiskEqualFold", "renewalRiskContainsFold", "ssoEnforced", "ssoEnforcedNEQ", "ssoEnforcedIsNil", "ssoEnforcedNotNil", "mfaSupported", "mfaSupportedNEQ", "mfaSupportedIsNil", "mfaSupportedNotNil", "mfaEnforced", "mfaEnforcedNEQ", "mfaEnforcedIsNil", "mfaEnforcedNotNil", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "riskRating", "riskRatingNEQ", "riskRatingIn", "riskRatingNotIn", "riskRatingContains", "riskRatingHasPrefix", "riskRatingHasSuffix", "riskRatingIsNil", "riskRatingNotNil", "riskRatingEqualFold", "riskRatingContainsFold", "riskScore", "riskScoreNEQ", "riskScoreGT", "riskScoreGTE", "riskScoreLT", "riskScoreLTE", "riskScoreIsNil", "riskScoreNotNil", "riskScoreCoverage", "riskScoreCoverageNEQ", "riskScoreCoverageGT", "riskScoreCoverageGTE", "riskScoreCoverageLT", "riskScoreCoverageLTE", "riskScoreCoverageIsNil", "riskScoreCoverageNotNil", "tier", "tierNEQ", "tierIn", "tierNotIn", "tierIsNil", "tierNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "nextReviewAt", "nextReviewAtGT", "nextReviewAtGTE", "nextReviewAtLT", "nextReviewAtLTE", "nextReviewAtIsNil", "nextReviewAtNotNil", "contractRenewalAt", "contractRenewalAtGT", "contractRenewalAtGTE", "contractRenewalAtLT", "contractRenewalAtLTE", "contractRenewalAtIsNil", "contractRenewalAtNotNil", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoFileID", "logoFileIDNEQ", "logoFileIDIn", "logoFileIDNotIn", "logoFileIDContains", "logoFileIDHasPrefix", "logoFileIDHasSuffix", "logoFileIDIsNil", "logoFileIDNotNil", "logoFileIDEqualFold", "logoFileIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasCatalog", "hasCatalogWith", "hasAdopted", "hasAdoptedWith", "hasEntityRelationshipState", "hasEntityRelationshipStateWith", "hasEntitySecurityQuestionnaireStatus", "hasEntitySecurityQuestionnaireStatusWith", "hasEntitySourceType", "hasEntitySourceTypeWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasContacts", "hasContactsWith", "hasDocuments", "hasDocumentsWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasAssets", "hasAssetsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasScans", "hasScansWith", "hasCampaigns", "hasCampaignsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasVendorRiskScores", "hasVendorRiskScoresWith", "hasIntegrations", "hasIntegrationsWith", "hasSubprocessors", "hasSubprocessorsWith", "hasAuthMethods", "hasAuthMethodsWith", "hasEmployerIdentityHolders", "hasEmployerIdentityHoldersWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasPlatforms", "hasPlatformsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasSourcePlatforms", "hasSourcePlatformsWith", "hasEntityType", "hasEntityTypeWith", "hasLogoFile", "hasLogoFileWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "domainsHas", "aliasesHas", "linkedAssetIdsHas", "providedServicesHas", "linksHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -250376,6 +252433,83 @@ func (ec *executionContext) unmarshalInputEntityWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -255536,7 +257670,7 @@ func (ec *executionContext) unmarshalInputEvidenceWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "collectionProcedure", "collectionProcedureNEQ", "collectionProcedureIn", "collectionProcedureNotIn", "collectionProcedureContains", "collectionProcedureHasPrefix", "collectionProcedureHasSuffix", "collectionProcedureIsNil", "collectionProcedureNotNil", "collectionProcedureEqualFold", "collectionProcedureContainsFold", "creationDate", "creationDateGT", "creationDateGTE", "creationDateLT", "creationDateLTE", "renewalDate", "renewalDateGT", "renewalDateGTE", "renewalDateLT", "renewalDateLTE", "renewalDateIsNil", "renewalDateNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "isAutomated", "isAutomatedNEQ", "isAutomatedIsNil", "isAutomatedNotNil", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasControlImplementations", "hasControlImplementationsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasFiles", "hasFilesWith", "hasPrograms", "hasProgramsWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasScans", "hasScansWith", "hasComments", "hasCommentsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "collectionProcedure", "collectionProcedureNEQ", "collectionProcedureIn", "collectionProcedureNotIn", "collectionProcedureContains", "collectionProcedureHasPrefix", "collectionProcedureHasSuffix", "collectionProcedureIsNil", "collectionProcedureNotNil", "collectionProcedureEqualFold", "collectionProcedureContainsFold", "creationDate", "creationDateGT", "creationDateGTE", "creationDateLT", "creationDateLTE", "renewalDate", "renewalDateGT", "renewalDateGTE", "renewalDateLT", "renewalDateLTE", "renewalDateIsNil", "renewalDateNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "isAutomated", "isAutomatedNEQ", "isAutomatedIsNil", "isAutomatedNotNil", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasControlImplementations", "hasControlImplementationsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasFiles", "hasFilesWith", "hasPrograms", "hasProgramsWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasScans", "hasScansWith", "hasComments", "hasCommentsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -256383,6 +258517,83 @@ func (ec *executionContext) unmarshalInputEvidenceWhereInput(ctx context.Context
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -262251,7 +264462,7 @@ func (ec *executionContext) unmarshalInputFindingWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "findingStatusName", "findingStatusNameNEQ", "findingStatusNameIn", "findingStatusNameNotIn", "findingStatusNameContains", "findingStatusNameHasPrefix", "findingStatusNameHasSuffix", "findingStatusNameIsNil", "findingStatusNameNotNil", "findingStatusNameEqualFold", "findingStatusNameContainsFold", "findingStatusID", "findingStatusIDNEQ", "findingStatusIDIn", "findingStatusIDNotIn", "findingStatusIDContains", "findingStatusIDHasPrefix", "findingStatusIDHasSuffix", "findingStatusIDIsNil", "findingStatusIDNotNil", "findingStatusIDEqualFold", "findingStatusIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "securityLevel", "securityLevelNEQ", "securityLevelIn", "securityLevelNotIn", "securityLevelIsNil", "securityLevelNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "resourceName", "resourceNameNEQ", "resourceNameIn", "resourceNameNotIn", "resourceNameContains", "resourceNameHasPrefix", "resourceNameHasSuffix", "resourceNameIsNil", "resourceNameNotNil", "resourceNameEqualFold", "resourceNameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "state", "stateNEQ", "stateIn", "stateNotIn", "stateContains", "stateHasPrefix", "stateHasSuffix", "stateIsNil", "stateNotNil", "stateEqualFold", "stateContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "findingClass", "findingClassNEQ", "findingClassIn", "findingClassNotIn", "findingClassContains", "findingClassHasPrefix", "findingClassHasSuffix", "findingClassIsNil", "findingClassNotNil", "findingClassEqualFold", "findingClassContainsFold", "severity", "severityNEQ", "severityIn", "severityNotIn", "severityContains", "severityHasPrefix", "severityHasSuffix", "severityIsNil", "severityNotNil", "severityEqualFold", "severityContainsFold", "numericSeverity", "numericSeverityNEQ", "numericSeverityIn", "numericSeverityNotIn", "numericSeverityGT", "numericSeverityGTE", "numericSeverityLT", "numericSeverityLTE", "numericSeverityIsNil", "numericSeverityNotNil", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactGT", "impactGTE", "impactLT", "impactLTE", "impactIsNil", "impactNotNil", "exploitability", "exploitabilityNEQ", "exploitabilityIn", "exploitabilityNotIn", "exploitabilityGT", "exploitabilityGTE", "exploitabilityLT", "exploitabilityLTE", "exploitabilityIsNil", "exploitabilityNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityContains", "priorityHasPrefix", "priorityHasSuffix", "priorityIsNil", "priorityNotNil", "priorityEqualFold", "priorityContainsFold", "open", "openNEQ", "openIsNil", "openNotNil", "blocksProduction", "blocksProductionNEQ", "blocksProductionIsNil", "blocksProductionNotNil", "production", "productionNEQ", "productionIsNil", "productionNotNil", "public", "publicNEQ", "publicIsNil", "publicNotNil", "validated", "validatedNEQ", "validatedIsNil", "validatedNotNil", "assessmentID", "assessmentIDNEQ", "assessmentIDIn", "assessmentIDNotIn", "assessmentIDContains", "assessmentIDHasPrefix", "assessmentIDHasSuffix", "assessmentIDIsNil", "assessmentIDNotNil", "assessmentIDEqualFold", "assessmentIDContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "recommendation", "recommendationNEQ", "recommendationIn", "recommendationNotIn", "recommendationContains", "recommendationHasPrefix", "recommendationHasSuffix", "recommendationIsNil", "recommendationNotNil", "recommendationEqualFold", "recommendationContainsFold", "recommendedActions", "recommendedActionsNEQ", "recommendedActionsIn", "recommendedActionsNotIn", "recommendedActionsContains", "recommendedActionsHasPrefix", "recommendedActionsHasSuffix", "recommendedActionsIsNil", "recommendedActionsNotNil", "recommendedActionsEqualFold", "recommendedActionsContainsFold", "vector", "vectorNEQ", "vectorIn", "vectorNotIn", "vectorContains", "vectorHasPrefix", "vectorHasSuffix", "vectorIsNil", "vectorNotNil", "vectorEqualFold", "vectorContainsFold", "remediationSLA", "remediationSLANEQ", "remediationSLAGT", "remediationSLAGTE", "remediationSLALT", "remediationSLALTE", "remediationSLAIsNil", "remediationSLANotNil", "eventTime", "eventTimeGT", "eventTimeGTE", "eventTimeLT", "eventTimeLTE", "eventTimeIsNil", "eventTimeNotNil", "reportedAt", "reportedAtGT", "reportedAtGTE", "reportedAtLT", "reportedAtLTE", "reportedAtIsNil", "reportedAtNotNil", "sourceUpdatedAt", "sourceUpdatedAtGT", "sourceUpdatedAtGTE", "sourceUpdatedAtLT", "sourceUpdatedAtLTE", "sourceUpdatedAtIsNil", "sourceUpdatedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasFindingStatus", "hasFindingStatusWith", "hasIntegrations", "hasIntegrationsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasActionPlans", "hasActionPlansWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasRemediations", "hasRemediationsWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasCheckResults", "hasCheckResultsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "categoriesHas", "referencesHas", "stepsToReproduceHas", "targetsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "findingStatusName", "findingStatusNameNEQ", "findingStatusNameIn", "findingStatusNameNotIn", "findingStatusNameContains", "findingStatusNameHasPrefix", "findingStatusNameHasSuffix", "findingStatusNameIsNil", "findingStatusNameNotNil", "findingStatusNameEqualFold", "findingStatusNameContainsFold", "findingStatusID", "findingStatusIDNEQ", "findingStatusIDIn", "findingStatusIDNotIn", "findingStatusIDContains", "findingStatusIDHasPrefix", "findingStatusIDHasSuffix", "findingStatusIDIsNil", "findingStatusIDNotNil", "findingStatusIDEqualFold", "findingStatusIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "securityLevel", "securityLevelNEQ", "securityLevelIn", "securityLevelNotIn", "securityLevelIsNil", "securityLevelNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "resourceName", "resourceNameNEQ", "resourceNameIn", "resourceNameNotIn", "resourceNameContains", "resourceNameHasPrefix", "resourceNameHasSuffix", "resourceNameIsNil", "resourceNameNotNil", "resourceNameEqualFold", "resourceNameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "state", "stateNEQ", "stateIn", "stateNotIn", "stateContains", "stateHasPrefix", "stateHasSuffix", "stateIsNil", "stateNotNil", "stateEqualFold", "stateContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "findingClass", "findingClassNEQ", "findingClassIn", "findingClassNotIn", "findingClassContains", "findingClassHasPrefix", "findingClassHasSuffix", "findingClassIsNil", "findingClassNotNil", "findingClassEqualFold", "findingClassContainsFold", "severity", "severityNEQ", "severityIn", "severityNotIn", "severityContains", "severityHasPrefix", "severityHasSuffix", "severityIsNil", "severityNotNil", "severityEqualFold", "severityContainsFold", "numericSeverity", "numericSeverityNEQ", "numericSeverityIn", "numericSeverityNotIn", "numericSeverityGT", "numericSeverityGTE", "numericSeverityLT", "numericSeverityLTE", "numericSeverityIsNil", "numericSeverityNotNil", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactGT", "impactGTE", "impactLT", "impactLTE", "impactIsNil", "impactNotNil", "exploitability", "exploitabilityNEQ", "exploitabilityIn", "exploitabilityNotIn", "exploitabilityGT", "exploitabilityGTE", "exploitabilityLT", "exploitabilityLTE", "exploitabilityIsNil", "exploitabilityNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityContains", "priorityHasPrefix", "priorityHasSuffix", "priorityIsNil", "priorityNotNil", "priorityEqualFold", "priorityContainsFold", "open", "openNEQ", "openIsNil", "openNotNil", "blocksProduction", "blocksProductionNEQ", "blocksProductionIsNil", "blocksProductionNotNil", "production", "productionNEQ", "productionIsNil", "productionNotNil", "public", "publicNEQ", "publicIsNil", "publicNotNil", "validated", "validatedNEQ", "validatedIsNil", "validatedNotNil", "assessmentID", "assessmentIDNEQ", "assessmentIDIn", "assessmentIDNotIn", "assessmentIDContains", "assessmentIDHasPrefix", "assessmentIDHasSuffix", "assessmentIDIsNil", "assessmentIDNotNil", "assessmentIDEqualFold", "assessmentIDContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "recommendation", "recommendationNEQ", "recommendationIn", "recommendationNotIn", "recommendationContains", "recommendationHasPrefix", "recommendationHasSuffix", "recommendationIsNil", "recommendationNotNil", "recommendationEqualFold", "recommendationContainsFold", "recommendedActions", "recommendedActionsNEQ", "recommendedActionsIn", "recommendedActionsNotIn", "recommendedActionsContains", "recommendedActionsHasPrefix", "recommendedActionsHasSuffix", "recommendedActionsIsNil", "recommendedActionsNotNil", "recommendedActionsEqualFold", "recommendedActionsContainsFold", "vector", "vectorNEQ", "vectorIn", "vectorNotIn", "vectorContains", "vectorHasPrefix", "vectorHasSuffix", "vectorIsNil", "vectorNotNil", "vectorEqualFold", "vectorContainsFold", "remediationSLA", "remediationSLANEQ", "remediationSLAGT", "remediationSLAGTE", "remediationSLALT", "remediationSLALTE", "remediationSLAIsNil", "remediationSLANotNil", "eventTime", "eventTimeGT", "eventTimeGTE", "eventTimeLT", "eventTimeLTE", "eventTimeIsNil", "eventTimeNotNil", "reportedAt", "reportedAtGT", "reportedAtGTE", "reportedAtLT", "reportedAtLTE", "reportedAtIsNil", "reportedAtNotNil", "sourceUpdatedAt", "sourceUpdatedAtGT", "sourceUpdatedAtGTE", "sourceUpdatedAtLT", "sourceUpdatedAtLTE", "sourceUpdatedAtIsNil", "sourceUpdatedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasFindingStatus", "hasFindingStatusWith", "hasIntegrations", "hasIntegrationsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasActionPlans", "hasActionPlansWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasRemediations", "hasRemediationsWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasCheckResults", "hasCheckResultsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "categoriesHas", "referencesHas", "stepsToReproduceHas", "targetsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -263098,6 +265309,83 @@ func (ec *executionContext) unmarshalInputFindingWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -268493,7 +270781,7 @@ func (ec *executionContext) unmarshalInputGroupWhereInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "isManaged", "isManagedNEQ", "isManagedIsNil", "isManagedNotNil", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "oscalRole", "oscalRoleNEQ", "oscalRoleIn", "oscalRoleNotIn", "oscalRoleContains", "oscalRoleHasPrefix", "oscalRoleHasSuffix", "oscalRoleIsNil", "oscalRoleNotNil", "oscalRoleEqualFold", "oscalRoleContainsFold", "oscalPartyUUID", "oscalPartyUUIDNEQ", "oscalPartyUUIDIn", "oscalPartyUUIDNotIn", "oscalPartyUUIDContains", "oscalPartyUUIDHasPrefix", "oscalPartyUUIDHasSuffix", "oscalPartyUUIDIsNil", "oscalPartyUUIDNotNil", "oscalPartyUUIDEqualFold", "oscalPartyUUIDContainsFold", "scimExternalID", "scimExternalIDNEQ", "scimExternalIDIn", "scimExternalIDNotIn", "scimExternalIDContains", "scimExternalIDHasPrefix", "scimExternalIDHasSuffix", "scimExternalIDIsNil", "scimExternalIDNotNil", "scimExternalIDEqualFold", "scimExternalIDContainsFold", "scimDisplayName", "scimDisplayNameNEQ", "scimDisplayNameIn", "scimDisplayNameNotIn", "scimDisplayNameContains", "scimDisplayNameHasPrefix", "scimDisplayNameHasSuffix", "scimDisplayNameIsNil", "scimDisplayNameNotNil", "scimDisplayNameEqualFold", "scimDisplayNameContainsFold", "scimActive", "scimActiveNEQ", "scimActiveIsNil", "scimActiveNotNil", "scimGroupMailing", "scimGroupMailingNEQ", "scimGroupMailingIn", "scimGroupMailingNotIn", "scimGroupMailingContains", "scimGroupMailingHasPrefix", "scimGroupMailingHasSuffix", "scimGroupMailingIsNil", "scimGroupMailingNotNil", "scimGroupMailingEqualFold", "scimGroupMailingContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasProgramEditors", "hasProgramEditorsWith", "hasProgramBlockedGroups", "hasProgramBlockedGroupsWith", "hasProgramViewers", "hasProgramViewersWith", "hasReportEditors", "hasReportEditorsWith", "hasReportBlockedGroups", "hasReportBlockedGroupsWith", "hasReportViewers", "hasReportViewersWith", "hasRiskEditors", "hasRiskEditorsWith", "hasRiskBlockedGroups", "hasRiskBlockedGroupsWith", "hasRiskViewers", "hasRiskViewersWith", "hasControlObjectiveEditors", "hasControlObjectiveEditorsWith", "hasControlObjectiveBlockedGroups", "hasControlObjectiveBlockedGroupsWith", "hasControlObjectiveViewers", "hasControlObjectiveViewersWith", "hasNarrativeEditors", "hasNarrativeEditorsWith", "hasNarrativeBlockedGroups", "hasNarrativeBlockedGroupsWith", "hasNarrativeViewers", "hasNarrativeViewersWith", "hasControlImplementationEditors", "hasControlImplementationEditorsWith", "hasControlImplementationBlockedGroups", "hasControlImplementationBlockedGroupsWith", "hasControlImplementationViewers", "hasControlImplementationViewersWith", "hasActionPlanEditors", "hasActionPlanEditorsWith", "hasActionPlanBlockedGroups", "hasActionPlanBlockedGroupsWith", "hasActionPlanViewers", "hasActionPlanViewersWith", "hasPlatformEditors", "hasPlatformEditorsWith", "hasPlatformBlockedGroups", "hasPlatformBlockedGroupsWith", "hasPlatformViewers", "hasPlatformViewersWith", "hasCampaignEditors", "hasCampaignEditorsWith", "hasCampaignBlockedGroups", "hasCampaignBlockedGroupsWith", "hasCampaignViewers", "hasCampaignViewersWith", "hasProcedureEditors", "hasProcedureEditorsWith", "hasProcedureBlockedGroups", "hasProcedureBlockedGroupsWith", "hasInternalPolicyEditors", "hasInternalPolicyEditorsWith", "hasInternalPolicyBlockedGroups", "hasInternalPolicyBlockedGroupsWith", "hasControlEditors", "hasControlEditorsWith", "hasControlBlockedGroups", "hasControlBlockedGroupsWith", "hasMappedControlEditors", "hasMappedControlEditorsWith", "hasMappedControlBlockedGroups", "hasMappedControlBlockedGroupsWith", "hasScanEditors", "hasScanEditorsWith", "hasScanBlockedGroups", "hasScanBlockedGroupsWith", "hasEntityEditors", "hasEntityEditorsWith", "hasEntityBlockedGroups", "hasEntityBlockedGroupsWith", "hasFindingEditors", "hasFindingEditorsWith", "hasFindingBlockedGroups", "hasFindingBlockedGroupsWith", "hasReviewEditors", "hasReviewEditorsWith", "hasReviewBlockedGroups", "hasReviewBlockedGroupsWith", "hasRemediationEditors", "hasRemediationEditorsWith", "hasRemediationBlockedGroups", "hasRemediationBlockedGroupsWith", "hasSetting", "hasSettingWith", "hasUsers", "hasUsersWith", "hasEvents", "hasEventsWith", "hasIntegrations", "hasIntegrationsWith", "hasAvatarFile", "hasAvatarFileWith", "hasFiles", "hasFilesWith", "hasTasks", "hasTasksWith", "hasCampaigns", "hasCampaignsWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasMembers", "hasMembersWith", "tagsHas", "oscalContactUuidsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "isManaged", "isManagedNEQ", "isManagedIsNil", "isManagedNotNil", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "oscalRole", "oscalRoleNEQ", "oscalRoleIn", "oscalRoleNotIn", "oscalRoleContains", "oscalRoleHasPrefix", "oscalRoleHasSuffix", "oscalRoleIsNil", "oscalRoleNotNil", "oscalRoleEqualFold", "oscalRoleContainsFold", "oscalPartyUUID", "oscalPartyUUIDNEQ", "oscalPartyUUIDIn", "oscalPartyUUIDNotIn", "oscalPartyUUIDContains", "oscalPartyUUIDHasPrefix", "oscalPartyUUIDHasSuffix", "oscalPartyUUIDIsNil", "oscalPartyUUIDNotNil", "oscalPartyUUIDEqualFold", "oscalPartyUUIDContainsFold", "scimExternalID", "scimExternalIDNEQ", "scimExternalIDIn", "scimExternalIDNotIn", "scimExternalIDContains", "scimExternalIDHasPrefix", "scimExternalIDHasSuffix", "scimExternalIDIsNil", "scimExternalIDNotNil", "scimExternalIDEqualFold", "scimExternalIDContainsFold", "scimDisplayName", "scimDisplayNameNEQ", "scimDisplayNameIn", "scimDisplayNameNotIn", "scimDisplayNameContains", "scimDisplayNameHasPrefix", "scimDisplayNameHasSuffix", "scimDisplayNameIsNil", "scimDisplayNameNotNil", "scimDisplayNameEqualFold", "scimDisplayNameContainsFold", "scimActive", "scimActiveNEQ", "scimActiveIsNil", "scimActiveNotNil", "scimGroupMailing", "scimGroupMailingNEQ", "scimGroupMailingIn", "scimGroupMailingNotIn", "scimGroupMailingContains", "scimGroupMailingHasPrefix", "scimGroupMailingHasSuffix", "scimGroupMailingIsNil", "scimGroupMailingNotNil", "scimGroupMailingEqualFold", "scimGroupMailingContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasProgramEditors", "hasProgramEditorsWith", "hasProgramBlockedGroups", "hasProgramBlockedGroupsWith", "hasProgramViewers", "hasProgramViewersWith", "hasReportEditors", "hasReportEditorsWith", "hasReportBlockedGroups", "hasReportBlockedGroupsWith", "hasReportViewers", "hasReportViewersWith", "hasRiskEditors", "hasRiskEditorsWith", "hasRiskBlockedGroups", "hasRiskBlockedGroupsWith", "hasRiskViewers", "hasRiskViewersWith", "hasControlObjectiveEditors", "hasControlObjectiveEditorsWith", "hasControlObjectiveBlockedGroups", "hasControlObjectiveBlockedGroupsWith", "hasControlObjectiveViewers", "hasControlObjectiveViewersWith", "hasNarrativeEditors", "hasNarrativeEditorsWith", "hasNarrativeBlockedGroups", "hasNarrativeBlockedGroupsWith", "hasNarrativeViewers", "hasNarrativeViewersWith", "hasControlImplementationEditors", "hasControlImplementationEditorsWith", "hasControlImplementationBlockedGroups", "hasControlImplementationBlockedGroupsWith", "hasControlImplementationViewers", "hasControlImplementationViewersWith", "hasActionPlanEditors", "hasActionPlanEditorsWith", "hasActionPlanBlockedGroups", "hasActionPlanBlockedGroupsWith", "hasActionPlanViewers", "hasActionPlanViewersWith", "hasPlatformEditors", "hasPlatformEditorsWith", "hasPlatformBlockedGroups", "hasPlatformBlockedGroupsWith", "hasPlatformViewers", "hasPlatformViewersWith", "hasCampaignEditors", "hasCampaignEditorsWith", "hasCampaignBlockedGroups", "hasCampaignBlockedGroupsWith", "hasCampaignViewers", "hasCampaignViewersWith", "hasProcedureEditors", "hasProcedureEditorsWith", "hasProcedureBlockedGroups", "hasProcedureBlockedGroupsWith", "hasInternalPolicyEditors", "hasInternalPolicyEditorsWith", "hasInternalPolicyBlockedGroups", "hasInternalPolicyBlockedGroupsWith", "hasControlEditors", "hasControlEditorsWith", "hasControlBlockedGroups", "hasControlBlockedGroupsWith", "hasMappedControlEditors", "hasMappedControlEditorsWith", "hasMappedControlBlockedGroups", "hasMappedControlBlockedGroupsWith", "hasScanEditors", "hasScanEditorsWith", "hasScanBlockedGroups", "hasScanBlockedGroupsWith", "hasEntityEditors", "hasEntityEditorsWith", "hasEntityBlockedGroups", "hasEntityBlockedGroupsWith", "hasFindingEditors", "hasFindingEditorsWith", "hasFindingBlockedGroups", "hasFindingBlockedGroupsWith", "hasReviewEditors", "hasReviewEditorsWith", "hasReviewBlockedGroups", "hasReviewBlockedGroupsWith", "hasRemediationEditors", "hasRemediationEditorsWith", "hasRemediationBlockedGroups", "hasRemediationBlockedGroupsWith", "hasSetting", "hasSettingWith", "hasUsers", "hasUsersWith", "hasEvents", "hasEventsWith", "hasIntegrations", "hasIntegrationsWith", "hasAvatarFile", "hasAvatarFileWith", "hasFiles", "hasFilesWith", "hasTasks", "hasTasksWith", "hasCampaigns", "hasCampaignsWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasMembers", "hasMembersWith", "tagsHas", "oscalContactUuidsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -269340,6 +271628,83 @@ func (ec *executionContext) unmarshalInputGroupWhereInput(ctx context.Context, o
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -272141,7 +274506,7 @@ func (ec *executionContext) unmarshalInputIdentityHolderWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "fullName", "fullNameNEQ", "fullNameIn", "fullNameNotIn", "fullNameContains", "fullNameHasPrefix", "fullNameHasSuffix", "fullNameEqualFold", "fullNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "alternateEmail", "alternateEmailNEQ", "alternateEmailIn", "alternateEmailNotIn", "alternateEmailContains", "alternateEmailHasPrefix", "alternateEmailHasSuffix", "alternateEmailIsNil", "alternateEmailNotNil", "alternateEmailEqualFold", "alternateEmailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "isOpenlaneUser", "isOpenlaneUserNEQ", "isOpenlaneUserIsNil", "isOpenlaneUserNotNil", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "userIDContains", "userIDHasPrefix", "userIDHasSuffix", "userIDIsNil", "userIDNotNil", "userIDEqualFold", "userIDContainsFold", "identityHolderType", "identityHolderTypeNEQ", "identityHolderTypeIn", "identityHolderTypeNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "isActive", "isActiveNEQ", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "department", "departmentNEQ", "departmentIn", "departmentNotIn", "departmentContains", "departmentHasPrefix", "departmentHasSuffix", "departmentIsNil", "departmentNotNil", "departmentEqualFold", "departmentContainsFold", "team", "teamNEQ", "teamIn", "teamNotIn", "teamContains", "teamHasPrefix", "teamHasSuffix", "teamIsNil", "teamNotNil", "teamEqualFold", "teamContainsFold", "location", "locationNEQ", "locationIn", "locationNotIn", "locationContains", "locationHasPrefix", "locationHasSuffix", "locationIsNil", "locationNotNil", "locationEqualFold", "locationContainsFold", "startDate", "startDateGT", "startDateGTE", "startDateLT", "startDateLTE", "startDateIsNil", "startDateNotNil", "endDate", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "employerEntityID", "employerEntityIDNEQ", "employerEntityIDIn", "employerEntityIDNotIn", "employerEntityIDContains", "employerEntityIDHasPrefix", "employerEntityIDHasSuffix", "employerEntityIDIsNil", "employerEntityIDNotNil", "employerEntityIDEqualFold", "employerEntityIDContainsFold", "externalUserID", "externalUserIDNEQ", "externalUserIDIn", "externalUserIDNotIn", "externalUserIDContains", "externalUserIDHasPrefix", "externalUserIDHasSuffix", "externalUserIDIsNil", "externalUserIDNotNil", "externalUserIDEqualFold", "externalUserIDContainsFold", "externalReferenceID", "externalReferenceIDNEQ", "externalReferenceIDIn", "externalReferenceIDNotIn", "externalReferenceIDContains", "externalReferenceIDHasPrefix", "externalReferenceIDHasSuffix", "externalReferenceIDIsNil", "externalReferenceIDNotNil", "externalReferenceIDEqualFold", "externalReferenceIDContainsFold", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasEmployer", "hasEmployerWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasAssessments", "hasAssessmentsWith", "hasTemplates", "hasTemplatesWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasPlatforms", "hasPlatformsWith", "hasCampaigns", "hasCampaignsWith", "hasTasks", "hasTasksWith", "hasFiles", "hasFilesWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAccessPlatforms", "hasAccessPlatformsWith", "hasUser", "hasUserWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "emailAliasesHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "fullName", "fullNameNEQ", "fullNameIn", "fullNameNotIn", "fullNameContains", "fullNameHasPrefix", "fullNameHasSuffix", "fullNameEqualFold", "fullNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "alternateEmail", "alternateEmailNEQ", "alternateEmailIn", "alternateEmailNotIn", "alternateEmailContains", "alternateEmailHasPrefix", "alternateEmailHasSuffix", "alternateEmailIsNil", "alternateEmailNotNil", "alternateEmailEqualFold", "alternateEmailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "isOpenlaneUser", "isOpenlaneUserNEQ", "isOpenlaneUserIsNil", "isOpenlaneUserNotNil", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "userIDContains", "userIDHasPrefix", "userIDHasSuffix", "userIDIsNil", "userIDNotNil", "userIDEqualFold", "userIDContainsFold", "identityHolderType", "identityHolderTypeNEQ", "identityHolderTypeIn", "identityHolderTypeNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "isActive", "isActiveNEQ", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "department", "departmentNEQ", "departmentIn", "departmentNotIn", "departmentContains", "departmentHasPrefix", "departmentHasSuffix", "departmentIsNil", "departmentNotNil", "departmentEqualFold", "departmentContainsFold", "team", "teamNEQ", "teamIn", "teamNotIn", "teamContains", "teamHasPrefix", "teamHasSuffix", "teamIsNil", "teamNotNil", "teamEqualFold", "teamContainsFold", "location", "locationNEQ", "locationIn", "locationNotIn", "locationContains", "locationHasPrefix", "locationHasSuffix", "locationIsNil", "locationNotNil", "locationEqualFold", "locationContainsFold", "startDate", "startDateGT", "startDateGTE", "startDateLT", "startDateLTE", "startDateIsNil", "startDateNotNil", "endDate", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "employerEntityID", "employerEntityIDNEQ", "employerEntityIDIn", "employerEntityIDNotIn", "employerEntityIDContains", "employerEntityIDHasPrefix", "employerEntityIDHasSuffix", "employerEntityIDIsNil", "employerEntityIDNotNil", "employerEntityIDEqualFold", "employerEntityIDContainsFold", "externalUserID", "externalUserIDNEQ", "externalUserIDIn", "externalUserIDNotIn", "externalUserIDContains", "externalUserIDHasPrefix", "externalUserIDHasSuffix", "externalUserIDIsNil", "externalUserIDNotNil", "externalUserIDEqualFold", "externalUserIDContainsFold", "externalReferenceID", "externalReferenceIDNEQ", "externalReferenceIDIn", "externalReferenceIDNotIn", "externalReferenceIDContains", "externalReferenceIDHasPrefix", "externalReferenceIDHasSuffix", "externalReferenceIDIsNil", "externalReferenceIDNotNil", "externalReferenceIDEqualFold", "externalReferenceIDContainsFold", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasEmployer", "hasEmployerWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasAssessments", "hasAssessmentsWith", "hasTemplates", "hasTemplatesWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasPlatforms", "hasPlatformsWith", "hasCampaigns", "hasCampaignsWith", "hasTasks", "hasTasksWith", "hasFiles", "hasFilesWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAccessPlatforms", "hasAccessPlatformsWith", "hasUser", "hasUserWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "emailAliasesHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -272988,6 +275353,83 @@ func (ec *executionContext) unmarshalInputIdentityHolderWhereInput(ctx context.C
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -278866,7 +281308,7 @@ func (ec *executionContext) unmarshalInputInternalPolicyWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "managementMode", "managementModeNEQ", "managementModeIn", "managementModeNotIn", "managementModeIsNil", "managementModeNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "reviewDue", "reviewDueGT", "reviewDueGTE", "reviewDueLT", "reviewDueLTE", "reviewDueIsNil", "reviewDueNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "approverID", "approverIDNEQ", "approverIDIn", "approverIDNotIn", "approverIDContains", "approverIDHasPrefix", "approverIDHasSuffix", "approverIDIsNil", "approverIDNotNil", "approverIDEqualFold", "approverIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "externalFileID", "externalFileIDNEQ", "externalFileIDIn", "externalFileIDNotIn", "externalFileIDContains", "externalFileIDHasPrefix", "externalFileIDHasSuffix", "externalFileIDIsNil", "externalFileIDNotNil", "externalFileIDEqualFold", "externalFileIDContainsFold", "externalContents", "externalContentsNEQ", "externalContentsIn", "externalContentsNotIn", "externalContentsContains", "externalContentsHasPrefix", "externalContentsHasSuffix", "externalContentsIsNil", "externalContentsNotNil", "externalContentsEqualFold", "externalContentsContainsFold", "internalPolicyKindName", "internalPolicyKindNameNEQ", "internalPolicyKindNameIn", "internalPolicyKindNameNotIn", "internalPolicyKindNameContains", "internalPolicyKindNameHasPrefix", "internalPolicyKindNameHasSuffix", "internalPolicyKindNameIsNil", "internalPolicyKindNameNotNil", "internalPolicyKindNameEqualFold", "internalPolicyKindNameContainsFold", "internalPolicyKindID", "internalPolicyKindIDNEQ", "internalPolicyKindIDIn", "internalPolicyKindIDNotIn", "internalPolicyKindIDContains", "internalPolicyKindIDHasPrefix", "internalPolicyKindIDHasSuffix", "internalPolicyKindIDIsNil", "internalPolicyKindIDNotNil", "internalPolicyKindIDEqualFold", "internalPolicyKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasApprover", "hasApproverWith", "hasDelegate", "hasDelegateWith", "hasInternalPolicyKind", "hasInternalPolicyKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControlObjectives", "hasControlObjectivesWith", "hasControlImplementations", "hasControlImplementationsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasProcedures", "hasProceduresWith", "hasNarratives", "hasNarrativesWith", "hasTasks", "hasTasksWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasFile", "hasFileWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasReviews", "hasReviewsWith", "hasAssessments", "hasAssessmentsWith", "hasIntegrations", "hasIntegrationsWith", "hasPolicyAttestations", "hasPolicyAttestationsWith", "tagsHas", "tagSuggestionsHas", "dismissedTagSuggestionsHas", "controlSuggestionsHas", "dismissedControlSuggestionsHas", "improvementSuggestionsHas", "dismissedImprovementSuggestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "managementMode", "managementModeNEQ", "managementModeIn", "managementModeNotIn", "managementModeIsNil", "managementModeNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "reviewDue", "reviewDueGT", "reviewDueGTE", "reviewDueLT", "reviewDueLTE", "reviewDueIsNil", "reviewDueNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "approverID", "approverIDNEQ", "approverIDIn", "approverIDNotIn", "approverIDContains", "approverIDHasPrefix", "approverIDHasSuffix", "approverIDIsNil", "approverIDNotNil", "approverIDEqualFold", "approverIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "externalFileID", "externalFileIDNEQ", "externalFileIDIn", "externalFileIDNotIn", "externalFileIDContains", "externalFileIDHasPrefix", "externalFileIDHasSuffix", "externalFileIDIsNil", "externalFileIDNotNil", "externalFileIDEqualFold", "externalFileIDContainsFold", "externalContents", "externalContentsNEQ", "externalContentsIn", "externalContentsNotIn", "externalContentsContains", "externalContentsHasPrefix", "externalContentsHasSuffix", "externalContentsIsNil", "externalContentsNotNil", "externalContentsEqualFold", "externalContentsContainsFold", "internalPolicyKindName", "internalPolicyKindNameNEQ", "internalPolicyKindNameIn", "internalPolicyKindNameNotIn", "internalPolicyKindNameContains", "internalPolicyKindNameHasPrefix", "internalPolicyKindNameHasSuffix", "internalPolicyKindNameIsNil", "internalPolicyKindNameNotNil", "internalPolicyKindNameEqualFold", "internalPolicyKindNameContainsFold", "internalPolicyKindID", "internalPolicyKindIDNEQ", "internalPolicyKindIDIn", "internalPolicyKindIDNotIn", "internalPolicyKindIDContains", "internalPolicyKindIDHasPrefix", "internalPolicyKindIDHasSuffix", "internalPolicyKindIDIsNil", "internalPolicyKindIDNotNil", "internalPolicyKindIDEqualFold", "internalPolicyKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasApprover", "hasApproverWith", "hasDelegate", "hasDelegateWith", "hasInternalPolicyKind", "hasInternalPolicyKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControlObjectives", "hasControlObjectivesWith", "hasControlImplementations", "hasControlImplementationsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasProcedures", "hasProceduresWith", "hasNarratives", "hasNarrativesWith", "hasTasks", "hasTasksWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasFile", "hasFileWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasReviews", "hasReviewsWith", "hasAssessments", "hasAssessmentsWith", "hasIntegrations", "hasIntegrationsWith", "hasPolicyAttestations", "hasPolicyAttestationsWith", "tagsHas", "tagSuggestionsHas", "dismissedTagSuggestionsHas", "controlSuggestionsHas", "dismissedControlSuggestionsHas", "improvementSuggestionsHas", "dismissedImprovementSuggestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -279790,6 +282232,83 @@ func (ec *executionContext) unmarshalInputInternalPolicyWhereInput(ctx context.C
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -283603,7 +286122,7 @@ func (ec *executionContext) unmarshalInputMappedControlWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "mappingType", "mappingTypeNEQ", "mappingTypeIn", "mappingTypeNotIn", "relation", "relationNEQ", "relationIn", "relationNotIn", "relationContains", "relationHasPrefix", "relationHasSuffix", "relationIsNil", "relationNotNil", "relationEqualFold", "relationContainsFold", "confidence", "confidenceNEQ", "confidenceGT", "confidenceGTE", "confidenceLT", "confidenceLTE", "confidenceIsNil", "confidenceNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasFromControls", "hasFromControlsWith", "hasToControls", "hasToControlsWith", "hasFromSubcontrols", "hasFromSubcontrolsWith", "hasToSubcontrols", "hasToSubcontrolsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "mappingType", "mappingTypeNEQ", "mappingTypeIn", "mappingTypeNotIn", "relation", "relationNEQ", "relationIn", "relationNotIn", "relationContains", "relationHasPrefix", "relationHasSuffix", "relationIsNil", "relationNotNil", "relationEqualFold", "relationContainsFold", "confidence", "confidenceNEQ", "confidenceGT", "confidenceGTE", "confidenceLT", "confidenceLTE", "confidenceIsNil", "confidenceNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasFromControls", "hasFromControlsWith", "hasToControls", "hasToControlsWith", "hasFromSubcontrols", "hasFromSubcontrolsWith", "hasToSubcontrols", "hasToSubcontrolsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -284387,6 +286906,83 @@ func (ec *executionContext) unmarshalInputMappedControlWhereInput(ctx context.Co
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -285126,7 +287722,7 @@ func (ec *executionContext) unmarshalInputNarrativeWhereInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasSatisfies", "hasSatisfiesWith", "hasPrograms", "hasProgramsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasSatisfies", "hasSatisfiesWith", "hasPrograms", "hasProgramsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -285973,6 +288569,83 @@ func (ec *executionContext) unmarshalInputNarrativeWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -299492,7 +302165,7 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "businessOwner", "businessOwnerNEQ", "businessOwnerIn", "businessOwnerNotIn", "businessOwnerContains", "businessOwnerHasPrefix", "businessOwnerHasSuffix", "businessOwnerIsNil", "businessOwnerNotNil", "businessOwnerEqualFold", "businessOwnerContainsFold", "businessOwnerUserID", "businessOwnerUserIDNEQ", "businessOwnerUserIDIn", "businessOwnerUserIDNotIn", "businessOwnerUserIDContains", "businessOwnerUserIDHasPrefix", "businessOwnerUserIDHasSuffix", "businessOwnerUserIDIsNil", "businessOwnerUserIDNotNil", "businessOwnerUserIDEqualFold", "businessOwnerUserIDContainsFold", "businessOwnerGroupID", "businessOwnerGroupIDNEQ", "businessOwnerGroupIDIn", "businessOwnerGroupIDNotIn", "businessOwnerGroupIDContains", "businessOwnerGroupIDHasPrefix", "businessOwnerGroupIDHasSuffix", "businessOwnerGroupIDIsNil", "businessOwnerGroupIDNotNil", "businessOwnerGroupIDEqualFold", "businessOwnerGroupIDContainsFold", "businessOwnerIdentityHolderID", "businessOwnerIdentityHolderIDNEQ", "businessOwnerIdentityHolderIDIn", "businessOwnerIdentityHolderIDNotIn", "businessOwnerIdentityHolderIDContains", "businessOwnerIdentityHolderIDHasPrefix", "businessOwnerIdentityHolderIDHasSuffix", "businessOwnerIdentityHolderIDIsNil", "businessOwnerIdentityHolderIDNotNil", "businessOwnerIdentityHolderIDEqualFold", "businessOwnerIdentityHolderIDContainsFold", "technicalOwner", "technicalOwnerNEQ", "technicalOwnerIn", "technicalOwnerNotIn", "technicalOwnerContains", "technicalOwnerHasPrefix", "technicalOwnerHasSuffix", "technicalOwnerIsNil", "technicalOwnerNotNil", "technicalOwnerEqualFold", "technicalOwnerContainsFold", "technicalOwnerUserID", "technicalOwnerUserIDNEQ", "technicalOwnerUserIDIn", "technicalOwnerUserIDNotIn", "technicalOwnerUserIDContains", "technicalOwnerUserIDHasPrefix", "technicalOwnerUserIDHasSuffix", "technicalOwnerUserIDIsNil", "technicalOwnerUserIDNotNil", "technicalOwnerUserIDEqualFold", "technicalOwnerUserIDContainsFold", "technicalOwnerGroupID", "technicalOwnerGroupIDNEQ", "technicalOwnerGroupIDIn", "technicalOwnerGroupIDNotIn", "technicalOwnerGroupIDContains", "technicalOwnerGroupIDHasPrefix", "technicalOwnerGroupIDHasSuffix", "technicalOwnerGroupIDIsNil", "technicalOwnerGroupIDNotNil", "technicalOwnerGroupIDEqualFold", "technicalOwnerGroupIDContainsFold", "technicalOwnerIdentityHolderID", "technicalOwnerIdentityHolderIDNEQ", "technicalOwnerIdentityHolderIDIn", "technicalOwnerIdentityHolderIDNotIn", "technicalOwnerIdentityHolderIDContains", "technicalOwnerIdentityHolderIDHasPrefix", "technicalOwnerIdentityHolderIDHasSuffix", "technicalOwnerIdentityHolderIDIsNil", "technicalOwnerIdentityHolderIDNotNil", "technicalOwnerIdentityHolderIDEqualFold", "technicalOwnerIdentityHolderIDContainsFold", "securityOwner", "securityOwnerNEQ", "securityOwnerIn", "securityOwnerNotIn", "securityOwnerContains", "securityOwnerHasPrefix", "securityOwnerHasSuffix", "securityOwnerIsNil", "securityOwnerNotNil", "securityOwnerEqualFold", "securityOwnerContainsFold", "securityOwnerUserID", "securityOwnerUserIDNEQ", "securityOwnerUserIDIn", "securityOwnerUserIDNotIn", "securityOwnerUserIDContains", "securityOwnerUserIDHasPrefix", "securityOwnerUserIDHasSuffix", "securityOwnerUserIDIsNil", "securityOwnerUserIDNotNil", "securityOwnerUserIDEqualFold", "securityOwnerUserIDContainsFold", "securityOwnerGroupID", "securityOwnerGroupIDNEQ", "securityOwnerGroupIDIn", "securityOwnerGroupIDNotIn", "securityOwnerGroupIDContains", "securityOwnerGroupIDHasPrefix", "securityOwnerGroupIDHasSuffix", "securityOwnerGroupIDIsNil", "securityOwnerGroupIDNotNil", "securityOwnerGroupIDEqualFold", "securityOwnerGroupIDContainsFold", "securityOwnerIdentityHolderID", "securityOwnerIdentityHolderIDNEQ", "securityOwnerIdentityHolderIDIn", "securityOwnerIdentityHolderIDNotIn", "securityOwnerIdentityHolderIDContains", "securityOwnerIdentityHolderIDHasPrefix", "securityOwnerIdentityHolderIDHasSuffix", "securityOwnerIdentityHolderIDIsNil", "securityOwnerIdentityHolderIDNotNil", "securityOwnerIdentityHolderIDEqualFold", "securityOwnerIdentityHolderIDContainsFold", "platformKindName", "platformKindNameNEQ", "platformKindNameIn", "platformKindNameNotIn", "platformKindNameContains", "platformKindNameHasPrefix", "platformKindNameHasSuffix", "platformKindNameIsNil", "platformKindNameNotNil", "platformKindNameEqualFold", "platformKindNameContainsFold", "platformKindID", "platformKindIDNEQ", "platformKindIDIn", "platformKindIDNotIn", "platformKindIDContains", "platformKindIDHasPrefix", "platformKindIDHasSuffix", "platformKindIDIsNil", "platformKindIDNotNil", "platformKindIDEqualFold", "platformKindIDContainsFold", "platformDataClassificationName", "platformDataClassificationNameNEQ", "platformDataClassificationNameIn", "platformDataClassificationNameNotIn", "platformDataClassificationNameContains", "platformDataClassificationNameHasPrefix", "platformDataClassificationNameHasSuffix", "platformDataClassificationNameIsNil", "platformDataClassificationNameNotNil", "platformDataClassificationNameEqualFold", "platformDataClassificationNameContainsFold", "platformDataClassificationID", "platformDataClassificationIDNEQ", "platformDataClassificationIDIn", "platformDataClassificationIDNotIn", "platformDataClassificationIDContains", "platformDataClassificationIDHasPrefix", "platformDataClassificationIDHasSuffix", "platformDataClassificationIDIsNil", "platformDataClassificationIDNotNil", "platformDataClassificationIDEqualFold", "platformDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "businessPurpose", "businessPurposeNEQ", "businessPurposeIn", "businessPurposeNotIn", "businessPurposeContains", "businessPurposeHasPrefix", "businessPurposeHasSuffix", "businessPurposeIsNil", "businessPurposeNotNil", "businessPurposeEqualFold", "businessPurposeContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "platformOwnerID", "platformOwnerIDNEQ", "platformOwnerIDIn", "platformOwnerIDNotIn", "platformOwnerIDContains", "platformOwnerIDHasPrefix", "platformOwnerIDHasSuffix", "platformOwnerIDIsNil", "platformOwnerIDNotNil", "platformOwnerIDEqualFold", "platformOwnerIDContainsFold", "externalReferenceID", "externalReferenceIDNEQ", "externalReferenceIDIn", "externalReferenceIDNotIn", "externalReferenceIDContains", "externalReferenceIDHasPrefix", "externalReferenceIDHasSuffix", "externalReferenceIDIsNil", "externalReferenceIDNotNil", "externalReferenceIDEqualFold", "externalReferenceIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasBusinessOwnerUser", "hasBusinessOwnerUserWith", "hasBusinessOwnerGroup", "hasBusinessOwnerGroupWith", "hasBusinessOwnerIdentityHolder", "hasBusinessOwnerIdentityHolderWith", "hasTechnicalOwnerUser", "hasTechnicalOwnerUserWith", "hasTechnicalOwnerGroup", "hasTechnicalOwnerGroupWith", "hasTechnicalOwnerIdentityHolder", "hasTechnicalOwnerIdentityHolderWith", "hasSecurityOwnerUser", "hasSecurityOwnerUserWith", "hasSecurityOwnerGroup", "hasSecurityOwnerGroupWith", "hasSecurityOwnerIdentityHolder", "hasSecurityOwnerIdentityHolderWith", "hasPlatformKind", "hasPlatformKindWith", "hasPlatformDataClassification", "hasPlatformDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasArchitectureDiagrams", "hasArchitectureDiagramsWith", "hasDataFlowDiagrams", "hasDataFlowDiagramsWith", "hasTrustBoundaryDiagrams", "hasTrustBoundaryDiagramsWith", "hasRisks", "hasRisksWith", "hasControls", "hasControlsWith", "hasAssessments", "hasAssessmentsWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasIntegrations", "hasIntegrationsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasSourceAssets", "hasSourceAssetsWith", "hasSourceEntities", "hasSourceEntitiesWith", "hasOutOfScopeAssets", "hasOutOfScopeAssetsWith", "hasOutOfScopeVendors", "hasOutOfScopeVendorsWith", "hasApplicableFrameworks", "hasApplicableFrameworksWith", "hasGeneratedScans", "hasGeneratedScansWith", "hasPlatformOwner", "hasPlatformOwnerWith", "hasSystemDetails", "hasSystemDetailsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "businessOwner", "businessOwnerNEQ", "businessOwnerIn", "businessOwnerNotIn", "businessOwnerContains", "businessOwnerHasPrefix", "businessOwnerHasSuffix", "businessOwnerIsNil", "businessOwnerNotNil", "businessOwnerEqualFold", "businessOwnerContainsFold", "businessOwnerUserID", "businessOwnerUserIDNEQ", "businessOwnerUserIDIn", "businessOwnerUserIDNotIn", "businessOwnerUserIDContains", "businessOwnerUserIDHasPrefix", "businessOwnerUserIDHasSuffix", "businessOwnerUserIDIsNil", "businessOwnerUserIDNotNil", "businessOwnerUserIDEqualFold", "businessOwnerUserIDContainsFold", "businessOwnerGroupID", "businessOwnerGroupIDNEQ", "businessOwnerGroupIDIn", "businessOwnerGroupIDNotIn", "businessOwnerGroupIDContains", "businessOwnerGroupIDHasPrefix", "businessOwnerGroupIDHasSuffix", "businessOwnerGroupIDIsNil", "businessOwnerGroupIDNotNil", "businessOwnerGroupIDEqualFold", "businessOwnerGroupIDContainsFold", "businessOwnerIdentityHolderID", "businessOwnerIdentityHolderIDNEQ", "businessOwnerIdentityHolderIDIn", "businessOwnerIdentityHolderIDNotIn", "businessOwnerIdentityHolderIDContains", "businessOwnerIdentityHolderIDHasPrefix", "businessOwnerIdentityHolderIDHasSuffix", "businessOwnerIdentityHolderIDIsNil", "businessOwnerIdentityHolderIDNotNil", "businessOwnerIdentityHolderIDEqualFold", "businessOwnerIdentityHolderIDContainsFold", "technicalOwner", "technicalOwnerNEQ", "technicalOwnerIn", "technicalOwnerNotIn", "technicalOwnerContains", "technicalOwnerHasPrefix", "technicalOwnerHasSuffix", "technicalOwnerIsNil", "technicalOwnerNotNil", "technicalOwnerEqualFold", "technicalOwnerContainsFold", "technicalOwnerUserID", "technicalOwnerUserIDNEQ", "technicalOwnerUserIDIn", "technicalOwnerUserIDNotIn", "technicalOwnerUserIDContains", "technicalOwnerUserIDHasPrefix", "technicalOwnerUserIDHasSuffix", "technicalOwnerUserIDIsNil", "technicalOwnerUserIDNotNil", "technicalOwnerUserIDEqualFold", "technicalOwnerUserIDContainsFold", "technicalOwnerGroupID", "technicalOwnerGroupIDNEQ", "technicalOwnerGroupIDIn", "technicalOwnerGroupIDNotIn", "technicalOwnerGroupIDContains", "technicalOwnerGroupIDHasPrefix", "technicalOwnerGroupIDHasSuffix", "technicalOwnerGroupIDIsNil", "technicalOwnerGroupIDNotNil", "technicalOwnerGroupIDEqualFold", "technicalOwnerGroupIDContainsFold", "technicalOwnerIdentityHolderID", "technicalOwnerIdentityHolderIDNEQ", "technicalOwnerIdentityHolderIDIn", "technicalOwnerIdentityHolderIDNotIn", "technicalOwnerIdentityHolderIDContains", "technicalOwnerIdentityHolderIDHasPrefix", "technicalOwnerIdentityHolderIDHasSuffix", "technicalOwnerIdentityHolderIDIsNil", "technicalOwnerIdentityHolderIDNotNil", "technicalOwnerIdentityHolderIDEqualFold", "technicalOwnerIdentityHolderIDContainsFold", "securityOwner", "securityOwnerNEQ", "securityOwnerIn", "securityOwnerNotIn", "securityOwnerContains", "securityOwnerHasPrefix", "securityOwnerHasSuffix", "securityOwnerIsNil", "securityOwnerNotNil", "securityOwnerEqualFold", "securityOwnerContainsFold", "securityOwnerUserID", "securityOwnerUserIDNEQ", "securityOwnerUserIDIn", "securityOwnerUserIDNotIn", "securityOwnerUserIDContains", "securityOwnerUserIDHasPrefix", "securityOwnerUserIDHasSuffix", "securityOwnerUserIDIsNil", "securityOwnerUserIDNotNil", "securityOwnerUserIDEqualFold", "securityOwnerUserIDContainsFold", "securityOwnerGroupID", "securityOwnerGroupIDNEQ", "securityOwnerGroupIDIn", "securityOwnerGroupIDNotIn", "securityOwnerGroupIDContains", "securityOwnerGroupIDHasPrefix", "securityOwnerGroupIDHasSuffix", "securityOwnerGroupIDIsNil", "securityOwnerGroupIDNotNil", "securityOwnerGroupIDEqualFold", "securityOwnerGroupIDContainsFold", "securityOwnerIdentityHolderID", "securityOwnerIdentityHolderIDNEQ", "securityOwnerIdentityHolderIDIn", "securityOwnerIdentityHolderIDNotIn", "securityOwnerIdentityHolderIDContains", "securityOwnerIdentityHolderIDHasPrefix", "securityOwnerIdentityHolderIDHasSuffix", "securityOwnerIdentityHolderIDIsNil", "securityOwnerIdentityHolderIDNotNil", "securityOwnerIdentityHolderIDEqualFold", "securityOwnerIdentityHolderIDContainsFold", "platformKindName", "platformKindNameNEQ", "platformKindNameIn", "platformKindNameNotIn", "platformKindNameContains", "platformKindNameHasPrefix", "platformKindNameHasSuffix", "platformKindNameIsNil", "platformKindNameNotNil", "platformKindNameEqualFold", "platformKindNameContainsFold", "platformKindID", "platformKindIDNEQ", "platformKindIDIn", "platformKindIDNotIn", "platformKindIDContains", "platformKindIDHasPrefix", "platformKindIDHasSuffix", "platformKindIDIsNil", "platformKindIDNotNil", "platformKindIDEqualFold", "platformKindIDContainsFold", "platformDataClassificationName", "platformDataClassificationNameNEQ", "platformDataClassificationNameIn", "platformDataClassificationNameNotIn", "platformDataClassificationNameContains", "platformDataClassificationNameHasPrefix", "platformDataClassificationNameHasSuffix", "platformDataClassificationNameIsNil", "platformDataClassificationNameNotNil", "platformDataClassificationNameEqualFold", "platformDataClassificationNameContainsFold", "platformDataClassificationID", "platformDataClassificationIDNEQ", "platformDataClassificationIDIn", "platformDataClassificationIDNotIn", "platformDataClassificationIDContains", "platformDataClassificationIDHasPrefix", "platformDataClassificationIDHasSuffix", "platformDataClassificationIDIsNil", "platformDataClassificationIDNotNil", "platformDataClassificationIDEqualFold", "platformDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "businessPurpose", "businessPurposeNEQ", "businessPurposeIn", "businessPurposeNotIn", "businessPurposeContains", "businessPurposeHasPrefix", "businessPurposeHasSuffix", "businessPurposeIsNil", "businessPurposeNotNil", "businessPurposeEqualFold", "businessPurposeContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "platformOwnerID", "platformOwnerIDNEQ", "platformOwnerIDIn", "platformOwnerIDNotIn", "platformOwnerIDContains", "platformOwnerIDHasPrefix", "platformOwnerIDHasSuffix", "platformOwnerIDIsNil", "platformOwnerIDNotNil", "platformOwnerIDEqualFold", "platformOwnerIDContainsFold", "externalReferenceID", "externalReferenceIDNEQ", "externalReferenceIDIn", "externalReferenceIDNotIn", "externalReferenceIDContains", "externalReferenceIDHasPrefix", "externalReferenceIDHasSuffix", "externalReferenceIDIsNil", "externalReferenceIDNotNil", "externalReferenceIDEqualFold", "externalReferenceIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasBusinessOwnerUser", "hasBusinessOwnerUserWith", "hasBusinessOwnerGroup", "hasBusinessOwnerGroupWith", "hasBusinessOwnerIdentityHolder", "hasBusinessOwnerIdentityHolderWith", "hasTechnicalOwnerUser", "hasTechnicalOwnerUserWith", "hasTechnicalOwnerGroup", "hasTechnicalOwnerGroupWith", "hasTechnicalOwnerIdentityHolder", "hasTechnicalOwnerIdentityHolderWith", "hasSecurityOwnerUser", "hasSecurityOwnerUserWith", "hasSecurityOwnerGroup", "hasSecurityOwnerGroupWith", "hasSecurityOwnerIdentityHolder", "hasSecurityOwnerIdentityHolderWith", "hasPlatformKind", "hasPlatformKindWith", "hasPlatformDataClassification", "hasPlatformDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasArchitectureDiagrams", "hasArchitectureDiagramsWith", "hasDataFlowDiagrams", "hasDataFlowDiagramsWith", "hasTrustBoundaryDiagrams", "hasTrustBoundaryDiagramsWith", "hasRisks", "hasRisksWith", "hasControls", "hasControlsWith", "hasAssessments", "hasAssessmentsWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasIntegrations", "hasIntegrationsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasSourceAssets", "hasSourceAssetsWith", "hasSourceEntities", "hasSourceEntitiesWith", "hasOutOfScopeAssets", "hasOutOfScopeAssetsWith", "hasOutOfScopeVendors", "hasOutOfScopeVendorsWith", "hasApplicableFrameworks", "hasApplicableFrameworksWith", "hasGeneratedScans", "hasGeneratedScansWith", "hasPlatformOwner", "hasPlatformOwnerWith", "hasSystemDetails", "hasSystemDetailsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -300339,6 +303012,83 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -304746,7 +307496,7 @@ func (ec *executionContext) unmarshalInputProcedureWhereInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "managementMode", "managementModeNEQ", "managementModeIn", "managementModeNotIn", "managementModeIsNil", "managementModeNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "reviewDue", "reviewDueGT", "reviewDueGTE", "reviewDueLT", "reviewDueLTE", "reviewDueIsNil", "reviewDueNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "approverID", "approverIDNEQ", "approverIDIn", "approverIDNotIn", "approverIDContains", "approverIDHasPrefix", "approverIDHasSuffix", "approverIDIsNil", "approverIDNotNil", "approverIDEqualFold", "approverIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "externalFileID", "externalFileIDNEQ", "externalFileIDIn", "externalFileIDNotIn", "externalFileIDContains", "externalFileIDHasPrefix", "externalFileIDHasSuffix", "externalFileIDIsNil", "externalFileIDNotNil", "externalFileIDEqualFold", "externalFileIDContainsFold", "externalContents", "externalContentsNEQ", "externalContentsIn", "externalContentsNotIn", "externalContentsContains", "externalContentsHasPrefix", "externalContentsHasSuffix", "externalContentsIsNil", "externalContentsNotNil", "externalContentsEqualFold", "externalContentsContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "procedureKindName", "procedureKindNameNEQ", "procedureKindNameIn", "procedureKindNameNotIn", "procedureKindNameContains", "procedureKindNameHasPrefix", "procedureKindNameHasSuffix", "procedureKindNameIsNil", "procedureKindNameNotNil", "procedureKindNameEqualFold", "procedureKindNameContainsFold", "procedureKindID", "procedureKindIDNEQ", "procedureKindIDIn", "procedureKindIDNotIn", "procedureKindIDContains", "procedureKindIDHasPrefix", "procedureKindIDHasSuffix", "procedureKindIDIsNil", "procedureKindIDNotNil", "procedureKindIDEqualFold", "procedureKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasApprover", "hasApproverWith", "hasDelegate", "hasDelegateWith", "hasProcedureKind", "hasProcedureKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasPrograms", "hasProgramsWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasTasks", "hasTasksWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasFile", "hasFileWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas", "tagSuggestionsHas", "dismissedTagSuggestionsHas", "controlSuggestionsHas", "dismissedControlSuggestionsHas", "improvementSuggestionsHas", "dismissedImprovementSuggestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "revision", "revisionNEQ", "revisionIn", "revisionNotIn", "revisionContains", "revisionHasPrefix", "revisionHasSuffix", "revisionIsNil", "revisionNotNil", "revisionEqualFold", "revisionContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "managementMode", "managementModeNEQ", "managementModeIn", "managementModeNotIn", "managementModeIsNil", "managementModeNotNil", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "reviewDue", "reviewDueGT", "reviewDueGTE", "reviewDueLT", "reviewDueLTE", "reviewDueIsNil", "reviewDueNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "approverID", "approverIDNEQ", "approverIDIn", "approverIDNotIn", "approverIDContains", "approverIDHasPrefix", "approverIDHasSuffix", "approverIDIsNil", "approverIDNotNil", "approverIDEqualFold", "approverIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "externalFileID", "externalFileIDNEQ", "externalFileIDIn", "externalFileIDNotIn", "externalFileIDContains", "externalFileIDHasPrefix", "externalFileIDHasSuffix", "externalFileIDIsNil", "externalFileIDNotNil", "externalFileIDEqualFold", "externalFileIDContainsFold", "externalContents", "externalContentsNEQ", "externalContentsIn", "externalContentsNotIn", "externalContentsContains", "externalContentsHasPrefix", "externalContentsHasSuffix", "externalContentsIsNil", "externalContentsNotNil", "externalContentsEqualFold", "externalContentsContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "procedureKindName", "procedureKindNameNEQ", "procedureKindNameIn", "procedureKindNameNotIn", "procedureKindNameContains", "procedureKindNameHasPrefix", "procedureKindNameHasSuffix", "procedureKindNameIsNil", "procedureKindNameNotNil", "procedureKindNameEqualFold", "procedureKindNameContainsFold", "procedureKindID", "procedureKindIDNEQ", "procedureKindIDIn", "procedureKindIDNotIn", "procedureKindIDContains", "procedureKindIDHasPrefix", "procedureKindIDHasSuffix", "procedureKindIDIsNil", "procedureKindIDNotNil", "procedureKindIDEqualFold", "procedureKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasApprover", "hasApproverWith", "hasDelegate", "hasDelegateWith", "hasProcedureKind", "hasProcedureKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasPrograms", "hasProgramsWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasTasks", "hasTasksWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasFile", "hasFileWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas", "tagSuggestionsHas", "dismissedTagSuggestionsHas", "controlSuggestionsHas", "dismissedControlSuggestionsHas", "improvementSuggestionsHas", "dismissedImprovementSuggestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -305670,6 +308420,83 @@ func (ec *executionContext) unmarshalInputProcedureWhereInput(ctx context.Contex
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -308233,7 +311060,7 @@ func (ec *executionContext) unmarshalInputProgramWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "programKindName", "programKindNameNEQ", "programKindNameIn", "programKindNameNotIn", "programKindNameContains", "programKindNameHasPrefix", "programKindNameHasSuffix", "programKindNameIsNil", "programKindNameNotNil", "programKindNameEqualFold", "programKindNameContainsFold", "programKindID", "programKindIDNEQ", "programKindIDIn", "programKindIDNotIn", "programKindIDContains", "programKindIDHasPrefix", "programKindIDHasSuffix", "programKindIDIsNil", "programKindIDNotNil", "programKindIDEqualFold", "programKindIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "frameworkName", "frameworkNameNEQ", "frameworkNameIn", "frameworkNameNotIn", "frameworkNameContains", "frameworkNameHasPrefix", "frameworkNameHasSuffix", "frameworkNameIsNil", "frameworkNameNotNil", "frameworkNameEqualFold", "frameworkNameContainsFold", "startDate", "startDateGT", "startDateGTE", "startDateLT", "startDateLTE", "startDateIsNil", "startDateNotNil", "endDate", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "observationPeriodStartDate", "observationPeriodStartDateGT", "observationPeriodStartDateGTE", "observationPeriodStartDateLT", "observationPeriodStartDateLTE", "observationPeriodStartDateIsNil", "observationPeriodStartDateNotNil", "observationPeriodEndDate", "observationPeriodEndDateGT", "observationPeriodEndDateGTE", "observationPeriodEndDateLT", "observationPeriodEndDateLTE", "observationPeriodEndDateIsNil", "observationPeriodEndDateNotNil", "fieldworkStartDate", "fieldworkStartDateGT", "fieldworkStartDateGTE", "fieldworkStartDateLT", "fieldworkStartDateLTE", "fieldworkStartDateIsNil", "fieldworkStartDateNotNil", "fieldworkEndDate", "fieldworkEndDateGT", "fieldworkEndDateGTE", "fieldworkEndDateLT", "fieldworkEndDateLTE", "fieldworkEndDateIsNil", "fieldworkEndDateNotNil", "auditorReady", "auditorReadyNEQ", "auditorWriteComments", "auditorWriteCommentsNEQ", "auditorReadComments", "auditorReadCommentsNEQ", "auditFirm", "auditFirmNEQ", "auditFirmIn", "auditFirmNotIn", "auditFirmContains", "auditFirmHasPrefix", "auditFirmHasSuffix", "auditFirmIsNil", "auditFirmNotNil", "auditFirmEqualFold", "auditFirmContainsFold", "auditor", "auditorNEQ", "auditorIn", "auditorNotIn", "auditorContains", "auditorHasPrefix", "auditorHasSuffix", "auditorIsNil", "auditorNotNil", "auditorEqualFold", "auditorContainsFold", "auditorEmail", "auditorEmailNEQ", "auditorEmailIn", "auditorEmailNotIn", "auditorEmailContains", "auditorEmailHasPrefix", "auditorEmailHasSuffix", "auditorEmailIsNil", "auditorEmailNotNil", "auditorEmailEqualFold", "auditorEmailContainsFold", "programOwnerID", "programOwnerIDNEQ", "programOwnerIDIn", "programOwnerIDNotIn", "programOwnerIDContains", "programOwnerIDHasPrefix", "programOwnerIDHasSuffix", "programOwnerIDIsNil", "programOwnerIDNotNil", "programOwnerIDEqualFold", "programOwnerIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasProgramKind", "hasProgramKindWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasRisks", "hasRisksWith", "hasTasks", "hasTasksWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasEvidence", "hasEvidenceWith", "hasNarratives", "hasNarrativesWith", "hasActionPlans", "hasActionPlansWith", "hasSystemDetails", "hasSystemDetailsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasUsers", "hasUsersWith", "hasProgramOwner", "hasProgramOwnerWith", "hasMembers", "hasMembersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "programKindName", "programKindNameNEQ", "programKindNameIn", "programKindNameNotIn", "programKindNameContains", "programKindNameHasPrefix", "programKindNameHasSuffix", "programKindNameIsNil", "programKindNameNotNil", "programKindNameEqualFold", "programKindNameContainsFold", "programKindID", "programKindIDNEQ", "programKindIDIn", "programKindIDNotIn", "programKindIDContains", "programKindIDHasPrefix", "programKindIDHasSuffix", "programKindIDIsNil", "programKindIDNotNil", "programKindIDEqualFold", "programKindIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "frameworkName", "frameworkNameNEQ", "frameworkNameIn", "frameworkNameNotIn", "frameworkNameContains", "frameworkNameHasPrefix", "frameworkNameHasSuffix", "frameworkNameIsNil", "frameworkNameNotNil", "frameworkNameEqualFold", "frameworkNameContainsFold", "startDate", "startDateGT", "startDateGTE", "startDateLT", "startDateLTE", "startDateIsNil", "startDateNotNil", "endDate", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "observationPeriodStartDate", "observationPeriodStartDateGT", "observationPeriodStartDateGTE", "observationPeriodStartDateLT", "observationPeriodStartDateLTE", "observationPeriodStartDateIsNil", "observationPeriodStartDateNotNil", "observationPeriodEndDate", "observationPeriodEndDateGT", "observationPeriodEndDateGTE", "observationPeriodEndDateLT", "observationPeriodEndDateLTE", "observationPeriodEndDateIsNil", "observationPeriodEndDateNotNil", "fieldworkStartDate", "fieldworkStartDateGT", "fieldworkStartDateGTE", "fieldworkStartDateLT", "fieldworkStartDateLTE", "fieldworkStartDateIsNil", "fieldworkStartDateNotNil", "fieldworkEndDate", "fieldworkEndDateGT", "fieldworkEndDateGTE", "fieldworkEndDateLT", "fieldworkEndDateLTE", "fieldworkEndDateIsNil", "fieldworkEndDateNotNil", "auditorReady", "auditorReadyNEQ", "auditorWriteComments", "auditorWriteCommentsNEQ", "auditorReadComments", "auditorReadCommentsNEQ", "auditFirm", "auditFirmNEQ", "auditFirmIn", "auditFirmNotIn", "auditFirmContains", "auditFirmHasPrefix", "auditFirmHasSuffix", "auditFirmIsNil", "auditFirmNotNil", "auditFirmEqualFold", "auditFirmContainsFold", "auditor", "auditorNEQ", "auditorIn", "auditorNotIn", "auditorContains", "auditorHasPrefix", "auditorHasSuffix", "auditorIsNil", "auditorNotNil", "auditorEqualFold", "auditorContainsFold", "auditorEmail", "auditorEmailNEQ", "auditorEmailIn", "auditorEmailNotIn", "auditorEmailContains", "auditorEmailHasPrefix", "auditorEmailHasSuffix", "auditorEmailIsNil", "auditorEmailNotNil", "auditorEmailEqualFold", "auditorEmailContainsFold", "programOwnerID", "programOwnerIDNEQ", "programOwnerIDIn", "programOwnerIDNotIn", "programOwnerIDContains", "programOwnerIDHasPrefix", "programOwnerIDHasSuffix", "programOwnerIDIsNil", "programOwnerIDNotNil", "programOwnerIDEqualFold", "programOwnerIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasProgramKind", "hasProgramKindWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasRisks", "hasRisksWith", "hasTasks", "hasTasksWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasEvidence", "hasEvidenceWith", "hasNarratives", "hasNarrativesWith", "hasActionPlans", "hasActionPlansWith", "hasSystemDetails", "hasSystemDetailsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasUsers", "hasUsersWith", "hasProgramOwner", "hasProgramOwnerWith", "hasMembers", "hasMembersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -309080,6 +311907,83 @@ func (ec *executionContext) unmarshalInputProgramWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -310806,7 +313710,7 @@ func (ec *executionContext) unmarshalInputRemediationWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "state", "stateNEQ", "stateIn", "stateNotIn", "stateContains", "stateHasPrefix", "stateHasSuffix", "stateIsNil", "stateNotNil", "stateEqualFold", "stateContainsFold", "intent", "intentNEQ", "intentIn", "intentNotIn", "intentContains", "intentHasPrefix", "intentHasSuffix", "intentIsNil", "intentNotNil", "intentEqualFold", "intentContainsFold", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "explanation", "explanationNEQ", "explanationIn", "explanationNotIn", "explanationContains", "explanationHasPrefix", "explanationHasSuffix", "explanationIsNil", "explanationNotNil", "explanationEqualFold", "explanationContainsFold", "instructions", "instructionsNEQ", "instructionsIn", "instructionsNotIn", "instructionsContains", "instructionsHasPrefix", "instructionsHasSuffix", "instructionsIsNil", "instructionsNotNil", "instructionsEqualFold", "instructionsContainsFold", "ownerReference", "ownerReferenceNEQ", "ownerReferenceIn", "ownerReferenceNotIn", "ownerReferenceContains", "ownerReferenceHasPrefix", "ownerReferenceHasSuffix", "ownerReferenceIsNil", "ownerReferenceNotNil", "ownerReferenceEqualFold", "ownerReferenceContainsFold", "repositoryURI", "repositoryURINEQ", "repositoryURIIn", "repositoryURINotIn", "repositoryURIContains", "repositoryURIHasPrefix", "repositoryURIHasSuffix", "repositoryURIIsNil", "repositoryURINotNil", "repositoryURIEqualFold", "repositoryURIContainsFold", "pullRequestURI", "pullRequestURINEQ", "pullRequestURIIn", "pullRequestURINotIn", "pullRequestURIContains", "pullRequestURIHasPrefix", "pullRequestURIHasSuffix", "pullRequestURIIsNil", "pullRequestURINotNil", "pullRequestURIEqualFold", "pullRequestURIContainsFold", "ticketReference", "ticketReferenceNEQ", "ticketReferenceIn", "ticketReferenceNotIn", "ticketReferenceContains", "ticketReferenceHasPrefix", "ticketReferenceHasSuffix", "ticketReferenceIsNil", "ticketReferenceNotNil", "ticketReferenceEqualFold", "ticketReferenceContainsFold", "dueAt", "dueAtGT", "dueAtGTE", "dueAtLT", "dueAtLTE", "dueAtIsNil", "dueAtNotNil", "completedAt", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "prGeneratedAt", "prGeneratedAtGT", "prGeneratedAtGTE", "prGeneratedAtLT", "prGeneratedAtLTE", "prGeneratedAtIsNil", "prGeneratedAtNotNil", "error", "errorNEQ", "errorIn", "errorNotIn", "errorContains", "errorHasPrefix", "errorHasSuffix", "errorIsNil", "errorNotNil", "errorEqualFold", "errorContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegrations", "hasIntegrationsWith", "hasScans", "hasScansWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "state", "stateNEQ", "stateIn", "stateNotIn", "stateContains", "stateHasPrefix", "stateHasSuffix", "stateIsNil", "stateNotNil", "stateEqualFold", "stateContainsFold", "intent", "intentNEQ", "intentIn", "intentNotIn", "intentContains", "intentHasPrefix", "intentHasSuffix", "intentIsNil", "intentNotNil", "intentEqualFold", "intentContainsFold", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "explanation", "explanationNEQ", "explanationIn", "explanationNotIn", "explanationContains", "explanationHasPrefix", "explanationHasSuffix", "explanationIsNil", "explanationNotNil", "explanationEqualFold", "explanationContainsFold", "instructions", "instructionsNEQ", "instructionsIn", "instructionsNotIn", "instructionsContains", "instructionsHasPrefix", "instructionsHasSuffix", "instructionsIsNil", "instructionsNotNil", "instructionsEqualFold", "instructionsContainsFold", "ownerReference", "ownerReferenceNEQ", "ownerReferenceIn", "ownerReferenceNotIn", "ownerReferenceContains", "ownerReferenceHasPrefix", "ownerReferenceHasSuffix", "ownerReferenceIsNil", "ownerReferenceNotNil", "ownerReferenceEqualFold", "ownerReferenceContainsFold", "repositoryURI", "repositoryURINEQ", "repositoryURIIn", "repositoryURINotIn", "repositoryURIContains", "repositoryURIHasPrefix", "repositoryURIHasSuffix", "repositoryURIIsNil", "repositoryURINotNil", "repositoryURIEqualFold", "repositoryURIContainsFold", "pullRequestURI", "pullRequestURINEQ", "pullRequestURIIn", "pullRequestURINotIn", "pullRequestURIContains", "pullRequestURIHasPrefix", "pullRequestURIHasSuffix", "pullRequestURIIsNil", "pullRequestURINotNil", "pullRequestURIEqualFold", "pullRequestURIContainsFold", "ticketReference", "ticketReferenceNEQ", "ticketReferenceIn", "ticketReferenceNotIn", "ticketReferenceContains", "ticketReferenceHasPrefix", "ticketReferenceHasSuffix", "ticketReferenceIsNil", "ticketReferenceNotNil", "ticketReferenceEqualFold", "ticketReferenceContainsFold", "dueAt", "dueAtGT", "dueAtGTE", "dueAtLT", "dueAtLTE", "dueAtIsNil", "dueAtNotNil", "completedAt", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "prGeneratedAt", "prGeneratedAtGT", "prGeneratedAtGTE", "prGeneratedAtLT", "prGeneratedAtLTE", "prGeneratedAtIsNil", "prGeneratedAtNotNil", "error", "errorNEQ", "errorIn", "errorNotIn", "errorContains", "errorHasPrefix", "errorHasSuffix", "errorIsNil", "errorNotNil", "errorEqualFold", "errorContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegrations", "hasIntegrationsWith", "hasScans", "hasScansWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -311653,6 +314557,83 @@ func (ec *executionContext) unmarshalInputRemediationWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -315739,7 +318720,7 @@ func (ec *executionContext) unmarshalInputReviewWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleEqualFold", "titleContainsFold", "state", "stateNEQ", "stateIn", "stateNotIn", "stateContains", "stateHasPrefix", "stateHasSuffix", "stateIsNil", "stateNotNil", "stateEqualFold", "stateContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "classification", "classificationNEQ", "classificationIn", "classificationNotIn", "classificationContains", "classificationHasPrefix", "classificationHasSuffix", "classificationIsNil", "classificationNotNil", "classificationEqualFold", "classificationContainsFold", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "reporter", "reporterNEQ", "reporterIn", "reporterNotIn", "reporterContains", "reporterHasPrefix", "reporterHasSuffix", "reporterIsNil", "reporterNotNil", "reporterEqualFold", "reporterContainsFold", "approved", "approvedNEQ", "approvedIsNil", "approvedNotNil", "reviewedAt", "reviewedAtGT", "reviewedAtGTE", "reviewedAtLT", "reviewedAtLTE", "reviewedAtIsNil", "reviewedAtNotNil", "reportedAt", "reportedAtGT", "reportedAtGTE", "reportedAtLT", "reportedAtLTE", "reportedAtIsNil", "reportedAtNotNil", "approvedAt", "approvedAtGT", "approvedAtGTE", "approvedAtLT", "approvedAtLTE", "approvedAtIsNil", "approvedAtNotNil", "reviewerID", "reviewerIDNEQ", "reviewerIDIn", "reviewerIDNotIn", "reviewerIDContains", "reviewerIDHasPrefix", "reviewerIDHasSuffix", "reviewerIDIsNil", "reviewerIDNotNil", "reviewerIDEqualFold", "reviewerIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegrations", "hasIntegrationsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasActionPlans", "hasActionPlansWith", "hasRemediations", "hasRemediationsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasTasks", "hasTasksWith", "hasReviewer", "hasReviewerWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleEqualFold", "titleContainsFold", "state", "stateNEQ", "stateIn", "stateNotIn", "stateContains", "stateHasPrefix", "stateHasSuffix", "stateIsNil", "stateNotNil", "stateEqualFold", "stateContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "classification", "classificationNEQ", "classificationIn", "classificationNotIn", "classificationContains", "classificationHasPrefix", "classificationHasSuffix", "classificationIsNil", "classificationNotNil", "classificationEqualFold", "classificationContainsFold", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "reporter", "reporterNEQ", "reporterIn", "reporterNotIn", "reporterContains", "reporterHasPrefix", "reporterHasSuffix", "reporterIsNil", "reporterNotNil", "reporterEqualFold", "reporterContainsFold", "approved", "approvedNEQ", "approvedIsNil", "approvedNotNil", "reviewedAt", "reviewedAtGT", "reviewedAtGTE", "reviewedAtLT", "reviewedAtLTE", "reviewedAtIsNil", "reviewedAtNotNil", "reportedAt", "reportedAtGT", "reportedAtGTE", "reportedAtLT", "reportedAtLTE", "reportedAtIsNil", "reportedAtNotNil", "approvedAt", "approvedAtGT", "approvedAtGTE", "approvedAtLT", "approvedAtLTE", "approvedAtIsNil", "approvedAtNotNil", "reviewerID", "reviewerIDNEQ", "reviewerIDIn", "reviewerIDNotIn", "reviewerIDContains", "reviewerIDHasPrefix", "reviewerIDHasSuffix", "reviewerIDIsNil", "reviewerIDNotNil", "reviewerIDEqualFold", "reviewerIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegrations", "hasIntegrationsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasActionPlans", "hasActionPlansWith", "hasRemediations", "hasRemediationsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasTasks", "hasTasksWith", "hasReviewer", "hasReviewerWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -316523,6 +319504,83 @@ func (ec *executionContext) unmarshalInputReviewWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -318613,7 +321671,7 @@ func (ec *executionContext) unmarshalInputRiskWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "stakeholderName", "stakeholderNameNEQ", "stakeholderNameIn", "stakeholderNameNotIn", "stakeholderNameContains", "stakeholderNameHasPrefix", "stakeholderNameHasSuffix", "stakeholderNameIsNil", "stakeholderNameNotNil", "stakeholderNameEqualFold", "stakeholderNameContainsFold", "stakeholderUserID", "stakeholderUserIDNEQ", "stakeholderUserIDIn", "stakeholderUserIDNotIn", "stakeholderUserIDContains", "stakeholderUserIDHasPrefix", "stakeholderUserIDHasSuffix", "stakeholderUserIDIsNil", "stakeholderUserIDNotNil", "stakeholderUserIDEqualFold", "stakeholderUserIDContainsFold", "stakeholderGroupID", "stakeholderGroupIDNEQ", "stakeholderGroupIDIn", "stakeholderGroupIDNotIn", "stakeholderGroupIDContains", "stakeholderGroupIDHasPrefix", "stakeholderGroupIDHasSuffix", "stakeholderGroupIDIsNil", "stakeholderGroupIDNotNil", "stakeholderGroupIDEqualFold", "stakeholderGroupIDContainsFold", "stakeholderIdentityHolderID", "stakeholderIdentityHolderIDNEQ", "stakeholderIdentityHolderIDIn", "stakeholderIdentityHolderIDNotIn", "stakeholderIdentityHolderIDContains", "stakeholderIdentityHolderIDHasPrefix", "stakeholderIdentityHolderIDHasSuffix", "stakeholderIdentityHolderIDIsNil", "stakeholderIdentityHolderIDNotNil", "stakeholderIdentityHolderIDEqualFold", "stakeholderIdentityHolderIDContainsFold", "delegateName", "delegateNameNEQ", "delegateNameIn", "delegateNameNotIn", "delegateNameContains", "delegateNameHasPrefix", "delegateNameHasSuffix", "delegateNameIsNil", "delegateNameNotNil", "delegateNameEqualFold", "delegateNameContainsFold", "delegateUserID", "delegateUserIDNEQ", "delegateUserIDIn", "delegateUserIDNotIn", "delegateUserIDContains", "delegateUserIDHasPrefix", "delegateUserIDHasSuffix", "delegateUserIDIsNil", "delegateUserIDNotNil", "delegateUserIDEqualFold", "delegateUserIDContainsFold", "delegateGroupID", "delegateGroupIDNEQ", "delegateGroupIDIn", "delegateGroupIDNotIn", "delegateGroupIDContains", "delegateGroupIDHasPrefix", "delegateGroupIDHasSuffix", "delegateGroupIDIsNil", "delegateGroupIDNotNil", "delegateGroupIDEqualFold", "delegateGroupIDContainsFold", "delegateIdentityHolderID", "delegateIdentityHolderIDNEQ", "delegateIdentityHolderIDIn", "delegateIdentityHolderIDNotIn", "delegateIdentityHolderIDContains", "delegateIdentityHolderIDHasPrefix", "delegateIdentityHolderIDHasSuffix", "delegateIdentityHolderIDIsNil", "delegateIdentityHolderIDNotNil", "delegateIdentityHolderIDEqualFold", "delegateIdentityHolderIDContainsFold", "riskKindName", "riskKindNameNEQ", "riskKindNameIn", "riskKindNameNotIn", "riskKindNameContains", "riskKindNameHasPrefix", "riskKindNameHasSuffix", "riskKindNameIsNil", "riskKindNameNotNil", "riskKindNameEqualFold", "riskKindNameContainsFold", "riskKindID", "riskKindIDNEQ", "riskKindIDIn", "riskKindIDNotIn", "riskKindIDContains", "riskKindIDHasPrefix", "riskKindIDHasSuffix", "riskKindIDIsNil", "riskKindIDNotNil", "riskKindIDEqualFold", "riskKindIDContainsFold", "riskCategoryName", "riskCategoryNameNEQ", "riskCategoryNameIn", "riskCategoryNameNotIn", "riskCategoryNameContains", "riskCategoryNameHasPrefix", "riskCategoryNameHasSuffix", "riskCategoryNameIsNil", "riskCategoryNameNotNil", "riskCategoryNameEqualFold", "riskCategoryNameContainsFold", "riskCategoryID", "riskCategoryIDNEQ", "riskCategoryIDIn", "riskCategoryIDNotIn", "riskCategoryIDContains", "riskCategoryIDHasPrefix", "riskCategoryIDHasSuffix", "riskCategoryIDIsNil", "riskCategoryIDNotNil", "riskCategoryIDEqualFold", "riskCategoryIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactIsNil", "impactNotNil", "likelihood", "likelihoodNEQ", "likelihoodIn", "likelihoodNotIn", "likelihoodIsNil", "likelihoodNotNil", "score", "scoreNEQ", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "mitigation", "mitigationNEQ", "mitigationIn", "mitigationNotIn", "mitigationContains", "mitigationHasPrefix", "mitigationHasSuffix", "mitigationIsNil", "mitigationNotNil", "mitigationEqualFold", "mitigationContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "businessCosts", "businessCostsNEQ", "businessCostsIn", "businessCostsNotIn", "businessCostsContains", "businessCostsHasPrefix", "businessCostsHasSuffix", "businessCostsIsNil", "businessCostsNotNil", "businessCostsEqualFold", "businessCostsContainsFold", "stakeholderID", "stakeholderIDNEQ", "stakeholderIDIn", "stakeholderIDNotIn", "stakeholderIDContains", "stakeholderIDHasPrefix", "stakeholderIDHasSuffix", "stakeholderIDIsNil", "stakeholderIDNotNil", "stakeholderIDEqualFold", "stakeholderIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "mitigatedAt", "mitigatedAtGT", "mitigatedAtGTE", "mitigatedAtLT", "mitigatedAtLTE", "mitigatedAtIsNil", "mitigatedAtNotNil", "reviewRequired", "reviewRequiredNEQ", "reviewRequiredIsNil", "reviewRequiredNotNil", "lastReviewedAt", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "dueDate", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "nextReviewDueAt", "nextReviewDueAtGT", "nextReviewDueAtGTE", "nextReviewDueAtLT", "nextReviewDueAtLTE", "nextReviewDueAtIsNil", "nextReviewDueAtNotNil", "residualScore", "residualScoreNEQ", "residualScoreGT", "residualScoreGTE", "residualScoreLT", "residualScoreLTE", "residualScoreIsNil", "residualScoreNotNil", "riskDecision", "riskDecisionNEQ", "riskDecisionIn", "riskDecisionNotIn", "riskDecisionIsNil", "riskDecisionNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasStakeholderUser", "hasStakeholderUserWith", "hasStakeholderGroup", "hasStakeholderGroupWith", "hasStakeholderIdentityHolder", "hasStakeholderIdentityHolderWith", "hasDelegateUser", "hasDelegateUserWith", "hasDelegateGroup", "hasDelegateGroupWith", "hasDelegateIdentityHolder", "hasDelegateIdentityHolderWith", "hasRiskKind", "hasRiskKindWith", "hasRiskCategory", "hasRiskCategoryWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasStakeholder", "hasStakeholderWith", "hasDelegate", "hasDelegateWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "stakeholderName", "stakeholderNameNEQ", "stakeholderNameIn", "stakeholderNameNotIn", "stakeholderNameContains", "stakeholderNameHasPrefix", "stakeholderNameHasSuffix", "stakeholderNameIsNil", "stakeholderNameNotNil", "stakeholderNameEqualFold", "stakeholderNameContainsFold", "stakeholderUserID", "stakeholderUserIDNEQ", "stakeholderUserIDIn", "stakeholderUserIDNotIn", "stakeholderUserIDContains", "stakeholderUserIDHasPrefix", "stakeholderUserIDHasSuffix", "stakeholderUserIDIsNil", "stakeholderUserIDNotNil", "stakeholderUserIDEqualFold", "stakeholderUserIDContainsFold", "stakeholderGroupID", "stakeholderGroupIDNEQ", "stakeholderGroupIDIn", "stakeholderGroupIDNotIn", "stakeholderGroupIDContains", "stakeholderGroupIDHasPrefix", "stakeholderGroupIDHasSuffix", "stakeholderGroupIDIsNil", "stakeholderGroupIDNotNil", "stakeholderGroupIDEqualFold", "stakeholderGroupIDContainsFold", "stakeholderIdentityHolderID", "stakeholderIdentityHolderIDNEQ", "stakeholderIdentityHolderIDIn", "stakeholderIdentityHolderIDNotIn", "stakeholderIdentityHolderIDContains", "stakeholderIdentityHolderIDHasPrefix", "stakeholderIdentityHolderIDHasSuffix", "stakeholderIdentityHolderIDIsNil", "stakeholderIdentityHolderIDNotNil", "stakeholderIdentityHolderIDEqualFold", "stakeholderIdentityHolderIDContainsFold", "delegateName", "delegateNameNEQ", "delegateNameIn", "delegateNameNotIn", "delegateNameContains", "delegateNameHasPrefix", "delegateNameHasSuffix", "delegateNameIsNil", "delegateNameNotNil", "delegateNameEqualFold", "delegateNameContainsFold", "delegateUserID", "delegateUserIDNEQ", "delegateUserIDIn", "delegateUserIDNotIn", "delegateUserIDContains", "delegateUserIDHasPrefix", "delegateUserIDHasSuffix", "delegateUserIDIsNil", "delegateUserIDNotNil", "delegateUserIDEqualFold", "delegateUserIDContainsFold", "delegateGroupID", "delegateGroupIDNEQ", "delegateGroupIDIn", "delegateGroupIDNotIn", "delegateGroupIDContains", "delegateGroupIDHasPrefix", "delegateGroupIDHasSuffix", "delegateGroupIDIsNil", "delegateGroupIDNotNil", "delegateGroupIDEqualFold", "delegateGroupIDContainsFold", "delegateIdentityHolderID", "delegateIdentityHolderIDNEQ", "delegateIdentityHolderIDIn", "delegateIdentityHolderIDNotIn", "delegateIdentityHolderIDContains", "delegateIdentityHolderIDHasPrefix", "delegateIdentityHolderIDHasSuffix", "delegateIdentityHolderIDIsNil", "delegateIdentityHolderIDNotNil", "delegateIdentityHolderIDEqualFold", "delegateIdentityHolderIDContainsFold", "riskKindName", "riskKindNameNEQ", "riskKindNameIn", "riskKindNameNotIn", "riskKindNameContains", "riskKindNameHasPrefix", "riskKindNameHasSuffix", "riskKindNameIsNil", "riskKindNameNotNil", "riskKindNameEqualFold", "riskKindNameContainsFold", "riskKindID", "riskKindIDNEQ", "riskKindIDIn", "riskKindIDNotIn", "riskKindIDContains", "riskKindIDHasPrefix", "riskKindIDHasSuffix", "riskKindIDIsNil", "riskKindIDNotNil", "riskKindIDEqualFold", "riskKindIDContainsFold", "riskCategoryName", "riskCategoryNameNEQ", "riskCategoryNameIn", "riskCategoryNameNotIn", "riskCategoryNameContains", "riskCategoryNameHasPrefix", "riskCategoryNameHasSuffix", "riskCategoryNameIsNil", "riskCategoryNameNotNil", "riskCategoryNameEqualFold", "riskCategoryNameContainsFold", "riskCategoryID", "riskCategoryIDNEQ", "riskCategoryIDIn", "riskCategoryIDNotIn", "riskCategoryIDContains", "riskCategoryIDHasPrefix", "riskCategoryIDHasSuffix", "riskCategoryIDIsNil", "riskCategoryIDNotNil", "riskCategoryIDEqualFold", "riskCategoryIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactIsNil", "impactNotNil", "likelihood", "likelihoodNEQ", "likelihoodIn", "likelihoodNotIn", "likelihoodIsNil", "likelihoodNotNil", "score", "scoreNEQ", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "mitigation", "mitigationNEQ", "mitigationIn", "mitigationNotIn", "mitigationContains", "mitigationHasPrefix", "mitigationHasSuffix", "mitigationIsNil", "mitigationNotNil", "mitigationEqualFold", "mitigationContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "businessCosts", "businessCostsNEQ", "businessCostsIn", "businessCostsNotIn", "businessCostsContains", "businessCostsHasPrefix", "businessCostsHasSuffix", "businessCostsIsNil", "businessCostsNotNil", "businessCostsEqualFold", "businessCostsContainsFold", "stakeholderID", "stakeholderIDNEQ", "stakeholderIDIn", "stakeholderIDNotIn", "stakeholderIDContains", "stakeholderIDHasPrefix", "stakeholderIDHasSuffix", "stakeholderIDIsNil", "stakeholderIDNotNil", "stakeholderIDEqualFold", "stakeholderIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "mitigatedAt", "mitigatedAtGT", "mitigatedAtGTE", "mitigatedAtLT", "mitigatedAtLTE", "mitigatedAtIsNil", "mitigatedAtNotNil", "reviewRequired", "reviewRequiredNEQ", "reviewRequiredIsNil", "reviewRequiredNotNil", "lastReviewedAt", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "dueDate", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "nextReviewDueAt", "nextReviewDueAtGT", "nextReviewDueAtGTE", "nextReviewDueAtLT", "nextReviewDueAtLTE", "nextReviewDueAtIsNil", "nextReviewDueAtNotNil", "residualScore", "residualScoreNEQ", "residualScoreGT", "residualScoreGTE", "residualScoreLT", "residualScoreLTE", "residualScoreIsNil", "residualScoreNotNil", "riskDecision", "riskDecisionNEQ", "riskDecisionIn", "riskDecisionNotIn", "riskDecisionIsNil", "riskDecisionNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasStakeholderUser", "hasStakeholderUserWith", "hasStakeholderGroup", "hasStakeholderGroupWith", "hasStakeholderIdentityHolder", "hasStakeholderIdentityHolderWith", "hasDelegateUser", "hasDelegateUserWith", "hasDelegateGroup", "hasDelegateGroupWith", "hasDelegateIdentityHolder", "hasDelegateIdentityHolderWith", "hasRiskKind", "hasRiskKindWith", "hasRiskCategory", "hasRiskCategoryWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasStakeholder", "hasStakeholderWith", "hasDelegate", "hasDelegateWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -319460,6 +322518,83 @@ func (ec *executionContext) unmarshalInputRiskWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -323388,7 +326523,7 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -324172,6 +327307,83 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -328198,7 +331410,7 @@ func (ec *executionContext) unmarshalInputSubcontrolWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "subcontrolKindName", "subcontrolKindNameNEQ", "subcontrolKindNameIn", "subcontrolKindNameNotIn", "subcontrolKindNameContains", "subcontrolKindNameHasPrefix", "subcontrolKindNameHasSuffix", "subcontrolKindNameIsNil", "subcontrolKindNameNotNil", "subcontrolKindNameEqualFold", "subcontrolKindNameContainsFold", "subcontrolKindID", "subcontrolKindIDNEQ", "subcontrolKindIDIn", "subcontrolKindIDNotIn", "subcontrolKindIDContains", "subcontrolKindIDHasPrefix", "subcontrolKindIDHasSuffix", "subcontrolKindIDIsNil", "subcontrolKindIDNotNil", "subcontrolKindIDEqualFold", "subcontrolKindIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "controlID", "controlIDNEQ", "controlIDIn", "controlIDNotIn", "controlIDContains", "controlIDHasPrefix", "controlIDHasSuffix", "controlIDEqualFold", "controlIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasSubcontrolKind", "hasSubcontrolKindWith", "hasControl", "hasControlWith", "hasControlImplementations", "hasControlImplementationsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "subcontrolKindName", "subcontrolKindNameNEQ", "subcontrolKindNameIn", "subcontrolKindNameNotIn", "subcontrolKindNameContains", "subcontrolKindNameHasPrefix", "subcontrolKindNameHasSuffix", "subcontrolKindNameIsNil", "subcontrolKindNameNotNil", "subcontrolKindNameEqualFold", "subcontrolKindNameContainsFold", "subcontrolKindID", "subcontrolKindIDNEQ", "subcontrolKindIDIn", "subcontrolKindIDNotIn", "subcontrolKindIDContains", "subcontrolKindIDHasPrefix", "subcontrolKindIDHasSuffix", "subcontrolKindIDIsNil", "subcontrolKindIDNotNil", "subcontrolKindIDEqualFold", "subcontrolKindIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "controlID", "controlIDNEQ", "controlIDIn", "controlIDNotIn", "controlIDContains", "controlIDHasPrefix", "controlIDHasSuffix", "controlIDEqualFold", "controlIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasSubcontrolKind", "hasSubcontrolKindWith", "hasControl", "hasControlWith", "hasControlImplementations", "hasControlImplementationsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -329045,6 +332257,83 @@ func (ec *executionContext) unmarshalInputSubcontrolWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -333747,7 +337036,7 @@ func (ec *executionContext) unmarshalInputSystemDetailWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemName", "systemNameNEQ", "systemNameIn", "systemNameNotIn", "systemNameContains", "systemNameHasPrefix", "systemNameHasSuffix", "systemNameEqualFold", "systemNameContainsFold", "version", "versionNEQ", "versionIn", "versionNotIn", "versionContains", "versionHasPrefix", "versionHasSuffix", "versionIsNil", "versionNotNil", "versionEqualFold", "versionContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "authorizationBoundary", "authorizationBoundaryNEQ", "authorizationBoundaryIn", "authorizationBoundaryNotIn", "authorizationBoundaryContains", "authorizationBoundaryHasPrefix", "authorizationBoundaryHasSuffix", "authorizationBoundaryIsNil", "authorizationBoundaryNotNil", "authorizationBoundaryEqualFold", "authorizationBoundaryContainsFold", "sensitivityLevel", "sensitivityLevelNEQ", "sensitivityLevelIn", "sensitivityLevelNotIn", "sensitivityLevelIsNil", "sensitivityLevelNotNil", "lastReviewed", "lastReviewedGT", "lastReviewedGTE", "lastReviewedLT", "lastReviewedLTE", "lastReviewedIsNil", "lastReviewedNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasEntities", "hasEntitiesWith", "hasAssets", "hasAssetsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemName", "systemNameNEQ", "systemNameIn", "systemNameNotIn", "systemNameContains", "systemNameHasPrefix", "systemNameHasSuffix", "systemNameEqualFold", "systemNameContainsFold", "version", "versionNEQ", "versionIn", "versionNotIn", "versionContains", "versionHasPrefix", "versionHasSuffix", "versionIsNil", "versionNotNil", "versionEqualFold", "versionContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "authorizationBoundary", "authorizationBoundaryNEQ", "authorizationBoundaryIn", "authorizationBoundaryNotIn", "authorizationBoundaryContains", "authorizationBoundaryHasPrefix", "authorizationBoundaryHasSuffix", "authorizationBoundaryIsNil", "authorizationBoundaryNotNil", "authorizationBoundaryEqualFold", "authorizationBoundaryContainsFold", "sensitivityLevel", "sensitivityLevelNEQ", "sensitivityLevelIn", "sensitivityLevelNotIn", "sensitivityLevelIsNil", "sensitivityLevelNotNil", "lastReviewed", "lastReviewedGT", "lastReviewedGTE", "lastReviewedLT", "lastReviewedLTE", "lastReviewedIsNil", "lastReviewedNotNil", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasEntities", "hasEntitiesWith", "hasAssets", "hasAssetsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -334594,6 +337883,83 @@ func (ec *executionContext) unmarshalInputSystemDetailWhereInput(ctx context.Con
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -335841,7 +339207,7 @@ func (ec *executionContext) unmarshalInputTagDefinitionWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "slug", "slugNEQ", "slugIn", "slugNotIn", "slugContains", "slugHasPrefix", "slugHasSuffix", "slugIsNil", "slugNotNil", "slugEqualFold", "slugContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "color", "colorNEQ", "colorIn", "colorNotIn", "colorContains", "colorHasPrefix", "colorHasSuffix", "colorIsNil", "colorNotNil", "colorEqualFold", "colorContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "aliasesHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "slug", "slugNEQ", "slugIn", "slugNotIn", "slugContains", "slugHasPrefix", "slugHasSuffix", "slugIsNil", "slugNotNil", "slugEqualFold", "slugContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "color", "colorNEQ", "colorIn", "colorNotIn", "colorContains", "colorHasPrefix", "colorHasSuffix", "colorIsNil", "colorNotNil", "colorEqualFold", "colorContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "aliasesHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -336625,6 +339991,83 @@ func (ec *executionContext) unmarshalInputTagDefinitionWhereInput(ctx context.Co
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -337371,7 +340814,7 @@ func (ec *executionContext) unmarshalInputTaskWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "taskKindName", "taskKindNameNEQ", "taskKindNameIn", "taskKindNameNotIn", "taskKindNameContains", "taskKindNameHasPrefix", "taskKindNameHasSuffix", "taskKindNameIsNil", "taskKindNameNotNil", "taskKindNameEqualFold", "taskKindNameContainsFold", "taskKindID", "taskKindIDNEQ", "taskKindIDIn", "taskKindIDNotIn", "taskKindIDContains", "taskKindIDHasPrefix", "taskKindIDHasSuffix", "taskKindIDIsNil", "taskKindIDNotNil", "taskKindIDEqualFold", "taskKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleEqualFold", "titleContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "due", "dueGT", "dueGTE", "dueLT", "dueLTE", "dueIsNil", "dueNotNil", "completed", "completedGT", "completedGTE", "completedLT", "completedLTE", "completedIsNil", "completedNotNil", "assigneeID", "assigneeIDNEQ", "assigneeIDIn", "assigneeIDNotIn", "assigneeIDContains", "assigneeIDHasPrefix", "assigneeIDHasSuffix", "assigneeIDIsNil", "assigneeIDNotNil", "assigneeIDEqualFold", "assigneeIDContainsFold", "assignerID", "assignerIDNEQ", "assignerIDIn", "assignerIDNotIn", "assignerIDContains", "assignerIDHasPrefix", "assignerIDHasSuffix", "assignerIDIsNil", "assignerIDNotNil", "assignerIDEqualFold", "assignerIDContainsFold", "systemGenerated", "systemGeneratedNEQ", "isTemplate", "isTemplateNEQ", "isSuggested", "isSuggestedNEQ", "priority", "priorityNEQ", "priorityGT", "priorityGTE", "priorityLT", "priorityLTE", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "idempotencyKey", "idempotencyKeyNEQ", "idempotencyKeyIn", "idempotencyKeyNotIn", "idempotencyKeyContains", "idempotencyKeyHasPrefix", "idempotencyKeyHasSuffix", "idempotencyKeyIsNil", "idempotencyKeyNotNil", "idempotencyKeyEqualFold", "idempotencyKeyContainsFold", "parentTaskID", "parentTaskIDNEQ", "parentTaskIDIn", "parentTaskIDNotIn", "parentTaskIDContains", "parentTaskIDHasPrefix", "parentTaskIDHasSuffix", "parentTaskIDIsNil", "parentTaskIDNotNil", "parentTaskIDEqualFold", "parentTaskIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasTaskKind", "hasTaskKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssigner", "hasAssignerWith", "hasAssignee", "hasAssigneeWith", "hasComments", "hasCommentsWith", "hasGroups", "hasGroupsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasPrograms", "hasProgramsWith", "hasRisks", "hasRisksWith", "hasPlatforms", "hasPlatformsWith", "hasScans", "hasScansWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControlImplementations", "hasControlImplementationsWith", "hasActionPlans", "hasActionPlansWith", "hasEvidence", "hasEvidenceWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "hasParent", "hasParentWith", "hasTasks", "hasTasksWith", "tagsHas", "externalReferenceUrlHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "taskKindName", "taskKindNameNEQ", "taskKindNameIn", "taskKindNameNotIn", "taskKindNameContains", "taskKindNameHasPrefix", "taskKindNameHasSuffix", "taskKindNameIsNil", "taskKindNameNotNil", "taskKindNameEqualFold", "taskKindNameContainsFold", "taskKindID", "taskKindIDNEQ", "taskKindIDIn", "taskKindIDNotIn", "taskKindIDContains", "taskKindIDHasPrefix", "taskKindIDHasSuffix", "taskKindIDIsNil", "taskKindIDNotNil", "taskKindIDEqualFold", "taskKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleEqualFold", "titleContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "due", "dueGT", "dueGTE", "dueLT", "dueLTE", "dueIsNil", "dueNotNil", "completed", "completedGT", "completedGTE", "completedLT", "completedLTE", "completedIsNil", "completedNotNil", "assigneeID", "assigneeIDNEQ", "assigneeIDIn", "assigneeIDNotIn", "assigneeIDContains", "assigneeIDHasPrefix", "assigneeIDHasSuffix", "assigneeIDIsNil", "assigneeIDNotNil", "assigneeIDEqualFold", "assigneeIDContainsFold", "assignerID", "assignerIDNEQ", "assignerIDIn", "assignerIDNotIn", "assignerIDContains", "assignerIDHasPrefix", "assignerIDHasSuffix", "assignerIDIsNil", "assignerIDNotNil", "assignerIDEqualFold", "assignerIDContainsFold", "systemGenerated", "systemGeneratedNEQ", "isTemplate", "isTemplateNEQ", "isSuggested", "isSuggestedNEQ", "priority", "priorityNEQ", "priorityGT", "priorityGTE", "priorityLT", "priorityLTE", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "idempotencyKey", "idempotencyKeyNEQ", "idempotencyKeyIn", "idempotencyKeyNotIn", "idempotencyKeyContains", "idempotencyKeyHasPrefix", "idempotencyKeyHasSuffix", "idempotencyKeyIsNil", "idempotencyKeyNotNil", "idempotencyKeyEqualFold", "idempotencyKeyContainsFold", "parentTaskID", "parentTaskIDNEQ", "parentTaskIDIn", "parentTaskIDNotIn", "parentTaskIDContains", "parentTaskIDHasPrefix", "parentTaskIDHasSuffix", "parentTaskIDIsNil", "parentTaskIDNotNil", "parentTaskIDEqualFold", "parentTaskIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasTaskKind", "hasTaskKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssigner", "hasAssignerWith", "hasAssignee", "hasAssigneeWith", "hasComments", "hasCommentsWith", "hasGroups", "hasGroupsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasPrograms", "hasProgramsWith", "hasRisks", "hasRisksWith", "hasPlatforms", "hasPlatformsWith", "hasScans", "hasScansWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControlImplementations", "hasControlImplementationsWith", "hasActionPlans", "hasActionPlansWith", "hasEvidence", "hasEvidenceWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "hasParent", "hasParentWith", "hasTasks", "hasTasksWith", "tagsHas", "externalReferenceUrlHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -338218,6 +341661,83 @@ func (ec *executionContext) unmarshalInputTaskWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -339520,83 +343040,6 @@ func (ec *executionContext) unmarshalInputTaskWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.SourceContainsFold = data
-		case "sourceKey":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKey = data
-		case "sourceKeyNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyNEQ = data
-		case "sourceKeyIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyIn = data
-		case "sourceKeyNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyNotIn = data
-		case "sourceKeyContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyContains = data
-		case "sourceKeyHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyHasPrefix = data
-		case "sourceKeyHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyHasSuffix = data
-		case "sourceKeyIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyIsNil = data
-		case "sourceKeyNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyNotNil = data
-		case "sourceKeyEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyEqualFold = data
-		case "sourceKeyContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKeyContainsFold = data
 		case "idempotencyKey":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idempotencyKey"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -340224,7 +343667,7 @@ func (ec *executionContext) unmarshalInputTemplateWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "templateType", "templateTypeNEQ", "templateTypeIn", "templateTypeNotIn", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "kind", "kindNEQ", "kindIn", "kindNotIn", "kindIsNil", "kindNotNil", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasDocuments", "hasDocumentsWith", "hasFiles", "hasFilesWith", "hasTrustCenter", "hasTrustCenterWith", "hasAssessments", "hasAssessmentsWith", "hasCampaigns", "hasCampaignsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "templateType", "templateTypeNEQ", "templateTypeIn", "templateTypeNotIn", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "kind", "kindNEQ", "kindIn", "kindNotIn", "kindIsNil", "kindNotNil", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasDocuments", "hasDocumentsWith", "hasFiles", "hasFilesWith", "hasTrustCenter", "hasTrustCenterWith", "hasAssessments", "hasAssessmentsWith", "hasCampaigns", "hasCampaignsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -341008,6 +344451,83 @@ func (ec *executionContext) unmarshalInputTemplateWhereInput(ctx context.Context
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -386847,7 +390367,7 @@ func (ec *executionContext) unmarshalInputUpdateTaskInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalID", "clearExternalID", "taskKindName", "clearTaskKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalUUID", "clearExternalUUID", "title", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "metadata", "clearMetadata", "status", "due", "clearDue", "completed", "clearCompleted", "systemGenerated", "isTemplate", "isSuggested", "priority", "source", "clearSource", "sourceKey", "clearSourceKey", "externalReferenceURL", "appendExternalReferenceURL", "clearExternalReferenceURL", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "taskKindID", "clearTaskKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "assignerID", "clearAssigner", "assigneeID", "clearAssignee", "addCommentIDs", "removeCommentIDs", "clearComments", "addGroupIDs", "removeGroupIDs", "clearGroups", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addRiskIDs", "removeRiskIDs", "clearRisks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addScanIDs", "removeScanIDs", "clearScans", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "parentID", "clearParent", "addTaskIDs", "removeTaskIDs", "clearTasks", "addComment", "deleteComment"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalID", "clearExternalID", "taskKindName", "clearTaskKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalUUID", "clearExternalUUID", "title", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "metadata", "clearMetadata", "status", "due", "clearDue", "completed", "clearCompleted", "systemGenerated", "isTemplate", "isSuggested", "priority", "source", "clearSource", "externalReferenceURL", "appendExternalReferenceURL", "clearExternalReferenceURL", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "taskKindID", "clearTaskKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "assignerID", "clearAssigner", "assigneeID", "clearAssignee", "addCommentIDs", "removeCommentIDs", "clearComments", "addGroupIDs", "removeGroupIDs", "clearGroups", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addRiskIDs", "removeRiskIDs", "clearRisks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addScanIDs", "removeScanIDs", "clearScans", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "parentID", "clearParent", "addTaskIDs", "removeTaskIDs", "clearTasks", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -387114,20 +390634,6 @@ func (ec *executionContext) unmarshalInputUpdateTaskInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearSource = data
-		case "sourceKey":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceKey = data
-		case "clearSourceKey":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceKey"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceKey = data
 		case "externalReferenceURL":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalReferenceURL"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
@@ -398128,7 +401634,7 @@ func (ec *executionContext) unmarshalInputVulnerabilityWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "vulnerabilityStatusName", "vulnerabilityStatusNameNEQ", "vulnerabilityStatusNameIn", "vulnerabilityStatusNameNotIn", "vulnerabilityStatusNameContains", "vulnerabilityStatusNameHasPrefix", "vulnerabilityStatusNameHasSuffix", "vulnerabilityStatusNameIsNil", "vulnerabilityStatusNameNotNil", "vulnerabilityStatusNameEqualFold", "vulnerabilityStatusNameContainsFold", "vulnerabilityStatusID", "vulnerabilityStatusIDNEQ", "vulnerabilityStatusIDIn", "vulnerabilityStatusIDNotIn", "vulnerabilityStatusIDContains", "vulnerabilityStatusIDHasPrefix", "vulnerabilityStatusIDHasSuffix", "vulnerabilityStatusIDIsNil", "vulnerabilityStatusIDNotNil", "vulnerabilityStatusIDEqualFold", "vulnerabilityStatusIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "securityLevel", "securityLevelNEQ", "securityLevelIn", "securityLevelNotIn", "securityLevelIsNil", "securityLevelNotNil", "cveID", "cveIDNEQ", "cveIDIn", "cveIDNotIn", "cveIDContains", "cveIDHasPrefix", "cveIDHasSuffix", "cveIDIsNil", "cveIDNotNil", "cveIDEqualFold", "cveIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "severity", "severityNEQ", "severityIn", "severityNotIn", "severityContains", "severityHasPrefix", "severityHasSuffix", "severityIsNil", "severityNotNil", "severityEqualFold", "severityContainsFold", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactGT", "impactGTE", "impactLT", "impactLTE", "impactIsNil", "impactNotNil", "exploitability", "exploitabilityNEQ", "exploitabilityIn", "exploitabilityNotIn", "exploitabilityGT", "exploitabilityGTE", "exploitabilityLT", "exploitabilityLTE", "exploitabilityIsNil", "exploitabilityNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityContains", "priorityHasPrefix", "priorityHasSuffix", "priorityIsNil", "priorityNotNil", "priorityEqualFold", "priorityContainsFold", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "vector", "vectorNEQ", "vectorIn", "vectorNotIn", "vectorContains", "vectorHasPrefix", "vectorHasSuffix", "vectorIsNil", "vectorNotNil", "vectorEqualFold", "vectorContainsFold", "remediationSLA", "remediationSLANEQ", "remediationSLAGT", "remediationSLAGTE", "remediationSLALT", "remediationSLALTE", "remediationSLAIsNil", "remediationSLANotNil", "open", "openNEQ", "openIsNil", "openNotNil", "blocking", "blockingNEQ", "blockingIsNil", "blockingNotNil", "production", "productionNEQ", "productionIsNil", "productionNotNil", "public", "publicNEQ", "publicIsNil", "publicNotNil", "validated", "validatedNEQ", "validatedIsNil", "validatedNotNil", "vulnerableVersionRange", "vulnerableVersionRangeNEQ", "vulnerableVersionRangeIn", "vulnerableVersionRangeNotIn", "vulnerableVersionRangeContains", "vulnerableVersionRangeHasPrefix", "vulnerableVersionRangeHasSuffix", "vulnerableVersionRangeIsNil", "vulnerableVersionRangeNotNil", "vulnerableVersionRangeEqualFold", "vulnerableVersionRangeContainsFold", "firstPatchedVersion", "firstPatchedVersionNEQ", "firstPatchedVersionIn", "firstPatchedVersionNotIn", "firstPatchedVersionContains", "firstPatchedVersionHasPrefix", "firstPatchedVersionHasSuffix", "firstPatchedVersionIsNil", "firstPatchedVersionNotNil", "firstPatchedVersionEqualFold", "firstPatchedVersionContainsFold", "fixAvailable", "fixAvailableNEQ", "fixAvailableIsNil", "fixAvailableNotNil", "packageName", "packageNameNEQ", "packageNameIn", "packageNameNotIn", "packageNameContains", "packageNameHasPrefix", "packageNameHasSuffix", "packageNameIsNil", "packageNameNotNil", "packageNameEqualFold", "packageNameContainsFold", "packageEcosystem", "packageEcosystemNEQ", "packageEcosystemIn", "packageEcosystemNotIn", "packageEcosystemContains", "packageEcosystemHasPrefix", "packageEcosystemHasSuffix", "packageEcosystemIsNil", "packageEcosystemNotNil", "packageEcosystemEqualFold", "packageEcosystemContainsFold", "manifestPath", "manifestPathNEQ", "manifestPathIn", "manifestPathNotIn", "manifestPathContains", "manifestPathHasPrefix", "manifestPathHasSuffix", "manifestPathIsNil", "manifestPathNotNil", "manifestPathEqualFold", "manifestPathContainsFold", "dependencyScope", "dependencyScopeNEQ", "dependencyScopeIn", "dependencyScopeNotIn", "dependencyScopeContains", "dependencyScopeHasPrefix", "dependencyScopeHasSuffix", "dependencyScopeIsNil", "dependencyScopeNotNil", "dependencyScopeEqualFold", "dependencyScopeContainsFold", "publishedAt", "publishedAtGT", "publishedAtGTE", "publishedAtLT", "publishedAtLTE", "publishedAtIsNil", "publishedAtNotNil", "discoveredAt", "discoveredAtGT", "discoveredAtGTE", "discoveredAtLT", "discoveredAtLTE", "discoveredAtIsNil", "discoveredAtNotNil", "sourceUpdatedAt", "sourceUpdatedAtGT", "sourceUpdatedAtGTE", "sourceUpdatedAtLT", "sourceUpdatedAtLTE", "sourceUpdatedAtIsNil", "sourceUpdatedAtNotNil", "dismissedAt", "dismissedAtGT", "dismissedAtGTE", "dismissedAtLT", "dismissedAtLTE", "dismissedAtIsNil", "dismissedAtNotNil", "dismissedReason", "dismissedReasonNEQ", "dismissedReasonIn", "dismissedReasonNotIn", "dismissedReasonContains", "dismissedReasonHasPrefix", "dismissedReasonHasSuffix", "dismissedReasonIsNil", "dismissedReasonNotNil", "dismissedReasonEqualFold", "dismissedReasonContainsFold", "dismissedComment", "dismissedCommentNEQ", "dismissedCommentIn", "dismissedCommentNotIn", "dismissedCommentContains", "dismissedCommentHasPrefix", "dismissedCommentHasSuffix", "dismissedCommentIsNil", "dismissedCommentNotNil", "dismissedCommentEqualFold", "dismissedCommentContainsFold", "fixedAt", "fixedAtGT", "fixedAtGTE", "fixedAtLT", "fixedAtLTE", "fixedAtIsNil", "fixedAtNotNil", "autoDismissedAt", "autoDismissedAtGT", "autoDismissedAtGTE", "autoDismissedAtLT", "autoDismissedAtLTE", "autoDismissedAtIsNil", "autoDismissedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasVulnerabilityStatus", "hasVulnerabilityStatusWith", "hasIntegrations", "hasIntegrationsWith", "hasFindings", "hasFindingsWith", "hasActionPlans", "hasActionPlansWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasRemediations", "hasRemediationsWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas", "referencesHas", "impactsHas", "cweIdsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "vulnerabilityStatusName", "vulnerabilityStatusNameNEQ", "vulnerabilityStatusNameIn", "vulnerabilityStatusNameNotIn", "vulnerabilityStatusNameContains", "vulnerabilityStatusNameHasPrefix", "vulnerabilityStatusNameHasSuffix", "vulnerabilityStatusNameIsNil", "vulnerabilityStatusNameNotNil", "vulnerabilityStatusNameEqualFold", "vulnerabilityStatusNameContainsFold", "vulnerabilityStatusID", "vulnerabilityStatusIDNEQ", "vulnerabilityStatusIDIn", "vulnerabilityStatusIDNotIn", "vulnerabilityStatusIDContains", "vulnerabilityStatusIDHasPrefix", "vulnerabilityStatusIDHasSuffix", "vulnerabilityStatusIDIsNil", "vulnerabilityStatusIDNotNil", "vulnerabilityStatusIDEqualFold", "vulnerabilityStatusIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "securityLevel", "securityLevelNEQ", "securityLevelIn", "securityLevelNotIn", "securityLevelIsNil", "securityLevelNotNil", "cveID", "cveIDNEQ", "cveIDIn", "cveIDNotIn", "cveIDContains", "cveIDHasPrefix", "cveIDHasSuffix", "cveIDIsNil", "cveIDNotNil", "cveIDEqualFold", "cveIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "severity", "severityNEQ", "severityIn", "severityNotIn", "severityContains", "severityHasPrefix", "severityHasSuffix", "severityIsNil", "severityNotNil", "severityEqualFold", "severityContainsFold", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactGT", "impactGTE", "impactLT", "impactLTE", "impactIsNil", "impactNotNil", "exploitability", "exploitabilityNEQ", "exploitabilityIn", "exploitabilityNotIn", "exploitabilityGT", "exploitabilityGTE", "exploitabilityLT", "exploitabilityLTE", "exploitabilityIsNil", "exploitabilityNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityContains", "priorityHasPrefix", "priorityHasSuffix", "priorityIsNil", "priorityNotNil", "priorityEqualFold", "priorityContainsFold", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "vector", "vectorNEQ", "vectorIn", "vectorNotIn", "vectorContains", "vectorHasPrefix", "vectorHasSuffix", "vectorIsNil", "vectorNotNil", "vectorEqualFold", "vectorContainsFold", "remediationSLA", "remediationSLANEQ", "remediationSLAGT", "remediationSLAGTE", "remediationSLALT", "remediationSLALTE", "remediationSLAIsNil", "remediationSLANotNil", "open", "openNEQ", "openIsNil", "openNotNil", "blocking", "blockingNEQ", "blockingIsNil", "blockingNotNil", "production", "productionNEQ", "productionIsNil", "productionNotNil", "public", "publicNEQ", "publicIsNil", "publicNotNil", "validated", "validatedNEQ", "validatedIsNil", "validatedNotNil", "vulnerableVersionRange", "vulnerableVersionRangeNEQ", "vulnerableVersionRangeIn", "vulnerableVersionRangeNotIn", "vulnerableVersionRangeContains", "vulnerableVersionRangeHasPrefix", "vulnerableVersionRangeHasSuffix", "vulnerableVersionRangeIsNil", "vulnerableVersionRangeNotNil", "vulnerableVersionRangeEqualFold", "vulnerableVersionRangeContainsFold", "firstPatchedVersion", "firstPatchedVersionNEQ", "firstPatchedVersionIn", "firstPatchedVersionNotIn", "firstPatchedVersionContains", "firstPatchedVersionHasPrefix", "firstPatchedVersionHasSuffix", "firstPatchedVersionIsNil", "firstPatchedVersionNotNil", "firstPatchedVersionEqualFold", "firstPatchedVersionContainsFold", "fixAvailable", "fixAvailableNEQ", "fixAvailableIsNil", "fixAvailableNotNil", "packageName", "packageNameNEQ", "packageNameIn", "packageNameNotIn", "packageNameContains", "packageNameHasPrefix", "packageNameHasSuffix", "packageNameIsNil", "packageNameNotNil", "packageNameEqualFold", "packageNameContainsFold", "packageEcosystem", "packageEcosystemNEQ", "packageEcosystemIn", "packageEcosystemNotIn", "packageEcosystemContains", "packageEcosystemHasPrefix", "packageEcosystemHasSuffix", "packageEcosystemIsNil", "packageEcosystemNotNil", "packageEcosystemEqualFold", "packageEcosystemContainsFold", "manifestPath", "manifestPathNEQ", "manifestPathIn", "manifestPathNotIn", "manifestPathContains", "manifestPathHasPrefix", "manifestPathHasSuffix", "manifestPathIsNil", "manifestPathNotNil", "manifestPathEqualFold", "manifestPathContainsFold", "dependencyScope", "dependencyScopeNEQ", "dependencyScopeIn", "dependencyScopeNotIn", "dependencyScopeContains", "dependencyScopeHasPrefix", "dependencyScopeHasSuffix", "dependencyScopeIsNil", "dependencyScopeNotNil", "dependencyScopeEqualFold", "dependencyScopeContainsFold", "publishedAt", "publishedAtGT", "publishedAtGTE", "publishedAtLT", "publishedAtLTE", "publishedAtIsNil", "publishedAtNotNil", "discoveredAt", "discoveredAtGT", "discoveredAtGTE", "discoveredAtLT", "discoveredAtLTE", "discoveredAtIsNil", "discoveredAtNotNil", "sourceUpdatedAt", "sourceUpdatedAtGT", "sourceUpdatedAtGTE", "sourceUpdatedAtLT", "sourceUpdatedAtLTE", "sourceUpdatedAtIsNil", "sourceUpdatedAtNotNil", "dismissedAt", "dismissedAtGT", "dismissedAtGTE", "dismissedAtLT", "dismissedAtLTE", "dismissedAtIsNil", "dismissedAtNotNil", "dismissedReason", "dismissedReasonNEQ", "dismissedReasonIn", "dismissedReasonNotIn", "dismissedReasonContains", "dismissedReasonHasPrefix", "dismissedReasonHasSuffix", "dismissedReasonIsNil", "dismissedReasonNotNil", "dismissedReasonEqualFold", "dismissedReasonContainsFold", "dismissedComment", "dismissedCommentNEQ", "dismissedCommentIn", "dismissedCommentNotIn", "dismissedCommentContains", "dismissedCommentHasPrefix", "dismissedCommentHasSuffix", "dismissedCommentIsNil", "dismissedCommentNotNil", "dismissedCommentEqualFold", "dismissedCommentContainsFold", "fixedAt", "fixedAtGT", "fixedAtGTE", "fixedAtLT", "fixedAtLTE", "fixedAtIsNil", "fixedAtNotNil", "autoDismissedAt", "autoDismissedAtGT", "autoDismissedAtGTE", "autoDismissedAtLT", "autoDismissedAtLTE", "autoDismissedAtIsNil", "autoDismissedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasVulnerabilityStatus", "hasVulnerabilityStatusWith", "hasIntegrations", "hasIntegrationsWith", "hasFindings", "hasFindingsWith", "hasActionPlans", "hasActionPlansWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasRemediations", "hasRemediationsWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas", "referencesHas", "impactsHas", "cweIdsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -398975,6 +402481,83 @@ func (ec *executionContext) unmarshalInputVulnerabilityWhereInput(ctx context.Co
 				return it, err
 			}
 			it.IntegrationRunIDContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "externalID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -414236,6 +417819,11 @@ func (ec *executionContext) _ActionPlan(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._ActionPlan_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._ActionPlan_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -414787,6 +418375,11 @@ func (ec *executionContext) _Assessment(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._Assessment_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._Assessment_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -415120,6 +418713,11 @@ func (ec *executionContext) _AssessmentPolicy(ctx context.Context, sel ast.Selec
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._AssessmentPolicy_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._AssessmentPolicy_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -415669,6 +419267,11 @@ func (ec *executionContext) _Asset(ctx context.Context, sel ast.SelectionSet, ob
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Asset_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Asset_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -416261,6 +419864,11 @@ func (ec *executionContext) _Campaign(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Campaign_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Campaign_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -417034,6 +420642,11 @@ func (ec *executionContext) _CheckResult(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._CheckResult_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "ownerID":
 			out.Values[i] = ec._CheckResult_ownerID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -417288,6 +420901,11 @@ func (ec *executionContext) _Contact(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Contact_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Contact_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -417559,6 +421177,11 @@ func (ec *executionContext) _Control(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Control_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Control_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -418213,6 +421836,11 @@ func (ec *executionContext) _ControlImplementation(ctx context.Context, sel ast.
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._ControlImplementation_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._ControlImplementation_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -418492,6 +422120,11 @@ func (ec *executionContext) _ControlObjective(ctx context.Context, sel ast.Selec
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._ControlObjective_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._ControlObjective_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -419020,6 +422653,11 @@ func (ec *executionContext) _CustomTypeEnum(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._CustomTypeEnum_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._CustomTypeEnum_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -419527,6 +423165,11 @@ func (ec *executionContext) _DirectoryAccount(ctx context.Context, sel ast.Selec
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._DirectoryAccount_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._DirectoryAccount_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -419948,6 +423591,11 @@ func (ec *executionContext) _DirectoryGroup(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._DirectoryGroup_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._DirectoryGroup_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -420283,6 +423931,11 @@ func (ec *executionContext) _DirectoryMembership(ctx context.Context, sel ast.Se
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._DirectoryMembership_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._DirectoryMembership_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -421006,6 +424659,11 @@ func (ec *executionContext) _EmailTemplate(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._EmailTemplate_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._EmailTemplate_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -421339,6 +424997,11 @@ func (ec *executionContext) _Entity(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Entity_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Entity_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -422512,6 +426175,11 @@ func (ec *executionContext) _Evidence(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._Evidence_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._Evidence_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -423524,6 +427192,11 @@ func (ec *executionContext) _Finding(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._Finding_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._Finding_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -424448,6 +428121,11 @@ func (ec *executionContext) _Group(ctx context.Context, sel ast.SelectionSet, ob
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Group_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Group_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -425616,6 +429294,11 @@ func (ec *executionContext) _IdentityHolder(ctx context.Context, sel ast.Selecti
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._IdentityHolder_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._IdentityHolder_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -426876,6 +430559,11 @@ func (ec *executionContext) _InternalPolicy(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._InternalPolicy_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._InternalPolicy_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -427781,6 +431469,11 @@ func (ec *executionContext) _MappedControl(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._MappedControl_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._MappedControl_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -428045,6 +431738,11 @@ func (ec *executionContext) _Narrative(ctx context.Context, sel ast.SelectionSet
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Narrative_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Narrative_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -431339,6 +435037,11 @@ func (ec *executionContext) _Platform(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._Platform_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._Platform_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -432118,6 +435821,11 @@ func (ec *executionContext) _Procedure(ctx context.Context, sel ast.SelectionSet
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._Procedure_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._Procedure_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -432598,6 +436306,11 @@ func (ec *executionContext) _Program(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Program_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Program_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -434721,6 +438434,11 @@ func (ec *executionContext) _Remediation(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._Remediation_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._Remediation_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -435604,6 +439322,11 @@ func (ec *executionContext) _Review(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._Review_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._Review_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -436042,6 +439765,11 @@ func (ec *executionContext) _Risk(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Risk_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Risk_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -436845,6 +440573,11 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._Scan_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._Scan_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -437598,6 +441331,11 @@ func (ec *executionContext) _Subcontrol(ctx context.Context, sel ast.SelectionSe
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Subcontrol_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Subcontrol_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -438610,6 +442348,11 @@ func (ec *executionContext) _SystemDetail(ctx context.Context, sel ast.Selection
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._SystemDetail_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._SystemDetail_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -439015,6 +442758,11 @@ func (ec *executionContext) _TagDefinition(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._TagDefinition_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._TagDefinition_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -439251,6 +442999,11 @@ func (ec *executionContext) _Task(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "sourceKey":
+			out.Values[i] = ec._Task_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "externalID":
 			out.Values[i] = ec._Task_externalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -439368,11 +443121,6 @@ func (ec *executionContext) _Task(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "source":
 			out.Values[i] = ec._Task_source(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "sourceKey":
-			out.Values[i] = ec._Task_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -439743,6 +443491,11 @@ func (ec *executionContext) _Template(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Template_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Template_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -443175,6 +446928,11 @@ func (ec *executionContext) _Vulnerability(ctx context.Context, sel ast.Selectio
 			}
 		case "integrationRunID":
 			out.Values[i] = ec._Vulnerability_integrationRunID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Vulnerability_sourceKey(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

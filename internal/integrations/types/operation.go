@@ -72,6 +72,8 @@ type ExecutionPolicy struct {
 	SkipRunRecord bool `json:"skipRunRecord,omitempty"`
 	// Snapshot marks a full-snapshot sync that owns a directory sync run and removal inference
 	Snapshot bool `json:"snapshot,omitempty"`
+	// NoRetry cancels a failed queued run instead of retrying it, for operations whose failure is reported to the user once
+	NoRetry bool `json:"noRetry,omitempty"`
 }
 
 // ScheduledCycleResult is the response payload scheduled operations use for adaptive scheduling

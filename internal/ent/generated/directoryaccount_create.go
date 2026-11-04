@@ -184,6 +184,20 @@ func (_c *DirectoryAccountCreate) SetNillableIntegrationRunID(v *string) *Direct
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *DirectoryAccountCreate) SetSourceKey(v string) *DirectoryAccountCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableSourceKey(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *DirectoryAccountCreate) SetExternalID(v string) *DirectoryAccountCreate {
 	_c.mutation.SetExternalID(v)
@@ -1036,6 +1050,10 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(directoryaccount.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(directoryaccount.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(directoryaccount.FieldExternalID, field.TypeString, value)

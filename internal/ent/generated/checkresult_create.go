@@ -202,6 +202,20 @@ func (_c *CheckResultCreate) SetNillableIntegrationRunID(v *string) *CheckResult
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *CheckResultCreate) SetSourceKey(v string) *CheckResultCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *CheckResultCreate) SetNillableSourceKey(v *string) *CheckResultCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *CheckResultCreate) SetOwnerID(v string) *CheckResultCreate {
 	_c.mutation.SetOwnerID(v)
@@ -593,6 +607,10 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(checkresult.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(checkresult.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(checkresult.FieldStatus, field.TypeEnum, value)

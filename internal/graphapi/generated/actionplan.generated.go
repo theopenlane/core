@@ -131,6 +131,8 @@ type MutationResolver interface {
 	CreateBulkCSVCustomTypeEnum(ctx context.Context, input graphql.Upload) (*model.CustomTypeEnumBulkCreatePayload, error)
 	UpdateCustomTypeEnum(ctx context.Context, id string, input generated.UpdateCustomTypeEnumInput) (*model.CustomTypeEnumUpdatePayload, error)
 	DeleteCustomTypeEnum(ctx context.Context, id string) (*model.CustomTypeEnumDeletePayload, error)
+	SeedDemoData(ctx context.Context, input model.SeedDemoDataInput) (*model.SeedDemoDataPayload, error)
+	DeleteDemoData(ctx context.Context, input model.DeleteDemoDataInput) (*model.DeleteDemoDataPayload, error)
 	CreateDirectoryAccount(ctx context.Context, input generated.CreateDirectoryAccountInput) (*model.DirectoryAccountCreatePayload, error)
 	CreateBulkDirectoryAccount(ctx context.Context, input []*generated.CreateDirectoryAccountInput) (*model.DirectoryAccountBulkCreatePayload, error)
 	CreateBulkCSVDirectoryAccount(ctx context.Context, input graphql.Upload) (*model.DirectoryAccountBulkCreatePayload, error)
@@ -5794,6 +5796,20 @@ func (ec *executionContext) field_Mutation_deleteDNSVerification_args(ctx contex
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteDemoData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (model.DeleteDemoDataInput, error) {
+			return ec.unmarshalNDeleteDemoDataInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDeleteDemoDataInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteDirectoryAccount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -6953,6 +6969,20 @@ func (ec *executionContext) field_Mutation_resolveVulnerability_args(ctx context
 		return nil, err
 	}
 	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_seedDemoData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (model.SeedDemoDataInput, error) {
+			return ec.unmarshalNSeedDemoDataInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSeedDemoDataInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -17105,6 +17135,94 @@ func (ec *executionContext) fieldContext_Mutation_deleteCustomTypeEnum(ctx conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteCustomTypeEnum_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_seedDemoData(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_seedDemoData(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SeedDemoData(ctx, fc.Args["input"].(model.SeedDemoDataInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *model.SeedDemoDataPayload) graphql.Marshaler {
+			return ec.marshalNSeedDemoDataPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSeedDemoDataPayload(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_seedDemoData(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SeedDemoDataPayload(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_seedDemoData_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteDemoData(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_deleteDemoData(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DeleteDemoData(ctx, fc.Args["input"].(model.DeleteDemoDataInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *model.DeleteDemoDataPayload) graphql.Marshaler {
+			return ec.marshalNDeleteDemoDataPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDeleteDemoDataPayload(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_deleteDemoData(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_DeleteDemoDataPayload(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteDemoData_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -40096,6 +40214,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteCustomTypeEnum":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteCustomTypeEnum(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "seedDemoData":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_seedDemoData(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteDemoData":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteDemoData(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

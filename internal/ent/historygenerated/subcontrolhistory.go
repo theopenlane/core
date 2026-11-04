@@ -57,6 +57,8 @@ type SubcontrolHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
@@ -151,7 +153,7 @@ func (*SubcontrolHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case subcontrolhistory.FieldSystemOwned, subcontrolhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldUpdatedByImpersonator, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldSourceDefinitionID, subcontrolhistory.FieldSourceDefinitionVersion, subcontrolhistory.FieldSourceInstanceID, subcontrolhistory.FieldManagedBy, subcontrolhistory.FieldIntegrationRunID, subcontrolhistory.FieldExternalID, subcontrolhistory.FieldExternalUUID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationDescription, subcontrolhistory.FieldPublicRepresentation, subcontrolhistory.FieldSource, subcontrolhistory.FieldSourceName, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldReferenceFrameworkRevision, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldSubcontrolKindName, subcontrolhistory.FieldSubcontrolKindID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
+		case subcontrolhistory.FieldID, subcontrolhistory.FieldRef, subcontrolhistory.FieldCreatedBy, subcontrolhistory.FieldUpdatedBy, subcontrolhistory.FieldUpdatedByImpersonator, subcontrolhistory.FieldDeletedBy, subcontrolhistory.FieldDisplayID, subcontrolhistory.FieldSourceDefinitionID, subcontrolhistory.FieldSourceDefinitionVersion, subcontrolhistory.FieldSourceInstanceID, subcontrolhistory.FieldManagedBy, subcontrolhistory.FieldIntegrationRunID, subcontrolhistory.FieldSourceKey, subcontrolhistory.FieldExternalID, subcontrolhistory.FieldExternalUUID, subcontrolhistory.FieldTitle, subcontrolhistory.FieldDescription, subcontrolhistory.FieldReferenceID, subcontrolhistory.FieldAuditorReferenceID, subcontrolhistory.FieldResponsiblePartyID, subcontrolhistory.FieldStatus, subcontrolhistory.FieldImplementationStatus, subcontrolhistory.FieldImplementationDescription, subcontrolhistory.FieldPublicRepresentation, subcontrolhistory.FieldSource, subcontrolhistory.FieldSourceName, subcontrolhistory.FieldReferenceFramework, subcontrolhistory.FieldReferenceFrameworkRevision, subcontrolhistory.FieldCategory, subcontrolhistory.FieldCategoryID, subcontrolhistory.FieldSubcategory, subcontrolhistory.FieldControlOwnerID, subcontrolhistory.FieldDelegateID, subcontrolhistory.FieldOwnerID, subcontrolhistory.FieldInternalNotes, subcontrolhistory.FieldSystemInternalID, subcontrolhistory.FieldSubcontrolKindName, subcontrolhistory.FieldSubcontrolKindID, subcontrolhistory.FieldRefCode, subcontrolhistory.FieldControlID:
 			values[i] = new(sql.NullString)
 		case subcontrolhistory.FieldHistoryTime, subcontrolhistory.FieldCreatedAt, subcontrolhistory.FieldUpdatedAt, subcontrolhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -280,6 +282,12 @@ func (_m *SubcontrolHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case subcontrolhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case subcontrolhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -638,6 +646,9 @@ func (_m *SubcontrolHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

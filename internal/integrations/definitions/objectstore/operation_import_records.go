@@ -11,7 +11,10 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/storagetypes"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -23,14 +26,20 @@ import (
 var (
 	// importPolicy runs the record import per installation and as a recurring system cycle against the runtime bucket
 	importPolicy = types.ExecutionPolicy{Reconcile: true, Scheduled: true}
-	// importContracts lists the schemas the record import ingests
-	importContracts = []types.IngestContract{{Schema: entityMapping.Schema}}
+	// importContracts lists every schema the definition has a mapping for
+	importContracts = lo.Map(recordSchemas, func(schema *entityops.Schema, _ int) types.IngestContract {
+		return types.IngestContract{Schema: schema.Name}
+	})
 )
 
 // runImportRecords ingests the JSON objects under the configured prefix one object at a time and moves each object whose
 // records imported without failure into the processed directory when the spec asks for it; the ownerless runtime path
-// fills an empty spec from the runtime config
+// fills an empty spec from the runtime config, and a dataset imports its manifest instead
 func runImportRecords(ctx context.Context, request types.OperationRequest, client *Client, cfg ImportRecords) (json.RawMessage, error) {
+	if cfg.Manifest {
+		return runImportDataset(ctx, request, client, cfg)
+	}
+
 	spec := cfg.ImportSpec
 
 	if request.Integration == nil && spec.Prefix == "" {
@@ -41,7 +50,10 @@ func runImportRecords(ctx context.Context, request types.OperationRequest, clien
 		return nil, ErrPrefixRequired
 	}
 
-	if err := ensureLinkTargets(ctx, request); err != nil {
+	// a system run has no organization, so its entity types are system-owned
+	_, noOrg := utils.ResolveOwnerID(ctx, "")
+
+	if err := ensureEntityTypes(ctx, request.DB, noOrg != nil, []string{vendorEntityTypeName}); err != nil {
 		return nil, err
 	}
 
@@ -86,7 +98,7 @@ func runImportRecords(ctx context.Context, request types.OperationRequest, clien
 		result.Moved++
 	}
 
-	logx.FromContext(ctx).Info().Str("prefix", spec.Prefix).Int("objects", result.Objects).Int("attempted", result.Attempted).Int("failed", result.Failed).Int("moved", result.Moved).Msg("objectstore: record import completed")
+	logx.FromContext(ctx).Debug().Str("prefix", spec.Prefix).Int("objects", result.Objects).Int("attempted", result.Attempted).Int("failed", result.Failed).Int("moved", result.Moved).Msg("objectstore: record import completed")
 
 	return providerkit.EncodeResult(result, ErrResultEncode)
 }
@@ -100,32 +112,27 @@ func validateImportRecords(_ context.Context, _ types.InstallationRequest, cfg *
 	return nil
 }
 
-// ensureLinkTargets creates the entity type the mapping links records to when it does not exist in the scope the link
-// resolver searches: system-owned for the ownerless runtime import, the installation's organization otherwise
-func ensureLinkTargets(ctx context.Context, request types.OperationRequest) error {
-	ownerScope := entitytype.SystemOwned(true)
-	create := request.DB.EntityType.Create().SetName(vendorEntityTypeName)
+// ensureEntityTypes creates the named entity types the imported records link to when they do not exist in the scope the
+// link resolver searches: system-owned rows for a system run, otherwise the caller's organization's own rows, which the
+// organization interceptor scopes to and the create hooks own
+func ensureEntityTypes(ctx context.Context, db *generated.Client, systemOwned bool, names []string) error {
+	for _, name := range lo.Uniq(names) {
+		exists, err := db.EntityType.Query().Where(entitytype.NameEqualFold(name), entitytype.SystemOwned(systemOwned)).Exist(ctx)
+		if err != nil {
+			return fmt.Errorf("%w: %s: %w", ErrEntityTypeSeed, name, err)
+		}
 
-	if request.Integration != nil {
-		ownerScope = entitytype.OwnerID(request.Integration.OwnerID)
-		create = create.SetOwnerID(request.Integration.OwnerID)
+		if exists {
+			continue
+		}
+
+		created, err := db.EntityType.Create().SetName(name).Save(ctx)
+		if err != nil {
+			return fmt.Errorf("%w: %s: %w", ErrEntityTypeSeed, name, err)
+		}
+
+		logx.FromContext(ctx).Debug().Str("entity_type_id", created.ID).Bool("system_owned", created.SystemOwned).Msg("objectstore: created entity type for import link")
 	}
-
-	exists, err := request.DB.EntityType.Query().Where(entitytype.NameEqualFold(vendorEntityTypeName), ownerScope).Exist(ctx)
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrEntityTypeSeed, err)
-	}
-
-	if exists {
-		return nil
-	}
-
-	created, err := create.Save(ctx)
-	if err != nil {
-		return fmt.Errorf("%w: %w", ErrEntityTypeSeed, err)
-	}
-
-	logx.FromContext(ctx).Info().Str("entity_type_id", created.ID).Bool("system_owned", created.SystemOwned).Msg("objectstore: created entity type for import link")
 
 	return nil
 }
@@ -192,11 +199,28 @@ func loadPayloadSet(ctx context.Context, client storage.Provider, key string) (t
 		return providerkit.RawEnvelope(fmt.Sprintf("%s#%d", key, idx), record)
 	})
 
-	return types.IngestPayloadSet{Schema: entityMapping.Schema, Envelopes: envelopes}, nil
+	return types.IngestPayloadSet{Schema: entityops.SchemaEntity.Name, Envelopes: envelopes}, nil
 }
 
 // loadRecords reads one object and decodes its records
 func loadRecords(ctx context.Context, client storage.Provider, key string) ([]json.RawMessage, error) {
+	document, err := downloadObject(ctx, client, key)
+	if err != nil {
+		return nil, err
+	}
+
+	records, err := decodeRecords(document)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("key", key).Int("bytes", len(document)).Msg("objectstore: object content is not json records")
+
+		return nil, fmt.Errorf("%w: %s: %w", ErrObjectContentInvalid, key, err)
+	}
+
+	return records, nil
+}
+
+// downloadObject reads the bytes of one object
+func downloadObject(ctx context.Context, client storage.Provider, key string) ([]byte, error) {
 	downloaded, err := client.Download(ctx, &storagetypes.File{FileMetadata: storagetypes.FileMetadata{Key: key}}, &storagetypes.DownloadFileOptions{})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("key", key).Msg("objectstore: object download failed")
@@ -204,14 +228,7 @@ func loadRecords(ctx context.Context, client storage.Provider, key string) ([]js
 		return nil, fmt.Errorf("%w: %s: %w", ErrObjectDownloadFailed, key, err)
 	}
 
-	records, err := decodeRecords(downloaded.File)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("key", key).Int("bytes", len(downloaded.File)).Msg("objectstore: object content is not json records")
-
-		return nil, fmt.Errorf("%w: %s: %w", ErrObjectContentInvalid, key, err)
-	}
-
-	return records, nil
+	return downloaded.File, nil
 }
 
 // decodeRecords parses a document as a JSON array of records, wrapping a single JSON object as one record

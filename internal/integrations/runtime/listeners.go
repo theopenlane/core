@@ -45,6 +45,22 @@ func integrationNotFoundCancel[T integrationEnvelope](message string) func(conte
 	}
 }
 
+// operationCancel builds the Cancel predicate for an operation's queued runs, cancelling instead of retrying when the
+// integration no longer exists or the operation does not retry
+func operationCancel(policy types.ExecutionPolicy) func(context.Context, operations.Envelope, error) bool {
+	notFound := integrationNotFoundCancel[operations.Envelope]("integration not found, cancelling operation")
+
+	return func(ctx context.Context, envelope operations.Envelope, err error) bool {
+		if policy.NoRetry {
+			logx.FromContext(ctx).Info().Err(err).Msg("operation does not retry, cancelling")
+
+			return true
+		}
+
+		return notFound(ctx, envelope, err)
+	}
+}
+
 // registerListeners registers the operation, ingest, webhook, reconcile, and definition-provided gala listeners
 func (r *Runtime) registerListeners() error {
 	runtime := r.Gala()
@@ -58,7 +74,7 @@ func (r *Runtime) registerListeners() error {
 		if _, err := gala.Register(runtime, gala.Definition[operations.Envelope]{
 			Topic:  gala.Topic[operations.Envelope]{Name: operation.Topic, Kind: gala.IntegrationRun.Kind()},
 			Name:   operation.Name,
-			Cancel: integrationNotFoundCancel[operations.Envelope]("integration not found, cancelling operation"),
+			Cancel: operationCancel(operation.Policy),
 			Handle: func(ctx gala.HandlerContext, envelope operations.Envelope) error {
 				return r.HandleOperation(ctx.Context, envelope)
 			},

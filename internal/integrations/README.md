@@ -185,6 +185,10 @@ Keep non-secret selectors in user input or integration metadata. Don't overload 
 
 Available variables are `envelope`, `variant`, `resource`, `action`, and `payload`.
 
+Beyond the standard library, expressions can call:
+
+- `merge(payload, {...})` returns the payload with the given keys set, for mappings that keep the record and change a few fields
+
 Use CEL for filtering and projection, not heavy normalization. If the expression starts encoding provider-specific control flow, that logic belongs in provider code instead.
 
 - Empty filter means allow the payload through
@@ -265,3 +269,13 @@ Spec: types.MappingOverride{
 ```
 
 A rule uses a field match **or** an expression. Field match is the fast path — it compiles to an indexed `IN` query scoped to the organization — so reach for an expression only when the match isn't a single-field equality.
+
+Set `PayloadKeys` when `SourceField` or `SourceList` names a key the mapping writes only to carry match values, rather than a field on the source schema. `providerkit.EdgeExternalIDLinks` derives one such rule per edge whose target matches on `external_id`, reading the target ids from a key named after the edge: `<edge>_external_ids` for a to-many edge (`programs_external_ids`) and `<edge>_external_id` for a unique one. The objectstore import links its records this way.
+
+## Runtime Ingest for an Organization
+
+A runtime operation (one with no installation behind it) normally writes system-owned rows. When the dispatch carries an `OwnerID`, ingest runs as that organization's integration caller, so the org-owned hooks set the owner, and stamps the payload set's `SourceKey` into `source_key` on every row so the rows can be found again by where they came from. `source_instance_id` stays reserved for the external instance an installation connects to. Runtime operations that don't ingest keep the dispatching caller.
+
+`entityops` generates `DeleteBySource` on owned schemas that carry source provenance. It deletes the caller's rows written by one definition, narrowed to a source instance, a source key, or both, relying on the organization interceptor and hook for scoping, and can skip rows updated since they were written. A filter without a definition, or with neither an instance nor a key, is rejected. The objectstore demo data removal uses it with the dataset's source key to take a seeded dataset back out of an organization.
+
+An objectstore dataset is a bucket prefix with a `manifest.json` naming its standards, schema file order, and profiles. Record values can hold `{{NAME}}` or `{{NAME|default}}` placeholders. They are filled from the built-in variables `ORG_NAME`, `ORG_DOMAIN`, `ORG_OWNER_USER_ID`, `ORG_OWNER_EMAIL`, and `ORG_OWNER_NAME`, then from the imported profile's variables, which override the built-ins. A placeholder neither sets keeps its default. `{{TODAY}}`, `{{TODAY+N}}`, and `{{TODAY-N}}` fill the import date moved by N days.

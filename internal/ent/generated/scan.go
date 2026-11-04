@@ -52,6 +52,8 @@ type Scan struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -476,7 +478,7 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scan.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldSourceDefinitionID, scan.FieldSourceDefinitionVersion, scan.FieldSourceInstanceID, scan.FieldManagedBy, scan.FieldIntegrationRunID, scan.FieldExternalID, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldReviewedByIdentityHolderID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldAssignedToIdentityHolderID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
+		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldSourceDefinitionID, scan.FieldSourceDefinitionVersion, scan.FieldSourceInstanceID, scan.FieldManagedBy, scan.FieldIntegrationRunID, scan.FieldSourceKey, scan.FieldExternalID, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldReviewedByIdentityHolderID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldAssignedToIdentityHolderID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
 			values[i] = new(sql.NullString)
 		case scan.FieldCreatedAt, scan.FieldUpdatedAt, scan.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -583,6 +585,12 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case scan.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case scan.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -985,6 +993,9 @@ func (_m *Scan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

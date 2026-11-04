@@ -3,6 +3,7 @@ package celx
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/google/cel-go/cel"
 	"github.com/stretchr/testify/assert"
@@ -79,4 +80,21 @@ func TestParagraphsNull(t *testing.T) {
 	out, _, err := eval.Evaluate(context.Background(), "paragraphs(s)", map[string]any{"s": nil})
 	assert.NoError(t, err)
 	assert.Equal(t, "", out.Value())
+}
+
+func TestMerge(t *testing.T) {
+	env, err := NewEnv(EnvConfig{}, cel.Variable("payload", cel.DynType))
+	assert.NoError(t, err)
+
+	eval := NewEvaluator(env, EvalConfig{Timeout: time.Second})
+
+	out, err := eval.EvaluateJSONMap(context.Background(), `merge(payload, {"status": "DRAFT", "approver_group_name": "Admins"})`, map[string]any{
+		"payload": map[string]any{"name": "policy", "status": "PUBLISHED"},
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, map[string]any{"name": "policy", "status": "DRAFT", "approver_group_name": "Admins"}, out)
+
+	out, err = eval.EvaluateJSONMap(context.Background(), `merge(payload, {"status": "DRAFT"})`, map[string]any{"payload": nil})
+	assert.NoError(t, err)
+	assert.Equal(t, map[string]any{"status": "DRAFT"}, out)
 }

@@ -17,6 +17,7 @@ mutation CreateBulkCSVTagDefinition ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -44,6 +45,7 @@ mutation CreateBulkTagDefinition ($input: [CreateTagDefinitionInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -71,6 +73,7 @@ mutation CreateTagDefinition ($input: CreateTagDefinitionInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt
@@ -131,6 +134,7 @@ query GetTagDefinitionByID ($tagDefinitionId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		sourceKey
 		systemInternalID
 		systemOwned
 		updatedAt
@@ -186,6 +190,7 @@ mutation UpdateTagDefinition ($updateTagDefinitionId: ID!, $input: UpdateTagDefi
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			sourceKey
 			systemInternalID
 			systemOwned
 			updatedAt

@@ -112,6 +112,9 @@ func (_u *SystemDetailHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(systemdetailhistory.FieldIntegrationRunID, field.TypeString)
 	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(systemdetailhistory.FieldSourceKey, field.TypeString)
+	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(systemdetailhistory.FieldExternalID, field.TypeString)
 	}
@@ -271,6 +274,9 @@ func (_u *SystemDetailHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sys
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(systemdetailhistory.FieldIntegrationRunID, field.TypeString)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(systemdetailhistory.FieldSourceKey, field.TypeString)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(systemdetailhistory.FieldExternalID, field.TypeString)

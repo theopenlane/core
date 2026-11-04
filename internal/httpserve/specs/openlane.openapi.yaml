@@ -626,6 +626,8 @@ components:
                                             properties:
                                                 inline:
                                                     type: boolean
+                                                noRetry:
+                                                    type: boolean
                                                 reconcile:
                                                     type: boolean
                                                 scheduled:

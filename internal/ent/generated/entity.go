@@ -53,6 +53,8 @@ type Entity struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -757,7 +759,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore, entity.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldSourceDefinitionID, entity.FieldSourceDefinitionVersion, entity.FieldSourceInstanceID, entity.FieldManagedBy, entity.FieldIntegrationRunID, entity.FieldExternalID, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldInternalOwnerIdentityHolderID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldReviewedByIdentityHolderID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldCatalogID, entity.FieldCatalogKey, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID:
+		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldSourceDefinitionID, entity.FieldSourceDefinitionVersion, entity.FieldSourceInstanceID, entity.FieldManagedBy, entity.FieldIntegrationRunID, entity.FieldSourceKey, entity.FieldExternalID, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldInternalOwnerIdentityHolderID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldReviewedByIdentityHolderID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldCatalogID, entity.FieldCatalogKey, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -866,6 +868,12 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case entity.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case entity.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1586,6 +1594,9 @@ func (_m *Entity) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

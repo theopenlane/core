@@ -246,6 +246,26 @@ func (_u *ControlImplementationUpdate) ClearIntegrationRunID() *ControlImplement
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *ControlImplementationUpdate) SetSourceKey(v string) *ControlImplementationUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ControlImplementationUpdate) SetNillableSourceKey(v *string) *ControlImplementationUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ControlImplementationUpdate) ClearSourceKey() *ControlImplementationUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *ControlImplementationUpdate) SetExternalID(v string) *ControlImplementationUpdate {
 	_u.mutation.SetExternalID(v)
@@ -827,6 +847,12 @@ func (_u *ControlImplementationUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(controlimplementation.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(controlimplementation.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(controlimplementation.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(controlimplementation.FieldExternalID, field.TypeString, value)
@@ -1434,6 +1460,26 @@ func (_u *ControlImplementationUpdateOne) SetNillableIntegrationRunID(v *string)
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *ControlImplementationUpdateOne) ClearIntegrationRunID() *ControlImplementationUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *ControlImplementationUpdateOne) SetSourceKey(v string) *ControlImplementationUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *ControlImplementationUpdateOne) SetNillableSourceKey(v *string) *ControlImplementationUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *ControlImplementationUpdateOne) ClearSourceKey() *ControlImplementationUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -2048,6 +2094,12 @@ func (_u *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node *C
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(controlimplementation.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(controlimplementation.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(controlimplementation.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(controlimplementation.FieldExternalID, field.TypeString, value)

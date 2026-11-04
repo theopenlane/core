@@ -233,6 +233,20 @@ func (_c *TemplateHistoryCreate) SetNillableIntegrationRunID(v *string) *Templat
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *TemplateHistoryCreate) SetSourceKey(v string) *TemplateHistoryCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableSourceKey(v *string) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *TemplateHistoryCreate) SetExternalID(v string) *TemplateHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -675,6 +689,10 @@ func (_c *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(templatehistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(templatehistory.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(templatehistory.FieldExternalID, field.TypeString, value)

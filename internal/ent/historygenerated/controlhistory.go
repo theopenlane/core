@@ -57,6 +57,8 @@ type ControlHistory struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
@@ -163,7 +165,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case controlhistory.FieldSystemOwned, controlhistory.FieldWorkflowEligibleMarker, controlhistory.FieldIsTrustCenterControl:
 			values[i] = new(sql.NullBool)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldUpdatedByImpersonator, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldSourceDefinitionID, controlhistory.FieldSourceDefinitionVersion, controlhistory.FieldSourceInstanceID, controlhistory.FieldManagedBy, controlhistory.FieldIntegrationRunID, controlhistory.FieldExternalID, controlhistory.FieldExternalUUID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldImplementationStatus, controlhistory.FieldImplementationDescription, controlhistory.FieldPublicRepresentation, controlhistory.FieldSource, controlhistory.FieldSourceName, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldUpdatedByImpersonator, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldSourceDefinitionID, controlhistory.FieldSourceDefinitionVersion, controlhistory.FieldSourceInstanceID, controlhistory.FieldManagedBy, controlhistory.FieldIntegrationRunID, controlhistory.FieldSourceKey, controlhistory.FieldExternalID, controlhistory.FieldExternalUUID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldImplementationStatus, controlhistory.FieldImplementationDescription, controlhistory.FieldPublicRepresentation, controlhistory.FieldSource, controlhistory.FieldSourceName, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldEnvironmentName, controlhistory.FieldEnvironmentID, controlhistory.FieldScopeName, controlhistory.FieldScopeID, controlhistory.FieldRefCode, controlhistory.FieldStandardID, controlhistory.FieldTrustCenterVisibility:
 			values[i] = new(sql.NullString)
 		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -292,6 +294,12 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case controlhistory.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case controlhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -686,6 +694,9 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

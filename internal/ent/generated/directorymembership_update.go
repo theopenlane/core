@@ -188,6 +188,26 @@ func (_u *DirectoryMembershipUpdate) ClearIntegrationRunID() *DirectoryMembershi
 	return _u
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_u *DirectoryMembershipUpdate) SetSourceKey(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableSourceKey(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *DirectoryMembershipUpdate) ClearSourceKey() *DirectoryMembershipUpdate {
+	_u.mutation.ClearSourceKey()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *DirectoryMembershipUpdate) SetOwnerID(v string) *DirectoryMembershipUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -714,6 +734,12 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(directorymembership.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(directorymembership.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(directorymembership.FieldSourceKey, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -1184,6 +1210,26 @@ func (_u *DirectoryMembershipUpdateOne) SetNillableIntegrationRunID(v *string) *
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *DirectoryMembershipUpdateOne) ClearIntegrationRunID() *DirectoryMembershipUpdateOne {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *DirectoryMembershipUpdateOne) SetSourceKey(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableSourceKey(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *DirectoryMembershipUpdateOne) ClearSourceKey() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -1742,6 +1788,12 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 	}
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(directorymembership.FieldIntegrationRunID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(directorymembership.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(directorymembership.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)

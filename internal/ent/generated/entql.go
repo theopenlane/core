@@ -175,6 +175,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldSourceInstanceID:                {Type: field.TypeString, Column: actionplan.FieldSourceInstanceID},
 			actionplan.FieldManagedBy:                       {Type: field.TypeString, Column: actionplan.FieldManagedBy},
 			actionplan.FieldIntegrationRunID:                {Type: field.TypeString, Column: actionplan.FieldIntegrationRunID},
+			actionplan.FieldSourceKey:                       {Type: field.TypeString, Column: actionplan.FieldSourceKey},
 			actionplan.FieldExternalID:                      {Type: field.TypeString, Column: actionplan.FieldExternalID},
 			actionplan.FieldName:                            {Type: field.TypeString, Column: actionplan.FieldName},
 			actionplan.FieldStatus:                          {Type: field.TypeEnum, Column: actionplan.FieldStatus},
@@ -245,6 +246,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessment.FieldSourceInstanceID:        {Type: field.TypeString, Column: assessment.FieldSourceInstanceID},
 			assessment.FieldManagedBy:               {Type: field.TypeString, Column: assessment.FieldManagedBy},
 			assessment.FieldIntegrationRunID:        {Type: field.TypeString, Column: assessment.FieldIntegrationRunID},
+			assessment.FieldSourceKey:               {Type: field.TypeString, Column: assessment.FieldSourceKey},
 			assessment.FieldExternalID:              {Type: field.TypeString, Column: assessment.FieldExternalID},
 			assessment.FieldOwnerID:                 {Type: field.TypeString, Column: assessment.FieldOwnerID},
 			assessment.FieldSystemOwned:             {Type: field.TypeBool, Column: assessment.FieldSystemOwned},
@@ -280,6 +282,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmentpolicy.FieldSourceInstanceID:        {Type: field.TypeString, Column: assessmentpolicy.FieldSourceInstanceID},
 			assessmentpolicy.FieldManagedBy:               {Type: field.TypeString, Column: assessmentpolicy.FieldManagedBy},
 			assessmentpolicy.FieldIntegrationRunID:        {Type: field.TypeString, Column: assessmentpolicy.FieldIntegrationRunID},
+			assessmentpolicy.FieldSourceKey:               {Type: field.TypeString, Column: assessmentpolicy.FieldSourceKey},
 			assessmentpolicy.FieldExternalID:              {Type: field.TypeString, Column: assessmentpolicy.FieldExternalID},
 			assessmentpolicy.FieldOwnerID:                 {Type: field.TypeString, Column: assessmentpolicy.FieldOwnerID},
 			assessmentpolicy.FieldAssessmentID:            {Type: field.TypeString, Column: assessmentpolicy.FieldAssessmentID},
@@ -355,6 +358,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			asset.FieldSourceInstanceID:              {Type: field.TypeString, Column: asset.FieldSourceInstanceID},
 			asset.FieldManagedBy:                     {Type: field.TypeString, Column: asset.FieldManagedBy},
 			asset.FieldIntegrationRunID:              {Type: field.TypeString, Column: asset.FieldIntegrationRunID},
+			asset.FieldSourceKey:                     {Type: field.TypeString, Column: asset.FieldSourceKey},
 			asset.FieldExternalID:                    {Type: field.TypeString, Column: asset.FieldExternalID},
 			asset.FieldOwnerID:                       {Type: field.TypeString, Column: asset.FieldOwnerID},
 			asset.FieldInternalOwner:                 {Type: field.TypeString, Column: asset.FieldInternalOwner},
@@ -426,6 +430,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			campaign.FieldSourceInstanceID:              {Type: field.TypeString, Column: campaign.FieldSourceInstanceID},
 			campaign.FieldManagedBy:                     {Type: field.TypeString, Column: campaign.FieldManagedBy},
 			campaign.FieldIntegrationRunID:              {Type: field.TypeString, Column: campaign.FieldIntegrationRunID},
+			campaign.FieldSourceKey:                     {Type: field.TypeString, Column: campaign.FieldSourceKey},
 			campaign.FieldExternalID:                    {Type: field.TypeString, Column: campaign.FieldExternalID},
 			campaign.FieldOwnerID:                       {Type: field.TypeString, Column: campaign.FieldOwnerID},
 			campaign.FieldInternalOwner:                 {Type: field.TypeString, Column: campaign.FieldInternalOwner},
@@ -520,6 +525,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			checkresult.FieldSourceInstanceID:        {Type: field.TypeString, Column: checkresult.FieldSourceInstanceID},
 			checkresult.FieldManagedBy:               {Type: field.TypeString, Column: checkresult.FieldManagedBy},
 			checkresult.FieldIntegrationRunID:        {Type: field.TypeString, Column: checkresult.FieldIntegrationRunID},
+			checkresult.FieldSourceKey:               {Type: field.TypeString, Column: checkresult.FieldSourceKey},
 			checkresult.FieldOwnerID:                 {Type: field.TypeString, Column: checkresult.FieldOwnerID},
 			checkresult.FieldStatus:                  {Type: field.TypeEnum, Column: checkresult.FieldStatus},
 			checkresult.FieldSource:                  {Type: field.TypeString, Column: checkresult.FieldSource},
@@ -554,6 +560,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			contact.FieldSourceInstanceID:        {Type: field.TypeString, Column: contact.FieldSourceInstanceID},
 			contact.FieldManagedBy:               {Type: field.TypeString, Column: contact.FieldManagedBy},
 			contact.FieldIntegrationRunID:        {Type: field.TypeString, Column: contact.FieldIntegrationRunID},
+			contact.FieldSourceKey:               {Type: field.TypeString, Column: contact.FieldSourceKey},
 			contact.FieldExternalID:              {Type: field.TypeString, Column: contact.FieldExternalID},
 			contact.FieldOwnerID:                 {Type: field.TypeString, Column: contact.FieldOwnerID},
 			contact.FieldFullName:                {Type: field.TypeString, Column: contact.FieldFullName},
@@ -592,6 +599,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldSourceInstanceID:           {Type: field.TypeString, Column: control.FieldSourceInstanceID},
 			control.FieldManagedBy:                  {Type: field.TypeString, Column: control.FieldManagedBy},
 			control.FieldIntegrationRunID:           {Type: field.TypeString, Column: control.FieldIntegrationRunID},
+			control.FieldSourceKey:                  {Type: field.TypeString, Column: control.FieldSourceKey},
 			control.FieldExternalID:                 {Type: field.TypeString, Column: control.FieldExternalID},
 			control.FieldExternalUUID:               {Type: field.TypeString, Column: control.FieldExternalUUID},
 			control.FieldTitle:                      {Type: field.TypeString, Column: control.FieldTitle},
@@ -664,6 +672,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlimplementation.FieldSourceInstanceID:        {Type: field.TypeString, Column: controlimplementation.FieldSourceInstanceID},
 			controlimplementation.FieldManagedBy:               {Type: field.TypeString, Column: controlimplementation.FieldManagedBy},
 			controlimplementation.FieldIntegrationRunID:        {Type: field.TypeString, Column: controlimplementation.FieldIntegrationRunID},
+			controlimplementation.FieldSourceKey:               {Type: field.TypeString, Column: controlimplementation.FieldSourceKey},
 			controlimplementation.FieldExternalID:              {Type: field.TypeString, Column: controlimplementation.FieldExternalID},
 			controlimplementation.FieldOwnerID:                 {Type: field.TypeString, Column: controlimplementation.FieldOwnerID},
 			controlimplementation.FieldSystemOwned:             {Type: field.TypeBool, Column: controlimplementation.FieldSystemOwned},
@@ -703,6 +712,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlobjective.FieldSourceInstanceID:        {Type: field.TypeString, Column: controlobjective.FieldSourceInstanceID},
 			controlobjective.FieldManagedBy:               {Type: field.TypeString, Column: controlobjective.FieldManagedBy},
 			controlobjective.FieldIntegrationRunID:        {Type: field.TypeString, Column: controlobjective.FieldIntegrationRunID},
+			controlobjective.FieldSourceKey:               {Type: field.TypeString, Column: controlobjective.FieldSourceKey},
 			controlobjective.FieldExternalID:              {Type: field.TypeString, Column: controlobjective.FieldExternalID},
 			controlobjective.FieldOwnerID:                 {Type: field.TypeString, Column: controlobjective.FieldOwnerID},
 			controlobjective.FieldSystemOwned:             {Type: field.TypeBool, Column: controlobjective.FieldSystemOwned},
@@ -772,6 +782,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customtypeenum.FieldSourceInstanceID:        {Type: field.TypeString, Column: customtypeenum.FieldSourceInstanceID},
 			customtypeenum.FieldManagedBy:               {Type: field.TypeString, Column: customtypeenum.FieldManagedBy},
 			customtypeenum.FieldIntegrationRunID:        {Type: field.TypeString, Column: customtypeenum.FieldIntegrationRunID},
+			customtypeenum.FieldSourceKey:               {Type: field.TypeString, Column: customtypeenum.FieldSourceKey},
 			customtypeenum.FieldExternalID:              {Type: field.TypeString, Column: customtypeenum.FieldExternalID},
 			customtypeenum.FieldOwnerID:                 {Type: field.TypeString, Column: customtypeenum.FieldOwnerID},
 			customtypeenum.FieldSystemOwned:             {Type: field.TypeBool, Column: customtypeenum.FieldSystemOwned},
@@ -839,6 +850,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directoryaccount.FieldSourceInstanceID:        {Type: field.TypeString, Column: directoryaccount.FieldSourceInstanceID},
 			directoryaccount.FieldManagedBy:               {Type: field.TypeString, Column: directoryaccount.FieldManagedBy},
 			directoryaccount.FieldIntegrationRunID:        {Type: field.TypeString, Column: directoryaccount.FieldIntegrationRunID},
+			directoryaccount.FieldSourceKey:               {Type: field.TypeString, Column: directoryaccount.FieldSourceKey},
 			directoryaccount.FieldExternalID:              {Type: field.TypeString, Column: directoryaccount.FieldExternalID},
 			directoryaccount.FieldOwnerID:                 {Type: field.TypeString, Column: directoryaccount.FieldOwnerID},
 			directoryaccount.FieldEnvironmentName:         {Type: field.TypeString, Column: directoryaccount.FieldEnvironmentName},
@@ -899,6 +911,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygroup.FieldSourceInstanceID:        {Type: field.TypeString, Column: directorygroup.FieldSourceInstanceID},
 			directorygroup.FieldManagedBy:               {Type: field.TypeString, Column: directorygroup.FieldManagedBy},
 			directorygroup.FieldIntegrationRunID:        {Type: field.TypeString, Column: directorygroup.FieldIntegrationRunID},
+			directorygroup.FieldSourceKey:               {Type: field.TypeString, Column: directorygroup.FieldSourceKey},
 			directorygroup.FieldExternalID:              {Type: field.TypeString, Column: directorygroup.FieldExternalID},
 			directorygroup.FieldOwnerID:                 {Type: field.TypeString, Column: directorygroup.FieldOwnerID},
 			directorygroup.FieldEnvironmentName:         {Type: field.TypeString, Column: directorygroup.FieldEnvironmentName},
@@ -946,6 +959,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorymembership.FieldSourceInstanceID:        {Type: field.TypeString, Column: directorymembership.FieldSourceInstanceID},
 			directorymembership.FieldManagedBy:               {Type: field.TypeString, Column: directorymembership.FieldManagedBy},
 			directorymembership.FieldIntegrationRunID:        {Type: field.TypeString, Column: directorymembership.FieldIntegrationRunID},
+			directorymembership.FieldSourceKey:               {Type: field.TypeString, Column: directorymembership.FieldSourceKey},
 			directorymembership.FieldOwnerID:                 {Type: field.TypeString, Column: directorymembership.FieldOwnerID},
 			directorymembership.FieldEnvironmentName:         {Type: field.TypeString, Column: directorymembership.FieldEnvironmentName},
 			directorymembership.FieldEnvironmentID:           {Type: field.TypeString, Column: directorymembership.FieldEnvironmentID},
@@ -1039,6 +1053,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplate.FieldSourceInstanceID:        {Type: field.TypeString, Column: emailtemplate.FieldSourceInstanceID},
 			emailtemplate.FieldManagedBy:               {Type: field.TypeString, Column: emailtemplate.FieldManagedBy},
 			emailtemplate.FieldIntegrationRunID:        {Type: field.TypeString, Column: emailtemplate.FieldIntegrationRunID},
+			emailtemplate.FieldSourceKey:               {Type: field.TypeString, Column: emailtemplate.FieldSourceKey},
 			emailtemplate.FieldExternalID:              {Type: field.TypeString, Column: emailtemplate.FieldExternalID},
 			emailtemplate.FieldOwnerID:                 {Type: field.TypeString, Column: emailtemplate.FieldOwnerID},
 			emailtemplate.FieldSystemOwned:             {Type: field.TypeBool, Column: emailtemplate.FieldSystemOwned},
@@ -1114,6 +1129,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entity.FieldSourceInstanceID:                      {Type: field.TypeString, Column: entity.FieldSourceInstanceID},
 			entity.FieldManagedBy:                             {Type: field.TypeString, Column: entity.FieldManagedBy},
 			entity.FieldIntegrationRunID:                      {Type: field.TypeString, Column: entity.FieldIntegrationRunID},
+			entity.FieldSourceKey:                             {Type: field.TypeString, Column: entity.FieldSourceKey},
 			entity.FieldExternalID:                            {Type: field.TypeString, Column: entity.FieldExternalID},
 			entity.FieldOwnerID:                               {Type: field.TypeString, Column: entity.FieldOwnerID},
 			entity.FieldInternalOwner:                         {Type: field.TypeString, Column: entity.FieldInternalOwner},
@@ -1253,6 +1269,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidence.FieldSourceInstanceID:        {Type: field.TypeString, Column: evidence.FieldSourceInstanceID},
 			evidence.FieldManagedBy:               {Type: field.TypeString, Column: evidence.FieldManagedBy},
 			evidence.FieldIntegrationRunID:        {Type: field.TypeString, Column: evidence.FieldIntegrationRunID},
+			evidence.FieldSourceKey:               {Type: field.TypeString, Column: evidence.FieldSourceKey},
 			evidence.FieldExternalID:              {Type: field.TypeString, Column: evidence.FieldExternalID},
 			evidence.FieldOwnerID:                 {Type: field.TypeString, Column: evidence.FieldOwnerID},
 			evidence.FieldEnvironmentName:         {Type: field.TypeString, Column: evidence.FieldEnvironmentName},
@@ -1404,6 +1421,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			finding.FieldSourceInstanceID:              {Type: field.TypeString, Column: finding.FieldSourceInstanceID},
 			finding.FieldManagedBy:                     {Type: field.TypeString, Column: finding.FieldManagedBy},
 			finding.FieldIntegrationRunID:              {Type: field.TypeString, Column: finding.FieldIntegrationRunID},
+			finding.FieldSourceKey:                     {Type: field.TypeString, Column: finding.FieldSourceKey},
 			finding.FieldExternalID:                    {Type: field.TypeString, Column: finding.FieldExternalID},
 			finding.FieldOwnerID:                       {Type: field.TypeString, Column: finding.FieldOwnerID},
 			finding.FieldInternalOwner:                 {Type: field.TypeString, Column: finding.FieldInternalOwner},
@@ -1519,6 +1537,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			group.FieldSourceInstanceID:        {Type: field.TypeString, Column: group.FieldSourceInstanceID},
 			group.FieldManagedBy:               {Type: field.TypeString, Column: group.FieldManagedBy},
 			group.FieldIntegrationRunID:        {Type: field.TypeString, Column: group.FieldIntegrationRunID},
+			group.FieldSourceKey:               {Type: field.TypeString, Column: group.FieldSourceKey},
 			group.FieldExternalID:              {Type: field.TypeString, Column: group.FieldExternalID},
 			group.FieldOwnerID:                 {Type: field.TypeString, Column: group.FieldOwnerID},
 			group.FieldName:                    {Type: field.TypeString, Column: group.FieldName},
@@ -1641,6 +1660,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			identityholder.FieldSourceInstanceID:              {Type: field.TypeString, Column: identityholder.FieldSourceInstanceID},
 			identityholder.FieldManagedBy:                     {Type: field.TypeString, Column: identityholder.FieldManagedBy},
 			identityholder.FieldIntegrationRunID:              {Type: field.TypeString, Column: identityholder.FieldIntegrationRunID},
+			identityholder.FieldSourceKey:                     {Type: field.TypeString, Column: identityholder.FieldSourceKey},
 			identityholder.FieldExternalID:                    {Type: field.TypeString, Column: identityholder.FieldExternalID},
 			identityholder.FieldOwnerID:                       {Type: field.TypeString, Column: identityholder.FieldOwnerID},
 			identityholder.FieldInternalOwner:                 {Type: field.TypeString, Column: identityholder.FieldInternalOwner},
@@ -1850,6 +1870,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldSourceInstanceID:                {Type: field.TypeString, Column: internalpolicy.FieldSourceInstanceID},
 			internalpolicy.FieldManagedBy:                       {Type: field.TypeString, Column: internalpolicy.FieldManagedBy},
 			internalpolicy.FieldIntegrationRunID:                {Type: field.TypeString, Column: internalpolicy.FieldIntegrationRunID},
+			internalpolicy.FieldSourceKey:                       {Type: field.TypeString, Column: internalpolicy.FieldSourceKey},
 			internalpolicy.FieldExternalID:                      {Type: field.TypeString, Column: internalpolicy.FieldExternalID},
 			internalpolicy.FieldOwnerID:                         {Type: field.TypeString, Column: internalpolicy.FieldOwnerID},
 			internalpolicy.FieldSystemOwned:                     {Type: field.TypeBool, Column: internalpolicy.FieldSystemOwned},
@@ -1964,6 +1985,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappedcontrol.FieldSourceInstanceID:        {Type: field.TypeString, Column: mappedcontrol.FieldSourceInstanceID},
 			mappedcontrol.FieldManagedBy:               {Type: field.TypeString, Column: mappedcontrol.FieldManagedBy},
 			mappedcontrol.FieldIntegrationRunID:        {Type: field.TypeString, Column: mappedcontrol.FieldIntegrationRunID},
+			mappedcontrol.FieldSourceKey:               {Type: field.TypeString, Column: mappedcontrol.FieldSourceKey},
 			mappedcontrol.FieldExternalID:              {Type: field.TypeString, Column: mappedcontrol.FieldExternalID},
 			mappedcontrol.FieldSystemOwned:             {Type: field.TypeBool, Column: mappedcontrol.FieldSystemOwned},
 			mappedcontrol.FieldInternalNotes:           {Type: field.TypeString, Column: mappedcontrol.FieldInternalNotes},
@@ -2000,6 +2022,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			narrative.FieldSourceInstanceID:        {Type: field.TypeString, Column: narrative.FieldSourceInstanceID},
 			narrative.FieldManagedBy:               {Type: field.TypeString, Column: narrative.FieldManagedBy},
 			narrative.FieldIntegrationRunID:        {Type: field.TypeString, Column: narrative.FieldIntegrationRunID},
+			narrative.FieldSourceKey:               {Type: field.TypeString, Column: narrative.FieldSourceKey},
 			narrative.FieldExternalID:              {Type: field.TypeString, Column: narrative.FieldExternalID},
 			narrative.FieldOwnerID:                 {Type: field.TypeString, Column: narrative.FieldOwnerID},
 			narrative.FieldSystemOwned:             {Type: field.TypeBool, Column: narrative.FieldSystemOwned},
@@ -2517,6 +2540,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			platform.FieldSourceInstanceID:               {Type: field.TypeString, Column: platform.FieldSourceInstanceID},
 			platform.FieldManagedBy:                      {Type: field.TypeString, Column: platform.FieldManagedBy},
 			platform.FieldIntegrationRunID:               {Type: field.TypeString, Column: platform.FieldIntegrationRunID},
+			platform.FieldSourceKey:                      {Type: field.TypeString, Column: platform.FieldSourceKey},
 			platform.FieldExternalID:                     {Type: field.TypeString, Column: platform.FieldExternalID},
 			platform.FieldOwnerID:                        {Type: field.TypeString, Column: platform.FieldOwnerID},
 			platform.FieldInternalOwner:                  {Type: field.TypeString, Column: platform.FieldInternalOwner},
@@ -2599,6 +2623,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldSourceInstanceID:                {Type: field.TypeString, Column: procedure.FieldSourceInstanceID},
 			procedure.FieldManagedBy:                       {Type: field.TypeString, Column: procedure.FieldManagedBy},
 			procedure.FieldIntegrationRunID:                {Type: field.TypeString, Column: procedure.FieldIntegrationRunID},
+			procedure.FieldSourceKey:                       {Type: field.TypeString, Column: procedure.FieldSourceKey},
 			procedure.FieldExternalID:                      {Type: field.TypeString, Column: procedure.FieldExternalID},
 			procedure.FieldOwnerID:                         {Type: field.TypeString, Column: procedure.FieldOwnerID},
 			procedure.FieldName:                            {Type: field.TypeString, Column: procedure.FieldName},
@@ -2659,6 +2684,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldSourceInstanceID:           {Type: field.TypeString, Column: program.FieldSourceInstanceID},
 			program.FieldManagedBy:                  {Type: field.TypeString, Column: program.FieldManagedBy},
 			program.FieldIntegrationRunID:           {Type: field.TypeString, Column: program.FieldIntegrationRunID},
+			program.FieldSourceKey:                  {Type: field.TypeString, Column: program.FieldSourceKey},
 			program.FieldExternalID:                 {Type: field.TypeString, Column: program.FieldExternalID},
 			program.FieldOwnerID:                    {Type: field.TypeString, Column: program.FieldOwnerID},
 			program.FieldProgramKindName:            {Type: field.TypeString, Column: program.FieldProgramKindName},
@@ -2729,6 +2755,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			remediation.FieldSourceInstanceID:        {Type: field.TypeString, Column: remediation.FieldSourceInstanceID},
 			remediation.FieldManagedBy:               {Type: field.TypeString, Column: remediation.FieldManagedBy},
 			remediation.FieldIntegrationRunID:        {Type: field.TypeString, Column: remediation.FieldIntegrationRunID},
+			remediation.FieldSourceKey:               {Type: field.TypeString, Column: remediation.FieldSourceKey},
 			remediation.FieldExternalID:              {Type: field.TypeString, Column: remediation.FieldExternalID},
 			remediation.FieldOwnerID:                 {Type: field.TypeString, Column: remediation.FieldOwnerID},
 			remediation.FieldSystemOwned:             {Type: field.TypeBool, Column: remediation.FieldSystemOwned},
@@ -2837,6 +2864,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			review.FieldSourceInstanceID:        {Type: field.TypeString, Column: review.FieldSourceInstanceID},
 			review.FieldManagedBy:               {Type: field.TypeString, Column: review.FieldManagedBy},
 			review.FieldIntegrationRunID:        {Type: field.TypeString, Column: review.FieldIntegrationRunID},
+			review.FieldSourceKey:               {Type: field.TypeString, Column: review.FieldSourceKey},
 			review.FieldExternalID:              {Type: field.TypeString, Column: review.FieldExternalID},
 			review.FieldOwnerID:                 {Type: field.TypeString, Column: review.FieldOwnerID},
 			review.FieldSystemOwned:             {Type: field.TypeBool, Column: review.FieldSystemOwned},
@@ -2891,6 +2919,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldSourceInstanceID:            {Type: field.TypeString, Column: risk.FieldSourceInstanceID},
 			risk.FieldManagedBy:                   {Type: field.TypeString, Column: risk.FieldManagedBy},
 			risk.FieldIntegrationRunID:            {Type: field.TypeString, Column: risk.FieldIntegrationRunID},
+			risk.FieldSourceKey:                   {Type: field.TypeString, Column: risk.FieldSourceKey},
 			risk.FieldExternalID:                  {Type: field.TypeString, Column: risk.FieldExternalID},
 			risk.FieldOwnerID:                     {Type: field.TypeString, Column: risk.FieldOwnerID},
 			risk.FieldStakeholderName:             {Type: field.TypeString, Column: risk.FieldStakeholderName},
@@ -2985,6 +3014,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scan.FieldSourceInstanceID:           {Type: field.TypeString, Column: scan.FieldSourceInstanceID},
 			scan.FieldManagedBy:                  {Type: field.TypeString, Column: scan.FieldManagedBy},
 			scan.FieldIntegrationRunID:           {Type: field.TypeString, Column: scan.FieldIntegrationRunID},
+			scan.FieldSourceKey:                  {Type: field.TypeString, Column: scan.FieldSourceKey},
 			scan.FieldExternalID:                 {Type: field.TypeString, Column: scan.FieldExternalID},
 			scan.FieldOwnerID:                    {Type: field.TypeString, Column: scan.FieldOwnerID},
 			scan.FieldSystemOwned:                {Type: field.TypeBool, Column: scan.FieldSystemOwned},
@@ -3081,6 +3111,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldSourceInstanceID:           {Type: field.TypeString, Column: subcontrol.FieldSourceInstanceID},
 			subcontrol.FieldManagedBy:                  {Type: field.TypeString, Column: subcontrol.FieldManagedBy},
 			subcontrol.FieldIntegrationRunID:           {Type: field.TypeString, Column: subcontrol.FieldIntegrationRunID},
+			subcontrol.FieldSourceKey:                  {Type: field.TypeString, Column: subcontrol.FieldSourceKey},
 			subcontrol.FieldExternalID:                 {Type: field.TypeString, Column: subcontrol.FieldExternalID},
 			subcontrol.FieldExternalUUID:               {Type: field.TypeString, Column: subcontrol.FieldExternalUUID},
 			subcontrol.FieldTitle:                      {Type: field.TypeString, Column: subcontrol.FieldTitle},
@@ -3212,6 +3243,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemdetail.FieldSourceInstanceID:        {Type: field.TypeString, Column: systemdetail.FieldSourceInstanceID},
 			systemdetail.FieldManagedBy:               {Type: field.TypeString, Column: systemdetail.FieldManagedBy},
 			systemdetail.FieldIntegrationRunID:        {Type: field.TypeString, Column: systemdetail.FieldIntegrationRunID},
+			systemdetail.FieldSourceKey:               {Type: field.TypeString, Column: systemdetail.FieldSourceKey},
 			systemdetail.FieldExternalID:              {Type: field.TypeString, Column: systemdetail.FieldExternalID},
 			systemdetail.FieldOwnerID:                 {Type: field.TypeString, Column: systemdetail.FieldOwnerID},
 			systemdetail.FieldSystemName:              {Type: field.TypeString, Column: systemdetail.FieldSystemName},
@@ -3274,6 +3306,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tagdefinition.FieldSourceInstanceID:        {Type: field.TypeString, Column: tagdefinition.FieldSourceInstanceID},
 			tagdefinition.FieldManagedBy:               {Type: field.TypeString, Column: tagdefinition.FieldManagedBy},
 			tagdefinition.FieldIntegrationRunID:        {Type: field.TypeString, Column: tagdefinition.FieldIntegrationRunID},
+			tagdefinition.FieldSourceKey:               {Type: field.TypeString, Column: tagdefinition.FieldSourceKey},
 			tagdefinition.FieldExternalID:              {Type: field.TypeString, Column: tagdefinition.FieldExternalID},
 			tagdefinition.FieldOwnerID:                 {Type: field.TypeString, Column: tagdefinition.FieldOwnerID},
 			tagdefinition.FieldSystemOwned:             {Type: field.TypeBool, Column: tagdefinition.FieldSystemOwned},
@@ -3311,6 +3344,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldSourceInstanceID:        {Type: field.TypeString, Column: task.FieldSourceInstanceID},
 			task.FieldManagedBy:               {Type: field.TypeString, Column: task.FieldManagedBy},
 			task.FieldIntegrationRunID:        {Type: field.TypeString, Column: task.FieldIntegrationRunID},
+			task.FieldSourceKey:               {Type: field.TypeString, Column: task.FieldSourceKey},
 			task.FieldExternalID:              {Type: field.TypeString, Column: task.FieldExternalID},
 			task.FieldOwnerID:                 {Type: field.TypeString, Column: task.FieldOwnerID},
 			task.FieldTaskKindName:            {Type: field.TypeString, Column: task.FieldTaskKindName},
@@ -3335,7 +3369,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldIsSuggested:             {Type: field.TypeBool, Column: task.FieldIsSuggested},
 			task.FieldPriority:                {Type: field.TypeInt, Column: task.FieldPriority},
 			task.FieldSource:                  {Type: field.TypeString, Column: task.FieldSource},
-			task.FieldSourceKey:               {Type: field.TypeString, Column: task.FieldSourceKey},
 			task.FieldIdempotencyKey:          {Type: field.TypeString, Column: task.FieldIdempotencyKey},
 			task.FieldExternalReferenceURL:    {Type: field.TypeJSON, Column: task.FieldExternalReferenceURL},
 			task.FieldParentTaskID:            {Type: field.TypeString, Column: task.FieldParentTaskID},
@@ -3365,6 +3398,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldSourceInstanceID:        {Type: field.TypeString, Column: template.FieldSourceInstanceID},
 			template.FieldManagedBy:               {Type: field.TypeString, Column: template.FieldManagedBy},
 			template.FieldIntegrationRunID:        {Type: field.TypeString, Column: template.FieldIntegrationRunID},
+			template.FieldSourceKey:               {Type: field.TypeString, Column: template.FieldSourceKey},
 			template.FieldExternalID:              {Type: field.TypeString, Column: template.FieldExternalID},
 			template.FieldOwnerID:                 {Type: field.TypeString, Column: template.FieldOwnerID},
 			template.FieldSystemOwned:             {Type: field.TypeBool, Column: template.FieldSystemOwned},
@@ -3817,6 +3851,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldSourceInstanceID:              {Type: field.TypeString, Column: vulnerability.FieldSourceInstanceID},
 			vulnerability.FieldManagedBy:                     {Type: field.TypeString, Column: vulnerability.FieldManagedBy},
 			vulnerability.FieldIntegrationRunID:              {Type: field.TypeString, Column: vulnerability.FieldIntegrationRunID},
+			vulnerability.FieldSourceKey:                     {Type: field.TypeString, Column: vulnerability.FieldSourceKey},
 			vulnerability.FieldExternalID:                    {Type: field.TypeString, Column: vulnerability.FieldExternalID},
 			vulnerability.FieldOwnerID:                       {Type: field.TypeString, Column: vulnerability.FieldOwnerID},
 			vulnerability.FieldInternalOwner:                 {Type: field.TypeString, Column: vulnerability.FieldInternalOwner},
@@ -20341,6 +20376,11 @@ func (f *ActionPlanFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *ActionPlanFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *ActionPlanFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldExternalID))
@@ -20988,6 +21028,11 @@ func (f *AssessmentFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(assessment.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *AssessmentFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(assessment.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *AssessmentFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(assessment.FieldExternalID))
@@ -21318,6 +21363,11 @@ func (f *AssessmentPolicyFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *AssessmentPolicyFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(assessmentpolicy.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *AssessmentPolicyFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(assessmentpolicy.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -21811,6 +21861,11 @@ func (f *AssetFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *AssetFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(asset.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *AssetFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(asset.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -22603,6 +22658,11 @@ func (f *CampaignFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *CampaignFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(campaign.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *CampaignFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(campaign.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -23431,6 +23491,11 @@ func (f *CheckResultFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(checkresult.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *CheckResultFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(checkresult.FieldSourceKey))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *CheckResultFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(checkresult.FieldOwnerID))
@@ -23686,6 +23751,11 @@ func (f *ContactFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *ContactFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(contact.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *ContactFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(contact.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -23949,6 +24019,11 @@ func (f *ControlFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *ControlFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(control.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *ControlFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(control.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -24832,6 +24907,11 @@ func (f *ControlImplementationFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(controlimplementation.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *ControlImplementationFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(controlimplementation.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *ControlImplementationFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(controlimplementation.FieldExternalID))
@@ -25112,6 +25192,11 @@ func (f *ControlObjectiveFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *ControlObjectiveFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(controlobjective.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *ControlObjectiveFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(controlobjective.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -25647,6 +25732,11 @@ func (f *CustomTypeEnumFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(customtypeenum.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *CustomTypeEnumFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(customtypeenum.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *CustomTypeEnumFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(customtypeenum.FieldExternalID))
@@ -26128,6 +26218,11 @@ func (f *DirectoryAccountFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *DirectoryAccountFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(directoryaccount.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *DirectoryAccountFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldExternalID))
@@ -26571,6 +26666,11 @@ func (f *DirectoryGroupFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(directorygroup.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *DirectoryGroupFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(directorygroup.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *DirectoryGroupFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(directorygroup.FieldExternalID))
@@ -26905,6 +27005,11 @@ func (f *DirectoryMembershipFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *DirectoryMembershipFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(directorymembership.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *DirectoryMembershipFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(directorymembership.FieldSourceKey))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.
@@ -27619,6 +27724,11 @@ func (f *EmailTemplateFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(emailtemplate.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *EmailTemplateFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(emailtemplate.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *EmailTemplateFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(emailtemplate.FieldExternalID))
@@ -28124,6 +28234,11 @@ func (f *EntityFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *EntityFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(entity.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *EntityFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(entity.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -29558,6 +29673,11 @@ func (f *EvidenceFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(evidence.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *EvidenceFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(evidence.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *EvidenceFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(evidence.FieldExternalID))
@@ -30801,6 +30921,11 @@ func (f *FindingFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(finding.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *FindingFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(finding.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *FindingFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(finding.FieldExternalID))
@@ -31884,6 +32009,11 @@ func (f *GroupFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *GroupFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(group.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *GroupFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(group.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -33332,6 +33462,11 @@ func (f *IdentityHolderFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *IdentityHolderFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(identityholder.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *IdentityHolderFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(identityholder.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -35276,6 +35411,11 @@ func (f *InternalPolicyFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *InternalPolicyFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(internalpolicy.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *InternalPolicyFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldExternalID))
@@ -36233,6 +36373,11 @@ func (f *MappedControlFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(mappedcontrol.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *MappedControlFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(mappedcontrol.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *MappedControlFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(mappedcontrol.FieldExternalID))
@@ -36498,6 +36643,11 @@ func (f *NarrativeFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *NarrativeFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(narrative.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *NarrativeFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(narrative.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -41835,6 +41985,11 @@ func (f *PlatformFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(platform.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *PlatformFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(platform.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *PlatformFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(platform.FieldExternalID))
@@ -42934,6 +43089,11 @@ func (f *ProcedureFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *ProcedureFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(procedure.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *ProcedureFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldExternalID))
@@ -43487,6 +43647,11 @@ func (f *ProgramFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *ProgramFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(program.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *ProgramFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(program.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -44193,6 +44358,11 @@ func (f *RemediationFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *RemediationFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(remediation.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *RemediationFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -45122,6 +45292,11 @@ func (f *ReviewFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(review.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *ReviewFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(review.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *ReviewFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(review.FieldExternalID))
@@ -45673,6 +45848,11 @@ func (f *RiskFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *RiskFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(risk.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *RiskFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(risk.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -46627,6 +46807,11 @@ func (f *ScanFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(scan.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *ScanFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(scan.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *ScanFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(scan.FieldExternalID))
@@ -47517,6 +47702,11 @@ func (f *SubcontrolFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *SubcontrolFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *SubcontrolFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(subcontrol.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -48645,6 +48835,11 @@ func (f *SystemDetailFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(systemdetail.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *SystemDetailFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(systemdetail.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *SystemDetailFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(systemdetail.FieldExternalID))
@@ -49003,6 +49198,11 @@ func (f *TagDefinitionFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(tagdefinition.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *TagDefinitionFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(tagdefinition.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *TagDefinitionFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(tagdefinition.FieldExternalID))
@@ -49191,6 +49391,11 @@ func (f *TaskFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(task.FieldIntegrationRunID))
 }
 
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *TaskFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(task.FieldSourceKey))
+}
+
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *TaskFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(task.FieldExternalID))
@@ -49309,11 +49514,6 @@ func (f *TaskFilter) WherePriority(p entql.IntP) {
 // WhereSource applies the entql string predicate on the source field.
 func (f *TaskFilter) WhereSource(p entql.StringP) {
 	f.Where(p.Field(task.FieldSource))
-}
-
-// WhereSourceKey applies the entql string predicate on the source_key field.
-func (f *TaskFilter) WhereSourceKey(p entql.StringP) {
-	f.Where(p.Field(task.FieldSourceKey))
 }
 
 // WhereIdempotencyKey applies the entql string predicate on the idempotency_key field.
@@ -49812,6 +50012,11 @@ func (f *TemplateFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *TemplateFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(template.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *TemplateFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(template.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.
@@ -53276,6 +53481,11 @@ func (f *VulnerabilityFilter) WhereManagedBy(p entql.StringP) {
 // WhereIntegrationRunID applies the entql string predicate on the integration_run_id field.
 func (f *VulnerabilityFilter) WhereIntegrationRunID(p entql.StringP) {
 	f.Where(p.Field(vulnerability.FieldIntegrationRunID))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *VulnerabilityFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldSourceKey))
 }
 
 // WhereExternalID applies the entql string predicate on the external_id field.

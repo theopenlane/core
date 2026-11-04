@@ -239,6 +239,20 @@ func (_c *RemediationHistoryCreate) SetNillableIntegrationRunID(v *string) *Reme
 	return _c
 }
 
+// SetSourceKey sets the "source_key" field.
+func (_c *RemediationHistoryCreate) SetSourceKey(v string) *RemediationHistoryCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *RemediationHistoryCreate) SetNillableSourceKey(v *string) *RemediationHistoryCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
+	}
+	return _c
+}
+
 // SetExternalID sets the "external_id" field.
 func (_c *RemediationHistoryCreate) SetExternalID(v string) *RemediationHistoryCreate {
 	_c.mutation.SetExternalID(v)
@@ -858,6 +872,10 @@ func (_c *RemediationHistoryCreate) createSpec() (*RemediationHistory, *sqlgraph
 	if value, ok := _c.mutation.IntegrationRunID(); ok {
 		_spec.SetField(remediationhistory.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(remediationhistory.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)

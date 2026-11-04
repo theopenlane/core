@@ -50,6 +50,8 @@ type Evidence struct {
 	ManagedBy string `json:"managed_by,omitempty"`
 	// id of the integration run that last wrote this record
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
+	// key grouping the records runtime ingest wrote from one named source
+	SourceKey string `json:"source_key,omitempty"`
 	// identifier of the record in an external system
 	ExternalID string `json:"external_id,omitempty"`
 	// the ID of the organization owner of the object
@@ -322,7 +324,7 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case evidence.FieldWorkflowEligibleMarker, evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldUpdatedByImpersonator, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldSourceDefinitionID, evidence.FieldSourceDefinitionVersion, evidence.FieldSourceInstanceID, evidence.FieldManagedBy, evidence.FieldIntegrationRunID, evidence.FieldExternalID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldExternalUUID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus, evidence.FieldReviewFrequency, evidence.FieldAuditorReferenceID:
+		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldUpdatedByImpersonator, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldSourceDefinitionID, evidence.FieldSourceDefinitionVersion, evidence.FieldSourceInstanceID, evidence.FieldManagedBy, evidence.FieldIntegrationRunID, evidence.FieldSourceKey, evidence.FieldExternalID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldExternalUUID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus, evidence.FieldReviewFrequency, evidence.FieldAuditorReferenceID:
 			values[i] = new(sql.NullString)
 		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -433,6 +435,12 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
 			} else if value.Valid {
 				_m.IntegrationRunID = value.String
+			}
+		case evidence.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case evidence.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -715,6 +723,9 @@ func (_m *Evidence) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("integration_run_id=")
 	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

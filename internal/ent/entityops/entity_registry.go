@@ -111,8 +111,8 @@ import (
 	"github.com/theopenlane/utils/mapx"
 )
 
-// entityRef is a lightweight reference to an entity
-type entityRef struct {
+// EntityRef is a lightweight reference to a matched entity: its id and schema descriptor
+type EntityRef struct {
 	// ID is the entity identifier
 	ID string
 	// Schema is the entity's schema descriptor
@@ -147,33 +147,45 @@ type IngestCapability struct {
 	buildUpdate func(context.Context, *generated.Client, json.RawMessage, json.RawMessage) (ent.Mutation, func(context.Context) error, error)
 }
 
-// CatalogCapability describes the catalog pointer, the visibility and key markers, and the fields copied from a catalog row
+// CatalogPointerField is the column naming the catalog row an adopted row was created from
+const CatalogPointerField = "catalog_id"
+
+// CatalogVisibilityField is the bool column marking a catalog row as visible to organizations
+const CatalogVisibilityField = "externally_visible"
+
+// systemOwnedField is the bool column marking a system-owned row
+const systemOwnedField = "system_owned"
+
+// CatalogCapability holds the per-schema catalog closures
 type CatalogCapability struct {
-	// PointerField is the snake_case foreign-key field naming the catalog row an adopted row came from
-	PointerField string
-	// VisibilityField is the snake_case bool field marking a catalog row as visible to organizations
-	VisibilityField string
-	// KeyField is the snake_case field on adopted rows holding the catalog row's lookup key
-	KeyField string
-	// Fields lists the snake_case fields copied from the catalog row on adopt and refresh
-	Fields []string
-	// adopt finds or creates one organization's adopted row for a catalog row
-	adopt func(ctx context.Context, client *generated.Client, catalogID, ownerID string, overlay json.RawMessage) (string, bool, error)
-	// refresh re-copies the catalog fields onto every adopted row of a catalog row
-	refresh func(ctx context.Context, client *generated.Client, catalogID string) (int, error)
-	// relink points rows carrying a catalog row's key at that row when their pointer is null or stale
-	relink func(ctx context.Context, client *generated.Client, catalogID string) (int, error)
-	// match returns the first visible catalog row matching a candidate in order
-	match func(ctx context.Context, client *generated.Client, candidates []MatchCandidate) (string, bool, error)
-	// visible reports whether the row is a visible system-owned catalog row
-	visible func(ctx context.Context, client *generated.Client, catalogID string) (bool, error)
+	// copies loads every row pointing at a catalog row
+	copies func(ctx context.Context, client *generated.Client, catalogID string) ([]json.RawMessage, error)
+	// unlink clears the catalog pointer on one row
+	unlink func(ctx context.Context, client *generated.Client, id string) error
+	// unlinkAll clears the catalog pointer on every row pointing at a catalog row
+	unlinkAll func(ctx context.Context, client *generated.Client, catalogID string) (int, error)
 }
 
-// MatchCandidate is one field and value to match a catalog row on, tried in the order given
-type MatchCandidate struct {
-	Field string
-	Value string
+// CatalogFields returns the source-managed field names
+func (s *Schema) CatalogFields() []string {
+	return lo.FilterMap(s.Fields, func(f FieldDescriptor, _ int) (string, bool) { return f.Name, f.SourceManaged })
 }
+
+// SourceFilter selects the rows written from one source definition, narrowed to a source instance, a source key, or both,
+// scoped to the caller's organization by the schema's organization interceptor and hook
+type SourceFilter struct {
+	// DefinitionID is the integration definition the rows were written by
+	DefinitionID string
+	// InstanceID is the source instance an installation wrote the rows from
+	InstanceID string
+	// Key is the source key runtime ingest wrote the rows under
+	Key string
+	// NotUpdatedAfter skips rows updated after this time when set, keeping rows changed since they were written
+	NotUpdatedAfter *time.Time
+}
+
+// RowCleanup runs after a row is deleted, for cleanup the delete hooks do not cover
+type RowCleanup func(ctx context.Context, id string) error
 
 // Schema is the runtime representation of a registered entity schema. It carries the schema
 // identity and its operation closures. Load, Fields, and Edges are universal; the remaining
@@ -183,8 +195,7 @@ type Schema struct {
 	// Create creates a new entity from a JSON input and returns the entity ID; emitted only for
 	// integration-mapped and catalog schemas, whose ingest upsert and adopt are the sole callers
 	Create func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error)
-	// Update applies a typed update input to an entity by ID; emitted only for integration-mapped
-	// and workflow-eligible schemas
+	// Update applies a typed update input by ID; emitted for integration-mapped, workflow-eligible and catalog schemas
 	Update func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error
 	// Query returns all entities of this schema within an organization as JSON; emitted only for
 	// integration-mapped schemas and link-rule targets, whose target selection is the sole caller
@@ -215,8 +226,9 @@ type Schema struct {
 	SnapshotScope func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error)
 	// MarkRemoved bulk-marks the given ids removed at the given time under the given integration run
 	MarkRemoved func(ctx context.Context, client *generated.Client, ids []string, at time.Time, runID string) error
-	// FillProvenance fills missing provenance on rows linked to the installation and reports rows written
-	FillProvenance func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error)
+	// DeleteBySource deletes the caller's rows matching the source filter, then runs cleanup for each deleted id when set,
+	// and returns the deleted ids, emitted only for owned schemas carrying source provenance
+	DeleteBySource func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error)
 	// Load loads a single entity by ID and returns its JSON representation
 	Load func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error)
 	// LoadObject loads the native generated Ent object for consumers that require its interfaces;
@@ -387,7 +399,7 @@ func (s *Schema) handleIngest(ctx context.Context, client *generated.Client, res
 		return err
 	}
 
-	payload = StampProvenance(payload, s, integration, integration.DefinitionID, request.RunID)
+	payload = StampProvenance(payload, s, ProvenanceSource{Integration: integration, DefinitionID: integration.DefinitionID, RunID: request.RunID})
 
 	payload, err = s.Ingest.prepare(ctx, integration, payload)
 	if err != nil {
@@ -476,10 +488,18 @@ func applyIngestDefaults(schema *Schema, payload json.RawMessage, defaults map[s
 	return prepared, nil
 }
 
-// isDefaultableJSON reports whether a mapped JSON value is absent in the semantic sense used by
-// ingest defaults. False and numeric zero remain explicit caller values.
+// isDefaultableJSON reports whether a JSON value is missing, null, an empty string or an empty container
 func isDefaultableJSON(raw json.RawMessage) bool {
-	return jsonx.IsEmptyRawMessage(raw) || bytes.Equal(bytes.TrimSpace(raw), []byte(`""`))
+	if jsonx.IsEmptyRawMessage(raw) {
+		return true
+	}
+
+	switch string(bytes.TrimSpace(raw)) {
+	case `""`, "[]", "{}":
+		return true
+	}
+
+	return false
 }
 
 // applyClears rewrites explicit null values in a snake_case payload to the generated Clear<Field>
@@ -728,14 +748,20 @@ func coerceTime(value any) (time.Time, error) {
 	}
 }
 
-// matchKeyIn returns a selector predicate matching the given match-key column against any of values,
-// testing JSON string arrays for membership and every other column for equality
-func matchKeyIn(schema *Schema, field string, values []string) func(*sql.Selector) {
+// lookupPredicate builds one column's lookup predicate: equality, array membership, or their case-folded forms for CaseInsensitive fields
+func lookupPredicate(schema *Schema, field string, values []string) func(*sql.Selector) {
 	descriptor, _ := schema.FieldByName(field)
+	array := descriptor.Type == "[]string"
 
 	return func(s *sql.Selector) {
-		switch descriptor.Type {
-		case "[]string":
+		switch {
+		case descriptor.CaseInsensitive && array:
+			jsonArrayMatch(field, lo.Map(values, func(value string, _ int) string { return strings.ToLower(value) }))(s)
+		case descriptor.CaseInsensitive:
+			s.Where(sql.Or(lo.Map(values, func(value string, _ int) *sql.Predicate {
+				return sql.EqualFold(s.C(field), value)
+			})...))
+		case array:
 			s.Where(sql.Or(lo.Map(values, func(value string, _ int) *sql.Predicate {
 				return sqljson.ValueContains(s.C(field), value)
 			})...))
@@ -763,24 +789,44 @@ const (
 	FieldSourceInstanceID = "source_instance_id"
 	// FieldIntegrationRunID is the provenance column recording the integration run that last wrote a record
 	FieldIntegrationRunID = "integration_run_id"
+	// FieldSourceKey is the provenance column grouping the rows runtime ingest wrote from one named source
+	FieldSourceKey = "source_key"
 )
+
+// ProvenanceSource identifies the writer whose provenance StampProvenance stamps onto an ingest payload
+type ProvenanceSource struct {
+	// Integration is the writing installation, nil for runtime ingest
+	Integration *generated.Integration
+	// DefinitionID is the definition runtime ingest runs under, used when Integration is nil
+	DefinitionID string
+	// SourceKey groups the rows runtime ingest writes from one named source, used when Integration is nil
+	SourceKey string
+	// RunID is the integration run writing the record
+	RunID string
+}
 
 // StampProvenance writes the schema's trusted integration-derived provenance columns and ownership
 // edges onto an ingest payload from the writing installation, overriding anything the mapping
 // emitted for them; it is the sole writer of provenance columns for both the synchronous and the
 // durable ingest paths, so a queued record persists with the same provenance a batched one does;
-// a nil installation stamps only the run id and the definition id, which is how runtime ingest writes system-owned rows
-func StampProvenance(payload json.RawMessage, schema *Schema, integration *generated.Integration, definitionID, runID string) json.RawMessage {
+// a nil installation stamps the run id, definition id, and the source key when set
+func StampProvenance(payload json.RawMessage, schema *Schema, source ProvenanceSource) json.RawMessage {
 	type provenanceValue struct {
 		field string
 		value string
 	}
 
+	integration := source.Integration
+	runID := source.RunID
+
 	values := []provenanceValue{provenanceValue{FieldIntegrationRunID, runID}}
 
 	switch {
 	case integration == nil:
-		values = append(values, provenanceValue{FieldSourceDefinitionID, definitionID})
+		values = append(values,
+			provenanceValue{FieldSourceDefinitionID, source.DefinitionID},
+			provenanceValue{FieldSourceKey, source.SourceKey},
+		)
 	default:
 		values = append(values,
 			provenanceValue{schema.OwnerField, integration.OwnerID},
@@ -843,10 +889,27 @@ func stampProvenanceKey(doc map[string]json.RawMessage, key string, value any) b
 	return true
 }
 
-// applyStampedFields sets the stamped provenance keys carried by payload on the mutation by name, for
-// fields the schema's GraphQL input type does not carry
+// applyStampedFields sets payload keys the GraphQL input type does not carry directly on the mutation
 func applyStampedFields(mutation ent.Mutation, payload json.RawMessage, fields ...string) error {
 	for _, field := range fields {
+		raw, ok := jsonx.DecodeObjectKey[json.RawMessage](payload, field)
+		if !ok || jsonx.IsEmptyRawMessage(raw) {
+			continue
+		}
+
+		if bytes.HasPrefix(bytes.TrimSpace(raw), []byte("{")) {
+			decoded, err := jsonx.Decode[map[string]any](raw)
+			if err != nil {
+				return err
+			}
+
+			if err := mutation.SetField(field, decoded); err != nil {
+				return err
+			}
+
+			continue
+		}
+
 		v := lookupValue(payload, field)
 		if v == "" {
 			continue
@@ -902,62 +965,104 @@ func integrationActive(ctx context.Context, client *generated.Client, integratio
 }
 
 // filterByAlternativeFields keeps rows whose lookup alternative field values match one of the key tuples
-func filterByAlternativeFields(rows []json.RawMessage, fields []string, keys []LookupValues) []json.RawMessage {
-	kept := make([]json.RawMessage, 0, len(rows))
-
-	for _, row := range rows {
-		rowValues := make(LookupValues, len(fields))
-		for _, field := range fields {
-			rowValues[field] = lookupValue(row, field)
-		}
-
-		if lo.SomeBy(keys, func(key LookupValues) bool {
-			return lo.EveryBy(fields, func(field string) bool { return rowValues[field] == key[field] })
-		}) {
-			kept = append(kept, row)
-		}
-	}
-
-	return kept
+func filterByAlternativeFields(s *Schema, rows []json.RawMessage, fields []string, keys []LookupValues) []json.RawMessage {
+	return lo.Filter(rows, func(row json.RawMessage, _ int) bool {
+		return lo.SomeBy(keys, func(key LookupValues) bool {
+			return lo.EveryBy(fields, func(field string) bool { return lookupFieldMatches(s, row, field, key[field]) })
+		})
+	})
 }
 
-// lookupKeyFor resolves the first lookup alternative fully present in the payload
-func lookupKeyFor(s *Schema, payload json.RawMessage) (alternative int, values LookupValues, ok bool) {
-	for i, alt := range s.Lookup {
-		candidate := make(LookupValues, len(alt.Fields))
+// lookupFieldMatches reports whether a row's field holds value: string arrays by membership, CaseInsensitive fields folding case
+func lookupFieldMatches(s *Schema, row json.RawMessage, field, value string) bool {
+	descriptor, _ := s.FieldByName(field)
 
-		complete := true
+	equal := func(a, b string) bool { return a == b }
+	if descriptor.CaseInsensitive {
+		equal = strings.EqualFold
+	}
+
+	if descriptor.Type == "[]string" {
+		values, _ := jsonx.DecodeObjectKey[[]string](row, field)
+
+		return lo.ContainsBy(values, func(held string) bool { return equal(held, value) })
+	}
+
+	return equal(lookupValue(row, field), value)
+}
+
+// lookupInputKey returns a field's mapping input key, or its name when unmapped
+func lookupInputKey(field FieldDescriptor) string {
+	if field.InputKey != "" {
+		return field.InputKey
+	}
+
+	return field.Name
+}
+
+// lookupKey is one lookup alternative with every key tuple a payload carries for it
+type lookupKey struct {
+	alternative int
+	values      []LookupValues
+}
+
+// cacheKeys renders every tuple of the lookup key into its prefetch cache key
+func (k lookupKey) cacheKeys(s *Schema) []lookupMatchKey {
+	return lo.Map(k.values, func(tuple LookupValues, _ int) lookupMatchKey {
+		return lookupMatchKey{schema: s.Snake, alternative: k.alternative, keys: EncodeLookupKey(s, s.Lookup[k.alternative], tuple)}
+	})
+}
+
+// lookupKeysFor returns every lookup alternative the payload fully carries, in declared order; a string-array field contributes one tuple per element
+func lookupKeysFor(s *Schema, payload json.RawMessage) []lookupKey {
+	return lo.FilterMap(s.Lookup, func(alt LookupAlternative, i int) (lookupKey, bool) {
+		tuples := []LookupValues{LookupValues{}}
 
 		for _, name := range alt.Fields {
 			field, found := s.FieldByName(name)
 			if !found {
-				complete = false
-				break
+				return lookupKey{}, false
 			}
 
-			value := lookupValue(payload, field.InputKey)
-			if value == "" {
-				complete = false
-				break
+			values := lookupFieldValues(payload, field)
+			if len(values) == 0 {
+				return lookupKey{}, false
 			}
 
-			candidate[name] = value
+			tuples = lo.FlatMap(tuples, func(tuple LookupValues, _ int) []LookupValues {
+				return lo.Map(values, func(value string, _ int) LookupValues { return lo.Assign(tuple, LookupValues{name: value}) })
+			})
 		}
 
-		if complete {
-			return i, candidate, true
-		}
-	}
-
-	return 0, nil, false
+		return lookupKey{alternative: i, values: tuples}, true
+	})
 }
 
-// EncodeLookupKey renders a lookup alternative's key values into the lookup cache key
-func EncodeLookupKey(alternative LookupAlternative, keys LookupValues) string {
-	parts := make([]string, len(alternative.Fields))
-	for i, field := range alternative.Fields {
-		parts[i] = keys[field]
+// lookupFieldValues returns the non-empty values a payload carries for a field, every element of a string array
+func lookupFieldValues(payload json.RawMessage, field FieldDescriptor) []string {
+	if field.Type == "[]string" {
+		decoded, _ := jsonx.DecodeObjectKey[[]string](payload, lookupInputKey(field))
+
+		return NormalizeStrings(decoded)
 	}
+
+	if value := lookupValue(payload, lookupInputKey(field)); value != "" {
+		return []string{value}
+	}
+
+	return nil
+}
+
+// EncodeLookupKey renders a lookup alternative's key values into the lookup cache key, lowering CaseInsensitive fields
+func EncodeLookupKey(schema *Schema, alternative LookupAlternative, keys LookupValues) string {
+	parts := lo.Map(alternative.Fields, func(field string, _ int) string {
+		descriptor, _ := schema.FieldByName(field)
+		if descriptor.CaseInsensitive {
+			return strings.ToLower(keys[field])
+		}
+
+		return keys[field]
+	})
 
 	return strings.Join(parts, "\x1f")
 }
@@ -1096,57 +1201,23 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 		return "", false, false, logError(ctx, ref, ErrUpsertUnsupported, nil)
 	}
 
-	alternative, keys, hasKey := lookupKeyFor(s, payload)
-
-	var (
-		rows      []json.RawMessage
-		cacheKey  lookupMatchKey
-		cacheable bool
-	)
-
-	switch {
-	case !hasKey:
+	candidates := lookupKeysFor(s, payload)
+	if len(candidates) == 0 {
 		return "", false, false, ErrUpsertKeyMissing
-	default:
-		cacheKey = lookupMatchKey{schema: s.Snake, alternative: alternative, keys: EncodeLookupKey(s.Lookup[alternative], keys)}
+	}
 
-		cache, ok := lookupMatchCacheContextKey.Get(ctx)
-		if !ok {
-			rows, err = s.QueryByLookup(ctx, client, ownerID, alternative, []LookupValues{keys})
-			if err != nil {
-				return "", false, false, err
-			}
+	cache, cacheable := lookupMatchCacheContextKey.Get(ctx)
 
+	var rows []json.RawMessage
+
+	for _, key := range candidates {
+		if rows, err = s.lookupRows(ctx, client, ownerID, key, cache); err != nil {
+			return "", false, false, err
+		}
+
+		if len(rows) > 0 {
 			break
 		}
-
-		cacheable = true
-
-		entry, present := cache[cacheKey]
-		if !present {
-			rows, err = s.QueryByLookup(ctx, client, ownerID, alternative, []LookupValues{keys})
-			if err != nil {
-				return "", false, false, err
-			}
-
-			break
-		}
-
-		for _, createdID := range entry.createdIDs {
-			row, lerr := s.Load(ctx, client, createdID)
-			if lerr != nil {
-				return "", false, false, lerr
-			}
-
-			entry.rows = append(entry.rows, row)
-		}
-
-		if len(entry.createdIDs) > 0 {
-			entry.createdIDs = nil
-			cache[cacheKey] = entry
-		}
-
-		rows = entry.rows
 	}
 
 	candidate, _, foreign, err := selectIngestCandidate(s, rows, payload)
@@ -1166,17 +1237,13 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 			return "", false, false, err
 		}
 
-		if s.Catalog != nil && ownerID == "" {
-			if err := s.relinkCreated(ctx, client, id); err != nil {
-				return "", false, false, err
-			}
-		}
-
 		if cacheable {
-			if cache, ok := lookupMatchCacheContextKey.Get(ctx); ok {
-				entry := cache[cacheKey]
-				entry.createdIDs = append(entry.createdIDs, id)
-				cache[cacheKey] = entry
+			for _, candidate := range candidates {
+				for _, cacheKey := range candidate.cacheKeys(s) {
+					entry := cache[cacheKey]
+					entry.createdIDs = append(entry.createdIDs, id)
+					cache[cacheKey] = entry
+				}
 			}
 		}
 
@@ -1189,9 +1256,42 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 		return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("invalid or cross-organization match for %s", s.Name))
 	}
 
-	changed, managed, err = s.applyIngestUpdate(ctx, client, candidate, payload)
+	changed, managed, err = s.applyIngestUpdate(ctx, client, ownerID, candidate, payload)
 
 	return id, changed, managed, err
+}
+
+// lookupRows returns the rows one lookup key matches, served from the prefetch cache when it holds every tuple of the key
+func (s *Schema) lookupRows(ctx context.Context, client *generated.Client, ownerID string, key lookupKey, cache lookupMatchCache) ([]json.RawMessage, error) {
+	keys := key.cacheKeys(s)
+
+	if !lo.EveryBy(keys, func(k lookupMatchKey) bool { return lo.HasKey(cache, k) }) {
+		return s.QueryByLookup(ctx, client, ownerID, key.alternative, key.values)
+	}
+
+	var rows []json.RawMessage
+
+	for _, k := range keys {
+		entry := cache[k]
+
+		for _, createdID := range entry.createdIDs {
+			row, err := s.Load(ctx, client, createdID)
+			if err != nil {
+				return nil, err
+			}
+
+			entry.rows = append(entry.rows, row)
+		}
+
+		if len(entry.createdIDs) > 0 {
+			entry.createdIDs = nil
+			cache[k] = entry
+		}
+
+		rows = append(rows, entry.rows...)
+	}
+
+	return lo.UniqBy(rows, entityID), nil
 }
 
 // pruneIngestFields drops unchanged and volatile-only assignments from the mutation
@@ -1328,8 +1428,65 @@ func (s *Schema) applyIngestResurrect(row json.RawMessage, payload json.RawMessa
 	return edited
 }
 
-// applyIngestUpdate applies the shared ingest write decision to one resolved row
-func (s *Schema) applyIngestUpdate(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (changed bool, managed bool, err error) {
+// provenanceFields are the provenance columns a fill never writes
+var provenanceFields = []string{FieldIntegrationID, FieldManagedBy, FieldPlatformID, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldIntegrationRunID, FieldSourceKey}
+
+// applyIngestFill fills empty fields and extends string arrays on an unmanaged row; no provenance, clears or claim
+func (s *Schema) applyIngestFill(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (changed bool, managed bool, err error) {
+	edges := lo.FilterMap([]string{s.IntegrationM2MEdge, s.IntegrationRunM2MEdge}, func(name string, _ int) (string, bool) {
+		edge, ok := s.EdgeByName(name)
+
+		return edge.CreateField, ok && name != ""
+	})
+
+	stripped := jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+		for _, key := range append(edges, provenanceFields...) {
+			delete(doc, key)
+		}
+
+		for key, value := range doc {
+			if jsonx.IsEmptyRawMessage(value) {
+				delete(doc, key)
+			}
+		}
+
+		return true
+	})
+
+	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.rekeyEdgesForUpdate(stripped))
+
+	mutation, save, err := s.Ingest.buildUpdate(ctx, client, row, rekeyed)
+	if err != nil {
+		return false, false, err
+	}
+
+	if err := s.fillMutation(ctx, mutation); err != nil {
+		return false, false, err
+	}
+
+	changes := ChangeSetFromMutation(mutation)
+
+	if !changes.Empty() {
+		if err := save(ctx); err != nil {
+			return false, false, err
+		}
+	}
+
+	if len(throughIDs) > 0 {
+		if err := applyThroughEdgeIDs(ctx, client, s, entityID(row), throughIDs); err != nil {
+			return false, false, err
+		}
+	}
+
+	return !changes.Empty() || len(throughIDs) > 0, false, nil
+}
+
+// applyIngestUpdate fills an unmanaged organization row and otherwise applies the writing installation's claim
+func (s *Schema) applyIngestUpdate(ctx context.Context, client *generated.Client, ownerID string, row json.RawMessage, payload json.RawMessage) (changed bool, managed bool, err error) {
+	if ownerID != "" && lookupValue(row, FieldManagedBy) == "" {
+		return s.applyIngestFill(ctx, client, row, payload)
+	}
+
 	owned, err := s.applyIngestClaim(ctx, client, row, payload)
 	if err != nil {
 		return false, true, err
@@ -1422,78 +1579,394 @@ func entityID(row json.RawMessage) string {
 	return id
 }
 
-// --- Catalog adoption ---
+// --- Catalog reconciliation ---
 
-// Adopt returns the organization's adopted row for the catalog row, creating it from the catalog
-// fields plus overlay when absent; created reports whether a row was created
-func (s *Schema) Adopt(ctx context.Context, client *generated.Client, catalogID, ownerID string, overlay json.RawMessage) (id string, created bool, err error) {
+// Reconcile returns the organization's row for payload: an existing row is enriched, a catalog match is adopted as a new linked copy, otherwise the row is created
+func (s *Schema) Reconcile(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage, links ...LinkSpec) (string, error) {
 	if s.Catalog == nil {
-		return "", false, ErrCatalogUnsupported
+		return "", ErrCatalogUnsupported
 	}
 
-	return s.Catalog.adopt(ctx, client, catalogID, ownerID, overlay)
+	ref := SchemaRef{Schema: s.Snake, Operation: refOpReconcile}
+	catalogID := lookupValue(payload, CatalogPointerField)
+	adopting := catalogID != ""
+
+	var row json.RawMessage
+
+	if adopting {
+		catalogRow, err := s.catalogRow(ctx, client, ref, catalogID)
+		if err != nil {
+			return "", err
+		}
+
+		if payload, row, err = s.adoptCatalogRow(ctx, client, ref, ownerID, payload, catalogRow); err != nil {
+			return "", err
+		}
+	}
+
+	if row == nil {
+		var err error
+
+		if row, err = s.resolveLookup(ctx, client, ownerID, payload); err != nil {
+			return "", err
+		}
+	}
+
+	if row == nil && !adopting {
+		catalogRow, err := s.resolveLookup(ctx, client, "", payload)
+		if err != nil {
+			return "", err
+		}
+
+		if catalogRow != nil {
+			adopting = true
+
+			if payload, row, err = s.adoptCatalogRow(ctx, client, ref, ownerID, payload, catalogRow); err != nil {
+				return "", err
+			}
+
+			if row == nil {
+				if row, err = s.resolveLookup(ctx, client, ownerID, payload); err != nil {
+					return "", err
+				}
+			}
+		}
+	}
+
+	if row != nil {
+		return entityID(row), s.reconcileHit(ctx, client, ownerID, row, payload, links)
+	}
+
+	return s.reconcileCreate(ctx, client, ref, ownerID, payload, adopting, links)
 }
 
-// RefreshAdopted re-copies the catalog fields onto every row adopted from the catalog row and returns how many changed
+// adoptCatalogRow merges the catalog row into payload and returns the organization's existing copy of it, nil when none
+func (s *Schema) adoptCatalogRow(ctx context.Context, client *generated.Client, ref SchemaRef, ownerID string, payload, catalogRow json.RawMessage) (json.RawMessage, json.RawMessage, error) {
+	merged, err := s.mergeCatalogRow(ctx, ref, payload, catalogRow)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	copies, err := s.Catalog.copies(ctx, client, entityID(catalogRow))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	existing, _ := lo.Find(copies, func(row json.RawMessage) bool { return lookupValue(row, s.OwnerField) == ownerID })
+
+	return merged, existing, nil
+}
+
+// RefreshAdopted rewrites the catalog row's source-managed fields onto every row pointing at it, each write running as the organization owning the copy, and returns how many rows were written
 func (s *Schema) RefreshAdopted(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
 	if s.Catalog == nil {
 		return 0, ErrCatalogUnsupported
 	}
 
-	return s.Catalog.refresh(ctx, client, catalogID)
-}
+	ref := SchemaRef{Schema: s.Snake, Operation: refOpUpdate, EntityID: catalogID}
 
-// RelinkAdopted points rows carrying the catalog row's key at it when their pointer is null or stale and returns how many moved
-func (s *Schema) RelinkAdopted(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
-	if s.Catalog == nil {
-		return 0, ErrCatalogUnsupported
-	}
-
-	return s.Catalog.relink(ctx, client, catalogID)
-}
-
-// Match returns the id of the first visible catalog row matching a candidate in order
-func (s *Schema) Match(ctx context.Context, client *generated.Client, candidates ...MatchCandidate) (string, bool, error) {
-	if s.Catalog == nil {
-		return "", false, ErrCatalogUnsupported
-	}
-
-	return s.Catalog.match(ctx, client, candidates)
-}
-
-// relinkCreated points adopted rows at a newly created row when it is a visible catalog row
-func (s *Schema) relinkCreated(ctx context.Context, client *generated.Client, id string) error {
-	visible, err := s.Catalog.visible(ctx, client, id)
+	row, err := s.Load(ctx, client, catalogID)
 	if err != nil {
-		return logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpQuery, EntityID: id}, ErrQueryFailed, err)
+		return 0, err
 	}
 
-	if !visible {
-		return nil
+	if !catalogVisible(row) {
+		return 0, nil
 	}
 
-	_, err = s.Catalog.relink(ctx, client, id)
+	payload, err := catalogPayload(row, s.CatalogFields())
+	if err != nil {
+		return 0, logError(ctx, ref, ErrDecodeFailed, err)
+	}
 
-	return err
+	copies, err := s.Catalog.copies(ctx, client, catalogID)
+	if err != nil {
+		return 0, err
+	}
+
+	for written, adopted := range copies {
+		if err := s.Update(auth.WithOrgInternalCaller(ctx, lookupValue(adopted, s.OwnerField)), client, entityID(adopted), payload); err != nil {
+			return written, err
+		}
+	}
+
+	return len(copies), nil
 }
 
-// catalogListenerCaller lets a catalog refresh update adopted rows in every organization
+// Unlink clears the catalog pointer on one row, detaching it from its catalog row
+func (s *Schema) Unlink(ctx context.Context, client *generated.Client, id string) error {
+	if s.Catalog == nil {
+		return ErrCatalogUnsupported
+	}
+
+	return s.Catalog.unlink(ctx, client, id)
+}
+
+// resolveLookup returns the single row the first complete lookup alternative matches in the organization, or among visible catalog rows when ownerID is empty; nil when none matches
+func (s *Schema) resolveLookup(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage) (json.RawMessage, error) {
+	catalog := ownerID == ""
+	if catalog {
+		ctx = auth.WithInternalReadCrossOrgContext(ctx)
+	}
+
+	for _, key := range lookupKeysFor(s, payload) {
+		rows, err := s.QueryByLookup(ctx, client, ownerID, key.alternative, key.values)
+		if err != nil {
+			return nil, err
+		}
+
+		if catalog {
+			rows = lo.Filter(rows, func(row json.RawMessage, _ int) bool { return catalogVisible(row) })
+		}
+
+		switch {
+		case len(rows) > 1:
+			return nil, logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpQuery}, ErrUpsertConflict, fmt.Errorf("%s.%s matched %d rows", s.Snake, strings.Join(s.Lookup[key.alternative].Fields, ","), len(rows)))
+		case len(rows) == 1:
+			return rows[0], nil
+		}
+	}
+
+	return nil, nil
+}
+
+// catalogRow loads the visible system-owned catalog row with the id, failing with ErrCatalogRowNotFound otherwise
+func (s *Schema) catalogRow(ctx context.Context, client *generated.Client, ref SchemaRef, catalogID string) (json.RawMessage, error) {
+	row, err := s.Load(auth.WithInternalReadCrossOrgContext(ctx), client, catalogID)
+
+	switch {
+	case generated.IsNotFound(err), err == nil && !catalogVisible(row):
+		return nil, logError(ctx, ref, ErrCatalogRowNotFound, fmt.Errorf("%s %s", s.Snake, catalogID))
+	case err != nil:
+		return nil, err
+	}
+
+	return row, nil
+}
+
+// catalogVisible reports whether a marshaled row is a visible system-owned catalog row
+func catalogVisible(row json.RawMessage) bool {
+	systemOwned, _ := jsonx.DecodeObjectKey[bool](row, systemOwnedField)
+	visible, _ := jsonx.DecodeObjectKey[bool](row, CatalogVisibilityField)
+
+	return systemOwned && visible
+}
+
+// mergeCatalogRow lays payload over the catalog row's populated source-managed fields and sets the pointer; an empty payload value never overrides
+func (s *Schema) mergeCatalogRow(ctx context.Context, ref SchemaRef, payload, catalogRow json.RawMessage) (json.RawMessage, error) {
+	base, err := catalogPayload(catalogRow, s.CatalogFields())
+	if err != nil {
+		return nil, logError(ctx, ref, ErrDecodeFailed, err)
+	}
+
+	merged, err := jsonx.ToRawMap(base)
+	if err != nil {
+		return nil, logError(ctx, ref, ErrDecodeFailed, err)
+	}
+
+	merged = lo.OmitBy(merged, func(_ string, value json.RawMessage) bool { return jsonx.IsEmptyRawMessage(value) })
+
+	overlay, err := jsonx.ToRawMap(payload)
+	if err != nil {
+		return nil, logError(ctx, ref, ErrDecodeFailed, err)
+	}
+
+	for name, value := range overlay {
+		if _, present := merged[name]; present && isDefaultableJSON(value) {
+			continue
+		}
+
+		merged[name] = value
+	}
+
+	if merged[CatalogPointerField], err = json.Marshal(entityID(catalogRow)); err != nil {
+		return nil, logError(ctx, ref, ErrMarshalFailed, err)
+	}
+
+	encoded, err := json.Marshal(merged)
+	if err != nil {
+		return nil, logError(ctx, ref, ErrMarshalFailed, err)
+	}
+
+	return encoded, nil
+}
+
+// reconcileHit fills the matched row's empty fields from payload and applies the links; the row is never linked
+func (s *Schema) reconcileHit(ctx context.Context, client *generated.Client, ownerID string, row, payload json.RawMessage, links []LinkSpec) error {
+	linked, err := InjectCreateLinks(ctx, client, ownerID, s, payload, links)
+	if err != nil {
+		return err
+	}
+
+	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.rekeyEdgesForUpdate(dropCatalogPointer(linked)))
+
+	mutation, save, err := s.Ingest.buildUpdate(ctx, client, row, rekeyed)
+	if err != nil {
+		return err
+	}
+
+	if err := s.fillMutation(ctx, mutation); err != nil {
+		return err
+	}
+
+	if !ChangeSetFromMutation(mutation).Empty() {
+		if err := save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return applyThroughEdgeIDs(ctx, client, s, entityID(row), throughIDs)
+}
+
+// reconcileCreate creates the organization's row from payload and links; an adoption keeps the catalog pointer
+func (s *Schema) reconcileCreate(ctx context.Context, client *generated.Client, ref SchemaRef, ownerID string, payload json.RawMessage, adopting bool, links []LinkSpec) (string, error) {
+	linked, err := InjectCreateLinks(ctx, client, ownerID, s, payload, links)
+	if err != nil {
+		return "", err
+	}
+
+	if !adopting {
+		linked = dropCatalogPointer(linked)
+	}
+
+	doc, err := jsonx.ToRawMap(linked)
+	if err != nil {
+		return "", logError(ctx, ref, ErrDecodeFailed, err)
+	}
+
+	if doc[s.OwnerField], err = json.Marshal(ownerID); err != nil {
+		return "", logError(ctx, ref, ErrMarshalFailed, err)
+	}
+
+	created, err := json.Marshal(doc)
+	if err != nil {
+		return "", logError(ctx, ref, ErrMarshalFailed, err)
+	}
+
+	return s.Create(ctx, client, created)
+}
+
+// dropCatalogPointer removes the catalog pointer from a payload so a write never links a row
+func dropCatalogPointer(payload json.RawMessage) json.RawMessage {
+	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+		delete(doc, CatalogPointerField)
+
+		return true
+	})
+}
+
+// fillMutation keeps only sets that give an empty stored value a non-empty one; arrays union, bools and clears drop
+func (s *Schema) fillMutation(ctx context.Context, mutation ent.Mutation) error {
+	for _, name := range NormalizeStrings(mutation.Fields()) {
+		field, ok := s.FieldByName(name)
+		if !ok || field.Type == "bool" {
+			if err := mutation.ResetField(name); err != nil {
+				return err
+			}
+
+			continue
+		}
+
+		old, err := mutation.OldField(ctx, name)
+		if err != nil {
+			return err
+		}
+
+		proposed, _ := mutation.Field(name)
+
+		if isEmptyValue(old) && !isEmptyValue(proposed) {
+			continue
+		}
+
+		merged, grew := unionStringValues(old, proposed)
+		if !grew {
+			if err := mutation.ResetField(name); err != nil {
+				return err
+			}
+
+			continue
+		}
+
+		if err := mutation.SetField(name, merged); err != nil {
+			return err
+		}
+	}
+
+	for _, name := range mutation.ClearedFields() {
+		if err := mutation.ResetField(name); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// isEmptyValue reports whether a stored value is nil, an empty string, slice or map, a zero number, or a zero time
+func isEmptyValue(value any) bool {
+	v := reflect.ValueOf(value)
+	for v.IsValid() && (v.Kind() == reflect.Pointer || v.Kind() == reflect.Interface) {
+		if v.IsNil() {
+			return true
+		}
+
+		v = v.Elem()
+	}
+
+	if !v.IsValid() {
+		return true
+	}
+
+	switch v.Kind() {
+	case reflect.String:
+		return strings.TrimSpace(v.String()) == ""
+	case reflect.Slice, reflect.Map:
+		return v.Len() == 0
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+		reflect.Float32, reflect.Float64:
+		return v.IsZero()
+	}
+
+	if t, ok := v.Interface().(time.Time); ok {
+		return t.IsZero()
+	}
+
+	typ := reflect.TypeFor[time.Time]()
+	if v.CanConvert(typ) {
+		return v.Convert(typ).Interface().(time.Time).IsZero()
+	}
+
+	return false
+}
+
+// unionStringValues extends a stored string slice with missing proposed elements; grew is false otherwise
+func unionStringValues(old, proposed any) (merged []string, grew bool) {
+	current, ok := old.([]string)
+	if !ok {
+		return nil, false
+	}
+
+	added, ok := proposed.([]string)
+	if !ok {
+		return nil, false
+	}
+
+	missing := lo.Without(lo.Uniq(added), current...)
+	if len(missing) == 0 {
+		return nil, false
+	}
+
+	return append(slices.Clone(current), missing...), true
+}
+
+// catalogListenerCaller lets a catalog listener update adopted rows in every organization
 func catalogListenerCaller(restored *auth.Caller, _ MutationPayload) *auth.Caller {
 	return restored.WithCapabilities(auth.CapInternalOperation)
 }
 
-// catalogRefreshHandler refreshes the adopted rows of a mutated row when it is a visible catalog row
+// catalogRefreshHandler rewrites the adopted rows of a mutated catalog row
 func catalogRefreshHandler(s *Schema) func(Invocation, MutationPayload) error {
 	return func(inv Invocation, _ MutationPayload) error {
-		visible, err := s.Catalog.visible(inv.Context, inv.Client, inv.EntityID)
-		if err != nil {
-			return logError(inv.Context, SchemaRef{Schema: s.Snake, Operation: refOpQuery, EntityID: inv.EntityID}, ErrQueryFailed, err)
-		}
-
-		if !visible {
-			return nil
-		}
-
 		updated, err := s.RefreshAdopted(inv.Context, inv.Client, inv.EntityID)
 		if err != nil {
 			return err
@@ -1505,33 +1978,57 @@ func catalogRefreshHandler(s *Schema) func(Invocation, MutationPayload) error {
 	}
 }
 
-// CatalogListeners refreshes adopted rows when a visible catalog row's source-managed fields change
+// catalogUnlinkHandler detaches every adopted row when a catalog row is soft-deleted or hidden
+func catalogUnlinkHandler(s *Schema) func(Invocation, MutationPayload) error {
+	return func(inv Invocation, payload MutationPayload) error {
+		if payload.Operation != OpSoftDelete {
+			visible, ok := payload.StringValue(CatalogVisibilityField)
+			if !ok || visible != "false" {
+				return nil
+			}
+		}
+
+		unlinked, err := s.Catalog.unlinkAll(inv.Context, inv.Client, inv.EntityID)
+		if err != nil {
+			return err
+		}
+
+		logx.FromContext(inv.Context).Info().Str(FieldSchema, s.Snake).Str(fieldEntityID, inv.EntityID).Int("unlinked", unlinked).Msg("entityops: detached adopted rows from catalog")
+
+		return nil
+	}
+}
+
+// CatalogListeners refreshes adopted rows on catalog field changes and detaches them on hide or soft-delete
 func CatalogListeners() []gala.Registration {
 	return []gala.Registration{
 		MutationListener{
 			Schema:     SchemaEntity,
 			Operations: []string{OpUpdate, OpUpdateOne},
-			Fields:     SchemaEntity.Catalog.Fields,
+			Fields:     []string{"display_name", "description", "domains", "aliases", "status_page_url", "provided_services", "links", "logo_remote_url"},
 			Caller:     catalogListenerCaller,
 			Handle:     catalogRefreshHandler(SchemaEntity),
+		},
+		MutationListener{
+			Schema:     SchemaEntity,
+			Operations: []string{OpUpdate, OpUpdateOne, OpSoftDelete},
+			Fields:     []string{CatalogVisibilityField},
+			Caller:     catalogListenerCaller,
+			Handle:     catalogUnlinkHandler(SchemaEntity),
 		},
 	}
 }
 
-// catalogPayload keeps only the keys copied onto adopted rows from a marshaled catalog row
+// catalogPayload renders the fields copied onto adopted rows from a marshaled catalog row, null for a field the row does not hold
 func catalogPayload(row json.RawMessage, fields []string) (json.RawMessage, error) {
 	document, err := jsonx.ToRawMap(row)
 	if err != nil {
 		return nil, err
 	}
 
-	kept := make(map[string]json.RawMessage, len(fields))
-
-	for _, field := range fields {
-		if value, ok := document[field]; ok {
-			kept[field] = value
-		}
-	}
+	kept := lo.SliceToMap(fields, func(field string) (string, json.RawMessage) {
+		return field, lo.ValueOr(document, field, json.RawMessage("null"))
+	})
 
 	payload, err := json.Marshal(kept)
 	if err != nil {
@@ -1539,6 +2036,15 @@ func catalogPayload(row json.RawMessage, fields []string) (json.RawMessage, erro
 	}
 
 	return payload, nil
+}
+
+// jsonArrayMatch matches a JSON string-array column when any lowered element equals one of values, which arrive lowered; a column holding anything but an array matches nothing
+func jsonArrayMatch(column string, values []string) func(*sql.Selector) {
+	return func(s *sql.Selector) {
+		s.Where(sql.P(func(b *sql.Builder) {
+			b.WriteString("EXISTS (SELECT 1 FROM jsonb_array_elements_text(CASE WHEN jsonb_typeof(").Ident(s.C(column)).WriteString(") = 'array' THEN ").Ident(s.C(column)).WriteString(" ELSE '[]'::jsonb END) AS v WHERE LOWER(v) IN (").Args(lo.ToAnySlice(values)...).WriteString("))")
+		}))
+	}
 }
 
 // --- Per-schema registrations ---
@@ -1581,6 +2087,7 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id", "external_file_id"}},
 			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_file_id"}},
 		},
@@ -1594,7 +2101,7 @@ var (
 
 			builder := client.ActionPlan.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -1615,7 +2122,7 @@ var (
 
 			builder := client.ActionPlan.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1698,7 +2205,7 @@ var (
 
 			builder := client.Assessment.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -1719,7 +2226,7 @@ var (
 
 			builder := client.Assessment.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1801,7 +2308,7 @@ var (
 
 			builder := client.AssessmentPolicy.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -1822,7 +2329,7 @@ var (
 
 			builder := client.AssessmentPolicy.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1941,6 +2448,7 @@ var (
 		IntegrationFKField:    "integration_id",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id", "source_identifier"}},
 			{Fields: []string{"external_id"}},
 			{Fields: []string{"source_identifier"}},
 		},
@@ -1954,7 +2462,7 @@ var (
 
 			builder := client.Asset.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -1975,7 +2483,7 @@ var (
 
 			builder := client.Asset.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2051,7 +2559,7 @@ var (
 
 			builder := client.Campaign.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -2072,7 +2580,7 @@ var (
 
 			builder := client.Campaign.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2228,7 +2736,7 @@ var (
 
 			builder := client.CheckResult.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -2249,7 +2757,7 @@ var (
 
 			builder := client.CheckResult.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2324,7 +2832,7 @@ var (
 
 			builder := client.Contact.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -2345,7 +2853,7 @@ var (
 
 			builder := client.Contact.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2422,7 +2930,7 @@ var (
 
 			builder := client.Control.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -2443,7 +2951,7 @@ var (
 
 			builder := client.Control.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2525,7 +3033,7 @@ var (
 
 			builder := client.ControlImplementation.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -2546,7 +3054,7 @@ var (
 
 			builder := client.ControlImplementation.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2620,7 +3128,7 @@ var (
 
 			builder := client.ControlObjective.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -2641,7 +3149,7 @@ var (
 
 			builder := client.ControlObjective.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2738,7 +3246,7 @@ var (
 
 			builder := client.CustomTypeEnum.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -2759,7 +3267,7 @@ var (
 
 			builder := client.CustomTypeEnum.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2859,7 +3367,7 @@ var (
 
 			builder := client.DirectoryAccount.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -2880,7 +3388,7 @@ var (
 
 			builder := client.DirectoryAccount.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2957,7 +3465,7 @@ var (
 
 			builder := client.DirectoryGroup.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -2978,7 +3486,7 @@ var (
 
 			builder := client.DirectoryGroup.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3056,7 +3564,7 @@ var (
 
 			builder := client.DirectoryMembership.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -3077,7 +3585,7 @@ var (
 
 			builder := client.DirectoryMembership.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3246,7 +3754,7 @@ var (
 
 			builder := client.EmailTemplate.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -3267,7 +3775,7 @@ var (
 
 			builder := client.EmailTemplate.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3354,7 +3862,7 @@ var (
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
 		},
-		Catalog: &CatalogCapability{PointerField: "catalog_id", VisibilityField: "externally_visible", KeyField: "catalog_key", Fields: []string{"display_name", "description", "domains", "aliases", "status_page_url", "provided_services", "links", "logo_remote_url"}},
+		Catalog: &CatalogCapability{},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "entity", Operation: refOpCreate}
 
@@ -3365,7 +3873,7 @@ var (
 
 			builder := client.Entity.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, "catalog_id", "catalog_key", FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, CatalogPointerField, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -3386,7 +3894,7 @@ var (
 
 			builder := client.Entity.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3533,7 +4041,7 @@ var (
 
 			builder := client.Evidence.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -3554,7 +4062,7 @@ var (
 
 			builder := client.Evidence.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3696,8 +4204,8 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id", "external_owner_id"}},
 			{Fields: []string{"external_id"}},
+			{Fields: []string{"external_id", "external_owner_id"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "finding", Operation: refOpCreate}
@@ -3709,7 +4217,7 @@ var (
 
 			builder := client.Finding.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -3730,7 +4238,7 @@ var (
 
 			builder := client.Finding.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3861,7 +4369,7 @@ var (
 
 			builder := client.Group.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -3882,7 +4390,7 @@ var (
 
 			builder := client.Group.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -4029,7 +4537,7 @@ var (
 
 			builder := client.IdentityHolder.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -4050,7 +4558,7 @@ var (
 
 			builder := client.IdentityHolder.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -4268,6 +4776,7 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id", "external_file_id"}},
 			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_file_id"}},
 		},
@@ -4281,7 +4790,7 @@ var (
 
 			builder := client.InternalPolicy.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -4302,7 +4811,7 @@ var (
 
 			builder := client.InternalPolicy.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -4453,7 +4962,7 @@ var (
 
 			builder := client.MappedControl.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -4474,7 +4983,7 @@ var (
 
 			builder := client.MappedControl.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -4548,7 +5057,7 @@ var (
 
 			builder := client.Narrative.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -4569,7 +5078,7 @@ var (
 
 			builder := client.Narrative.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -5037,7 +5546,7 @@ var (
 
 			builder := client.Platform.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -5058,7 +5567,7 @@ var (
 
 			builder := client.Platform.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -5132,6 +5641,7 @@ var (
 		OwnerField:            procedure.FieldOwnerID,
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id", "external_file_id"}},
 			{Fields: []string{"external_id"}},
 			{Fields: []string{"external_file_id"}},
 		},
@@ -5145,7 +5655,7 @@ var (
 
 			builder := client.Procedure.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -5166,7 +5676,7 @@ var (
 
 			builder := client.Procedure.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -5250,7 +5760,7 @@ var (
 
 			builder := client.Program.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -5271,7 +5781,7 @@ var (
 
 			builder := client.Program.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -5358,8 +5868,8 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id", "external_owner_id"}},
 			{Fields: []string{"external_id"}},
+			{Fields: []string{"external_id", "external_owner_id"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "remediation", Operation: refOpCreate}
@@ -5371,7 +5881,7 @@ var (
 
 			builder := client.Remediation.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -5392,7 +5902,7 @@ var (
 
 			builder := client.Remediation.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -5533,8 +6043,8 @@ var (
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
-			{Fields: []string{"external_id", "external_owner_id"}},
 			{Fields: []string{"external_id"}},
+			{Fields: []string{"external_id", "external_owner_id"}},
 		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "review", Operation: refOpCreate}
@@ -5546,7 +6056,7 @@ var (
 
 			builder := client.Review.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -5567,7 +6077,7 @@ var (
 
 			builder := client.Review.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -5644,7 +6154,7 @@ var (
 
 			builder := client.Risk.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -5665,7 +6175,7 @@ var (
 
 			builder := client.Risk.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -5770,7 +6280,7 @@ var (
 
 			builder := client.Scan.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -5791,7 +6301,7 @@ var (
 
 			builder := client.Scan.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -5915,7 +6425,7 @@ var (
 
 			builder := client.Subcontrol.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -5936,7 +6446,7 @@ var (
 
 			builder := client.Subcontrol.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -6114,7 +6624,7 @@ var (
 
 			builder := client.SystemDetail.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -6135,7 +6645,7 @@ var (
 
 			builder := client.SystemDetail.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -6232,7 +6742,7 @@ var (
 
 			builder := client.TagDefinition.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -6253,7 +6763,7 @@ var (
 
 			builder := client.TagDefinition.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -6330,7 +6840,7 @@ var (
 
 			builder := client.Task.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -6351,7 +6861,7 @@ var (
 
 			builder := client.Task.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -6434,7 +6944,7 @@ var (
 
 			builder := client.Template.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -6455,7 +6965,7 @@ var (
 
 			builder := client.Template.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -6874,7 +7384,7 @@ var (
 
 			builder := client.Vulnerability.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -6895,7 +7405,7 @@ var (
 
 			builder := client.Vulnerability.UpdateOneID(entityID).SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 				return logError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -7259,8 +7769,8 @@ func init() {
 		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string", InputKey: "dismissed_tag_suggestions", Clearable: true},
 		{Name: "due_date", Label: "DueDate", Type: "time.Time", InputKey: "due_date", Clearable: true},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Clearable: true},
-		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true, Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -7284,6 +7794,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
@@ -7303,7 +7814,7 @@ func init() {
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "jsonconfig", Label: "Jsonconfig", Type: "map[string]interface {}", InputKey: "jsonconfig", Clearable: true},
@@ -7314,6 +7825,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -7328,7 +7840,7 @@ func init() {
 		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true, InputKey: "assessment_id"},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_policy_id", Label: "InternalPolicyID", Type: "string", MatchKey: true, InputKey: "internal_policy_id"},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7337,6 +7849,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7399,7 +7912,7 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", InputKey: "estimated_monthly_cost", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "identifier", Label: "Identifier", Type: "string", MatchKey: true, InputKey: "identifier", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -7421,8 +7934,9 @@ func init() {
 		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name", Clearable: true, CaseInsensitive: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
-		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", LookupKey: true, Clearable: true},
+		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", Clearable: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_platform_id", Label: "SourcePlatformID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type"},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
@@ -7447,7 +7961,7 @@ func init() {
 		{Name: "email_branding_id", Label: "EmailBrandingID", Type: "string", MatchKey: true, InputKey: "email_branding_id", Clearable: true},
 		{Name: "email_template_id", Label: "EmailTemplateID", Type: "string", MatchKey: true, InputKey: "email_template_id", Clearable: true},
 		{Name: "entity_id", Label: "EntityID", Type: "string", MatchKey: true, InputKey: "entity_id", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Clearable: true},
@@ -7475,6 +7989,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.CampaignStatus", WorkflowEligible: true, InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "template_id", Label: "TemplateID", Type: "string", MatchKey: true, InputKey: "template_id", Clearable: true},
@@ -7518,11 +8033,12 @@ func init() {
 		{Name: "last_observed_at", Label: "LastObservedAt", Type: "models.DateTime", InputKey: "last_observed_at", Clearable: true, Volatile: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id", LookupKey: true, Clearable: true},
+		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.CheckStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -7537,7 +8053,7 @@ func init() {
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, InputKey: "full_name", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -7548,6 +8064,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.UserStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title", Clearable: true},
@@ -7578,7 +8095,7 @@ func init() {
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "evidence_requests", Label: "EvidenceRequests", Type: "[]models.EvidenceRequests", InputKey: "evidence_requests", Clearable: true},
 		{Name: "example_evidence", Label: "ExampleEvidence", Type: "[]models.ExampleEvidence", InputKey: "example_evidence", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "implementation_description", Label: "ImplementationDescription", Type: "string", MatchKey: true, InputKey: "implementation_description", Clearable: true},
 		{Name: "implementation_guidance", Label: "ImplementationGuidance", Type: "[]models.ImplementationGuidance", InputKey: "implementation_guidance", Clearable: true},
@@ -7602,6 +8119,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_name", Label: "SourceName", Type: "string", MatchKey: true, InputKey: "source_name", Clearable: true},
 		{Name: "standard_id", Label: "StandardID", Type: "string", MatchKey: true, InputKey: "standard_id", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.ControlStatus", WorkflowEligible: true, InputKey: "status", Clearable: true, WebhookPayload: true},
@@ -7624,7 +8142,7 @@ func init() {
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
 		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", InputKey: "details_json", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "implementation_date", Label: "ImplementationDate", Type: "time.Time", InputKey: "implementation_date", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
@@ -7633,6 +8151,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", InputKey: "status", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
@@ -7653,7 +8172,7 @@ func init() {
 		{Name: "desired_outcome", Label: "DesiredOutcome", Type: "string", MatchKey: true, InputKey: "desired_outcome", Clearable: true},
 		{Name: "desired_outcome_json", Label: "DesiredOutcomeJSON", Type: "[]interface {}", InputKey: "desired_outcome_json", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7664,6 +8183,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.ObjectiveStatus", InputKey: "status", Clearable: true},
 		{Name: "subcategory", Label: "Subcategory", Type: "string", MatchKey: true, InputKey: "subcategory", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
@@ -7700,7 +8220,7 @@ func init() {
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "field", Label: "Field", Type: "string", MatchKey: true, InputKey: "field"},
 		{Name: "icon", Label: "Icon", Type: "string", MatchKey: true, InputKey: "icon", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -7712,6 +8232,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -7754,7 +8275,7 @@ func init() {
 		{Name: "email_aliases", Label: "EmailAliases", Type: "[]string", InputKey: "email_aliases", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
 		{Name: "family_name", Label: "FamilyName", Type: "string", MatchKey: true, InputKey: "family_name", Clearable: true},
 		{Name: "given_name", Label: "GivenName", Type: "string", MatchKey: true, InputKey: "given_name", Clearable: true},
 		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true, InputKey: "identity_holder_id", Clearable: true},
@@ -7780,6 +8301,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.DirectoryAccountStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -7799,7 +8321,7 @@ func init() {
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
 		{Name: "external_sharing_allowed", Label: "ExternalSharingAllowed", Type: "bool", InputKey: "external_sharing_allowed", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -7817,6 +8339,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Clearable: true, Volatile: true},
 		{Name: "status", Label: "Status", Type: "enums.DirectoryGroupStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -7828,8 +8351,8 @@ func init() {
 		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", MatchKey: true, InputKey: "directory_account_id", LookupKey: true},
-		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", MatchKey: true, InputKey: "directory_group_id", LookupKey: true},
+		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", MatchKey: true, InputKey: "directory_account_id"},
+		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", MatchKey: true, InputKey: "directory_group_id"},
 		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
@@ -7849,6 +8372,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7891,7 +8415,7 @@ func init() {
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "format", Label: "Format", Type: "enums.NotificationTemplateFormat", InputKey: "format", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -7908,6 +8432,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "subject_template", Label: "SubjectTemplate", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
@@ -7962,7 +8487,7 @@ func init() {
 		{Name: "entity_type_id", Label: "EntityTypeID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "externally_visible", Label: "ExternallyVisible", Type: "bool", InputKey: "externally_visible", Clearable: true},
 		{Name: "has_soc2", Label: "HasSoc2", Type: "bool", InputKey: "has_soc2", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -8000,6 +8525,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "spend_currency", Label: "SpendCurrency", Type: "string", MatchKey: true, InputKey: "spend_currency", Clearable: true},
 		{Name: "sso_enforced", Label: "SSOEnforced", Type: "bool", InputKey: "sso_enforced", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.EntityStatus", InputKey: "status", Clearable: true},
@@ -8052,7 +8578,7 @@ func init() {
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "is_automated", Label: "IsAutomated", Type: "bool", InputKey: "is_automated", Clearable: true},
@@ -8067,6 +8593,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.EvidenceStatus", InputKey: "status", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -8167,7 +8694,7 @@ func init() {
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "event_time", Label: "EventTime", Type: "models.DateTime", WorkflowEligible: true, InputKey: "event_time", Clearable: true, Volatile: true},
 		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Clearable: true},
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
 		{Name: "finding_class", Label: "FindingClass", Type: "string", MatchKey: true, InputKey: "finding_class", Clearable: true},
@@ -8208,6 +8735,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true, Volatile: true},
 		{Name: "state", Label: "State", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "state", Clearable: true},
 		{Name: "steps_to_reproduce", Label: "StepsToReproduce", Type: "[]string", InputKey: "steps_to_reproduce", Clearable: true},
@@ -8249,7 +8777,7 @@ func init() {
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name"},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "gravatar_logo_url", Label: "GravatarLogoURL", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "is_managed", Label: "IsManaged", Type: "bool", Clearable: true},
@@ -8267,6 +8795,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -8333,7 +8862,7 @@ func init() {
 		{Name: "end_date", Label: "EndDate", Type: "models.DateTime", WorkflowEligible: true, InputKey: "end_date", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_reference_id", Label: "ExternalReferenceID", Type: "string", MatchKey: true, InputKey: "external_reference_id", Clearable: true},
 		{Name: "external_user_id", Label: "ExternalUserID", Type: "string", MatchKey: true, InputKey: "external_user_id", Clearable: true},
 		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, InputKey: "full_name"},
@@ -8355,6 +8884,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "start_date", Label: "StartDate", Type: "models.DateTime", WorkflowEligible: true, InputKey: "start_date", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.UserStatus", WorkflowEligible: true, InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -8489,8 +9019,8 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Clearable: true},
-		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true, Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
@@ -8510,6 +9040,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
@@ -8560,7 +9091,7 @@ func init() {
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -8571,6 +9102,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -8586,7 +9118,7 @@ func init() {
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -8595,6 +9127,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -8943,7 +9476,7 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", InputKey: "estimated_monthly_cost", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_reference_id", Label: "ExternalReferenceID", Type: "string", MatchKey: true, InputKey: "external_reference_id", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -8976,6 +9509,7 @@ func init() {
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", Clearable: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type"},
 		{Name: "status", Label: "Status", Type: "enums.PlatformStatus", WorkflowEligible: true, InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -9007,8 +9541,8 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Clearable: true},
-		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true, Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -9027,6 +9561,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
@@ -9053,7 +9588,7 @@ func init() {
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "end_date", Label: "EndDate", Type: "time.Time", InputKey: "end_date", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "fieldwork_end_date", Label: "FieldworkEndDate", Type: "time.Time", InputKey: "fieldwork_end_date", Clearable: true},
 		{Name: "fieldwork_start_date", Label: "FieldworkStartDate", Type: "time.Time", InputKey: "fieldwork_start_date", Clearable: true},
@@ -9070,6 +9605,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "start_date", Label: "StartDate", Type: "time.Time", InputKey: "start_date", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.ProgramStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -9099,7 +9635,7 @@ func init() {
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "error", Label: "Error", Type: "string", MatchKey: true, InputKey: "error", Clearable: true},
 		{Name: "explanation", Label: "Explanation", Type: "string", MatchKey: true, InputKey: "explanation", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Clearable: true},
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
 		{Name: "instructions", Label: "Instructions", Type: "string", MatchKey: true, InputKey: "instructions", Clearable: true},
@@ -9119,6 +9655,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "state", Label: "State", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "state", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.RemediationStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary", Clearable: true},
@@ -9175,7 +9712,7 @@ func init() {
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Clearable: true},
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
@@ -9194,6 +9731,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "state", Label: "State", Type: "string", MatchKey: true, InputKey: "state", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.ReviewStatus", InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary", Clearable: true},
@@ -9223,7 +9761,7 @@ func init() {
 		{Name: "due_date", Label: "DueDate", Type: "models.DateTime", WorkflowEligible: true, InputKey: "due_date", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "impact", Label: "Impact", Type: "enums.RiskImpact", WorkflowEligible: true, InputKey: "impact", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -9252,6 +9790,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "stakeholder_group_id", Label: "StakeholderGroupID", Type: "string", MatchKey: true, InputKey: "stakeholder_group_id", Clearable: true},
 		{Name: "stakeholder_id", Label: "StakeholderID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "stakeholder_identity_holder_id", Label: "StakeholderIdentityHolderID", Type: "string", MatchKey: true, InputKey: "stakeholder_identity_holder_id", Clearable: true},
@@ -9290,7 +9829,7 @@ func init() {
 		{Name: "discovered_vulnerability_ids", Label: "DiscoveredVulnerabilityIds", Type: "[]string", InputKey: "discovered_vulnerability_ids", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "generated_by_platform_id", Label: "GeneratedByPlatformID", Type: "string", MatchKey: true, InputKey: "generated_by_platform_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
@@ -9313,6 +9852,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.ScanStatus", InputKey: "status"},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
@@ -9371,7 +9911,7 @@ func init() {
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "evidence_requests", Label: "EvidenceRequests", Type: "[]models.EvidenceRequests", InputKey: "evidence_requests", Clearable: true},
 		{Name: "example_evidence", Label: "ExampleEvidence", Type: "[]models.ExampleEvidence", InputKey: "example_evidence", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "implementation_description", Label: "ImplementationDescription", Type: "string", MatchKey: true, InputKey: "implementation_description", Clearable: true},
 		{Name: "implementation_guidance", Label: "ImplementationGuidance", Type: "[]models.ImplementationGuidance", InputKey: "implementation_guidance", Clearable: true},
@@ -9392,6 +9932,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_name", Label: "SourceName", Type: "string", MatchKey: true, InputKey: "source_name", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.ControlStatus", WorkflowEligible: true, InputKey: "status", Clearable: true, WebhookPayload: true},
 		{Name: "subcategory", Label: "Subcategory", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "subcategory", Clearable: true},
@@ -9457,7 +9998,7 @@ func init() {
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "last_reviewed", Label: "LastReviewed", Type: "models.DateTime", InputKey: "last_reviewed", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -9468,6 +10009,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_name", Label: "SystemName", Type: "string", MatchKey: true, InputKey: "system_name"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -9499,7 +10041,7 @@ func init() {
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -9509,6 +10051,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -9529,7 +10072,7 @@ func init() {
 		{Name: "due", Label: "Due", Type: "models.DateTime", WorkflowEligible: true, InputKey: "due", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "external_reference_url", Label: "ExternalReferenceURL", Type: "[]string", InputKey: "external_reference_url", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "idempotency_key", Label: "IdempotencyKey", Type: "string", MatchKey: true, Clearable: true},
@@ -9547,7 +10090,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, InputKey: "source_key", Clearable: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.TaskStatus", WorkflowEligible: true, InputKey: "status"},
 		{Name: "system_generated", Label: "SystemGenerated", Type: "bool", WorkflowEligible: true, InputKey: "system_generated"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -9567,7 +10110,7 @@ func init() {
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "jsonconfig", Label: "Jsonconfig", Type: "map[string]interface {}", InputKey: "jsonconfig"},
@@ -9580,6 +10123,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -9881,7 +10425,7 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability", Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
 		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Clearable: true},
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
 		{Name: "first_patched_version", Label: "FirstPatchedVersion", Type: "string", MatchKey: true, InputKey: "first_patched_version", Clearable: true},
@@ -9922,6 +10466,7 @@ func init() {
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true, Volatile: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
@@ -21793,7 +22338,7 @@ func init() {
 
 		entities, err := client.ActionPlan.Query().
 			Where(ownerScopeActionPlan(orgID)).
-			Where(predicate.ActionPlan(matchKeyIn(SchemaActionPlan, field, values))).
+			Where(predicate.ActionPlan(lookupPredicate(SchemaActionPlan, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -21821,7 +22366,7 @@ func init() {
 
 		entities, err := client.Assessment.Query().
 			Where(ownerScopeAssessment(orgID)).
-			Where(predicate.Assessment(matchKeyIn(SchemaAssessment, field, values))).
+			Where(predicate.Assessment(lookupPredicate(SchemaAssessment, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -21849,7 +22394,7 @@ func init() {
 
 		entities, err := client.AssessmentPolicy.Query().
 			Where(assessmentpolicy.OwnerID(orgID)).
-			Where(predicate.AssessmentPolicy(matchKeyIn(SchemaAssessmentPolicy, field, values))).
+			Where(predicate.AssessmentPolicy(lookupPredicate(SchemaAssessmentPolicy, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -21877,7 +22422,7 @@ func init() {
 
 		entities, err := client.AssessmentResponse.Query().
 			Where(assessmentresponse.OwnerID(orgID)).
-			Where(predicate.AssessmentResponse(matchKeyIn(SchemaAssessmentResponse, field, values))).
+			Where(predicate.AssessmentResponse(lookupPredicate(SchemaAssessmentResponse, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -21905,7 +22450,7 @@ func init() {
 
 		entities, err := client.Asset.Query().
 			Where(ownerScopeAsset(orgID)).
-			Where(predicate.Asset(matchKeyIn(SchemaAsset, field, values))).
+			Where(predicate.Asset(lookupPredicate(SchemaAsset, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -21933,7 +22478,7 @@ func init() {
 
 		entities, err := client.Campaign.Query().
 			Where(campaign.OwnerID(orgID)).
-			Where(predicate.Campaign(matchKeyIn(SchemaCampaign, field, values))).
+			Where(predicate.Campaign(lookupPredicate(SchemaCampaign, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -21961,7 +22506,7 @@ func init() {
 
 		entities, err := client.CampaignTarget.Query().
 			Where(campaigntarget.OwnerID(orgID)).
-			Where(predicate.CampaignTarget(matchKeyIn(SchemaCampaignTarget, field, values))).
+			Where(predicate.CampaignTarget(lookupPredicate(SchemaCampaignTarget, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -21989,7 +22534,7 @@ func init() {
 
 		entities, err := client.CheckResult.Query().
 			Where(checkresult.OwnerID(orgID)).
-			Where(predicate.CheckResult(matchKeyIn(SchemaCheckResult, field, values))).
+			Where(predicate.CheckResult(lookupPredicate(SchemaCheckResult, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22017,7 +22562,7 @@ func init() {
 
 		entities, err := client.Contact.Query().
 			Where(contact.OwnerID(orgID)).
-			Where(predicate.Contact(matchKeyIn(SchemaContact, field, values))).
+			Where(predicate.Contact(lookupPredicate(SchemaContact, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22045,7 +22590,7 @@ func init() {
 
 		entities, err := client.Control.Query().
 			Where(ownerScopeControl(orgID)).
-			Where(predicate.Control(matchKeyIn(SchemaControl, field, values))).
+			Where(predicate.Control(lookupPredicate(SchemaControl, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22073,7 +22618,7 @@ func init() {
 
 		entities, err := client.ControlImplementation.Query().
 			Where(ownerScopeControlImplementation(orgID)).
-			Where(predicate.ControlImplementation(matchKeyIn(SchemaControlImplementation, field, values))).
+			Where(predicate.ControlImplementation(lookupPredicate(SchemaControlImplementation, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22101,7 +22646,7 @@ func init() {
 
 		entities, err := client.ControlObjective.Query().
 			Where(ownerScopeControlObjective(orgID)).
-			Where(predicate.ControlObjective(matchKeyIn(SchemaControlObjective, field, values))).
+			Where(predicate.ControlObjective(lookupPredicate(SchemaControlObjective, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22129,7 +22674,7 @@ func init() {
 
 		entities, err := client.CustomTypeEnum.Query().
 			Where(ownerScopeCustomTypeEnum(orgID)).
-			Where(predicate.CustomTypeEnum(matchKeyIn(SchemaCustomTypeEnum, field, values))).
+			Where(predicate.CustomTypeEnum(lookupPredicate(SchemaCustomTypeEnum, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22157,7 +22702,7 @@ func init() {
 
 		entities, err := client.DirectoryAccount.Query().
 			Where(directoryaccount.OwnerID(orgID)).
-			Where(predicate.DirectoryAccount(matchKeyIn(SchemaDirectoryAccount, field, values))).
+			Where(predicate.DirectoryAccount(lookupPredicate(SchemaDirectoryAccount, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22185,7 +22730,7 @@ func init() {
 
 		entities, err := client.DirectoryGroup.Query().
 			Where(directorygroup.OwnerID(orgID)).
-			Where(predicate.DirectoryGroup(matchKeyIn(SchemaDirectoryGroup, field, values))).
+			Where(predicate.DirectoryGroup(lookupPredicate(SchemaDirectoryGroup, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22213,7 +22758,7 @@ func init() {
 
 		entities, err := client.DirectoryMembership.Query().
 			Where(directorymembership.OwnerID(orgID)).
-			Where(predicate.DirectoryMembership(matchKeyIn(SchemaDirectoryMembership, field, values))).
+			Where(predicate.DirectoryMembership(lookupPredicate(SchemaDirectoryMembership, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22241,7 +22786,7 @@ func init() {
 
 		entities, err := client.Discussion.Query().
 			Where(discussion.OwnerID(orgID)).
-			Where(predicate.Discussion(matchKeyIn(SchemaDiscussion, field, values))).
+			Where(predicate.Discussion(lookupPredicate(SchemaDiscussion, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22269,7 +22814,7 @@ func init() {
 
 		entities, err := client.DocumentData.Query().
 			Where(documentdata.OwnerID(orgID)).
-			Where(predicate.DocumentData(matchKeyIn(SchemaDocumentData, field, values))).
+			Where(predicate.DocumentData(lookupPredicate(SchemaDocumentData, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22297,7 +22842,7 @@ func init() {
 
 		entities, err := client.EmailTemplate.Query().
 			Where(ownerScopeEmailTemplate(orgID)).
-			Where(predicate.EmailTemplate(matchKeyIn(SchemaEmailTemplate, field, values))).
+			Where(predicate.EmailTemplate(lookupPredicate(SchemaEmailTemplate, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22325,7 +22870,7 @@ func init() {
 
 		entities, err := client.Entity.Query().
 			Where(ownerScopeEntity(orgID)).
-			Where(predicate.Entity(matchKeyIn(SchemaEntity, field, values))).
+			Where(predicate.Entity(lookupPredicate(SchemaEntity, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22353,7 +22898,7 @@ func init() {
 
 		entities, err := client.EntityType.Query().
 			Where(ownerScopeEntityType(orgID)).
-			Where(predicate.EntityType(matchKeyIn(SchemaEntityType, field, values))).
+			Where(predicate.EntityType(lookupPredicate(SchemaEntityType, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22381,7 +22926,7 @@ func init() {
 
 		entities, err := client.Evidence.Query().
 			Where(evidence.OwnerID(orgID)).
-			Where(predicate.Evidence(matchKeyIn(SchemaEvidence, field, values))).
+			Where(predicate.Evidence(lookupPredicate(SchemaEvidence, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22409,7 +22954,7 @@ func init() {
 
 		entities, err := client.Finding.Query().
 			Where(ownerScopeFinding(orgID)).
-			Where(predicate.Finding(matchKeyIn(SchemaFinding, field, values))).
+			Where(predicate.Finding(lookupPredicate(SchemaFinding, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22437,7 +22982,7 @@ func init() {
 
 		entities, err := client.FindingControl.Query().
 			Where(findingcontrol.OwnerID(orgID)).
-			Where(predicate.FindingControl(matchKeyIn(SchemaFindingControl, field, values))).
+			Where(predicate.FindingControl(lookupPredicate(SchemaFindingControl, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22465,7 +23010,7 @@ func init() {
 
 		entities, err := client.Group.Query().
 			Where(group.OwnerID(orgID)).
-			Where(predicate.Group(matchKeyIn(SchemaGroup, field, values))).
+			Where(predicate.Group(lookupPredicate(SchemaGroup, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22493,7 +23038,7 @@ func init() {
 
 		entities, err := client.IdentityHolder.Query().
 			Where(identityholder.OwnerID(orgID)).
-			Where(predicate.IdentityHolder(matchKeyIn(SchemaIdentityHolder, field, values))).
+			Where(predicate.IdentityHolder(lookupPredicate(SchemaIdentityHolder, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22521,7 +23066,7 @@ func init() {
 
 		entities, err := client.Integration.Query().
 			Where(ownerScopeIntegration(orgID)).
-			Where(predicate.Integration(matchKeyIn(SchemaIntegration, field, values))).
+			Where(predicate.Integration(lookupPredicate(SchemaIntegration, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22549,7 +23094,7 @@ func init() {
 
 		entities, err := client.IntegrationRun.Query().
 			Where(integrationrun.OwnerID(orgID)).
-			Where(predicate.IntegrationRun(matchKeyIn(SchemaIntegrationRun, field, values))).
+			Where(predicate.IntegrationRun(lookupPredicate(SchemaIntegrationRun, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22577,7 +23122,7 @@ func init() {
 
 		entities, err := client.InternalPolicy.Query().
 			Where(ownerScopeInternalPolicy(orgID)).
-			Where(predicate.InternalPolicy(matchKeyIn(SchemaInternalPolicy, field, values))).
+			Where(predicate.InternalPolicy(lookupPredicate(SchemaInternalPolicy, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22605,7 +23150,7 @@ func init() {
 
 		entities, err := client.Invite.Query().
 			Where(invite.OwnerID(orgID)).
-			Where(predicate.Invite(matchKeyIn(SchemaInvite, field, values))).
+			Where(predicate.Invite(lookupPredicate(SchemaInvite, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22633,7 +23178,7 @@ func init() {
 
 		entities, err := client.MappedControl.Query().
 			Where(ownerScopeMappedControl(orgID)).
-			Where(predicate.MappedControl(matchKeyIn(SchemaMappedControl, field, values))).
+			Where(predicate.MappedControl(lookupPredicate(SchemaMappedControl, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22661,7 +23206,7 @@ func init() {
 
 		entities, err := client.Narrative.Query().
 			Where(ownerScopeNarrative(orgID)).
-			Where(predicate.Narrative(matchKeyIn(SchemaNarrative, field, values))).
+			Where(predicate.Narrative(lookupPredicate(SchemaNarrative, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22689,7 +23234,7 @@ func init() {
 
 		entities, err := client.Note.Query().
 			Where(note.OwnerID(orgID)).
-			Where(predicate.Note(matchKeyIn(SchemaNote, field, values))).
+			Where(predicate.Note(lookupPredicate(SchemaNote, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22717,7 +23262,7 @@ func init() {
 
 		entities, err := client.NotificationTemplate.Query().
 			Where(ownerScopeNotificationTemplate(orgID)).
-			Where(predicate.NotificationTemplate(matchKeyIn(SchemaNotificationTemplate, field, values))).
+			Where(predicate.NotificationTemplate(lookupPredicate(SchemaNotificationTemplate, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22745,7 +23290,7 @@ func init() {
 
 		entities, err := client.Platform.Query().
 			Where(platform.OwnerID(orgID)).
-			Where(predicate.Platform(matchKeyIn(SchemaPlatform, field, values))).
+			Where(predicate.Platform(lookupPredicate(SchemaPlatform, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22773,7 +23318,7 @@ func init() {
 
 		entities, err := client.Procedure.Query().
 			Where(ownerScopeProcedure(orgID)).
-			Where(predicate.Procedure(matchKeyIn(SchemaProcedure, field, values))).
+			Where(predicate.Procedure(lookupPredicate(SchemaProcedure, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22801,7 +23346,7 @@ func init() {
 
 		entities, err := client.Program.Query().
 			Where(program.OwnerID(orgID)).
-			Where(predicate.Program(matchKeyIn(SchemaProgram, field, values))).
+			Where(predicate.Program(lookupPredicate(SchemaProgram, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22829,7 +23374,7 @@ func init() {
 
 		entities, err := client.Remediation.Query().
 			Where(ownerScopeRemediation(orgID)).
-			Where(predicate.Remediation(matchKeyIn(SchemaRemediation, field, values))).
+			Where(predicate.Remediation(lookupPredicate(SchemaRemediation, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22857,7 +23402,7 @@ func init() {
 
 		entities, err := client.Report.Query().
 			Where(report.OwnerID(orgID)).
-			Where(predicate.Report(matchKeyIn(SchemaReport, field, values))).
+			Where(predicate.Report(lookupPredicate(SchemaReport, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22885,7 +23430,7 @@ func init() {
 
 		entities, err := client.Review.Query().
 			Where(ownerScopeReview(orgID)).
-			Where(predicate.Review(matchKeyIn(SchemaReview, field, values))).
+			Where(predicate.Review(lookupPredicate(SchemaReview, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22913,7 +23458,7 @@ func init() {
 
 		entities, err := client.Risk.Query().
 			Where(risk.OwnerID(orgID)).
-			Where(predicate.Risk(matchKeyIn(SchemaRisk, field, values))).
+			Where(predicate.Risk(lookupPredicate(SchemaRisk, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22941,7 +23486,7 @@ func init() {
 
 		entities, err := client.Scan.Query().
 			Where(ownerScopeScan(orgID)).
-			Where(predicate.Scan(matchKeyIn(SchemaScan, field, values))).
+			Where(predicate.Scan(lookupPredicate(SchemaScan, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22969,7 +23514,7 @@ func init() {
 
 		entities, err := client.Standard.Query().
 			Where(ownerScopeStandard(orgID)).
-			Where(predicate.Standard(matchKeyIn(SchemaStandard, field, values))).
+			Where(predicate.Standard(lookupPredicate(SchemaStandard, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22997,7 +23542,7 @@ func init() {
 
 		entities, err := client.Subcontrol.Query().
 			Where(ownerScopeSubcontrol(orgID)).
-			Where(predicate.Subcontrol(matchKeyIn(SchemaSubcontrol, field, values))).
+			Where(predicate.Subcontrol(lookupPredicate(SchemaSubcontrol, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23025,7 +23570,7 @@ func init() {
 
 		entities, err := client.Subprocessor.Query().
 			Where(ownerScopeSubprocessor(orgID)).
-			Where(predicate.Subprocessor(matchKeyIn(SchemaSubprocessor, field, values))).
+			Where(predicate.Subprocessor(lookupPredicate(SchemaSubprocessor, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23053,7 +23598,7 @@ func init() {
 
 		entities, err := client.Subscriber.Query().
 			Where(subscriber.OwnerID(orgID)).
-			Where(predicate.Subscriber(matchKeyIn(SchemaSubscriber, field, values))).
+			Where(predicate.Subscriber(lookupPredicate(SchemaSubscriber, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23081,7 +23626,7 @@ func init() {
 
 		entities, err := client.SystemDetail.Query().
 			Where(systemdetail.OwnerID(orgID)).
-			Where(predicate.SystemDetail(matchKeyIn(SchemaSystemDetail, field, values))).
+			Where(predicate.SystemDetail(lookupPredicate(SchemaSystemDetail, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23109,7 +23654,7 @@ func init() {
 
 		entities, err := client.TagDefinition.Query().
 			Where(ownerScopeTagDefinition(orgID)).
-			Where(predicate.TagDefinition(matchKeyIn(SchemaTagDefinition, field, values))).
+			Where(predicate.TagDefinition(lookupPredicate(SchemaTagDefinition, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23137,7 +23682,7 @@ func init() {
 
 		entities, err := client.Task.Query().
 			Where(task.OwnerID(orgID)).
-			Where(predicate.Task(matchKeyIn(SchemaTask, field, values))).
+			Where(predicate.Task(lookupPredicate(SchemaTask, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23165,7 +23710,7 @@ func init() {
 
 		entities, err := client.Template.Query().
 			Where(ownerScopeTemplate(orgID)).
-			Where(predicate.Template(matchKeyIn(SchemaTemplate, field, values))).
+			Where(predicate.Template(lookupPredicate(SchemaTemplate, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23193,7 +23738,7 @@ func init() {
 
 		entities, err := client.TrustCenter.Query().
 			Where(trustcenter.OwnerID(orgID)).
-			Where(predicate.TrustCenter(matchKeyIn(SchemaTrustCenter, field, values))).
+			Where(predicate.TrustCenter(lookupPredicate(SchemaTrustCenter, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23221,7 +23766,7 @@ func init() {
 
 		entities, err := client.VendorRiskScore.Query().
 			Where(vendorriskscore.OwnerID(orgID)).
-			Where(predicate.VendorRiskScore(matchKeyIn(SchemaVendorRiskScore, field, values))).
+			Where(predicate.VendorRiskScore(lookupPredicate(SchemaVendorRiskScore, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23249,7 +23794,7 @@ func init() {
 
 		entities, err := client.Vulnerability.Query().
 			Where(ownerScopeVulnerability(orgID)).
-			Where(predicate.Vulnerability(matchKeyIn(SchemaVulnerability, field, values))).
+			Where(predicate.Vulnerability(lookupPredicate(SchemaVulnerability, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23277,7 +23822,7 @@ func init() {
 
 		entities, err := client.WorkflowDefinition.Query().
 			Where(ownerScopeWorkflowDefinition(orgID)).
-			Where(predicate.WorkflowDefinition(matchKeyIn(SchemaWorkflowDefinition, field, values))).
+			Where(predicate.WorkflowDefinition(lookupPredicate(SchemaWorkflowDefinition, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23305,7 +23850,7 @@ func init() {
 
 		entities, err := client.WorkflowInstance.Query().
 			Where(workflowinstance.OwnerID(orgID)).
-			Where(predicate.WorkflowInstance(matchKeyIn(SchemaWorkflowInstance, field, values))).
+			Where(predicate.WorkflowInstance(lookupPredicate(SchemaWorkflowInstance, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23333,7 +23878,7 @@ func init() {
 
 		entities, err := client.WorkflowObjectRef.Query().
 			Where(workflowobjectref.OwnerID(orgID)).
-			Where(predicate.WorkflowObjectRef(matchKeyIn(SchemaWorkflowObjectRef, field, values))).
+			Where(predicate.WorkflowObjectRef(lookupPredicate(SchemaWorkflowObjectRef, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -23385,7 +23930,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23411,7 +23956,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23430,7 +23975,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23463,7 +24008,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23496,7 +24041,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23522,7 +24067,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23562,7 +24107,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23595,7 +24140,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23621,7 +24166,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23654,7 +24199,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23680,7 +24225,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23741,7 +24286,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23774,7 +24319,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23800,7 +24345,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23833,7 +24378,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23901,7 +24446,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23934,7 +24479,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23960,7 +24505,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -23979,7 +24524,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24033,7 +24578,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24066,7 +24611,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24085,7 +24630,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24111,7 +24656,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24137,7 +24682,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24170,7 +24715,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24196,7 +24741,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24222,7 +24767,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24248,7 +24793,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24274,7 +24819,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24300,7 +24845,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24333,7 +24878,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24359,7 +24904,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24385,7 +24930,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24418,7 +24963,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24444,7 +24989,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24470,7 +25015,7 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -24492,7 +25037,7 @@ func init() {
 
 		update := client.ActionPlan.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24530,7 +25075,7 @@ func init() {
 
 		update := client.Assessment.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24568,7 +25113,7 @@ func init() {
 
 		update := client.AssessmentPolicy.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24606,7 +25151,7 @@ func init() {
 
 		update := client.Asset.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24644,7 +25189,7 @@ func init() {
 
 		update := client.Campaign.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24682,7 +25227,7 @@ func init() {
 
 		update := client.CheckResult.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24720,7 +25265,7 @@ func init() {
 
 		update := client.Contact.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24758,7 +25303,7 @@ func init() {
 
 		update := client.Control.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24796,7 +25341,7 @@ func init() {
 
 		update := client.ControlImplementation.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24834,7 +25379,7 @@ func init() {
 
 		update := client.ControlObjective.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24872,7 +25417,7 @@ func init() {
 
 		update := client.CustomTypeEnum.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24910,7 +25455,7 @@ func init() {
 
 		update := client.DirectoryAccount.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24948,7 +25493,7 @@ func init() {
 
 		update := client.DirectoryGroup.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -24986,7 +25531,7 @@ func init() {
 
 		update := client.DirectoryMembership.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25024,7 +25569,7 @@ func init() {
 
 		update := client.EmailTemplate.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25062,7 +25607,7 @@ func init() {
 
 		update := client.Entity.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25100,7 +25645,7 @@ func init() {
 
 		update := client.Evidence.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25138,7 +25683,7 @@ func init() {
 
 		update := client.Finding.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25176,7 +25721,7 @@ func init() {
 
 		update := client.Group.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25214,7 +25759,7 @@ func init() {
 
 		update := client.IdentityHolder.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25252,7 +25797,7 @@ func init() {
 
 		update := client.InternalPolicy.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25290,7 +25835,7 @@ func init() {
 
 		update := client.MappedControl.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25328,7 +25873,7 @@ func init() {
 
 		update := client.Narrative.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25366,7 +25911,7 @@ func init() {
 
 		update := client.Platform.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25404,7 +25949,7 @@ func init() {
 
 		update := client.Procedure.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25442,7 +25987,7 @@ func init() {
 
 		update := client.Program.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25480,7 +26025,7 @@ func init() {
 
 		update := client.Remediation.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25518,7 +26063,7 @@ func init() {
 
 		update := client.Review.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25556,7 +26101,7 @@ func init() {
 
 		update := client.Risk.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25594,7 +26139,7 @@ func init() {
 
 		update := client.Scan.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25632,7 +26177,7 @@ func init() {
 
 		update := client.Subcontrol.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25670,7 +26215,7 @@ func init() {
 
 		update := client.SystemDetail.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25708,7 +26253,7 @@ func init() {
 
 		update := client.TagDefinition.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25746,7 +26291,7 @@ func init() {
 
 		update := client.Task.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25784,7 +26329,7 @@ func init() {
 
 		update := client.Template.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25822,7 +26367,7 @@ func init() {
 
 		update := client.Vulnerability.UpdateOne(&existing).SetInput(input)
 
-		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID, FieldSourceKey); err != nil {
 			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
 		}
 
@@ -25869,7 +26414,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.ActionPlan.Query()
 			query = query.Where(ownerScopeActionPlan(ownerID))
-			query = query.Where(predicate.ActionPlan(matchKeyIn(SchemaActionPlan, primary, chunk)))
+			query = query.Where(predicate.ActionPlan(lookupPredicate(SchemaActionPlan, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -25887,7 +26432,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaActionPlan, results, fields, keys), nil
 	}
 	SchemaAssessment.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "assessment", Operation: refOpQuery}
@@ -25913,7 +26458,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Assessment.Query()
 			query = query.Where(ownerScopeAssessment(ownerID))
-			query = query.Where(predicate.Assessment(matchKeyIn(SchemaAssessment, primary, chunk)))
+			query = query.Where(predicate.Assessment(lookupPredicate(SchemaAssessment, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -25931,7 +26476,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaAssessment, results, fields, keys), nil
 	}
 	SchemaAssessmentPolicy.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "assessment_policy", Operation: refOpQuery}
@@ -25957,7 +26502,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.AssessmentPolicy.Query()
 			query = query.Where(assessmentpolicy.OwnerID(ownerID))
-			query = query.Where(predicate.AssessmentPolicy(matchKeyIn(SchemaAssessmentPolicy, primary, chunk)))
+			query = query.Where(predicate.AssessmentPolicy(lookupPredicate(SchemaAssessmentPolicy, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -25975,7 +26520,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaAssessmentPolicy, results, fields, keys), nil
 	}
 	SchemaAsset.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "asset", Operation: refOpQuery}
@@ -26001,7 +26546,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Asset.Query()
 			query = query.Where(ownerScopeAsset(ownerID))
-			query = query.Where(predicate.Asset(matchKeyIn(SchemaAsset, primary, chunk)))
+			query = query.Where(predicate.Asset(lookupPredicate(SchemaAsset, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26019,7 +26564,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaAsset, results, fields, keys), nil
 	}
 	SchemaCampaign.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "campaign", Operation: refOpQuery}
@@ -26045,7 +26590,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Campaign.Query()
 			query = query.Where(campaign.OwnerID(ownerID))
-			query = query.Where(predicate.Campaign(matchKeyIn(SchemaCampaign, primary, chunk)))
+			query = query.Where(predicate.Campaign(lookupPredicate(SchemaCampaign, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26063,7 +26608,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaCampaign, results, fields, keys), nil
 	}
 	SchemaCheckResult.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "check_result", Operation: refOpQuery}
@@ -26089,7 +26634,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.CheckResult.Query()
 			query = query.Where(checkresult.OwnerID(ownerID))
-			query = query.Where(predicate.CheckResult(matchKeyIn(SchemaCheckResult, primary, chunk)))
+			query = query.Where(predicate.CheckResult(lookupPredicate(SchemaCheckResult, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26107,7 +26652,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaCheckResult, results, fields, keys), nil
 	}
 	SchemaContact.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "contact", Operation: refOpQuery}
@@ -26133,7 +26678,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Contact.Query()
 			query = query.Where(contact.OwnerID(ownerID))
-			query = query.Where(predicate.Contact(matchKeyIn(SchemaContact, primary, chunk)))
+			query = query.Where(predicate.Contact(lookupPredicate(SchemaContact, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26151,7 +26696,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaContact, results, fields, keys), nil
 	}
 	SchemaControl.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "control", Operation: refOpQuery}
@@ -26177,7 +26722,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Control.Query()
 			query = query.Where(ownerScopeControl(ownerID))
-			query = query.Where(predicate.Control(matchKeyIn(SchemaControl, primary, chunk)))
+			query = query.Where(predicate.Control(lookupPredicate(SchemaControl, primary, chunk)))
 			query = query.Where(control.StandardIDIsNil())
 
 			entities, err := query.All(ctx)
@@ -26196,7 +26741,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaControl, results, fields, keys), nil
 	}
 	SchemaControlImplementation.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "control_implementation", Operation: refOpQuery}
@@ -26222,7 +26767,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.ControlImplementation.Query()
 			query = query.Where(ownerScopeControlImplementation(ownerID))
-			query = query.Where(predicate.ControlImplementation(matchKeyIn(SchemaControlImplementation, primary, chunk)))
+			query = query.Where(predicate.ControlImplementation(lookupPredicate(SchemaControlImplementation, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26240,7 +26785,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaControlImplementation, results, fields, keys), nil
 	}
 	SchemaControlObjective.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "control_objective", Operation: refOpQuery}
@@ -26266,7 +26811,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.ControlObjective.Query()
 			query = query.Where(ownerScopeControlObjective(ownerID))
-			query = query.Where(predicate.ControlObjective(matchKeyIn(SchemaControlObjective, primary, chunk)))
+			query = query.Where(predicate.ControlObjective(lookupPredicate(SchemaControlObjective, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26284,7 +26829,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaControlObjective, results, fields, keys), nil
 	}
 	SchemaCustomTypeEnum.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "custom_type_enum", Operation: refOpQuery}
@@ -26310,7 +26855,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.CustomTypeEnum.Query()
 			query = query.Where(ownerScopeCustomTypeEnum(ownerID))
-			query = query.Where(predicate.CustomTypeEnum(matchKeyIn(SchemaCustomTypeEnum, primary, chunk)))
+			query = query.Where(predicate.CustomTypeEnum(lookupPredicate(SchemaCustomTypeEnum, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26328,7 +26873,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaCustomTypeEnum, results, fields, keys), nil
 	}
 	SchemaDirectoryAccount.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
@@ -26354,7 +26899,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.DirectoryAccount.Query()
 			query = query.Where(directoryaccount.OwnerID(ownerID))
-			query = query.Where(predicate.DirectoryAccount(matchKeyIn(SchemaDirectoryAccount, primary, chunk)))
+			query = query.Where(predicate.DirectoryAccount(lookupPredicate(SchemaDirectoryAccount, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26372,7 +26917,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaDirectoryAccount, results, fields, keys), nil
 	}
 	SchemaDirectoryGroup.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
@@ -26398,7 +26943,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.DirectoryGroup.Query()
 			query = query.Where(directorygroup.OwnerID(ownerID))
-			query = query.Where(predicate.DirectoryGroup(matchKeyIn(SchemaDirectoryGroup, primary, chunk)))
+			query = query.Where(predicate.DirectoryGroup(lookupPredicate(SchemaDirectoryGroup, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26416,7 +26961,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaDirectoryGroup, results, fields, keys), nil
 	}
 	SchemaDirectoryMembership.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
@@ -26442,7 +26987,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.DirectoryMembership.Query()
 			query = query.Where(directorymembership.OwnerID(ownerID))
-			query = query.Where(predicate.DirectoryMembership(matchKeyIn(SchemaDirectoryMembership, primary, chunk)))
+			query = query.Where(predicate.DirectoryMembership(lookupPredicate(SchemaDirectoryMembership, primary, chunk)))
 			query = query.Where(directorymembership.RemovedAtIsNil())
 
 			entities, err := query.All(ctx)
@@ -26461,7 +27006,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaDirectoryMembership, results, fields, keys), nil
 	}
 	SchemaEmailTemplate.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "email_template", Operation: refOpQuery}
@@ -26487,7 +27032,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.EmailTemplate.Query()
 			query = query.Where(ownerScopeEmailTemplate(ownerID))
-			query = query.Where(predicate.EmailTemplate(matchKeyIn(SchemaEmailTemplate, primary, chunk)))
+			query = query.Where(predicate.EmailTemplate(lookupPredicate(SchemaEmailTemplate, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26505,7 +27050,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaEmailTemplate, results, fields, keys), nil
 	}
 	SchemaEntity.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
@@ -26531,7 +27076,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Entity.Query()
 			query = query.Where(ownerScopeEntity(ownerID))
-			query = query.Where(predicate.Entity(matchKeyIn(SchemaEntity, primary, chunk)))
+			query = query.Where(predicate.Entity(lookupPredicate(SchemaEntity, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26549,7 +27094,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaEntity, results, fields, keys), nil
 	}
 	SchemaEvidence.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "evidence", Operation: refOpQuery}
@@ -26575,7 +27120,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Evidence.Query()
 			query = query.Where(evidence.OwnerID(ownerID))
-			query = query.Where(predicate.Evidence(matchKeyIn(SchemaEvidence, primary, chunk)))
+			query = query.Where(predicate.Evidence(lookupPredicate(SchemaEvidence, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26593,7 +27138,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaEvidence, results, fields, keys), nil
 	}
 	SchemaFinding.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
@@ -26619,7 +27164,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Finding.Query()
 			query = query.Where(ownerScopeFinding(ownerID))
-			query = query.Where(predicate.Finding(matchKeyIn(SchemaFinding, primary, chunk)))
+			query = query.Where(predicate.Finding(lookupPredicate(SchemaFinding, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26637,7 +27182,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaFinding, results, fields, keys), nil
 	}
 	SchemaGroup.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "group", Operation: refOpQuery}
@@ -26663,7 +27208,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Group.Query()
 			query = query.Where(group.OwnerID(ownerID))
-			query = query.Where(predicate.Group(matchKeyIn(SchemaGroup, primary, chunk)))
+			query = query.Where(predicate.Group(lookupPredicate(SchemaGroup, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26681,7 +27226,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaGroup, results, fields, keys), nil
 	}
 	SchemaIdentityHolder.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "identity_holder", Operation: refOpQuery}
@@ -26707,7 +27252,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.IdentityHolder.Query()
 			query = query.Where(identityholder.OwnerID(ownerID))
-			query = query.Where(predicate.IdentityHolder(matchKeyIn(SchemaIdentityHolder, primary, chunk)))
+			query = query.Where(predicate.IdentityHolder(lookupPredicate(SchemaIdentityHolder, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26725,7 +27270,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaIdentityHolder, results, fields, keys), nil
 	}
 	SchemaInternalPolicy.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
@@ -26751,7 +27296,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.InternalPolicy.Query()
 			query = query.Where(ownerScopeInternalPolicy(ownerID))
-			query = query.Where(predicate.InternalPolicy(matchKeyIn(SchemaInternalPolicy, primary, chunk)))
+			query = query.Where(predicate.InternalPolicy(lookupPredicate(SchemaInternalPolicy, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26769,7 +27314,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaInternalPolicy, results, fields, keys), nil
 	}
 	SchemaMappedControl.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "mapped_control", Operation: refOpQuery}
@@ -26795,7 +27340,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.MappedControl.Query()
 			query = query.Where(ownerScopeMappedControl(ownerID))
-			query = query.Where(predicate.MappedControl(matchKeyIn(SchemaMappedControl, primary, chunk)))
+			query = query.Where(predicate.MappedControl(lookupPredicate(SchemaMappedControl, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26813,7 +27358,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaMappedControl, results, fields, keys), nil
 	}
 	SchemaNarrative.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "narrative", Operation: refOpQuery}
@@ -26839,7 +27384,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Narrative.Query()
 			query = query.Where(ownerScopeNarrative(ownerID))
-			query = query.Where(predicate.Narrative(matchKeyIn(SchemaNarrative, primary, chunk)))
+			query = query.Where(predicate.Narrative(lookupPredicate(SchemaNarrative, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26857,7 +27402,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaNarrative, results, fields, keys), nil
 	}
 	SchemaPlatform.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "platform", Operation: refOpQuery}
@@ -26883,7 +27428,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Platform.Query()
 			query = query.Where(platform.OwnerID(ownerID))
-			query = query.Where(predicate.Platform(matchKeyIn(SchemaPlatform, primary, chunk)))
+			query = query.Where(predicate.Platform(lookupPredicate(SchemaPlatform, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26901,7 +27446,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaPlatform, results, fields, keys), nil
 	}
 	SchemaProcedure.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "procedure", Operation: refOpQuery}
@@ -26927,7 +27472,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Procedure.Query()
 			query = query.Where(ownerScopeProcedure(ownerID))
-			query = query.Where(predicate.Procedure(matchKeyIn(SchemaProcedure, primary, chunk)))
+			query = query.Where(predicate.Procedure(lookupPredicate(SchemaProcedure, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26945,7 +27490,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaProcedure, results, fields, keys), nil
 	}
 	SchemaProgram.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "program", Operation: refOpQuery}
@@ -26971,7 +27516,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Program.Query()
 			query = query.Where(program.OwnerID(ownerID))
-			query = query.Where(predicate.Program(matchKeyIn(SchemaProgram, primary, chunk)))
+			query = query.Where(predicate.Program(lookupPredicate(SchemaProgram, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -26989,7 +27534,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaProgram, results, fields, keys), nil
 	}
 	SchemaRemediation.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "remediation", Operation: refOpQuery}
@@ -27015,7 +27560,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Remediation.Query()
 			query = query.Where(ownerScopeRemediation(ownerID))
-			query = query.Where(predicate.Remediation(matchKeyIn(SchemaRemediation, primary, chunk)))
+			query = query.Where(predicate.Remediation(lookupPredicate(SchemaRemediation, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27033,7 +27578,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaRemediation, results, fields, keys), nil
 	}
 	SchemaReview.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "review", Operation: refOpQuery}
@@ -27059,7 +27604,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Review.Query()
 			query = query.Where(ownerScopeReview(ownerID))
-			query = query.Where(predicate.Review(matchKeyIn(SchemaReview, primary, chunk)))
+			query = query.Where(predicate.Review(lookupPredicate(SchemaReview, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27077,7 +27622,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaReview, results, fields, keys), nil
 	}
 	SchemaRisk.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
@@ -27103,7 +27648,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Risk.Query()
 			query = query.Where(risk.OwnerID(ownerID))
-			query = query.Where(predicate.Risk(matchKeyIn(SchemaRisk, primary, chunk)))
+			query = query.Where(predicate.Risk(lookupPredicate(SchemaRisk, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27121,7 +27666,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaRisk, results, fields, keys), nil
 	}
 	SchemaScan.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "scan", Operation: refOpQuery}
@@ -27147,7 +27692,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Scan.Query()
 			query = query.Where(ownerScopeScan(ownerID))
-			query = query.Where(predicate.Scan(matchKeyIn(SchemaScan, primary, chunk)))
+			query = query.Where(predicate.Scan(lookupPredicate(SchemaScan, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27165,7 +27710,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaScan, results, fields, keys), nil
 	}
 	SchemaSubcontrol.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "subcontrol", Operation: refOpQuery}
@@ -27191,7 +27736,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Subcontrol.Query()
 			query = query.Where(ownerScopeSubcontrol(ownerID))
-			query = query.Where(predicate.Subcontrol(matchKeyIn(SchemaSubcontrol, primary, chunk)))
+			query = query.Where(predicate.Subcontrol(lookupPredicate(SchemaSubcontrol, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27209,7 +27754,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaSubcontrol, results, fields, keys), nil
 	}
 	SchemaSystemDetail.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
@@ -27235,7 +27780,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.SystemDetail.Query()
 			query = query.Where(systemdetail.OwnerID(ownerID))
-			query = query.Where(predicate.SystemDetail(matchKeyIn(SchemaSystemDetail, primary, chunk)))
+			query = query.Where(predicate.SystemDetail(lookupPredicate(SchemaSystemDetail, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27253,7 +27798,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaSystemDetail, results, fields, keys), nil
 	}
 	SchemaTagDefinition.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "tag_definition", Operation: refOpQuery}
@@ -27279,7 +27824,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.TagDefinition.Query()
 			query = query.Where(ownerScopeTagDefinition(ownerID))
-			query = query.Where(predicate.TagDefinition(matchKeyIn(SchemaTagDefinition, primary, chunk)))
+			query = query.Where(predicate.TagDefinition(lookupPredicate(SchemaTagDefinition, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27297,7 +27842,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaTagDefinition, results, fields, keys), nil
 	}
 	SchemaTask.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "task", Operation: refOpQuery}
@@ -27323,7 +27868,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Task.Query()
 			query = query.Where(task.OwnerID(ownerID))
-			query = query.Where(predicate.Task(matchKeyIn(SchemaTask, primary, chunk)))
+			query = query.Where(predicate.Task(lookupPredicate(SchemaTask, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27341,7 +27886,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaTask, results, fields, keys), nil
 	}
 	SchemaTemplate.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "template", Operation: refOpQuery}
@@ -27367,7 +27912,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Template.Query()
 			query = query.Where(ownerScopeTemplate(ownerID))
-			query = query.Where(predicate.Template(matchKeyIn(SchemaTemplate, primary, chunk)))
+			query = query.Where(predicate.Template(lookupPredicate(SchemaTemplate, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27385,7 +27930,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaTemplate, results, fields, keys), nil
 	}
 	SchemaVulnerability.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
@@ -27411,7 +27956,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Vulnerability.Query()
 			query = query.Where(ownerScopeVulnerability(ownerID))
-			query = query.Where(predicate.Vulnerability(matchKeyIn(SchemaVulnerability, primary, chunk)))
+			query = query.Where(predicate.Vulnerability(lookupPredicate(SchemaVulnerability, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -27429,7 +27974,7 @@ func init() {
 			}
 		}
 
-		return filterByAlternativeFields(results, fields, keys), nil
+		return filterByAlternativeFields(SchemaVulnerability, results, fields, keys), nil
 	}
 	SchemaDirectoryAccount.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
@@ -27578,979 +28123,1630 @@ func init() {
 
 		return nil
 	}
-	SchemaActionPlan.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "action_plan", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
+	SchemaActionPlan.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "action_plan", Operation: refOpDelete}
 
-		predicates := []predicate.ActionPlan{
-			actionplan.And(
-				actionplan.HasIntegrationsWith(integration.ID(installation.ID)),
-				actionplan.Not(actionplan.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
-				actionplan.Or(actionplan.SourceDefinitionIDIsNil(), actionplan.SourceDefinitionID(""), actionplan.SourceInstanceIDIsNil(), actionplan.SourceInstanceID("")),
-				actionplan.Or(actionplan.ManagedByIsNil(), actionplan.ManagedBy(""), actionplan.ManagedBy(installation.ID)),
-			),
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
 		}
 
-		if instanceID != "" {
-			predicates = append(predicates, actionplan.And(
-				actionplan.ManagedBy(installation.ID),
-				actionplan.Or(actionplan.SourceInstanceIDIsNil(), actionplan.SourceInstanceIDNEQ(instanceID)),
-			))
+		query := client.ActionPlan.Query().Where(actionplan.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(actionplan.SourceInstanceID(filter.InstanceID))
 		}
 
-		update := client.ActionPlan.Update().
-			Where(actionplan.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		if filter.Key != "" {
+			query = query.Where(actionplan.SourceKey(filter.Key))
 		}
 
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(actionplan.UpdatedAtLTE(*filter.NotUpdatedAfter))
 		}
 
-		affected, err := update.Save(ctx)
+		ids, err := query.IDs(ctx)
 		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
 		}
 
-		return affected, nil
-	}
-	SchemaAsset.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "asset", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Asset{
-			asset.And(
-				asset.IntegrationID(installation.ID),
-				asset.Or(asset.SourceDefinitionIDIsNil(), asset.SourceDefinitionID(""), asset.SourceInstanceIDIsNil(), asset.SourceInstanceID("")),
-				asset.Or(asset.ManagedByIsNil(), asset.ManagedBy(""), asset.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, asset.And(
-				asset.ManagedBy(installation.ID),
-				asset.Or(asset.SourceInstanceIDIsNil(), asset.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Asset.Update().
-			Where(asset.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaCampaign.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "campaign", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Campaign{
-			campaign.And(
-				campaign.IntegrationID(installation.ID),
-				campaign.Or(campaign.SourceDefinitionIDIsNil(), campaign.SourceDefinitionID(""), campaign.SourceInstanceIDIsNil(), campaign.SourceInstanceID("")),
-				campaign.Or(campaign.ManagedByIsNil(), campaign.ManagedBy(""), campaign.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, campaign.And(
-				campaign.ManagedBy(installation.ID),
-				campaign.Or(campaign.SourceInstanceIDIsNil(), campaign.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Campaign.Update().
-			Where(campaign.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaCheckResult.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "check_result", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.CheckResult{
-			checkresult.And(
-				checkresult.IntegrationID(installation.ID),
-				checkresult.Or(checkresult.SourceDefinitionIDIsNil(), checkresult.SourceDefinitionID(""), checkresult.SourceInstanceIDIsNil(), checkresult.SourceInstanceID("")),
-				checkresult.Or(checkresult.ManagedByIsNil(), checkresult.ManagedBy(""), checkresult.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, checkresult.And(
-				checkresult.ManagedBy(installation.ID),
-				checkresult.Or(checkresult.SourceInstanceIDIsNil(), checkresult.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.CheckResult.Update().
-			Where(checkresult.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaContact.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "contact", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Contact{
-			contact.And(
-				contact.IntegrationID(installation.ID),
-				contact.Or(contact.SourceDefinitionIDIsNil(), contact.SourceDefinitionID(""), contact.SourceInstanceIDIsNil(), contact.SourceInstanceID("")),
-				contact.Or(contact.ManagedByIsNil(), contact.ManagedBy(""), contact.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, contact.And(
-				contact.ManagedBy(installation.ID),
-				contact.Or(contact.SourceInstanceIDIsNil(), contact.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Contact.Update().
-			Where(contact.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaDirectoryAccount.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.DirectoryAccount{
-			directoryaccount.And(
-				directoryaccount.IntegrationID(installation.ID),
-				directoryaccount.Or(directoryaccount.SourceDefinitionIDIsNil(), directoryaccount.SourceDefinitionID(""), directoryaccount.SourceInstanceIDIsNil(), directoryaccount.SourceInstanceID("")),
-				directoryaccount.Or(directoryaccount.ManagedByIsNil(), directoryaccount.ManagedBy(""), directoryaccount.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, directoryaccount.And(
-				directoryaccount.ManagedBy(installation.ID),
-				directoryaccount.Or(directoryaccount.SourceInstanceIDIsNil(), directoryaccount.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.DirectoryAccount.Update().
-			Where(directoryaccount.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaDirectoryGroup.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "directory_group", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.DirectoryGroup{
-			directorygroup.And(
-				directorygroup.IntegrationID(installation.ID),
-				directorygroup.Or(directorygroup.SourceDefinitionIDIsNil(), directorygroup.SourceDefinitionID(""), directorygroup.SourceInstanceIDIsNil(), directorygroup.SourceInstanceID("")),
-				directorygroup.Or(directorygroup.ManagedByIsNil(), directorygroup.ManagedBy(""), directorygroup.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, directorygroup.And(
-				directorygroup.ManagedBy(installation.ID),
-				directorygroup.Or(directorygroup.SourceInstanceIDIsNil(), directorygroup.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.DirectoryGroup.Update().
-			Where(directorygroup.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaDirectoryMembership.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "directory_membership", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.DirectoryMembership{
-			directorymembership.And(
-				directorymembership.IntegrationID(installation.ID),
-				directorymembership.Or(directorymembership.SourceDefinitionIDIsNil(), directorymembership.SourceDefinitionID(""), directorymembership.SourceInstanceIDIsNil(), directorymembership.SourceInstanceID("")),
-				directorymembership.Or(directorymembership.ManagedByIsNil(), directorymembership.ManagedBy(""), directorymembership.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, directorymembership.And(
-				directorymembership.ManagedBy(installation.ID),
-				directorymembership.Or(directorymembership.SourceInstanceIDIsNil(), directorymembership.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.DirectoryMembership.Update().
-			Where(directorymembership.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaEmailTemplate.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "email_template", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.EmailTemplate{
-			emailtemplate.And(
-				emailtemplate.IntegrationID(installation.ID),
-				emailtemplate.Or(emailtemplate.SourceDefinitionIDIsNil(), emailtemplate.SourceDefinitionID(""), emailtemplate.SourceInstanceIDIsNil(), emailtemplate.SourceInstanceID("")),
-				emailtemplate.Or(emailtemplate.ManagedByIsNil(), emailtemplate.ManagedBy(""), emailtemplate.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, emailtemplate.And(
-				emailtemplate.ManagedBy(installation.ID),
-				emailtemplate.Or(emailtemplate.SourceInstanceIDIsNil(), emailtemplate.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.EmailTemplate.Update().
-			Where(emailtemplate.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaEntity.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Entity{
-			entity.And(
-				entity.HasIntegrationsWith(integration.ID(installation.ID)),
-				entity.Not(entity.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
-				entity.Or(entity.SourceDefinitionIDIsNil(), entity.SourceDefinitionID(""), entity.SourceInstanceIDIsNil(), entity.SourceInstanceID("")),
-				entity.Or(entity.ManagedByIsNil(), entity.ManagedBy(""), entity.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, entity.And(
-				entity.ManagedBy(installation.ID),
-				entity.Or(entity.SourceInstanceIDIsNil(), entity.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Entity.Update().
-			Where(entity.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaFinding.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "finding", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Finding{
-			finding.And(
-				finding.HasIntegrationsWith(integration.ID(installation.ID)),
-				finding.Not(finding.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
-				finding.Or(finding.SourceDefinitionIDIsNil(), finding.SourceDefinitionID(""), finding.SourceInstanceIDIsNil(), finding.SourceInstanceID("")),
-				finding.Or(finding.ManagedByIsNil(), finding.ManagedBy(""), finding.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, finding.And(
-				finding.ManagedBy(installation.ID),
-				finding.Or(finding.SourceInstanceIDIsNil(), finding.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Finding.Update().
-			Where(finding.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaGroup.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "group", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Group{
-			group.And(
-				group.HasIntegrationsWith(integration.ID(installation.ID)),
-				group.Not(group.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
-				group.Or(group.SourceDefinitionIDIsNil(), group.SourceDefinitionID(""), group.SourceInstanceIDIsNil(), group.SourceInstanceID("")),
-				group.Or(group.ManagedByIsNil(), group.ManagedBy(""), group.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, group.And(
-				group.ManagedBy(installation.ID),
-				group.Or(group.SourceInstanceIDIsNil(), group.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Group.Update().
-			Where(group.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaInternalPolicy.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "internal_policy", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.InternalPolicy{
-			internalpolicy.And(
-				internalpolicy.HasIntegrationsWith(integration.ID(installation.ID)),
-				internalpolicy.Not(internalpolicy.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
-				internalpolicy.Or(internalpolicy.SourceDefinitionIDIsNil(), internalpolicy.SourceDefinitionID(""), internalpolicy.SourceInstanceIDIsNil(), internalpolicy.SourceInstanceID("")),
-				internalpolicy.Or(internalpolicy.ManagedByIsNil(), internalpolicy.ManagedBy(""), internalpolicy.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, internalpolicy.And(
-				internalpolicy.ManagedBy(installation.ID),
-				internalpolicy.Or(internalpolicy.SourceInstanceIDIsNil(), internalpolicy.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.InternalPolicy.Update().
-			Where(internalpolicy.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaPlatform.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "platform", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Platform{
-			platform.And(
-				platform.HasIntegrationsWith(integration.ID(installation.ID)),
-				platform.Not(platform.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
-				platform.Or(platform.SourceDefinitionIDIsNil(), platform.SourceDefinitionID(""), platform.SourceInstanceIDIsNil(), platform.SourceInstanceID("")),
-				platform.Or(platform.ManagedByIsNil(), platform.ManagedBy(""), platform.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, platform.And(
-				platform.ManagedBy(installation.ID),
-				platform.Or(platform.SourceInstanceIDIsNil(), platform.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Platform.Update().
-			Where(platform.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaRemediation.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "remediation", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Remediation{
-			remediation.And(
-				remediation.HasIntegrationsWith(integration.ID(installation.ID)),
-				remediation.Not(remediation.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
-				remediation.Or(remediation.SourceDefinitionIDIsNil(), remediation.SourceDefinitionID(""), remediation.SourceInstanceIDIsNil(), remediation.SourceInstanceID("")),
-				remediation.Or(remediation.ManagedByIsNil(), remediation.ManagedBy(""), remediation.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, remediation.And(
-				remediation.ManagedBy(installation.ID),
-				remediation.Or(remediation.SourceInstanceIDIsNil(), remediation.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Remediation.Update().
-			Where(remediation.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaReview.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "review", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Review{
-			review.And(
-				review.HasIntegrationsWith(integration.ID(installation.ID)),
-				review.Not(review.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
-				review.Or(review.SourceDefinitionIDIsNil(), review.SourceDefinitionID(""), review.SourceInstanceIDIsNil(), review.SourceInstanceID("")),
-				review.Or(review.ManagedByIsNil(), review.ManagedBy(""), review.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, review.And(
-				review.ManagedBy(installation.ID),
-				review.Or(review.SourceInstanceIDIsNil(), review.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Review.Update().
-			Where(review.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaRisk.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "risk", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Risk{
-			risk.And(
-				risk.IntegrationID(installation.ID),
-				risk.Or(risk.SourceDefinitionIDIsNil(), risk.SourceDefinitionID(""), risk.SourceInstanceIDIsNil(), risk.SourceInstanceID("")),
-				risk.Or(risk.ManagedByIsNil(), risk.ManagedBy(""), risk.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, risk.And(
-				risk.ManagedBy(installation.ID),
-				risk.Or(risk.SourceInstanceIDIsNil(), risk.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Risk.Update().
-			Where(risk.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaVulnerability.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
-		ref := SchemaRef{Schema: "vulnerability", Operation: refOpUpdate}
-		instanceID := installation.InstallationMetadata.Display.ExternalID
-
-		predicates := []predicate.Vulnerability{
-			vulnerability.And(
-				vulnerability.HasIntegrationsWith(integration.ID(installation.ID)),
-				vulnerability.Not(vulnerability.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
-				vulnerability.Or(vulnerability.SourceDefinitionIDIsNil(), vulnerability.SourceDefinitionID(""), vulnerability.SourceInstanceIDIsNil(), vulnerability.SourceInstanceID("")),
-				vulnerability.Or(vulnerability.ManagedByIsNil(), vulnerability.ManagedBy(""), vulnerability.ManagedBy(installation.ID)),
-			),
-		}
-
-		if instanceID != "" {
-			predicates = append(predicates, vulnerability.And(
-				vulnerability.ManagedBy(installation.ID),
-				vulnerability.Or(vulnerability.SourceInstanceIDIsNil(), vulnerability.SourceInstanceIDNEQ(instanceID)),
-			))
-		}
-
-		update := client.Vulnerability.Update().
-			Where(vulnerability.Or(predicates...)).
-			SetSourceDefinitionID(installation.DefinitionID).
-			SetManagedBy(installation.ID)
-
-		if installation.DefinitionVersion != "" {
-			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
-		}
-
-		if instanceID != "" {
-			update = update.SetSourceInstanceID(instanceID)
-		}
-
-		affected, err := update.Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return affected, nil
-	}
-	SchemaEntity.Catalog.adopt = func(ctx context.Context, client *generated.Client, catalogID, ownerID string, overlay json.RawMessage) (string, bool, error) {
-		ref := SchemaRef{Schema: "entity", Operation: refOpCreate, EntityID: catalogID}
-
-		row, key, err := catalogRowEntity(ctx, client, ref, catalogID)
-		if err != nil {
-			return "", false, err
-		}
-
-		id, err := client.Entity.Query().Where(entity.OwnerID(ownerID), entity.CatalogID(catalogID)).OnlyID(ctx)
-		switch {
-		case err == nil:
-			return id, false, nil
-		case !generated.IsNotFound(err):
-			return "", false, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		if key != "" {
-			id, err = client.Entity.Query().Where(entity.OwnerID(ownerID), entity.CatalogKey(key)).OnlyID(ctx)
-			switch {
-			case err == nil:
-				if err := client.Entity.UpdateOneID(id).SetCatalogID(catalogID).Exec(ctx); err != nil {
-					return "", false, logPersistError(ctx, SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: id}, ErrUpdateFailed, err)
-				}
-
-				return id, false, nil
-			case !generated.IsNotFound(err):
-				return "", false, logError(ctx, ref, ErrQueryFailed, err)
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.ActionPlan.Delete().Where(actionplan.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
 			}
 		}
 
-		payload, err := catalogPayload(row, SchemaEntity.Catalog.Fields)
-		if err != nil {
-			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
+		if cleanup == nil {
+			return ids, nil
 		}
 
-		if payload, _, err = jsonx.SetObjectKey(payload, entity.FieldOwnerID, ownerID); err != nil {
-			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
-		}
-
-		if payload, _, err = jsonx.SetObjectKey(payload, SchemaEntity.Catalog.PointerField, catalogID); err != nil {
-			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
-		}
-
-		if payload, _, err = jsonx.SetObjectKey(payload, SchemaEntity.Catalog.KeyField, key); err != nil {
-			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
-		}
-
-		if len(overlay) > 0 {
-			if payload, _, err = jsonx.DeepMerge(payload, overlay); err != nil {
-				return "", false, logError(ctx, ref, ErrDecodeFailed, err)
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
 			}
 		}
 
-		id, err = SchemaEntity.Create(ctx, client, payload)
-		if err != nil {
-			return "", false, err
+		return ids, nil
+	}
+	SchemaAssessment.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "assessment", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
 		}
 
-		return id, true, nil
-	}
-	SchemaEntity.Catalog.refresh = func(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
-		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: catalogID}
+		query := client.Assessment.Query().Where(assessment.SourceDefinitionID(filter.DefinitionID))
 
-		row, _, err := catalogRowEntity(ctx, client, ref, catalogID)
+		if filter.InstanceID != "" {
+			query = query.Where(assessment.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(assessment.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(assessment.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Assessment.Delete().Where(assessment.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaAssessmentPolicy.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "assessment_policy", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.AssessmentPolicy.Query().Where(assessmentpolicy.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(assessmentpolicy.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(assessmentpolicy.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(assessmentpolicy.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.AssessmentPolicy.Delete().Where(assessmentpolicy.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaAsset.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "asset", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Asset.Query().Where(asset.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(asset.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(asset.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(asset.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Asset.Delete().Where(asset.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaCampaign.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "campaign", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Campaign.Query().Where(campaign.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(campaign.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(campaign.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(campaign.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Campaign.Delete().Where(campaign.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaCheckResult.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "check_result", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.CheckResult.Query().Where(checkresult.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(checkresult.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(checkresult.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(checkresult.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.CheckResult.Delete().Where(checkresult.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaContact.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "contact", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Contact.Query().Where(contact.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(contact.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(contact.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(contact.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Contact.Delete().Where(contact.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaControl.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "control", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Control.Query().Where(control.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(control.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(control.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(control.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Control.Delete().Where(control.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaControlImplementation.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "control_implementation", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.ControlImplementation.Query().Where(controlimplementation.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(controlimplementation.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(controlimplementation.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(controlimplementation.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.ControlImplementation.Delete().Where(controlimplementation.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaControlObjective.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "control_objective", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.ControlObjective.Query().Where(controlobjective.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(controlobjective.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(controlobjective.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(controlobjective.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.ControlObjective.Delete().Where(controlobjective.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaCustomTypeEnum.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "custom_type_enum", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.CustomTypeEnum.Query().Where(customtypeenum.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(customtypeenum.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(customtypeenum.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(customtypeenum.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.CustomTypeEnum.Delete().Where(customtypeenum.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaDirectoryAccount.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.DirectoryAccount.Query().Where(directoryaccount.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(directoryaccount.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(directoryaccount.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(directoryaccount.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.DirectoryAccount.Delete().Where(directoryaccount.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaDirectoryGroup.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.DirectoryGroup.Query().Where(directorygroup.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(directorygroup.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(directorygroup.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(directorygroup.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.DirectoryGroup.Delete().Where(directorygroup.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaDirectoryMembership.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.DirectoryMembership.Query().Where(directorymembership.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(directorymembership.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(directorymembership.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(directorymembership.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.DirectoryMembership.Delete().Where(directorymembership.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaEmailTemplate.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "email_template", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.EmailTemplate.Query().Where(emailtemplate.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(emailtemplate.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(emailtemplate.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(emailtemplate.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.EmailTemplate.Delete().Where(emailtemplate.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaEntity.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Entity.Query().Where(entity.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(entity.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(entity.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(entity.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Entity.Delete().Where(entity.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaEvidence.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "evidence", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Evidence.Query().Where(evidence.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(evidence.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(evidence.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(evidence.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Evidence.Delete().Where(evidence.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaFinding.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "finding", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Finding.Query().Where(finding.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(finding.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(finding.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(finding.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Finding.Delete().Where(finding.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaGroup.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "group", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Group.Query().Where(group.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(group.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(group.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(group.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Group.Delete().Where(group.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaIdentityHolder.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "identity_holder", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.IdentityHolder.Query().Where(identityholder.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(identityholder.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(identityholder.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(identityholder.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.IdentityHolder.Delete().Where(identityholder.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaInternalPolicy.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "internal_policy", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.InternalPolicy.Query().Where(internalpolicy.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(internalpolicy.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(internalpolicy.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(internalpolicy.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.InternalPolicy.Delete().Where(internalpolicy.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaMappedControl.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "mapped_control", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.MappedControl.Query().Where(mappedcontrol.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(mappedcontrol.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(mappedcontrol.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(mappedcontrol.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.MappedControl.Delete().Where(mappedcontrol.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaNarrative.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "narrative", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Narrative.Query().Where(narrative.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(narrative.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(narrative.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(narrative.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Narrative.Delete().Where(narrative.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaPlatform.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "platform", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Platform.Query().Where(platform.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(platform.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(platform.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(platform.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Platform.Delete().Where(platform.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaProcedure.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "procedure", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Procedure.Query().Where(procedure.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(procedure.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(procedure.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(procedure.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Procedure.Delete().Where(procedure.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaProgram.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "program", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Program.Query().Where(program.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(program.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(program.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(program.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Program.Delete().Where(program.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaRemediation.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "remediation", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Remediation.Query().Where(remediation.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(remediation.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(remediation.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(remediation.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Remediation.Delete().Where(remediation.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaReview.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "review", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Review.Query().Where(review.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(review.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(review.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(review.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Review.Delete().Where(review.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaRisk.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "risk", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Risk.Query().Where(risk.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(risk.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(risk.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(risk.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Risk.Delete().Where(risk.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaScan.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "scan", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Scan.Query().Where(scan.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(scan.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(scan.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(scan.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Scan.Delete().Where(scan.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaSubcontrol.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "subcontrol", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Subcontrol.Query().Where(subcontrol.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(subcontrol.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(subcontrol.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(subcontrol.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Subcontrol.Delete().Where(subcontrol.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaSystemDetail.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "system_detail", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.SystemDetail.Query().Where(systemdetail.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(systemdetail.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(systemdetail.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(systemdetail.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.SystemDetail.Delete().Where(systemdetail.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaTagDefinition.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "tag_definition", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.TagDefinition.Query().Where(tagdefinition.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(tagdefinition.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(tagdefinition.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(tagdefinition.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.TagDefinition.Delete().Where(tagdefinition.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaTask.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "task", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Task.Query().Where(task.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(task.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(task.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(task.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Task.Delete().Where(task.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaTemplate.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "template", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Template.Query().Where(template.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(template.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(template.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(template.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Template.Delete().Where(template.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaVulnerability.DeleteBySource = func(ctx context.Context, client *generated.Client, filter SourceFilter, cleanup RowCleanup) ([]string, error) {
+		ref := SchemaRef{Schema: "vulnerability", Operation: refOpDelete}
+
+		if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
+			return nil, ErrSourceFilterRequired
+		}
+
+		query := client.Vulnerability.Query().Where(vulnerability.SourceDefinitionID(filter.DefinitionID))
+
+		if filter.InstanceID != "" {
+			query = query.Where(vulnerability.SourceInstanceID(filter.InstanceID))
+		}
+
+		if filter.Key != "" {
+			query = query.Where(vulnerability.SourceKey(filter.Key))
+		}
+
+		if filter.NotUpdatedAfter != nil {
+			query = query.Where(vulnerability.UpdatedAtLTE(*filter.NotUpdatedAfter))
+		}
+
+		ids, err := query.IDs(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if _, err := client.Vulnerability.Delete().Where(vulnerability.IDIn(chunk...)).Exec(ctx); err != nil {
+				return nil, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		if cleanup == nil {
+			return ids, nil
+		}
+
+		for _, id := range ids {
+			if err := cleanup(ctx, id); err != nil {
+				return ids, logError(ctx, ref, ErrDeleteFailed, err)
+			}
+		}
+
+		return ids, nil
+	}
+	SchemaEntity.Catalog.copies = func(ctx context.Context, client *generated.Client, catalogID string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpQuery, EntityID: catalogID}
+
+		entities, err := client.Entity.Query().Where(entity.CatalogID(catalogID)).All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaEntity.Catalog.unlink = func(ctx context.Context, client *generated.Client, id string) error {
+		if err := client.Entity.UpdateOneID(id).ClearCatalogID().Exec(ctx); err != nil {
+			return logPersistError(ctx, SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: id}, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaEntity.Catalog.unlinkAll = func(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
+		copies, err := SchemaEntity.Catalog.copies(ctx, client, catalogID)
 		if err != nil {
 			return 0, err
 		}
 
-		payload, err := catalogPayload(row, SchemaEntity.Catalog.Fields)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrMarshalFailed, err)
-		}
-
-		input, err := jsonx.Decode[generated.UpdateEntityInput](payload)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrDecodeFailed, err)
-		}
-
-		updated, err := client.Entity.Update().Where(entity.CatalogID(catalogID)).SetInput(input).Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return updated, nil
-	}
-	SchemaEntity.Catalog.relink = func(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
-		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: catalogID}
-
-		_, key, err := catalogRowEntity(ctx, client, ref, catalogID)
-		if err != nil {
-			return 0, err
-		}
-
-		if key == "" {
-			return 0, nil
-		}
-
-		pointers, err := client.Entity.Query().Where(entity.CatalogKey(key), entity.CatalogIDNotNil()).Select(entity.FieldCatalogID).Strings(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		live, err := client.Entity.Query().Where(entity.IDIn(lo.Uniq(pointers)...)).IDs(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		relinked, err := client.Entity.Update().
-			Where(entity.IDNEQ(catalogID), entity.CatalogKey(key), entity.Or(entity.CatalogIDIsNil(), entity.CatalogIDNotIn(live...))).
-			SetCatalogID(catalogID).
-			Save(ctx)
-		if err != nil {
-			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return relinked, nil
-	}
-	SchemaEntity.Catalog.match = func(ctx context.Context, client *generated.Client, candidates []MatchCandidate) (string, bool, error) {
-		ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
-
-		for _, candidate := range candidates {
-			if candidate.Value == "" {
-				continue
-			}
-
-			field, ok := SchemaEntity.FieldByName(candidate.Field)
-			if !ok {
-				return "", false, logError(ctx, ref, ErrFieldNotFound, fmt.Errorf("%s.%s", "entity", candidate.Field))
-			}
-
-			var where predicate.Entity
-
-			switch field.Name {
-			case "aliases":
-				where = predicate.Entity(func(s *sql.Selector) {
-					s.Where(sqljson.ValueContains(entity.FieldAliases, candidate.Value))
-				})
-			case "billing_model":
-				where = entity.BillingModelEqualFold(candidate.Value)
-			case "catalog_id":
-				where = entity.CatalogIDEqualFold(candidate.Value)
-			case "catalog_key":
-				where = entity.CatalogKeyEqualFold(candidate.Value)
-			case "created_by":
-				where = entity.CreatedByEqualFold(candidate.Value)
-			case "deleted_by":
-				where = entity.DeletedByEqualFold(candidate.Value)
-			case "description":
-				where = entity.DescriptionEqualFold(candidate.Value)
-			case "display_name":
-				where = entity.DisplayNameEqualFold(candidate.Value)
-			case "domains":
-				where = predicate.Entity(func(s *sql.Selector) {
-					s.Where(sqljson.ValueContains(entity.FieldDomains, candidate.Value))
-				})
-			case "entity_relationship_state_id":
-				where = entity.EntityRelationshipStateIDEqualFold(candidate.Value)
-			case "entity_relationship_state_name":
-				where = entity.EntityRelationshipStateNameEqualFold(candidate.Value)
-			case "entity_security_questionnaire_status_id":
-				where = entity.EntitySecurityQuestionnaireStatusIDEqualFold(candidate.Value)
-			case "entity_security_questionnaire_status_name":
-				where = entity.EntitySecurityQuestionnaireStatusNameEqualFold(candidate.Value)
-			case "entity_source_type_id":
-				where = entity.EntitySourceTypeIDEqualFold(candidate.Value)
-			case "entity_source_type_name":
-				where = entity.EntitySourceTypeNameEqualFold(candidate.Value)
-			case "entity_type_id":
-				where = entity.EntityTypeIDEqualFold(candidate.Value)
-			case "environment_id":
-				where = entity.EnvironmentIDEqualFold(candidate.Value)
-			case "environment_name":
-				where = entity.EnvironmentNameEqualFold(candidate.Value)
-			case "external_id":
-				where = entity.ExternalIDEqualFold(candidate.Value)
-			case "integration_run_id":
-				where = entity.IntegrationRunIDEqualFold(candidate.Value)
-			case "internal_notes":
-				where = entity.InternalNotesEqualFold(candidate.Value)
-			case "internal_owner":
-				where = entity.InternalOwnerEqualFold(candidate.Value)
-			case "internal_owner_group_id":
-				where = entity.InternalOwnerGroupIDEqualFold(candidate.Value)
-			case "internal_owner_identity_holder_id":
-				where = entity.InternalOwnerIdentityHolderIDEqualFold(candidate.Value)
-			case "internal_owner_user_id":
-				where = entity.InternalOwnerUserIDEqualFold(candidate.Value)
-			case "linked_asset_ids":
-				where = predicate.Entity(func(s *sql.Selector) {
-					s.Where(sqljson.ValueContains(entity.FieldLinkedAssetIds, candidate.Value))
-				})
-			case "links":
-				where = predicate.Entity(func(s *sql.Selector) {
-					s.Where(sqljson.ValueContains(entity.FieldLinks, candidate.Value))
-				})
-			case "logo_file_id":
-				where = entity.LogoFileIDEqualFold(candidate.Value)
-			case "logo_remote_url":
-				where = entity.LogoRemoteURLEqualFold(candidate.Value)
-			case "managed_by":
-				where = entity.ManagedByEqualFold(candidate.Value)
-			case "name":
-				where = entity.NameEqualFold(candidate.Value)
-			case "owner_id":
-				where = entity.OwnerIDEqualFold(candidate.Value)
-			case "provided_services":
-				where = predicate.Entity(func(s *sql.Selector) {
-					s.Where(sqljson.ValueContains(entity.FieldProvidedServices, candidate.Value))
-				})
-			case "renewal_risk":
-				where = entity.RenewalRiskEqualFold(candidate.Value)
-			case "reviewed_by":
-				where = entity.ReviewedByEqualFold(candidate.Value)
-			case "reviewed_by_group_id":
-				where = entity.ReviewedByGroupIDEqualFold(candidate.Value)
-			case "reviewed_by_identity_holder_id":
-				where = entity.ReviewedByIdentityHolderIDEqualFold(candidate.Value)
-			case "reviewed_by_user_id":
-				where = entity.ReviewedByUserIDEqualFold(candidate.Value)
-			case "risk_rating":
-				where = entity.RiskRatingEqualFold(candidate.Value)
-			case "scope_id":
-				where = entity.ScopeIDEqualFold(candidate.Value)
-			case "scope_name":
-				where = entity.ScopeNameEqualFold(candidate.Value)
-			case "source_definition_id":
-				where = entity.SourceDefinitionIDEqualFold(candidate.Value)
-			case "source_definition_version":
-				where = entity.SourceDefinitionVersionEqualFold(candidate.Value)
-			case "source_instance_id":
-				where = entity.SourceInstanceIDEqualFold(candidate.Value)
-			case "spend_currency":
-				where = entity.SpendCurrencyEqualFold(candidate.Value)
-			case "status_page_url":
-				where = entity.StatusPageURLEqualFold(candidate.Value)
-			case "system_internal_id":
-				where = entity.SystemInternalIDEqualFold(candidate.Value)
-			case "tags":
-				where = predicate.Entity(func(s *sql.Selector) {
-					s.Where(sqljson.ValueContains(entity.FieldTags, candidate.Value))
-				})
-			case "updated_by":
-				where = entity.UpdatedByEqualFold(candidate.Value)
-			case "updated_by_impersonator":
-				where = entity.UpdatedByImpersonatorEqualFold(candidate.Value)
-			default:
-				return "", false, logError(ctx, ref, ErrCatalogMatchFieldUnsupported, fmt.Errorf("%s.%s", "entity", field.Name))
-			}
-
-			id, err := client.Entity.Query().Where(entity.SystemOwned(true), entity.ExternallyVisible(true), where).FirstID(ctx)
-			switch {
-			case err == nil:
-				return id, true, nil
-			case !generated.IsNotFound(err):
-				return "", false, logError(ctx, ref, ErrQueryFailed, err)
+		for unlinked, adopted := range copies {
+			if err := SchemaEntity.Catalog.unlink(auth.WithOrgInternalCaller(ctx, lookupValue(adopted, SchemaEntity.OwnerField)), client, entityID(adopted)); err != nil {
+				return unlinked, err
 			}
 		}
 
-		return "", false, nil
-	}
-	SchemaEntity.Catalog.visible = func(ctx context.Context, client *generated.Client, catalogID string) (bool, error) {
-		return client.Entity.Query().Where(entity.ID(catalogID), entity.SystemOwned(true), entity.ExternallyVisible(true)).Exist(ctx)
+		return len(copies), nil
 	}
 	SchemaActionPlan.Ingest.persist = defaultIngestPersist(SchemaActionPlan)
 	SchemaAssessment.Ingest.persist = defaultIngestPersist(SchemaAssessment)
@@ -28869,27 +30065,6 @@ func ownerScopeWorkflowDefinition(ownerID string) predicate.WorkflowDefinition {
 	return workflowdefinition.OwnerID(ownerID)
 }
 
-// catalogRowEntity loads a visible system-owned catalog entity as JSON with its lookup key, distinguishing hidden rows from missing ones
-func catalogRowEntity(ctx context.Context, client *generated.Client, ref SchemaRef, catalogID string) (json.RawMessage, string, error) {
-	row, err := client.Entity.Query().Where(entity.ID(catalogID), entity.SystemOwned(true)).Only(ctx)
-
-	switch {
-	case generated.IsNotFound(err):
-		return nil, "", logError(ctx, ref, ErrCatalogRowNotSystemOwned, err)
-	case err != nil:
-		return nil, "", logError(ctx, ref, ErrQueryFailed, err)
-	case !row.ExternallyVisible:
-		return nil, "", logError(ctx, ref, ErrCatalogRowNotVisible, fmt.Errorf("%s %s is not visible", "entity", catalogID))
-	}
-
-	raw, err := json.Marshal(row)
-	if err != nil {
-		return nil, "", logError(ctx, ref, ErrMarshalFailed, err)
-	}
-
-	return raw, lookupValue(raw, "external_id"), nil
-}
-
 // splitThroughEdgeIDs removes through-edge id lists from a create or update payload, returning the
 // cleaned payload and the target ids per edge name. Malformed values are left in place so input
 // validation rejects them instead of being silently discarded
@@ -29108,11 +30283,12 @@ func AllSchemas() []*Schema {
 	return result
 }
 
-// selectTargets queries entities matching a target selector and filters them with a typed CEL
+// SelectTargets queries entities matching a target selector and filters them with a typed CEL
 // evaluator bound to the target schema's native projection — and, when the selector carries
 // SourceContext with a SourceSchema, the source schema's projection as "source" — so selector
-// expressions resolve typed fields rather than evaluating against a map[string]any
-func selectTargets(ctx context.Context, client *generated.Client, orgID string, selector TargetSelector) ([]entityRef, error) {
+// expressions resolve typed fields rather than evaluating against a map[string]any. Link injection
+// and cross-entity workflow actions both resolve their targets through this
+func SelectTargets(ctx context.Context, client *generated.Client, orgID string, selector TargetSelector) ([]EntityRef, error) {
 	schema, ok := LookupSchema(selector.Schema.Name)
 	if !ok {
 		return nil, logError(ctx, SchemaRef{Schema: selector.Schema.Snake, Operation: refOpQuery}, ErrSchemaNotFound, fmt.Errorf("schema %s is not registered", selector.Schema.Name))
@@ -29165,7 +30341,7 @@ func selectTargets(ctx context.Context, client *generated.Client, orgID string, 
 
 	excludeSet := mapx.MapSetFromSlice(selector.ExcludeIDs)
 
-	var results []entityRef
+	var results []EntityRef
 
 	for _, data := range entities {
 		id := entityID(data)
@@ -29199,7 +30375,7 @@ func selectTargets(ctx context.Context, client *generated.Client, orgID string, 
 			}
 		}
 
-		results = append(results, entityRef{ID: id, Schema: schema.SchemaDescriptor})
+		results = append(results, EntityRef{ID: id, Schema: schema.SchemaDescriptor})
 	}
 
 	return results, nil

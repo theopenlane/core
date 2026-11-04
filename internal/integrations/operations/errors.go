@@ -37,6 +37,16 @@ var (
 	ErrIngestUpsertConflict = errors.New("integrations/operations: ingest upsert conflict")
 	// ErrIngestUnsupportedSchema indicates the runtime does not yet support the requested generated ingest schema
 	ErrIngestUnsupportedSchema = errors.New("integrations/operations: ingest schema unsupported")
+	// ErrSourceFilterRequired indicates a source delete was asked for without a definition and an instance or key
+	ErrSourceFilterRequired = errors.New("integrations/operations: source delete requires a definition and an instance or key")
+	// ErrSourceOwnerRequired indicates a source delete was dispatched without an organization to delete from
+	ErrSourceOwnerRequired = errors.New("integrations/operations: source delete requires an organization")
+	// ErrSourceKeepUnknown indicates a schema to keep is not part of the schemas being deleted
+	ErrSourceKeepUnknown = errors.New("integrations/operations: kept schema is not in the delete order")
+	// ErrSourceSchemaNotDeletable indicates a schema has no delete by source
+	ErrSourceSchemaNotDeletable = errors.New("integrations/operations: schema cannot be deleted by source")
+	// ErrSourceDeleteFailed indicates a schema's source rows could not be removed
+	ErrSourceDeleteFailed = errors.New("integrations/operations: source delete failed")
 	// ErrIngestSchemaNotSystemOwned indicates the schema carries no system_owned marker, so runtime ingest cannot persist it without an owner
 	ErrIngestSchemaNotSystemOwned = errors.New("integrations/operations: ingest schema cannot be system owned")
 	// ErrIngestPersistFailed indicates the mapped record could not be persisted
