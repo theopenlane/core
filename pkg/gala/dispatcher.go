@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertype"
 	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/jsonx"
@@ -237,5 +238,37 @@ func (w *riverDispatchWorker) Work(ctx context.Context, job *river.Job[EnvelopeA
 		return err
 	}
 
-	return w.galaProvider().dispatchEnvelope(ctx, envelope)
+	runtime := w.galaProvider()
+	if err := runtime.dispatchEnvelope(ctx, envelope); err != nil {
+		return err
+	}
+
+	if runtime.completeJobsInline {
+		runtime.completeJobInline(ctx, job)
+	}
+
+	return nil
+}
+
+// completeJobInline marks a finished job completed now instead of leaving it running until
+// River's next completer flush, a failure leaves the job for that flush
+func (g *Gala) completeJobInline(ctx context.Context, job *river.Job[EnvelopeArgs]) {
+	tx, err := g.jobClient.GetPool().Begin(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Int64("job_id", job.ID).Msg("failed to begin inline job completion")
+
+		return
+	}
+
+	defer func() { _ = tx.Rollback(ctx) }()
+
+	if _, err := river.JobCompleteTx[*riverpgxv5.Driver](ctx, tx, job); err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Int64("job_id", job.ID).Msg("failed to complete job inline")
+
+		return
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Int64("job_id", job.ID).Msg("failed to commit inline job completion")
+	}
 }

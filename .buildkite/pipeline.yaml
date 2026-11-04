@@ -149,6 +149,7 @@ steps:
           - internal/ent/**
           - internal/graphapi/**
           - common/enums/**
+          - fga/generate/**
         plugins:
           - docker#v5.14.0:
               !!merge <<: *build-image

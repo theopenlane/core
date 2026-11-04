@@ -195,6 +195,7 @@ func (suite *HandlerTestSuite) setupSuite() {
 		FetchCooldown:        time.Millisecond,
 		FetchPollInterval:    10 * time.Millisecond, //nolint:mnd
 		WaitIdlePollInterval: 10 * time.Millisecond, //nolint:mnd
+		CompleteJobsInline:   true,
 	})
 	coreutils.RequireNoError(suite.T(), err)
 

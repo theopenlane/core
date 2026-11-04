@@ -215,6 +215,7 @@ func (s *WorkflowEngineTestSuite) setupSuite() {
 		FetchCooldown:        time.Millisecond,
 		FetchPollInterval:    10 * time.Millisecond,
 		WaitIdlePollInterval: 10 * time.Millisecond,
+		CompleteJobsInline:   true,
 	})
 	coreutils.RequireNoError(s.T(), err)
 
