@@ -2,48 +2,26 @@ package schemaparse
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 
 	"entgo.io/contrib/entgql"
-	"entgo.io/ent/entc"
-	"entgo.io/ent/entc/gen"
 	"entgo.io/ent/entc/load"
 	"github.com/theopenlane/entx"
+
+	"github.com/theopenlane/core/v2/fga/generate/schemainfo"
 )
 
-// SchemaInfo holds information about an ent schema that is relevant for generating FGA permissions, such as the name of the schema and whether it has create access rules defined in its Policy function.
-type SchemaInfo struct {
-	// Name is the name of the schema
-	Name string
-	// ExcludeFromGeneration excludes this type from any crud generation, only allowing default access
-	// and no api token access or additional permissions for users
-	ExcludeFromGeneration bool
-	// CanCreateServiceOnly is used for objects that only service (api tokens) are allowed to create and not users/groups
-	CanCreateServiceOnly bool
-	// OnlyAllowCreate checks settings of create and update and delete and determines if only creation is allowed
-	OnlyAllowCreate bool
-	// HasCreate indicates the schema should have crud create operations
-	HasCreate bool
-	// HasUpdate indicates the schema should have crud update operations
-	HasUpdate bool
-	// HasDelete indicates the schema should have crud delete operations
-	HasDelete bool
-	// HasGroupCreator indicates the schema should have group creator permissions
-	HasGroupCreator bool
-	// Parents are the parent types the schema can also inherit crud access from
-	Parents []string
+// parsedSchema adds the annotation and policy parsing to the schema snapshot
+type parsedSchema struct {
+	schemainfo.SchemaInfo
 }
 
-// GetSchemas gets all ent schemas and returns settings based on annotations and policies
-func GetSchemas(schemaDir string) ([]SchemaInfo, error) {
-	schemas := []SchemaInfo{}
+// GetSchemas returns the settings of the loaded ent schemas based on annotations and policies
+func GetSchemas(loaded []*load.Schema) []schemainfo.SchemaInfo {
+	schemas := []schemainfo.SchemaInfo{}
 
-	graph, err := entc.LoadGraph(schemaDir, &gen.Config{})
-	if err != nil {
-		return nil, err
-	}
-
-	allSchemas := sortSchemas(graph.Schemas)
+	allSchemas := sortSchemas(loaded)
 
 	fmt.Printf("found %d schemas\n", len(allSchemas))
 
@@ -59,26 +37,28 @@ func GetSchemas(schemaDir string) ([]SchemaInfo, error) {
 			si.functionContainsCheckCreateAccess(body)
 		}
 
-		schemas = append(schemas, si)
+		schemas = append(schemas, si.SchemaInfo)
 	}
-
-	return schemas, nil
-}
-
-// sortSchemas sorts schemas alphabetically by name
-func sortSchemas(schemas []*load.Schema) []*load.Schema {
-	sort.SliceStable(schemas, func(i, j int) bool {
-		return schemas[i].Name < schemas[j].Name
-	})
 
 	return schemas
 }
 
+// sortSchemas returns a copy of schemas sorted alphabetically by name, leaving the graph order untouched
+func sortSchemas(schemas []*load.Schema) []*load.Schema {
+	sorted := slices.Clone(schemas)
+
+	sort.SliceStable(sorted, func(i, j int) bool {
+		return sorted[i].Name < sorted[j].Name
+	})
+
+	return sorted
+}
+
 // checkSchemaAnnotations checks annotations on schemas, eliminating not-needed schemas before policy checks
-func checkSchemaAnnotations(schema *load.Schema) (SchemaInfo, bool) {
-	si := SchemaInfo{
+func checkSchemaAnnotations(schema *load.Schema) (parsedSchema, bool) {
+	si := parsedSchema{SchemaInfo: schemainfo.SchemaInfo{
 		Name: schema.Name,
-	}
+	}}
 
 	si.checkEntGQLAnnotation(schema)
 
@@ -97,7 +77,7 @@ func checkSchemaAnnotations(schema *load.Schema) (SchemaInfo, bool) {
 // checkEntGQLAnnotation checks for the Skip annotation on the schema
 // SkipAll implies that there shouldn't be any additional crud settings
 // It uses the MutationInputs settings to see if the schema allows create and update
-func (si *SchemaInfo) checkEntGQLAnnotation(schema *load.Schema) {
+func (si *parsedSchema) checkEntGQLAnnotation(schema *load.Schema) {
 	if si.ExcludeFromGeneration {
 		return
 	}
@@ -125,7 +105,7 @@ func (si *SchemaInfo) checkEntGQLAnnotation(schema *load.Schema) {
 
 // checkSkipAnnotation checks the optional FGA Crud annotation that is used as precedence
 // over any setting that is determined based on annotations + policies
-func (si *SchemaInfo) checkSkipAnnotation(schema *load.Schema) {
+func (si *parsedSchema) checkSkipAnnotation(schema *load.Schema) {
 	if si.ExcludeFromGeneration {
 		return
 	}
@@ -152,7 +132,7 @@ func (si *SchemaInfo) checkSkipAnnotation(schema *load.Schema) {
 
 // checkGroupPermissions looks for the group permissions annotation
 // that will enable setting the `_creator` settings
-func (si *SchemaInfo) checkGroupPermissions(schema *load.Schema) {
+func (si *parsedSchema) checkGroupPermissions(schema *load.Schema) {
 	if si.ExcludeFromGeneration {
 		return
 	}
@@ -164,7 +144,7 @@ func (si *SchemaInfo) checkGroupPermissions(schema *load.Schema) {
 
 // getParentSchemas looks for the parent fga annotation to set
 // inheritance of crud in the model
-func (si *SchemaInfo) getParentSchemas(schema *load.Schema) {
+func (si *parsedSchema) getParentSchemas(schema *load.Schema) {
 	if si.ExcludeFromGeneration {
 		return
 	}
