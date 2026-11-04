@@ -252,7 +252,15 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 	h.clearAuthFlowCookies(ctx.Response().Writer, authenticatedUserSSOCookieName)
 
 	orgStatus, err := h.fetchSSOStatus(auth.WithInternalReadContext(userCtx), in.OrganizationID, entUser.ID)
+
+	// jit may not have created the user early if it is disabled or domain not allowed
+	// send the correct header instead of generic 500
+	if generated.IsNotFound(err) {
+		return h.Forbidden(ctx, ErrSSONoOrganizationAccess)
+	}
+
 	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resolve sso enforcement during callback")
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 

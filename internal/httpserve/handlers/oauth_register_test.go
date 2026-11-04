@@ -131,7 +131,7 @@ func (suite *HandlerTestSuite) TestOauthRegister() {
 		suite.ClearTestData()
 		suite.registerAuthenticatedTestHandler(http.MethodPost, tfaValidatePath, suite.h.ValidateTOTP)
 
-		email := "tfauser@theopenlane.io"
+		email := "antman@theopenlane.io"
 
 		data := models.OauthTokenRequest{
 			Name:             "User with TFA",
