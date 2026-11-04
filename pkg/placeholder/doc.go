@@ -1,3 +1,3 @@
-// Package placeholder fills {{name}} and {{name|default}} variable placeholders and {{TODAY}} date placeholders in
-// JSON documents, escaping each value so a filled document stays valid JSON
+// Package placeholder fills {{name}}, {{name|default}} and date offset {{name+N}} variable placeholders in JSON
+// documents, escaping each value so a filled document stays valid JSON
 package placeholder

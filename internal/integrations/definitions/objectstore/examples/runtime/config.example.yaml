@@ -1,7 +1,7 @@
 # local disk bucket for the objectstore runtime integration, merge into config/config.yaml
 # the scheduled system import reads import.prefix, which has no directory here, so it imports nothing
-# demo datasets live under demo/<dataset> and are only read by the demo seed operation
-# the committed bucket only holds the small "minimal" dataset, to seed a full dataset put it under
+# demo datasets live under demo/<dataset> and are only read when a seed imports them by their manifest
+# the committed bucket only holds the small "minimal" demo dataset, to seed a full dataset put it under
 # examples/runtime/demo/<dataset> (gitignored) and point the bucket at ./internal/integrations/definitions/objectstore/examples/runtime
 integrations:
   objectstoreruntime:

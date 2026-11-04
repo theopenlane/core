@@ -39,6 +39,8 @@ var (
 	ErrIngestUnsupportedSchema = errors.New("integrations/operations: ingest schema unsupported")
 	// ErrSourceFilterRequired indicates a source delete was asked for without a definition and an instance or key
 	ErrSourceFilterRequired = errors.New("integrations/operations: source delete requires a definition and an instance or key")
+	// ErrSourceOperationContextRequired indicates a runtime source delete ran without its operation context
+	ErrSourceOperationContextRequired = errors.New("integrations/operations: runtime source delete requires an operation context")
 	// ErrSourceOwnerRequired indicates a source delete was dispatched without an organization to delete from
 	ErrSourceOwnerRequired = errors.New("integrations/operations: source delete requires an organization")
 	// ErrSourceKeepUnknown indicates a schema to keep is not part of the schemas being deleted

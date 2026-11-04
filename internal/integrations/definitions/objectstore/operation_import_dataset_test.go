@@ -82,10 +82,7 @@ func TestLoadDatasetPayloadSet(t *testing.T) {
 		contracted[contract.Schema] = true
 	}
 
-	fill := datasetFill{
-		today:     placeholder.Today(time.Now()),
-		variables: placeholder.Variables{"ORG_NAME": "Acme Corp", "ORG_DOMAIN": "acme.test", "ORG_OWNER_USER_ID": "user_1"},
-	}
+	fill := placeholder.Variables{"ORG_NAME": "Acme Corp", "ORG_DOMAIN": "acme.test", "ORG_OWNER_USER_ID": "user_1", "TODAY": time.Now().UTC().Format(time.DateOnly)}
 
 	for _, name := range manifest.Order {
 		payloadSet, err := loadDatasetPayloadSet(ctx, provider, prefix, name, fill)
@@ -115,7 +112,8 @@ func TestDatasetProfiles(t *testing.T) {
 		expectedApprover string
 		expectedErr      error
 	}{
-		{name: "default profile keeps the record values", expectedStatus: "PUBLISHED", expectedApprover: "Admins"},
+		{name: "no profile keeps the record values", expectedStatus: "PUBLISHED", expectedApprover: "Admins"},
+		{name: "demo profile keeps the record values", profile: "DEMO", expectedStatus: "PUBLISHED", expectedApprover: "Admins"},
 		{name: "draft profile", profile: "DRAFT", expectedStatus: "DRAFT", expectedApprover: ""},
 		{name: "unknown profile", profile: "MISSING", expectedErr: ErrDatasetProfileUnknown},
 	}
@@ -130,7 +128,7 @@ func TestDatasetProfiles(t *testing.T) {
 
 			assert.NilError(t, err)
 
-			fill := datasetFill{today: placeholder.Today(time.Now()), variables: variables}
+			fill := placeholder.Variables{"TODAY": time.Now().UTC().Format(time.DateOnly)}.With(variables)
 
 			payloadSet, err := loadDatasetPayloadSet(ctx, provider, prefix, "internal_policy", fill)
 			assert.NilError(t, err)
@@ -175,7 +173,7 @@ func TestLinkStandardControls(t *testing.T) {
 }
 
 func TestDatasetBuiltinVariables(t *testing.T) {
-	variables, err := DatasetBuiltinVariables{OrgName: "Acme", OrgDomain: "acme.test", OwnerUserID: "user_1", OwnerEmail: "owner@acme.test", OwnerName: "Owner"}.variables()
+	variables, err := DatasetBuiltinVariables{OrgName: "Acme", OrgDomain: "acme.test", OwnerUserID: "user_1", OwnerEmail: "owner@acme.test", OwnerName: "Owner", Today: "2026-11-04"}.variables()
 	assert.NilError(t, err)
 
 	assert.DeepEqual(t, placeholder.Variables{
@@ -184,6 +182,7 @@ func TestDatasetBuiltinVariables(t *testing.T) {
 		"ORG_OWNER_USER_ID": "user_1",
 		"ORG_OWNER_EMAIL":   "owner@acme.test",
 		"ORG_OWNER_NAME":    "Owner",
+		"TODAY":             "2026-11-04",
 	}, variables)
 
 	schema := jsonx.SchemaFrom[DatasetBuiltinVariables]()

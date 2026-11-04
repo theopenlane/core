@@ -85,6 +85,7 @@ func Builder(runtime *RuntimeConfig, federationIssuer string, cfg Config) regist
 					Policy(importPolicy).
 					Ingest(importContracts...).
 					SkipDefaultLookback().
+					Variables(jsonx.SchemaFrom[DatasetBuiltinVariables]()).
 					Description("Import the JSON records under a bucket prefix object by object, moving each imported object aside when configured, or a manifest-described dataset as the dispatching organization").
 					Registration(),
 				types.OperationPayloadOf[WriteObject]().

@@ -645,6 +645,7 @@ components:
                                             type: boolean
                                         topic:
                                             type: string
+                                        variables: {}
                                     type: object
                                 type: array
                             operatorConfig:

@@ -11,10 +11,10 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
 // DeleteSource selects the rows the dispatching definition wrote into the organization under one source key, from one
@@ -24,8 +24,6 @@ type DeleteSource struct {
 	SourceKey string `json:"sourceKey,omitempty" jsonschema:"title=Source Key,description=Source key the rows were written under"`
 	// InstanceID is the source instance an installation wrote the rows from
 	InstanceID string `json:"instanceId,omitempty" jsonschema:"title=Instance ID,description=Source instance the rows were written from"`
-	// Order lists schemas in ingest order, deleted in reverse so dependents go first, every deletable schema when empty
-	Order []string `json:"order,omitempty" jsonschema:"title=Order,description=Schemas in ingest order, every deletable schema when empty"`
 	// Keep lists the schemas whose rows are kept
 	Keep []string `json:"keep,omitempty" jsonschema:"title=Keep,description=Schemas whose rows are kept"`
 	// Subject names what is removed in the outcome notification
@@ -51,21 +49,19 @@ var DeleteSourceOp = types.OperationPayloadOf[DeleteSource]().
 
 // RunSourceDelete removes the source's rows for the dispatching definition and notifies the organization, for any operation that resolves the source to delete itself
 func RunSourceDelete(ctx context.Context, request types.OperationRequest, cfg DeleteSource) (json.RawMessage, error) {
-	oc, _ := gala.OperationContextFromContext(ctx)
-
-	definitionID := types.IntegrationSourceFrom(oc).DefinitionID
-	if request.Integration != nil {
-		definitionID = request.Integration.DefinitionID
+	definitionID, err := sourceDefinitionID(ctx, request)
+	if err != nil {
+		return nil, err
 	}
 
 	// the delete is scoped by the caller's organization, so never run it without one
-	if _, err := utils.ResolveOwnerID(ctx, ""); err != nil {
+	if _, err := auth.GetOrganizationIDFromContext(ctx); err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrSourceOwnerRequired, err)
 	}
 
 	filter := entityops.SourceFilter{DefinitionID: definitionID, InstanceID: cfg.InstanceID, Key: cfg.SourceKey}
 
-	deleted, deleteErr := deleteSourceRecords(ctx, request.DB, filter, cfg.Order, cfg.Keep)
+	deleted, deleteErr := deleteSourceRecords(ctx, request.DB, filter, cfg.Keep)
 
 	notifyErr := NotifyDeleteOutcome(ctx, lo.CoalesceOrEmpty(cfg.Subject, defaultDeleteSubject), deleted, deleteErr)
 	if deleteErr != nil {
@@ -82,14 +78,14 @@ func RunSourceDelete(ctx context.Context, request types.OperationRequest, cfg De
 // deleteSourceRecords deletes the rows the filter's source wrote for the schemas in ingest order, leaving the kept
 // schemas untouched, and returns the deleted count per schema, including on error
 // schemas are deleted in reverse ingest order so dependents go before the records they link to
-func deleteSourceRecords(ctx context.Context, db *ent.Client, filter entityops.SourceFilter, order, keep []string) (map[string]int, error) {
+func deleteSourceRecords(ctx context.Context, db *ent.Client, filter entityops.SourceFilter, keep []string) (map[string]int, error) {
 	deleted := map[string]int{}
 
 	if filter.DefinitionID == "" || (filter.InstanceID == "" && filter.Key == "") {
 		return deleted, ErrSourceFilterRequired
 	}
 
-	schemas, err := sourceDeleteOrder(order, keep)
+	schemas, err := sourceDeleteOrder(keep)
 	if err != nil {
 		return deleted, err
 	}
@@ -115,12 +111,24 @@ func deleteSourceRecords(ctx context.Context, db *ent.Client, filter entityops.S
 	return deleted, nil
 }
 
-// sourceDeleteOrder returns the schemas to delete in reverse ingest order without the kept ones, every deletable schema
-// when no order is given, rejecting a kept schema that is not in the order, which would otherwise silently delete everything
-func sourceDeleteOrder(order, keep []string) ([]string, error) {
-	if len(order) == 0 {
-		order = deletableSchemas()
+// sourceDefinitionID returns the definition the delete runs under, from the installation or the runtime operation context
+func sourceDefinitionID(ctx context.Context, request types.OperationRequest) (string, error) {
+	if request.Integration != nil {
+		return request.Integration.DefinitionID, nil
 	}
+
+	oc, ok := gala.OperationContextFromContext(ctx)
+	if !ok {
+		return "", ErrSourceOperationContextRequired
+	}
+
+	return types.IntegrationSourceFrom(oc).DefinitionID, nil
+}
+
+// sourceDeleteOrder returns every deletable schema without the kept ones, referencing schemas before the schemas they
+// reference, rejecting a kept schema that is not deletable, which would otherwise silently delete everything
+func sourceDeleteOrder(keep []string) ([]string, error) {
+	order := deletableSchemas()
 
 	if unknown, _ := lo.Difference(keep, order); len(unknown) > 0 {
 		return nil, fmt.Errorf("%w: %v", ErrSourceKeepUnknown, unknown)

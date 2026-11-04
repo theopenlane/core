@@ -892,7 +892,8 @@
                       },
                       "topic": {
                         "type": "string"
-                      }
+                      },
+                      "variables": {}
                     },
                     "type": "object"
                   },

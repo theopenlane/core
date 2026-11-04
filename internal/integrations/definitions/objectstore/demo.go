@@ -8,9 +8,9 @@ import (
 	"regexp"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/iam/auth"
 )
 
 // demoPrefix is the bucket directory holding the demo datasets
@@ -28,12 +28,11 @@ func (d DemoDataset) Prefix() (string, error) {
 	return path.Join(demoPrefix, string(d)), nil
 }
 
-// demoProfileName returns the dataset manifest profile the demo profile imports under, none for the demo profile whose
-// values are the records' placeholder defaults
+// demoProfileName returns the dataset manifest profile the demo profile imports under, the demo profile when unset
 func demoProfileName(profile enums.DemoDataProfile) (string, error) {
 	switch profile {
 	case "", enums.DemoDataProfileDemo:
-		return "", nil
+		return enums.DemoDataProfileDemo.String(), nil
 	case enums.DemoDataProfileDraft:
 		return enums.DemoDataProfileDraft.String(), nil
 	default:
@@ -49,7 +48,7 @@ func DemoSeedUniqueKey(ownerID string, dataset DemoDataset, profile string) stri
 
 // SeedDemoRequest returns the runtime dispatch that seeds the demo dataset, under the profile, into the caller's organization
 func SeedDemoRequest(ctx context.Context, dataset DemoDataset, profile enums.DemoDataProfile) (types.DispatchRequest, error) {
-	orgID, err := utils.ResolveOwnerID(ctx, "")
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return types.DispatchRequest{}, err
 	}
@@ -72,7 +71,7 @@ func SeedDemoRequest(ctx context.Context, dataset DemoDataset, profile enums.Dem
 // DeleteDemoRequest returns the runtime dispatch that removes the demo dataset's seeded rows from the caller's
 // organization, leaving the schemas listed in keep untouched
 func DeleteDemoRequest(ctx context.Context, dataset DemoDataset, keep []string) (types.DispatchRequest, error) {
-	orgID, err := utils.ResolveOwnerID(ctx, "")
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return types.DispatchRequest{}, err
 	}

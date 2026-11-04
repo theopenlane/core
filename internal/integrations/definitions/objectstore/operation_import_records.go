@@ -14,12 +14,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
 )
 
@@ -51,7 +51,7 @@ func runImportRecords(ctx context.Context, request types.OperationRequest, clien
 	}
 
 	// a system run has no organization, so its entity types are system-owned
-	_, noOrg := utils.ResolveOwnerID(ctx, "")
+	_, noOrg := auth.GetOrganizationIDFromContext(ctx)
 
 	if err := ensureEntityTypes(ctx, request.DB, noOrg != nil, []string{vendorEntityTypeName}); err != nil {
 		return nil, err

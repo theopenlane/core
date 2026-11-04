@@ -12,7 +12,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/logx"
 )
 
@@ -26,7 +25,7 @@ const (
 // NotifyOutcome sends the notification describing how a background operation finished to the caller's organization
 // the title and body are sent as written, the type defaults to organization and the topic to import complete
 func NotifyOutcome(ctx context.Context, objectType string, content entityops.NotificationContent) error {
-	orgID, err := utils.ResolveOwnerID(ctx, "")
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return err
 	}
@@ -46,9 +45,7 @@ func NotifyOutcome(ctx context.Context, objectType string, content entityops.Not
 		create = create.SetChannels(content.Channels)
 	}
 
-	_, err = create.Save(ctx)
-
-	return err
+	return create.Exec(ctx)
 }
 
 // NotifyImportOutcome sends the organization notification summarizing an import

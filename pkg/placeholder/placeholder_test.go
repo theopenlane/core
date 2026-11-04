@@ -3,7 +3,6 @@ package placeholder
 import (
 	"encoding/json"
 	"testing"
-	"time"
 
 	"gotest.tools/v3/assert"
 )
@@ -24,7 +23,8 @@ func TestVariablesFill(t *testing.T) {
 		{name: "variable without a default", doc: `{"status":"{{STATUS}}"}`, expected: `{"status":"DRAFT"}`},
 		{name: "unset variable without a default is untouched", doc: `{"name":"{{ORG_NAME}}"}`, expected: `{"name":"{{ORG_NAME}}"}`},
 		{name: "lowercase dotted name", doc: `{"ref":"{{object.ref_code}}"}`, expected: `{"ref":"CC1.1"}`},
-		{name: "date placeholders are untouched", doc: `{"due":"{{TODAY+1}}"}`, expected: `{"due":"{{TODAY+1}}"}`},
+		{name: "unset variable with an offset is untouched", doc: `{"due":"{{TODAY+1}}"}`, expected: `{"due":"{{TODAY+1}}"}`},
+		{name: "offset on a value that is not a date is untouched", doc: `{"status":"{{STATUS+1}}"}`, expected: `{"status":"{{STATUS+1}}"}`},
 	}
 
 	for _, tc := range testCases {
@@ -45,8 +45,7 @@ func TestVariablesWith(t *testing.T) {
 }
 
 func TestFill(t *testing.T) {
-	today := Today(time.Date(2026, 11, 10, 23, 30, 0, 0, time.FixedZone("EST", -5*60*60)))
-	variables := Variables{"ORG_NAME": `Acme "Quoted" \ Co`, "ORG_DOMAIN": "acme.test"}
+	variables := Variables{"ORG_NAME": `Acme "Quoted" \ Co`, "ORG_DOMAIN": "acme.test", "TODAY": "2026-11-11"}
 
 	testCases := []struct {
 		name     string
@@ -69,7 +68,7 @@ func TestFill(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			filled := variables.Fill(today.Fill(tc.doc))
+			filled := variables.Fill(tc.doc)
 
 			assert.Equal(t, tc.expected, filled)
 			assert.Check(t, json.Valid([]byte(filled)))

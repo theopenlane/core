@@ -74,8 +74,8 @@ func TestDemoProfileName(t *testing.T) {
 		expected    string
 		expectedErr error
 	}{
-		{name: "omitted profile uses the record defaults", expected: ""},
-		{name: "demo profile uses the record defaults", profile: enums.DemoDataProfileDemo, expected: ""},
+		{name: "omitted profile is the demo profile", expected: "DEMO"},
+		{name: "demo profile", profile: enums.DemoDataProfileDemo, expected: "DEMO"},
 		{name: "draft profile", profile: enums.DemoDataProfileDraft, expected: "DRAFT"},
 		{name: "unknown profile", profile: enums.DemoDataProfileInvalid, expectedErr: ErrDemoProfileUnknown},
 	}

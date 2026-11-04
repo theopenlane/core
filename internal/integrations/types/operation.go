@@ -150,6 +150,8 @@ type OperationRegistration struct {
 	DisabledForAll bool `json:"disabledForAll"`
 	// Input describes the operation's input document: the payload a caller supplies on each dispatch, and for a stored operation the per-installation document kept under its name
 	Input InputRegistration `json:"input"`
+	// Variables is the JSON schema of the built-in variables the records the operation reads can use in placeholders
+	Variables json.RawMessage `json:"variables,omitempty"`
 	// Stored reports whether the operation keeps a per-installation input document under its name
 	Stored bool `json:"stored"`
 	// Schedule overrides the default adaptive schedule for reconcile or scheduled cycles

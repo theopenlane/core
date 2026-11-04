@@ -154,7 +154,7 @@ func loadDatasetPayloadSets(ctx context.Context, db *generated.Client, client *C
 		return nil, err
 	}
 
-	fill := datasetFill{today: placeholder.Today(time.Now()), variables: builtins.With(variables)}
+	fill := builtins.With(variables)
 
 	programRefCodes := map[string][]string{}
 
@@ -294,6 +294,7 @@ func datasetBuiltinVariables(ctx context.Context, db *generated.Client) (placeho
 		OwnerUserID: caller.SubjectID,
 		OwnerEmail:  caller.SubjectEmail,
 		OwnerName:   lo.CoalesceOrEmpty(caller.SubjectName, caller.SubjectEmail),
+		Today:       time.Now().UTC().Format(time.DateOnly),
 	}.variables()
 }
 
@@ -307,22 +308,9 @@ func (b DatasetBuiltinVariables) variables() (placeholder.Variables, error) {
 	return variables, nil
 }
 
-// datasetFill holds everything filled into a dataset record's placeholders at import
-type datasetFill struct {
-	// today fills the {{TODAY}} placeholders
-	today placeholder.Today
-	// variables fill the {{NAME}} and {{NAME|default}} placeholders from the built-ins and the imported profile
-	variables placeholder.Variables
-}
-
-// apply fills every placeholder in record
-func (f datasetFill) apply(record string) string {
-	return f.variables.Fill(f.today.Fill(record))
-}
-
 // loadDatasetPayloadSet reads one schema file of the dataset, fills its placeholders, and wraps its records as that
 // schema's payload set, keyed by the dataset prefix as its source key
-func loadDatasetPayloadSet(ctx context.Context, provider storage.Provider, prefix, name string, fill datasetFill) (types.IngestPayloadSet, error) {
+func loadDatasetPayloadSet(ctx context.Context, provider storage.Provider, prefix, name string, fill placeholder.Variables) (types.IngestPayloadSet, error) {
 	schema, ok := entityops.LookupSchema(name)
 	if !ok {
 		return types.IngestPayloadSet{}, fmt.Errorf("%w: %s", ErrDatasetSchemaUnknown, name)
@@ -336,7 +324,7 @@ func loadDatasetPayloadSet(ctx context.Context, provider storage.Provider, prefi
 	}
 
 	envelopes := lo.Map(records, func(record json.RawMessage, idx int) types.MappingEnvelope {
-		return providerkit.RawEnvelope(fmt.Sprintf("%s#%d", key, idx), json.RawMessage(fill.apply(string(record))))
+		return providerkit.RawEnvelope(fmt.Sprintf("%s#%d", key, idx), json.RawMessage(fill.Fill(string(record))))
 	})
 
 	return types.IngestPayloadSet{Schema: schema.Name, Envelopes: envelopes, SourceKey: prefix}, nil

@@ -34,7 +34,7 @@ func (r *mutationResolver) seedDemoData(ctx context.Context, input model.SeedDem
 		return nil, generated.ErrPermissionDenied
 	}
 
-	rt, err := demoRuntime(ctx)
+	rt, err := objectstoreRuntime(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (r *mutationResolver) deleteDemoData(ctx context.Context, input model.Delet
 		return nil, generated.ErrPermissionDenied
 	}
 
-	rt, err := demoRuntime(ctx)
+	rt, err := objectstoreRuntime(ctx, ErrDemoDataUnavailable)
 	if err != nil {
 		return nil, err
 	}
@@ -74,13 +74,13 @@ func (r *mutationResolver) deleteDemoData(ctx context.Context, input model.Delet
 	return &model.DeleteDemoDataPayload{Accepted: true}, nil
 }
 
-// demoRuntime returns the integrations runtime when it has an objectstore runtime client, so a deployment without the
+// objectstoreRuntime returns the integrations runtime when it has an objectstore runtime client, so a deployment without the
 // runtime bucket fails before queueing
-func demoRuntime(ctx context.Context) (*intruntime.Runtime, error) {
+func objectstoreRuntime(ctx context.Context, returnErr error) (*intruntime.Runtime, error) {
 	rt, _, ok := runtimeClient(objectstore.DefinitionID.ID())
 	if !ok {
-		logx.FromContext(ctx).Error().Str("definition_id", objectstore.DefinitionID.ID()).Msg("demo data: integrations runtime or objectstore runtime client is not configured")
-		return nil, ErrDemoDataUnavailable
+		logx.FromContext(ctx).Error().Str("definition_id", objectstore.DefinitionID.ID()).Msg("integrations runtime or objectstore runtime client is not configured")
+		return nil, returnErr
 	}
 
 	return rt, nil

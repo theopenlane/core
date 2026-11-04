@@ -2,6 +2,7 @@ package objectstore
 
 import (
 	"encoding/json"
+	"path/filepath"
 	"testing"
 
 	"github.com/samber/lo"
@@ -10,6 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/mappingtest"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 func builderMappings(t *testing.T) []types.MappingRegistration {
@@ -42,8 +44,32 @@ func TestEntityMapping(t *testing.T) {
 	assert.Equal(t, "1password-vendor", mapped["name"])
 	assert.Equal(t, "1Password", mapped["display_name"])
 	assert.DeepEqual(t, []any{"1password.com"}, mapped["domains"])
+	assert.DeepEqual(t, []any{"technology", "password management"}, mapped["tags"])
+	assert.Equal(t, "https://www.google.com/s2/favicons?domain=1password.com&sz=128", mapped["logo_remote_url"])
 	assert.Equal(t, true, mapped["externally_visible"])
 	assert.Equal(t, vendorEntityTypeName, mapped[recordEntityTypeKey])
+}
+
+func TestEntityExamplesUseInputKeys(t *testing.T) {
+	spec := mappingtest.MappingSpec(t, builderMappings(t), entityops.SchemaEntity.Name)
+
+	inputKeys := lo.Map(entityops.SchemaEntity.Fields, func(field entityops.FieldDescriptor, _ int) string { return field.InputKey })
+	linkKeys := lo.Map(spec.Links, func(link types.LinkRule, _ int) string { return lo.CoalesceOrEmpty(link.SourceList, link.SourceField) })
+
+	examples, err := filepath.Glob(filepath.Join("examples", "*.json"))
+	assert.NilError(t, err)
+	assert.Check(t, len(examples) > 0)
+
+	for _, example := range examples {
+		t.Run(filepath.Base(example), func(t *testing.T) {
+			record, err := jsonx.ToRawMap(mappingtest.LoadExample(t, "examples", filepath.Base(example)))
+			assert.NilError(t, err)
+
+			for key := range record {
+				assert.Check(t, lo.Contains(inputKeys, key) || lo.Contains(linkKeys, key), "%s is not an entity input or link key", key)
+			}
+		})
+	}
 }
 
 func TestEntityMappingEntityType(t *testing.T) {

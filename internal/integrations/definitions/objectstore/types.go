@@ -206,6 +206,8 @@ type DatasetBuiltinVariables struct {
 	OwnerEmail string `json:"ORG_OWNER_EMAIL" jsonschema:"title=Owner Email,description=Email of the owner who requested the import"`
 	// OwnerName is the name of the owner who requested the import
 	OwnerName string `json:"ORG_OWNER_NAME" jsonschema:"title=Owner Name,description=Name of the owner who requested the import or their email when unnamed"`
+	// Today is the import day in UTC, {{TODAY+N}} and {{TODAY-N}} move it by N days
+	Today string `json:"TODAY" jsonschema:"title=Today,description=Import date as YYYY-MM-DD and {{TODAY+N}} or {{TODAY-N}} move it by N days"`
 }
 
 // DemoDataset is a demo dataset name, a single lowercase directory under the demo prefix of the runtime bucket

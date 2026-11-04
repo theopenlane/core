@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/utils/jsonx"
 )
 
 func TestBuilderRegisters(t *testing.T) {
@@ -44,6 +45,7 @@ func TestBuilderRegisters(t *testing.T) {
 	assert.Assert(t, !importRecords.Internal, "the runtime shares the customer-selectable import")
 	assert.Assert(t, !importRecords.DisabledForAll)
 	assert.DeepEqual(t, importContracts, importRecords.Ingest)
+	assert.DeepEqual(t, json.RawMessage(jsonx.SchemaFrom[DatasetBuiltinVariables]()), importRecords.Variables)
 	assert.Check(t, len(importRecords.Ingest) == len(recordSchemas), "the import ingests every ingestable schema once")
 
 	_, found = lo.Find(def.Operations, func(op types.OperationRegistration) bool {

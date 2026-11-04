@@ -17,10 +17,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/logx"
 )
 
@@ -226,7 +226,7 @@ func (ic IngestContext) ownerID(ctx context.Context) string {
 		return ic.Integration.OwnerID
 	}
 
-	ownerID, err := utils.ResolveOwnerID(ctx, "")
+	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return ""
 	}
