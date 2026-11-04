@@ -132,9 +132,54 @@ func sourceDeleteOrder(order, keep []string) ([]string, error) {
 	return names, nil
 }
 
-// deletableSchemas returns the snake_case names of every schema that supports deleting by source
+// deletableSchemas returns the snake_case names of every schema that supports deleting by source, each after the
+// schemas its foreign keys point at, so the reversed delete removes referencing rows before the rows they reference
 func deletableSchemas() []string {
-	return lo.FilterMap(entityops.AllSchemas(), func(schema *entityops.Schema, _ int) (string, bool) {
-		return schema.Snake, schema.DeleteBySource != nil
+	deletable := lo.Filter(entityops.AllSchemas(), func(schema *entityops.Schema, _ int) bool {
+		return schema.DeleteBySource != nil
 	})
+
+	sorter := dependencySorter{
+		included: lo.SliceToMap(deletable, func(schema *entityops.Schema) (*entityops.Schema, bool) { return schema, true }),
+		placed:   map[*entityops.Schema]bool{},
+		visiting: map[*entityops.Schema]bool{},
+	}
+
+	for _, schema := range deletable {
+		sorter.visit(schema)
+	}
+
+	return lo.Map(sorter.ordered, func(schema *entityops.Schema, _ int) string { return schema.Snake })
+}
+
+// dependencySorter orders schemas after the schemas their foreign key edges point at, keeping registry order among
+// independent schemas and breaking cycles at the schema reached first
+type dependencySorter struct {
+	// included are the schemas being ordered
+	included map[*entityops.Schema]bool
+	// placed are the schemas already in the order
+	placed map[*entityops.Schema]bool
+	// visiting are the schemas on the current path, a cycle stops at them
+	visiting map[*entityops.Schema]bool
+	// ordered is the dependency order built so far
+	ordered []*entityops.Schema
+}
+
+// visit places schema after every included schema its foreign key edges point at
+func (d *dependencySorter) visit(schema *entityops.Schema) {
+	if d.placed[schema] || d.visiting[schema] {
+		return
+	}
+
+	d.visiting[schema] = true
+
+	for _, edge := range schema.Edges {
+		if edge.Field != "" && edge.Target != schema && d.included[edge.Target] {
+			d.visit(edge.Target)
+		}
+	}
+
+	d.visiting[schema] = false
+	d.placed[schema] = true
+	d.ordered = append(d.ordered, schema)
 }

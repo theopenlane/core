@@ -1481,9 +1481,20 @@ func (s *Schema) applyIngestFill(ctx context.Context, client *generated.Client, 
 	return !changes.Empty() || len(throughIDs) > 0, false, nil
 }
 
-// applyIngestUpdate fills an unmanaged organization row and otherwise applies the writing installation's claim
+// linkedToWriter reports whether an unmanaged row already carries the writing installation's integration or external
+// instance, a row written before managed_by was tracked that the installation claims rather than only fills
+func linkedToWriter(row json.RawMessage, payload json.RawMessage) bool {
+	return lo.SomeBy([]string{FieldIntegrationID, FieldSourceInstanceID}, func(field string) bool {
+		writer := lookupValue(payload, field)
+
+		return writer != "" && lookupValue(row, field) == writer
+	})
+}
+
+// applyIngestUpdate fills an unmanaged organization row the writing installation has no link to and otherwise applies
+// the writing installation's claim
 func (s *Schema) applyIngestUpdate(ctx context.Context, client *generated.Client, ownerID string, row json.RawMessage, payload json.RawMessage) (changed bool, managed bool, err error) {
-	if ownerID != "" && lookupValue(row, FieldManagedBy) == "" {
+	if ownerID != "" && lookupValue(row, FieldManagedBy) == "" && !linkedToWriter(row, payload) {
 		return s.applyIngestFill(ctx, client, row, payload)
 	}
 

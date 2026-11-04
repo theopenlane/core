@@ -5,6 +5,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -81,6 +82,34 @@ func TestSourceDeleteOrderDefaultsToDeletableSchemas(t *testing.T) {
 
 	_, err = sourceDeleteOrder(nil, []string{"not_a_schema"})
 	assert.Check(t, errors.Is(err, ErrSourceKeepUnknown))
+}
+
+func TestSourceDeleteOrderReferencingRowsFirst(t *testing.T) {
+	t.Parallel()
+
+	got, err := sourceDeleteOrder(nil, nil)
+	assert.NilError(t, err)
+
+	position := lo.SliceToMap(got, func(name string) (string, int) { return name, lo.IndexOf(got, name) })
+
+	for _, name := range got {
+		schema, _ := entityops.LookupSchema(name)
+
+		for _, edge := range schema.Edges {
+			target, deletable := position[lo.FromPtr(edge.Target).Snake]
+			if edge.Field == "" || edge.Target == schema || !deletable {
+				continue
+			}
+
+			if _, cyclic := lo.Find(edge.Target.Edges, func(back entityops.EdgeDescriptor) bool { return back.Field != "" && back.Target == schema }); cyclic {
+				continue
+			}
+
+			assert.Check(t, position[name] < target, "%s must be deleted before %s", name, edge.Target.Snake)
+		}
+	}
+
+	assert.Check(t, position[entityops.SchemaControl.Snake] < position[entityops.SchemaCustomTypeEnum.Snake])
 }
 
 func TestDeleteSourceRecordsFilterRequired(t *testing.T) {

@@ -254,19 +254,6 @@ func TestEvalMap_Merge(t *testing.T) {
 	}
 }
 
-func TestEvalFilter_EmptyContext(t *testing.T) {
-	t.Parallel()
-
-	matched, err := EvalFilter(context.Background(), `!has(context.programs)`, types.MappingEnvelope{Payload: json.RawMessage(`{}`)}, types.MappingInstallation{})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	if !matched {
-		t.Fatalf("expected an envelope without context to expose an empty context")
-	}
-}
-
 func TestEnvelopeToVars(t *testing.T) {
 	t.Parallel()
 

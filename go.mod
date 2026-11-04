@@ -117,7 +117,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.37.0
+	github.com/theopenlane/entx v0.37.1-0.20261104052133-db53c7b84e98
 	github.com/theopenlane/go-client v0.15.1
 	github.com/theopenlane/gqlgen-plugins v0.19.2
 	github.com/theopenlane/httpsling v0.3.0

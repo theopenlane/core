@@ -4049,6 +4049,7 @@ type ComplexityRoot struct {
 		SubmitTrustCenterNDAResponse             func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
 		SubmitWorkflowProposal                   func(childComplexity int, id string) int
 		TransferOrganizationOwnership            func(childComplexity int, newOwnerEmail string) int
+		UnlinkEntityCatalog                      func(childComplexity int, id string) int
 		UpdateAPIToken                           func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                         func(childComplexity int, id string, input generated.UpdateActionPlanInput, actionPlanFile *graphql.Upload, actionPlanFileMetadata *model.FileMetadataInput) int
 		UpdateAssessment                         func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
@@ -30132,6 +30133,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.TransferOrganizationOwnership(childComplexity, args["newOwnerEmail"].(string)), true
+	case "Mutation.unlinkEntityCatalog":
+		if e.ComplexityRoot.Mutation.UnlinkEntityCatalog == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_unlinkEntityCatalog_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UnlinkEntityCatalog(childComplexity, args["id"].(string)), true
 	case "Mutation.updateAPIToken":
 		if e.ComplexityRoot.Mutation.UpdateAPIToken == nil {
 			break
@@ -151454,6 +151466,10 @@ extend type Mutation {
     adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
     """
     adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
+    """
+    unlinkEntityCatalog detaches the organization's entity from the catalog so catalog refreshes no longer apply to it; idempotent
+    """
+    unlinkEntityCatalog(id: ID!): EntityUpdatePayload!
 }
 `, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {

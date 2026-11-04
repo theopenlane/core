@@ -66,6 +66,30 @@ func (r *mutationResolver) AdoptEntity(ctx context.Context, catalogID string, in
 	}, nil
 }
 
+// UnlinkEntityCatalog is the resolver for the unlinkEntityCatalog field.
+func (r *mutationResolver) UnlinkEntityCatalog(ctx context.Context, id string) (*model.EntityUpdatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	ctx, err := common.SetOrganizationInAuthContext(ctx, nil)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	if err := entityops.SchemaEntity.Unlink(ctx, withTransactionalMutation(ctx), id); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
+	}
+
+	res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "entity"})
+	}
+
+	return &model.EntityUpdatePayload{
+		Entity: res,
+	}, nil
+}
+
 // EntitiesCatalog is the resolver for the entitiesCatalog field.
 func (r *queryResolver) EntitiesCatalog(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) (*generated.EntityConnection, error) {
 	// set page limit if nothing was set
