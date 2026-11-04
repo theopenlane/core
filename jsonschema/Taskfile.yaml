@@ -8,10 +8,11 @@ tasks:
 
   generate:
     desc: generate the jsonschema and documentation
-    deps:
-      - task: schema-and-docs
+    # run in sequence, parallel go runs each compile internal/ent/generated and run out of memory
+    cmds:
       - task: workflow-schema-and-docs
       - task: integration-schema
+      - task: schema-and-docs
       - task: openapi
 
   schema-and-docs:
